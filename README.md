@@ -12,7 +12,7 @@
 
 ## What This Repository Is
 
-This repository contains a systematic computational analysis of **19 cancer types** using a unified mathematical framework derived from the Waddington epigenetic landscape.
+This repository contains a systematic computational analysis of **18+ cancer types** using a unified mathematical framework derived from the Waddington epigenetic landscape.
 
 Every cancer type in this repository was analyzed using the same reproducible protocol applied to public gene expression data (TCGA and GEO). Each analysis produces a **depth score** — a continuous variable that measures how far a tumour has traveled from its normal cellular identity toward a false attractor state — and a **depth-stratified drug map** that specifies which molecular targets are relevant at which position in the landscape.
 
@@ -29,13 +29,13 @@ The depth of commitment to the false attractor is **rankable** across patients i
 The molecular dependencies of each depth position are **derivable** from that ranking alone.  
 The drugs that target those dependencies **converge with published clinical trial targets** in every cancer analyzed.
 
-**Zero false positives in direction across 19 independent cancer analyses.**
+**Zero false positives in direction across 18+ independent cancer analyses.**
 
 That is not a claim about the strength of individual correlations. It is a claim about the reliability of the method: every geometry-derived drug target has been confirmed by published pharmacology or active clinical trials, without knowing the pharmacology in advance.
 
 ---
 
-## The 19 Cancer Types
+## The 18+ Cancer Types
 
 | Cancer | Full Name | Cell of Origin | Dataset | Folder |
 |--------|-----------|----------------|---------|--------|
@@ -170,7 +170,7 @@ For the full theoretical foundation:
 
 ## Cross-Cancer Patterns (Empirical, Not Assumed)
 
-Across 19 independent analyses, the following patterns emerged. These are **empirical findings**, not axioms:
+Across 18+ independent analyses, the following patterns emerged. These are **empirical findings**, not axioms:
 
 | Pattern | Description |
 |---------|-------------|
@@ -279,7 +279,7 @@ If you use this framework, reproduce an analysis, or build on any finding:
 
 ```
 Eric Robert Lawson. Attractor Oncology: Waddington Landscape Geometry
-Applied to Cancer Patient Stratification Across 19 Cancer Types.
+Applied to Cancer Patient Stratification Across 18+ Cancer Types.
 GitHub: https://github.com/Eric-Robert-Lawson/attractor-oncology, 2026.
 [Include GEO accession of dataset used and document number of finding cited]
 ```

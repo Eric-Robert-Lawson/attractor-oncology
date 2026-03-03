@@ -12,6 +12,8 @@
 
 [https://github.com/Eric-Robert-Lawson/OrganismCore/](https://github.com/Eric-Robert-Lawson/OrganismCore/)
 
+Contact: OrganismCore@proton.me
+
 ---
 
 ## What This Repository Is

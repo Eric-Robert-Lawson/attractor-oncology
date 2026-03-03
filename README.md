@@ -133,22 +133,24 @@ It specifies five phases:
 
 ## Getting Started: Running a New Cancer Analysis
 
-**Requirements:**
-- Python 3.8+
-- `numpy`, `pandas`, `scipy`, `matplotlib`
-- A GEO accession number for your cancer of interest
-- No institutional access, no proprietary data, no cloud compute
-
-**Start here:**
-
-```bash
-python Cancer_Research/universal_discovery_start_script.py
-```
-
-Change the `GEO_ACCESSION` variable to your target dataset. The script performs blind saddle point detection, depth score derivation, and landscape figure generation from raw GEO data.
+Utilizing AI agents, you can discover datasets using the protocol and execute the protocol on the dataset to derive results from principles first.
 
 Then follow [Workflow_Protocol.md](Cancer_Research/Workflow_Protocol.md) Phase 0 through Phase 5.
 
+
+### **Step 1**
+Open up a copilot session and attach [Onboarding_1](Onboarding_1/) and all the files within and say "onboard with agents and await further instructions"
+
+### **Step 2**
+Then you attach [Onboarding_2](Onboarding_2/) and prompt "Onboard with subdomain_agents + meta_dsl + substrate_awareness + urs_core_charter and await further instructions."
+
+### **Step 3**
+After these prompts, the agent will have the ability to engage with the reasoning architecture required to operate efficiently with the protocol. That is when you go into cancer research folder and give the onboarding files: [OrganismCore_Cancer_Framework.md](cancer_research/OrganismCore_Cancer_Framework.md), [THE_TRIADIC_CONVERGENCE_RECORD.md](/THE_TRIADIC_CONVERGENCE_RECORD.md), [Workflow_Protocol.md](/Workflow_Protocol.md), [universal_discovery_start_script.py](/universal_discovery_start_script.py), and [waddington_saddle_point_cancer_reversion.md](waddington_saddle_point_cancer_reversion.md) + some other previous grounding from other cancer types to give understanding of how scripts are setup and the process explicitly. 
+
+### **Step 4**
+Move forward, be sure the session understands the framework and how to operate from within it, ensure that it maintains drug targets/predictions or whatever vector you want to analyze to avoid drift. However the computational process through principles first computations of existing databases can be done through this, as it helps to have AI compute the scripts in real time and to delegate script construction to the session.
+
+Any questions in the process feel free to contact.
 ---
 
 ## The Waddington Foundation

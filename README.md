@@ -24,6 +24,8 @@ Every cancer type in this repository was analyzed using the same reproducible pr
 
 This is not a bioinformatics pipeline. It is a **geometric framework** for understanding cancer as a position problem rather than a mutation problem.
 
+Also important to note: Some folders have early results when protocol was still being developed, if that is case another folder within called deeper_dive will be constructed. This will be more detailed.
+
 ---
 
 ## The Core Claim

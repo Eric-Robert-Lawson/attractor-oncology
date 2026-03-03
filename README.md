@@ -8,6 +8,10 @@
 **License:** MIT  
 **Languages:** Python, TeX  
 
+**This repo is a sub-repo based on OrganismCore framework, but dedicated to cancer research. For more information you can visit the repo, but it is much more general than cancer.**
+
+[https://github.com/Eric-Robert-Lawson/OrganismCore/](https://github.com/Eric-Robert-Lawson/OrganismCore/)
+
 ---
 
 ## What This Repository Is

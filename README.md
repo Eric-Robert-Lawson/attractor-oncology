@@ -315,3 +315,41 @@ Not the drugs that target the average patient who does not exist.
 
 That is the goal.  
 Every script, every document, every wrong prediction recorded — all of it serves that purpose.
+
+---
+
+## **The Principle**
+
+
+```
+Cancer is a false attractor in the
+Waddington epigenetic landscape.
+The malignant cells are stuck below
+the differentiation threshold —
+a ceiling imposed by suppression of
+the lineage-specific terminal
+differentiation genes (switch genes).
+
+The switch genes are identifiable by
+their expression profile: suppressed
+in the malignant block population
+relative to the normal differentiated
+endpoint.
+
+The minimal therapeutic set for
+reversion is the switch genes —
+not the scaffold genes that mark
+lineage identity throughout the
+hierarchy, and not the scaffold
+oncogenes expressed throughout
+the cancer landscape.
+
+The gates are different for each
+cancer type because the lineages
+are different. The lock is the same.
+
+This is computable.
+For any cancer.
+From public data.
+From one principle.
+```

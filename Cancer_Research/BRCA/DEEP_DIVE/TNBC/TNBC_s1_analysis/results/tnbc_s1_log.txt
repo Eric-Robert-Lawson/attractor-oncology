@@ -1,0 +1,369 @@
+=================================================================
+BRCA TNBC — SCRIPT 1
+OrganismCore — BRCA-S4a/b | 2026-03-04
+=================================================================
+
+CRITICAL: Uses GSE176078_Wu_etal_2021_BRCA_scRNASeq.tar.gz
+          NOT GSE176078_RAW.tar (that is per-sample files)
+
+=================================================================
+STEP 0: DATA ACQUISITION
+Dataset: GSE176078 — Wu et al. 2021
+File: GSE176078_Wu_etal_2021_BRCA_scRNASeq.tar.gz
+NOTE: Using pre-merged matrix TAR, NOT _RAW.tar
+=================================================================
+
+--- scRNA-seq (GSE176078 merged matrix) ---
+  Found extracted dir: ../../Wu_etal_2021_BRCA_scRNASeq
+  scRNA-seq dir: /Users/ericlawson/cancer/BRCA/Wu_etal_2021_BRCA_scRNASeq
+  OK: count_matrix_sparse.mtx (2395.4 MB)
+  OK: count_matrix_genes.tsv (0.3 MB)
+  OK: count_matrix_barcodes.tsv (2.5 MB)
+  OK: metadata.csv (11.0 MB)
+
+--- Bulk pCR data (GSE25066) ---
+  Downloading GSE25066 series matrix...
+  Attempt 1: .gov/geo/series/GSE25nnn/GSE25066/matrix/GSE25066_series_matrix.txt.gz
+  Downloaded: ./TNBC_s1_analysis/data/GSE25066_series_matrix.txt.gz (61.6 MB)
+=================================================================
+STEP 1: LOAD METADATA
+=================================================================
+  Cells: 100064
+  Columns: ['orig.ident', 'nCount_RNA', 'nFeature_RNA', 'percent.mito', 'subtype', 'celltype_subset', 'celltype_minor', 'celltype_major']
+
+  Cell type distribution (celltype_subset):
+    T_cells_c1_CD4+_IL7R                     n=7786
+    Cancer LumA SC                           n=7742
+    Cancer Cycling                           n=5359
+    T_cells_c4_CD8+_ZFP36                    n=5063
+    T_cells_c0_CD4+_CCR7                     n=4952
+    Endothelial ACKR1                        n=4611
+    Cancer Basal SC                          n=4312
+    T_cells_c2_CD4+_T-regs_FOXP3             n=4246
+    Cancer Her2 SC                           n=3708
+    Plasmablasts                             n=3524
+    PVL Differentiated s3                    n=3487
+    Cancer LumB SC                           n=3368
+    T_cells_c7_CD8+_IFNG                     n=3168
+    B cells Memory                           n=2581
+    CAFs MSC iCAF-like s1                    n=2309
+    CAFs myCAF like s5                       n=2265
+    T_cells_c3_CD4+_Tfh_CXCL13               n=2247
+    Myeloid_c10_Macrophage_1_EGR1            n=2150
+    Myeloid_c1_LAM1_FABP5                    n=2122
+    Luminal Progenitors                      n=1992
+    T_cells_c8_CD8+_LAG3                     n=1955
+    T_cells_c9_NK_cells_AREG                 n=1846
+    Endothelial CXCL12                       n=1644
+    T_cells_c11_MKI67                        n=1528
+    Myeloid_c12_Monocyte_1_IL1B              n=1339
+    Mature Luminal                           n=1265
+    PVL Immature s1                          n=1169
+    Endothelial RGS5                         n=1147
+    Myeloid_c2_LAM2_APOE                     n=1126
+    T_cells_c10_NKT_cells_FCGR3A             n=1122
+    Myoepithelial                            n=1098
+    T_cells_c6_IFIT1                         n=1017
+    Myeloid_c8_Monocyte_2_S100A9             n=935
+    CAFs MSC iCAF-like s2                    n=844
+    PVL_Immature s2                          n=717
+    B cells Naive                            n=625
+    CAFs myCAF like s4                       n=602
+    CAFs Transitioning s3                    n=553
+    Myeloid_c9_Macrophage_2_CXCL10           n=505
+    Cycling_Myeloid                          n=463
+    Myeloid_c11_cDC2_CD1C                    n=337
+    Myeloid_c4_DCs_pDC_IRF7                  n=331
+    T_cells_c5_CD8+_GZMK                     n=284
+    Endothelial Lymphatic LYVE1              n=203
+    Myeloid_c3_cDC1_CLEC9A                   n=156
+    Myeloid_c0_DC_LAMP3                      n=131
+    Myeloid_c7_Monocyte_3_FCGR3A             n=54
+    Cycling PVL                              n=50
+    Myeloid_c5_Macrophage_3_SIGLEC1          n=26
+
+  KEY POPULATIONS:
+    TNBC / Basal SC:       4312
+    LumA SC:               7742
+    Mature Luminal:        1265
+    Luminal Progenitors:   1992
+    Myoepithelial:         1098
+=================================================================
+STEP 2: LOAD EXPRESSION
+Reading MTX via scipy.io.mmread (same as LumA)
+=================================================================
+  Genes in matrix: 29733
+  Sample gene names: ['RP11-34P13.7', 'FO538757.3', 'FO538757.2', 'AP006222.2', 'RP4-669L17.10']
+  Barcodes: 100064
+  Reading MTX via scipy.io.mmread (~30-90 sec)...
+  Matrix shape: (29733, 100064)  (genes × cells)
+  Target genes found: 49 / 49
+  Extracting target genes from sparse matrix...
+    10/49 genes extracted
+    20/49 genes extracted
+    30/49 genes extracted
+    40/49 genes extracted
+  Raw expression matrix: (100064, 49)
+
+  Library sizes (raw counts, target genes):
+    Median: 14.0  Mean: 42.5  Min: 0.0  Max: 2165.0
+  Library size outliers (outside 5x median): 33080
+  Log1p normalization applied
+    ESR1         mean=0.1204  nonzero=9681
+    FOXA1        mean=0.1004  nonzero=9856
+    GATA3        mean=0.3437  nonzero=26196
+    SPDEF        mean=0.2246  nonzero=16350
+    PGR          mean=0.0335  nonzero=3754
+    KRT8         mean=0.5509  nonzero=29111
+
+  TNBC cache saved: ./TNBC_s1_analysis/results/expr_cache_tnbc_s1.csv
+=================================================================
+STEP 3: CLASSIFY POPULATIONS
+=================================================================
+  Expr/meta overlap: 100064
+  tnbc      : 4312 cells
+  mature    : 1265 cells
+  prog      : 1992 cells
+  myo       : 1098 cells
+  luma      : 7742 cells
+=================================================================
+STEP 4: LOAD BULK pCR DATA (GSE25066)
+=================================================================
+  Bulk matrix: (22283, 508)
+  ER/PR/HER2 not parseable. Using all samples.
+
+=================================================================
+SECTION 1: TOP MOVERS — UNFILTERED
+Protocol v2.0: geometry reveals itself first
+No prediction panel imposed. Read before Section 4.
+=================================================================
+
+  TOP 20 GENES LOST IN TNBC vs mature luminal
+  Gene              Normal      TNBC   Change%           p-value
+  --------------------------------------------------------------
+  PGR               0.3548    0.0076    -97.9%      p<1e-100 ***
+  ESR1              0.7489    0.0245    -96.7%      p<1e-100 ***
+  AR                0.9379    0.1453    -84.5%      p<1e-100 ***
+  FOXA1             0.3934    0.0759    -80.7%      p<1e-100 ***
+  SPDEF             1.1943    0.2665    -77.7%      p<1e-100 ***
+  NKX3-1            0.0862    0.0222    -74.3%    p=4.35e-29 ***
+  CDH1              0.6945    0.2356    -66.1%      p<1e-100 ***
+  GATA3             1.1115    0.5181    -53.4%      p<1e-100 ***
+  BRCA1             0.0320    0.0169    -47.3%    p=2.49e-05 ***
+  CLDN4             2.3609    1.2905    -45.3%      p<1e-100 ***
+  KRT18             2.7530    1.6470    -40.2%      p<1e-100 ***
+  CDK2              0.1219    0.0746    -38.8%    p=1.75e-10 ***
+  KRT8              2.2654    1.5243    -32.7%    p=5.38e-98 ***
+  PIK3CA            0.0855    0.0635    -25.7%    p=5.72e-04 ***
+  CLDN3             1.1499    0.8660    -24.7%    p=4.76e-37 ***
+  RB1               0.1854    0.1435    -22.6%    p=2.70e-06 ***
+  AKT1              0.2486    0.1952    -21.5%    p=1.10e-05 ***
+  ASXL1             0.1139    0.0958    -15.9%      p=0.0673  ns
+  NKX2-1            0.0000    0.0002     +nan%      p=0.5884  ns
+
+  TOP 20 GENES GAINED IN TNBC vs mature luminal
+  Gene              Normal      TNBC   Change%           p-value
+  --------------------------------------------------------------
+  SOX10             0.0082    0.1170  +1323.3%    p=1.77e-33 ***
+  ZEB2              0.0066    0.0747  +1035.5%    p=9.90e-18 ***
+  ZEB1              0.0058    0.0652  +1023.6%    p=4.18e-16 ***
+  MKI67             0.0016    0.0146   +787.9%    p=1.57e-05 ***
+  KRT5              0.0759    0.4613   +507.9%    p=4.96e-56 ***
+  CDH3              0.0360    0.1706   +373.9%    p=4.41e-33 ***
+  VIM               0.4529    2.1294   +370.2%      p<1e-100 ***
+  AURKA             0.0099    0.0458   +364.8%    p=1.18e-11 ***
+  EZH2              0.0414    0.1530   +269.7%    p=6.91e-27 ***
+  EGFR              0.0643    0.2314   +260.1%    p=8.72e-37 ***
+  KRT14             0.1339    0.4337   +223.9%    p=4.25e-20 ***
+  CD274             0.0104    0.0316   +203.2%    p=2.25e-05 ***
+  EED               0.0707    0.1933   +173.2%    p=2.80e-21 ***
+  SPI1              0.0088    0.0211   +141.1%    p=3.69e-03  **
+  DNMT3A            0.0691    0.1522   +120.4%    p=8.26e-15 ***
+  HDAC2             0.4506    0.9789   +117.3%    p=5.52e-76 ***
+  FOXC1             0.0585    0.1260   +115.4%    p=3.31e-13 ***
+  SNAI1             0.0248    0.0496   +100.5%    p=5.11e-05 ***
+  TOP2A             0.0063    0.0115    +81.7%      p=0.0614  ns
+  PCNA              0.2486    0.3797    +52.7%    p=5.04e-12 ***
+
+  Saved: ./TNBC_s1_analysis/results/tnbc_s1_saddle.csv
+
+=================================================================
+SECTION 2: PCA GEOMETRY
+Read PC1 loadings before Section 4 (prediction check)
+=================================================================
+  Library size outliers removed: 333
+
+  Variance explained:
+    PC1: 16.12%
+    PC2: 8.22%
+    PC3: 4.51%
+    PC4: 4.05%
+    PC5: 3.20%
+
+  PC1 top positive loadings:
+    KRT18               +0.2595
+    KRT8                +0.2510
+    PARP1               +0.2451
+    CLDN4               +0.2330
+    HDAC2               +0.2243
+    CDH1                +0.2179
+    GATA3               +0.2109
+    CLDN3               +0.2071
+    HDAC1               +0.2032
+    KDM1A               +0.1884
+
+  PC1 top negative loadings:
+    CD274               +0.0396
+    MKI67               +0.0393
+    KRT14               +0.0348
+    TOP2A               +0.0324
+    SPI1                +0.0315
+    ZEB1                +0.0054
+    NKX2-1              +0.0024
+    CDX2                -0.0000
+    OLIG2               -0.0000
+    ZEB2                -0.0032
+
+  PC1 separation TNBC vs Mature Luminal: STRONG  p=1.64e-42
+    TNBC mean=0.0205  Mature mean=1.0572
+
+=================================================================
+SECTION 3: DEPTH SCORE
+Predicted = norm(basal_FAs) + (1-norm(luminal_SWs)) / 2
+=================================================================
+  Basal component:   ['KRT5', 'KRT14', 'SOX10', 'FOXC1', 'EGFR']
+  Luminal component: ['ESR1', 'FOXA1', 'GATA3', 'SPDEF']
+
+  Depth score (4312 TNBC cells):
+    Mean=0.5139  Median=0.5000  Std=0.0904  Min=0.0000  Max=0.9172
+
+  Top depth correlations:
+  Gene                      r  p-value
+  --------------------------------------
+  KRT14               +0.7199  p=0.00e+00
+  KRT5                +0.7152  p=0.00e+00
+  SPDEF               -0.5151  p=6.82e-291
+  VIM                 +0.4454  p=2.95e-209
+  EED                 +0.4355  p=4.05e-199
+  FOXA1               -0.3773  p=6.39e-146
+  EGFR                +0.3646  p=1.03e-135
+  FOXC1               +0.3629  p=2.46e-134
+  CDH3                +0.3183  p=4.17e-102
+  AR                  -0.3014  p=2.89e-91
+  ESR1                -0.2692  p=1.78e-72
+  HDAC1               +0.2647  p=4.45e-70
+  KDM1A               +0.2478  p=2.36e-61
+  SOX10               +0.2395  p=2.77e-57
+  PARP1               +0.2350  p=3.57e-55
+  RB1                 +0.1965  p=8.78e-39
+  PGR                 -0.1882  p=1.09e-35
+  HDAC2               +0.1840  p=3.84e-34
+  BRCA2               +0.1716  p=7.61e-30
+  KRT8                +0.1403  p=2.13e-20
+  CDH1                +0.1290  p=1.85e-17
+  AURKA               +0.1229  p=5.55e-16
+  DNMT3A              +0.1229  p=5.55e-16
+  KRT18               +0.1166  p=1.57e-14
+  CLDN3               -0.1142  p=5.43e-14
+
+=================================================================
+SECTION 4: PREDICTION PANEL CHECK
+Locked in BRCA-S4a 2026-03-04. Checked here.
+=================================================================
+
+  P1 — SWITCH GENES (predicted DOWN):
+  Gene           Mature     TNBC     %chg               p   r_depth  Verdict
+  ------------------------------------------------------------------------
+  ESR1           0.7489   0.0245   -96.7%    p<1e-100 ***   -0.269   ✓ CONFIRMED
+  FOXA1          0.3934   0.0759   -80.7%    p<1e-100 ***   -0.377   ✓ CONFIRMED
+  GATA3          1.1115   0.5181   -53.4%    p<1e-100 ***   +0.046   ✓ CONFIRMED
+  SPDEF          1.1943   0.2665   -77.7%    p<1e-100 ***   -0.515   ✓ CONFIRMED
+  PGR            0.3548   0.0076   -97.9%    p<1e-100 ***   -0.188   ✓ CONFIRMED
+  KRT8           2.2654   1.5243   -32.7%  p=5.38e-98 ***   +0.140   ✓ CONFIRMED
+  KRT18          2.7530   1.6470   -40.2%    p<1e-100 ***   +0.117   ✓ CONFIRMED
+  BRCA1          0.0320   0.0169   -47.3%  p=2.49e-05 ***   -0.058   ✓ CONFIRMED
+
+  P2 — FA MARKERS   (predicted UP):
+  Gene           Mature     TNBC     %chg               p   r_depth  Verdict
+  ------------------------------------------------------------------------
+  KRT5           0.0759   0.4613  +507.9%  p=4.96e-56 ***   +0.715   ✓ CONFIRMED
+  KRT14          0.1339   0.4337  +223.9%  p=4.25e-20 ***   +0.720   ✓ CONFIRMED
+  SOX10          0.0082   0.1170 +1323.3%  p=1.77e-33 ***   +0.239   ✓ CONFIRMED
+  FOXC1          0.0585   0.1260  +115.4%  p=3.31e-13 ***   +0.363   ✓ CONFIRMED
+  EGFR           0.0643   0.2314  +260.1%  p=8.72e-37 ***   +0.365   ✓ CONFIRMED
+  VIM            0.4529   2.1294  +370.2%    p<1e-100 ***   +0.445   ✓ CONFIRMED
+  CDH3           0.0360   0.1706  +373.9%  p=4.41e-33 ***   +0.318   ✓ CONFIRMED
+
+  P3 — EZH2 CONVERGENCE NODE (UP, r>+0.30):
+  EZH2: mature=0.0414 TNBC=0.1530 +269.7%  p=6.91e-27 ***  r=+0.065  ? PARTIAL
+
+  P4 — COMPOSITE TYPE TEST (r(BRCA1, ESR1) > +0.15):
+  r(BRCA1, ESR1) = +0.0455  p=2.77e-03  ✗ NOT CONFIRMED
+
+  P7 — EPIGENETIC PANEL:
+  Gene           Mature     TNBC     %chg               p  r_depth
+  ------------------------------------------------------------
+  EZH2           0.0414   0.1530  +269.7%  p=6.91e-27 ***  +0.065
+  HDAC1          0.3936   0.5136   +30.5%  p=6.11e-08 ***  +0.265
+  HDAC2          0.4506   0.9789  +117.3%  p=5.52e-76 ***  +0.184
+  KDM1A          0.1363   0.2020   +48.2%  p=2.21e-06 ***  +0.248
+  TET2           0.0692   0.0779   +12.6%    p=0.4335  ns  +0.048
+  DNMT3A         0.0691   0.1522  +120.4%  p=8.26e-15 ***  +0.123
+  ASXL1          0.1139   0.0958   -15.9%    p=0.0673  ns  +0.052
+  EED            0.0707   0.1933  +173.2%  p=2.80e-21 ***  +0.436
+
+  P9 — HETEROGENEITY:
+  AR             -84.5% vs mature  r_depth=-0.301  p<1e-100 ***
+  VIM           +370.2% vs mature  r_depth=+0.445  p<1e-100 ***
+  CDH1           -66.1% vs mature  r_depth=+0.129  p<1e-100 ***
+  ZEB1         +1023.6% vs mature  r_depth=+0.044  p=4.18e-16 ***
+  ZEB2         +1035.5% vs mature  r_depth=+0.025  p=9.90e-18 ***
+  SNAI1         +100.5% vs mature  r_depth=+0.071  p=5.11e-05 ***
+  CLDN3          -24.7% vs mature  r_depth=-0.114  p=4.76e-37 ***
+  CLDN4          -45.3% vs mature  r_depth=+0.010  p<1e-100 ***
+
+  CONTROLS (should be flat):
+  CDX2            +nan%    p=1.0000  ns  ⚠ ELEVATED
+  SPI1          +141.1%  p=3.69e-03  **  ⚠ ELEVATED
+  NKX2-1          +nan%    p=0.5884  ns  ⚠ ELEVATED
+  NKX3-1         -74.3%  p=4.35e-29 ***  ⚠ ELEVATED
+  OLIG2           +nan%    p=1.0000  ns  ⚠ ELEVATED
+
+  VS LUMINAL PROGENITOR:
+  Gene             Prog     TNBC     %chg  p
+  --------------------------------------------------
+  ESR1           0.1161   0.0245   -78.9%  p=3.06e-49 ***
+  FOXA1          0.0522   0.0759   +45.5%  p=6.00e-05 ***
+  GATA3          0.5142   0.5181    +0.8%  p=0.7150  ns
+  SPDEF          0.2686   0.2665    -0.8%  p=0.0316   *
+  PGR            0.0193   0.0076   -60.6%  p=3.63e-05 ***
+  KRT8           2.0055   1.5243   -24.0%  p=7.61e-55 ***
+  KRT18          2.2153   1.6470   -25.7%  p=1.06e-69 ***
+  BRCA1          0.0258   0.0169   -34.6%  p=3.05e-03  **
+  KRT5           0.8950   0.4613   -48.5%  p=6.47e-100 ***
+  KRT14          1.0521   0.4337   -58.8%  p=2.99e-95 ***
+
+=================================================================
+SECTION 5: NOVEL SIGNALS
+Signals not in prediction panel — named without literature
+=================================================================
+
+  Novel suppressed (not in prediction panel):
+
+  Novel elevated (not in prediction panel):
+
+=================================================================
+P6: pCR DEPTH TEST (GSE25066)
+Predicted: r(depth_proxy, pCR_binary) < 0
+=================================================================
+  Matched bulk samples: 508
+  Basal probes: 0  Luminal probes: 0
+  No target probes found. Using top-variance proxy.
+
+  r(depth_proxy, pCR) = -0.0980   p = 0.0272
+  P6: ✓ CONFIRMED — deeper TNBC → lower pCR probability
+  pCR=1 mean depth: 0.4984  n=310
+  pCR=0 mean depth: 0.5348  n=198
+
+--- Generating figure ---
+  Figure saved: ./TNBC_s1_analysis/results/tnbc_s1_figure.png

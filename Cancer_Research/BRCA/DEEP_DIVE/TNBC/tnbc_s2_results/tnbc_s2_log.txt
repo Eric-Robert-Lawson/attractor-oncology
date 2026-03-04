@@ -1,0 +1,481 @@
+=================================================================
+BRCA TNBC — SCRIPT 2
+BULK VALIDATION + pCR + DRFS + TCGA OS
+OrganismCore — BRCA-S4c/d | 2026-03-04
+=================================================================
+
+CONFIRMED URLS (diagnostic 2026-03-04):
+  GSE25066:  https://ftp.ncbi.nlm.nih.gov/geo/series/GSE25nnn/GSE25066/matrix/GSE25066_series_matrix.txt.gz
+  TCGA EXPR: https://tcga.xenahubs.net/download/TCGA.BRCA.sampleMap/HiSeqV2.gz
+  TCGA CLIN: https://tcga.xenahubs.net/download/TCGA.BRCA.sampleMap/BRCA_clinicalMatrix
+  TCGA SURV: https://pancanatlas.xenahubs.net/download/Survival_SupplementalTable_S1_20171025_xena_sp
+  GPL96:     EMBEDDED (all NCBI FTP files return 404)
+
+=================================================================
+STEP 0: DATA ACQUISITION
+=================================================================
+
+[GSE25066]
+  Downloading: GSE25066
+  URL: https://ftp.ncbi.nlm.nih.gov/geo/series/GSE25nnn/GSE25066/matrix/GSE25066_series_matrix.txt.gz
+  Downloaded: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/TNBC/tnbc_s2_results/data/GSE25066_series_matrix.txt.gz (61.6 MB)
+
+[TCGA_EXPR]
+  Downloading: TCGA_EXPR
+  URL: https://tcga.xenahubs.net/download/TCGA.BRCA.sampleMap/HiSeqV2.gz
+  Downloaded: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/TNBC/tnbc_s2_results/data/TCGA_BRCA_HiSeqV2.gz (64.3 MB)
+
+[TCGA_CLIN]
+  Downloading: TCGA_CLIN
+  URL: https://tcga.xenahubs.net/download/TCGA.BRCA.sampleMap/BRCA_clinicalMatrix
+  Downloaded: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/TNBC/tnbc_s2_results/data/TCGA_BRCA_clinicalMatrix.tsv (1.7 MB)
+
+[TCGA_SURV]
+  Downloading: TCGA_SURV
+  URL: https://pancanatlas.xenahubs.net/download/Survival_SupplementalTable_S1_20171025_xena_sp
+  Downloaded: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/TNBC/tnbc_s2_results/data/TCGA_pancan_survival.tsv (2.4 MB)
+
+=================================================================
+PARSE GSE25066
+Probe→gene: embedded GPL96 mapping (NCBI FTP returns 404)
+pCR key:    pathologic_response_pcr_rd  (pCR / RD)
+TNBC keys:  er_status_ihc / pr_status_ihc / her2_status
+PAM50 key:  pam50_class
+Survival:   drfs_1_event_0_censored + drfs_even_time_years
+=================================================================
+  Parsing GSE25066 series matrix...
+  Lines parsed:      22374
+  Sample IDs:        508
+  Characteristics rows: 24
+  Expression probes: 22283
+  Column IDs:        508
+  Expression matrix (samples × probes): (508, 22283)
+
+  Embedded GPL96 mapping:
+    Probe entries in dict:    78
+    Genes with ≥1 probe hit:  49
+    Genes with 0 probes hit:  12
+    Critical genes MISSING from probe_df: ['SPDEF']
+  Gene-level matrix: (508, 49)
+  Genes available: ['AGR2', 'AKT1', 'AR', 'AURKA', 'BRCA1', 'BRCA2', 'CCL5', 'CCNB1', 'CCNE1', 'CD44', 'CDC20', 'CDC6', 'CDH2', 'CDH3', 'CDK2', 'CLDN3', 'CLDN4', 'CXCL10', 'EED', 'EGFR', 'ESR1', 'EZH2', 'FN1', 'FOXA1', 'FOXC1', 'GATA3', 'HDAC1', 'IGF1R', 'IRF1', 'KRT14', 'KRT5', 'MET', 'MKI67', 'PARP1', 'PCNA', 'PGR', 'PIK3CA', 'PTEN', 'SNAI1', 'SOX10', 'SPI1', 'STAT1', 'TFF1', 'TFF3', 'TOP2A', 'TP53', 'TWIST1', 'VIM', 'ZEB1']
+
+  Metadata parsed:
+    pCR annotated:    306 / 508
+    pCR=1 (complete): 57
+    pCR=0 (residual): 249
+    ER annotated:     502
+    PR annotated:     501
+    HER2 annotated:   491
+    PAM50 annotated:  508
+    PAM50 distribution: {'Basal': 189, 'LumA': 160, 'LumB': 78, 'Normal': 44, 'Her2': 37}
+    DRFS event:       508
+    DRFS time:        310
+
+=================================================================
+TASK 1: GSE25066 — pCR + DRFS SURVIVAL
+Tests: S2-P1, S2-P2, S2-P3, S2-P6, S2-P7, S2-P9
+=================================================================
+
+  TNBC (ER-/PR-/HER2-): n=178
+
+  Full cohort: n=508
+  FA markers available   (all): ['KRT5', 'KRT14', 'SOX10', 'FOXC1', 'EGFR', 'VIM', 'CDH3']
+  Switch genes available (all): ['ESR1', 'FOXA1', 'GATA3', 'PGR']
+  Depth (all): mean=0.5291  std=0.1584  min=0.1179  max=0.9057
+
+  TNBC subset in gene_df: n=178
+  FA markers available   (TNBC): ['KRT5', 'KRT14', 'SOX10', 'FOXC1', 'EGFR', 'VIM', 'CDH3']
+  Switch genes available (TNBC): ['ESR1', 'FOXA1', 'GATA3', 'PGR']
+  Depth (TNBC): mean=0.6393  std=0.1204  min=0.0000  max=0.9254
+
+  S2-P1: DEPTH vs pCR  (full cohort)
+  Predicted: r more negative than -0.098 (Script 1 proxy)
+  r(depth, pCR) = +0.2860   p=3.61e-07 ***   n=306
+  pCR=1 mean depth: 0.6344  n=57
+  pCR=0 mean depth: 0.5138  n=249
+  S2-P1: ✗ NOT CONFIRMED
+
+  S2-P1b TNBC subset n=112:
+  r(depth_TNBC, pCR) = +0.0397   p=0.6780  ns
+  S2-P1b: ✗ NOT CONFIRMED
+
+  S2-P2 (EED vs EZH2) and S2-P3 (PARP1) vs pCR:
+  Gene           r(pCR)         p-value    AUC(pCR)  Note
+  ------------------------------------------------------------
+  EED           -0.0427    p=0.4565  ns       0.561  ✓ P2 DIRECTIONAL
+  EZH2          +0.2737  p=1.17e-06 ***       0.277  
+  PARP1         +0.0817    p=0.1541  ns       0.424  ✗ P3 NOT CONFIRMED
+  MKI67         +0.2287  p=5.40e-05 ***       0.318  
+  TOP2A         +0.1912  p=7.73e-04 ***       0.348  
+  KRT5          +0.1581  p=5.57e-03  **       0.352  
+  VIM           -0.0555    p=0.3331  ns       0.552  
+  SOX10         +0.1666  p=3.46e-03  **       0.363  
+  AR            -0.2318  p=4.23e-05 ***       0.689  
+
+  EED vs EZH2 comparison:
+    r(EED)=-0.0427  r(EZH2)=+0.2737
+    AUC(EED)=0.561  AUC(EZH2)=0.277
+    S2-P2b: ✓ EED more predictive on both r and AUC
+
+  S2-P7: SPI1 RESOLUTION (immune vs depth)
+  Predicted: r(SPI1, PTPRC) > |r(SPI1, depth)|
+  SPI1 or PTPRC not in gene_df. S2-P7 untestable.
+
+  S2-P9: AR vs DEPTH  (predicted r < -0.15)
+  r(AR, depth) = -0.5468  p=6.09e-41 ***
+  S2-P9: ✓ CONFIRMED
+
+  S2-P6: DEPTH vs DRFS SURVIVAL IN GSE25066
+  (drfs_1_event_0_censored + drfs_even_time_years)
+  Predicted: depth-high → shorter DRFS (p<0.05)
+  Survival analysis n=309  events=65
+  Split at depth median=0.551:
+    High depth: n=155  events=48
+    Low depth:  n=154  events=17
+  Log-rank stat=22.994  p=0.0000
+  High-depth median DRFS: 1.139 years
+  Low-depth  median DRFS: 1.845 years
+  S2-P6 GSE25066: ✓ CONFIRMED — depth-high shorter DRFS
+  Spearman r(depth, DRFS event) = +0.2122  p=1.71e-04 ***
+
+  BULK DEPTH CORRELATIONS (all genes):
+  Gene                r  p-value
+  -----------------------------------
+  ESR1          -0.8088  p<1e-100 ***
+  PGR           -0.7663  p=2.78e-99 ***
+  EGFR          +0.6823  p=7.34e-71 ***
+  KRT5          +0.6479  p=8.69e-62 ***
+  AR            -0.5468  p=6.09e-41 ***
+  AKT1          -0.5159  p=6.69e-36 ***
+  ZEB1          +0.4905  p=4.17e-32 ***
+  CDK2          +0.4223  p=2.19e-23 ***
+  CXCL10        +0.4172  p=8.25e-23 ***
+  MET           +0.3940  p=2.59e-20 ***
+  KRT14         +0.3838  p=2.80e-19 ***
+  SOX10         +0.3798  p=7.03e-19 ***
+  TOP2A         +0.3135  p=4.76e-13 ***
+  CDC6          +0.3125  p=5.72e-13 ***
+  HDAC1         -0.3047  p=2.23e-12 ***
+  CCNE1         +0.2953  p=1.12e-11 ***
+  SPI1          +0.2710  p=5.33e-10 ***
+  EZH2          +0.2440  p=2.56e-08 ***
+  TP53          -0.2389  p=5.05e-08 ***
+  CDH3          +0.2315  p=1.32e-07 ***
+  EED           +0.2260  p=2.62e-07 ***
+  AURKA         +0.2253  p=2.88e-07 ***
+  MKI67         +0.2157  p=9.21e-07 ***
+  SNAI1         +0.2143  p=1.08e-06 ***
+  STAT1         +0.2120  p=1.43e-06 ***
+
+=================================================================
+TASK 2: LEHMANN SUBTYPE DEPTH MAPPING
+Tests: S2-P4
+Predicted: LAR < BL1/BL2 < IM < M/MSL
+=================================================================
+  FA markers available   (Lehmann): ['KRT5', 'KRT14', 'SOX10', 'FOXC1', 'EGFR', 'VIM', 'CDH3']
+  Switch genes available (Lehmann): ['ESR1', 'FOXA1', 'GATA3', 'PGR']
+  Depth (Lehmann): mean=0.5291  std=0.1584  min=0.1179  max=0.9057
+
+  Lehmann centroid scoring...
+    BL1: 9/10 genes — ['CCNE1', 'CDK2', 'CDC6', 'CDC20', 'MKI67', 'TOP2A', 'PCNA', 'BRCA1', 'BRCA2']
+    BL2: 7/7 genes — ['EGFR', 'MET', 'IGF1R', 'PIK3CA', 'PTEN', 'CLDN3', 'CLDN4']
+    IM: 5/6 genes — ['CCL5', 'CXCL10', 'SPI1', 'IRF1', 'STAT1']
+    LAR: 5/6 genes — ['AR', 'FOXA1', 'TFF1', 'TFF3', 'AGR2']
+    M: 6/7 genes — ['VIM', 'ZEB1', 'SNAI1', 'CDH2', 'FN1', 'TWIST1']
+    MSL: 2/5 genes — ['CD44', 'FOXC1']
+
+  Assignment counts:
+    M: n=259
+    IM: n=146
+    BL1: n=78
+    MSL: n=21
+    LAR: n=4
+
+  Depth by Lehmann subtype:
+  Subtype      n       mean     median      std
+  ---------------------------------------------
+  LAR          4     0.4732     0.4734   0.0151
+  BL1         78     0.5400     0.5760   0.1622
+  IM         146     0.5878     0.6166   0.1372
+  M          259     0.4983     0.4973   0.1560
+  MSL         21     0.4712     0.4320   0.2061
+
+  S2-P4 EVALUATION:
+  LAR mean depth=0.4732  (predicted < 0.40)
+  S2-P4 LAR: ✗ NOT CONFIRMED
+  M mean depth=0.4983  (predicted > 0.60)
+  S2-P4 M: ✗ NOT CONFIRMED
+  MSL mean depth=0.4712  (predicted > 0.60)
+  S2-P4 MSL: ✗ NOT CONFIRMED
+
+  Actual depth ordering (low → high):
+    MSL: 0.4712
+    LAR: 0.4732
+    M: 0.4983
+    BL1: 0.5400
+    IM: 0.5878
+
+  Kruskal-Wallis p=0.0000
+
+  Depth by PAM50 class (embedded in GSE25066):
+  PAM50          n   mean depth
+  ------------------------------
+  Basal        189       0.6661
+  Her2          37       0.5925
+  LumB          78       0.3895
+  LumA         160       0.4051
+  Normal        44       0.5855
+
+=================================================================
+TASK 3: TCGA-BRCA
+Tests: S2-P5 (BRCA1 expression proxy), S2-P6 (TCGA OS)
+=================================================================
+  Loading TCGA-BRCA expression...
+  Shape (samples × genes): (1218, 20530)
+  Sample IDs (first 3): ['TCGA-AR-A5QQ-01', 'TCGA-D8-A1JA-01', 'TCGA-BH-A0BQ-01']
+  Loading TCGA-BRCA clinical matrix...
+  Clinical shape: (1247, 193)
+  Clinical columns:
+    'AJCC_Stage_nature2012'
+    'Age_at_Initial_Pathologic_Diagnosis_nature2012'
+    'CN_Clusters_nature2012'
+    'Converted_Stage_nature2012'
+    'Days_to_Date_of_Last_Contact_nature2012'
+    'Days_to_date_of_Death_nature2012'
+    'ER_Status_nature2012'
+    'Gender_nature2012'
+    'HER2_Final_Status_nature2012'
+    'Integrated_Clusters_no_exp__nature2012'
+    'Integrated_Clusters_unsup_exp__nature2012'
+    'Integrated_Clusters_with_PAM50__nature2012'
+    'Metastasis_Coded_nature2012'
+    'Metastasis_nature2012'
+    'Node_Coded_nature2012'
+    'Node_nature2012'
+    'OS_Time_nature2012'
+    'OS_event_nature2012'
+    'PAM50Call_RNAseq'
+    'PAM50_mRNA_nature2012'
+    'PR_Status_nature2012'
+    'RPPA_Clusters_nature2012'
+    'SigClust_Intrinsic_mRNA_nature2012'
+    'SigClust_Unsupervised_mRNA_nature2012'
+    'Survival_Data_Form_nature2012'
+    'Tumor_T1_Coded_nature2012'
+    'Tumor_nature2012'
+    'Vital_Status_nature2012'
+    '_GENOMIC_ID_TCGA_BRCA_G4502A_07_3'
+    '_GENOMIC_ID_TCGA_BRCA_PDMRNAseq'
+    '_GENOMIC_ID_TCGA_BRCA_PDMRNAseqCNV'
+    '_GENOMIC_ID_TCGA_BRCA_PDMarray'
+    '_GENOMIC_ID_TCGA_BRCA_PDMarrayCNV'
+    '_GENOMIC_ID_TCGA_BRCA_RPPA'
+    '_GENOMIC_ID_TCGA_BRCA_RPPA_RBN'
+    '_GENOMIC_ID_TCGA_BRCA_exp_HiSeqV2'
+    '_GENOMIC_ID_TCGA_BRCA_exp_HiSeqV2_PANCAN'
+    '_GENOMIC_ID_TCGA_BRCA_exp_HiSeqV2_exon'
+    '_GENOMIC_ID_TCGA_BRCA_exp_HiSeqV2_percentile'
+    '_GENOMIC_ID_TCGA_BRCA_gistic2'
+    '_GENOMIC_ID_TCGA_BRCA_gistic2thd'
+    '_GENOMIC_ID_TCGA_BRCA_hMethyl27'
+    '_GENOMIC_ID_TCGA_BRCA_hMethyl450'
+    '_GENOMIC_ID_TCGA_BRCA_miRNA_GA'
+    '_GENOMIC_ID_TCGA_BRCA_miRNA_HiSeq'
+    '_GENOMIC_ID_TCGA_BRCA_mutation'
+    '_GENOMIC_ID_TCGA_BRCA_mutation_curated_wustl_gene'
+    '_GENOMIC_ID_TCGA_BRCA_mutation_wustl_gene'
+    '_GENOMIC_ID_data/public/TCGA/BRCA/miRNA_GA_gene'
+    '_GENOMIC_ID_data/public/TCGA/BRCA/miRNA_HiSeq_gene'
+    '_INTEGRATION'
+    '_PANCAN_CNA_PANCAN_K8'
+    '_PANCAN_Cluster_Cluster_PANCAN'
+    '_PANCAN_DNAMethyl_BRCA'
+    '_PANCAN_DNAMethyl_PANCAN'
+    '_PANCAN_RPPA_PANCAN_K8'
+    '_PANCAN_UNC_RNAseq_PANCAN_K16'
+    '_PANCAN_miRNA_PANCAN'
+    '_PANCAN_mirna_BRCA'
+    '_PANCAN_mutation_PANCAN'
+    '_PATIENT'
+    '_cohort'
+    '_primary_disease'
+    '_primary_site'
+    'additional_pharmaceutical_therapy'
+    'additional_radiation_therapy'
+    'additional_surgery_locoregional_procedure'
+    'additional_surgery_metastatic_procedure'
+    'age_at_initial_pathologic_diagnosis'
+    'anatomic_neoplasm_subdivision'
+    'axillary_lymph_node_stage_method_type'
+    'axillary_lymph_node_stage_other_method_descriptive_text'
+    'bcr_followup_barcode'
+    'bcr_patient_barcode'
+    'bcr_sample_barcode'
+    'breast_cancer_surgery_margin_status'
+    'breast_carcinoma_estrogen_receptor_status'
+    'breast_carcinoma_immunohistochemistry_er_pos_finding_scale'
+    'breast_carcinoma_immunohistochemistry_pos_cell_score'
+    'breast_carcinoma_immunohistochemistry_prgstrn_rcptr_ps_fndng_scl'
+    'breast_carcinoma_primary_surgical_procedure_name'
+    'breast_carcinoma_progesterone_receptor_status'
+    'breast_carcinoma_surgical_procedure_name'
+    'breast_neoplasm_other_surgical_procedure_descriptive_text'
+    'cytokeratin_immunohistochemistry_staining_method_mcrmtstss_ndctr'
+    'days_to_additional_surgery_locoregional_procedure'
+    'days_to_additional_surgery_metastatic_procedure'
+    'days_to_birth'
+    'days_to_collection'
+    'days_to_death'
+    'days_to_initial_pathologic_diagnosis'
+    'days_to_last_followup'
+    'days_to_last_known_alive'
+    'days_to_new_tumor_event_additional_surgery_procedure'
+    'days_to_new_tumor_event_after_initial_treatment'
+    'disease_code'
+    'distant_metastasis_present_ind2'
+    'er_detection_method_text'
+    'er_level_cell_percentage_category'
+    'fluorescence_in_st_hybrdztn_dgnstc_prcdr_chrmsm_17_sgnl_rslt_rng'
+    'followup_case_report_form_submission_reason'
+    'form_completion_date'
+    'gender'
+    'her2_and_centromere_17_positive_finding_other_measuremnt_scl_txt'
+    'her2_erbb_method_calculation_method_text'
+    'her2_erbb_pos_finding_cell_percent_category'
+    'her2_erbb_pos_finding_fluorescence_n_st_hybrdztn_clcltn_mthd_txt'
+    'her2_immunohistochemistry_level_result'
+    'her2_neu_and_centromere_17_copy_number_analysis_npt_ttl_nmbr_cnt'
+    'her2_neu_breast_carcinoma_copy_analysis_input_total_number'
+    'her2_neu_chromosone_17_signal_ratio_value'
+    'her2_neu_metastatic_breast_carcinoma_copy_analysis_inpt_ttl_nmbr'
+    'histological_type'
+    'histological_type_other'
+    'history_of_neoadjuvant_treatment'
+    'hr2_n_nd_cntrmr_17_cpy_nmbr_mtsttc_brst_crcnm_nlyss_npt_ttl_nmbr'
+    'icd_10'
+    'icd_o_3_histology'
+    'icd_o_3_site'
+    'immunohistochemistry_positive_cell_score'
+    'informed_consent_verified'
+    'init_pathology_dx_method_other'
+    'initial_pathologic_diagnosis_method'
+    'initial_weight'
+    'is_ffpe'
+    'lab_proc_her2_neu_immunohistochemistry_receptor_status'
+    'lab_procedure_her2_neu_in_situ_hybrid_outcome_type'
+    'lost_follow_up'
+    'lymph_node_examined_count'
+    'margin_status'
+    'menopause_status'
+    'metastatic_breast_carcinm_ps_fndng_prgstrn_rcptr_thr_msr_scl_txt'
+    'metastatic_breast_carcinom_lb_prc_hr2_n_mmnhstchmstry_rcptr_stts'
+    'metastatic_breast_carcinoma_erbb2_immunohistochemistry_levl_rslt'
+    'metastatic_breast_carcinoma_estrogen_receptor_detection_mthd_txt'
+    'metastatic_breast_carcinoma_estrogen_receptor_status'
+    'metastatic_breast_carcinoma_estrogen_receptr_lvl_cll_prcnt_ctgry'
+    'metastatic_breast_carcinoma_her2_erbb_method_calculatin_mthd_txt'
+    'metastatic_breast_carcinoma_her2_erbb_pos_findng_cll_prcnt_ctgry'
+    'metastatic_breast_carcinoma_her2_neu_chromosone_17_signal_rat_vl'
+    'metastatic_breast_carcinoma_immunhstchmstry_r_pstv_fndng_scl_typ'
+    'metastatic_breast_carcinoma_immunohistochemistry_er_pos_cell_scr'
+    'metastatic_breast_carcinoma_immunohistochemistry_pr_pos_cell_scr'
+    'metastatic_breast_carcinoma_lab_proc_hr2_n_n_st_hybrdztn_tcm_typ'
+    'metastatic_breast_carcinoma_pos_finding_hr2_rbb2_thr_msr_scl_txt'
+    'metastatic_breast_carcinoma_progestern_rcptr_lvl_cll_prcnt_ctgry'
+    'metastatic_breast_carcinoma_progesterone_receptor_dtctn_mthd_txt'
+    'metastatic_breast_carcinoma_progesterone_receptor_status'
+    'metastatic_site_at_diagnosis'
+    'metastatic_site_at_diagnosis_other'
+    'methylation_Clusters_nature2012'
+    'miRNA_Clusters_nature2012'
+    'mtsttc_brst_crcnm_flrscnc_n_st_hybrdztn_dgnstc_prc_cntrmr_17_sgn'
+    'mtsttc_brst_crcnm_hr2_rbb_ps_fndng_flrscnc_n_st_hybrdztn_clcltn'
+    'mtsttc_brst_crcnm_mmnhstchmstry_prgstrn_rcptr_pstv_fndng_scl_typ'
+    'new_neoplasm_event_occurrence_anatomic_site'
+    'new_neoplasm_event_type'
+    'new_neoplasm_occurrence_anatomic_site_text'
+    'new_tumor_event_additional_surgery_procedure'
+    'new_tumor_event_after_initial_treatment'
+    'number_of_lymphnodes_positive_by_he'
+    'number_of_lymphnodes_positive_by_ihc'
+    'oct_embedded'
+    'other_dx'
+    'pathologic_M'
+    'pathologic_N'
+    'pathologic_T'
+    'pathologic_stage'
+    'pathology_report_file_name'
+    'patient_id'
+    'person_neoplasm_cancer_status'
+    'pgr_detection_method_text'
+    'pos_finding_her2_erbb2_other_measurement_scale_text'
+    'pos_finding_metastatic_brst_crcnm_strgn_rcptr_thr_msrmnt_scl_txt'
+    'pos_finding_progesterone_receptor_other_measurement_scale_text'
+    'positive_finding_estrogen_receptor_other_measurement_scale_text'
+    'postoperative_rx_tx'
+    'primary_lymph_node_presentation_assessment'
+    'progesterone_receptor_level_cell_percent_category'
+    'project_code'
+    'radiation_therapy'
+    'sample_type'
+    'sample_type_id'
+    'surgical_procedure_purpose_other_text'
+    'system_version'
+    'targeted_molecular_therapy'
+    'tissue_prospective_collection_indicator'
+    'tissue_retrospective_collection_indicator'
+    'tissue_source_site'
+    'tumor_tissue_site'
+    'vial_number'
+    'vital_status'
+    'year_of_initial_pathologic_diagnosis'
+
+  PAM50 column: 'Integrated_Clusters_with_PAM50__nature2012'
+  PAM50 values: {3.0: 161, 4.0: 76, 2.0: 72, 1.0: 39}
+
+  Expression ∩ clinical: 1218
+
+  PAM50 Basal-like: n=0
+  PAM50 LumA:       n=0
+
+  TCGA FA genes available:     ['KRT5', 'KRT14', 'SOX10', 'FOXC1', 'EGFR', 'VIM', 'CDH3']
+  TCGA switch genes available: ['ESR1', 'FOXA1', 'GATA3', 'SPDEF', 'PGR']
+  TCGA depth: mean=0.4135  std=0.1832
+
+  S2-P5: BRCA1 EXPRESSION IN BASAL-LIKE
+  NOTE: Expression proxy — definitive test needs
+  GDC somatic mutation + methylation data (auth required).
+  BRCA1 not in TCGA expression or insufficient Basal samples.
+
+  S2-P6: DEPTH vs OS IN TCGA-BRCA
+  Pan-cancer survival: (12591, 33)
+  Survival columns: ['_PATIENT', 'cancer type abbreviation', 'age_at_initial_pathologic_diagnosis', 'gender', 'race', 'ajcc_pathologic_tumor_stage', 'clinical_stage', 'histological_type', 'histological_grade', 'initial_pathologic_dx_year']
+  BRCA samples in survival table: 179
+  OS time col:  OS_Time_nature2012
+  OS event col: OS_event_nature2012
+  TCGA survival n=866  events=132
+  Log-rank stat=0.194  p=0.6596
+  S2-P6 TCGA: ns  p=0.6596
+  Spearman r(depth, event) = +0.0568  p=0.0950  ns
+
+=================================================================
+PREDICTION SCORECARD — BRCA-S4c
+=================================================================
+
+  Pred        Status                        Note
+  ------------------------------------------------------------------------
+  S2-P1       ✗ NOT CONFIRMED               r=+0.286
+  S2-P2       ✓ PARTIAL                     EED r more negative but ≥-0.10
+  S2-P3       ✗ NOT CONFIRMED               PARP1 r=+0.082
+  S2-P4       ✗ NOT CONFIRMED               LAR mean depth=0.473
+  S2-P5       ? PROXY ONLY                  BRCA1 expression proxy — mutation needs GDC
+  S2-P6a GSE  ✓ CONFIRMED                   DRFS log-rank p=0.0000
+  S2-P6b TCGA  ? NS                          OS log-rank p=0.6596
+  S2-P7       ? NOT IN DATASET              SPI1/PTPRC absent
+  S2-P8       P PROSPECTIVE                 EED>EZH2 as EZH2i biomarker — future datasets
+  S2-P9       ✓ CONFIRMED                   r(AR,depth)=-0.547
+
+
+--- Generating figure ---
+  Figure saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/TNBC/tnbc_s2_results/tnbc_s2_figure.png
+  CSV: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/TNBC/tnbc_s2_results/tnbc_s2_results.csv

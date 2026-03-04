@@ -21,6 +21,8 @@ Zero false positives in drug target direction across 22 independent cancer analy
 
 **Contact:** OrganismCore@proton.me
 
+---
+
 **This repository is a dedicated cancer sub-repository of the OrganismCore framework.
 OrganismCore applies the same structural invariant across multiple domains beyond cancer.**
 

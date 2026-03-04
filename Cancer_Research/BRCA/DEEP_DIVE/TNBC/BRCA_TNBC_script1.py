@@ -329,29 +329,52 @@ def load_metadata(sc_dir):
     log(f"  Cells: {len(meta)}")
     log(f"  Columns: {list(meta.columns[:10])}")
 
-    # Resolve cell type column
-    if CT_COL not in meta.columns:
-        log(f"  WARNING: '{CT_COL}' not found.")
-        for col in meta.columns:
-            if "celltype" in col.lower() or "subset" in col.lower():
-                log(f"  Using '{col}' instead.")
-                meta[CT_COL] = meta[col]
+    # Print value distributions for all three celltype columns
+    for col in ["celltype_major", "celltype_minor", "celltype_subset"]:
+        if col in meta.columns:
+            log(f"\n  Cell type distribution ({col}):")
+            for ct, n in meta[col].value_counts().items():
+                log(f"    {ct:<40} n={n}")
+
+    # Auto-detect the correct fine-grained column by checking which one
+    # contains the expected fine-grained labels. Try in priority order.
+    _fine_labels = {CANCER_BASAL, MATURE_LUM}
+    _candidate_cols = ["celltype_minor", "celltype_subset", "celltype_major"]
+
+    def _build_combined(df, cols):
+        combined = pd.Series("", index=df.index)
+        for c in cols:
+            if c in df.columns:
+                combined = combined + " " + df[c].fillna("")
+        return combined
+
+    ct_col = None
+    for col in _candidate_cols:
+        if col in meta.columns:
+            vals = set(meta[col].unique())
+            if _fine_labels & vals:
+                ct_col = col
+                log(f"\n  Auto-detected fine-grained column: {col}")
                 break
 
-    if CT_COL not in meta.columns:
+    if ct_col is None:
+        # Partial-match fallback: combine all three celltype columns into one
+        # search column and look for cells matching "Cancer" AND "Basal"
+        log(f"\n  WARNING: No column contains exact fine-grained labels.")
+        log(f"  Falling back to partial match across all celltype columns...")
+        meta["_ct_combined"] = _build_combined(meta, _candidate_cols)
+        ct_col = "_ct_combined"
+
+    if ct_col not in meta.columns:
         log("  FATAL: Cannot find cell type column.")
         return None
 
-    log(f"\n  Cell type distribution ({CT_COL}):")
-    for ct, n in meta[CT_COL].value_counts().items():
-        log(f"    {ct:<40} n={n}")
-
     # Tag populations
-    meta["is_tnbc"]   = meta[CT_COL] == CANCER_BASAL
-    meta["is_luma"]   = meta[CT_COL] == CANCER_LUMA
-    meta["is_mature"] = meta[CT_COL] == MATURE_LUM
-    meta["is_prog"]   = meta[CT_COL] == LUMINAL_PROG
-    meta["is_myo"]    = meta[CT_COL] == MYOEPITH
+    meta["is_tnbc"]   = meta[ct_col] == CANCER_BASAL
+    meta["is_luma"]   = meta[ct_col] == CANCER_LUMA
+    meta["is_mature"] = meta[ct_col] == MATURE_LUM
+    meta["is_prog"]   = meta[ct_col] == LUMINAL_PROG
+    meta["is_myo"]    = meta[ct_col] == MYOEPITH
 
     n_tnbc = meta["is_tnbc"].sum()
     log(f"\n  KEY POPULATIONS:")
@@ -364,9 +387,10 @@ def load_metadata(sc_dir):
     if n_tnbc < 50:
         log(f"  WARNING: Only {n_tnbc} TNBC cells with exact label.")
         log(f"  Trying partial match 'Basal' + 'Cancer'...")
+        combined = _build_combined(meta, _candidate_cols)
         meta["is_tnbc"] = (
-            meta[CT_COL].str.contains("Basal", case=False, na=False) &
-            meta[CT_COL].str.contains("Cancer", case=False, na=False)
+            combined.str.contains("Basal", case=False, na=False) &
+            combined.str.contains("Cancer", case=False, na=False)
         )
         log(f"  After partial match: {meta['is_tnbc'].sum()}")
 

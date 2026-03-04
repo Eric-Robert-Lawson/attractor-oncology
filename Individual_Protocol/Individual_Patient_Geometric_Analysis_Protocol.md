@@ -296,30 +296,50 @@ DATA FORMATS — RANKED BY QUALITY:
 
   TIER 4 — MINIMUM:
     IHC staining values for the
-    3-gene clinical panel.
-    Each cancer analysis produces
-    a 3-gene panel approximating
-    the depth score at r > 0.85.
-    If all that exists is three
-    IHC H-scores or staining intensities —
-    an approximate depth score
-    is computable.
-    Less precise. Directionally valid.
-    Honest about the approximation.
+    cancer-type-specific panel.
+    For cancer types where the IHC
+    proxy has been formally validated
+    in the OrganismCore repository,
+    a 3-gene H-score panel approximates
+    the full depth score at r > 0.85.
+    For other cancer types, the IHC
+    panel provides directional classification
+    (attractor type assignment) but not
+    a calibrated depth score.
+    Honest about the difference.
+    Clinically actionable in both cases.
 
-  NOT USABLE:
-    DNA mutation data alone.
-    Copy number variation alone.
+  MUTATION DATA — PARTIAL CONTRIBUTION:
+    DNA mutation data alone (Foundation One,
+    Tempus xT, Guardant360, etc.) cannot
+    compute a depth score.
+    It does contribute to:
+      Attractor type classification.
+        BRCA1/2 loss → composite type flag
+        in breast and ovarian cancer.
+        IDH1/2 mutation → attractor type
+        in glioma.
+        NPM1/FLT3 → AML attractor subtype.
+      Composite type assignment.
+      Depth indicator flags.
+        TP53 mutation → deep attractor signal
+        across multiple cancer types.
+    Use mutation data alongside
+    expression data.
+    Do not use it as a replacement for
+    expression data.
+    Geometry requires expression measurements.
+    Mutations tell you about the founding
+    event. Expression tells you where
+    the cells are now.
+
+  NOT USABLE ALONE:
+    Copy number variation without expression.
     Imaging data.
     Blood marker values without
     expression data.
     Clinical notes without
     molecular measurements.
-
-    The framework is geometric.
-    It requires expression measurements.
-    Geometry cannot be derived from
-    mutation profiles alone.
 
 SERIAL BIOPSY DATA:
   If the patient has had multiple

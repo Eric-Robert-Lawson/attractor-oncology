@@ -1,5 +1,5 @@
-# TRIPLE-NEGATIVE BREAST CANCER — BEFORE DOCUMENT
-## Predictions Locked Before Script 1 Runs
+# TNBC — SCRIPT 1 BEFORE-DOCUMENT
+## Predictions Locked Before Data Loads
 ## OrganismCore — Document BRCA-S4a
 ## Date: 2026-03-04
 
@@ -11,730 +11,659 @@
 document_id:        BRCA-S4a
 series:             BRCA Deep Dive — TNBC (Basal-like)
 folder:             Cancer_Research/BRCA/DEEP_DIVE/TNBC/
-type:               BEFORE DOCUMENT
-                    Predictions only.
-                    No data loaded.
-                    No results present.
-                    This document is locked
-                    before Script 1 runs.
-date_locked:        2026-03-04
+type:               BEFORE-DOCUMENT
+                    All predictions stated before
+                    any data is loaded.
+                    This document cannot be modified
+                    after Script 1 runs.
+date:               2026-03-04
 author:             Eric Robert Lawson
                     OrganismCore
 protocol_version:   Workflow_Protocol.md v2.0
-dataset:            GSE176078 — Wu et al. 2021
-                    Nature Genetics | PMID: 34493872
-                    100,064 cells — 26 primary breast tumors
-                    SAME DATASET AS LUMINAL A DEEP DIVE
-                    NO NEW DOWNLOAD REQUIRED
-population_of_interest:
-                    Cancer Basal SC   (TNBC cancer cells)
-normal_reference:
-                    Luminal Progenitors  (primary — cell of
-                                         origin per current
-                                         consensus)
-                    Mature Luminal       (secondary — confirm
-                                         TNBC identity is absent)
-cross_reference:
-                    Cancer LumA SC       (confirm LumA/TNBC
-                                         geometry are opposite)
-additional_dataset:
-                    GSE25066 — Hatzis et al. 2011
-                    Lancet | PMID: 21641858
-                    508 pre-treatment ER-/HER2- bulk RNA-seq
-                    pCR annotated — the clinical endpoint test
-                    To be incorporated in Script 2 if
-                    depth score is established in Script 1
+dataset_planned:    GSE176078 — Wu et al. 2021
+                    (same scRNA-seq dataset as LumA —
+                    basal-like cells extracted separately)
+                    + GSE25066 — Hatzis et al. 2011
+                    (508 pre-treatment bulk samples,
+                    pCR annotation — clinical endpoint)
+status:             LOCKED — predictions cannot change
+                    after this document is committed
 precursor_documents:
-                    BRCA_Subtype_Orientation.md
-                    ATTRACTOR_GEOMETRY_AXIOMS.md (Doc 90)
-                    BRCA-S1a/S1b/S2a/S2b/S2c (LumA series)
-next_document:      BRCA-S4b
-                    Script 1 results + reasoning artifact
-status:             LOCKED — predictions immutable
-                    after this date
+  ATTRACTOR_GEOMETRY_AXIOMS.md (Doc 90)
+  BRCA_Subtype_Orientation.md
+  BRCA-S2b (LumA Script 2 artifact)
+  BRCA-S2c (LumA literature check)
 ```
 
 ---
 
-## CRITICAL CONTEXT — WHAT IS ALREADY KNOWN
+## PART I — ATTRACTOR TYPE ASSIGNMENT
+## Before any biology is stated
 
 ```
-Two sources of prior knowledge constrain these predictions.
-Neither is allowed to determine them.
-Both are stated explicitly so that any influence is visible.
+Per ATTRACTOR_GEOMETRY_AXIOMS.md (Doc 90),
+the first step before any prediction is to
+assign the attractor type using the diagnostic
+algorithm.
 
-SOURCE 1 — THE PRIOR BULK BRCA ANALYSIS (Documents 75, 82, 83):
+QUESTION 1: Cell of origin?
+  The normal cell is the LUMINAL PROGENITOR —
+  specifically the BRCA1-regulated luminal progenitor
+  in the breast ductal-lobular hierarchy.
+  The correct terminal destination is the mature
+  luminal epithelial cell.
 
-  From Document 82 extended (BRCA drug target exploration):
-    EZH2 elevated in TNBC/basal SC: +269.7%
-    EZH2 is the identified convergence node
-    Tazemetostat predicted as drug target
-    Confirmed: Schade et al. Nature 2024
+QUESTION 2: Are identity TFs of the correct
+  terminal state expressed?
+  NO — TNBC is ER-negative, PR-negative.
+  ESR1 and PGR are absent.
+  FOXA1 expression is markedly reduced.
+  GATA3 is low or absent.
+  The luminal identity programme is NOT expressed.
 
-  From Document 75 secondary comparison:
-    Cancer Basal SC vs Mature Luminal:
-      KRT5/14, SOX10, FOXC1 elevated in Basal SC
-      FOXA1, GATA3, ESR1 suppressed in Basal SC
-    This established the wrong-identity signature.
+QUESTION 4: Is the cell expressing identity TFs
+  of a DIFFERENT normal cell type?
+  YES — KRT5, KRT14, SOX10, FOXC1, EGFR.
+  These are markers of:
+    — Myoepithelial / basal cells (KRT5/14)
+    — Neural crest (SOX10)
+    — Basal progenitors (FOXC1)
+  None of these are the correct terminal identity
+  for a luminal progenitor.
 
-  What this means for these predictions:
-    The prior analysis was bulk-level at the
-    population mean. It confirmed the geometry exists.
-    The deep dive asks finer questions:
-      What is the depth axis WITHIN TNBC?
-      What predicts pCR response?
-      What is the composite type structure?
-    These questions were not asked before.
+PRIMARY TYPE ASSIGNMENT: TYPE 2 — WRONG VALLEY
 
-SOURCE 2 — THE ATTRACTOR GEOMETRY AXIOMS (Document 90):
+BUT — COMPOSITE TYPE EVALUATION REQUIRED:
 
-  Prediction A stated in Document 90:
-    TNBC may be a Type 1 → Type 2 composite.
-    Type 1: BRCA1 loss blocks luminal progenitor
-            from completing differentiation
-    Type 2: cell falls into basal false attractor
-    Therapeutic implication: combination of
-    Type 1 drug (PARP inhibitor) + Type 2 drug
-    (EZH2 inhibitor) should show synergy.
+  The founding event in a large fraction of TNBC
+  is BRCA1 loss in a LUMINAL PROGENITOR.
+  BRCA1 is required for luminal progenitor identity.
+  Without BRCA1:
+    Stage 1: Luminal progenitor cannot complete
+             differentiation (TYPE 1 — BLOCKED APPROACH)
+    Stage 2: Progenitor falls into basal/stem-like
+             false attractor (TYPE 2 — WRONG VALLEY)
 
-  This prediction was stated before this document.
-  It is the primary structural hypothesis
-  being tested by Script 1.
+  PREDICTION: TNBC is a COMPOSITE TYPE 1 → TYPE 2.
 
-THE RULE:
-  The prior analysis confirmed EZH2 as the
-  convergence node. That finding is used as the
-  reference point, not as the answer.
-  The deep dive must go further:
-    How deep is the basin?
-    What determines depth within TNBC?
-    Where exactly is the saddle point?
-    Is the Type 1 element detectable
-    in the expression data?
-```
+  This is the first test of the composite type
+  axiom stated in Doc 90 Prediction C.
 
----
-
-## SECTION I — BIOLOGICAL GROUNDING
-
----
-
-### I.1 The normal cell of origin
-
-```
-CURRENT CONSENSUS (2024):
-  Most TNBC / basal-like cancers arise from a
-  BRCA1-regulated LUMINAL PROGENITOR.
-
-  Not the mature luminal cell (LumA's origin).
-  Not the myoepithelial cell (despite basal markers).
-  The LUMINAL PROGENITOR — the cell partway
-  through the luminal differentiation journey
-  that BRCA1 normally supervises.
-
-  Why this matters for the geometry:
-    A luminal progenitor is already on the path
-    toward luminal identity.
-    It has partial luminal TF expression.
-    Without BRCA1, it cannot complete the journey.
-    This is the TYPE 1 component.
-    The block at the luminal progenitor → mature
-    luminal saddle point.
-
-    But instead of stalling in the progenitor state
-    (which would produce a Type 1 cancer like AML),
-    the BRCA1-null luminal progenitor activates the
-    basal transcriptional programme.
-    It falls into the basal false attractor.
-    This is the TYPE 2 component.
-
-THE COMPOSITE SEQUENCE:
-  Luminal progenitor
-    → BRCA1 loss (Type 1 block installed)
-    → Cannot complete luminal differentiation
-    → Basal programme activated (Type 2 entry)
-    → Basal false attractor stabilized by EZH2
-
-  Each stage is detectable in the expression data.
-  Script 1 tests whether both stages are visible.
+  If confirmed: the correct therapeutic strategy
+  addresses both stages:
+    Type 1: PARP inhibitors (exploit BRCA1 defect)
+    Type 2: EZH2 inhibitors (dissolve basal attractor)
+  Their combination is in active trials.
+  The composite type predicts why.
 ```
 
 ---
 
-### I.2 The normal differentiation pathway
+## PART II — BIOLOGICAL GROUNDING
+## The lineage and its normal architecture
 
 ```
-MAMMARY STEM CELL
-  ↓
-LUMINAL PROGENITOR  ← TNBC cell of origin
-  |
-  | ← BRCA1 required for this transition
-  ↓
-MATURE LUMINAL CELL  ← Normal endpoint (LumA territory)
+THE NORMAL JOURNEY THIS CANCER INTERRUPTS:
 
-LUMINAL PROGENITOR
-  |
-  | ← BRCA1 loss blocks this path
-  | ← Basal programme activates instead
-  ↓
-BASAL FALSE ATTRACTOR  ← TNBC destination
+  Mammary stem cell
+    ↓
+  Luminal progenitor   ← BRCA1 required here
+    ↓                    for identity maintenance
+  Committed luminal    ← Where TNBC blocks (Type 1)
+    ↓
+  Mature luminal       ← Correct terminal state
+  epithelial cell        (ESR1+, FOXA1+, GATA3+)
 
-NORMAL MYOEPITHELIAL CELL  ← TNBC resembles this
-                              but does NOT originate
-                              from it (per consensus)
+THE FALSE ATTRACTOR STATE (Type 2 destination):
 
-SADDLE POINT 1 (Type 1 element):
-  Luminal progenitor → Mature luminal transition
-  Gate: BRCA1 / luminal commitment TFs
-  When BRCA1 is lost: gate closes, cell cannot pass
-  Switch genes at this saddle:
-    BRCA1 itself
-    Luminal commitment TFs that BRCA1 enables:
-    ESR1, FOXA1, GATA3 — the LumA identity TFs
-    that are ACTIVATED as the cell commits to luminal
-    These should be SUPPRESSED in TNBC relative to
-    Luminal Progenitor (not just vs mature luminal)
+  When BRCA1 fails in the luminal progenitor,
+  the cell cannot take the luminal path.
+  It activates the basal/myoepithelial programme
+  — the nearest accessible stable state in the
+  Waddington landscape.
 
-SADDLE POINT 2 (Type 2 element):
-  The energy barrier between the luminal progenitor
-  state and the basal false attractor.
-  Once crossed, EZH2 stabilizes the new state.
-  The convergence node: EZH2.
-```
+  The basal false attractor is maintained by:
+    EZH2 — epigenetic silencer of luminal programme
+            (PRC2 complex, H3K27me3 at luminal TF loci)
+    SOX10 — neural crest / basal identity TF
+    FOXC1 — basal progenitor identity TF
+    KRT5/14 — structural markers of basal identity
+    EGFR — growth factor receptor of basal state
 
----
+  These are the FA markers — the identity genes of
+  the wrong valley the cell has fallen into.
 
-### I.3 What TNBC should look like in the data
+THE SADDLE POINT:
 
-```
-BASED ON TYPE 1 → TYPE 2 COMPOSITE PREDICTION:
+  The saddle point between the normal luminal
+  valley and the basal false attractor is maintained
+  by BRCA1-dependent chromatin organisation.
 
-  VERSUS LUMINAL PROGENITOR (Type 1 signal):
-    ESR1    SUPPRESSED  (luminal commitment failed)
-    FOXA1   SUPPRESSED  (pioneer factor absent)
-    GATA3   SUPPRESSED  (luminal TF absent)
-    KRT8    SUPPRESSED  (luminal structural gene)
-    These being suppressed vs progenitor = the cell
-    could not complete luminal commitment = TYPE 1.
+  In normal luminal progenitors:
+    BRCA1 maintains chromatin accessibility at
+    luminal TF loci (ESR1, FOXA1, GATA3).
+    When BRCA1 is lost, these loci become inaccessible.
+    EZH2 deposits H3K27me3 at these loci.
+    The luminal programme is epigenetically silenced.
+    The cell is locked in the basal false attractor.
 
-  VERSUS MATURE LUMINAL (Type 2 signal — already known):
-    KRT5/14  ELEVATED   (basal programme active)
-    SOX10    ELEVATED   (basal/neural crest identity)
-    FOXC1    ELEVATED   (basal-like TF)
-    EGFR     ELEVATED   (basal growth signalling)
-    VIM      ELEVATED   (mesenchymal marker)
-    EZH2     ELEVATED   (convergence node)
-
-  THE COMPOSITE SIGNAL:
-    ESR1/FOXA1/GATA3 suppressed vs PROGENITOR
-    = Type 1 element (blocked before luminal commitment)
-    KRT5/SOX10/EZH2 elevated vs BOTH references
-    = Type 2 element (stabilized in basal state)
-
-  If BOTH are detected, the composite type is confirmed.
-  If ONLY Type 2 is detected:
-    Either the Type 1 element is too subtle
-    or the consensus cell-of-origin is wrong
-    (myoepithelial, not luminal progenitor).
-
-THE DECISIVE TEST:
-  r(ESR1, EZH2) within TNBC cancer cells.
-  If negative: more EZH2 → less ESR1
-    EZH2 is actively suppressing luminal programme
-    Supports Type 2 mechanism (EZH2 as convergence node
-    maintaining the false attractor by silencing
-    the luminal identity TFs)
-  If near zero: EZH2 and ESR1 are independent
-    EZH2 may not be directly suppressing ESR1
-    Alternative mechanism for luminal suppression
+  The saddle point is therefore:
+    BRCA1 loss → EZH2 gain → luminal TF silencing
+    → basal programme activation → stable false
+    attractor with EZH2 as the convergence node.
 ```
 
 ---
 
-## SECTION II — PREDICTIONS
-## Locked 2026-03-04 before any data loads
+## PART III — PREDICTIONS
+## All stated 2026-03-04 before data loads
 
 ---
 
-### II.1 Switch gene predictions (Type 1 element)
+### P1 — SWITCH GENES (suppressed in TNBC vs normal)
 
 ```
-PREDICTED SUPPRESSED in TNBC vs Luminal Progenitor:
+Switch genes are the luminal identity TFs that
+were silenced when the luminal progenitor fell
+into the basal false attractor.
+These are suppressed in TNBC relative to:
+  — Normal luminal progenitors
+  — Mature luminal cells (the correct terminal state)
 
-  P1-SW-1: ESR1   SUPPRESSED  vs Luminal Progenitor
-    Role: master luminal TF, BRCA1-regulated
-    Reasoning: BRCA1 loss prevents luminal commitment
-               The first step of commitment is ESR1 activation
-               ESR1 should be LOWER in TNBC even than
-               the progenitor it came from
-    Direction: DOWN vs progenitor
-    Predicted magnitude: >50% suppression
+PREDICTED SUPPRESSED (switch genes):
 
-  P1-SW-2: FOXA1  SUPPRESSED  vs Luminal Progenitor
-    Role: pioneer factor, opens chromatin for ESR1 binding
-    Reasoning: Without BRCA1, FOXA1 cannot establish
-               the luminal chromatin state
-    Direction: DOWN vs progenitor
-    Predicted magnitude: >50% suppression
+  ESR1      Estrogen receptor alpha
+            Master luminal TF — drives luminal identity
+            Expected: near-absent in TNBC
+            CONFIRMED by clinical definition (ER-)
+            Direction: DOWN  p predicted: <0.001
 
-  P1-SW-3: GATA3  SUPPRESSED  vs Luminal Progenitor
-    Role: luminal differentiation TF
-    Reasoning: same as FOXA1 — luminal commitment TF
-               that BRCA1 enables
-    Direction: DOWN vs progenitor
-    Predicted magnitude: >30% suppression
-    NOTE: GATA3 has lower baseline in progenitors than
-          FOXA1 — smaller absolute change expected
+  FOXA1     Pioneer TF — opens chromatin for ER binding
+            Required for luminal programme initiation
+            Expected: suppressed — BRCA1 loss prevents
+            chromatin accessibility at FOXA1 targets
+            Direction: DOWN  p predicted: <0.001
 
-  P1-SW-4: KRT8   SUPPRESSED  vs Luminal Progenitor
-    Role: luminal structural cytokeratin
-    Reasoning: Luminal structural identity lost in TNBC
-    Direction: DOWN vs progenitor
+  GATA3     Luminal differentiation TF
+            Co-expressed with ER/FOXA1 in normal luminal
+            Expected: suppressed — downstream of FOXA1
+            in the luminal programme
+            Direction: DOWN  p predicted: <0.001
 
-  EXPECTED: All four show a gradient:
-    Mature Luminal > Luminal Progenitor > TNBC
-    This gradient confirms the Type 1 element:
-    the cell is FURTHER from luminal identity
-    than even the progenitor it came from.
-```
+  SPDEF     Luminal/secretory TF
+            Downstream target of FOXA1
+            Expected: suppressed
+            Direction: DOWN  p predicted: <0.01
 
----
+  PGR       Progesterone receptor
+            ER target gene — confirmed absent (PR-)
+            Direction: DOWN  p predicted: <0.001
 
-### II.2 False attractor predictions (Type 2 element)
-
-```
-PREDICTED ELEVATED in TNBC vs BOTH references:
-
-  P2-FA-1: KRT5   ELEVATED  vs both references
-    Role: basal cytokeratin 5 — basal programme marker
-    Reasoning: confirmed in prior bulk analysis
-    Direction: UP vs both
-    Predicted magnitude: >500% vs mature luminal
-                         >200% vs luminal progenitor
-
-  P2-FA-2: KRT14  ELEVATED  vs both references
-    Role: basal cytokeratin 14
-    Direction: UP vs both
-
-  P2-FA-3: SOX10  ELEVATED  vs both references
-    Role: neural crest / basal identity TF
-    Reasoning: confirmed in prior bulk analysis
-    Direction: UP vs both
-
-  P2-FA-4: EZH2   ELEVATED  vs both references
-    Role: PRC2 catalytic subunit — convergence node
-    Reasoning: confirmed +269.7% in prior analysis
-               confirmed Schade et al. Nature 2024
-    Direction: UP vs both
-    This is the most confident prediction in the panel.
-
-  P2-FA-5: FOXC1  ELEVATED  vs both references
-    Role: basal-like identity TF
-    Reasoning: FOXC1 is a documented TNBC marker
-    Direction: UP vs both
-
-  P2-FA-6: VIM    ELEVATED  vs both references
-    Role: vimentin — mesenchymal/EMT marker
-    Reasoning: basal false attractor has partial EMT
-    Direction: UP vs both
-    NOTE: VIM elevation with depth would suggest
-          EMT is a depth axis, not just a binary marker
+NOTE: These suppressions are clinically confirmed
+by the triple-negative definition.
+The question is not IF they are suppressed but
+HOW MUCH and whether the depth of suppression
+correlates with clinical outcome (pCR).
 ```
 
 ---
 
-### II.3 Epigenetic prediction
+### P2 — FALSE ATTRACTOR MARKERS (elevated in TNBC)
 
 ```
-EZH2: ELEVATED (predicted above)
-  Direction: UP — gain of function lock
-  This is the Type 2 convergence node.
-  EZH2 is elevated to stabilize the basal false
-  attractor by silencing the luminal programme.
-  This is the GAIN OF FUNCTION epigenetic lock
-  (same class as BRCA, different cancer).
+FA markers are the identity genes of the basal
+false attractor — the wrong valley the cell
+has fallen into.
 
-  CONTRAST WITH LumA:
-    LumA: EZH2 FLAT (ns)
-    TNBC: EZH2 ELEVATED (+270%)
-  This contrast is among the strongest cross-subtype
-  geometric distinctions in the breast cancer series.
-  LumA is Type 3 (arrest dismantlement — no epigenetic lock).
-  TNBC is Type 2 (false attractor — EZH2 as the lock).
+PREDICTED ELEVATED (FA markers):
 
-DNMT3A / TET2:
-  Direction: UNCERTAIN
-  Not predicting confidently.
-  Will read from the data.
+  KRT5      Basal cytokeratin 5
+            Marker of myoepithelial / basal cells
+            Expected: highly elevated in TNBC
+            Direction: UP  p predicted: <0.001
 
-HDAC1/2:
-  Direction: SUPPRESSED in TNBC predicted
-  Reasoning: LumA showed HDAC1/2 suppressed.
-  TNBC may show same pattern for different reason
-  (basal programme requires chromatin opening,
-  not closing via HDACs).
-  Weak prediction. Will read from data.
-```
+  KRT14     Basal cytokeratin 14
+            Co-marker with KRT5 of basal identity
+            Expected: highly elevated
+            Direction: UP  p predicted: <0.001
 
----
+  SOX10     Neural crest / basal identity TF
+            Elevated specifically in TNBC/basal-like
+            Not expressed in luminal subtypes
+            Expected: strongly elevated
+            Direction: UP  p predicted: <0.001
 
-### II.4 Depth axis prediction
+  FOXC1     Basal progenitor TF
+            Drives aggressive basal programme
+            Expected: elevated vs luminal normal
+            Direction: UP  p predicted: <0.01
 
-```
-The depth axis in TNBC is expected to differ
-fundamentally from LumA.
+  EGFR      Epidermal growth factor receptor
+            Overexpressed in basal-like TNBC
+            Not amplified — overexpressed
+            Expected: elevated vs normal luminal
+            Direction: UP  p predicted: <0.01
 
-LumA depth axis: CDKN1A (arrest dismantlement)
-  Cells with less p21 = deeper in the arrest-removed
-  valley = more arrest-gone
-
-TNBC depth axis prediction:
-  The depth axis should reflect DEGREE OF BASAL
-  PROGRAMME ACTIVATION, not arrest removal.
-  EZH2 level should positively correlate with depth.
-  KRT5/14/SOX10 should correlate with depth.
-  ESR1/FOXA1 should NEGATIVELY correlate with depth.
-
-  P3-DEPTH-1:
-    r(EZH2, depth) > +0.40 within TNBC
-    Higher EZH2 = deeper basal false attractor
-    = more luminal programme suppressed
-
-  P3-DEPTH-2:
-    r(ESR1, depth) < -0.25 within TNBC
-    More ESR1 = shallower (less committed to basal)
-    = cells closer to the luminal progenitor origin
-
-  P3-DEPTH-3:
-    EZH2 and ESR1 are ANTI-CORRELATED within TNBC:
-    r(EZH2, ESR1) < -0.20
-    This is the decisive test of whether EZH2 is
-    actively suppressing the luminal programme
-    or is independently elevated.
-
-  P3-DEPTH-4:
-    r(KRT5, depth) > +0.30 within TNBC
-    KRT5 rises with depth — deeper basal commitment
-    correlates with more basal structural gene expression
-
-  P3-DEPTH-5:
-    pCR prediction (if GSE25066 depth is computable):
-    Low depth (more ESR1, less EZH2, less KRT5) =
-    more residual luminal-progenitor character =
-    more genomic instability sensitivity =
-    higher pCR to chemotherapy
-    High depth (more EZH2, less ESR1, more KRT5) =
-    fully committed basal attractor =
-    lower pCR = more resistant to chemotherapy
-    This is the most clinically significant prediction.
+  VIM       Vimentin — mesenchymal marker
+            Rises with depth in TNBC
+            Expected: elevated, correlates with depth
+            Direction: UP (graded with depth)
 ```
 
 ---
 
-### II.5 Composite type test predictions
+### P3 — CONVERGENCE NODE
 
 ```
-THE DECISIVE COMPOSITE TYPE TESTS:
+PREDICTED CONVERGENCE NODE: EZH2
 
-  P4-COMP-1: TYPE 1 GRADIENT VISIBLE
-    ESR1/FOXA1/GATA3 should be lower in TNBC
-    than in Luminal Progenitors.
-    FULL GRADIENT:
-      Mature Luminal >> Luminal Progenitor > TNBC
-    If TNBC < Luminal Progenitor for all three:
-      Type 1 element CONFIRMED in expression data.
-    If TNBC ≈ Luminal Progenitor for all three:
-      Type 1 element not visible at expression level.
-      BRCA1 loss may be functional not expressional.
+Reasoning:
+  EZH2 is the catalytic subunit of PRC2.
+  PRC2 deposits H3K27me3 at luminal TF gene loci.
+  EZH2 elevation in TNBC simultaneously:
+    — Silences ESR1/FOXA1/GATA3 (luminal TFs)
+    — Maintains KRT5/KRT14/SOX10 (basal identity)
+    — Suppresses differentiation across the genome
+    — Maintains chromatin in the basal false attractor
 
-  P4-COMP-2: TYPE 2 ELEMENT INDEPENDENT OF TYPE 1
-    EZH2/KRT5/SOX10 elevated vs Luminal Progenitor
-    independently of ESR1/FOXA1 suppression.
-    Both signals present simultaneously.
+  This is the single node whose inhibition is
+  predicted to dissolve the basal false attractor.
 
-  P4-COMP-3: r(ESR1, EZH2) < -0.15 within TNBC
-    The anti-correlation confirms EZH2 suppresses
-    ESR1 within TNBC — the convergence node is
-    actively maintaining the false attractor by
-    silencing the luminal programme in real time.
-    This is the single most important correlation
-    in the entire TNBC analysis.
+  Direction: EZH2 ELEVATED in TNBC vs normal luminal
+  Predicted r with depth score: strongly positive
 
-  P4-COMP-4: MKI67 DEPTH CORRELATION
-    r(MKI67, depth) positive within TNBC
-    Deeper basal attractor = more proliferative
-    This contrasts with LumA where MKI67 was flat
-    (LumA is not a proliferation problem at the
-    population mean — TNBC is)
+  CONFIRMED EXTERNALLY:
+    Schade et al. Nature 635, 755-763 (2024)
+    Harvard / Dana-Farber / Ludwig Center
+    AKT and EZH2 inhibitors dissolve TNBC
+    false attractor and produce luminal conversion.
+    Independent derivation confirms EZH2 as
+    convergence node.
+    This was documented in Doc 71 and Doc 83.
+    The prediction is pre-confirmed by this
+    independent work.
+
+  PREDICTION: EZH2 is the top positive depth correlate
+  within TNBC. r(EZH2, depth) > 0.30 predicted.
 ```
 
 ---
 
-### II.6 Drug target predictions
+### P4 — THE COMPOSITE TYPE PREDICTION
 
 ```
-All stated before data. Stated 2026-03-04.
+PREDICTION: TNBC shows evidence of BOTH Type 1 AND
+Type 2 geometry embedded in the expression data.
 
-DRUG 1 — EZH2 INHIBITOR (tazemetostat)
-  Mechanism: EZH2 is the convergence node.
-  Inhibiting EZH2 dissolves the false attractor
-  by removing the epigenetic silencing of the
-  luminal programme.
-  Status: CONFIRMED (Schade et al. Nature 2024)
-          (Framework derived independently)
-  Depth prediction: Higher EZH2 = greater benefit
-                    from EZH2 inhibition
-  Novel extension: EZH2 level at diagnosis should
-                   predict magnitude of tazemetostat
-                   response — analogous to CDKN1A
-                   in LumA predicting CDK4/6i benefit
+Specifically:
 
-DRUG 2 — PARP INHIBITOR (olaparib, talazoparib)
-  Mechanism: BRCA1 dysfunction is the Type 1 block.
-  PARP inhibitors exploit the BRCA1-null state.
-  The cell cannot repair DNA double-strand breaks.
-  PARP inhibition is synthetic lethal with BRCA1
-  deficiency.
-  Status: CONFIRMED (approved for BRCA1-mutated TNBC)
-  This is the Type 1 drug — it exploits the block,
-  not the false attractor.
+  TYPE 1 SIGNAL:
+    BRCA1 expression itself should be reduced
+    in the cancer cells vs normal luminal progenitors
+    (somatic BRCA1 loss or promoter methylation
+    in non-germline cases — ~50-60% of TNBC have
+    BRCA1 dysfunction by one mechanism or another)
 
-DRUG 3 — EZH2i + PARPi COMBINATION
-  Mechanism: Addresses both stages of composite type.
-  Type 1 stage: PARPi exploits the BRCA1 block
-  Type 2 stage: EZH2i dissolves the false attractor
-  Framework prediction: synergy between the two
-  drugs because they address different stages.
-  Status: 🆕 NOVEL COMBINATION PREDICTION
-  The composite type taxonomy predicts this synergy.
-  Single-drug logic from either type alone would
-  not predict it.
-  Literature check (S4c) will assess whether
-  this combination is already in trials.
+    The luminal progenitor programme was NOT
+    expressed at full capacity even before the
+    basal programme was activated.
+    This should be visible as a DOUBLE SUPPRESSION:
+      Luminal TFs suppressed (Type 1 signal)
+      AND basal TFs elevated (Type 2 signal)
+    where the luminal suppression EXCEEDS what
+    would be seen from EZH2 alone.
 
-DRUG 4 — ANTI-PD-L1 / PEMBROLIZUMAB
-  Mechanism: TNBC has high TIL infiltration.
-  The deepest basal attractors may have the highest
-  immune infiltration (EMT and basal programme
-  create an inflammatory microenvironment).
-  Depth score should correlate with TIL markers
-  and predicted pembrolizumab response.
-  Status: Pembrolizumab approved for PD-L1+ TNBC
-          (KEYNOTE-522)
-  Depth prediction: Depth score within TNBC may
-                    stratify pembrolizumab benefit
-                    better than PD-L1 IHC alone.
-                    🆕 NOVEL STRATIFICATION PREDICTION
+  TYPE 2 SIGNAL:
+    EZH2 elevated — convergence node active
+    Basal identity markers elevated
+    Epigenetic lock on luminal loci (H3K27me3 proxy:
+    look for HDAC1/2 and EZH2 co-elevation)
 
-DRUG 5 — SACITUZUMAB GOVITECAN (TROP2 ADC)
-  Mechanism: TROP2 is a surface antigen on TNBC.
-  Depth prediction: Does TROP2 expression vary with
-                    attractor depth within TNBC?
-                    High depth (deep basal) = more TROP2?
-                    This is an open question to read from
-                    the depth correlation data.
-  Status: Approved second-line metastatic TNBC
-  Novel question: TROP2 as depth-correlated target
+  THE CRITICAL TEST:
+    r(BRCA1, ESR1) within TNBC cells.
+    If > 0 and significant: BRCA1 expression
+    correlates with residual luminal programme —
+    confirms Type 1 component is present.
+    If near zero: BRCA1 and luminal identity are
+    uncoupled in these cells — Type 1 component
+    already completed and only Type 2 remains.
+
+    Prediction: r(BRCA1, ESR1) in TNBC > 0.15
+    (partial Type 1 signal still detectable)
 ```
 
 ---
 
-### II.7 Control gene predictions
+### P5 — DEPTH SCORE PREDICTION
 
 ```
-PREDICTED FLAT in TNBC vs Luminal references:
+PREDICTED DEPTH SCORE CONSTRUCTION:
 
-  SPI1 (PU.1)    — myeloid TF, not breast
-  CDX2           — intestinal TF, not breast
-  NKX2-1         — lung TF, not breast
-  OLIG2          — oligodendrocyte TF, not breast
+  Component 1: Basal identity elevation
+    norm(mean of KRT5, KRT14, SOX10, FOXC1)
+    Higher = more committed to basal false attractor
 
-  LumA identity TFs should be ABSENT in TNBC:
-    FOXA1  ABSENT (confirmed prior analysis)
-    GATA3  ABSENT (confirmed prior analysis)
-    ESR1   ABSENT (confirmed prior analysis)
-    PGR    ABSENT (confirmed — TNBC by definition)
+  Component 2: Luminal identity suppression
+    1 - norm(mean of ESR1, FOXA1, GATA3)
+    Higher = further from correct luminal identity
 
-  These absent LumA markers in TNBC confirm the
-  Type 2 geometry — wrong valley, correct identity
-  programme absent.
-```
+  Depth = (Component 1 + Component 2) / 2
 
----
+PREDICTED DEPTH CORRELATES (top within TNBC):
+  EZH2:   r > +0.30  (convergence node rises with depth)
+  VIM:    r > +0.25  (mesenchymal character with depth)
+  MKI67:  r > +0.20  (proliferation with depth)
+  BRCA1:  r < -0.15  (residual BRCA1 falls with depth —
+                      deeper = more BRCA1 dysfunction)
+  ESR1:   r < -0.30  (luminal TF falls with depth)
+  FOXA1:  r < -0.25  (pioneer TF falls with depth)
 
-## SECTION III — DATASET STRUCTURE CHECK
+ANTI-PREDICTED (should NOT correlate with depth):
+  CDX2, SPI1, NKX2-1 — non-breast lineage controls
+  These should be flat (near-absent in all TNBC)
 
-```
-Before Script 1 runs, confirm:
-
-REQUIRED FROM GSE176078 (Wu et al. 2021):
-  Population: "Cancer Basal SC"
-    — This is the TNBC population
-    — Already labeled in metadata.csv
-    — No re-classification needed
-
-  Normal reference 1: "Luminal Progenitors"
-    — Primary reference for Type 1 test
-    — Already labeled in metadata.csv
-
-  Normal reference 2: "Mature Luminal"
-    — Secondary reference for cross-comparison
-    — Already labeled in metadata.csv
-
-  Cross-reference: "Cancer LumA SC"
-    — For LumA vs TNBC geometry confirmation
-    — Already labeled in metadata.csv
-
-FILE SOURCES (same as LumA scripts — reuse cache):
-  count_matrix_sparse.mtx
-  count_matrix_genes.tsv
-  count_matrix_barcodes.tsv
-  metadata.csv
-
-  IF ALREADY CACHED FROM LUMINAL A SCRIPTS:
-    No re-download required.
-    Script 1 checks for cache and skips download.
-
-LIBRARY SIZE CHECK (Protocol v2.0 requirement):
-  Report library sizes per cell in each population.
-  Flag any cell with library size > 5x median
-  or < median/5 as outlier.
-  TNBC cells have higher proliferation — expect
-  slightly higher library sizes than LumA.
-  Do not flag proliferation-related library size
-  differences as technical artefacts.
-  Flag genuine extreme outliers only.
-
-GENE NAME FORMAT:
-  Human (all caps): BRCA1, EZH2, KRT5
-  Confirmed from LumA scripts.
-  No mouse gene name issues expected.
+NOTE ON TYPE 3 CONTRAST:
+  In LumA: luminal TFs ELEVATED, correlated with depth
+  In TNBC: luminal TFs SUPPRESSED, anti-correlated
+  This is the Type 2 vs Type 3 inversion.
+  The direction of the identity TF depth correlation
+  is the cleanest between-type diagnostic.
 ```
 
 ---
 
-## SECTION IV — SCRIPT 1 OUTPUT STRUCTURE
+### P6 — pCR PREDICTION (bulk GSE25066)
 
 ```
-Per Protocol v2.0 — discovery frame enforced.
-Output must be in this order:
+PREDICTED RELATIONSHIP BETWEEN DEPTH AND pCR:
 
-SECTION 1: TOP MOVERS (unfiltered)
-  Top 20 genes GAINED in TNBC vs Luminal Progenitor
-  Top 20 genes LOST in TNBC vs Luminal Progenitor
-  Read cold. No prediction panel imposed.
+  Hypothesis:
+    Deeper TNBC tumors (higher basal false attractor
+    commitment, lower residual luminal identity)
+    will have LOWER pCR rates to standard
+    neoadjuvant chemotherapy.
 
-SECTION 2: TOP MOVERS vs MATURE LUMINAL
-  Top 20 GAINED
-  Top 20 LOST
-  For comparison with Luminal Progenitor results.
+  Reasoning:
+    Deeper basal attractor = more EZH2-mediated
+    epigenetic lock = more stable false attractor
+    = more resistant to perturbation by cytotoxics.
+    Shallower attractor = cells closer to a
+    transition state = more vulnerable to
+    chemotherapy-induced apoptosis.
+    This is the Waddington depth → therapy
+    vulnerability prediction.
 
-SECTION 3: TYPE 1 GRADIENT TEST
-  ESR1, FOXA1, GATA3, KRT8 across three populations:
-  Mature Luminal > Luminal Progenitor > TNBC?
-  Is the gradient confirmed?
+  ALTERNATIVE HYPOTHESIS (to be tested):
+    Deeper attractor = more proliferative (higher MKI67)
+    = more sensitive to chemotherapy (anti-metabolites
+    and taxanes kill cycling cells preferentially).
+    Some evidence in the literature that high TILs
+    (immune infiltration) and high Ki-67 predict
+    pCR. Both are consistent with the basal false
+    attractor being the context.
 
-SECTION 4: PCA GEOMETRY
-  PC1 variance explained
-  PC1 top loadings
-  Does PC1 separate TNBC from normal references?
-  What do the loadings encode — basal or luminal axis?
+  The two hypotheses generate OPPOSITE predictions.
+  The data will discriminate.
 
-SECTION 5: DEPTH SCORE
-  Blind depth score from top movers
-  EZH2-centred component
-  ESR1/FOXA1 inverse component
-  Depth correlations within TNBC
-
-SECTION 6: PREDICTION PANEL CHECK
-  Where do all predictions above land in the landscape?
-  Confirmed / not confirmed / inverted / unexpected
-
-SECTION 7: COMPOSITE TYPE ASSESSMENT
-  r(ESR1, EZH2) within TNBC — the decisive test
-  Type 1 gradient present/absent
-  Type 2 markers present/absent
-  Composite type confirmed/rejected/partial
-
-SECTION 8: TNBC vs LUMA CROSS-COMPARISON
-  Top movers in TNBC that are opposite in LumA
-  Geometry contrast: Type 2 vs Type 3
-
-A script that leads with the prediction panel
-has failed to implement the discovery frame.
+  FORMAL PREDICTION: depth score is negatively
+  correlated with pCR rate in TNBC (deeper = less
+  likely to achieve pCR).
+  r(depth, pCR_binary) < 0 predicted.
+  p < 0.05 predicted in GSE25066 TNBC subset.
 ```
 
 ---
 
-## SECTION V — THE COMPLETE PREDICTION SUMMARY
+### P7 — EPIGENETIC PREDICTION
 
 ```
-ALL PREDICTIONS LOCKED 2026-03-04
-BEFORE ANY TNBC DATA IS LOADED
+Based on Lesson 5 (Workflow_Protocol v2.0):
+  EZH2 direction must be determined from data.
+  In BRCA (bulk analysis): EZH2 elevated (gain of
+  function lock) — confirmed.
+  In LumA: EZH2 near-neutral (+19% vs progenitor, ns)
+  In TNBC: EZH2 is the convergence node.
 
-TYPE 1 ELEMENT (BRCA1 block):
-  P1-SW-1: ESR1   DOWN vs Luminal Progenitor  >50%
-  P1-SW-2: FOXA1  DOWN vs Luminal Progenitor  >50%
-  P1-SW-3: GATA3  DOWN vs Luminal Progenitor  >30%
-  P1-SW-4: KRT8   DOWN vs Luminal Progenitor
+PREDICTION: EZH2 ELEVATED in TNBC vs normal luminal
 
-TYPE 2 ELEMENT (Basal false attractor):
-  P2-FA-1: KRT5   UP   vs both references     >500% vs mature
-  P2-FA-2: KRT14  UP   vs both references
-  P2-FA-3: SOX10  UP   vs both references
-  P2-FA-4: EZH2   UP   vs both references     confirmed prior
-  P2-FA-5: FOXC1  UP   vs both references
-  P2-FA-6: VIM    UP   vs both references
+  EZH2 direction: UP
+  Magnitude predicted: >50% vs normal luminal
+  p predicted: <0.001
+  r with depth score: > +0.30
 
-EPIGENETIC:
-  P-EPI-1: EZH2 elevated, gain-of-function lock
+  Supporting reasoning:
+    The Schade 2024 paper (Nature) demonstrates
+    EZH2 inhibition produces luminal conversion
+    in TNBC. This confirms EZH2 is active and
+    maintaining the epigenetic lock.
+    The framework independently derived EZH2 as
+    the convergence node from the geometry.
+    Both converge on EZH2 ELEVATED as the lock.
 
-DEPTH AXIS:
-  P3-DEPTH-1: r(EZH2,  depth) > +0.40 within TNBC
-  P3-DEPTH-2: r(ESR1,  depth) < -0.25 within TNBC
-  P3-DEPTH-3: r(EZH2,  ESR1)  < -0.20 within TNBC
-  P3-DEPTH-4: r(KRT5,  depth) > +0.30 within TNBC
-  P3-DEPTH-5: pCR prediction (Script 2 with GSE25066)
-
-COMPOSITE TYPE:
-  P4-COMP-1: ESR1/FOXA1/GATA3 lower in TNBC
-             than in Luminal Progenitors
-  P4-COMP-2: EZH2/KRT5/SOX10 elevated vs progenitor
-             independently
-  P4-COMP-3: r(ESR1, EZH2) < -0.15 within TNBC
-  P4-COMP-4: r(MKI67, depth) > 0 within TNBC
-
-DRUG TARGETS:
-  DRUG 1: EZH2 inhibitor (tazemetostat)    ✓ prior confirmation
-  DRUG 2: PARP inhibitor (olaparib)        ✓ approved
-  DRUG 3: EZH2i + PARPi combination       🆕 novel from composite type
-  DRUG 4: Pembrolizumab depth stratified  🆕 novel stratification
-  DRUG 5: Sacituzumab govitecan (TROP2)   ? depth correlation open
-
-CONTROLS (all predicted FLAT):
-  SPI1, CDX2, NKX2-1, OLIG2
-
-LUMA CONTRAST (all predicted ABSENT/SUPPRESSED):
-  FOXA1, GATA3, ESR1, PGR, CDKN1A (LumA markers)
+ADDITIONAL EPIGENETIC:
+  HDAC1/2:   Predicted ELEVATED (co-epigenetic
+             lock with EZH2 — maintains basal
+             chromatin state)
+  KDM1A:     Predicted ELEVATED (LSD1 demethylates
+             H3K4me2 at luminal TF loci —
+             additional silencing layer)
+  TET2:      Predicted SUPPRESSED or neutral
+             (DNA demethylase — its loss would
+             increase methylation at luminal TF
+             promoters, supporting silencing)
 ```
 
 ---
 
-## STATUS
+### P8 — DRUG TARGET PREDICTIONS
+## Before data, before literature (beyond what is known)
+
+```
+All stated 2026-03-04 before Script 1 runs.
+
+DRUG TARGET 1 — EZH2 INHIBITORS
+  Tazemetostat (EZH2 inhibitor)
+  Mechanism: dissolve epigenetic lock on luminal
+  TF loci → allow partial luminal reconversion
+  → push cells toward the luminal/senescent state
+  Schade 2024 (Nature) independently confirmed.
+  This is pre-confirmed by external literature.
+  Status: ✓ CONVERGENT (already known)
+
+DRUG TARGET 2 — PARP INHIBITORS
+  Olaparib, talazoparib
+  Mechanism: exploit BRCA1 deficiency (Type 1
+  component of the composite type geometry)
+  Synthetic lethality: BRCA1-deficient cells
+  cannot repair double-strand breaks via
+  homologous recombination.
+  PARP inhibitors trap PARP at single-strand
+  breaks, converting them to DSBs, which kill
+  BRCA1-deficient cells selectively.
+  Status: ✓ CONVERGENT (approved in BRCA1-mutated
+  TNBC — confirms Type 1 component logic)
+
+DRUG TARGET 3 — EZH2 + PARP COMBINATION
+  Predicted from composite type axiom (Doc 90):
+  Type 1 + Type 2 composite = both type-specific
+  drugs should be synergistic.
+  EZH2i dissolves the Type 2 false attractor.
+  PARPi exploits the Type 1 BRCA1 defect.
+  Together: the cell cannot maintain the false
+  attractor (EZH2i) AND cannot repair the
+  resulting DNA damage (PARPi).
+  PREDICTION: EZH2i + PARPi combination is
+  synergistic in TNBC beyond what either drug
+  achieves alone.
+  Status: 🆕 NOVEL derivation from composite
+  type geometry — to be checked in literature
+
+DRUG TARGET 4 — DEPTH-STRATIFIED IMMUNOTHERAPY
+  Pembrolizumab (anti-PD-L1) is now standard
+  with neoadjuvant chemotherapy in TNBC
+  (KEYNOTE-522).
+  PREDICTION: Depth score stratifies pembrolizumab
+  benefit. Shallower tumors (closer to luminal,
+  more partial differentiation) may have higher
+  TIL infiltration and greater immunotherapy
+  response. Deeper tumors (more committed to
+  basal false attractor) may be more immune-excluded
+  and less pembrolizumab-sensitive.
+  Status: 🆕 NOVEL — depth as immunotherapy
+  stratification variable not established.
+
+DRUG TARGET 5 — AKT INHIBITORS
+  Schade 2024 found AKT + EZH2 inhibition
+  synergistic in TNBC (PI3K/AKT pathway
+  co-activates EZH2 in basal cells).
+  PREDICTION: AKT1 elevated in deeper TNBC cells
+  (r(AKT1, depth) > 0.15 predicted).
+  Status: ⚠ PARTIALLY PRE-KNOWN (Schade 2024)
+  but AKT as depth marker within TNBC is not
+  yet established.
+```
+
+---
+
+### P9 — INTERNAL TNBC HETEROGENEITY
+
+```
+TNBC contains at least 6 molecular subtypes
+(Lehmann et al. 2011, 2016).
+The GSE176078 scRNA-seq data does not have
+Lehmann subtype calls.
+The depth score will be applied across ALL
+basal-like cells in the dataset.
+
+PREDICTION: Depth score will reveal heterogeneity
+within the TNBC population that partially maps
+to known Lehmann subtypes.
+
+Specifically:
+  Deeper cells (high basal FA markers, low luminal
+  switch genes, high EZH2): BL1 or BL2 subtypes
+  Intermediate cells (partial luminal character):
+  LAR (luminal androgen receptor) subtype
+
+  AR (androgen receptor):
+    The LAR subtype is AR-positive.
+    PREDICTION: AR expression in TNBC cells is
+    negatively correlated with depth.
+    Cells that retained partial luminal character
+    (shallower in the basal attractor) may retain
+    AR as a residual luminal feature.
+    r(AR, depth) < -0.15 predicted.
+    (This is the opposite of LumA where
+    r(AR, depth) = +0.285)
+
+  VIM (vimentin):
+    Mesenchymal/claudin-low feature.
+    PREDICTION: r(VIM, depth) > +0.20.
+    Deeper cells acquire partial EMT character.
+```
+
+---
+
+## PART IV — WHAT THIS ANALYSIS CANNOT TELL US
+
+```
+The scRNA-seq data (GSE176078) contains:
+  Basal-like cells: n=4,312
+  Normal references: mature luminal, luminal progenitor
+
+This data was not collected specifically for
+TNBC analysis. The "basal SC" annotation is the
+closest available population.
+
+LIMITATIONS:
+  1. No Lehmann subtype annotation — cannot test
+     BL1/BL2/LAR directly
+  2. No pCR annotation — the pCR prediction
+     (P6) requires GSE25066
+  3. No immune cell data from the cancer compartment
+     — cannot test TIL depth correlation directly
+  4. The normal references are from the same dataset
+     — matched donors, not separate cohorts
+
+GSE25066 IS REQUIRED for P6 (pCR prediction).
+It is independent of GSE176078.
+The script will load both separately.
+They will be analyzed in separate steps.
+```
+
+---
+
+## PART V — COMPLETE PREDICTION REFERENCE
+
+```
+PREDICTIONS LOCKED 2026-03-04
+Document: BRCA-S4a
+Author: Eric Robert Lawson, OrganismCore
+
+ATTRACTOR TYPE: COMPOSITE TYPE 1 → TYPE 2
+
+P1 — SWITCH GENES (all DOWN in TNBC):
+  ESR1, FOXA1, GATA3, SPDEF, PGR
+  p < 0.001 for all predicted
+
+P2 — FA MARKERS (all UP in TNBC):
+  KRT5, KRT14, SOX10, FOXC1, EGFR, VIM
+
+P3 — CONVERGENCE NODE:
+  EZH2 ELEVATED, r(EZH2, depth) > +0.30
+  (pre-confirmed by Schade 2024 / Nature)
+
+P4 — COMPOSITE TYPE TEST:
+  r(BRCA1, ESR1) within TNBC > +0.15
+  (partial Type 1 signal detectable)
+
+P5 — DEPTH SCORE:
+  norm(KRT5+KRT14+SOX10+FOXC1) +
+  (1 - norm(ESR1+FOXA1+GATA3)) / 2
+  Top correlates: EZH2, VIM, MKI67 (positive)
+                  ESR1, FOXA1, BRCA1 (negative)
+
+P6 — pCR PREDICTION (GSE25066):
+  r(depth, pCR_binary) < 0
+  (deeper = lower pCR probability)
+
+P7 — EPIGENETIC:
+  EZH2 UP >50% vs normal luminal
+  HDAC1/2 elevated
+  KDM1A elevated
+
+P8 — DRUG TARGETS:
+  ✓ EZH2 inhibitors (tazemetostat)
+  ✓ PARP inhibitors (olaparib)
+  🆕 EZH2 + PARP combination (from composite type)
+  🆕 Depth-stratified pembrolizumab
+  ⚠ AKT inhibitors (partially pre-known)
+
+P9 — HETEROGENEITY:
+  r(AR, depth) < -0.15 (LAR cells shallower)
+  r(VIM, depth) > +0.20 (EMT cells deeper)
+
+CONTROLS (should be flat in TNBC):
+  CDX2, SPI1, NKX2-1, NKX3-1, OLIG2
+  If any are elevated: analyst assumption error
+  Record and process per Wrong Prediction Protocol
+```
+
+---
+
+## STATUS BLOCK
 
 ```
 document:           BRCA-S4a
-date_locked:        2026-03-04
-predictions:        26 total
-  Type 1 element:   4 predictions
-  Type 2 element:   6 predictions
-  Epigenetic:       1 prediction
-  Depth axis:       5 predictions (1 deferred to S2)
-  Composite type:   4 predictions
-  Drug targets:     5 predictions (2 novel, 3 confirmed)
-  Controls:         4 predictions
-
-author:             Eric Robert Lawson
-                    OrganismCore
+type:               Before-Document (locked predictions)
+date:               2026-03-04
+author:             Eric Robert Lawson / OrganismCore
 status:             LOCKED
+
+predictions_count:  9 prediction groups
+attractor_type:     Composite Type 1 → Type 2
+datasets:           GSE176078 (scRNA-seq)
+                    GSE25066 (bulk, pCR annotation)
+next_document:      BRCA-S4b (Script 1 reasoning artifact)
+script:             BRCA_TNBC_script1.py
 ```

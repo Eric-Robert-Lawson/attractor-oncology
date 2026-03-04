@@ -10,10 +10,15 @@ literature consultation. All predictions pre-registered and timestamped.
 Zero false positives in drug target direction across 22 independent cancer analyses.
 
 **Author:** Eric Robert Lawson
+
 **Affiliation:** Independent mathematician
+
 **ORCID:** https://orcid.org/0009-0002-0414-6544
+
 **Date:** 2026-03-04
+
 **License:** MIT
+
 **Contact:** OrganismCore@proton.me
 
 **This repository is a dedicated cancer sub-repository of the OrganismCore framework.

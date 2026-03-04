@@ -16,6 +16,12 @@ Contact: OrganismCore@proton.me
 
 ---
 
+#**How?**
+
+Read [The Puddle](The_Puddle.md) if you want to understand this framework because it works based on principles first with a structural invariant that was derived from OrganismCore.
+
+---
+
 ## What This Repository Is
 
 This repository contains a systematic computational analysis of **18+ cancer types** using a unified mathematical framework derived from the Waddington epigenetic landscape.

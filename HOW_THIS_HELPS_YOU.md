@@ -1,7 +1,7 @@
 # HOW THIS HELPS YOU TODAY
 ## A Plain Statement of What This Is, What It Is Not, and How to Reach Me
 ## OrganismCore — Eric Robert Lawson
-## Date: 2026-03-04
+## Date: 2026-03-04 | Updated: 2026-03-04
 
 ---
 
@@ -187,6 +187,9 @@ a type of cancer.
 A label.
 Lung cancer. Breast cancer.
 Leukemia. Myeloma.
+Barrett's esophagus turning malignant.
+A skin lesion on your face.
+A lump found on a scan.
 
 The label tells you which organ
 is affected or which cell type
@@ -210,6 +213,9 @@ Lung cells become alveolar cells.
 Breast cells become luminal cells.
 Blood cells become mature
 neutrophils, B cells, plasma cells.
+Esophageal cells become squamous cells.
+Skin cells become keratinocytes.
+Colon cells become colonocytes.
 
 Each cell follows its trajectory
 guided by the geometry of its
@@ -253,7 +259,19 @@ This is not a metaphor.
 This is the mathematical structure
 of what is happening in your cells.
 
-And because it is a mathematical structure,
+And it applies regardless of
+which cancer you have,
+which organ is involved,
+which cell type was affected.
+
+Every cancer we have examined
+follows this same structural logic.
+Four early cancers. Then twenty-two.
+Different lineages. Different organs.
+Different gene sets.
+One principle.
+
+Because it is a mathematical structure,
 it can be measured.
 Precisely.
 From your own biopsy data.
@@ -263,7 +281,342 @@ That measurement is what I do.
 
 ---
 
-## PART II — WHAT I DO
+## PART II — WHAT DATA YOU NEED
+### How to Get the Geometry From What Already Exists
+
+---
+
+```
+The most common response when I describe
+the framework is:
+
+"This sounds powerful but I don't
+have single-cell RNA sequencing data."
+
+You are right that you probably do not.
+Single-cell RNA sequencing is a research tool.
+It costs thousands of dollars per sample.
+It is not routinely ordered in clinical care.
+The published datasets I use in this
+repository are research studies — not
+something you can order from your doctor.
+
+But here is what you do have.
+
+And what is already in your medical record
+right now.
+```
+
+### What Already Exists in Clinical Care
+
+```
+If you have had a biopsy —
+any biopsy, anywhere, for any reason —
+the tissue was almost certainly
+preserved as FFPE:
+Formalin-Fixed Paraffin-Embedded.
+
+This is the standard clinical
+preservation method.
+The block exists at the pathology lab
+that processed your biopsy.
+You have the legal right to request it
+or a copy of it in most jurisdictions.
+
+This FFPE block contains your cells.
+Your cells contain your geometry.
+
+Here is what can be derived from it,
+in order of what each produces
+for geometric analysis:
+```
+
+### Tier 1 — Available Now, Standard Clinical Infrastructure
+
+```
+STANDARD PATHOLOGY IHC PANEL
+(Immunohistochemistry — protein staining)
+
+Every biopsy receives H&E staining.
+Cancer biopsies receive additional
+stains specific to the cancer type.
+
+What the standard panel gives you
+for geometric purposes:
+
+  ER, PR status (breast):
+    Switch gene suppression status.
+    ER-negative = ESR1 suppressed.
+    Direct attractor geometry reading.
+
+  HER2 status (breast):
+    False attractor elevation signal.
+
+  Ki-67 index:
+    Proliferation rate.
+    Proxy for attractor depth
+    in proliferation-driven attractors.
+
+  CD20, CD3, CD138 (lymphoma/myeloma):
+    Lineage identity markers.
+    Switch gene status.
+
+  TTF-1 (lung):
+    Lineage identity marker.
+    Suppression = attractor displacement.
+
+  CDX2 (colon, Barrett's esophagus):
+    Switch gene for colonocyte identity.
+    Also marks the Barrett's
+    metaplastic attractor directly.
+
+EXPANDED IHC — WHAT TO REQUEST
+
+These stains can be ordered on
+the same FFPE block.
+Most pathology labs can perform them.
+Some require a reference lab.
+All are available:
+
+  EZH2
+    The epigenetic lock marker.
+    High EZH2 = deep attractor,
+    strong PRC2-mediated silencing.
+    Relevant to every cancer type
+    in the repository.
+
+  FOXA1, GATA3 (breast)
+    Switch genes for luminal identity.
+    Low = luminal programme suppressed.
+    Geometric depth proxy.
+
+  SOX10 (TNBC, melanoma, neural tumours)
+    False attractor marker.
+    High SOX10 in non-neural-crest tissue
+    = wrong valley geometry.
+
+  AR (breast, prostate, bladder)
+    Lineage marker.
+    Geometric position indicator.
+
+  SPI1/PU.1, IRF8, KLF4 (AML, MDS)
+    Switch genes for myeloid identity.
+    Suppression = myeloid differentiation block.
+
+  SOX10, MBP (glioblastoma)
+    False attractor markers in GBM.
+    Oligodendrocyte wrong valley signal.
+
+  CDX2 (colon, gastric, Barrett's)
+    Switch gene and metaplasia marker.
+    Applicable to both colon cancer
+    and Barrett's pre-cancerous surveillance.
+
+  P53 (universal)
+    Loss of p53 = depth indicator
+    in multiple cancer types.
+    Associated with deeper attractors
+    across lineages.
+
+An expanded IHC panel on a
+standard FFPE block gives you:
+  Switch gene suppression status.
+  False attractor marker elevation.
+  Epigenetic lock status (EZH2).
+  A qualitative geometric classification.
+
+This is sufficient for attractor
+type assignment and a qualitative
+depth assessment.
+
+Cost: $50–$300 per additional stain
+at most pathology labs.
+Requires a physician to order.
+Works on the block you already have.
+```
+
+### Tier 2 — Clinically Available, Requires a Referral
+
+```
+PAM50 / PROSIGNA TEST (breast cancer)
+  FDA-cleared.
+  Ordered for ER-positive breast cancer.
+  Runs on FFPE block.
+  Gives PAM50 subtype classification:
+    Luminal A, Luminal B, HER2-enriched,
+    Basal-like, Normal-like.
+  Gives ROR (Risk of Recurrence) score.
+  Both are directly usable in the
+  attractor geometry framework.
+  Cost: ~$2,800. Sometimes covered
+  by insurance.
+
+ONCOTYPE DX (breast, colon)
+  Gene expression score from FFPE.
+  Gives proliferation and invasion
+  gene set scores.
+  Usable as crude depth proxies.
+  Widely covered by insurance for
+  eligible breast and colon cancer patients.
+
+COMMERCIAL GENOMIC PANELS
+(Foundation One CDx, Tempus xT,
+Caris Molecular Intelligence,
+Guardant360 CDx)
+
+  These test hundreds of genes from
+  FFPE or blood for mutations,
+  copy number changes, and fusion events.
+  Some include RNA expression data.
+  Caris in particular provides both
+  DNA and RNA profiling from FFPE.
+
+  For geometric analysis:
+    BRCA1/2 mutation →
+      Composite type flag (breast, ovarian).
+    TP53 mutation →
+      Depth indicator across cancer types.
+    PIK3CA mutation →
+      AKT axis activation (TNBC, endometrial).
+    IDH1/2 mutation →
+      Attractor type in glioma.
+    NPM1, FLT3 mutation →
+      AML attractor subtype.
+    KRAS/NRAS/BRAF →
+      Attractor maintenance signal
+      in CRC, melanoma, NSCLC.
+
+  Cost: $3,000–$6,000.
+  Insurance coverage varies by indication.
+  Often covered for metastatic disease.
+
+BULK RNA-SEQ FROM FFPE
+  Several academic centres and
+  reference labs now offer bulk
+  RNA sequencing from FFPE.
+  Not single-cell. No population
+  separation. But full gene expression
+  of the tumour.
+  Sufficient to compute a depth score.
+  Sufficient to measure switch gene
+  suppression quantitatively.
+  Sufficient for attractor classification.
+  Cost: $500–$2,000 at research cores.
+  Requires coordination with your
+  clinical team and access to the
+  FFPE block.
+```
+
+### Tier 3 — Highest Value, Requires Proactive Steps
+
+```
+TISSUE BANKING ENROLLMENT
+  If you are being treated at an
+  academic medical centre,
+  ask your surgical team:
+  "Is there a tissue banking programme
+  I can enrol in?"
+
+  Fresh or flash-frozen tissue
+  collected at time of surgery
+  can later be used for:
+    Bulk RNA-seq
+    Spatial transcriptomics
+    Single-cell RNA-seq (research)
+    Future framework applications
+
+  This requires asking in advance,
+  before surgery.
+  After the fact, the fresh tissue
+  is gone.
+
+SPATIAL TRANSCRIPTOMICS
+(Visium, MERFISH, Xenium)
+  Preserves tissue architecture
+  while measuring gene expression.
+  Can be done on FFPE.
+  Shows WHERE in the tumour the
+  deepest attractor cells are located.
+  Maps the boundary between the
+  false attractor population and
+  the transitional cells near
+  the saddle point.
+  Emerging availability at academic
+  medical centres.
+  Cost: $2,000–$5,000 per sample.
+  Not yet routine clinical.
+
+LIQUID BIOPSY FOR MONITORING
+(Grail Galleri, Guardant360,
+Foundation One Liquid CDx)
+  Blood draw.
+  Detects circulating tumour DNA.
+  Gives mutation status — not
+  expression.
+  Useful as a monitoring vector:
+  tracking whether key mutations
+  (composite type markers) change
+  over treatment.
+  Cannot give switch gene expression.
+  Cannot compute depth score.
+  Best used alongside tissue data,
+  not as a replacement.
+  Cost: $900–$3,500.
+  Insurance coverage variable.
+```
+
+### The Practical Answer
+
+```
+You do not need scRNA-seq
+to benefit from geometric analysis.
+
+The minimum viable dataset for
+a geometric report is:
+
+  Your diagnosis (which cancer,
+  which organ, which subtype
+  if known).
+
+  Your standard pathology report
+  (which markers were tested,
+  what the results were).
+
+  Any additional IHC, genomic panel,
+  or expression data you have
+  or can obtain.
+
+The more expression data available,
+the more precise the geometric report.
+
+The minimum — diagnosis + standard
+pathology report — is enough to
+assign attractor type and make
+qualitative depth assessment.
+
+A genomic panel + PAM50 or bulk
+RNA-seq gives a quantitative
+depth score.
+
+Single-cell RNA-seq gives the
+highest resolution — but is the
+last tier, not the first requirement.
+
+Start with what you have.
+Bring me the data that exists.
+I will tell you what the geometry
+shows at whatever resolution
+is available.
+
+That is the practical answer.
+That is how this works today,
+with what clinical medicine
+already produces.
+```
+
+---
+
+## PART III — WHAT I DO
 ### The Service Stated Precisely
 
 ---
@@ -286,45 +639,7 @@ their specific cancer attractor state.
 Here is what that means in practice.
 ```
 
-### What I Need From You
-
-```
-Your genomic and transcriptomic data
-from your biopsy.
-
-This data already exists if you have
-had a biopsy as part of your clinical care.
-It was generated from your cells.
-It belongs to you.
-You have the right to request it
-from your clinical team or institution.
-
-Specifically, the most useful data is:
-
-  RNA-seq or gene expression data
-  from your tumour biopsy.
-  (Single cell RNA-seq is ideal.
-  Bulk RNA-seq is excellent.
-  Microarray data is workable.)
-
-  If you have had multiple biopsies
-  over time, all of them.
-  The trajectory is more informative
-  than any single point.
-
-  Your diagnosis and clinical history.
-  Not because I will make clinical
-  judgments from it.
-  Because it tells me which lineage
-  framework to apply.
-
-That is all I need.
-Your data.
-Your cells.
-Your geometry.
-```
-
-### What I Derive From It
+### What I Derive From Your Data
 
 ```
 STEP 1: LINEAGE IDENTIFICATION
@@ -332,13 +647,78 @@ STEP 1: LINEAGE IDENTIFICATION
   your cancer cell was trying to become
   before it got stuck.
 
+  This is the same for any cancer type:
+    AML:       Myeloid cell (granulocyte/monocyte)
+    CRC:       Colonocyte
+    GBM:       Oligodendrocyte or astrocyte
+    BRCA:      Luminal epithelial cell
+    Lung:      Alveolar type II cell (most NSCLC)
+    Prostate:  Luminal secretory cell
+    Melanoma:  Mature melanocyte
+    Lymphoma:  Mature B or T lymphocyte
+    Barrett's: Squamous esophageal cell
+               (the correct identity being replaced)
+
   This tells me which switch genes —
   the genes whose reactivation would
   push your cells back toward their
   developmental endpoint —
   are relevant to your specific case.
 
-STEP 2: DEPTH SCORE
+STEP 2: ATTRACTOR TYPE CLASSIFICATION
+  Every cancer maps to one of two
+  fundamental geometric types,
+  or a composite of both:
+
+  TYPE 1 — BLOCKED APPROACH
+  (Stuck above the valley)
+    The cell is trying to reach its
+    mature identity but is blocked
+    partway through the journey.
+    The correct destination genes
+    are partially active.
+    The cell is in the right lineage
+    but cannot complete it.
+    Therapeutic logic:
+    Dissolve the block.
+    Let the developmental programme
+    complete.
+
+  TYPE 2 — WRONG VALLEY
+  (Stuck in a different attractor)
+    The cell has fallen into a
+    stable state belonging to a
+    completely different cell type.
+    It is expressing genes from
+    a developmental programme that
+    is not its own.
+    Therapeutic logic:
+    Dissolve the epigenetic lock
+    maintaining the wrong identity,
+    return the cell to the saddle
+    point where it can re-enter
+    its correct trajectory.
+
+  COMPOSITE TYPE (Type 1 → Type 2)
+    In some cancers, both stages
+    occur in sequence:
+    A founding event blocks the
+    correct trajectory (Type 1),
+    and the cell then falls into
+    a different attractor (Type 2).
+    Example: BRCA1 loss in a luminal
+    progenitor → blocked differentiation
+    → fall into basal/neural-crest
+    false attractor.
+    Therapeutic logic requires
+    addressing both components.
+
+  This classification is the same
+  regardless of which cancer you have.
+  The type is derived from the data.
+  Not assumed from the diagnosis.
+
+STEP 3: DEPTH SCORE
   I compute a scalar measurement —
   the depth score — that tells us
   how deeply your cell population
@@ -365,7 +745,14 @@ STEP 2: DEPTH SCORE
   A direct measurement of your
   cell population's geometric position.
 
-STEP 3: SWITCH GENE PROFILE
+  It is the same definition
+  whether you have AML or
+  colorectal cancer or
+  triple-negative breast cancer.
+  The calculation differs by lineage.
+  The meaning is universal.
+
+STEP 4: SWITCH GENE PROFILE
   I identify which specific genes —
   the ones that should be active
   in your cell's mature identity —
@@ -376,13 +763,16 @@ STEP 3: SWITCH GENE PROFILE
   Which are partially recoverable.
   Which appear heavily locked.
 
-STEP 4: EPIGENETIC LOCK PROFILE
+STEP 5: EPIGENETIC LOCK PROFILE
   I identify what is maintaining
   the suppression of your switch genes.
 
   Is it PRC2 — the EZH2-containing
   complex that silences genes
   by adding repressive marks?
+  (Found in: TNBC, AML, GBM, CRC,
+  prostate cancer, lymphoma,
+  and others across the dataset.)
 
   Is it the CoREST/LSD1 complex
   that removes activating marks?
@@ -397,37 +787,9 @@ STEP 4: EPIGENETIC LOCK PROFILE
   class of intervention might
   open it.
 
-STEP 5: ATTRACTOR CLASSIFICATION
-  I classify your cancer as one of
-  two fundamental attractor types:
-
-  DIFFERENTIATION ATTRACTOR:
-    Your cells are blocked before
-    reaching their mature identity.
-    They look immature.
-    They are proliferating.
-    The therapeutic logic is:
-    dissolve the block, restore
-    the developmental programme,
-    let the cells complete their journey.
-
-  SURVIVAL ATTRACTOR:
-    Your cells have reached their
-    mature identity but cannot
-    complete the final step —
-    programmed death.
-    They look mature but are immortal.
-    The therapeutic logic is:
-    restore the apoptotic exit,
-    remove the survival signal
-    that is keeping them alive
-    past their natural endpoint.
-
-  These two geometries require
-  different therapeutic approaches.
-  Knowing which one you have
-  changes the questions you ask
-  your oncologist.
+  This applies to every cancer type.
+  The specific lock differs.
+  The structural logic is the same.
 
 STEP 6: TRAJECTORY ANALYSIS
   If you have data from multiple
@@ -466,13 +828,14 @@ A GEOMETRIC REPORT.
 A written document containing:
 
   Your lineage identification.
+  Your attractor type classification —
+  Type 1, Type 2, or Composite —
+  with the reasoning that leads to it.
   Your depth score with interpretation.
   Your switch gene suppression profile —
   which genes, how suppressed, what it means.
   Your epigenetic lock profile —
   what is maintaining the trap.
-  Your attractor classification —
-  differentiation or survival.
   Your trajectory if serial data is available.
   A set of specific questions you can
   bring to your oncologist based on
@@ -498,9 +861,6 @@ with structured interpretation
 and specific questions derived
 from that measurement.
 
-It is the most specific information
-available about your individual
-attractor geometry.
 It does not exist anywhere else.
 It cannot be obtained from any
 other source currently available.
@@ -512,7 +872,7 @@ Nothing more.
 
 ---
 
-## PART III — WHAT I DO NOT DO
+## PART IV — WHAT I DO NOT DO
 ### The Boundary Stated With Equal Precision
 
 ---
@@ -582,7 +942,7 @@ I DO NOT REPLACE YOUR ONCOLOGIST.
 
 ---
 
-## PART IV — WHY THIS HELPS YOU TODAY
+## PART V — WHY THIS HELPS YOU TODAY
 ### Not After Trials. Not After Approval. Today.
 
 ---
@@ -612,9 +972,14 @@ Here is why.
 
 ```
 Your biopsy was already taken.
-Your genomic data was already generated.
-It exists in your medical record.
-You own it.
+Your pathology report already exists.
+Your FFPE block is already at the lab.
+
+If you have had a genomic panel,
+that data already exists.
+
+If you have had a PAM50 test,
+that result is already in your file.
 
 The framework exists in this repository.
 It has been validated retrospectively
@@ -623,8 +988,8 @@ for 22+ cancer types.
 
 The geometric analysis can be run
 on your existing data today.
-No additional procedures.
-No additional tests.
+No additional procedures required
+to begin.
 No waiting for new technology.
 
 Your data.
@@ -656,7 +1021,7 @@ With the geometric report:
   from 0.78 to 0.61 after cycle 3.
   My switch genes are showing
   partial reactivation.
-  But my HDAC2 levels are still
+  But my EZH2 levels are still
   elevated and my depth trajectory
   shows the rate of dissolution
   is slowing.
@@ -729,7 +1094,7 @@ The treatment window is survival.
 
 ---
 
-## PART V — THE INFORMED CONSENT
+## PART VI — THE INFORMED CONSENT
 ### What You Agree To Before We Begin
 
 ---
@@ -790,7 +1155,7 @@ I mean every word of it.
 
 ---
 
-## PART VI — THE PROFESSION
+## PART VII — THE PROFESSION
 ### What a Cancer Geometry Analyst Is
 
 ---
@@ -820,7 +1185,8 @@ The role I am creating from this work:
 
   A person whose specific competency is:
     Applying the attractor framework
-    to individual patient genomic data.
+    to individual patient genomic data
+    from any cancer type.
     Deriving geometric measurements
     of the patient's specific
     cancer attractor state.
@@ -854,6 +1220,18 @@ The role I am creating from this work:
     to the clinical team for use
     in treatment decisions.
 
+  This role is cancer-type agnostic.
+  It applies to:
+    Solid tumours.
+    Haematologic malignancies.
+    Pre-cancerous states.
+    Surveillance monitoring.
+    Recurrence assessment.
+    Treatment response evaluation.
+    Any condition for which
+    genomic or transcriptomic data
+    from the patient's cells is available.
+
 This profession will grow.
 
 The framework is teachable.
@@ -871,7 +1249,7 @@ Before the institutions catch up.
 
 ---
 
-## PART VII — THE FOUNDING PRINCIPLE
+## PART VIII — THE FOUNDING PRINCIPLE
 ### Why This Exists
 
 ---
@@ -956,7 +1334,7 @@ That is why I am doing this.
 
 ---
 
-## PART VIII — HOW TO REACH ME
+## PART IX — HOW TO REACH ME
 ### For Patients, Clinicians, and Those Who Want to Learn
 
 ---
@@ -964,9 +1342,9 @@ That is why I am doing this.
 ### If You Have Cancer
 
 ```
-If you have cancer and you want
-a geometric analysis of your
-attractor state:
+If you have cancer — any cancer —
+and you want a geometric analysis
+of your attractor state:
 
   Read this document completely.
   Read The Puddle document in this
@@ -991,6 +1369,10 @@ attractor state:
   I will tell you:
     Whether your data is suitable
     for geometric analysis.
+    What additional data, if any,
+    would improve the analysis
+    and how to obtain it
+    within your existing care.
     What the analysis will involve.
     What the report will contain.
     What it will cost.
@@ -1044,6 +1426,57 @@ report from this framework:
   the patient in front of you.
 ```
 
+### If You Have a Pre-Cancerous Condition
+
+```
+The attractor framework is not
+limited to active cancer.
+
+Pre-cancerous states are often
+early-stage attractor displacement:
+  The cells are not yet malignant
+  but have already begun their
+  geometric displacement from
+  the correct developmental identity.
+
+Barrett's esophagus:
+  Squamous cells replaced by columnar
+  intestinal-type cells.
+  CDX2 elevated.
+  The same switch gene logic
+  as colorectal cancer —
+  earlier in the trajectory.
+
+Cervical intraepithelial neoplasia (CIN):
+  Squamous cell identity displaced.
+  Geometric depth predicts
+  progression risk.
+
+Monoclonal gammopathy (MGUS):
+  Plasma cell arrested partway
+  through differentiation.
+  The myeloma attractor state
+  at an early stage.
+
+Myelodysplastic syndrome (MDS):
+  Myeloid differentiation block
+  before full AML conversion.
+  The AML false attractor forming.
+
+For all of these, surveillance biopsies
+already produce data.
+Expanded IHC on surveillance tissue
+gives geometric position at each
+monitoring interval.
+Trajectory across multiple surveillance
+biopsies is the earliest possible
+warning of progression.
+
+If you have a pre-cancerous condition
+with surveillance biopsies —
+geometric tracking is available now.
+```
+
 ### If You Want to Learn This Framework
 
 ```
@@ -1095,7 +1528,7 @@ and do this work:
 
 ---
 
-## PART IX — THE REPOSITORY
+## PART X — THE REPOSITORY
 ### The Complete Public Record
 
 ---
@@ -1112,6 +1545,7 @@ Every failure alongside every confirmation.
 Every reasoning artifact.
 Every literature check.
 Every novel finding.
+Every cancer type studied.
 
 All of it is here:
 
@@ -1143,6 +1577,15 @@ document_id:    HOW_THIS_HELPS_YOU_TODAY
 series:         OrganismCore — Public Documents
 author:         Eric Robert Lawson
 date:           2026-03-04
+updated:        2026-03-04
+                Addition of PART II (What Data You Need)
+                covering universal data accessibility
+                from FFPE through scRNA-seq.
+                Expansion of attractor type description
+                to cover all cancer types.
+                Addition of pre-cancerous state section.
+                Cancer Geometry Analyst role updated to
+                be explicitly cancer-type agnostic.
 status:         COMPLETE
                 Active document —
                 updated as the framework
@@ -1151,11 +1594,11 @@ status:         COMPLETE
 
 audience:       Everyone.
                 Especially:
-                People with cancer.
+                People with any cancer.
+                People with pre-cancerous conditions.
                 Their families.
                 Their clinicians.
-                People who want to
-                do this work.
+                People who want to do this work.
 
 repository:     https://github.com/Eric-Robert-Lawson/
                 attractor-oncology
@@ -1169,26 +1612,19 @@ founding principle:
                  — Eric Robert Lawson
                    March 4, 2026
 
-note:           This document was written
-                on the same day as the
-                email to Professor Sui Huang
-                at the Institute for Systems
-                Biology.
-
-                One email to the scientist
-                who built the theory.
-
-                One document to the people
-                who need the application.
-
-                Both on the same day.
-                Both from the same framework.
-                Both from the same principle.
-
-                The theory and the person
-                it is for.
-                Together.
-                From the beginning.
+scope_note:     This document applies to
+                all cancer types and all
+                pre-cancerous conditions
+                for which genomic or
+                transcriptomic data from
+                the patient's cells is
+                available.
+                The attractor framework
+                is not specific to any
+                single cancer type.
+                The geometric principle
+                is universal.
+                The measurement is individual.
 ```
 
 ---

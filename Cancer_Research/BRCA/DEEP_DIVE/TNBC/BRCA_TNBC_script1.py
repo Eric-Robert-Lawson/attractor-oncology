@@ -106,11 +106,11 @@ BULK_FILE   = "GSE25066_series_matrix.txt.gz"
 # Confirmed from LumA log: CT_COL = "celltype_major"
 # ============================================================
 
-CT_COL       = "celltype_major"
+CT_COL = "celltype_subset"
 CANCER_BASAL = "Cancer Basal SC"
-MATURE_LUM   = "Normal Luminal Mature"
-LUMINAL_PROG = "Normal Luminal Progenitors"
-MYOEPITH     = "Normal Myoepithelial"
+MATURE_LUM   = "Mature Luminal"
+LUMINAL_PROG = "Luminal Progenitors"
+MYOEPITH     = "Myoepithelial"
 CANCER_LUMA  = "Cancer LumA SC"
 
 # ============================================================

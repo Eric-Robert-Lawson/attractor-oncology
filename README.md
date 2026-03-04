@@ -1,6 +1,6 @@
 # Attractor Oncology
 ### Waddington Landscape Geometry Applied to Cancer Patient Stratification
-#### A Computational Framework for Personalised Cancer Genomics — Reproducible From Public scRNA-seq and Bulk RNA-seq Data
+#### A Computational Framework for Personalised Cancer Genomics — Reproducible From Public scRNA-seq and Bulk RNA-seq Data all the way down to pathology reports and ICH data (bare minimum) 
 
 A systematic application of Waddington epigenetic landscape geometry to 22+
 cancer entities using public scRNA-seq and bulk RNA-seq datasets (TCGA and GEO).

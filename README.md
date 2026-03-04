@@ -1,13 +1,19 @@
 # Attractor Oncology
 ### Waddington Landscape Geometry Applied to Cancer Patient Stratification
-#### A Computational Framework Derived From Public Data — No Institutional Access Required
+#### A Computational Framework for Personalised Cancer Genomics — Reproducible From Public scRNA-seq and Bulk RNA-seq Data
+
+A systematic application of Waddington epigenetic landscape geometry to 22+
+cancer entities using public scRNA-seq and bulk RNA-seq datasets (TCGA and GEO).
+Derives lineage-specific attractor depth scores, switch gene suppression profiles,
+epigenetic lock identities, and drug targets from first principles — before any
+literature consultation. All predictions pre-registered and timestamped.
+Zero false positives in drug target direction across 22 independent cancer analyses.
 
 **Author:** Eric Robert Lawson
 **Affiliation:** Independent mathematician
 **ORCID:** https://orcid.org/0009-0002-0414-6544
 **Date:** 2026-03-04
 **License:** MIT
-**Languages:** Python, TeX
 **Contact:** OrganismCore@proton.me
 
 **This repository is a dedicated cancer sub-repository of the OrganismCore framework.

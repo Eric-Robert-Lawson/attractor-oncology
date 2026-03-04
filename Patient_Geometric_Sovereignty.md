@@ -698,111 +698,624 @@ when it matters is unbounded.
 
 ## PART VII — THE PRACTICAL PROTOCOL
 ### What Patient Geometric Sovereignty Looks Like
+### With Tiered Data Accessibility
 
 ---
 
 ```
-STEP 1: REQUEST YOUR DATA
-  At every biopsy, at every
-  blood draw where liquid biopsy
-  is available, request:
-    Full transcriptomic data
-    (RNA-seq if possible)
-    Genomic data
-    (mutation profile)
-    Epigenomic data
-    (methylation if available)
+The framework does not require
+$3,000–$15,000 per-sample sequencing
+to be useful to you.
+
+That is the ideal tier.
+It is not the only tier.
+
+What you need depends on
+what you have access to.
+
+This applies to every cancer type.
+Every lineage.
+Every diagnosis.
+
+Below is the complete tiered protocol,
+from what every patient can do
+to what patients with full access can do.
+
+Every tier is better than nothing.
+The higher tiers add precision,
+not a different answer.
+
+═══════════════════════════════════════
+TIER 0 — WHAT EVERY PATIENT HAS
+Cost: $0
+Data source: Your existing clinical record
+═══════════════════════════════════════
+
+Every patient who has been diagnosed
+with a solid tumour has:
+
+  IHC (immunohistochemistry) panel
+    — Standard lineage markers
+      for your cancer type
+    — Proliferation markers (Ki-67)
+    — Receptor status where applicable
+
+  Pathology report
+    — Grade
+    — Subtype
+    — Margin status
+    — Lymph node status
+
+  Imaging
+    — RECIST-measurable disease
+
+These are not gene expression data.
+They are proxy measurements of
+the switch gene landscape.
+
+The absence of a lineage marker
+that should be present in the
+normal cell of origin IS a switch
+gene suppression measurement.
+It is low-resolution.
+It is still real.
+
+What you can derive from Tier 0:
+  Attractor type assignment
+  (Type 1, Type 2, or Composite)
+  with moderate confidence.
+  Switch gene suppression:
+    directional (suppressed vs expressed)
+    not quantitative.
+  Depth score: not computable,
+    but attractor class is clear.
+
+What you can ask from Tier 0:
+  "My lineage markers show [absent
+   markers]. Based on the false
+   attractor framework, this is
+   consistent with a Type 2 geometry —
+   my cells have the identity of a
+   different cell type, not the one
+   they originated from.
+   Is there any data from my tumour
+   that would tell us how deep that
+   lock is? Are there additional
+   markers worth adding to my panel?"
+
+═══════════════════════════════════════
+TIER 1 — STANDARD CLINICAL GENOMICS
+Cost: ~$300–$1,500
+Data source: Clinical NGS panel
+             (e.g., FoundationOne CDx,
+             Tempus xT, Guardant360,
+             Caris MI Profile,
+             or equivalent)
+═══════════════════════════════════════
+
+Many cancer patients already receive
+a clinical NGS panel as standard of care
+or via their institution.
+
+What you get:
+  Somatic mutation profile
+    — Driver mutations for your
+      cancer type
+    — DNA repair pathway status
+      (BRCA1/2, HRD, MMR)
+  Copy number alterations
+  TMB (tumour mutational burden)
+  MSI status
+  RNA fusion panel (some platforms)
+
+What you can derive from Tier 1:
+  Composite type evidence:
+    Loss of a gene required for
+    correct lineage differentiation
+    in the cell of origin is the
+    Type 1 → Type 2 composite signal.
+    If present: the composite type
+    prediction is confirmed at
+    the DNA level.
+
+  Depth proxy via genomic instability:
+    Higher HRD / higher TMB =
+    more genomic instability =
+    consistent with deeper attractor
+    and greater replication stress.
+    Not a direct depth score.
+    A correlated proxy.
+
+  Epigenetic driver amplification:
+    Amplification of epigenetic
+    lock drivers (e.g., EZH2, DNMT3A,
+    or lineage-specific repressors)
+    is direct genomic confirmation
+    of an epigenetic lock mechanism.
+
+  Pathway activation:
+    Activation of survival pathways
+    (PI3K/AKT, RAS/MAPK, JAK/STAT)
+    is consistent with deep attractor
+    maintenance.
+
+What you can ask from Tier 1:
+  "My panel shows loss of [lineage
+   differentiation gene] and elevated
+   genomic instability. This is
+   consistent with a composite
+   Type 1 → Type 2 geometry.
+   Given [pathway activation] in
+   my tumour, is there a clinical
+   rationale for adding an agent
+   that targets the epigenetic lock
+   to my protocol?"
+
+═══════════════════════════════════════
+TIER 2 — GENE EXPRESSION PANEL
+Cost: ~$200–$600
+Data source: NanoString nCounter,
+             validated subtype panels,
+             or equivalent low-plex
+             expression panel
+             from FFPE tissue
+═══════════════════════════════════════
+
+These platforms measure dozens to
+hundreds of pre-specified genes
+from FFPE tissue (the standard
+pathology block you already have).
+They do not require fresh tissue.
+They do not require $10,000.
+
+What you get:
+  Direct gene expression values
+  for the genes in the panel.
+
+For attractor geometry, you need:
+  Switch genes
+    (lineage identity TFs for your
+    cancer's cell of origin)
+  False attractor markers
+    (identity genes of the wrong
+    cell type your cancer resembles)
+  Epigenetic drivers
+    (EZH2 and PRC2 components
+    are relevant across cancer types)
+  EMT markers where relevant
+    (VIM, CDH1, ZEB1)
+  Proliferation markers (MKI67)
+
+What you can derive from Tier 2:
+  Quantitative switch gene
+  suppression scores.
+  Approximate depth score from
+  the ratio of suppressed switch
+  genes to elevated false attractor
+  markers.
+  Subtype confirmation.
+  Epigenetic driver expression level —
+  proxy for epigenetic lock depth.
+
+What you can ask from Tier 2:
+  "My expression panel confirms
+   [subtype] with absent [switch genes]
+   and elevated [false attractor markers].
+   My [epigenetic driver] expression
+   is elevated. This is the geometry
+   pattern associated with deep
+   attractor state and an epigenetic
+   lock. Is there a basis for adding
+   epigenetic therapy to my protocol
+   or for enrolling in a relevant
+   combination trial?"
+
+═══════════════════════════════════════
+TIER 3 — BULK RNA-SEQ
+Cost: ~$500–$1,500 research grade
+      ~$1,500–$4,000 clinical grade
+Data source: FFPE RNA-seq
+             (many academic centres
+             now offer this)
+             or fresh tissue if available
+═══════════════════════════════════════
+
+Bulk RNA-seq gives you the full
+transcriptome — all ~20,000 genes.
+
+For your individual sample:
+  You do not need the full pipeline.
+  You need expression values for
+  the 20–50 genes in the attractor
+  panel for your cancer type.
+
+What you can derive from Tier 3:
+  Full quantitative depth score.
+  Complete switch gene suppression
+  profile.
+  Full false attractor marker panel.
+  EED expression
+    (depth driver in the PRC2 complex —
+    relevant across cancer types).
+  Secondary depth-linked targets
+    specific to your cancer type.
+  EMT depth gradient
+    where relevant.
+  Correlation analysis
+    (how your gene pairs move together
+    within your tumour).
+
+What you can do with Tier 3 that
+you cannot do with lower tiers:
+  Compute a proper depth score.
+  Identify your molecular subtype
+  with precision.
+  Distinguish different epigenetic
+  lock mechanisms.
+  Make the distinction between
+  deep versus shallow attractor
+  with quantitative confidence.
+
+═══════════════════════════════════════
+TIER 4 — SINGLE-CELL RNA-SEQ
+Cost: ~$3,000–$15,000
+Data source: Fresh tissue required,
+             research centre needed
+═══════════════════════════════════════
+
+This is the gold standard tier
+for resolving attractor geometry
+at cell-type resolution.
+
+For your individual sample:
+This tier gives you:
+  Cell-by-cell depth scores.
+  Identification of the deepest
+  attractor cells in your tumour.
+  The geometry of the heterogeneity —
+  what fraction of your tumour
+  is in a deep versus shallow state.
+  The specific subpopulation that
+  is most likely to survive treatment.
+
+This tier is currently a research
+instrument, not a standard clinical
+measurement.
+
+It is the correct tier for
+generating the precision information
+that Tier 0–2 cannot provide.
+
+It is not required to begin
+using the framework.
+It is the destination the field
+is moving toward.
+
+═══════════════════════════════════════
+LIQUID BIOPSY — LONGITUDINAL TRACKING
+Cost: ~$300–$1,500 per timepoint
+Data source: Cell-free DNA (cfDNA)
+             from a blood draw
+             (Guardant360, FoundationOne
+             Liquid CDx, or equivalent)
+═══════════════════════════════════════
+
+This is the tier that enables
+longitudinal geometric tracking
+without repeated biopsies.
+
+A blood draw at each treatment
+cycle gives you:
+  Circulating tumour DNA (ctDNA)
+  mutation profile.
+  Changes in mutation allele
+  frequency as proxy for
+  tumour dynamics.
+  Emerging resistance mutations.
+  Genomic instability signal.
+
+What you can track geometrically:
+  If driver allele frequencies
+  associated with the deep attractor
+  are rising: the deep attractor
+  cells are being enriched.
+  If pathway activation mutations
+  are increasing: the epigenetic
+  lock is strengthening.
+  If a new resistance mutation
+  emerges: the attractor is shifting —
+  a new false attractor may be forming.
+
+This is the currently accessible
+longitudinal tracking tool
+for any cancer type.
+
+It is not RNA-seq.
+It is a DNA-level proxy.
+It is available from a blood draw.
+You can request it at each cycle.
+Your oncologist may already be
+ordering it without framing it
+as geometric tracking.
+
+═══════════════════════════════════════
+SUMMARY TABLE
+═══════════════════════════════════════
+
+  Tier 0 — IHC + pathology report
+    Cost: $0 (already done)
+    Geometry: Attractor type only
+    Access: Universal
+
+  Tier 1 — Clinical NGS panel
+    Cost: $300–$1,500
+    Geometry: Composite type,
+              instability proxy,
+              pathway activation
+    Access: Standard of care for many
+
+  Tier 2 — Gene expression panel
+    Cost: $200–$600
+    Geometry: Switch gene profile,
+              approximate depth
+    Access: Available, not always ordered
+
+  Liquid biopsy — cfDNA serial
+    Cost: $300–$1,500 per draw
+    Geometry: Longitudinal proxy,
+              resistance emergence
+    Access: Standard of care, increasing
+
+  Tier 3 — Bulk RNA-seq
+    Cost: $500–$4,000
+    Geometry: Full depth score,
+              molecular subtype,
+              complete attractor panel
+    Access: Academic centres, increasing
+
+  Tier 4 — scRNA-seq
+    Cost: $3,000–$15,000
+    Geometry: Cell-resolution depth,
+              heterogeneity map
+    Access: Research only (2026)
+
+The point is not to wait for Tier 4.
+The point is to use what you have
+at whatever tier you can access.
+
+Tier 0 is enough to ask the right
+questions.
+
+Tier 1 is enough to test the composite
+type hypothesis.
+
+Tier 2 is enough to compute a
+directional depth score.
+
+Tier 3 is enough for the full analysis.
+
+Every tier is better than silence.
+This applies regardless of your
+cancer type, your diagnosis,
+your lineage, or your subtype.
+```
+
+---
+
+### STEP 1: UNDERSTAND YOUR TIER
+
+```
+Before requesting data, establish
+what you already have and what
+tier you can realistically access.
+
+Questions to ask:
+  1. Has a clinical NGS panel been
+     ordered for my case?
+     (If not: why not, and can it be?)
+
+  2. Has my molecular subtype been
+     confirmed by gene expression?
+     (Often ordered for treatment
+     decisions already —
+     ask explicitly if not mentioned.)
+
+  3. Is my institution running
+     liquid biopsy at treatment cycles?
+     (Increasingly standard — worth
+     asking explicitly if not mentioned.)
+
+  4. Does my institution have a
+     research partnership that
+     includes bulk or single-cell
+     RNA-seq for biopsy samples?
+     (Academic medical centres often
+     have these programmes — you
+     can ask to enrol.)
+
+You do not need to begin at Tier 4.
+You need to begin at your tier.
+```
+
+---
+
+### STEP 2: REQUEST YOUR DATA
+
+```
+At every biopsy, at every blood draw
+where liquid biopsy is available:
+
+  Request the highest tier of data
+  that is clinically available or
+  accessible through a research
+  programme at your institution.
+
+  Explicitly request:
+    A copy of all genomic data
+    generated from your tissue.
+    Your sequencing reports.
+    Your IHC panel values
+    (not just the clinical
+    interpretation — the numbers).
 
   You are entitled to this data.
   Request it explicitly.
   In writing if necessary.
   It is yours.
 
-─────────────────────────────────────────
+  If your institution offers research
+  enrolment that would provide
+  Tier 3 or Tier 4 data:
+    Ask to be enrolled.
+    The cost is typically zero to you.
+    The data it generates is yours.
+```
 
-STEP 2: DERIVE YOUR GEOMETRY
-  Using the OrganismCore framework:
-    Identify your lineage
-    Compute your depth score
-    Profile your switch gene suppression
-    Identify your epigenetic locks
-    Classify your attractor type
-    (differentiation vs survival)
+---
+
+### STEP 3: DERIVE YOUR GEOMETRY
+
+```
+Using the OrganismCore framework:
+
+  FROM ANY TIER:
+    Identify your lineage.
+    Assign your attractor type
+    (Type 1, Type 2, or Composite).
+
+  FROM TIER 1+:
+    Test the composite type hypothesis
+    via loss of differentiation genes
+    and genomic instability status.
+
+  FROM TIER 2+:
+    Compute directional depth score.
+    Profile switch gene suppression.
+    Identify epigenetic lock genes.
+
+  FROM TIER 3+:
+    Compute full quantitative depth score.
+    Identify molecular subtype.
+    Distinguish epigenetic lock mechanisms.
+    Profile secondary depth-linked targets.
+
+  FROM TIER 4:
+    Cell-resolution depth map.
+    Deepest attractor subpopulation
+    identified.
 
   Document everything.
   Timestamp everything.
   This is your geometric record.
+```
 
-─────────────────────────────────────────
+---
 
-STEP 3: ESTABLISH YOUR BASELINE
-  Before treatment begins:
-    Baseline depth score
-    Baseline switch gene profile
-    Baseline false attractor markers
-    Baseline epigenetic lock profile
+### STEP 4: ESTABLISH YOUR BASELINE
 
-  This is the geometry of your
-  disease before any intervention.
-  It is the reference against which
-  all subsequent measurements
-  will be compared.
+```
+Before treatment begins:
+  Baseline geometry at whatever
+  tier is available.
+  Baseline switch gene profile.
+  Baseline false attractor markers.
+  Baseline epigenetic lock profile.
 
-─────────────────────────────────────────
+This is the geometry of your
+disease before any intervention.
+It is the reference against which
+all subsequent measurements
+will be compared.
 
-STEP 4: TRACK THROUGH TREATMENT
-  At every available measurement point:
-    Recompute depth score
-    Track switch gene reactivation
-    Track false attractor suppression
-    Track epigenetic lock stability
+Even Tier 0 baseline is better
+than no baseline.
+A pathology panel taken pre-treatment
+and a liquid biopsy at cycle 3
+gives you a before/after.
+That is a trajectory.
+A trajectory is what matters.
+```
 
-  Plot the trajectory.
-  Is the depth score falling?
-  Are the switch genes recovering?
-  Is the attractor dissolving?
+---
 
-  OR:
+### STEP 5: TRACK THROUGH TREATMENT
 
-  Is the depth score stable or rising?
-  Are the switch genes remaining
-  suppressed?
-  Is the attractor consolidating?
+```
+At every available measurement point:
+  Recompute depth score
+  (at whatever tier is available).
+  Track switch gene reactivation.
+  Track false attractor suppression.
+  Track epigenetic lock stability
+  via liquid biopsy proxy.
 
-  The trajectory tells you which
-  scenario you are in.
+Plot the trajectory.
+Is the depth score falling?
+Are the switch genes recovering?
+Is the attractor dissolving?
 
-──────────────────────────────────────��──
+OR:
 
-STEP 5: BRING THE DATA TO YOUR TEAM
-  At every clinical appointment:
-    Bring your geometric record.
-    State what you are measuring.
-    State what it suggests.
-    Ask what it means in the context
-    of the clinical findings.
-    Ask whether it changes anything.
+Is the depth score stable or rising?
+Are the switch genes remaining
+suppressed?
+Is the attractor consolidating?
 
-  You are not challenging your
-  oncologist.
-  You are giving them data they
-  do not otherwise have.
-  Data about your specific geometry.
-  The most specific data available
-  about your specific disease.
+The trajectory tells you which
+scenario you are in.
+```
 
-─────────────────────────────────────────
+---
 
-STEP 6: ACT ON GEOMETRIC SIGNALS EARLY
-  If the geometry signals something
-  the clinical measurement has not
-  yet registered:
-    Do not wait for the clinical
-    measurement to catch up.
-    Bring the geometric signal
-    to your team immediately.
-    Ask explicitly whether it
-    warrants a treatment adjustment.
+### STEP 6: BRING THE DATA TO YOUR TEAM
+
+```
+At every clinical appointment:
+  Bring your geometric record.
+  State what you are measuring.
+  State what tier your data is from.
+  State what it suggests.
+  Ask what it means in the context
+  of the clinical findings.
+  Ask whether it changes anything.
+
+You are not challenging your
+oncologist.
+You are giving them data they
+do not otherwise have.
+Data about your specific geometry.
+The most specific data available
+about your specific disease.
+
+Frame it correctly:
+  "I have been tracking my attractor
+   geometry from my [NGS panel /
+   expression panel / liquid biopsy].
+   This is what I am measuring.
+   This is what it suggests.
+   I want to understand whether
+   this is consistent with what
+   you are seeing clinically,
+   and whether it warrants any
+   change to the plan."
+
+That is the right conversation.
+```
+
+---
+
+### STEP 7: ACT ON GEOMETRIC SIGNALS EARLY
+
+```
+If the geometry signals something
+the clinical measurement has not
+yet registered:
+  Do not wait for the clinical
+  measurement to catch up.
+  Bring the geometric signal
+  to your team immediately.
+  Ask explicitly whether it
+  warrants a treatment adjustment.
 
   The window between the geometric
   signal and the clinical registration
@@ -872,6 +1385,12 @@ In real time.
 From your own biopsy.
 From your own data.
 From your own geometry.
+
+You do not need a $10,000 test
+to begin.
+You need your pathology report
+and the willingness to ask
+what the geometry means.
 
 Both measurements are necessary.
 Neither is sufficient alone.
@@ -947,6 +1466,25 @@ note:           This document was written
                 That number is growing.
 
                 This document is for them.
+
+                The tiered data protocol was
+                added because the framework
+                must be accessible to patients
+                who cannot afford whole-genome
+                sequencing — which is most
+                patients.
+
+                Every tier is better than
+                nothing.
+                Every tier is better than
+                waiting for a tier you
+                cannot afford.
+                The geometry can be read
+                from what you already have.
+
+                This applies to every cancer.
+                Every lineage.
+                Every patient.
 ```
 
 ---
@@ -954,9 +1492,8 @@ note:           This document was written
 *"The medical system will tell you what worked*
 *in a population of people like you.*
 *Your geometry will tell you what is happening*
-*to your cells.*
-*Both are necessary.*
-*In the scenario that matters most,*
-*yours is the measurement that saves your life."*
+*in your cells.*
+*You need both.*
+*You have the right to both."*
 
-— Eric Robert Lawson, March 4, 2026
+— Eric Robert Lawson, OrganismCore, 2026-03-04

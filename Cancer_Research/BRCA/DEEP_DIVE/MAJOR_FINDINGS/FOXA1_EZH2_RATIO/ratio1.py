@@ -76,16 +76,12 @@ except ImportError:
     HAS_SKLEARN = False
 
 # ============================================================
-# PATHS
-# ============================================================
-# Script lives directly in DEEP_DIVE/ — same level as the
-# Cross_Subtype_s*_results/ directories.
-# No "../" needed.
+# PATHS  — corrected from directory inspection 2026-03-05
 # ============================================================
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Prior script output directories (siblings of this script)
+# Prior script output directories
 S1_DATA    = os.path.join(SCRIPT_DIR,
                            "Cross_Subtype_s1_results", "data")
 S1_RESULTS = os.path.join(SCRIPT_DIR,
@@ -106,16 +102,26 @@ RESULTS_DIR = os.path.join(BASE_DIR, "results")
 for d in [BASE_DIR, DATA_DIR, RESULTS_DIR]:
     os.makedirs(d, exist_ok=True)
 
-# ── Cache files from prior scripts ────────────────────────────
-# Named explicitly in Script 2 docstring:
-TCGA_EXPR_CACHE = os.path.join(S1_RESULTS,
-                                "expr_cache_cs_s1_tcga.csv")
-TCGA_CLIN_FILE  = os.path.join(S1_DATA,
-                                "TCGA_BRCA_clinicalMatrix.tsv")
+# ── Confirmed cache paths (verified from ls output) ───────────
+
+# scRNA expression cache — lives in results/, not data/
 SC_EXPR_CACHE   = os.path.join(S1_RESULTS,
                                 "expr_cache_cs_s1_sc.csv")
 
-# Named in Script 3 PATH block:
+# TCGA expression cache — also in results/
+TCGA_EXPR_CACHE = os.path.join(S1_RESULTS,
+                                "expr_cache_cs_s1_tcga.csv")
+
+# TCGA clinical — in data/ (confirmed by ls)
+TCGA_CLIN_FILE  = os.path.join(S1_DATA,
+                                "TCGA_BRCA_clinicalMatrix.tsv")
+
+# scRNA metadata — confirmed exact path from ls
+SC_METADATA_FILE = os.path.join(S1_DATA,
+                                 "Wu_etal_2021_BRCA_scRNASeq",
+                                 "metadata.csv")
+
+# METABRIC — Script 3 output
 META_EXPR_FILE  = os.path.join(S3_DATA,
                                 "metabric_expression.csv")
 META_CLIN_FILE  = os.path.join(S3_DATA,
@@ -125,22 +131,22 @@ GSE25066_EXPR   = os.path.join(S3_DATA,
 GSE25066_CLIN   = os.path.join(S3_DATA,
                                 "gse25066_clinical.csv")
 
-# ── RPPA download targets ──────────────────────────────────────
-# Priority 1: Xena RPPA_RBN (131 antibodies × 747 samples)
-# Priority 2: TCPA Level 4 (cleaner gene symbols as row labels)
-# Priority 3: UCSC Xena pancanatlas
-RPPA_GZ   = os.path.join(DATA_DIR, "RPPA_RBN.gz")
-RPPA_FILE = os.path.join(DATA_DIR, "RPPA_RBN.tsv")
+# ── RPPA ──────────────────────────────────────────────────────
+# Xena RPPA_RBN uses MD Anderson display names (not gene symbols).
+# Primary: TCPA Level 4 — uses clean HUGO gene symbols as rows.
+# Fallback: Xena RPPA_RBN — needs symbol lookup from index file.
+RPPA_GZ   = os.path.join(DATA_DIR, "RPPA.gz")
+RPPA_FILE = os.path.join(DATA_DIR, "RPPA.tsv")
 
 RPPA_URLS = [
-    "https://tcga.xenahubs.net/download/"
-    "TCGA.BRCA.sampleMap/RPPA_RBN.gz",
-    "https://pancanatlas.xenahubs.net/download/"
-    "TCGA.BRCA.sampleMap/RPPA_RBN.gz",
-    # TCPA Level4 — gene symbols as rows, samples as columns
-    "https://tcga.xenahubs.net/download/"
-    "TCGA.BRCA.sampleMap/"
-    "RPPA_protein_level_20160128.gz",
+    # LinkedOmics TCGA-BRCA RPPA — gene-level (HUGO symbols)
+    # Confirmed working URL from linkedomics.org/data_download/TCGA-BRCA/
+    "http://linkedomics.org/data_download/TCGA-BRCA/"
+    "rppa_gene_cct.zip",
+    # LinkedOmics analyte-level fallback (antibody names but
+    # _extract_foxa1_ezh2 handles partial matching)
+    "http://linkedomics.org/data_download/TCGA-BRCA/"
+    "rppa_analyte_cct.zip",
 ]
 
 # cBioPortal API (same config as Script 3)
@@ -235,24 +241,50 @@ def try_urls(url_list, dest_gz, label):
 
 
 def norm_subtype(s):
+    """
+    Map Wu et al. 2021 celltype_subset labels and all other
+    known label formats to the five canonical subtype keys.
+    """
     s = str(s).strip()
-    luma  = ["LumA", "lumA", "Luminal_A", "Luminal A",
-             "LUMINAL_A", "luminal_a"]
-    lumb  = ["LumB", "lumB", "Luminal_B", "Luminal B",
-             "LUMINAL_B", "luminal_b"]
-    her2  = ["HER2", "Her2", "her2", "HER2_enriched",
-             "HER2-enriched", "HER2 ENRICHED", "Her2 SC"]
-    tnbc  = ["Basal", "TNBC", "basal-like", "Basal-like",
-             "Basal SC", "Cancer Basal SC", "TNBC/Basal",
-             "Basal-Like", "BASAL"]
-    cl    = ["CL", "claudin-low", "Claudin-low",
-             "claudin_low", "Claudin_low", "CLAUDIN_LOW"]
-    for label, aliases in [("LumA", luma), ("LumB", lumb),
-                            ("HER2", her2), ("TNBC", tnbc),
-                            ("CL", cl)]:
-        if s in aliases:
-            return label
-    return s
+    mapping = {
+        # ── Wu et al. 2021 GSE176078 labels (exact) ──────────
+        "Cancer LumA SC":   "LumA",
+        "Cancer LumB SC":   "LumB",
+        "Cancer Her2 SC":   "HER2",
+        "Cancer Basal SC":  "TNBC",
+        # ── TCGA / cBioPortal PAM50 labels ───────────────────
+        "LumA":             "LumA",
+        "lumA":             "LumA",
+        "Luminal A":        "LumA",
+        "Luminal_A":        "LumA",
+        "LUMINAL_A":        "LumA",
+        "LumB":             "LumB",
+        "lumB":             "LumB",
+        "Luminal B":        "LumB",
+        "Luminal_B":        "LumB",
+        "LUMINAL_B":        "LumB",
+        "HER2":             "HER2",
+        "Her2":             "HER2",
+        "her2":             "HER2",
+        "HER2_enriched":    "HER2",
+        "HER2-enriched":    "HER2",
+        "HER2 ENRICHED":    "HER2",
+        "Her2 SC":          "HER2",
+        "Basal":            "TNBC",
+        "TNBC":             "TNBC",
+        "basal-like":       "TNBC",
+        "Basal-like":       "TNBC",
+        "Basal-Like":       "TNBC",
+        "Basal SC":         "TNBC",
+        "BASAL":            "TNBC",
+        "CL":               "CL",
+        "claudin-low":      "CL",
+        "Claudin-low":      "CL",
+        "claudin_low":      "CL",
+        "Claudin_low":      "CL",
+        "CLAUDIN_LOW":      "CL",
+    }
+    return mapping.get(s, s)
 
 
 def kw_and_pairs(groups):
@@ -521,75 +553,152 @@ def run_component_a():
             return {"status": "NOT_TESTABLE",
                     "predictions": {"R1-A": "NOT TESTABLE"}}
 
-    # ── A.2: Attach cell type labels ─────────────────────────
+        # ── A.2: Attach cell type labels ─────────────────────────
     log("")
     log("── A.2: ATTACH CELL TYPE LABELS ──")
 
+    # Priority order — confirmed local paths first.
+    # Never download if any local path exists.
     meta_paths = [
-        os.path.join(S1_DATA, "sc_metadata.csv"),
+        SC_METADATA_FILE,   # confirmed: S1_DATA/Wu_etal_2021_BRCA_scRNASeq/metadata.csv
         os.path.join(S1_DATA,
                      "GSE176078_Wu_2021_BRCA_scRNA_metadata.csv"),
-        os.path.join(S1_DATA, "metadata.csv"),
-        os.path.join(S1_DATA, "cell_metadata.csv"),
+        os.path.join(S1_RESULTS,
+                     "GSE176078_Wu_2021_BRCA_scRNA_metadata.csv"),
+        os.path.join(DATA_DIR, "sc_meta.csv"),
     ]
+
     meta = None
     for p in meta_paths:
         if os.path.exists(p):
-            meta = pd.read_csv(p, index_col=0)
-            log(f"  Metadata: {p}  shape={meta.shape}")
-            break
+            log(f"  Trying: {p}")
+            try:
+                meta = pd.read_csv(p, index_col=0)
+                log(f"  Metadata loaded: {p}")
+                log(f"  Shape: {meta.shape}")
+                log(f"  Columns: {list(meta.columns[:10])}")
+                break
+            except Exception as e:
+                log(f"  Parse error ({os.path.basename(p)}): "
+                    f"{e}")
 
+    # Download ONLY if nothing local resolved.
+    # The correct GEO metadata file is ~2 MB (not 558 MB).
+    # If sc_meta.csv.gz is 558 MB it is the count matrix —
+    # delete it before re-running.
     if meta is None:
-        meta_url = (
-            "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE176nnn/"
-            "GSE176078/suppl/"
-            "GSE176078_Wu_etal_2021_BRCA_scRNASeq.tar.gz"
-        )
         meta_gz    = os.path.join(DATA_DIR, "sc_meta.csv.gz")
         meta_plain = os.path.join(DATA_DIR, "sc_meta.csv")
-        fetch_url(meta_url, meta_gz, "sc_metadata")
-        if os.path.exists(meta_gz):
+
+        # Guard: refuse to parse anything > 10 MB as metadata
+        if (os.path.exists(meta_gz)
+                and os.path.getsize(meta_gz) > 10_000_000):
+            log(f"  sc_meta.csv.gz is "
+                f"{os.path.getsize(meta_gz):,} B — "
+                f"this is the count matrix, not metadata.")
+            log(f"  Delete it and re-run, or place the "
+                f"correct metadata.csv at:")
+            log(f"    {SC_METADATA_FILE}")
+            return {"status": "NOT_TESTABLE",
+                    "predictions": {
+                        "R1-A": "NOT TESTABLE",
+                        "R1-B": "NOT TESTABLE",
+                        "R1-C": "NOT TESTABLE"}}
+
+        if (os.path.exists(meta_plain)
+                and os.path.getsize(meta_plain) > 10_000_000):
+            log(f"  sc_meta.csv is too large — count matrix.")
+            log(f"  Delete it and place metadata.csv at:")
+            log(f"    {SC_METADATA_FILE}")
+            return {"status": "NOT_TESTABLE",
+                    "predictions": {
+                        "R1-A": "NOT TESTABLE",
+                        "R1-B": "NOT TESTABLE",
+                        "R1-C": "NOT TESTABLE"}}
+
+        # Correct GEO URL — metadata only, ~2 MB compressed
+        meta_url = (
+            "https://ftp.ncbi.nlm.nih.gov/geo/series/"
+            "GSE176nnn/GSE176078/suppl/"
+            "GSE176078_Wu_2021_BRCA_scRNA_metadata.csv.gz"
+        )
+        log(f"  No local metadata found. Downloading...")
+        log(f"  URL: {meta_url}")
+        fetch_url(meta_url, meta_gz, "sc_metadata_gz",
+                  timeout=60)
+
+        if (os.path.exists(meta_gz)
+                and os.path.getsize(meta_gz) < 10_000_000):
             import shutil
-            with gzip.open(meta_gz, "rb") as fi, \
-                 open(meta_plain, "wb") as fo:
-                shutil.copyfileobj(fi, fo)
-            meta = pd.read_csv(meta_plain, index_col=0)
-            log(f"  Downloaded metadata: shape={meta.shape}")
+            try:
+                with gzip.open(meta_gz, "rt",
+                               encoding="utf-8") as fi, \
+                     open(meta_plain, "w",
+                          encoding="utf-8") as fo:
+                    shutil.copyfileobj(fi, fo)
+                meta = pd.read_csv(meta_plain, index_col=0)
+                log(f"  Downloaded metadata: {meta.shape}")
+            except Exception as e:
+                log(f"  Download parse error: {e}")
+        else:
+            log(f"  Download too large or failed — "
+                f"place metadata.csv at:")
+            log(f"    {SC_METADATA_FILE}")
 
     if meta is None:
-        log("  No metadata found — Component A NOT TESTABLE")
+        log("  Metadata unavailable — Component A NOT TESTABLE")
         return {"status": "NOT_TESTABLE",
-                "predictions": {"R1-A": "NOT TESTABLE"}}
+                "predictions": {"R1-A": "NOT TESTABLE",
+                                "R1-B": "NOT TESTABLE",
+                                "R1-C": "NOT TESTABLE"}}
 
     # ── A.3: Find subtype column ──────────────────────────────
+    log("")
+    log("── A.3: FIND SUBTYPE COLUMN ──")
+
+    # Script 1 confirmed: Wu et al. metadata column = "celltype_subset"
     sub_col = None
-    for c in meta.columns:
-        vc = meta[c].value_counts()
-        vals = str(vc.index.tolist()).upper()
-        if (("LUMA" in vals or "LUM_A" in vals
-             or "CANCER LUMA" in vals
-             or "CANCER LUMB" in vals)
-                and len(vc) >= 3):
-            sub_col = c
-            break
+    CT_COL  = "celltype_subset"
 
-    if sub_col is None:
+    if CT_COL in meta.columns:
+        sub_col = CT_COL
+        log(f"  Found confirmed column: '{CT_COL}'")
+    else:
+        # Fallback scan if metadata has different structure
+        wu_labels = {"Cancer LumA SC", "Cancer LumB SC",
+                     "Cancer Her2 SC", "Cancer Basal SC"}
         for c in meta.columns:
-            if ("subtype" in c.lower() or "pam50" in c.lower()
-                    or "celltype" in c.lower()):
-                vc = meta[c].value_counts()
-                if len(vc) >= 3:
-                    sub_col = c
-                    break
+            vals = set(meta[c].dropna().unique())
+            if wu_labels & vals:   # any Wu label present
+                sub_col = c
+                log(f"  Found Wu et al. labels in: '{c}'")
+                break
 
     if sub_col is None:
-        log("  Cannot identify subtype column in metadata.")
-        log(f"  Columns: {list(meta.columns[:15])}")
+        # Last-resort: any column with >=3 distinct values
+        # that look subtype-like
+        for c in meta.columns:
+            vc = meta[c].value_counts()
+            vals_upper = str(vc.index.tolist()).upper()
+            if (len(vc) >= 3
+                    and ("LUM" in vals_upper
+                         or "BASAL" in vals_upper
+                         or "HER2" in vals_upper)):
+                sub_col = c
+                log(f"  Fallback subtype column: '{c}'")
+                break
+
+    if sub_col is None:
+        log("  Cannot identify subtype column.")
+        log(f"  Available columns: {list(meta.columns)}")
         return {"status": "NOT_TESTABLE",
-                "predictions": {"R1-A": "NOT TESTABLE"}}
+                "predictions": {"R1-A": "NOT TESTABLE",
+                                "R1-B": "NOT TESTABLE",
+                                "R1-C": "NOT TESTABLE"}}
 
     log(f"  Subtype column: '{sub_col}'")
-    log(f"  Values:\n{meta[sub_col].value_counts().head(10)}")
+    log(f"  Value counts:\n"
+        f"{meta[sub_col].value_counts().head(12)}")
 
     # ── A.4: Per-cell ratio ───────────────────────────────────
     log("")
@@ -637,7 +746,7 @@ def run_component_a():
                 f"med={medians_a[s]:.4f}")
 
     kw_p_a, pw_a = kw_and_pairs(groups_a)
-    log(f"\n  KW p = {kw_p_a:.2e}")
+    log(f"\n  KW p = {kw_p_a:.2e}" if kw_p_a is not None else "\n  KW p = None (insufficient groups)")
 
     adj = [("LumA","LumB"), ("LumB","HER2"),
            ("HER2","TNBC"), ("TNBC","CL")]
@@ -735,326 +844,226 @@ def run_component_a():
 
 
 # ============================================================
-# COMPONENT B — TCGA RPPA protein-level validation
+# COMPONENT B — TCGA BULK RNA-seq VALIDATION
+# ============================================================
+# NOTE: RPPA-RBN panel (131 antibodies) does not include
+# FOXA1 or EZH2. Replaced with TCGA HiSeqV2 bulk RNA-seq.
+# Cache: Cross_Subtype_s1_results/results/expr_cache_cs_s1_tcga.csv
+# Clinical: Cross_Subtype_s1_results/data/TCGA_BRCA_clinicalMatrix.tsv
+# n ≈ 1,100 | PAM50 labels | OS endpoint
 # ============================================================
 
-def load_rppa():
+def load_tcga_bulk():
     """
-    Load TCGA BRCA RPPA.
-    Returns (foxa1_series, ezh2_series, rppa_df) or
-            (None, None, None).
-
-    FIX 2: Xena RPPA_RBN has proteins as ROWS
-    (e.g., '4EBP1', 'FOXA1-R-V', 'EZH2-C-V') and
-    samples as COLUMNS.
-    Search the index (rows) with substring matching,
-    case-insensitive, for tokens that START with FOXA1 / EZH2.
+    Load TCGA BRCA bulk RNA-seq expression cache and clinical.
+    Both files confirmed present from Component A cache status.
+    Returns (expr_df, clin_df) — expr is samples × genes.
     """
-    got = try_urls(RPPA_URLS, RPPA_GZ, "RPPA")
-    rppa = None
+    expr = None
+    clin = None
 
-    if got and os.path.exists(got):
+    # ── Expression ────────────────────────────────────────────
+    if os.path.exists(TCGA_EXPR_CACHE):
         try:
-            with gzip.open(got, "rt") as f:
-                rppa = pd.read_csv(f, sep="\t", index_col=0)
-            log(f"  RPPA loaded from gz: {rppa.shape}")
-        except Exception as e1:
-            try:
-                rppa = pd.read_csv(got, sep="\t", index_col=0)
-                log(f"  RPPA loaded as plain: {rppa.shape}")
-            except Exception as e2:
-                log(f"  RPPA parse error: {e1} / {e2}")
-
-    if rppa is None and os.path.exists(RPPA_FILE):
-        rppa = pd.read_csv(RPPA_FILE, sep="\t", index_col=0)
-        log(f"  RPPA loaded from local TSV: {rppa.shape}")
-
-    if rppa is None:
-        return None, None, None
-
-    log(f"  RPPA index[:5]:   {list(rppa.index[:5])}")
-    log(f"  RPPA columns[:3]: {list(rppa.columns[:3])}")
-
-    # ── Search ROWS (proteins) for FOXA1 and EZH2 ────────────
-    # Xena RPPA_RBN format:
-    #   rows = antibodies (e.g. 'FOXA1-R-V', 'EZH2-C-V')
-    #   columns = TCGA barcodes
-    foxa1_row = ezh2_row = None
-
-    all_rows_upper = {str(r).upper(): str(r)
-                      for r in rppa.index}
-    for token, orig in all_rows_upper.items():
-        if token.startswith("FOXA1"):
-            foxa1_row = orig
-            break
-    for token, orig in all_rows_upper.items():
-        if token.startswith("EZH2"):
-            ezh2_row = orig
-            break
-
-    if foxa1_row and ezh2_row:
-        log(f"  Found FOXA1 row: '{foxa1_row}'")
-        log(f"  Found EZH2  row: '{ezh2_row}'")
-        return (rppa.loc[foxa1_row].astype(float),
-                rppa.loc[ezh2_row].astype(float),
-                rppa)
-
-    # ── Search COLUMNS (antibodies) as fallback ───────────────
-    all_cols_upper = {str(c).upper(): str(c)
-                      for c in rppa.columns}
-    for token, orig in all_cols_upper.items():
-        if token.startswith("FOXA1"):
-            foxa1_row = orig
-            break
-    for token, orig in all_cols_upper.items():
-        if token.startswith("EZH2"):
-            ezh2_row = orig
-            break
-
-    if foxa1_row and ezh2_row:
-        log(f"  Cols orientation: FOXA1='{foxa1_row}' "
-            f"EZH2='{ezh2_row}'")
-        rppa2 = rppa.T
-        return (rppa2.loc[foxa1_row].astype(float),
-                rppa2.loc[ezh2_row].astype(float),
-                rppa2)
-
-    # ── Report what IS available ──────────────────────────────
-    log("  FOXA1/EZH2 not found in RPPA.")
-    fox_rows = [x for x in rppa.index
-                if "FOX" in str(x).upper()][:8]
-    ezh_rows = [x for x in rppa.index
-                if "EZH" in str(x).upper()][:8]
-    log(f"  FOX* rows: {fox_rows}")
-    log(f"  EZH* rows: {ezh_rows}")
-    fox_cols = [x for x in rppa.columns
-                if "FOX" in str(x).upper()][:8]
-    log(f"  FOX* cols: {fox_cols}")
-
-    # ── Save full index for inspection ───────────────────────
-    idx_file = os.path.join(DATA_DIR, "rppa_row_index.txt")
-    with open(idx_file, "w") as f:
-        f.write("\n".join(str(x) for x in rppa.index))
-    log(f"  Full RPPA row index saved to: {idx_file}")
-
-    return None, None, rppa
-
-
-def load_tcga_pam50():
-    """
-    Load TCGA PAM50 labels.
-    1. Try TCGA_BRCA_clinicalMatrix.tsv from S1_DATA
-    2. Try TCGA_PAM50_CACHE (prior cBioPortal fetch)
-    3. Fetch from cBioPortal
-    Returns (clin_df, pam50_col) or (None, None).
-    """
-    for src, path in [("S1 cache", TCGA_CLIN_FILE),
-                      ("local cache", TCGA_PAM50_CACHE)]:
-        if os.path.exists(path):
-            sep = "\t" if path.endswith(".tsv") else ","
-            try:
-                clin = pd.read_csv(path, sep=sep, index_col=0,
-                                   low_memory=False)
-                log(f"  TCGA clinical from {src}: {clin.shape}")
-                pam50_col = None
-                for c in clin.columns:
-                    cu = c.upper()
-                    if "PAM50" in cu or "SUBTYPE" in cu:
-                        vc = clin[c].value_counts()
-                        labels = str(vc.index.tolist()).upper()
-                        if (len(vc) >= 3
-                                and ("LUMA" in labels
-                                     or "BASAL" in labels)):
-                            pam50_col = c
-                            break
-                if pam50_col:
-                    log(f"  PAM50 col: '{pam50_col}'")
-                    return clin, pam50_col
-                else:
-                    log(f"  No PAM50 col found in {src}.")
-                    log(f"  Cols: {list(clin.columns[:20])}")
-            except Exception as e:
-                log(f"  {src} load error: {e}")
-
-    # ── cBioPortal fetch ──────────────────────────────────────
-    log("  Fetching TCGA clinical from cBioPortal...")
-    rows_dict = {}
-    for page in range(10):
-        url = (f"{CBIO_BASE}/studies/{TCGA_CBIO_STUDY}"
-               f"/clinical-data"
-               f"?clinicalDataType=SAMPLE"
-               f"&pageSize=5000&pageNumber={page}")
-        try:
-            req = urllib.request.Request(
-                url,
-                headers={"Accept": "application/json",
-                         "User-Agent": "OrganismCore/1.0"})
-            with urllib.request.urlopen(req, timeout=60) as r:
-                data = json.loads(r.read().decode())
-            if not data:
-                break
-            for rec in data:
-                sid = rec.get("sampleId","")
-                key = rec.get("clinicalAttributeId","")
-                val = rec.get("value","")
-                if sid not in rows_dict:
-                    rows_dict[sid] = {}
-                rows_dict[sid][key] = val
-            log(f"  TCGA page {page}: {len(data)} records")
-            if len(data) < 5000:
-                break
+            expr = pd.read_csv(TCGA_EXPR_CACHE, index_col=0)
+            log(f"  TCGA expr cache: {expr.shape}")
+            log(f"  Columns[:6]: {list(expr.columns[:6])}")
         except Exception as e:
-            log(f"  TCGA page {page} error: {e}")
-            break
+            log(f"  TCGA expr load error: {e}")
+    else:
+        log(f"  TCGA expr cache not found: {TCGA_EXPR_CACHE}")
 
-    if not rows_dict:
-        return None, None
+    # ── Clinical ──────────────────────────────────────────────
+    if os.path.exists(TCGA_CLIN_FILE):
+        try:
+            clin = pd.read_csv(TCGA_CLIN_FILE, sep="\t",
+                               index_col=0, low_memory=False)
+            log(f"  TCGA clinical: {clin.shape}")
+            log(f"  Clin cols[:10]: {list(clin.columns[:10])}")
+        except Exception as e:
+            log(f"  TCGA clinical load error: {e}")
+    else:
+        log(f"  TCGA clinical not found: {TCGA_CLIN_FILE}")
 
-    # FIX 3 applied here as well
-    clin = pd.DataFrame.from_dict(rows_dict, orient="index")
-    clin.index.name = "SAMPLE_ID"
-    clin.to_csv(TCGA_PAM50_CACHE, sep="\t")
-    log(f"  TCGA clinical fetched: {clin.shape}")
-    log(f"  Cols: {list(clin.columns[:15])}")
+    return expr, clin
 
-    pam50_col = None
+
+def find_pam50_col(clin):
+    """Return the PAM50 column name or None."""
     for c in clin.columns:
         cu = c.upper()
         if "PAM50" in cu or "SUBTYPE" in cu:
             vc = clin[c].value_counts()
             labels = str(vc.index.tolist()).upper()
-            if len(vc) >= 3 and "LUMA" in labels:
-                pam50_col = c
-                break
-    if pam50_col:
-        log(f"  PAM50 col: '{pam50_col}'")
-    return clin, pam50_col
+            if (len(vc) >= 3
+                    and ("LUMA" in labels
+                         or "BASAL" in labels
+                         or "LUM" in labels)):
+                return c
+    return None
 
 
 def run_component_b():
     log("")
     log("=" * 65)
-    log("COMPONENT B — TCGA RPPA PROTEIN-LEVEL VALIDATION")
-    log("FOXA1 + EZH2 protein | TCGA BRCA | n≈750")
+    log("COMPONENT B — TCGA BULK RNA-seq VALIDATION")
+    log("FOXA1 + EZH2 mRNA | TCGA HiSeqV2 | n≈1,100")
+    log("NOTE: RPPA-RBN panel lacks FOXA1/EZH2 antibodies.")
+    log("      Using bulk RNA-seq cache from Script 1.")
     log("=" * 65)
 
     preds = {}
 
-    # ── B.1: Load RPPA ────────────────────────────────────────
+    # ── B.1: Load TCGA bulk ───────────────────────────────────
     log("")
-    log("── B.1: LOAD RPPA ──")
-    foxa1_p, ezh2_p, rppa_full = load_rppa()
+    log("── B.1: LOAD TCGA BULK RNA-seq ──")
+    expr_b, clin_b = load_tcga_bulk()
 
-    if foxa1_p is None:
-        log("  RPPA FOXA1/EZH2 not accessible.")
-        log("  See rppa_row_index.txt for available proteins.")
-        log("  Component B NOT TESTABLE")
-        return {"status":      "NOT_TESTABLE",
+    if expr_b is None:
+        log("  Expression unavailable — Component B NOT TESTABLE")
+        return {"status": "NOT_TESTABLE",
                 "predictions": {
                     "R2-A": "NOT TESTABLE",
                     "R2-B": "NOT TESTABLE",
                     "R2-C": "NOT TESTABLE",
                     "R2-D": "NOT TESTABLE",
                 }}
-
-    log(f"  FOXA1 protein n={foxa1_p.notna().sum()}")
-    log(f"  EZH2  protein n={ezh2_p.notna().sum()}")
-
-    # ── B.2: Load PAM50 ───────────────────────────────────────
-    log("")
-    log("── B.2: LOAD TCGA PAM50 ──")
-    clin_b, pam50_col_b = load_tcga_pam50()
-
-    if clin_b is None or pam50_col_b is None:
-        log("  PAM50 unavailable — Component B NOT TESTABLE")
-        return {"status":      "NOT_TESTABLE",
+    if clin_b is None:
+        log("  Clinical unavailable — Component B NOT TESTABLE")
+        return {"status": "NOT_TESTABLE",
                 "predictions": {"R2-A": "NOT TESTABLE"}}
 
-    log(f"  PAM50 distribution:\n"
-        f"{clin_b[pam50_col_b].value_counts().head(8)}")
+    # ── B.2: Locate FOXA1 and EZH2 ───────────────────────────
+    log("")
+    log("── B.2: LOCATE FOXA1 AND EZH2 ──")
+
+    # expr_b may be samples × genes OR genes × samples
+    if "FOXA1" in expr_b.columns and "EZH2" in expr_b.columns:
+        log("  Orientation: samples × genes")
+        foxa1_b = expr_b["FOXA1"].astype(float)
+        ezh2_b  = expr_b["EZH2"].astype(float)
+        expr_t  = expr_b
+    elif "FOXA1" in expr_b.index and "EZH2" in expr_b.index:
+        log("  Orientation: genes × samples — transposing")
+        foxa1_b = expr_b.loc["FOXA1"].astype(float)
+        ezh2_b  = expr_b.loc["EZH2"].astype(float)
+        expr_t  = expr_b.T
+    else:
+        log("  FOXA1/EZH2 not found in TCGA expression cache.")
+        log(f"  Index[:5]:   {list(expr_b.index[:5])}")
+        log(f"  Columns[:5]: {list(expr_b.columns[:5])}")
+        return {"status": "NOT_TESTABLE",
+                "predictions": {"R2-A": "NOT TESTABLE"}}
+
+    log(f"  FOXA1 n={foxa1_b.notna().sum()}  "
+        f"mean={foxa1_b.mean():.3f}")
+    log(f"  EZH2  n={ezh2_b.notna().sum()}  "
+        f"mean={ezh2_b.mean():.3f}")
+
+    # ── B.3: Find PAM50 column ────────────────────────────────
+    log("")
+    log("── B.3: FIND PAM50 COLUMN ──")
+
+    pam50_col = find_pam50_col(clin_b)
+    if pam50_col is None:
+        log("  PAM50 column not found.")
+        log(f"  Columns: {list(clin_b.columns[:20])}")
+        return {"status": "NOT_TESTABLE",
+                "predictions": {"R2-A": "NOT TESTABLE"}}
+
+    log(f"  PAM50 column: '{pam50_col}'")
+    log(f"  Distribution:\n"
+        f"{clin_b[pam50_col].value_counts().head(8)}")
 
     # OS columns
-    os_t = os_e = None
+    os_t_b = os_e_b = None
     for c in clin_b.columns:
         cu = c.upper()
-        if cu == "OS_MONTHS":    os_t = c
-        if cu == "OS_STATUS":    os_e = c
-    log(f"  OS time={os_t}  OS event={os_e}")
+        if "OS_TIME"  in cu or cu == "OS_TIME_NATURE2012":
+            os_t_b = c
+        if "OS_EVENT" in cu or cu == "OS_EVENT_NATURE2012":
+            os_e_b = c
+        # Xena naming
+        if cu == "OS(MONTHS)":
+            os_t_b = c
+        if cu == "OS(STATUS)":
+            os_e_b = c
+    # Broader fallback
+    if os_t_b is None:
+        for c in clin_b.columns:
+            if "DAYS_TO" in c.upper() and "DEATH" in c.upper():
+                os_t_b = c; break
+    log(f"  OS time={os_t_b}  OS event={os_e_b}")
 
-    # ── B.3: Align RPPA ↔ PAM50 ──────────────────────────────
+    # ── B.4: Align expression ↔ clinical ─────────────────────
     log("")
-    log("── B.3: ALIGN RPPA ↔ PAM50 ──")
+    log("── B.4: ALIGN ──")
 
-    # Try direct overlap
-    common_b = foxa1_p.index.intersection(clin_b.index)
-    log(f"  Full barcode overlap: {len(common_b)}")
+    common_b = expr_t.index.intersection(clin_b.index)
+    log(f"  Direct overlap: {len(common_b)}")
 
-    if len(common_b) < 20:
-        # 15-char truncation (TCGA-XX-XXXX-01 → same)
-        rppa_idx  = pd.Index(
-            [str(x)[:15] for x in foxa1_p.index])
-        clin_idx  = pd.Index(
-            [str(x)[:15] for x in clin_b.index])
-        common_b  = rppa_idx.intersection(clin_idx)
+    if len(common_b) < 50:
+        ei = pd.Index([str(x)[:15] for x in expr_t.index])
+        ci = pd.Index([str(x)[:15] for x in clin_b.index])
+        common_b = ei.intersection(ci)
         log(f"  15-char overlap: {len(common_b)}")
-        if len(common_b) >= 20:
-            foxa1_p.index = rppa_idx
-            ezh2_p.index  = rppa_idx
-            clin_b.index  = clin_idx
+        if len(common_b) >= 50:
+            expr_t  = expr_t.copy(); expr_t.index = ei
+            clin_b  = clin_b.copy(); clin_b.index = ci
 
-    if len(common_b) < 20:
-        log("  Insufficient overlap (<20) — NOT TESTABLE")
-        return {"status":      "NOT_TESTABLE",
+    if len(common_b) < 50:
+        log("  Insufficient overlap — NOT TESTABLE")
+        return {"status": "NOT_TESTABLE",
                 "predictions": {"R2-A": "NOT TESTABLE"}}
 
     log(f"  Using {len(common_b)} matched samples")
 
-    keep_cols = [pam50_col_b]
-    if os_t: keep_cols.append(os_t)
-    if os_e: keep_cols.append(os_e)
+    keep = [pam50_col]
+    if os_t_b: keep.append(os_t_b)
+    if os_e_b: keep.append(os_e_b)
 
-    df_b = pd.DataFrame({
-        "FOXA1_p": foxa1_p[foxa1_p.index.isin(common_b)],
-        "EZH2_p":  ezh2_p[ezh2_p.index.isin(common_b)],
-    })
-    df_b = df_b.join(
-        clin_b.loc[clin_b.index.isin(common_b),
-                   keep_cols],
-        how="inner")
-    rename_map = {pam50_col_b: "PAM50"}
-    if os_t: rename_map[os_t] = "OS_MONTHS"
-    if os_e: rename_map[os_e] = "OS_STATUS"
-    df_b = df_b.rename(columns=rename_map)
+    gene_cols = [c for c in ["FOXA1", "EZH2"]
+                 if c in expr_t.columns]
+    df_b = expr_t.loc[common_b, gene_cols].copy()
+    df_b = df_b.join(clin_b.loc[common_b, keep], how="inner")
+
+    rn = {pam50_col: "PAM50"}
+    if os_t_b: rn[os_t_b] = "OS_T"
+    if os_e_b: rn[os_e_b] = "OS_E"
+    df_b = df_b.rename(columns=rn)
     df_b["subtype"] = df_b["PAM50"].apply(norm_subtype)
-    df_b["ratio_p"] = (
-        df_b["FOXA1_p"]
-        / (df_b["EZH2_p"].replace(0, np.nan) + 1e-6))
+    df_b["ratio_b"] = (
+        df_b["FOXA1"].astype(float)
+        / (df_b["EZH2"].astype(float).replace(0, np.nan)
+           + 1e-6))
 
     log(f"  df_b: {df_b.shape}")
     log(f"  Subtype dist:\n"
-        f"{df_b['subtype'].value_counts()}")
+        f"{df_b['subtype'].value_counts().head(8)}")
 
-    # ── B.4: Ordering test R2-A (PRIMARY) ─────────────────────
+    # ── B.5: Ordering test R2-A (PRIMARY) ─────────────────────
     log("")
-    log("── B.4: R2-A ★ PRIMARY ★ ──")
+    log("── B.5: ORDERING TEST (R2-A) ★ PRIMARY ★ ──")
 
     known_b  = ["LumA", "LumB", "HER2", "TNBC"]
     groups_b = {
-        s: df_b[df_b["subtype"] == s]["ratio_p"].dropna().values
+        s: df_b[df_b["subtype"] == s]["ratio_b"].dropna().values
         for s in known_b
         if (df_b["subtype"] == s).sum() >= 5
     }
     medians_b = {s: float(np.median(v))
                  for s, v in groups_b.items()}
-    log("  Protein ratio medians:")
+
+    log("  FOXA1/EZH2 ratio medians (bulk mRNA):")
     for s in known_b:
         if s in medians_b:
-            log(f"    {s:6s}: n={len(groups_b[s]):3d}  "
+            log(f"    {s:6s}: n={len(groups_b[s]):4d}  "
                 f"med={medians_b[s]:.4f}")
 
-    kw_p_b, pw_b = kw_and_pairs(groups_b)
-    log(f"\n  KW p = {kw_p_b:.2e}" if kw_p_b else
-        "  KW p = None")
+    kw_p_b, _ = kw_and_pairs(groups_b)
+    log(f"\n  KW p = "
+        f"{kw_p_b:.2e}" if kw_p_b is not None else
+        "\n  KW p = None")
 
     adj_b = [("LumA","LumB"), ("LumB","HER2"), ("HER2","TNBC")]
     nc_b, nt_b, detail_b = order_check(medians_b, adj_b)
@@ -1066,92 +1075,105 @@ def run_component_b():
            and nc_b >= 2)
     preds["R2-A"] = ("CONFIRMED ★ PRIMARY ★"
                      if r2a else "NOT CONFIRMED")
-    log(f"  R2-A: {nc_b}/{nt_b}  KW p={kw_p_b}  "
-        f"→ {preds['R2-A']}")
+    log(f"  R2-A → {preds['R2-A']}")
 
-    # ── B.5: EZH2 highest in TNBC R2-B ───────────────────────
+    # ── B.6: EZH2 highest in TNBC (R2-B) ─────────────────────
     ezh2_meds = {
         s: float(np.median(
-            df_b[df_b["subtype"]==s]["EZH2_p"].dropna()))
+            df_b[df_b["subtype"]==s]["EZH2"].dropna()))
         for s in known_b
         if (df_b["subtype"]==s).sum() >= 5
     }
-    log(f"  EZH2 protein meds: {ezh2_meds}")
+    log(f"\n  EZH2 medians: {ezh2_meds}")
     r2b = ("TNBC" in ezh2_meds and "LumA" in ezh2_meds
            and ezh2_meds["TNBC"] > ezh2_meds["LumA"])
     preds["R2-B"] = "CONFIRMED" if r2b else "NOT CONFIRMED"
-    log(f"  R2-B → {preds['R2-B']}")
+    log(f"  R2-B (EZH2 TNBC > LumA) → {preds['R2-B']}")
 
-    # ── B.6: FOXA1 highest in LumA R2-C ──────────────────────
+    # ── B.7: FOXA1 highest in LumA (R2-C) ────────────────────
     foxa1_meds = {
         s: float(np.median(
-            df_b[df_b["subtype"]==s]["FOXA1_p"].dropna()))
+            df_b[df_b["subtype"]==s]["FOXA1"].dropna()))
         for s in known_b
         if (df_b["subtype"]==s).sum() >= 5
     }
-    log(f"  FOXA1 protein meds: {foxa1_meds}")
+    log(f"  FOXA1 medians: {foxa1_meds}")
     r2c = ("LumA" in foxa1_meds and "TNBC" in foxa1_meds
            and foxa1_meds["LumA"] > foxa1_meds["TNBC"])
     preds["R2-C"] = "CONFIRMED" if r2c else "NOT CONFIRMED"
-    log(f"  R2-C → {preds['R2-C']}")
+    log(f"  R2-C (FOXA1 LumA > TNBC) → {preds['R2-C']}")
 
-    # ── B.7: Survival R2-D ────────────────────────────────────
+    # ── B.8: Survival R2-D ────────────────────────────────────
     log("")
-    log("── B.7: SURVIVAL (R2-D) ──")
+    log("── B.8: SURVIVAL (R2-D) ──")
     r2d_p = None
-    if "OS_MONTHS" in df_b.columns and \
-       "OS_STATUS" in df_b.columns:
-        df_b["OS_t"] = pd.to_numeric(
-            df_b["OS_MONTHS"], errors="coerce")
-        df_b["OS_e"] = df_b["OS_STATUS"].apply(
+    if "OS_T" in df_b.columns and "OS_E" in df_b.columns:
+        df_b["OS_t_n"] = pd.to_numeric(
+            df_b["OS_T"], errors="coerce")
+        df_b["OS_e_n"] = df_b["OS_E"].apply(
             lambda x: 1 if str(x).upper() in
-            ["DECEASED","1","1.0","DEAD",
-             "1:DECEASED","DEAD:DECEASED"]
+            ["1", "1.0", "DECEASED", "DEAD",
+             "1:DECEASED", "DEAD:DECEASED"]
             else 0)
-        r2d_p = km_q14(df_b, "OS_t", "OS_e", "ratio_p",
-                       title="RPPA ratio vs OS")
-        log(f"  KM p = {r2d_p:.4f}" if r2d_p is not None
-            else "  KM: not testable")
+        # Convert days → months if values look like days
+        if df_b["OS_t_n"].median() > 500:
+            df_b["OS_t_n"] = df_b["OS_t_n"] / 30.44
+            log("  OS time converted days → months")
+        r2d_p = km_q14(df_b, "OS_t_n", "OS_e_n", "ratio_b",
+                       title="TCGA bulk ratio vs OS")
+        log(f"  KM logrank p = "
+            f"{r2d_p:.4f}" if r2d_p is not None
+            else "  KM: not run")
+    else:
+        log("  OS columns not found — R2-D NOT TESTABLE")
+
     preds["R2-D"] = (
         "CONFIRMED" if r2d_p is not None and r2d_p < 0.05
         else ("NOT TESTABLE" if r2d_p is None
               else "NOT CONFIRMED"))
     log(f"  R2-D → {preds['R2-D']}")
 
-    # ── B.8: Figure ───────────────────────────────────────────
-    plot_s_b = [s for s in known_b if s in groups_b]
-    fig_b, ax_b = plt.subplots(1, 3, figsize=(15, 5))
+    # ── B.9: Figure ───────────────────────────────────────────
+    log("")
+    log("── B.9: FIGURE ──")
+
+    plot_s = [s for s in known_b if s in groups_b]
+    n_panels = 3 if (HAS_LIFELINES
+                     and "OS_t_n" in df_b.columns
+                     and r2d_p is not None) else 2
+    fig_b, ax_b = plt.subplots(1, n_panels,
+                                figsize=(5*n_panels + 1, 5))
+    if n_panels == 2:
+        ax_b = list(ax_b)
 
     ax_b[0].violinplot(
-        [df_b[df_b["subtype"]==s]["FOXA1_p"].dropna().values
-         for s in plot_s_b], showmedians=True)
-    ax_b[0].set_xticks(range(1, len(plot_s_b)+1))
-    ax_b[0].set_xticklabels(plot_s_b)
-    ax_b[0].set_title("FOXA1 protein (RPPA)\n"
-                      "Expected: LumA>LumB>HER2>TNBC")
-    ax_b[0].set_ylabel("RPPA level")
+        [groups_b[s] for s in plot_s], showmedians=True)
+    ax_b[0].set_xticks(range(1, len(plot_s)+1))
+    ax_b[0].set_xticklabels(plot_s, fontsize=8)
+    ax_b[0].set_ylabel("FOXA1/EZH2 ratio (mRNA log2)")
+    ax_b[0].set_title(
+        f"Component B: TCGA bulk RNA-seq\n"
+        f"n={len(df_b)}  KW p="
+        f"{'N/A' if kw_p_b is None else f'{kw_p_b:.2e}'}")
 
-    ax_b[1].violinplot(
-        [df_b[df_b["subtype"]==s]["EZH2_p"].dropna().values
-         for s in plot_s_b], showmedians=True)
-    ax_b[1].set_xticks(range(1, len(plot_s_b)+1))
-    ax_b[1].set_xticklabels(plot_s_b)
-    ax_b[1].set_title("EZH2 protein (RPPA)\n"
-                      "Expected: TNBC>HER2>LumB>LumA")
-    ax_b[1].set_ylabel("RPPA level")
+    meds = [medians_b.get(s, np.nan) for s in plot_s]
+    cols = [SUBTYPE_COLORS.get(s,"#888") for s in plot_s]
+    labs = [f"{s}\n(n={len(groups_b[s])})" for s in plot_s]
+    ax_b[1].bar(labs, meds, color=cols, alpha=0.85,
+                edgecolor="black", linewidth=0.7)
+    ax_b[1].set_ylabel("Median FOXA1/EZH2")
+    ax_b[1].set_title(
+        f"Ordering: {nc_b}/{nt_b} correct\n"
+        f"R2-A: {preds['R2-A']}")
 
-    ax_b[2].violinplot(
-        [groups_b[s] for s in plot_s_b], showmedians=True)
-    ax_b[2].set_xticks(range(1, len(plot_s_b)+1))
-    ax_b[2].set_xticklabels(plot_s_b)
-    ax_b[2].set_title(
-        f"FOXA1/EZH2 protein ratio\n"
-        f"KW p={'N/A' if kw_p_b is None else f'{kw_p_b:.2e}'}"
-        f"  R2-A: {preds['R2-A']}")
-    ax_b[2].set_ylabel("FOXA1/EZH2 protein ratio")
+    if n_panels == 3:
+        km_q14(df_b, "OS_t_n", "OS_e_n", "ratio_b",
+               ax=ax_b[2],
+               title="TCGA bulk ratio vs OS")
 
-    plt.suptitle(f"Component B: TCGA RPPA  n={len(df_b)}",
-                 y=1.01)
+    plt.suptitle("Component B: TCGA HiSeqV2 bulk RNA-seq\n"
+                 "(RPPA-RBN excluded: FOXA1/EZH2 not in panel)",
+                 y=1.01, fontsize=9)
     plt.tight_layout()
     plt.savefig(FIG_COMP_B, dpi=150, bbox_inches="tight")
     plt.close()
@@ -1495,15 +1517,15 @@ def make_combined(res_a, res_b, res_c):
     fig, axes = plt.subplots(1, 3, figsize=(16, 5))
 
     panels = [
-        ("A: scRNA-seq\n(GSE176078)",
+        ("A: scRNA-seq\n(GSE176078 n≈20k cells)",
          res_a.get("medians",{}),
          res_a.get("status","—"),
          res_a.get("nc","—"), res_a.get("nt","—")),
-        ("B: RPPA protein\n(TCGA)",
+        ("B: Bulk RNA-seq\n(TCGA HiSeqV2 n≈1,100)",   # ← updated
          res_b.get("medians",{}),
          res_b.get("status","—"),
          res_b.get("nc","—"), res_b.get("nt","—")),
-        ("C: mRNA microarray\n(METABRIC)",
+        ("C: mRNA microarray\n(METABRIC n=1,980)",
          res_c.get("medians",{}),
          res_c.get("status","—"),
          res_c.get("nc","—"), res_c.get("nt","—")),
@@ -1573,9 +1595,9 @@ def make_scorecard(res_a, res_b, res_c):
         rows.append({
             "id":         pred_id,
             "component":  "B",
-            "dataset":    "TCGA RPPA protein",
+            "dataset":    "TCGA HiSeqV2 bulk RNA-seq",   # ← updated
             "n":          res_b.get("n_samples","N/A"),
-            "technology": "RPPA protein",
+            "technology": "bulk mRNA log2 (HiSeqV2)",    # ← updated
             "status":     status,
         })
     for pred_id, status in \

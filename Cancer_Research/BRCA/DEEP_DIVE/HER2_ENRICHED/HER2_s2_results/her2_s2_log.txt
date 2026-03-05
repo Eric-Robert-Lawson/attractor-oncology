@@ -1,0 +1,184 @@
+============================================================
+BRCA HER2-ENRICHED — SCRIPT 2
+BULK VALIDATION + RESISTANCE + SURVIVAL
+OrganismCore — BRCA-S3c/d | 2026-03-05
+============================================================
+============================================================
+STEP 1: DATA ACQUISITION
+============================================================
+
+-- TCGA-BRCA expression --
+  Trying: https://tcga.xenahubs.net/download/TCGA.BRCA.sampleMap/HiSeqV2.gz
+  Cached: TCGA_BRCA_HiSeqV2.gz
+
+-- TCGA-BRCA clinical --
+  Trying: https://tcga.xenahubs.net/download/TCGA.BRCA.sampleMap/BRCA_clinicalMatrix
+  Cached: TCGA_BRCA_clinicalMatrix.tsv
+
+-- TCGA-BRCA survival --
+  Trying: https://pancanatlas.xenahubs.net/download/Survival_SupplementalTable_S1_20171025_xena_sp
+  Cached: TCGA_pancan_survival.tsv
+
+-- Trastuzumab response datasets --
+  Trying GSE37946...
+  Cached: GSE37946_series_matrix.txt.gz
+  SUCCESS: using GSE37946
+
+============================================================
+STEP 2: LOAD TCGA-BRCA EXPRESSION
+============================================================
+  Reading expression matrix...
+  Shape: (20530, 1218)  (genes x samples)
+  Target genes found:   45 / 46
+  Missing genes:        ['MIEN1']
+
+============================================================
+STEP 3: LOAD TCGA-BRCA CLINICAL + SURVIVAL
+============================================================
+  Clinical shape: (1247, 193)
+  Clinical columns (first 10): ['AJCC_Stage_nature2012', 'Age_at_Initial_Pathologic_Diagnosis_nature2012', 'CN_Clusters_nature2012', 'Converted_Stage_nature2012', 'Days_to_Date_of_Last_Contact_nature2012', 'Days_to_date_of_Death_nature2012', 'ER_Status_nature2012', 'Gender_nature2012', 'HER2_Final_Status_nature2012', 'Integrated_Clusters_no_exp__nature2012']
+  Survival shape: (12591, 33)
+  Survival columns: ['_PATIENT', 'cancer type abbreviation', 'age_at_initial_pathologic_diagnosis', 'gender', 'race', 'ajcc_pathologic_tumor_stage', 'clinical_stage', 'histological_type', 'histological_grade', 'initial_pathologic_dx_year', 'menopause_status', 'birth_days_to', 'vital_status', 'tumor_status', 'last_contact_days_to', 'death_days_to', 'cause_of_death', 'new_tumor_event_type', 'new_tumor_event_site', 'new_tumor_event_site_other', 'new_tumor_event_dx_days_to', 'treatment_outcome_first_course', 'margin_status', 'residual_tumor', 'OS', 'OS.time', 'DSS', 'DSS.time', 'DFI', 'DFI.time', 'PFI', 'PFI.time', 'Redaction']
+
+============================================================
+STEP 4: IDENTIFY HER2-ENRICHED SAMPLES
+============================================================
+  PAM50 column candidates: ['Integrated_Clusters_with_PAM50__nature2012', 'PAM50Call_RNAseq', 'PAM50_mRNA_nature2012']
+  Column 'Integrated_Clusters_with_PAM50__nature2012' values: ['1.0', '3.0', '2.0', '4.0']
+  Column 'PAM50Call_RNAseq' values: ['Normal', 'LumA', 'LumB', 'Basal', 'Her2']
+  Using PAM50 column: 'PAM50Call_RNAseq'
+  HER2-enriched: n=67
+  LumA:          n=434
+  Basal-like:    n=142
+
+============================================================
+STEP 5: TCGA BULK VALIDATION
+  S2-P3: r(EZH2, ESR1) in HER2-enriched
+  S2-P4: Amplicon fold-change in bulk
+  S2-P5: FOXA1 retained; r(FOXA1, ESR1) > 0
+============================================================
+  HER2-enriched in expr: n=67
+  LumA in expr:          n=434
+  Basal in expr:         n=142
+
+  S2-P4 — AMPLICON FOLD-CHANGE (HER2 vs LumA)
+  Gene             HER2     LumA        FC%  p-value
+  -------------------------------------------------------
+  ERBB2          15.549   12.860      +20.9%  p=2.00e-18 ***
+  GRB7           11.555    8.781      +31.6%  p=3.22e-21 ***
+  STARD3         11.892    9.693      +22.7%  p=1.19e-20 ***
+  MIEN1         NOT FOUND
+  ESR1            8.309   13.396      -38.0%  p=7.99e-34 ***
+  FOXA1          12.574   12.743       -1.3%  p=7.02e-06 ***
+  GATA3          11.609   13.553      -14.3%  p=8.03e-22 ***
+  EZH2            9.061    7.991      +13.4%  p=1.04e-19 ***
+  ERBB3          12.480   12.926       -3.5%  p=1.38e-08 ***
+
+  S2-P4 ERBB2: NOT CONFIRMED (+20.9%)
+  S2-P4 STARD3: NOT CONFIRMED (+22.7%)
+
+  S2-P5 — FOXA1 RETENTION (HER2 vs Basal)
+  Gene             HER2    Basal        FC%  p-value
+  -------------------------------------------------------
+  FOXA1          12.574    6.684      +88.1%  p=2.32e-30 ***
+  ESR1            8.309    6.504      +27.8%  p=8.88e-07 ***
+  GATA3          11.609    9.286      +25.0%  p=5.17e-14 ***
+  KRT5            8.001   11.564      -30.8%  p=4.50e-13 ***
+  SOX10           3.034    9.220      -67.1%  p=2.45e-17 ***
+  EZH2            9.061    9.727       -6.8%  p=9.67e-08 ***
+
+  r(FOXA1, ESR1) in HER2-enriched: r=+0.271  p=2.64e-02
+  S2-P5: CONFIRMED
+
+  S2-P3 — r(EZH2, ESR1) IN HER2-ENRICHED
+  r(EZH2, ESR1): r=-0.017  p=8.92e-01
+  S2-P3: NOT CONFIRMED
+  r(EZH2, FOXA1): r=+0.005  p=9.70e-01  [secondary]
+
+============================================================
+STEP 6: DEPTH SCORE + SURVIVAL
+  S2-P2: depth score → OS
+  S2-P6: depth score → Grade
+  S2-P7: AR-low → worse OS
+============================================================
+  Depth genes available: ['ERBB3', 'CDH1', 'AR']
+  Depth score: mean=0.409  median=0.385  range=[0.000, 1.000]
+  OS columns from clinical: time='OS_Time_nature2012', event='OS_event_nature2012'
+  Depth + OS merged: n=66
+
+  S2-P2 — DEPTH SCORE VS OS (log-rank)
+  Depth-high (n=33): median OS = 3062.0
+  Depth-low  (n=33):  median OS = not reached
+  Log-rank p = 0.6418
+  S2-P2: NOT CONFIRMED
+
+  S2-P7 — AR-LOW vs AR-HIGH WITHIN HER2-ENRICHED
+  AR + OS merged: n=66
+  Median OS AR-high: not reached
+  Median OS AR-low:  3062.0
+  Log-rank p = 0.7662
+  S2-P7: NOT CONFIRMED
+
+  S2-P6 — DEPTH SCORE vs HISTOLOGICAL GRADE
+  Grade column candidates: []
+  Grade column not found — S2-P6 skipped.
+
+============================================================
+STEP 7: TRASTUZUMAB RESISTANCE ANALYSIS
+  S2-P1: ERBB3 as pCR biomarker
+============================================================
+  Dataset: GSE37946  File: GSE37946_series_matrix.txt.gz
+  Parsing series matrix...
+  Samples:  50
+  Probes:   22283
+  Meta fields: ['age', 'er', 'pr', 'her2', 'clin_stage', 'path_stage', 'path_response']
+  pCR column scoring:
+  field                      pCR hits  RD hits   total
+  ----------------------------------------------------
+  path_response                    26       23      49
+  path_stage                        1        0       1
+  age                               0        0       0
+  er                                0        0       0
+  pr                                0        0       0
+  her2                              0        0       0
+  clin_stage                        0        0       0
+
+  Selected pCR column: 'path_response'
+  Raw values (unique): ['', 'path_response: RD', 'path_response: pCR']
+  pCR=1 (responders): 26
+  pCR=0 (non-resp):   23
+  ERBB3 probes found: ['205047_s_at', '205048_s_at', '210766_s_at']
+  ERBB3 + pCR merged: n=49
+  ERBB3 pCR group  (n=26): mean=6.387  median=6.400
+  ERBB3 RD  group  (n=23): mean=6.582  median=6.474
+  Mann-Whitney p = 0.5412
+  S2-P1: NOT CONFIRMED (p=0.5412, ERBB3-high → RD (reverse))
+  ERBB3 AUC (pCR) = 0.448
+
+============================================================
+STEP 8: GENERATING FIGURE
+============================================================
+  Figure saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/HER2_Enriched/HER2_s2_results/her2_s2_figure.png
+
+============================================================
+STEP 9: SAVE RESULTS
+============================================================
+  Results saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/HER2_Enriched/HER2_s2_results/her2_s2_results.csv  (44 rows)
+
+============================================================
+PREDICTION SUMMARY
+============================================================
+  S2-P1 ERBB3 → pCR            NOT_CONFIRMED
+  S2-P2 Depth → OS             NOT CONFIRMED  (p=0.6418)
+  S2-P3 r(EZH2, ESR1)          NOT CONFIRMED  (p=0.8922  r=-0.017)
+  S2-P4 ERBB2 FC bulk          CONFIRMED  (p=0.0000  r=+20.905)
+  S2-P5 FOXA1 retention        CONFIRMED  (p=0.0264  r=+0.271)
+  S2-P6 Depth → Grade          NO DATA
+  S2-P7 AR-low → worse OS      NOT CONFIRMED  (p=0.7662)
+
+  Log:     /Users/ericlawson/cancer/BRCA/DEEP_DIVE/HER2_Enriched/HER2_s2_results/her2_s2_log.txt
+  Figure:  /Users/ericlawson/cancer/BRCA/DEEP_DIVE/HER2_Enriched/HER2_s2_results/her2_s2_figure.png
+  Results: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/HER2_Enriched/HER2_s2_results/her2_s2_results.csv
+============================================================
+SCRIPT 2 COMPLETE
+============================================================

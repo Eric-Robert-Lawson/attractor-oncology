@@ -1,0 +1,187 @@
+=================================================================
+BRCA ILC — SCRIPT 2: SURVIVAL ANALYSIS
+OrganismCore — Document BRCA-S6c/d | 2026-03-05
+
+ATTRACTOR TYPE: TYPE 3 VARIANT — ADHESION LOCK DISSOLUTION
+Output directory: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ILC/ILC_s2_results
+=================================================================
+
+=================================================================
+LOADING EXPRESSION MATRIX (from Script 1 data)
+=================================================================
+  Expression shape: (20530, 1218)
+  Sample example: TCGA-AR-A5QQ-01
+
+=================================================================
+LOADING CLINICAL MATRIX
+=================================================================
+  Clinical shape: (1247, 193)
+  Histology column: 'histological_type'
+  PAM50 column: 'PAM50Call_RNAseq'
+
+=================================================================
+LOADING SURVIVAL DATA
+=================================================================
+  Attempt 1/3: https://pancanatlas.xenahubs.net/download/Survival_SupplementalTable_S1_...
+  Downloading TCGA pancan survival ...
+  OK: TCGA_pancan_survival.tsv (2.4 MB)
+  Survival shape: (12591, 34)
+  Columns: ['sample', '_PATIENT', 'cancer type abbreviation', 'age_at_initial_pathologic_diagnosis', 'gender', 'race', 'ajcc_pathologic_tumor_stage', 'clinical_stage', 'histological_type', 'histological_grade', 'initial_pathologic_dx_year', 'menopause_status']
+  Survival index set to: 'sample'
+
+=================================================================
+CLASSIFYING SAMPLES
+=================================================================
+  ILC: 216  LumA: 355  TNBC: 140  HER2: 65  LumB: 185  Normal: 114
+
+=================================================================
+BUILDING SURVIVAL VECTORS
+=================================================================
+  Pancan survival: time='OS.time', event='OS'
+  Clinical fallback: time='OS_Time_nature2012', event='OS_event_nature2012'
+  Total samples with survival data: 922
+  ILC samples with survival data:   215
+  Expression already log2-transformed. Using as-is.
+
+=================================================================
+SURVIVAL ANALYSES
+=================================================================
+
+  S2-P1 — ESR1 PREDICTS OS WITHIN ILC
+  Prediction: ESR1-high = better survival
+-----------------------------------------------------------------
+  S2-P1 [ESR1 tertile within ILC]
+    ESR1-high: n=71, events=6, median OS=3926d
+    ESR1-low:  n=71, events=7, median OS=infd
+    Log-rank: p=0.5688 (ns)  HR=1.363  [LOW better (opposite)]
+    Status: [NOT CONFIRMED]
+
+  S2-P2 — CDH1 DEPTH PREDICTS OS WITHIN ILC
+  Prediction: CDH1-low (deep) = worse survival
+-----------------------------------------------------------------
+  S2-P2 [CDH1 tertile within ILC]
+    CDH1-low (deep): n=71, events=8, median OS=infd
+    CDH1-high (shallow):  n=70, events=8, median OS=4267d
+    Log-rank: p=0.5991 (ns)  HR=1.296  [LOW better (opposite)]
+    Status: [NOT CONFIRMED]
+
+  S2-P3 — ILC vs LumA OVERALL SURVIVAL
+  Prediction: ILC worse than LumA
+-----------------------------------------------------------------
+  S2-P3 [ILC vs LumA]
+    LumA: n=352, events=52, median OS=3736d
+    ILC:  n=215, events=25, median OS=4267d
+    Log-rank: p=0.9152 (ns)  HR=1.026  [LOW better (opposite)]
+    Status: [NOT CONFIRMED]
+
+  S2-P4 — SPDEF NOVEL PROGNOSTIC MARKER WITHIN ILC
+  Prediction: SPDEF-high = better survival (novel)
+-----------------------------------------------------------------
+  S2-P4 [SPDEF tertile within ILC]
+    SPDEF-high: n=71, events=9, median OS=infd
+    SPDEF-low:  n=70, events=5, median OS=infd
+    Log-rank: p=0.1747 (ns)  HR=2.083  [LOW better (opposite)]
+    Status: [NOT CONFIRMED]
+
+  S2-P5 — PTEN-LOW PREDICTS WORSE OS WITHIN ILC
+  Prediction: PTEN-low = worse survival
+-----------------------------------------------------------------
+  S2-P5 [PTEN tertile within ILC]
+    PTEN-low: n=70, events=7, median OS=3492d
+    PTEN-high:  n=71, events=10, median OS=4267d
+    Log-rank: p=0.8943 (ns)  HR=1.066  [LOW better (opposite)]
+    Status: [NOT CONFIRMED]
+
+  S2-P6 — EZH2 DOES NOT PREDICT OS WITHIN ILC (null)
+  Prediction: no significant difference
+-----------------------------------------------------------------
+  S2-P6 [EZH2 tertile within ILC]
+    EZH2-high: n=71, events=12, median OS=infd
+    EZH2-low:  n=70, events=6, median OS=4267d
+    Log-rank: p=0.0404 *  HR=2.656  [SIGNIFICANT (unexpected)]
+    Status: [OPPOSITE]
+
+  S2-P7 — CCND1-HIGH TRENDS TOWARD BETTER OS WITHIN ILC
+  Prediction: trend p < 0.15, CCND1-high better (treatment confound)
+-----------------------------------------------------------------
+  S2-P7 [CCND1 tertile within ILC]
+    CCND1-high: n=71, events=9, median OS=infd
+    CCND1-low:  n=70, events=10, median OS=infd
+    Log-rank: p=0.8894 (ns)  HR=0.938  [HIGH better (predicted)]
+    Status: [NOT CONFIRMED]
+
+  S2-P8 — MKI67 DOES NOT STRONGLY PREDICT OS IN ILC (conditional null)
+  Prediction: p > 0.05 within ILC, or weak HR
+-----------------------------------------------------------------
+  S2-P8 [MKI67 tertile within ILC]
+    MKI67-high: n=70, events=13, median OS=infd
+    MKI67-low:  n=71, events=5, median OS=3492d
+    Log-rank: p=0.0185 *  HR=3.218  [SIGNIFICANT (unexpected)]
+    Status: [OPPOSITE]
+
+  BONUS — PIK3CA mRNA TERTILE WITHIN ILC
+  Not a formal prediction. Exploratory.
+-----------------------------------------------------------------
+  BONUS-PIK3CA [PIK3CA mRNA tertile within ILC]
+    PIK3CA-high: n=70, events=5, median OS=infd
+    PIK3CA-low:  n=71, events=7, median OS=3926d
+    Log-rank: p=0.3644 (ns)  HR=0.595  [NULL confirmed]
+    Status: [NULL CONFIRMED]
+
+  BONUS — FOXA1 TERTILE WITHIN ILC
+  Exploratory. FOXA1 was highest luminal TF by absolute level.
+-----------------------------------------------------------------
+  BONUS-FOXA1 [FOXA1 tertile within ILC]
+    FOXA1-high: n=71, events=8, median OS=infd
+    FOXA1-low:  n=70, events=8, median OS=4267d
+    Log-rank: p=0.9108 (ns)  HR=0.947  [HIGH better (predicted)]
+    Status: [NOT CONFIRMED]
+
+
+=================================================================
+  CROSS-SUBTYPE SURVIVAL COMPARISON
+  ILC vs LumA vs TNBC vs HER2 vs LumB
+=================================================================
+  ILC          n=215   events=25    median OS=4267d
+  LUMA         n=352   events=52    median OS=3736d
+  TNBC         n=139   events=20    median OS=7455d
+  HER2         n=62    events=13    median OS=6456d
+  LUMB         n=182   events=30    median OS=3941d
+
+  ILC pairwise log-rank:
+  ILC vs LUMA     p=0.9152 (ns)  HR(ILC/other)=0.975
+  ILC vs TNBC     p=0.8361 (ns)  HR(ILC/other)=1.063
+  ILC vs HER2     p=0.1059 (trend)  HR(ILC/other)=0.595
+  ILC vs LUMB     p=0.0775 (trend)  HR(ILC/other)=0.627
+
+=================================================================
+GENERATING FIGURE
+=================================================================
+  Figure saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ILC/ILC_s2_results/ilc_s2_figure.png
+  Results saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ILC/ILC_s2_results/ilc_s2_survival.csv
+
+=================================================================
+FINAL PREDICTION SCORECARD
+=================================================================
+  ID             Status                        p       HR  Label
+  -----------------------------------------------------------------
+  S2-P1          NOT CONFIRMED            0.5688    1.363  ESR1 tertile within ILC
+  S2-P2          NOT CONFIRMED            0.5991    1.296  CDH1 tertile within ILC
+  S2-P3          NOT CONFIRMED            0.9152    1.026  ILC vs LumA
+  S2-P4          NOT CONFIRMED            0.1747    2.083  SPDEF tertile within ILC
+  S2-P5          NOT CONFIRMED            0.8943    1.066  PTEN tertile within ILC
+  S2-P6          OPPOSITE                 0.0404    2.656  EZH2 tertile within ILC
+  S2-P7          NOT CONFIRMED            0.8894    0.938  CCND1 tertile within ILC
+  S2-P8          OPPOSITE                 0.0185    3.218  MKI67 tertile within ILC
+  BONUS-PIK3CA   NULL CONFIRMED           0.3644    0.595  PIK3CA mRNA tertile within ILC
+  BONUS-FOXA1    NOT CONFIRMED            0.9108    0.947  FOXA1 tertile within ILC
+
+=================================================================
+SCRIPT 2 COMPLETE
+=================================================================
+  Log:     /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ILC/ILC_s2_results/ilc_s2_log.txt
+  Figure:  /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ILC/ILC_s2_results/ilc_s2_figure.png
+  CSV:     /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ILC/ILC_s2_results/ilc_s2_survival.csv
+
+NEXT: Write BRCA-S6d (script2_results_and_reasoning.md)
+      then run Literature Check (Phase 4 of Protocol).

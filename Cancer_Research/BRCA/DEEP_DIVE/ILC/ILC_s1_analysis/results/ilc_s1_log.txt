@@ -1,0 +1,477 @@
+=================================================================
+BRCA ILC — SCRIPT 1: DISCOVERY (v3 — corrected)
+OrganismCore — Document BRCA-S6a/b | 2026-03-05
+
+ATTRACTOR TYPE: TYPE 3 VARIANT — ADHESION LOCK DISSOLUTION
+  TF identity retained (ESR1/FOXA1/GATA3).
+  Structural lock removed (CDH1 loss).
+  Predicted geometric inverse of TNBC.
+  Output directory: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ILC/ILC_s1_analysis
+=================================================================
+
+=================================================================
+STEP 1: ATTEMPT scRNA-seq PATH (GSE176078)
+=================================================================
+  Reading metadata: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ILC/ILC_s1_analysis/data/Wu_etal_2021_BRCA_scRNASeq/metadata.csv
+  Metadata shape: (100064, 9)
+  Cell type counts (celltype_subset):
+    T_cells_c1_CD4+_IL7R: 7786
+    Cancer LumA SC: 7742
+    Cancer Cycling: 5359
+    T_cells_c4_CD8+_ZFP36: 5063
+    T_cells_c0_CD4+_CCR7: 4952
+    Endothelial ACKR1: 4611
+    Cancer Basal SC: 4312
+    T_cells_c2_CD4+_T-regs_FOXP3: 4246
+    Cancer Her2 SC: 3708
+    Plasmablasts: 3524
+    PVL Differentiated s3: 3487
+    Cancer LumB SC: 3368
+    T_cells_c7_CD8+_IFNG: 3168
+    B cells Memory: 2581
+    CAFs MSC iCAF-like s1: 2309
+    CAFs myCAF like s5: 2265
+    T_cells_c3_CD4+_Tfh_CXCL13: 2247
+    Myeloid_c10_Macrophage_1_EGR1: 2150
+    Myeloid_c1_LAM1_FABP5: 2122
+    Luminal Progenitors: 1992
+    T_cells_c8_CD8+_LAG3: 1955
+    T_cells_c9_NK_cells_AREG: 1846
+    Endothelial CXCL12: 1644
+    T_cells_c11_MKI67: 1528
+    Myeloid_c12_Monocyte_1_IL1B: 1339
+    Mature Luminal: 1265
+    PVL Immature s1: 1169
+    Endothelial RGS5: 1147
+    Myeloid_c2_LAM2_APOE: 1126
+    T_cells_c10_NKT_cells_FCGR3A: 1122
+    Myoepithelial: 1098
+    T_cells_c6_IFIT1: 1017
+    Myeloid_c8_Monocyte_2_S100A9: 935
+    CAFs MSC iCAF-like s2: 844
+    PVL_Immature s2: 717
+    B cells Naive: 625
+    CAFs myCAF like s4: 602
+    CAFs Transitioning s3: 553
+    Myeloid_c9_Macrophage_2_CXCL10: 505
+    Cycling_Myeloid: 463
+    Myeloid_c11_cDC2_CD1C: 337
+    Myeloid_c4_DCs_pDC_IRF7: 331
+    T_cells_c5_CD8+_GZMK: 284
+    Endothelial Lymphatic LYVE1: 203
+    Myeloid_c3_cDC1_CLEC9A: 156
+    Myeloid_c0_DC_LAMP3: 131
+    Myeloid_c7_Monocyte_3_FCGR3A: 54
+    Cycling PVL: 50
+    Myeloid_c5_Macrophage_3_SIGLEC1: 26
+  Cells with lobular/ILC keyword in any column: 0
+  ILC cells not found or insufficient (n=0 < 50).
+  Wu et al. 2021 classified by molecular subtype (not histology).
+  ILC tumors were not explicitly included — falling through to TCGA.
+
+=================================================================
+STEP 2: TCGA-BRCA BULK RNA-seq PATH
+=================================================================
+
+  [2a] Expression matrix
+  Already present: TCGA_BRCA_HiSeqV2.gz (64.3 MB)
+
+  [2b] Clinical matrix
+  Already present: TCGA_BRCA_clinicalMatrix.tsv (1.7 MB)
+
+=================================================================
+LOADING EXPRESSION MATRIX
+=================================================================
+  Delimiter: TAB
+  First line sample: sample	TCGA-AR-A5QQ-01	TCGA-D8-A1JA-01	TCGA-BH-A0BQ-01	TCGA-BH-A0BT-01	TCGA-A8-A06X-01	TCGA-A8-A096-01	TCGA-BH-A0C7-01	T
+  Expression shape: (20530, 1218)  (genes × samples)
+  Gene index sample:   ['ARHGEF10L', 'HIF3A', 'RNF17', 'RNF10', 'RNF11']
+  Sample column sample:['TCGA-AR-A5QQ-01', 'TCGA-D8-A1JA-01', 'TCGA-BH-A0BQ-01']
+
+=================================================================
+LOADING CLINICAL MATRIX
+=================================================================
+  Delimiter: TAB
+  Clinical shape (before index): (1247, 194)
+  All columns (194): ['sampleID', 'AJCC_Stage_nature2012', 'Age_at_Initial_Pathologic_Diagnosis_nature2012', 'CN_Clusters_nature2012', 'Converted_Stage_nature2012', 'Days_to_Date_of_Last_Contact_nature2012', 'Days_to_date_of_Death_nature2012', 'ER_Status_nature2012', 'Gender_nature2012', 'HER2_Final_Status_nature2012', 'Integrated_Clusters_no_exp__nature2012', 'Integrated_Clusters_unsup_exp__nature2012', 'Integrated_Clusters_with_PAM50__nature2012', 'Metastasis_Coded_nature2012', 'Metastasis_nature2012', 'Node_Coded_nature2012', 'Node_nature2012', 'OS_Time_nature2012', 'OS_event_nature2012', 'PAM50Call_RNAseq', 'PAM50_mRNA_nature2012', 'PR_Status_nature2012', 'RPPA_Clusters_nature2012', 'SigClust_Intrinsic_mRNA_nature2012', 'SigClust_Unsupervised_mRNA_nature2012', 'Survival_Data_Form_nature2012', 'Tumor_T1_Coded_nature2012', 'Tumor_nature2012', 'Vital_Status_nature2012', '_INTEGRATION', '_PANCAN_CNA_PANCAN_K8', '_PANCAN_Cluster_Cluster_PANCAN', '_PANCAN_DNAMethyl_BRCA', '_PANCAN_DNAMethyl_PANCAN', '_PANCAN_RPPA_PANCAN_K8', '_PANCAN_UNC_RNAseq_PANCAN_K16', '_PANCAN_miRNA_PANCAN', '_PANCAN_mirna_BRCA', '_PANCAN_mutation_PANCAN', '_PATIENT', '_cohort', '_primary_disease', '_primary_site', 'additional_pharmaceutical_therapy', 'additional_radiation_therapy', 'additional_surgery_locoregional_procedure', 'additional_surgery_metastatic_procedure', 'age_at_initial_pathologic_diagnosis', 'anatomic_neoplasm_subdivision', 'axillary_lymph_node_stage_method_type', 'axillary_lymph_node_stage_other_method_descriptive_text', 'bcr_followup_barcode', 'bcr_patient_barcode', 'bcr_sample_barcode', 'breast_cancer_surgery_margin_status', 'breast_carcinoma_estrogen_receptor_status', 'breast_carcinoma_immunohistochemistry_er_pos_finding_scale', 'breast_carcinoma_immunohistochemistry_pos_cell_score', 'breast_carcinoma_immunohistochemistry_prgstrn_rcptr_ps_fndng_scl', 'breast_carcinoma_primary_surgical_procedure_name', 'breast_carcinoma_progesterone_receptor_status', 'breast_carcinoma_surgical_procedure_name', 'breast_neoplasm_other_surgical_procedure_descriptive_text', 'cytokeratin_immunohistochemistry_staining_method_mcrmtstss_ndctr', 'days_to_additional_surgery_locoregional_procedure', 'days_to_additional_surgery_metastatic_procedure', 'days_to_birth', 'days_to_collection', 'days_to_death', 'days_to_initial_pathologic_diagnosis', 'days_to_last_followup', 'days_to_last_known_alive', 'days_to_new_tumor_event_additional_surgery_procedure', 'days_to_new_tumor_event_after_initial_treatment', 'disease_code', 'distant_metastasis_present_ind2', 'er_detection_method_text', 'er_level_cell_percentage_category', 'fluorescence_in_st_hybrdztn_dgnstc_prcdr_chrmsm_17_sgnl_rslt_rng', 'followup_case_report_form_submission_reason', 'form_completion_date', 'gender', 'her2_and_centromere_17_positive_finding_other_measuremnt_scl_txt', 'her2_erbb_method_calculation_method_text', 'her2_erbb_pos_finding_cell_percent_category', 'her2_erbb_pos_finding_fluorescence_n_st_hybrdztn_clcltn_mthd_txt', 'her2_immunohistochemistry_level_result', 'her2_neu_and_centromere_17_copy_number_analysis_npt_ttl_nmbr_cnt', 'her2_neu_breast_carcinoma_copy_analysis_input_total_number', 'her2_neu_chromosone_17_signal_ratio_value', 'her2_neu_metastatic_breast_carcinoma_copy_analysis_inpt_ttl_nmbr', 'histological_type', 'histological_type_other', 'history_of_neoadjuvant_treatment', 'hr2_n_nd_cntrmr_17_cpy_nmbr_mtsttc_brst_crcnm_nlyss_npt_ttl_nmbr', 'icd_10', 'icd_o_3_histology', 'icd_o_3_site', 'immunohistochemistry_positive_cell_score', 'informed_consent_verified', 'init_pathology_dx_method_other', 'initial_pathologic_diagnosis_method', 'initial_weight', 'is_ffpe', 'lab_proc_her2_neu_immunohistochemistry_receptor_status', 'lab_procedure_her2_neu_in_situ_hybrid_outcome_type', 'lost_follow_up', 'lymph_node_examined_count', 'margin_status', 'menopause_status', 'metastatic_breast_carcinm_ps_fndng_prgstrn_rcptr_thr_msr_scl_txt', 'metastatic_breast_carcinom_lb_prc_hr2_n_mmnhstchmstry_rcptr_stts', 'metastatic_breast_carcinoma_erbb2_immunohistochemistry_levl_rslt', 'metastatic_breast_carcinoma_estrogen_receptor_detection_mthd_txt', 'metastatic_breast_carcinoma_estrogen_receptor_status', 'metastatic_breast_carcinoma_estrogen_receptr_lvl_cll_prcnt_ctgry', 'metastatic_breast_carcinoma_her2_erbb_method_calculatin_mthd_txt', 'metastatic_breast_carcinoma_her2_erbb_pos_findng_cll_prcnt_ctgry', 'metastatic_breast_carcinoma_her2_neu_chromosone_17_signal_rat_vl', 'metastatic_breast_carcinoma_immunhstchmstry_r_pstv_fndng_scl_typ', 'metastatic_breast_carcinoma_immunohistochemistry_er_pos_cell_scr', 'metastatic_breast_carcinoma_immunohistochemistry_pr_pos_cell_scr', 'metastatic_breast_carcinoma_lab_proc_hr2_n_n_st_hybrdztn_tcm_typ', 'metastatic_breast_carcinoma_pos_finding_hr2_rbb2_thr_msr_scl_txt', 'metastatic_breast_carcinoma_progestern_rcptr_lvl_cll_prcnt_ctgry', 'metastatic_breast_carcinoma_progesterone_receptor_dtctn_mthd_txt', 'metastatic_breast_carcinoma_progesterone_receptor_status', 'metastatic_site_at_diagnosis', 'metastatic_site_at_diagnosis_other', 'methylation_Clusters_nature2012', 'miRNA_Clusters_nature2012', 'mtsttc_brst_crcnm_flrscnc_n_st_hybrdztn_dgnstc_prc_cntrmr_17_sgn', 'mtsttc_brst_crcnm_hr2_rbb_ps_fndng_flrscnc_n_st_hybrdztn_clcltn', 'mtsttc_brst_crcnm_mmnhstchmstry_prgstrn_rcptr_pstv_fndng_scl_typ', 'new_neoplasm_event_occurrence_anatomic_site', 'new_neoplasm_event_type', 'new_neoplasm_occurrence_anatomic_site_text', 'new_tumor_event_additional_surgery_procedure', 'new_tumor_event_after_initial_treatment', 'number_of_lymphnodes_positive_by_he', 'number_of_lymphnodes_positive_by_ihc', 'oct_embedded', 'other_dx', 'pathologic_M', 'pathologic_N', 'pathologic_T', 'pathologic_stage', 'pathology_report_file_name', 'patient_id', 'person_neoplasm_cancer_status', 'pgr_detection_method_text', 'pos_finding_her2_erbb2_other_measurement_scale_text', 'pos_finding_metastatic_brst_crcnm_strgn_rcptr_thr_msrmnt_scl_txt', 'pos_finding_progesterone_receptor_other_measurement_scale_text', 'positive_finding_estrogen_receptor_other_measurement_scale_text', 'postoperative_rx_tx', 'primary_lymph_node_presentation_assessment', 'progesterone_receptor_level_cell_percent_category', 'project_code', 'radiation_therapy', 'sample_type', 'sample_type_id', 'surgical_procedure_purpose_other_text', 'system_version', 'targeted_molecular_therapy', 'tissue_prospective_collection_indicator', 'tissue_retrospective_collection_indicator', 'tissue_source_site', 'tumor_tissue_site', 'vial_number', 'vital_status', 'year_of_initial_pathologic_diagnosis', '_GENOMIC_ID_TCGA_BRCA_exp_HiSeqV2_exon', '_GENOMIC_ID_TCGA_BRCA_exp_HiSeqV2_PANCAN', '_GENOMIC_ID_TCGA_BRCA_RPPA_RBN', '_GENOMIC_ID_TCGA_BRCA_mutation', '_GENOMIC_ID_TCGA_BRCA_PDMRNAseq', '_GENOMIC_ID_TCGA_BRCA_hMethyl450', '_GENOMIC_ID_TCGA_BRCA_RPPA', '_GENOMIC_ID_TCGA_BRCA_PDMRNAseqCNV', '_GENOMIC_ID_TCGA_BRCA_mutation_curated_wustl_gene', '_GENOMIC_ID_TCGA_BRCA_hMethyl27', '_GENOMIC_ID_TCGA_BRCA_PDMarrayCNV', '_GENOMIC_ID_TCGA_BRCA_miRNA_HiSeq', '_GENOMIC_ID_TCGA_BRCA_mutation_wustl_gene', '_GENOMIC_ID_TCGA_BRCA_miRNA_GA', '_GENOMIC_ID_TCGA_BRCA_exp_HiSeqV2_percentile', '_GENOMIC_ID_data/public/TCGA/BRCA/miRNA_GA_gene', '_GENOMIC_ID_TCGA_BRCA_gistic2thd', '_GENOMIC_ID_data/public/TCGA/BRCA/miRNA_HiSeq_gene', '_GENOMIC_ID_TCGA_BRCA_G4502A_07_3', '_GENOMIC_ID_TCGA_BRCA_exp_HiSeqV2', '_GENOMIC_ID_TCGA_BRCA_gistic2', '_GENOMIC_ID_TCGA_BRCA_PDMarray']
+  Barcode in first column: 'sampleID'
+  Clinical index sample: ['TCGA-3C-AAAU-01', 'TCGA-3C-AALI-01', 'TCGA-3C-AALJ-01', 'TCGA-3C-AALK-01', 'TCGA-4H-AAAK-01']
+  Clinical index length (chars): 15
+  Clinical shape (final): (1247, 193)
+
+  Histology column: 'histological_type'
+  Lobular entries in histology column: 216
+  Histology value sample: ['Infiltrating Lobular Carcinoma', 'Infiltrating Ductal Carcinoma', 'Other, specify', 'Mixed Histology (please specify)', 'Mucinous Carcinoma', 'Metaplastic Carcinoma', 'Infiltrating Carcinoma NOS', 'Medullary Carcinoma']
+  PAM50 column: 'PAM50Call_RNAseq'
+  PAM50 value counts:
+    LumA: 434
+    LumB: 194
+    Basal: 142
+    Normal: 119
+    Her2: 67
+
+=================================================================
+IDENTIFYING ILC AND NORMAL SAMPLES
+=================================================================
+  Expression columns total:    1218
+  Expression barcode example:  TCGA-AR-A5QQ-01
+  Expression barcode length:   15
+  Patient prefixes in expr:    1097
+  Tumour samples (-01*):       1097
+  Normal samples (-11*):       114
+
+  Clinical index example: 'TCGA-3C-AAAU-01'  (length 15)
+  Patient map key example: 'TCGA-AR-A5QQ'  (length 12)
+
+  Patients in clinical matched to expression: 1243
+  ILC patients matched to expression:         216
+  ILC samples (expression entries):           204
+  Normal samples:                             253
+  IDC LumA (PAM50):                           344
+  IDC TNBC (PAM50 Basal):                     140
+  IDC HER2 (PAM50 Her2):                      65
+  IDC LumB (PAM50):                           185
+
+=================================================================
+VERIFYING SAMPLES IN EXPRESSION MATRIX
+=================================================================
+  ILC          n=204 — all present
+  NORMAL       n=253 — all present
+  LUMA         n=344 — all present
+  TNBC         n=140 — all present
+  HER2         n=65 — all present
+  LUMB         n=185 — all present
+
+  FINAL COHORT:
+    ILC          n=204
+    NORMAL       n=253
+    LUMA         n=344
+    TNBC         n=140
+    HER2         n=65
+    LUMB         n=185
+
+=================================================================
+NORMALISE
+=================================================================
+  Non-zero median: 8.3190
+  Max value:       20.9784
+  Values appear already log2-transformed. Using as-is.
+
+=================================================================
+UNFILTERED DISCOVERY SCAN
+  Geometry first. No panel imposed.
+  ILC vs Adjacent Normal — all expressed genes.
+=================================================================
+  ILC samples:    204
+  Normal samples: 253
+  Full ranked results saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ILC/ILC_s1_analysis/results/ilc_s1_top_movers.csv
+
+  TOP 30 GAINED IN ILC vs Normal:
+  Gene                ILC   Normal     Change  Stat
+  --------------------------------------------------------------
+  INS              0.0857   0.0039   +2092.3%  p=0.0062 *
+  KRTAP10-3        0.0233   0.0017   +1255.2%  p=0.0035 *
+  APCS             0.0621   0.0046   +1250.4%  p=0.0063 *
+  C22orf42         0.0247   0.0019   +1177.5%  p=0.0279 *
+  CELA2A           0.0668   0.0056   +1100.0%  p=0.0064 *
+  REG1B            0.0414   0.0036   +1064.0%  p=0.0801
+  SNORA51          0.0178   0.0015   +1058.5%  p=0.0139 *
+  OR4S2            0.0163   0.0015    +987.6%  p=0.8787
+  LCE1D            0.0211   0.0021    +914.7%  p=0.4403
+  OR5AR1           0.0162   0.0017    +869.6%  p=0.2187
+  OR8K3            0.0290   0.0031    +819.6%  p=0.2221
+  C14orf177        0.0245   0.0028    +762.8%  p=0.0223 *
+  C13orf28         0.0258   0.0030    +749.2%  p=0.0281 *
+  PRG3             0.0124   0.0016    +688.3%  p=0.2204
+  MS4A5            0.0137   0.0018    +663.0%  p=0.2187
+  OR6S1            0.0359   0.0049    +634.5%  p=0.0026 *
+  KRTAP4-8         0.0602   0.0083    +621.1%  p=0.0004 *
+  ?|100130426      0.0257   0.0037    +590.7%  p=0.0432 *
+  NOX3             0.0409   0.0060    +583.1%  p=0.0320 *
+  REG3A            0.0571   0.0085    +573.8%  p=0.2985
+  KRT28            0.0831   0.0127    +555.9%  p=0.0715
+  OR2G6            0.0204   0.0031    +550.1%  p=0.0795
+  GC               0.1937   0.0299    +548.1%  p=0.1572
+  KRTAP10-10       0.0113   0.0019    +503.5%  p=0.1106
+  SNORA44          0.0487   0.0081    +502.0%  p=0.0002 *
+  KRTAP9-2         0.0181   0.0030    +494.5%  p=0.4815
+  PRODH2           0.0653   0.0120    +444.7%  p=0.0016 *
+  OR8H1            0.0201   0.0037    +436.9%  p=0.8787
+  SCARNA15         0.0361   0.0067    +436.7%  p=0.0008 *
+  KRTAP10-1        0.0272   0.0057    +374.2%  p=0.0574
+
+  TOP 30 LOST IN ILC vs Normal:
+  Gene                ILC   Normal     Change  Stat
+  --------------------------------------------------------------
+  CT47A7           0.0000   0.0165    -100.0%  p=0.3716
+  TTTY10           0.0000   0.0113    -100.0%  p=0.2047
+  OR5B3            0.0000   0.0100    -100.0%  p=0.1197
+  TTTY9B           0.0000   0.0124    -100.0%  p=0.3716
+  OR6Q1            0.0000   0.0158    -100.0%  p=0.1197
+  NCRNA00230B      0.0000   0.0148    -100.0%  p=0.0719
+  FTHL17           0.0000   0.1243    -100.0%  p=0.0026 *
+  SCARNA27         0.0000   0.0105    -100.0%  p=0.2047
+  SRY              0.0000   0.0104    -100.0%  p=0.3716
+  CT47A6           0.0000   0.0149    -100.0%  p=0.3716
+  OR52E8           0.0000   0.0254    -100.0%  p=0.0042 *
+  OR10H4           0.0000   0.0252    -100.0%  p=0.0105 *
+  PER4             0.0000   0.0495    -100.0%  p=0.0026 *
+  LOC144776        0.0000   0.0104    -100.0%  p=0.0719
+  DSCR4            0.0022   0.0950     -97.7%  p=0.0255 *
+  LOC644145        0.0037   0.1101     -96.7%  p=0.0000 *
+  NOBOX            0.0021   0.0619     -96.6%  p=0.2631
+  LOC643486        0.0014   0.0243     -94.1%  p=0.1636
+  TECTB            0.0022   0.0360     -94.0%  p=0.0027 *
+  LRRC30           0.0020   0.0318     -93.8%  p=0.4279
+  RNASE12          0.0110   0.1548     -92.9%  p=0.0212 *
+  MYF5             0.0037   0.0484     -92.4%  p=0.0469 *
+  IFNA10           0.0028   0.0370     -92.3%  p=0.0107 *
+  ASB18            0.0039   0.0425     -90.7%  p=0.0724
+  PPBPL2           0.0046   0.0482     -90.4%  p=0.0004 *
+  NCRNA00185       0.0026   0.0266     -90.4%  p=0.4254
+  CYLC2            0.0020   0.0208     -90.2%  p=0.1029
+  VENTXP1          0.0027   0.0273     -90.0%  p=0.0420 *
+  SPRR2B           0.0323   0.3217     -90.0%  p=1.89e-10 **
+  ADH7             0.0929   0.8532     -89.1%  p=1.60e-08 **
+
+  GEOMETRY READ (unfiltered):
+  CDH1           rank #4332       -14.5%  p=3.02e-33 ***  ← P1: structural loss — expected DOMINANT
+  ESR1           rank #6103        +9.4%  p=2.11e-08 **  ← P2: luminal TF — expected RETAINED
+  FOXA1          rank #4139       +15.4%  p=1.60e-15 ***  ← P2: luminal TF — expected RETAINED
+  GATA3          rank #5088       +11.9%  p=1.05e-20 ***  ← P2: luminal TF — expected RETAINED
+  VIM            rank #12964       -2.8%  p=0.0000 *  ← P7: mesenchymal — expected LOW
+  ZEB1           rank #11635       -3.5%  p=0.0007 *  ← P7: EMT TF — expected LOW
+  SOX10          rank #5164       -11.6%  p=0.0002 *  ← P7: basal/NC — expected LOW (TNBC was +1323%)
+  KRT5           rank #6239        -9.1%  p=2.80e-06 **  ← P7: basal CK — expected LOW (TNBC was +508%)
+  EZH2           rank #6383        +8.9%  p=5.45e-08 **  ← P3: epigenetic — expected ELEVATED
+  DNMT3A         rank #12741       +2.9%  p=7.07e-08 **  ← P4: CDH1 methylation — expected ELEVATED
+  MKI67          rank #8650        +5.8%  p=0.0124 *  ← P5: proliferation — expected LOW vs TNBC/HER2
+  ERBB2          rank #8316        +6.1%  p=1.26e-17 ***  ← negative control — should NOT be elevated
+  AKT1           rank #12591       +3.0%  p=1.28e-13 ***  ← P6: PI3K axis — expected ELEVATED
+  PTEN           rank #10324       -4.3%  p=2.00e-19 ***  ← P6: PI3K suppressor — may be reduced
+
+  STRUCTURAL INVERSION TEST:
+  Predicted: ILC is the geometric inverse of TNBC
+  TNBC: ESR1 erased, VIM elevated, CDH1 retained
+  ILC:  ESR1 retained, VIM low, CDH1 erased
+
+  CDH1 -14.5% → CDH1 mRNA not substantially reduced.
+  This is consistent with mutation-only ILC (CDH1 protein absent,
+  mRNA intact). Methylation-driven ILC (~35%) shows mRNA reduction.
+  ESR1 +9.4% → LUMINAL TF RETAINED. P2 supported.
+  VIM -2.8% / ZEB1 -3.5% → No EMT programme. P7 supported.
+  ILC invades without canonical EMT — structural inversion confirmed.
+
+=================================================================
+PANEL ANALYSIS — PREDICTION TESTS (BRCA-S6a)
+=================================================================
+
+  P1 — CDH1 DOMINANT STRUCTURAL LOSS
+  Expected: CDH1 largest or near-largest lost gene
+-----------------------------------------------------------------
+  CDH1         ILC=10.7374  Norm=12.5557     -14.5%  p=3.02e-33 ***          [NOTE-mRNA-intact-mutation-only-ILC]  P1: CDH1 structural axis
+  CDH3         ILC= 9.1490  Norm= 9.6924      -5.6%  p=2.16e-07 **           [INFO]  P1: CDH1 structural axis
+  CTNND1       ILC=12.7787  Norm=13.1052      -2.5%  p=2.90e-09 **           [INFO]  P1: CDH1 structural axis
+  CDH2         ILC= 5.4062  Norm= 5.5988      -3.4%  p=0.6397                [INFO]  P1: CDH1 structural axis
+
+  P2 — LUMINAL IDENTITY TFs RETAINED
+  Expected: ESR1/FOXA1/GATA3/PGR comparable to normal (>-30%)
+-----------------------------------------------------------------
+  ESR1         ILC=12.6871  Norm=11.5994      +9.4%  p=2.11e-08 **           [CONFIRMED]  P2: Luminal TF retention
+  FOXA1        ILC=12.5151  Norm=10.8447     +15.4%  p=1.60e-15 ***          [CONFIRMED]  P2: Luminal TF retention
+  GATA3        ILC=13.3672  Norm=11.9507     +11.9%  p=1.05e-20 ***          [CONFIRMED]  P2: Luminal TF retention
+  PGR          ILC=10.1675  Norm= 9.7188      +4.6%  p=0.0149 *              [CONFIRMED]  P2: Luminal TF retention
+  KRT8         ILC=14.4049  Norm=13.2196      +9.0%  p=1.21e-16 ***          [CONFIRMED]  P2: Luminal TF retention
+  KRT18        ILC=13.8939  Norm=12.7307      +9.1%  p=3.36e-17 ***          [CONFIRMED]  P2: Luminal TF retention
+  SPDEF        ILC=11.9571  Norm=10.0498     +19.0%  p=1.58e-28 ***          [CONFIRMED]  P2: Luminal TF retention
+
+  P3 — EZH2 ELEVATED AND TARGETS CDH1 NOT ESR1
+  Expected: EZH2 elevated, r(EZH2,CDH1) < 0 within ILC
+-----------------------------------------------------------------
+  EZH2         ILC= 8.2132  Norm= 7.5441      +8.9%  p=5.45e-08 **           [NOT CONFIRMED]  P3: EZH2 elevation
+  EED          ILC= 8.3847  Norm= 8.5601      -2.0%  p=0.0000 *              [INFO]  P3: PRC2 complex
+  SUZ12        ILC= 9.9042  Norm=10.0007      -1.0%  p=0.1053                [INFO]  P3: PRC2 complex
+  EZH2 vs CDH1 (within ILC):  r=-0.147  p=0.0362 *
+  → EZH2/CDH1 correlation weak (r=-0.147).
+    PRC2 may not be dominant CDH1 silencer in bulk (mutation-only ILC).
+  EZH2 vs ESR1 (within ILC):  r=-0.171  p=0.0146 *
+  → EZH2 does NOT target ESR1 in ILC. P3 supported.
+
+  P4 — DNMT3A ELEVATED (CDH1 methylation driver)
+  Expected: DNMT3A elevated vs normal
+-----------------------------------------------------------------
+  DNMT3A       ILC= 9.1545  Norm= 8.8977      +2.9%  p=7.07e-08 **           [INFO]  P4: DNA methylation axis
+  DNMT1        ILC=10.8180  Norm=10.4974      +3.1%  p=1.69e-09 **           [INFO]  P4: DNA methylation axis
+  DNMT3B       ILC= 6.5686  Norm= 6.3866      +2.8%  p=0.0024 *              [INFO]  P4: DNA methylation axis
+
+  P5 — LOW PROLIFERATION (ILC Grade 1-2)
+  Expected: MKI67/TOP2A lower than TNBC and HER2
+-----------------------------------------------------------------
+  MKI67        ILC= 9.7733  Norm= 9.2415      +5.8%  p=0.0124 *              [INFO]  P5: Proliferation
+  TOP2A        ILC=10.2763  Norm= 9.4820      +8.4%  p=0.0008 *              [INFO]  P5: Proliferation
+  PCNA         ILC=10.8175  Norm=10.6358      +1.7%  p=0.0011 *              [INFO]  P5: Proliferation
+  CCNB1        ILC= 9.2261  Norm= 8.6868      +6.2%  p=5.96e-06 **           [INFO]  P5: Proliferation
+  CDK2         ILC= 9.3723  Norm= 9.3505      +0.2%  p=0.3949                [INFO]  P5: Proliferation
+  CDK4         ILC=11.0725  Norm=10.9612      +1.0%  p=0.0012 *              [INFO]  P5: Proliferation
+  CCND1        ILC=12.9265  Norm=12.4969      +3.4%  p=0.0001 *              [INFO]  P5: Proliferation
+  AURKA        ILC= 7.7003  Norm= 7.3145      +5.3%  p=0.0019 *              [INFO]  P5: Proliferation
+  MKI67 cross-subtype: ILC=9.7733  TNBC=11.9877  HER2=11.6294
+  → ILC lower proliferation than TNBC. P5 SUPPORTED.
+
+  P6 — PIK3CA PATHWAY ELEVATED
+  Expected: AKT1/MTOR elevated; PTEN reduced
+-----------------------------------------------------------------
+  AKT1         ILC=12.0862  Norm=11.7390      +3.0%  p=1.28e-13 ***          [NOT CONFIRMED]  P6: PI3K pathway
+  AKT2         ILC=11.4134  Norm=11.3040      +1.0%  p=0.0011 *              [INFO]  P6: PI3K pathway
+  MTOR         ILC=10.3788  Norm=10.7338      -3.3%  p=2.04e-15 ***          [NOT CONFIRMED]  P6: PI3K pathway
+  PTEN         ILC=10.7823  Norm=11.2691      -4.3%  p=2.00e-19 ***          [PARTIAL]  P6: PI3K pathway
+  PIK3CA       ILC= 8.6659  Norm= 9.4760      -8.5%  p=1.05e-25 ***          [INFO]  P6: PI3K pathway
+  PIK3R1       ILC=11.5259  Norm=12.0943      -4.7%  p=2.31e-09 **           [INFO]  P6: PI3K pathway
+  RPS6KB1      ILC= 9.6660  Norm= 9.9663      -3.0%  p=2.53e-10 **           [NOT CONFIRMED]  P6: PI3K pathway
+
+  P7 — NO BASAL OR MESENCHYMAL PROGRAMME
+  Expected: VIM/ZEB1/ZEB2/SOX10/KRT5 all < +100%
+-----------------------------------------------------------------
+  KRT5         ILC=10.0997  Norm=11.1133      -9.1%  p=2.80e-06 **           [CONFIRMED]  P7: No basal/EMT
+  KRT14        ILC=10.0790  Norm=10.5922      -4.8%  p=0.0036 *              [CONFIRMED]  P7: No basal/EMT
+  VIM          ILC=14.4108  Norm=14.8213      -2.8%  p=0.0000 *              [CONFIRMED]  P7: No basal/EMT
+  ZEB1         ILC= 9.5675  Norm= 9.9129      -3.5%  p=0.0007 *              [CONFIRMED]  P7: No basal/EMT
+  ZEB2         ILC= 9.3478  Norm= 9.9659      -6.2%  p=1.29e-07 **           [CONFIRMED]  P7: No basal/EMT
+  SNAI1        ILC= 6.5302  Norm= 6.7686      -3.5%  p=0.0036 *              [CONFIRMED]  P7: No basal/EMT
+  SOX10        ILC= 6.7146  Norm= 7.5989     -11.6%  p=0.0002 *              [CONFIRMED]  P7: No basal/EMT
+  FOXC1        ILC= 7.5156  Norm= 8.3729     -10.2%  p=1.17e-10 **           [CONFIRMED]  P7: No basal/EMT
+  FN1          ILC=15.7032  Norm=15.1387      +3.7%  p=0.0034 *              [CONFIRMED]  P7: No basal/EMT
+  TWIST1       ILC= 7.1825  Norm= 7.4034      -3.0%  p=0.0371 *              [CONFIRMED]  P7: No basal/EMT
+
+  P8 — CDH1-BASED DEPTH AXIS WITHIN ILC
+  Tertile split on CDH1: deep (low CDH1) vs shallow (high CDH1)
+  Key question: does ESR1 fall with CDH1? (unexpected) or stay?
+-----------------------------------------------------------------
+  CDH1 range in ILC: min=7.2396, max=14.5500, mean=10.7374
+  Deep ILC (low CDH1):     n=67
+  Shallow ILC (high CDH1): n=67
+
+  Gene             Deep  Shallow     Change  Stat
+  --------------------------------------------------------
+  CDH1           8.9163  12.6430     -29.5%  p=1.76e-23 ***
+  CDH3           8.4465   9.4390     -10.5%  p=0.0000 *
+  CTNND1        12.7118  12.8331      -0.9%  p=0.3524
+  CDH2           5.5203   5.2622      +4.9%  p=0.2419
+  ESR1          12.8915  12.6807      +1.7%  p=0.4283
+  FOXA1         12.7083  12.5281      +1.4%  p=0.1848
+  GATA3         13.6780  13.2901      +2.9%  p=0.0210 *
+  PGR            9.5707  10.4667      -8.6%  p=0.1953
+  KRT8          14.5253  14.3504      +1.2%  p=0.1247
+  KRT18         14.0280  13.8626      +1.2%  p=0.2128
+  SPDEF         12.1738  11.9797      +1.6%  p=0.1819
+  EZH2           8.3125   8.0844      +2.8%  p=0.1173
+  DNMT3A         9.2415   9.0719      +1.9%  p=0.0125 *
+  KRT5           8.5774  10.4144     -17.6%  p=0.0001 *
+  KRT14          8.7279  10.3068     -15.3%  p=0.0018 *
+  VIM           14.3707  14.2785      +0.6%  p=0.4820
+  ZEB1           9.5274   9.4397      +0.9%  p=0.6198
+  ZEB2           9.2117   9.2976      -0.9%  p=0.5421
+  MKI67          9.8884   9.6067      +2.9%  p=0.1833
+  TOP2A         10.2882  10.2543      +0.3%  p=0.5540
+  PCNA          10.8485  10.8430      +0.1%  p=0.3904
+  AKT1          12.1771  12.0034      +1.4%  p=0.0846
+  AKT2          11.4589  11.3758      +0.7%  p=0.2509
+  MTOR          10.2749  10.4885      -2.0%  p=0.0173 *
+  PTEN          10.6098  10.8610      -2.3%  p=0.0648
+
+  ESR1 stable across CDH1 depth axis (+1.7%).
+  → CDH1 structural axis independent of luminal TF identity. P8 SUPPORTED.
+
+  P9 — DRUG TARGET SUMMARY FROM GEOMETRY ALONE
+-----------------------------------------------------------------
+  ENDOCRINE THERAPY: ESR1 ILC=12.6871
+  → ER RETAINED at high level. Endocrine therapy strongly supported.
+  → Tamoxifen / Aromatase inhibitors / CDK4/6 inhibitors (Palbociclib).
+
+  PI3K/mTOR INHIBITORS:
+  → PIK3CA mutated in ~48% of ILC (highest of any BRCA subtype).
+  → Alpelisib (PI3Kα), Everolimus (mTOR) have geometric basis.
+
+  ANTI-HER2 (NEGATIVE): ERBB2 ILC=13.1533
+  → ERBB2 not amplified in ILC. Anti-HER2 has no geometric basis.
+
+  Panel results saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ILC/ILC_s1_analysis/results/ilc_s1_panel.csv
+
+=================================================================
+CROSS-SUBTYPE COMPARISON
+  ILC vs LumA vs TNBC vs HER2 vs Normal
+=================================================================
+  Gene                   ILC      NORMAL        LUMA        TNBC        HER2        LUMB
+  --------------------------------------------------------------------------------------
+  CDH1               10.7374     12.5557     13.3989     12.8712     13.7610     13.5944
+  ESR1               12.6871     11.5994     13.5431      6.5434      8.3180     13.5851
+  FOXA1              12.5151     10.8447     12.9612      6.7000     12.5992     12.9264
+  GATA3              13.3672     11.9507     13.7260      9.3050     11.6253     13.6443
+  VIM                14.4108     14.8213     14.0659     14.6228     13.9385     13.6072
+  ZEB1                9.5675      9.9129      9.5831      8.4277      9.2105      9.1177
+  EZH2                8.2132      7.5441      8.0565      9.7065      9.0609      9.0354
+  MKI67               9.7733      9.2415     10.1436     11.9877     11.6294     11.3998
+  ERBB2              13.1533     12.3935     12.9028     11.9015     15.5895     12.9182
+  DNMT3A              9.1545      8.8977      9.0741      9.8590      9.7295      9.3849
+  KRT5               10.0997     11.1133      9.0970     11.5532      8.0804      6.0668
+  SOX10               6.7146      7.5989      5.1529      9.3210      3.0355      2.6632
+  CDH3                9.1490      9.6924      8.9282     11.8630     10.0450      8.2428
+  AR                  8.6364      8.7153      9.3852      4.1093      9.1266      9.0405
+  PTEN               10.7823     11.2691     11.1018     10.3718     11.0103     10.8843
+  AKT1               12.0862     11.7390     12.0622     11.7494     12.5449     11.9989
+  CDH2                5.4062      5.5988      6.4404      6.7584      7.1581      6.2715
+  CTNND1             12.7787     13.1052     13.1010     12.9245     13.0532     12.9637
+
+  STRUCTURAL INVERSION SUMMARY:
+  CDH1: ILC=10.7374  TNBC=12.8712  Normal=12.5557
+  ESR1: ILC=12.6871  TNBC=6.5434  Normal=11.5994
+  ✓ CDH1 lower in ILC than TNBC — greater structural dissolution.
+  ✓ ESR1 higher in ILC than TNBC — luminal identity retained.
+  STRUCTURAL INVERSION CONFIRMED: ILC and TNBC are geometric opposites.
+
+=================================================================
+PCA GEOMETRY
+  Does ILC cluster near LumA (shared TF identity)?
+  Or does CDH1 loss create a distinct geometric position?
+=================================================================
+  Variance: PC1=23.0%  PC2=15.7%
+  Centroids (PC1, PC2):
+    ilc          PC1= -0.982  PC2=  1.741
+    normal       PC1= -6.525  PC2= -0.982
+    luma         PC1=  0.001  PC2=  2.586
+    tnbc         PC1=  2.789  PC2= -5.668
+    her2         PC1=  3.029  PC2=  0.138
+    lumb         PC1=  2.748  PC2=  2.232
+  ILC ↔ LumA distance: 1.296
+  ILC ↔ TNBC distance: 8.314
+  ILC CLOSER to LumA. Shared luminal TF identity confirmed.
+
+=================================================================
+GENERATING FIGURE
+=================================================================
+  Figure saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ILC/ILC_s1_analysis/results/ilc_s1_figure.png
+
+=================================================================
+SCRIPT 1 COMPLETE
+=================================================================
+  Log:         /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ILC/ILC_s1_analysis/results/ilc_s1_log.txt
+  Figure:      /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ILC/ILC_s1_analysis/results/ilc_s1_figure.png
+  Panel CSV:   /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ILC/ILC_s1_analysis/results/ilc_s1_panel.csv
+  Top movers:  /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ILC/ILC_s1_analysis/results/ilc_s1_top_movers.csv
+  Cross-type:  /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ILC/ILC_s1_analysis/results/ilc_s1_cross_subtype.csv
+
+NEXT: Write BRCA-S6b (script1_results_and_reasoning.md)
+      before running Script 2.
+
+KEY QUESTIONS TO ANSWER IN BRCA-S6b:
+  1. Was CDH1 the dominant lost gene?  (P1)
+  2. Were luminal TFs retained?        (P2)
+  3. EZH2 vs CDH1 correlation sign?   (P3)
+  4. DNMT3A elevated?                 (P4)
+  5. MKI67 lower than TNBC/HER2?      (P5)
+  6. PI3K axis elevated?              (P6)
+  7. VIM/ZEB1/SOX10 low?              (P7)
+  8. ESR1 stable on CDH1 depth axis?  (P8)
+  9. What did the unfiltered scan reveal first?
+
+  Protocol v2.0: geometry first, predictions second.

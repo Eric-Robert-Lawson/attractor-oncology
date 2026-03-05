@@ -1,0 +1,544 @@
+=================================================================
+BRCA CLAUDIN-LOW — SCRIPT 1
+OrganismCore — Document BRCA-S7a/b | 2026-03-05
+
+ATTRACTOR TYPE: TYPE 4 — STEM LOCK
+DIFFERENTIATION ARREST AT PROGENITOR ROOT
+Cell of origin: Mammary stem cell
+Depth axis: Stem programme depth
+Output directory: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s1_analysis/results
+=================================================================
+=================================================================
+STEP 0: DATA ACQUISITION
+  Output: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s1_analysis/data
+=================================================================
+
+-- TCGA-BRCA expression (HiSeqV2) --
+  Trying: https://tcga.xenahubs.net/download/TCGA.BRCA.sampleMap/HiSeqV2.gz
+  Downloading TCGA-BRCA expression ...
+  OK: TCGA_BRCA_HiSeqV2.gz (64.3 MB)
+
+-- TCGA-BRCA clinical matrix --
+  Trying: https://tcga.xenahubs.net/download/TCGA.BRCA.sampleMap/BRCA_clinicalMatrix
+  Downloading TCGA-BRCA clinical ...
+  OK: TCGA_BRCA_clinicalMatrix.tsv (1.7 MB)
+
+=================================================================
+STEP 1: LOAD EXPRESSION MATRIX
+=================================================================
+  Reading TCGA-BRCA HiSeqV2...
+  Raw shape: (20530, 1218)
+  Shape (genes x samples): (20530, 1218)
+  Sample IDs (first 3): ['TCGA-AR-A5QQ-01', 'TCGA-D8-A1JA-01', 'TCGA-BH-A0BQ-01']
+  Gene IDs (first 3): ['ARHGEF10L', 'HIF3A', 'RNF17']
+  Target genes found: 67 / 69
+  Missing genes: ['PUMA', 'NOXA']
+  Signature genes found: 10 / 10
+
+=================================================================
+STEP 2: LOAD CLINICAL MATRIX
+=================================================================
+  Separator detected: TAB
+  Clinical shape: (1247, 193)
+  Clinical index sample: ['TCGA-3C-AAAU-01', 'TCGA-3C-AALI-01', 'TCGA-3C-AALJ-01']
+  PAM50Call_RNAseq:
+    LumA                                          n=434
+    LumB                                          n=194
+    Basal                                         n=142
+    Normal                                        n=119
+    Her2                                          n=67
+  PAM50_mRNA_nature2012:
+    Luminal A                                     n=231
+    Luminal B                                     n=127
+    Basal-like                                    n=98
+    HER2-enriched                                 n=58
+    Normal-like                                   n=8
+  histological_type:
+    Infiltrating Ductal Carcinoma                 n=901
+    Infiltrating Lobular Carcinoma                n=216
+    Other, specify                                n=48
+    Mixed Histology (please specify)              n=40
+    Mucinous Carcinoma                            n=18
+    Metaplastic Carcinoma                         n=9
+    Medullary Carcinoma                           n=8
+    Infiltrating Carcinoma NOS                    n=1
+  ER_Status_nature2012:
+    Positive                                      n=601
+    Negative                                      n=179
+    Indeterminate                                 n=2
+  HER2_Final_Status_nature2012:
+    Negative                                      n=652
+    Positive                                      n=114
+    Equivocal                                     n=10
+  Integrated_Clusters_with_PAM50__nature2012:
+    3.0                                           n=161
+    4.0                                           n=76
+    2.0                                           n=72
+    1.0                                           n=39
+
+=================================================================
+STEP 3: BUILD SAMPLE POPULATIONS
+=================================================================
+  Total expression samples: 1218
+  Sample barcode example: TCGA-AR-A5QQ-01
+  Tumour samples (01):  1097
+  Normal samples (11):  114
+  PAM50 column: 'PAM50Call_RNAseq'
+
+  PAM50 subtype distribution (tumour samples):
+    LumA         n=357
+    LumB         n=168
+    Her2         n=58
+    Basal        n=119
+    Normal       n=116
+    Unassigned  n=279
+
+=================================================================
+STEP 3b: CLAUDIN-LOW IDENTIFICATION FROM 10-GENE SIGNATURE
+  Geometry-first protocol. No PAM50 label used.
+=================================================================
+  Computing cohort medians across tumour samples...
+  Signature genes present: ['CLDN3', 'CLDN4', 'CLDN7', 'CDH1', 'ESR1', 'VIM', 'CD44', 'SNAI1', 'ZEB1', 'FN1']
+    CLDN3      cohort median = 10.1357
+    CLDN4      cohort median = 12.2276
+    CLDN7      cohort median = 10.9371
+    CDH1       cohort median = 13.1607
+    ESR1       cohort median = 12.7948
+    VIM        cohort median = 14.2308
+    CD44       cohort median = 13.0030
+    SNAI1      cohort median = 6.6723
+    ZEB1       cohort median = 9.3276
+    FN1        cohort median = 16.2107
+
+  Scoring tumour samples against 10-gene signature...
+  Score distribution:
+    score >= 0: n=1097
+    score >= 1: n=1080
+    score >= 2: n=1024
+    score >= 3: n=944
+    score >= 4: n=795
+    score >= 5: n=614
+    score >= 6: n=453
+    score >= 7: n=306
+    score >= 8: n=179
+    score >= 9: n=66
+    score >= 10: n=19
+
+  Claudin-low calls at each threshold:
+    Threshold 6: n=453
+    Threshold 7: n=306
+    Threshold 8: n=179
+
+  PRIMARY threshold (7): n=306
+  ERBB2 exclusion cutoff (p90): 14.7306
+  ERBB2-high excluded: 38
+  Claudin-low final n = 268
+
+  FINAL claudin-low n = 268
+
+  PAM50 cross-check for claudin-low samples (informational):
+    LumA                 n=110
+    nan                  n=58
+    Basal                n=40
+    Normal               n=39
+    LumB                 n=18
+    Her2                 n=3
+  (Geometry-first: PAM50 label is a cross-check, not the classifier)
+
+  Final population summary:
+    claudin_low     n=268
+    normal          n=114
+    luma            n=357
+    lumb            n=168
+    her2            n=58
+    basal           n=119
+    ilc             n=0
+
+=================================================================
+STEP 4: UNFILTERED DISCOVERY SCAN
+  Geometry first. No panel imposed.
+  Claudin-low vs. Adjacent Normal — all expressed genes.
+=================================================================
+  Claudin-low samples: 268
+  Normal samples:      114
+  Scanning 20530 genes...
+  Top movers saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s1_analysis/results/cl_s1_top_movers.csv
+
+  TOP 30 GAINED IN CLAUDIN-LOW vs NORMAL:
+  Gene           CL Mean  Nor Mean     Change  p-value
+  --------------------------------------------------------------
+  DPPA2           0.0974    0.0044      +inf%  p=0.076
+  LOC146481       0.1603    0.0000      +inf%  p=0.000 *
+  IL28A           0.2644    0.0000      +inf%  p=1.00e-08 **
+  OC90            0.1562    0.0077      +inf%  p=0.000 *
+  FLJ36000        0.0894    0.0080      +inf%  p=0.016 *
+  PRLH            0.0595    0.0078      +inf%  p=0.008 *
+  GAGE1           0.0835    0.0000      +inf%  p=0.063
+  HIST1H4L        0.0575    0.0073      +inf%  p=0.006 *
+  ADAM18          0.0567    0.0100      +inf%  p=0.036 *
+  GAGE2D          0.1221    0.0000      +inf%  p=0.037 *
+  APCS            0.0559    0.0000      +inf%  p=0.022 *
+  FTHL17          0.2039    0.0000      +inf%  p=0.004 *
+  CT45A4          0.0649    0.0094      +inf%  p=0.883
+  GAGE12D         0.1518    0.0000      +inf%  p=0.017 *
+  CT45A3          0.0628    0.0000      +inf%  p=0.063
+  GAGE12J         0.0758    0.0000      +inf%  p=0.022 *
+  GAGE4           0.1572    0.0000      +inf%  p=0.002 *
+  GIF             0.0927    0.0081      +inf%  p=0.003 *
+  FAM9A           0.0927    0.0064      +inf%  p=0.015 *
+  MC2R            0.0661    0.0047      +inf%  p=0.013 *
+  PDCL2           0.1035    0.0000      +inf%  p=0.000 *
+  ASZ1            0.1756    0.0057      +inf%  p=0.001 *
+  STRA8           0.4108    0.0082      +inf%  p=7.13e-06 **
+  LCE3E           0.0838    0.0000      +inf%  p=0.037 *
+  CGB1            0.0564    0.0000      +inf%  p=0.006 *
+  SPANXN3         0.1549    0.0000      +inf%  p=4.79e-07 **
+  OR2B2           0.0913    0.0086      +inf%  p=0.000 *
+  TM4SF5          0.0576    0.0048      +inf%  p=0.016 *
+  NOX3            0.0528    0.0089      +inf%  p=0.094
+  KRTAP5-6        0.0758    0.0000      +inf%  p=0.000 *
+
+  TOP 30 LOST IN CLAUDIN-LOW vs NORMAL:
+  Gene           CL Mean  Nor Mean     Change  p-value
+  --------------------------------------------------------------
+  LRRC30          0.0015    0.0679     -97.8%  p=0.161
+  CSN1S2A         0.0102    0.3231     -96.8%  p=0.000 *
+  CYMP            0.0175    0.4008     -95.6%  p=6.77e-26 ***
+  LOC644145       0.0151    0.2298     -93.4%  p=8.66e-10 **
+  NOBOX           0.0039    0.0582     -93.2%  p=0.135
+  KRTAP13-4       0.0298    0.4183     -92.9%  p=6.24e-23 ***
+  FABP9           0.0360    0.4712     -92.4%  p=6.86e-18 ***
+  OR4D10          0.0061    0.0794     -92.3%  p=0.000 *
+  FGF6            0.0049    0.0619     -92.0%  p=0.620
+  USP29           0.0092    0.1053     -91.2%  p=3.42e-09 **
+  LOC338588       0.0253    0.2853     -91.1%  p=6.42e-16 ***
+  LOC100133920    0.1014    1.1330     -91.0%  p=8.31e-28 ***
+  OR4D6           0.0156    0.1650     -90.6%  p=1.99e-12 ***
+  PRHOXNB         0.0546    0.5716     -90.4%  p=2.62e-14 ***
+  PPBPL2          0.0087    0.0885     -90.2%  p=1.56e-07 **
+  PGA4            0.1021    1.0141     -89.9%  p=7.38e-19 ***
+  MYF5            0.0080    0.0793     -89.9%  p=0.327
+  RNASE12         0.0319    0.3078     -89.7%  p=0.000 *
+  AADACL2         0.1483    1.4236     -89.6%  p=2.66e-36 ***
+  TECTB           0.0087    0.0775     -88.8%  p=0.000 *
+  SULT1C3         0.2218    1.9675     -88.7%  p=1.44e-18 ***
+  LOC729467       0.2381    1.8968     -87.4%  p=6.34e-29 ***
+  DHRS7C          0.0428    0.3297     -87.0%  p=1.60e-11 ***
+  ACSM2B          0.1577    1.1312     -86.1%  p=9.56e-32 ***
+  XAGE5           0.0167    0.1194     -86.0%  p=5.46e-07 **
+  TBL1Y           0.0087    0.0621     -86.0%  p=0.795
+  ACSM2A          0.2417    1.7050     -85.8%  p=1.59e-38 ***
+  XAGE3           0.0905    0.6382     -85.8%  p=1.26e-14 ***
+  SLC22A12        0.3632    2.4777     -85.3%  p=1.25e-31 ***
+  CACNG2          0.0348    0.2341     -85.1%  p=5.67e-06 **
+
+  GEOMETRY READ (unfiltered scan — read before prediction check):
+  ─────────────────────────────────────────────────────────────
+  ESR1       rank #16531     -1.4%  p=0.002 *
+             Luminal identity TF — expect near-zero
+  VIM        rank #11764     -4.2%  p=4.04e-12 ***
+             Mesenchymal/stem — expect strongly elevated
+  CLDN3      rank #6855     +11.3%  p=0.023 *
+             Claudin-3 — expect strongly lost
+  CLDN4      rank #9994      +5.9%  p=0.874
+             Claudin-4 — expect strongly lost
+  CLDN7      rank #7195     +10.5%  p=2.18e-11 ***
+             Claudin-7 — expect strongly lost
+  CD44       rank #13339     +3.1%  p=8.51e-09 **
+             Breast stem cell marker — expect elevated
+  CD24       rank #7788      +9.2%  p=6.47e-08 **
+             Stem exclusion marker — expect low
+  ZEB1       rank #13020     -3.3%  p=0.004 *
+             EMT TF — expect elevated
+  SNAI1      rank #10606     +5.3%  p=0.004 *
+             EMT/stem TF — expect elevated
+  ERBB2      rank #12002     +4.0%  p=0.000 *
+             HER2 amplicon — expect NOT elevated
+  CD274      rank #9649      +6.3%  p=0.038 *
+             PD-L1 — immune programme
+  FOXA1      rank #6145     +13.5%  p=2.59e-16 ***
+             Luminal pioneer TF — expect lost
+  GATA3      rank #7425      +9.9%  p=1.41e-14 ***
+             Luminal differentiation TF — expect lost
+  MKI67      rank #2504     +41.0%  p=9.21e-43 ***
+             Proliferation — relative to TNBC
+
+=================================================================
+STEP 5: NAMED PANEL TESTS
+  Prediction tests run AFTER geometry read.
+=================================================================
+
+  ────────────────────────────────────────────────────────────
+  P1 — ESR1 / FOXA1 / GATA3 / PGR: lowest of all subtypes
+  ────────────────────────────────────────────────────────────
+  [P1] ESR1        CL=11.1511  Nor=11.3055      -1.4%  p=0.002 *  
+  [P1] FOXA1       CL=11.1391  Nor=9.8124     +13.5%  p=2.59e-16 ***  
+  [P1] GATA3       CL=12.2964  Nor=11.1887      +9.9%  p=1.41e-14 ***  
+  [P1] PGR         CL=9.3309  Nor=10.3084      -9.5%  p=0.044 *  
+  [P1] SPDEF       CL=10.3739  Nor=9.1927     +12.8%  p=2.31e-10 **  
+  [P1] AR          CL=8.2372  Nor=8.8468      -6.9%  p=0.627  
+
+  ────────────────────────────────────────────────────────────
+  P2 — VIM / ZEB1 / SNAI1 / FN1: partial EMT programme
+  ────────────────────────────────────────────────────────────
+  [P2] VIM         CL=14.9074  Nor=15.5641      -4.2%  p=4.04e-12 ***  
+  [P2] ZEB1        CL=9.9508  Nor=10.2909      -3.3%  p=0.004 *  
+  [P2] ZEB2        CL=9.9043  Nor=10.6427      -6.9%  p=3.84e-11 ***  
+  [P2] SNAI1       CL=7.1125  Nor=6.7571      +5.3%  p=0.004 *  
+  [P2] SNAI2       CL=9.2710  Nor=9.5772      -3.2%  p=0.000 *  
+  [P2] TWIST1      CL=7.4488  Nor=8.1738      -8.9%  p=7.27e-11 ***  
+  [P2] FN1         CL=16.9550  Nor=13.4159     +26.4%  p=2.34e-49 ***  
+  [P2] CDH2        CL=6.8353  Nor=4.6129     +48.2%  p=3.31e-29 ***  
+
+  ────────────────────────────────────────────────────────────
+  P3 — CLDN3 / CLDN4 / CLDN7: lowest of all subtypes
+  ────────────────────────────────────────────────────────────
+  [P3] CLDN3       CL=9.0781  Nor=8.1547     +11.3%  p=0.023 *  
+  [P3] CLDN4       CL=11.5977  Nor=10.9522      +5.9%  p=0.874  
+  [P3] CLDN7       CL=10.2528  Nor=9.2826     +10.5%  p=2.18e-11 ***  
+  [P3] CLDN8       CL=6.3816  Nor=8.7269     -26.9%  p=3.01e-25 ***  
+  [P3] CDH1        CL=12.0720  Nor=11.9089      +1.4%  p=0.006 *  
+
+  ────────────────────────────────────────────────────────────
+  P4 — CD44 high / CD24 low: canonical breast stem phenotype
+  ────────────────────────────────────────────────────────────
+  [P4] CD44        CL=13.3742  Nor=12.9704      +3.1%  p=8.51e-09 **  
+  [P4] CD24        CL=13.8778  Nor=12.7091      +9.2%  p=6.47e-08 **  
+  [P4] ALDH1A1     CL=9.0180  Nor=11.1967     -19.5%  p=1.29e-38 ***  
+  [P4] KRT14       CL=9.4752  Nor=12.6628     -25.2%  p=1.41e-22 ***  
+  [P4] KRT5        CL=10.2449  Nor=12.9916     -21.1%  p=2.82e-21 ***  
+  [P4] TP63        CL=7.6118  Nor=10.1202     -24.8%  p=2.19e-26 ***  
+  [P4] ITGA6       CL=11.3513  Nor=12.3368      -8.0%  p=4.16e-25 ***  
+  [P4] PROM1       CL=8.6392  Nor=10.1220     -14.6%  p=6.83e-09 **  
+
+  ────────────────────────────────────────────────────────────
+  P5 — TP53 target signature: less disrupted than TNBC
+  ────────────────────────────────────────────────────────────
+  [P5] CDKN1A      CL=10.7937  Nor=11.0706      -2.5%  p=0.020 *  
+  [P5] MDM2        CL=10.8637  Nor=10.8453      +0.2%  p=0.706  
+  [P5] BAX         CL=9.2143  Nor=8.1695     +12.8%  p=2.04e-35 ***  
+  [P5] GADD45A     CL=8.9817  Nor=9.0977      -1.3%  p=0.327  
+  [P5] TP53        CL=10.5520  Nor=10.4900      +0.6%  p=0.260  
+  [P5] PUMA        MISSING FROM MATRIX  
+
+  ────────────────────────────────────────────────────────────
+  P6 — Immune programme: PD-L1 / CD8A elevated
+  ────────────────────────────────────────────────────────────
+  [P6] CD274       CL=4.9678  Nor=4.6740      +6.3%  p=0.038 *  
+  [P6] CD8A        CL=7.8665  Nor=7.1852      +9.5%  p=0.000 *  
+  [P6] FOXP3       CL=6.3991  Nor=3.8393     +66.7%  p=1.64e-40 ***  
+  [P6] PDCD1       CL=4.7289  Nor=3.1015     +52.5%  p=8.59e-20 ***  
+  [P6] LAG3        CL=5.8912  Nor=4.5109     +30.6%  p=9.90e-17 ***  
+  [P6] TIGIT       CL=6.2887  Nor=4.1484     +51.6%  p=6.86e-28 ***  
+  [P6] CD68        CL=11.5199  Nor=10.8713      +6.0%  p=4.49e-09 **  
+  [P6] CD163       CL=9.8956  Nor=9.5190      +4.0%  p=0.033 *  
+  [P6] IFNG        CL=2.2518  Nor=1.3417     +67.8%  p=3.12e-06 **  
+
+  ────────────────────────────────────────────────────────────
+  P7 — Depth axis: CLDN3 orthogonal to VIM within claudin-low
+  ────────────────────────────────────────────────────────────
+  Within claudin-low: r(CLDN3, VIM) = -0.1314  p=0.032 *
+  Prediction: CLDN3 and VIM should be orthogonal (r near 0)
+  Prediction: Negative r expected (as VIM rises, CLDN3 falls)
+
+  CLDN3 vs luminal identity markers (within claudin-low):
+    r(CLDN3, ESR1) = 0.2051  p=0.001 *
+    Prediction: positive r (residual claudin retention correlates with partial luminal identity)
+    r(CLDN3, FOXA1) = 0.3258  p=4.80e-08 **
+    Prediction: positive r (residual claudin retention correlates with partial luminal identity)
+    r(CLDN3, GATA3) = 0.3666  p=6.04e-10 **
+    Prediction: positive r (residual claudin retention correlates with partial luminal identity)
+
+  VIM vs stem markers (within claudin-low):
+    r(VIM, CD44) = -0.0209  p=0.733
+    r(VIM, ALDH1A1) = -0.0349  p=0.569
+    r(VIM, KRT14) = 0.1721  p=0.005 *
+    r(VIM, SNAI1) = 0.3472  p=5.23e-09 **
+    r(VIM, ZEB1) = -0.0163  p=0.790
+
+  ────────────────────────────────────────────────────────────
+  P8 — Cross-subtype PCA: claudin-low most distant from LumA
+  ────────────────────────────────────────────────────────────
+  (Computed in STEP 6 — cross-subtype comparison)
+
+  ────────────────────────────────────────────────────────────
+  P9 — Drug target geometry: immune + stem, NOT ER or HER2
+  ────────────────────────────────────────────────────────────
+  [P9] TACSTD2     CL=12.2142  Nor=12.0628      +1.3%  p=0.001 *  
+  [P9] BRCA1       CL=8.1453  Nor=7.6169      +6.9%  p=1.89e-10 **  
+  [P9] PARP1       CL=12.3739  Nor=11.3916      +8.6%  p=1.53e-43 ***  
+  [P9] ERBB2       CL=12.3417  Nor=11.8639      +4.0%  p=0.000 *  
+  [P9] ESR1        CL=11.1511  Nor=11.3055      -1.4%  p=0.002 *  
+  [P9] CD274       CL=4.9678  Nor=4.6740      +6.3%  p=0.038 *  
+  [P9] ALDH1A1     CL=9.0180  Nor=11.1967     -19.5%  p=1.29e-38 ***  
+  [P9] PIK3CA      CL=9.2546  Nor=9.7557      -5.1%  p=2.58e-15 ***  
+  [P9] PTEN        CL=11.0085  Nor=11.5572      -4.7%  p=2.41e-16 ***  
+
+  ────────────────────────────────────────────────────────────
+  PROLIFERATION — context for cross-subtype comparison
+  ────────────────────────────────────────────────────────────
+  [PROLIF] MKI67       CL=10.5118  Nor=7.4539     +41.0%  p=9.21e-43 ***  
+  [PROLIF] TOP2A       CL=10.7739  Nor=7.4681     +44.3%  p=8.58e-44 ***  
+  [PROLIF] PCNA        CL=10.9928  Nor=9.9841     +10.1%  p=2.25e-38 ***  
+  [PROLIF] CCNB1       CL=9.4425  Nor=7.4549     +26.7%  p=7.13e-45 ***  
+
+  Panel results saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s1_analysis/results/cl_s1_panel.csv
+
+=================================================================
+STEP 6: CROSS-SUBTYPE COMPARISON
+  Claudin-low positioned relative to all BRCA subtypes.
+  Same dataset, same reference, same gene panel.
+=================================================================
+  Gene                Normal   Claudin-low          LumA          LumB HER2-enriched    TNBC/Basal
+  ────────────────────────────────────────────────────────────────────────────────────────────────
+  ESR1               11.3055       11.1511       13.5440       13.6281        8.2643        6.3529
+  FOXA1               9.8124       11.1391       12.9605       12.9745       12.5412        6.6802
+  GATA3              11.1887       12.2964       13.7136       13.6953       11.6239        9.2655
+  PGR                10.3084        9.3309       11.0287        9.4693        5.9508        4.6574
+  CLDN3               8.1547        9.0781        9.8148       10.0019       10.0407        9.7030
+  CLDN4              10.9522       11.5977       11.9844       11.9467       12.2875       12.4785
+  CLDN7               9.2826       10.2528       10.8145       10.9673       11.0823       10.5451
+  VIM                15.5641       14.9074       14.0925       13.5692       13.9724       14.6773
+  ZEB1               10.2909        9.9508        9.6341        9.0517        9.1963        8.4119
+  SNAI1               6.7571        7.1125        6.4245        6.3513        7.0971        7.5141
+  CDH1               11.9089       12.0720       12.8484       13.5240       13.6438       12.7797
+  CD44               12.9704       13.3742       13.1915       12.5892       12.6518       13.3964
+  CD24               12.7091       13.8778       13.7655       13.5710       15.3330       14.7811
+  ALDH1A1            11.1967        9.0180        8.5069        7.9154        8.5797        7.8013
+  KRT14              12.6628        9.4752        8.6322        5.6619        6.5651        9.6931
+  KRT5               12.9916       10.2449        9.0388        6.1141        8.1935       11.4430
+  CD274               4.6740        4.9678        4.3622        4.4098        5.1560        4.8725
+  CD8A                7.1852        7.8665        7.0516        7.0077        7.7075        7.5750
+  MKI67               7.4539       10.5118       10.1653       11.3672       11.6539       12.0301
+  ERBB2              11.8639       12.3417       12.9613       12.9604       15.5699       11.8570
+  CDKN1A             11.0706       10.7937       10.7224       10.6301       10.5589       10.2242
+  MDM2               10.8453       10.8637       11.2642       11.3753       10.6828       10.6607
+
+  Cross-subtype table saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s1_analysis/results/cl_s1_cross_subtype.csv
+
+  PCA — cross-subtype position (P8 test):
+  PCA variance explained: PC1=46.7%  PC2=36.3%
+
+  Population                PC1      PC2
+  ──────────────────────────────────────
+  Claudin-low            -1.630    1.049
+  Normal                 -6.102    0.322
+  LumA                   -0.027   -2.973
+  LumB                    2.209   -3.986
+  HER2-enriched           3.645    1.005
+  TNBC/Basal              1.906    4.583
+
+  Pairwise centroid distances (Euclidean on PCA space):
+    Claudin-low          ↔ Normal               d=4.5316
+    Claudin-low          ↔ LumA                 d=4.6163
+    Claudin-low          ↔ LumB                 d=6.4739
+    Claudin-low          ↔ HER2-enriched        d=5.6741
+    Claudin-low          ↔ TNBC/Basal           d=5.6663
+    Normal               ↔ LumA                 d=7.0797
+    Normal               ↔ LumB                 d=9.4488
+    Normal               ↔ HER2-enriched        d=10.0063
+    Normal               ↔ TNBC/Basal           d=9.4369
+    LumA                 ↔ LumB                 d=2.4671
+    LumA                 ↔ HER2-enriched        d=6.5522
+    LumA                 ↔ TNBC/Basal           d=7.8712
+    LumB                 ↔ HER2-enriched        d=6.2299
+    LumB                 ↔ TNBC/Basal           d=8.6741
+    HER2-enriched        ↔ TNBC/Basal           d=6.2021
+
+  Distances FROM claudin-low to each subtype (P8 test):
+  Prediction: max distance to LumA
+    Claudin-low ↔ Normal               d=4.5316
+    Claudin-low ↔ LumA                 d=4.6163
+    Claudin-low ↔ LumB                 d=6.4739
+    Claudin-low ↔ HER2-enriched        d=5.6741
+    Claudin-low ↔ TNBC/Basal           d=5.6663
+
+=================================================================
+STEP 7: STEM DEPTH AXIS (P7 — within claudin-low)
+  How deeply locked in the false attractor is each sample?
+=================================================================
+  Positive markers used: ['VIM', 'CD44', 'SNAI1', 'ZEB1', 'FN1']
+  Negative markers used: ['CLDN3', 'CLDN4', 'CLDN7', 'CDH1', 'ESR1']
+  Depth scores computed for 268 claudin-low samples.
+  Score range: -2.0762 to 5.3759
+  Score mean:  0.0000
+  Score std:   0.8917
+  Depth scores saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s1_analysis/results/cl_s1_depth_axis.csv
+
+  Gene correlations with depth score (within claudin-low):
+  (High positive r = gene marks deep attractor state)
+  Gene                r              p
+  ──────────────────────────────────────
+  VIM            0.6092     p=1.27e-28
+  CD44           0.2368     p=9.05e-05
+  SNAI1          0.3899     p=3.66e-11
+  ZEB1           0.1238     p=4.28e-02
+  FN1            0.3510     p=3.47e-09
+  CLDN3         -0.6367     p=7.22e-32
+  CLDN4         -0.6411     p=2.02e-32
+  CLDN7         -0.6185     p=1.12e-29
+  CDH1          -0.4586     p=2.40e-15
+  ESR1          -0.3929     p=2.53e-11
+  FOXA1         -0.4296     p=1.84e-13
+  ESR1          -0.3929     p=2.53e-11
+  GATA3         -0.5073     p=6.24e-19
+  MKI67          0.1029     p=9.27e-02
+  CD274          0.0016     p=9.79e-01
+  ALDH1A1       -0.0254     p=6.79e-01
+  PROM1         -0.0241     p=6.95e-01
+
+  Depth correlations saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s1_analysis/results/cl_s1_depth_correlations.csv
+
+=================================================================
+STEP 8: GENERATE FIGURE
+=================================================================
+  Figure saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s1_analysis/results/cl_s1_figure.png
+
+=================================================================
+STEP 9: PREDICTION SCORECARD
+  Protocol v2.0: geometry was read first (Steps 4–6).
+  Predictions now scored against that geometry.
+=================================================================
+
+  P1 — ESR1/FOXA1/GATA3: lowest of all BRCA subtypes
+    ESR1:  CL=11.1511  Basal=6.3529  LumA=13.5440  vs-Basal:NOT LOWER ✗  vs-LumA:LOWER ✓
+    FOXA1:  CL=11.1391  Basal=6.6802  LumA=12.9605  vs-Basal:NOT LOWER ✗  vs-LumA:LOWER ✓
+    GATA3:  CL=12.2964  Basal=9.2655  LumA=13.7136  vs-Basal:NOT LOWER ✗  vs-LumA:LOWER ✓
+
+  P2 — VIM/ZEB1/SNAI1: partial EMT elevated
+    VIM:  CL=14.9074  Normal=15.5641  LumA=14.0925  vs-Normal:NOT UP ✗  vs-LumA:UP ✓
+    ZEB1:  CL=9.9508  Normal=10.2909  LumA=9.6341  vs-Normal:NOT UP ✗  vs-LumA:UP ✓
+    SNAI1:  CL=7.1125  Normal=6.7571  LumA=6.4245  vs-Normal:UP ✓  vs-LumA:UP ✓
+
+  P3 — CLDN3/CLDN4/CLDN7: lowest of all subtypes
+    CLDN3:  CL=9.0781  Basal=9.7030  Nor=8.1547  vs-Basal:LOWER ✓  vs-Normal:NOT LOWER ✗
+    CLDN4:  CL=11.5977  Basal=12.4785  Nor=10.9522  vs-Basal:LOWER ✓  vs-Normal:NOT LOWER ✗
+    CLDN7:  CL=10.2528  Basal=10.5451  Nor=9.2826  vs-Basal:LOWER ✓  vs-Normal:NOT LOWER ✗
+
+  P4 — CD44 high / CD24 low
+    CD44:  CL=13.3742  Normal=12.9704  UP ✓
+    CD24:  CL=13.8778  Normal=12.7091  NOT DOWN ✗
+
+  P6 — Immune programme: PD-L1 elevated
+    CD274: CL=4.9678  Normal=4.6740  LumA=4.3622  UP ✓
+
+  P9 — HER2 (ERBB2) confirmation: expect NOT elevated
+    ERBB2: CL=12.3417  Normal=11.8639  NOT amplified ✓
+
+=================================================================
+SCRIPT 1 COMPLETE
+=================================================================
+  Claudin-low samples identified: 268
+  Normal reference samples:       114
+  Output directory: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s1_analysis/results
+  Log:       /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s1_analysis/results/cl_s1_log.txt
+  Figure:    /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s1_analysis/results/cl_s1_figure.png
+  Panel CSV: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s1_analysis/results/cl_s1_panel.csv
+  Top movers CSV: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s1_analysis/results/cl_s1_top_movers.csv
+  Cross-subtype CSV: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s1_analysis/results/cl_s1_cross_subtype.csv
+  Depth axis CSV: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s1_analysis/results/cl_s1_depth_axis.csv
+
+  NEXT STEP:
+    Write script1_results_and_reasoning.md (BRCA-S7b)
+    Read geometry on its own terms BEFORE scoring predictions.
+    Then write before_script2.md (BRCA-S7c) with locked predictions.

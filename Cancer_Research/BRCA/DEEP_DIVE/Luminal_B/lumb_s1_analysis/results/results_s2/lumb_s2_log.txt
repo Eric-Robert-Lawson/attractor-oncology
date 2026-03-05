@@ -1,0 +1,460 @@
+=================================================================
+BRCA LUMINAL B — SCRIPT 2
+OrganismCore — Document BRCA-S5c
+Date: 2026-03-05
+=================================================================
+
+SCRIPT 2 PREDICTIONS (locked BRCA-S5a/b → BRCA-S5c):
+  SB2-1: CDKN1A depth separates LumB from all references
+  SB2-2: r(ESR1, PGR) < r in LumA — NCOA/SPDEF mechanism
+  SB2-3: r(DNMT3A, HDAC2) > 0.20 within LumB
+  SB2-4: SPI1 co-expresses with PTPRC (immune, not ectopic)
+  SB2-5: r(CDKN2A, CDKN1A) < 0 in LumB (senescence bypass)
+  SB2-6: r(CD274, MYC) > 0.25 within LumB
+  SB2-7: ERBB2 > Mature Luminal and LumA
+  SB2-8: CV(CDKN1A) > CV(CCND1) — CDKN1A is primary variable
+
+=================================================================
+STEP 0: LOAD CACHED DATA FROM SCRIPT 1
+Reusing Script 1 downloads. No re-download.
+=================================================================
+  Loading expression cache: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/luminal_b/lumb_s1_analysis/results/expr_cache_lumb_s1.csv
+  Expression shape: (100064, 41)
+  Genes in cache: ['AR', 'CCND1', 'CCNE1', 'CD274', 'CDK2', 'CDK4', 'CDK6', 'CDKN1A', 'CDKN2A', 'CDX2', 'DNMT3A', 'DNMT3B', 'EED', 'ERBB2', 'ESR1', 'EZH2', 'FOXA1', 'GATA3', 'HDAC1', 'HDAC2', 'KDM1A', 'KRT14', 'KRT5', 'MKI67', 'MYC', 'NCOA1', 'NCOA2', 'NKX2-1', 'NKX3-1', 'OLIG2', 'PARP1', 'PCNA', 'PGR', 'RB1', 'SOX10', 'SPDEF', 'SPI1', 'TET2', 'TGFBR2', 'TOP2A', 'TP53']
+  Metadata: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/luminal_b/lumb_s1_analysis/data/Wu_etal_2021_BRCA_scRNASeq/metadata.csv (100064 cells)
+
+  New genes needed for S2 (30): ['NRIP1', 'MED1', 'EP300', 'CREBBP', 'TFF1', 'TFF3', 'AGR2', 'PTPRC', 'CD14', 'LYZ', 'CSF1R', 'CD68', 'ITGAM', 'FCGR3A', 'CDKN1B', 'CCNA1', 'CCNB1', 'E2F1', 'E2F3', 'CD80', 'PDCD1LG2', 'ERBB3', 'EGFR', 'MUC4', 'GRB7', 'PIK3CA', 'AKT1', 'AKT2', 'MTOR', 'PTEN']
+  These will be extracted from MTX if available.
+=================================================================
+OPTIONAL: EXTRACTING NEW GENES FROM MTX
+=================================================================
+  Need to extract 30 new genes:
+  ['NRIP1', 'MED1', 'EP300', 'CREBBP', 'TFF1', 'TFF3', 'AGR2', 'PTPRC', 'CD14', 'LYZ', 'CSF1R', 'CD68', 'ITGAM', 'FCGR3A', 'CDKN1B', 'CCNA1', 'CCNB1', 'E2F1', 'E2F3', 'CD80', 'PDCD1LG2', 'ERBB3', 'EGFR', 'MUC4', 'GRB7', 'PIK3CA', 'AKT1', 'AKT2', 'MTOR', 'PTEN']
+  Extracting 30 new genes from MTX...
+  Loading MTX for new gene extraction...
+    NRIP1: mean=0.1112  nonzero=12772
+    MED1: mean=0.0784  nonzero=9569
+    EP300: mean=0.0866  nonzero=11123
+    CREBBP: mean=0.1219  nonzero=15084
+    TFF1: mean=0.1010  nonzero=5819
+    TFF3: mean=0.2147  nonzero=13166
+    AGR2: mean=0.3690  nonzero=17854
+    PTPRC: mean=0.4472  nonzero=37230
+    CD14: mean=0.1614  nonzero=10834
+    LYZ: mean=0.2631  nonzero=13371
+    CSF1R: mean=0.0791  nonzero=6139
+    CD68: mean=0.2325  nonzero=14125
+    ITGAM: mean=0.0338  nonzero=3818
+    FCGR3A: mean=0.1398  nonzero=8457
+    CDKN1B: mean=0.2578  nonzero=28903
+    CCNA1: mean=0.0033  nonzero=410
+    CCNB1: mean=0.0600  nonzero=5956
+    E2F1: mean=0.0121  nonzero=1507
+    E2F3: mean=0.0490  nonzero=6411
+    CD80: mean=0.0140  nonzero=1720
+    PDCD1LG2: mean=0.0194  nonzero=2400
+    ERBB3: mean=0.1320  nonzero=12695
+    EGFR: mean=0.0606  nonzero=6873
+    MUC4: mean=0.0034  nonzero=357
+    GRB7: mean=0.1117  nonzero=9633
+    PIK3CA: mean=0.0518  nonzero=6829
+    AKT1: mean=0.1238  nonzero=14260
+    AKT2: mean=0.1130  nonzero=14232
+    MTOR: mean=0.0534  nonzero=7088
+    PTEN: mean=0.1218  nonzero=14339
+  Merging 30 new genes across 100064 cells...
+  Cache updated: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/luminal_b/lumb_s1_analysis/results/expr_cache_lumb_s1.csv
+  New shape: (100064, 71)
+=================================================================
+STEP 1: PREPARE POPULATIONS
+THREE references: Mature Luminal + Luminal Progenitor + Cancer LumA SC
+=================================================================
+  LumB SC:             n=3368
+  LumA SC:             n=7742
+  Basal SC:            n=4312
+  Mature Luminal:      n=1265
+  Luminal Progenitors: n=1992
+=================================================================
+STEP 2: CDKN1A-ONLY DEPTH SCORE
+Formula: depth = 1 - norm(CDKN1A)
+S5b correction: identity component REMOVED
+  (FOXA1/GATA3 are HIGHER in LumB — misspecified)
+Joint normalisation across LumB + Mature + Progenitor + LumA
+Prediction SB2-1: depth separates LumB from all references
+=================================================================
+
+  CDKN1A-only depth scores:
+  LumB:        mean=0.9593  std=0.0881
+  LumA:        mean=0.8676  std=0.1762
+  Mature Lum:  mean=0.6651  std=0.2393
+  Luminal Prg: mean=0.7086  std=0.2395
+
+  p(LumB vs Mature Luminal): p=0.00e+00 ***  [LumB > Mature Luminal]
+
+  p(LumB vs Luminal Progenitor): p=0.00e+00 ***  [LumB > Luminal Progenitor]
+
+  p(LumB vs Cancer LumA): p=3.13e-166 ***  [LumB > Cancer LumA]
+
+  S1-composite vs S2-CDKN1A depth correlation:
+  r = +0.5222  p=4.56e-235 ***
+  → Partial concordance: S2 purer on CDKN1A axis
+
+  Top S2 depth correlations within LumB:
+  Gene                  r           p-value
+  --------------------------------------------
+  CDKN1A          -1.0000  p=0.00e+00 ***
+  MYC             -0.2208  p=1.86e-38 ***
+  HDAC2           -0.1780  p=2.20e-25 ***
+  PARP1           -0.1702  p=2.56e-23 ***
+  AR              -0.1668  p=1.92e-22 ***
+  PCNA            -0.1627  p=2.04e-21 ***
+  CDKN1B          -0.1620  p=3.06e-21 ***
+  SPDEF           -0.1608  p=5.92e-21 ***
+  GATA3           -0.1507  p=1.45e-18 ***
+  ERBB3           -0.1498  p=2.28e-18 ***
+  CCND1           -0.1496  p=2.62e-18 ***
+  CDK4            -0.1488  p=3.93e-18 ***
+  CREBBP          -0.1378  p=9.74e-16 ***
+  HDAC1           -0.1344  p=4.68e-15 ***
+  AGR2            -0.1308  p=2.52e-14 ***
+  AKT2            -0.1182  p=6.03e-12 ***
+  ESR1            -0.1143  p=2.85e-11 ***
+  ERBB2           -0.1125  p=5.77e-11 ***
+  EGFR            -0.1070  p=4.86e-10 ***
+  GRB7            -0.1047  p=1.12e-09 ***
+  TP53            -0.1012  p=3.89e-09 ***
+  MED1            -0.0955  p=2.82e-08 ***
+  KDM1A           -0.0928  p=6.89e-08 ***
+  PTEN            -0.0901  p=1.63e-07 ***
+  EP300           -0.0867  p=4.70e-07 ***
+
+=================================================================
+STEP 3: THREE-REFERENCE COMPARISON
+LumB vs Mature Luminal / Progenitor / Cancer LumA
+=================================================================
+
+  Gene            Mature      Prog      LumA      LumB    vsMat%   vsLumA%  p_luma
+  --------------------------------------------------------------------------------
+  FOXA1           0.3934    0.0522    0.5221    0.4834    +22.9%     -7.4%  p=4.51e-03  **
+  GATA3           1.1115    0.5142    1.3230    1.8801    +69.1%    +42.1%  p=1.97e-127 ***
+  ESR1            0.7489    0.1161    0.6901    1.1344    +51.5%    +64.4%  p=2.51e-141 ***
+  PGR             0.3548    0.0193    0.1950    0.1997    -43.7%     +2.4%  p=0.0663  ns
+  SPDEF           1.1943    0.2686    0.9882    0.8800    -26.3%    -10.9%  p=3.03e-13 ***
+  CDKN1A          1.4956    1.3015    0.5914    0.1816    -87.9%    -69.3%  p=3.13e-166 ***
+  CDKN2A          0.0692    0.0449    0.0484    0.0938    +35.5%    +93.9%  p=2.88e-26 ***
+  CDK4            0.4646    0.5271    0.3463    0.4568     -1.7%    +31.9%  p=3.68e-21 ***
+  CCND1           0.8115    0.6927    0.8135    1.8368   +126.3%   +125.8%  p=7.61e-269 ***
+  MKI67           0.0016    0.0028    0.0006    0.0099   +505.2%  +1487.4%  p=9.38e-19 ***
+  TOP2A           0.0063    0.0058    0.0052    0.0528   +731.7%   +910.8%  p=5.90e-78 ***
+  MYC             1.1010    1.5092    0.6738    1.2633    +14.7%    +87.5%  p=2.05e-136 ***
+  EZH2            0.0414    0.0594    0.0485    0.0486    +17.6%     +0.3%  p=0.7560  ns
+  DNMT3A          0.0691    0.0731    0.0508    0.1253    +81.4%   +146.7%  p=2.03e-51 ***
+  HDAC1           0.3936    0.3481    0.2160    0.3771     -4.2%    +74.6%  p=1.23e-64 ***
+  HDAC2           0.4506    0.5959    0.2745    0.5476    +21.5%    +99.5%  p=2.53e-106 ***
+  RB1             0.1854    0.1792    0.1170    0.0727    -60.8%    -37.9%  p=1.89e-15 ***
+  TP53            0.1458    0.2371    0.0949    0.1497     +2.7%    +57.8%  p=3.21e-21 ***
+  SPI1            0.0088    0.0079    0.0053    0.0219   +149.6%   +314.9%  p=2.04e-20 ***
+  CD274           0.0104    0.0024    0.0028    0.0086    -17.5%   +209.6%  p=1.68e-06 ***
+  ERBB2           0.5293    0.2490    0.4091    0.4901     -7.4%    +19.8%  p=2.08e-09 ***
+  NCOA1           0.2822    0.2510    0.1414    0.1168    -58.6%    -17.4%  p=1.62e-04 ***
+
+=================================================================
+STEP 4: ER CIRCUIT GAP TEST — MECHANISM
+SB2-2: ESR1 elevated but PGR output lower than expected
+S5b: r(ESR1,PGR)=0.234 in LumB vs 0.333 in LumA
+Test nodes: NCOA1, NCOA2, SPDEF, NRIP1
+=================================================================
+
+  Within-population co-expression correlations:
+  Pair                      r_LumB    r_LumA  r_Mature  Gap_LumB<LumA?
+  --------------------------------------------------------------------
+  ESR1→PGR                 +0.2342   +0.3328   +0.2779  YES — LumB < LumA
+  ESR1→SPDEF               +0.4407   +0.0926   +0.4726  NO — LumB ≥ LumA
+  FOXA1→ESR1               +0.4391   +0.3825   +0.2581  NO — LumB ≥ LumA
+  FOXA1→PGR                +0.1921   +0.2524   +0.2367  YES — LumB < LumA
+  FOXA1→GATA3              +0.3235   +0.1998   +0.3710  NO — LumB ≥ LumA
+  ESR1→NCOA1               +0.2098   +0.0156   +0.2832  NO — LumB ≥ LumA
+  ESR1→NCOA2               +0.2855   +0.1285   +0.2182  NO — LumB ≥ LumA
+
+  ER coactivator levels in LumB vs LumA:
+  Gene            LumA      LumB    vs_LumA%  p_luma
+  -------------------------------------------------------
+  NCOA1         0.1414    0.1168      -17.4%  p=1.62e-04 ***  → FLAT
+  NCOA2         0.1186    0.1423      +20.0%  p=6.17e-04 ***  → FLAT
+  NRIP1         0.2214    0.2299       +3.8%  p=0.4332  ns  → FLAT
+  MED1          0.1067    0.1205      +12.9%  p=0.0516  ns  → FLAT
+  EP300         0.0922    0.1090      +18.2%  p=1.15e-03  **  → FLAT
+  CREBBP        0.1785    0.1874       +5.0%  p=0.3891  ns  → FLAT
+  SPDEF         0.9882    0.8800      -10.9%  p=3.03e-13 ***  → FLAT
+  TFF1          0.8447    0.1444      -82.9%  p=3.58e-236 ***  → SUPPRESSED
+  TFF3          1.1236    0.6614      -41.1%  p=8.49e-114 ***  → SUPPRESSED
+  AGR2          2.0161    2.4958      +23.8%  p=4.17e-50 ***  → ELEVATED
+
+  SB2-2 VERDICT:
+  r(ESR1, PGR) LumB=+0.2342 vs LumA=+0.3328
+  NCOA1: FLAT  NCOA2: FLAT  SPDEF: FLAT
+  ESR1→PGR decoupling confirmed in LumB vs LumA.
+  Mechanism not resolved at expression level. May be post-translational or epigenetic.
+  SB2-2: ✓ DIRECTIONAL — decoupling confirmed, mechanism unresolved
+
+=================================================================
+STEP 5: EPIGENETIC CONVERGENCE TEST
+SB2-3: DNMT3A co-expresses with HDAC2 within LumB (r > 0.20)
+Tests: DNMT3A-HDAC1/2 co-expression
+       DNMT3A-CDKN1A inverse correlation
+       HDAC1/2-CDKN1A inverse correlation
+=================================================================
+
+  Pair                      r_LumB    r_LumA  p_LumB           SB2-3?
+  -----------------------------------------------------------------
+  DNMT3A–HDAC2             +0.2668   +0.0708  p=5.68e-56 ***    SB2-3 ✓ CONFIRMED
+  DNMT3A–HDAC1             +0.2187   +0.1421  p=9.55e-38 ***    
+  DNMT3A–CDKN1A            +0.0712   +0.0638  p=3.54e-05 ***    
+  HDAC2–CDKN1A             +0.1780   +0.1216  p=2.20e-25 ***    
+  HDAC1–CDKN1A             +0.1344   +0.0331  p=4.68e-15 ***    
+  EZH2–CDKN1A              +0.0572   +0.1019  p=8.94e-04 ***    
+  KDM1A–CDKN1A             +0.0928   +0.0568  p=6.89e-08 ***    
+  DNMT3A–EZH2              +0.0312   +0.0994  p=0.0706  ns      
+  HDAC1–HDAC2              +0.4500   +0.2198  p=1.22e-167 ***   
+  PARP1–CDKN1A             +0.1702   +0.1775  p=2.56e-23 ***    
+
+  Convergence summary:
+  r(DNMT3A, HDAC2)   = +0.2668  (SB2-3 threshold > 0.20)
+  r(DNMT3A, CDKN1A)  = +0.0712  (negative = DNMT3A suppresses CDKN1A)
+  r(HDAC2,  CDKN1A)  = +0.1780  (negative = HDAC2 suppresses CDKN1A)
+  Convergence hypothesis not clearly supported at expression level.
+
+=================================================================
+STEP 6: SPI1 RESOLUTION TEST
+SB2-4: SPI1 elevation — immune contamination or ectopic?
+Test: r(SPI1, PTPRC) > |r(SPI1, FOXA1)| → contamination
+      r(SPI1, FOXA1) > |r(SPI1, PTPRC)| → ectopic epithelial
+=================================================================
+
+  SPI1 in LumB: mean=0.0219  nonzero=101 / 3368
+
+  r(SPI1, immune markers) in LumB:
+    SPI1–PTPRC         r=-0.0035  p=0.8413  ns
+    SPI1–CD14          r=+0.0567  p=9.89e-04 ***
+    SPI1–LYZ           r=+0.0903  p=1.54e-07 ***
+    SPI1–CSF1R         r=-0.0115  p=0.5048  ns
+    SPI1–CD68          r=+0.0766  p=8.48e-06 ***
+    SPI1–ITGAM         r=+0.0313  p=0.0696  ns
+    SPI1–FCGR3A        r=+0.0309  p=0.0727  ns
+
+  r(SPI1, epithelial markers) in LumB:
+    SPI1–FOXA1         r=+0.0291  p=0.0918  ns
+    SPI1–GATA3         r=+0.1484  p=4.79e-18 ***
+    SPI1–ESR1          r=+0.1299  p=3.73e-14 ***
+    SPI1–CDKN1A        r=+0.0785  p=5.15e-06 ***
+    SPI1–KRT5          r=+0.0058  p=0.7356  ns
+
+  r(SPI1, immune markers) in LumA (reference):
+    SPI1–PTPRC         r=+0.0317  p=5.27e-03  **
+    SPI1–CD14          r=+0.0781  p=5.89e-12 ***
+    SPI1–LYZ           r=+0.0430  p=1.52e-04 ***
+    SPI1–CSF1R         r=+0.1181  p=1.88e-25 ***
+    SPI1–CD68          r=+0.0607  p=9.12e-08 ***
+    SPI1–ITGAM         r=+0.0123  p=0.2794  ns
+    SPI1–FCGR3A        r=+0.1150  p=3.23e-24 ***
+
+  SB2-4 VERDICT:
+  r(SPI1, PTPRC) = -0.0035
+  r(SPI1, FOXA1) = +0.0291
+  r(SPI1, CD14)  = +0.0567
+  SB2-4: ✗ NOT CONFIRMED — SPI1 co-expresses with FOXA1
+  SPI1 elevation appears to be genuine epithelial expression.
+  Mechanistic role of SPI1 in LumB requires investigation.
+
+=================================================================
+STEP 7: CDKN2A / CDKN1A PARADOX — SENESCENCE BYPASS
+SB2-5: CDKN2A elevated +93.9% vs LumA, CDKN1A -69.3%
+Prediction: r(CDKN2A, CDKN1A) < 0 within LumB
+Interpretation: p16 accumulates as senescence signal;
+p21 suppressed as the effector exit point.
+=================================================================
+
+  r(CDKN2A, CDKN1A) in LumB: +0.0403  p=0.0195   *
+  r(CDKN2A, CDKN1A) in LumA: +0.0597  p=1.47e-07 ***
+
+  CDKN2A in LumB: mean=0.0938  std=0.2632
+  CDKN1A in LumB: mean=0.1816  std=0.3935
+  CDKN2A in LumA: mean=0.0484  std=0.1968
+  CDKN1A in LumA: mean=0.5914  std=0.7869
+
+  CDKN2A-high / CDKN1A-low (senescence bypass) cells:
+  n=0 / 3368 (0.0%)
+
+  SB2-5: ✗ NOT CONFIRMED — r=+0.0403
+  CDKN2A and CDKN1A do not inversely correlate in LumB.
+  p16/p21 paradox is not a within-cell phenomenon.
+  May reflect between-cell-state heterogeneity.
+
+=================================================================
+STEP 8: CD274 / MYC CO-EXPRESSION TEST
+SB2-6: S5b — CD274 +209.6% vs LumA
+Prediction: r(CD274, MYC) > 0.25 within LumB
+Mechanism: MYC is known to directly activate CD274
+           MYC-high LumB cells = immune-evasive state
+=================================================================
+
+  r(CD274, MYC) in LumB: +0.1045  p=1.19e-09 ***
+  r(CD274, MYC) in LumA: +0.0278  p=0.0145   *
+  r(CD274, CCND1     ) = +0.1067  p=5.43e-10 ***
+  r(CD274, CDK4      ) = +0.0817  p=2.07e-06 ***
+  r(CD274, CDKN1A    ) = +0.0854  p=6.90e-07 ***
+  r(CD274, FOXA1     ) = +0.0438  p=0.0110   *
+  r(CD274, GATA3     ) = +0.0972  p=1.58e-08 ***
+  r(CD274, ESR1      ) = +0.1042  p=1.36e-09 ***
+  r(CD274, HDAC2     ) = +0.1030  p=2.07e-09 ***
+  r(CD274, DNMT3A    ) = +0.1070  p=4.74e-10 ***
+
+  r(CD274, CDKN1A) = +0.0854  p=6.90e-07 ***
+  (Negative: CD274 and CDKN1A suppress each other)
+
+  SB2-6: ✓ DIRECTIONAL — r=+0.1045 (below 0.25 threshold)
+
+=================================================================
+STEP 9: ERBB2 QUANTIFICATION
+SB2-7: ERBB2 in LumB vs all references
+S5b: ERBB2 +96.8% vs Progenitor (not in S1 panel)
+Assess: HER2-low expression territory in LumB
+=================================================================
+
+  ERBB2 across populations:
+  Progenitor  : mean=0.2490  std=0.4375
+  Mature      : mean=0.5293  std=0.5846
+  LumA        : mean=0.4091  std=0.5040
+  LumB        : mean=0.4901  std=0.5751
+  LumB vs Mature: -7.4%  p=0.0376   *
+  LumB vs LumA: +19.8%  p=2.08e-09 ***
+
+  LumB ERBB2 distribution:
+  Q50 (median) = 0.0000
+  Q75          = 0.6931
+  Q90          = 1.3863
+
+  ERBB2-Q75+ cells (HER2-low territory proxy): n=813 (24.1% of LumB)
+  Profile of ERBB2-high LumB cells:
+    CDKN1A    : hi=0.2580  all=0.1816  (+42.1%)
+    MYC       : hi=2.1104  all=1.2633  (+67.1%)
+    CCND1     : hi=2.9578  all=1.8368  (+61.0%)
+    FOXA1     : hi=0.6773  all=0.4834  (+40.1%)
+    GATA3     : hi=2.8073  all=1.8801  (+49.3%)
+    ESR1      : hi=1.7175  all=1.1344  (+51.4%)
+    CD274     : hi=0.0220  all=0.0086  (+155.5%)
+
+  SB2-7 VERDICT:
+  SB2-7: ✓ PARTIAL — LumB > LumA but not > Mature
+
+=================================================================
+STEP 10: BULK RNA-SEQ — CDKN1A vs CCND1 VARIANCE
+SB2-8: CDKN1A CV > CCND1 CV across tumors
+Hypothesis: CDKN1A loss = primary LumB → LumA event
+=================================================================
+  Loading: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/luminal_b/lumb_s1_analysis/data/GSE176078_Wu_etal_2021_bulkRNAseq_raw_counts.txt.gz
+  Bulk shape: (58388, 24)
+  Available target genes: 16 / 16
+
+  Gene CV across tumors (higher CV = more variable):
+  Gene                Mean         Std        CV
+  --------------------------------------------
+  CDKN1A            2260.1      2204.9     0.976
+  CCND1            23200.1     20121.7     0.867
+  CDK4              1028.4       432.4     0.420
+  MKI67             8732.8      9308.5     1.066
+  TOP2A             3725.9      3162.0     0.849
+  FOXA1             9459.9      8771.2     0.927
+  GATA3            10467.0      9737.7     0.930
+  ESR1             20852.2     27009.3     1.295
+  PGR               6996.1      8736.8     1.249
+  EZH2              1382.6       816.5     0.591
+  DNMT3A            4250.7      1292.2     0.304
+  HDAC2             3898.8      1782.5     0.457
+  MYC               3017.0      2799.1     0.928
+  ERBB2            21997.1     42527.2     1.933
+  RB1               3541.7      1246.7     0.352
+  CDKN2A             569.2       916.3     1.610
+
+  SB2-8 VERDICT:
+  CV(CDKN1A) = 0.976
+  CV(CCND1)  = 0.867
+  SB2-8: ✓ CONFIRMED — CDKN1A more variable than CCND1
+  Supports CDKN1A loss as primary event in LumB.
+  CCND1 expression is more uniform — may be constitutive.
+  Drug target implication: CDKN1A loss is the variable
+  axis → tumors stratify by CDKN1A level, not CCND1.
+
+  Bulk depth (1-CDKN1A) across 24 tumors:
+  mean=0.8054  std=0.2376  min=0.0000  max=1.0000
+
+  Highest depth tumors (lowest CDKN1A):
+    CID44041: depth=1.0000  CDKN1A=454.5
+    CID4495: depth=0.9535  CDKN1A=885.7
+    CID4535: depth=0.9534  CDKN1A=886.9
+    CID4530N: depth=0.9359  CDKN1A=1049.0
+    CID3586: depth=0.9272  CDKN1A=1130.1
+
+  Lowest depth tumors (highest CDKN1A):
+    CID4515: depth=0.7917  CDKN1A=2387.2
+    CID4461: depth=0.7683  CDKN1A=2604.5
+    CID4290A: depth=0.6937  CDKN1A=3297.3
+    CID4513: depth=0.1375  CDKN1A=8458.1
+    CID4523: depth=0.0000  CDKN1A=9734.5
+
+  Bulk correlations with CDKN1A:
+  Gene                 r  p-value
+  ------------------------------------
+  MKI67          +0.6270  p=1.04e-03  **
+  CDK4           +0.5374  p=6.76e-03  **
+  TOP2A          +0.4341  p=0.0341   *
+  MYC            +0.3897  p=0.0597  ns
+  DNMT3A         -0.3460  p=0.0977  ns
+  EZH2           +0.3394  p=0.1047  ns
+  GATA3          -0.3165  p=0.1319  ns
+  CCND1          -0.2675  p=0.2063  ns
+  RB1            +0.2606  p=0.2188  ns
+  PGR            -0.2527  p=0.2334  ns
+  ESR1           -0.2053  p=0.3358  ns
+  FOXA1          -0.1829  p=0.3923  ns
+  ERBB2          -0.1048  p=0.6258  ns
+  HDAC2          +0.0606  p=0.7786  ns
+  CDKN2A         -0.0293  p=0.8919  ns
+
+=================================================================
+STEP 11: SCRIPT 2 PREDICTION SCORECARD
+=================================================================
+
+PREDICTIONS LOCKED IN BRCA-S5a/b → BRCA-S5c:
+
+SB2-1: CDKN1A depth separates LumB from all references
+       → See STEP 2 output above
+
+SB2-2: r(ESR1, PGR) in LumB < LumA — NCOA/SPDEF mechanism
+       r_LumB=+0.2342  r_LumA=+0.3328  → ? CANNOT EVALUATE
+       NCOA1=FLAT  NCOA2=FLAT  SPDEF=FLAT
+
+SB2-3: r(DNMT3A, HDAC2) > 0.20 within LumB
+       r(DNMT3A, HDAC2) = +0.2668  → ? CANNOT EVALUATE
+
+SB2-4: SPI1 co-expresses with PTPRC (immune contamination)
+       r(SPI1,PTPRC)=-0.0035  r(SPI1,FOXA1)=+0.0291  → ? CANNOT EVALUATE
+
+SB2-5: r(CDKN2A, CDKN1A) < 0 in LumB (senescence bypass)
+       r=+0.0403  p=0.0195   *  → ? CANNOT EVALUATE
+
+SB2-6: r(CD274, MYC) > 0.25 within LumB
+       r=+0.1045  p=1.19e-09 ***  → ? CANNOT EVALUATE
+
+SB2-7: ERBB2 in LumB > Mature Luminal and LumA
+       LumB=0.4901  LumA=0.4091  Mature=0.5293  → ? CANNOT EVALUATE
+
+SB2-8: CV(CDKN1A) > CV(CCND1) across bulk tumors
+       CV(CDKN1A)=0.976  CV(CCND1)=0.867  → ? CANNOT EVALUATE
+
+S2 depth correlations saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/luminal_b/lumb_s1_analysis/results/results_s2/lumb_s2_results.csv
+
+=================================================================
+STEP 12: GENERATING SCRIPT 2 FIGURE
+=================================================================
+  Figure saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/luminal_b/lumb_s1_analysis/results/results_s2/lumb_s2_figure.png

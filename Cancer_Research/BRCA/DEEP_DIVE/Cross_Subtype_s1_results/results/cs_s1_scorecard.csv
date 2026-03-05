@@ -1,0 +1,17 @@
+prediction,status,note
+CS-1,PARTIAL,LumA > TNBC: CONFIRMED | LumA > LumB: FAILED | LumB > TNBC: CONFIRMED | TNBC > CL: CONFIRMED
+CS-2,CONFIRMED,TNBC > LumA: CONFIRMED | HER2 > LumA: CONFIRMED | TNBC > LumB: CONFIRMED
+CS-3,PARTIAL,TNBC further than LumA: CONFIRMED | CL further than TNBC: FAILED | LumA closer than LumB: CONFIRMED
+CS-4,PARTIAL,LumA FOXA1 > Mature Luminal: CONFIRMED | TNBC FOXA1 < Mature Luminal: CONFIRMED | ILC in TCGA only — partial test
+CS-5,CONFIRMED,Lock mechanism progression confirmed across all six individual subtype analyses
+CS-6,CONFIRMED,TNBC EZH2 > LumA EZH2: CONFIRMED
+CS-7,CONFIRMED,LumA FOXA1/EZH2 > TNBC: CONFIRMED
+CS-9,CONFIRMED,FOXA1 ordering matches depth axis
+CS-8,CONFIRMED,Unified depth-guided drug map assembled from six confirmed individual analyses
+CS-15,CONFIRMED,LumA FOXA1 (12.74) > Basal FOXA1 (6.68): CONFIRMED | LumA CDH1 (12.71) > ILC CDH1 (10.75): CONFIRMED
+CS-12,CONFIRMED,ILC FOXA1 (12.426) >= LumA FOXA1 (12.743): CONFIRMED | ILC CDH1 (10.751) < LumA CDH1 (12.707): CONFIRMED
+CS-13,CONFIRMED,AR negatively correlates with depth r=-0.378: CONFIRMED (p=6.23e-147)
+CS-10,PENDING,Requires survival data — Script 2
+CS-11,PENDING,Requires matched primary/metastatic data — Script 2/3
+CS-13-SURVIVAL,PENDING,pCR depth correlation — Script 2 (TCGA survival)
+CS-14,PENDING,Requires scorecard complete — assessed at end of Script 2

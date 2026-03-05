@@ -1,0 +1,294 @@
+=================================================================
+BRCA CROSS-SUBTYPE ANALYSIS — SCRIPT 2
+OrganismCore — Document BRCA-S8d
+Before-document: BRCA-S8d (predictions locked)
+Date: 2026-03-05
+=================================================================
+
+PROTOCOL v2.0:
+  Depth score distributions printed FIRST.
+  Survival tests SECOND.
+  Wrong predictions documented alongside correct ones.
+  Combined scorecard (Script 1 + Script 2) at end.
+
+=================================================================
+STEP 0: LOAD CACHED DATA FROM SCRIPT 1
+=================================================================
+  Loading TCGA cache: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s1_results/results/expr_cache_cs_s1_tcga.csv
+  TCGA shape: (1218, 72)
+  Loading clinical matrix: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s1_results/data/TCGA_BRCA_clinicalMatrix.tsv
+  Clinical shape: (1247, 193)
+  OS time column:  'OS_Time_nature2012'
+  OS event column: 'OS_event_nature2012'
+  Loading scRNA-seq cache: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s1_results/results/expr_cache_cs_s1_sc.csv
+  scRNA-seq shape: (100064, 61)
+
+=================================================================
+STEP 1: CLASSIFY TCGA-BRCA SUBTYPES
+=================================================================
+  TCGA-clinical common samples: 1218
+  LumA      : n=434
+  LumB      : n=194
+  HER2      : n=67
+  Basal     : n=142
+  ILC       : n=210
+  CL        : n=14
+
+=================================================================
+STEP 2: COMPUTE DEPTH SCORES IN TCGA-BRCA
+=================================================================
+  LumA    : n=434  depth Q25=0.410  Q50=0.493  Q75=0.596
+    pos genes: ['EZH2', 'MKI67']
+    neg genes: ['CDKN1A', 'FOXA1', 'GATA3']
+  LumB    : n=194  depth Q25=0.412  Q50=0.502  Q75=0.592
+    pos genes: ['EZH2', 'HDAC1', 'MKI67']
+    neg genes: ['CDKN1A', 'TFF1', 'FOXA1']
+  HER2    : n=67  depth Q25=0.414  Q50=0.512  Q75=0.591
+    pos genes: ['EZH2', 'ERBB2', 'MKI67']
+    neg genes: ['FOXA1', 'AR', 'ESR1']
+  Basal   : n=142  depth Q25=0.437  Q50=0.511  Q75=0.578
+    pos genes: ['EZH2', 'SOX10', 'ZEB1', 'MKI67']
+    neg genes: ['AR', 'FOXA1', 'CDKN1A']
+  ILC     : n=210  depth Q25=0.361  Q50=0.508  Q75=0.632
+    pos genes: ['EZH2', 'MKI67']
+    neg genes: ['CDH1', 'CDKN1A']
+  CL      : n=14  depth Q25=0.384  Q50=0.417  Q75=0.673
+    pos genes: ['ZEB1', 'VIM', 'SNAI1']
+    neg genes: ['ESR1', 'CLDN3', 'FOXA1']
+
+  Depth scores saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s2_results/results/cs_s2_depth_scores.csv
+
+=================================================================
+STEP 3: RESOLVE SURVIVAL DATA
+=================================================================
+  OS time from 'OS_Time_nature2012': n_valid=933, median=571 days
+  OS event from 'OS_event_nature2012': n_events=132, event_rate=14.1%
+  Valid survival records: 866
+  Median follow-up: 1.8 years
+
+=================================================================
+ANALYSIS 1: KAPLAN-MEIER BY DEPTH (CS-10)
+Tests: Depth score predicts OS within subtypes
+Predicted: High depth = worse OS in all subtypes
+=================================================================
+
+  LumA (n_valid=382):
+  Group sizes: Q1 (shallow):n=96 | Q2:n=95 | Q3:n=95 | Q4 (deep):n=96
+  Q1 (shallow) median OS: 2.0 yr  n=96
+  Q4 (deep)    median OS: 1.8 yr  n=96
+  Log-rank p = 0.8517
+  Cox HR (continuous depth): 0.451  p=0.4805
+    LumA: PARTIAL — correct direction, underpowered (Q4/Q1 median 1.8/2.0yr logrank p=0.852 HR=0.45)
+
+  LumB (n_valid=169):
+  Group sizes: Q1 (shallow):n=44 | Q2:n=40 | Q3:n=42 | Q4 (deep):n=43
+  Q1 (shallow) median OS: 1.5 yr  n=44
+  Q4 (deep)    median OS: 2.0 yr  n=43
+  Log-rank p = 0.9333
+  Cox HR (continuous depth): 0.972  p=0.9869
+    LumB: FAILED (Q4/Q1 median 2.0/1.5yr logrank p=0.933 HR=0.97)
+
+  HER2 (n_valid=57):
+  Group sizes: Q1 (shallow):n=15 | Q2:n=13 | Q3:n=14 | Q4 (deep):n=15
+  Q1 (shallow) median OS: 2.5 yr  n=15
+  Q4 (deep)    median OS: 1.3 yr  n=15
+  Log-rank p = 0.0575
+  Cox HR (continuous depth): 0.062  p=0.3351
+    HER2: PARTIAL — correct direction, underpowered (Q4/Q1 median 1.3/2.5yr logrank p=0.058 HR=0.06)
+
+  Basal (n_valid=128):
+  Group sizes: Q1 (shallow):n=32 | Q2:n=32 | Q3:n=32 | Q4 (deep):n=32
+  Q1 (shallow) median OS: 1.4 yr  n=32
+  Q4 (deep)    median OS: 2.1 yr  n=32
+  Log-rank p = 0.2283
+  Cox HR (continuous depth): 0.129  p=0.4404
+    Basal: FAILED (Q4/Q1 median 2.1/1.4yr logrank p=0.228 HR=0.13)
+
+  ILC (n_valid=72):
+  Group sizes: Q1 (shallow):n=18 | Q2:n=18 | Q3:n=18 | Q4 (deep):n=18
+  Q1 (shallow) median OS: 1.8 yr  n=18
+  Q4 (deep)    median OS: 1.3 yr  n=18
+  Log-rank p = 0.1325
+  Cox HR (continuous depth): 37123049.577  p=0.0751
+    ILC: PARTIAL — correct direction, underpowered (Q4/Q1 median 1.3/1.8yr logrank p=0.132 HR=37123049.58)
+
+  CL: n=14 — too small for KM
+  [✗] CS-10: FAILED  LumA: PARTIAL — correct direction, underpowered (Q4/Q1 median 1.8/2.0yr logrank p=0.852 HR=0.45) | LumB: FAILED (Q4/Q1 median 2.0/1.5yr logrank p=0.933 HR=0.97) | HER2: PARTIAL — correct direction, underpowered (Q4/Q1 median 1.3/2.5yr logrank p=0.058 HR=0.06) | Basal: FAILED (Q4/Q1 median 2.1/1.4yr logrank p=0.228 HR=0.13) | ILC: PARTIAL — correct direction, underpowered (Q4/Q1 median 1.3/1.8yr logrank p=0.132 HR=37123049.58)
+
+  Survival summary: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s2_results/results/cs_s2_survival_summary.csv
+  KM figure saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s2_results/results/cs_s2_km_luma.png
+  KM figure saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s2_results/results/cs_s2_km_lumb.png
+  KM figure saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s2_results/results/cs_s2_km_her2.png
+  KM figure saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s2_results/results/cs_s2_km_tnbc.png
+  KM figure saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s2_results/results/cs_s2_km_ilc.png
+
+=================================================================
+ANALYSIS 2: TNBC AR-DEPTH SURVIVAL (CS-13-SURVIVAL)
+Predicted: AR-low (deep) TNBC has worse DRFS/OS
+than AR-high (shallow) despite equivalent/better pCR
+=================================================================
+  TNBC n_valid: 128
+  AR in TNBC: mean=4.109  median=4.103
+  AR-high (shallow): n=64
+  AR-low  (deep):    n=64
+  AR-high median OS: 1.4 yr
+  AR-low  median OS: 1.6 yr
+  Log-rank p = 0.6507
+  Cox HR (AR continuous): 0.961  p=0.7369
+  Interpretation: HR < 1 = higher AR protective
+  AR survival figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s2_results/results/cs_s2_tnbc_ar.png
+  [~] CS-13-SURVIVAL: PARTIAL  AR-low OS 1.6yr vs AR-high 1.4yr logrank p=0.651 HR(AR)=0.961 (underpowered)
+
+=================================================================
+ANALYSIS 3: LumB ER OUTPUT DECOUPLING (CS-LUMB-DECOUPLE)
+Predicted: TFF1/ESR1 ratio lower in LumB than LumA
+despite LumB having higher raw ESR1 mRNA
+=================================================================
+  TFF1:  available
+  TFF3:  available
+  ESR1:  available
+  HDAC1: available
+
+  RAW EXPRESSION COMPARISON:
+  Gene          LumA mean    LumB mean    LumB/LumA
+  --------------------------------------------------
+  ESR1             13.396       13.600        1.015
+  TFF1             10.157        9.884        0.973
+  TFF3             11.164       11.002        0.986
+  FOXA1            12.743       12.933        1.015
+  HDAC1            11.139       11.341        1.018
+  HDAC2            10.883       11.121        1.022
+  DNMT3A            9.059        9.379        1.035
+
+  TFF1/ESR1 RATIO:
+  LumA: mean=0.7598  median=0.7946
+  LumB: mean=0.7333  median=0.7498
+  Mann-Whitney (LumA > LumB): U=45261, p=0.0661
+
+  TFF3/ESR1 RATIO:
+  LumA: mean=0.8390
+  LumB: mean=0.8148
+  Mann-Whitney (LumA > LumB): p=0.0570
+
+  HDAC1 vs TFF1/ESR1 ratio in LumB: r=-0.051, p=0.4816
+  Predicted: HDAC1 high = lower TFF1/ESR1 ratio (r < -0.2)
+  Direction: NOT CONFIRMED
+  Decoupling figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s2_results/results/cs_s2_lumb_decouple.png
+  [~] CS-LUMB-DECOUPLE: PARTIAL  TFF1/ESR1: LumA=0.795 > LumB=0.750, p=0.0661 (correct direction, p not significant)
+
+=================================================================
+ANALYSIS 4: EZH2-FREE PCA (CS-PCA-EZH2FREE)
+Predicted: CL further than TNBC from MatureLum
+when EZH2 removed from gene panel
+=================================================================
+  Loading metadata: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s1_results/data/Wu_etal_2021_BRCA_scRNASeq/metadata.csv
+  CL cells (thresh=3): n=412
+  Genes WITH EZH2: ['FOXA1', 'GATA3', 'ESR1', 'PGR', 'SPDEF', 'EZH2', 'SOX10', 'KRT5', 'KRT14']
+  Genes WITHOUT EZH2: ['FOXA1', 'GATA3', 'ESR1', 'PGR', 'SPDEF', 'SOX10', 'KRT5', 'KRT14', 'CDH1', 'AR']
+
+  PCA WITH_EZH2 (PC1=77.1%):
+    MatureLum   : dist=0.000
+    LumB        : dist=1.143
+    LumA        : dist=1.378
+    HER2        : dist=3.825
+    CL          : dist=4.973
+    TNBC        : dist=5.951
+
+  PCA EZH2_FREE (PC1=78.4%):
+    MatureLum   : dist=0.000
+    LumA        : dist=2.103
+    LumB        : dist=2.291
+    HER2        : dist=3.798
+    TNBC        : dist=6.063
+    CL          : dist=6.572
+
+  EZH2-FREE: CL dist=6.572  TNBC dist=6.063
+  Predicted: CL > TNBC in EZH2-free space
+  [✓] CS-PCA-EZH2FREE: CONFIRMED  CL (6.572) > TNBC (6.063) when EZH2 excluded
+  EZH2-free PCA figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s2_results/results/cs_s2_pca_ezh2free.png
+
+=================================================================
+ANALYSIS 5: ILC FOXA1 SURVIVAL (CS-ILC-ET)
+Predicted: EZH2-high + MKI67-high ILC HR > 2.0
+within ILC only
+=================================================================
+  ILC n_valid: 72
+
+  FOXA1-high vs low in ILC:
+  FOXA1-high median OS: 1.4 yr
+  FOXA1-low  median OS: 1.6 yr
+  Log-rank p = 0.9628
+
+  EZH2-high + MKI67-high (double high): n=30
+  EZH2-low  + MKI67-low  (double low):  n=30
+  Double-high median OS: 1.2 yr
+  Double-low  median OS: 1.6 yr
+  Log-rank p = 0.1532
+  Cox HR EZH2:  0.048  p=0.4537
+  Cox HR MKI67: 71.939  p=0.1988
+  [~] CS-ILC-ET: PARTIAL  EZH2+MKI67 double-high OS 1.2 vs 1.6yr p=0.153 (underpowered)
+
+=================================================================
+ANALYSIS 6: UNIVERSAL DEPTH SCORE (CS-DEPTH-UNIVERSAL)
+Predicted: Depth score dominates within-subtype OS
+in every subtype where survival data is available
+=================================================================
+
+  LumA — Depth score: HR=0.451  p=0.4805
+  LumA — CDKN1A: HR=0.807  p=0.2705
+  LumA — ESR1: HR=0.975  p=0.8344
+  LumA — FOXA1: HR=0.963  p=0.7204
+  LumA — Depth score best predictor: NO
+    Best gene: CDKN1A p=0.2705
+
+  LumB — Depth score: HR=0.972  p=0.9869
+  LumB — ESR1: HR=1.401  p=0.1668
+  LumB — MKI67: HR=1.129  p=0.6707
+  LumB — FOXA1: HR=0.713  p=0.5242
+  LumB — Depth score best predictor: NO
+    Best gene: ESR1 p=0.1668
+
+  HER2 — Depth score: HR=0.062  p=0.3351
+  HER2 — ERBB2: HR=0.844  p=0.2790
+  HER2 — ESR1: HR=1.303  p=0.0517
+  HER2 — EZH2: HR=1.197  p=0.6674
+  HER2 — Depth score best predictor: NO
+    Best gene: ESR1 p=0.0517
+
+  Basal — Depth score: HR=0.129  p=0.4404
+  Basal — AR: HR=0.961  p=0.7369
+  Basal — EZH2: HR=0.424  p=0.0242
+  Basal — SOX10: HR=1.032  p=0.6462
+  Basal — Depth score best predictor: NO
+    Best gene: EZH2 p=0.0242
+
+  ILC — Depth score: HR=37123049.577  p=0.0751
+  ILC — FOXA1: HR=1.130  p=0.8240
+  ILC — EZH2: HR=11.834  p=0.1208
+  ILC — MKI67: HR=9.111  p=0.0740
+  ILC — Depth score best predictor: NO
+    Best gene: MKI67 p=0.0740
+
+  Depth score best predictor: 0/5 subtypes
+  [✗] CS-DEPTH-UNIVERSAL: FAILED  Depth score best in only 0/5
+
+=================================================================
+MASTER FIGURE
+=================================================================
+  Master figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s2_results/results/cs_s2_master_figure.png
+
+=================================================================
+COMBINED SCORECARD — SCRIPT 1 + SCRIPT 2
+=================================================================
+  Confirmed:  10/20
+  Partial:    6/20
+  Failed:     2/20
+  Scorecard:  /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s2_results/results/cs_s2_scorecard.csv
+
+=================================================================
+SCRIPT 2 COMPLETE
+Results: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s2_results/results
+Log:     /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s2_results/results/cs_s2_log.txt
+Next:    BRCA-S8e (Script 2 Reasoning Artifact)
+         then: BRCA-S8f (Script 3 if warranted)
+=================================================================

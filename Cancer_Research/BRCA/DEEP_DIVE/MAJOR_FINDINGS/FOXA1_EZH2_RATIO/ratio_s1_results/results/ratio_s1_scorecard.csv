@@ -1,0 +1,11 @@
+id,component,dataset,n,technology,status
+R1-A,A,GSE176078 scRNA-seq,19130,scRNA-seq log1p,NOT CONFIRMED
+R1-B,A,GSE176078 scRNA-seq,19130,scRNA-seq log1p,NOT CONFIRMED
+R1-C,A,GSE176078 scRNA-seq,19130,scRNA-seq log1p,CONFIRMED
+R2-A,B,TCGA HiSeqV2 bulk RNA-seq,1218,bulk mRNA log2 (HiSeqV2),CONFIRMED ★ PRIMARY ★
+R2-B,B,TCGA HiSeqV2 bulk RNA-seq,1218,bulk mRNA log2 (HiSeqV2),CONFIRMED
+R2-C,B,TCGA HiSeqV2 bulk RNA-seq,1218,bulk mRNA log2 (HiSeqV2),CONFIRMED
+R2-D,B,TCGA HiSeqV2 bulk RNA-seq,1218,bulk mRNA log2 (HiSeqV2),CONFIRMED
+R3-A,C,METABRIC mRNA,1980,mRNA microarray z-score,NOT CONFIRMED
+R3-B,C,METABRIC mRNA,1980,mRNA microarray z-score,CONFIRMED
+R3-C,C,METABRIC mRNA,1980,mRNA microarray z-score,CONFIRMED

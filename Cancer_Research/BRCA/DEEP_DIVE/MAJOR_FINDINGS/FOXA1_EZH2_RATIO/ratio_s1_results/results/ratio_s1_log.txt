@@ -1,0 +1,271 @@
+=================================================================
+FOXA1/EZH2 RATIO — VALIDATION SCRIPT 1 v2 (RATIO-S1b)
+OrganismCore | 2026-03-05 | FIXES: paths, RPPA, clinical index
+=================================================================
+Script dir:  /Users/ericlawson/cancer/BRCA/DEEP_DIVE
+S1 data:     /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s1_results/data
+S3 data:     /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s3_results/data
+Output:      /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s1_results
+lifelines:   True
+sklearn:     True
+
+── CACHE FILE STATUS ──
+  ✓  TCGA expr (S1): 638,970 B
+  ✓  TCGA clinical (S1): 1,698,413 B
+  ✓  scRNA cache (S1): 27,056,494 B
+  ✓  METABRIC expr (S3): 588,138 B
+  ✓  METABRIC clin (S3): 410,489 B
+  ✓  GSE25066 expr (S3): 221,214 B
+  ✓  GSE25066 clin (S3): 68,368 B
+
+Starting Component A (scRNA-seq)...
+
+=================================================================
+COMPONENT A — GSE176078 scRNA-seq PER-PATIENT
+Reuses expr_cache_cs_s1_sc.csv from S1 cache
+=================================================================
+
+── A.1: LOAD scRNA-seq EXPRESSION CACHE ──
+  Looking for: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s1_results/results/expr_cache_cs_s1_sc.csv
+  Loading: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s1_results/results/expr_cache_cs_s1_sc.csv
+  scRNA cache shape: (100064, 61)
+  Columns sample: ['FOXA1', 'GATA3', 'ESR1', 'PGR', 'SPDEF', 'EZH2', 'EED', 'SUZ12', 'HDAC1', 'HDAC2', 'KDM1A', 'DNMT3A']
+
+── A.2: ATTACH CELL TYPE LABELS ──
+  Trying: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s1_results/data/Wu_etal_2021_BRCA_scRNASeq/metadata.csv
+  Metadata loaded: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s1_results/data/Wu_etal_2021_BRCA_scRNASeq/metadata.csv
+  Shape: (100064, 8)
+  Columns: ['orig.ident', 'nCount_RNA', 'nFeature_RNA', 'percent.mito', 'subtype', 'celltype_subset', 'celltype_minor', 'celltype_major']
+
+── A.3: FIND SUBTYPE COLUMN ──
+  Found confirmed column: 'celltype_subset'
+  Subtype column: 'celltype_subset'
+  Value counts:
+celltype_subset
+T_cells_c1_CD4+_IL7R            7786
+Cancer LumA SC                  7742
+Cancer Cycling                  5359
+T_cells_c4_CD8+_ZFP36           5063
+T_cells_c0_CD4+_CCR7            4952
+Endothelial ACKR1               4611
+Cancer Basal SC                 4312
+T_cells_c2_CD4+_T-regs_FOXP3    4246
+Cancer Her2 SC                  3708
+Plasmablasts                    3524
+PVL Differentiated s3           3487
+Cancer LumB SC                  3368
+Name: count, dtype: int64
+
+── A.4: PER-CELL FOXA1/EZH2 RATIO ──
+  Cell barcode overlap: 100064
+  Cells with known subtype: 19130
+  Per subtype:
+subtype
+LumA    7742
+TNBC    4312
+HER2    3708
+LumB    3368
+Name: count, dtype: int64
+
+── A.5: ORDERING TEST (R1-A) ──
+  Ratio medians per subtype:
+    LumA  : n= 7742  med=0.5000
+    LumB  : n= 3368  med=0.0000
+    HER2  : n= 3708  med=0.0000
+    TNBC  : n= 4312  med=0.0000
+
+  KW p = 0.00e+00
+  LumA(0.5000) > LumB(0.0000): ✓
+  LumB(0.0000) > HER2(0.0000): ✗
+  HER2(0.0000) > TNBC(0.0000): ✗
+  R1-A: 1/3 correct  KW p=0.00e+00  → NOT CONFIRMED
+
+── A.6: CONCORDANCE WITH CUTS (R1-B) ──
+  Cohen's kappa: 0.0599
+  R1-B → NOT CONFIRMED
+
+── A.7: RATIO OUTPERFORMS SINGLE GENE (R1-C) ──
+  kappa ratio=0.0599  FOXA1=0.0  EZH2=0.0
+  R1-C → CONFIRMED
+  Figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s1_results/results/ratio_s1_compA_scrna.png
+
+Starting Component B (RPPA protein)...
+
+=================================================================
+COMPONENT B — TCGA BULK RNA-seq VALIDATION
+FOXA1 + EZH2 mRNA | TCGA HiSeqV2 | n≈1,100
+NOTE: RPPA-RBN panel lacks FOXA1/EZH2 antibodies.
+      Using bulk RNA-seq cache from Script 1.
+=================================================================
+
+── B.1: LOAD TCGA BULK RNA-seq ──
+  TCGA expr cache: (1218, 72)
+  Columns[:6]: ['FOXA1', 'GATA3', 'ESR1', 'PGR', 'SPDEF', 'EZH2']
+  TCGA clinical: (1247, 193)
+  Clin cols[:10]: ['AJCC_Stage_nature2012', 'Age_at_Initial_Pathologic_Diagnosis_nature2012', 'CN_Clusters_nature2012', 'Converted_Stage_nature2012', 'Days_to_Date_of_Last_Contact_nature2012', 'Days_to_date_of_Death_nature2012', 'ER_Status_nature2012', 'Gender_nature2012', 'HER2_Final_Status_nature2012', 'Integrated_Clusters_no_exp__nature2012']
+
+── B.2: LOCATE FOXA1 AND EZH2 ──
+  Orientation: samples × genes
+  FOXA1 n=1218  mean=11.456
+  EZH2  n=1218  mean=8.427
+
+── B.3: FIND PAM50 COLUMN ──
+  PAM50 column: 'PAM50Call_RNAseq'
+  Distribution:
+PAM50Call_RNAseq
+LumA      434
+LumB      194
+Basal     142
+Normal    119
+Her2       67
+Name: count, dtype: int64
+  OS time=OS_Time_nature2012  OS event=OS_event_nature2012
+
+── B.4: ALIGN ──
+  Direct overlap: 1218
+  Using 1218 matched samples
+  df_b: (1218, 7)
+  Subtype dist:
+subtype
+LumA      434
+nan       262
+LumB      194
+TNBC      142
+Normal    119
+HER2       67
+Name: count, dtype: int64
+
+── B.5: ORDERING TEST (R2-A) ★ PRIMARY ★ ──
+  FOXA1/EZH2 ratio medians (bulk mRNA):
+    LumA  : n= 434  med=1.6015
+    LumB  : n= 194  med=1.4236
+    HER2  : n=  67  med=1.3697
+    TNBC  : n= 142  med=0.6476
+
+  KW p = 2.87e-103
+  LumA(1.6015) > LumB(1.4236): ✓
+  LumB(1.4236) > HER2(1.3697): ✓
+  HER2(1.3697) > TNBC(0.6476): ✓
+  R2-A → CONFIRMED ★ PRIMARY ★
+
+  EZH2 medians: {'LumA': 8.07995, 'LumB': 9.05595, 'HER2': 9.167, 'TNBC': 9.74235}
+  R2-B (EZH2 TNBC > LumA) → CONFIRMED
+  FOXA1 medians: {'LumA': 12.93755, 'LumB': 12.9206, 'HER2': 12.6236, 'TNBC': 6.4655000000000005}
+  R2-C (FOXA1 LumA > TNBC) → CONFIRMED
+
+── B.8: SURVIVAL (R2-D) ──
+  OS time converted days → months
+  KM logrank p = 0.0031
+  R2-D → CONFIRMED
+
+── B.9: FIGURE ──
+  Figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s1_results/results/ratio_s1_compB_rppa.png
+
+Starting Component C (METABRIC mRNA)...
+
+=================================================================
+COMPONENT C — METABRIC mRNA LARGE-COHORT
+n=1,980 | CLAUDIN_SUBTYPE | OS endpoint
+=================================================================
+
+── C.1: LOAD METABRIC DATA ──
+  METABRIC expr from S3 cache: (1980, 39)
+  METABRIC clin from S3 cache: (2509, 24)
+  Expression: (1980, 39)
+  Clinical:   (2509, 24)
+  Clin cols:  ['AGE_AT_DIAGNOSIS', 'BREAST_SURGERY', 'CHEMOTHERAPY', 'CLAUDIN_SUBTYPE', 'COHORT', 'ER_IHC', 'HER2_SNP6', 'HISTOLOGICAL_SUBTYPE', 'HORMONE_THERAPY', 'INFERRED_MENOPAUSAL_STATE', 'INTCLUST', 'LATERALITY', 'LYMPH_NODES_EXAMINED_POSITIVE', 'NPI', 'OS_MONTHS']
+
+── C.2: LOCATE FOXA1 AND EZH2 ──
+  Orientation: samples × genes
+
+── C.3: FIND SUBTYPE + OS COLUMNS ──
+  Subtype col: 'CLAUDIN_SUBTYPE'
+  Distribution:
+CLAUDIN_SUBTYPE
+LumA           700
+LumB           475
+Her2           224
+claudin-low    218
+Basal          209
+Normal         148
+NC               6
+Name: count, dtype: int64
+  OS time=OS_MONTHS  OS event=OS_STATUS
+
+── C.4: ALIGN ──
+  Direct overlap: 1980
+  df_c: (1980, 7)
+  Subtype dist:
+subtype_n
+LumA      700
+LumB      475
+HER2      224
+CL        218
+TNBC      209
+Normal    148
+NC          6
+Name: count, dtype: int64
+
+── C.5: ORDERING TEST (R3-A) ──
+  Ratio medians (mRNA):
+    LumA  : n= 700  med=0.2528
+    LumB  : n= 475  med=-0.5334
+    HER2  : n= 224  med=-0.1513
+    TNBC  : n= 209  med=1.0676
+    CL    : n= 218  med=0.0220
+
+  KW p = 6.36e-26
+  LumA(0.2528) > LumB(-0.5334): ✓
+  LumB(-0.5334) > HER2(-0.1513): ✗
+  HER2(-0.1513) > TNBC(1.0676): ✗
+  R3-A → NOT CONFIRMED
+  LumA vs LumB p = 1.26e-12
+  R3-B → CONFIRMED
+
+── C.7: SURVIVAL (R3-C) ──
+  KM p = 0.0000
+  R3-C → CONFIRMED
+  Figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s1_results/results/ratio_s1_compC_metabric.png
+
+── COMBINED FIGURE ──
+  Combined figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s1_results/results/ratio_s1_combined.png
+
+=================================================================
+SCORECARD — RATIO-S1b
+=================================================================
+  ID        Dataset                      n  Status
+  ────────  ──────────────────────  ──────  ──────────────────────
+  R1-A      GSE176078 scRNA-seq      19130  NOT CONFIRMED
+  R1-B      GSE176078 scRNA-seq      19130  NOT CONFIRMED
+  R1-C      GSE176078 scRNA-seq      19130  CONFIRMED
+  R2-A      TCGA HiSeqV2 bulk RNA-seq    1218  CONFIRMED ★ PRIMARY ★
+  R2-B      TCGA HiSeqV2 bulk RNA-seq    1218  CONFIRMED
+  R2-C      TCGA HiSeqV2 bulk RNA-seq    1218  CONFIRMED
+  R2-D      TCGA HiSeqV2 bulk RNA-seq    1218  CONFIRMED
+  R3-A      METABRIC mRNA             1980  NOT CONFIRMED
+  R3-B      METABRIC mRNA             1980  CONFIRMED
+  R3-C      METABRIC mRNA             1980  CONFIRMED
+
+  CONFIRMED:    7
+  NOT CONFIRMED:3
+  NOT TESTABLE: 0
+
+  ══════════════════════════════════════
+  PRIMARY: R2-A = CONFIRMED ★ PRIMARY ★
+  ══════════════════════════════════════
+
+  Scorecard: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s1_results/results/ratio_s1_scorecard.csv
+
+=================================================================
+RATIO-S1b COMPLETE
+=================================================================
+  Component A status: COMPLETE
+  Component B status: COMPLETE
+  Component C status: COMPLETE
+
+  Log:       /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s1_results/results/ratio_s1_log.txt
+  Scorecard: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s1_results/results/ratio_s1_scorecard.csv
+  Figures:   /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s1_results/results
+
+  Next: RATIO-S1c — ratio_script1_results_and_reasoning.md
+=================================================================

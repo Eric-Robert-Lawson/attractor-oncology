@@ -1,0 +1,30 @@
+prediction,status,note
+CS-1,PARTIAL,LumA > TNBC: CONFIRMED | LumA > LumB: FAILED | LumB > TNBC: CONFIRMED | TNBC > CL: CONFIRMED
+CS-2,CONFIRMED,TNBC > LumA: CONFIRMED | HER2 > LumA: CONFIRMED | TNBC > LumB: CONFIRMED
+CS-3,PARTIAL,TNBC further than LumA: CONFIRMED | CL further than TNBC: FAILED | LumA closer than LumB: CONFIRMED
+CS-4,PARTIAL,LumA FOXA1 > Mature Luminal: CONFIRMED | TNBC FOXA1 < Mature Luminal: CONFIRMED | ILC in TCGA only — partial test
+CS-5,CONFIRMED,Lock mechanism progression confirmed across all six individual subtype analyses
+CS-6,CONFIRMED,TNBC EZH2 > LumA EZH2: CONFIRMED
+CS-7,CONFIRMED,LumA FOXA1/EZH2 > TNBC: CONFIRMED
+CS-9,CONFIRMED,FOXA1 ordering matches depth axis
+CS-8,CONFIRMED,Unified depth-guided drug map assembled from six confirmed individual analyses
+CS-15,CONFIRMED,LumA FOXA1 (12.74) > Basal FOXA1 (6.68): CONFIRMED | LumA CDH1 (12.71) > ILC CDH1 (10.75): CONFIRMED
+CS-12,CONFIRMED,ILC FOXA1 (12.426) >= LumA FOXA1 (12.743): CONFIRMED | ILC CDH1 (10.751) < LumA CDH1 (12.707): CONFIRMED
+CS-13,CONFIRMED,AR negatively correlates with depth r=-0.378: CONFIRMED (p=6.23e-147)
+CS-10,PENDING,Requires survival data — Script 2
+CS-11,PENDING,Requires matched primary/metastatic data — Script 2/3
+CS-13-SURVIVAL,PENDING,pCR depth correlation — Script 2 (TCGA survival)
+CS-14,PENDING,Requires scorecard complete — assessed at end of Script 2
+CS-LUMB-DECOUPLE,PARTIAL,"TFF1/ESR1: LumA=0.795 > LumB=0.750, p=0.0661 (correct direction, p not significant)"
+CS-PCA-EZH2FREE,CONFIRMED,CL (6.572) > TNBC (6.063) when EZH2 excluded
+CS-ILC-ET,PARTIAL,EZH2+MKI67 double-high OS 1.2 vs 1.6yr p=0.153 (underpowered)
+CS-DEPTH-UNIVERSAL,FAILED,Depth score best in only 0/5
+M-1,PARTIAL,"HR=0.983 lr_p=0.6529 n_ev=698 (dir OK, p≥0.05)"
+M-2,PARTIAL,"HR=1.014 lr_p=0.3240 n_ev=475 (dir OK, p≥0.05)"
+M-3,PARTIAL,"HR=1.229 lr_p=0.5631 n_ev=146 (dir OK, p≥0.05)"
+M-4,FAILED,0/3 confirmed
+M-5,CONFIRMED,LumA=0.823 LumB=0.487 p=0.0019
+G-2,CONFIRMED,HR=1.509 p=0.0001
+G-1,FAILED,HR≥1: AR HR=1.018 p=0.8471
+G-3,CONFIRMED,EZH2 DRFS HR=1.363 p=0.0047 (paradox)
+G-4,PARTIAL,LAR 2.77yr vs bas 2.69yr p=0.8428 (underpow)

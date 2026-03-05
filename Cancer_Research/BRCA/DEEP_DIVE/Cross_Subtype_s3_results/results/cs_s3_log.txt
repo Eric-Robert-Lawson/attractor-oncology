@@ -1,0 +1,308 @@
+=================================================================
+BRCA CROSS-SUBTYPE ANALYSIS — SCRIPT 3 v5
+OrganismCore — Document BRCA-S8f
+Date: 2026-03-05
+=================================================================
+
+v5 fixes:
+  1. GPL96/570 URLs: correct GEO tokens (GPL0nnn/GPL570nnn) + ftp:// variants
+  2. Hard-coded canonical probe map as final fallback (zero network dependency)
+  3. IndexError: parse_gse25066 split into independent 2-pass reads; guarded splits
+
+
+=================================================================
+PART A: METABRIC DOWNLOAD
+=================================================================
+  Fetching expression (entrezGeneIds, batches of 10)...
+    Batch 1: 19800 rows
+    Batch 2: 19800 rows
+    Batch 3: 19800 rows
+    Batch 4: 17820 rows
+  Expression: (1980, 39)
+  Fetching clinical (paged)...
+    Page 0: 500 items  total: 22
+    Page 1: 500 items  total: 44
+    Page 2: 500 items  total: 65
+    Page 3: 500 items  total: 86
+    Page 4: 500 items  total: 108
+    Page 5: 500 items  total: 129
+    Page 6: 500 items  total: 150
+    Page 7: 500 items  total: 171
+    Page 8: 500 items  total: 193
+    Page 9: 500 items  total: 214
+    Page 10: 500 items  total: 237
+    Page 11: 500 items  total: 258
+    Page 12: 500 items  total: 279
+    Page 13: 500 items  total: 300
+    Page 14: 500 items  total: 321
+    Page 15: 500 items  total: 342
+    Page 16: 500 items  total: 363
+    Page 17: 500 items  total: 384
+    Page 18: 500 items  total: 405
+    Page 19: 500 items  total: 427
+    Page 20: 500 items  total: 448
+    Page 21: 500 items  total: 469
+    Page 22: 500 items  total: 490
+    Page 23: 500 items  total: 511
+    Page 24: 500 items  total: 533
+    Page 25: 500 items  total: 554
+    Page 26: 500 items  total: 575
+    Page 27: 500 items  total: 596
+    Page 28: 500 items  total: 617
+    Page 29: 500 items  total: 638
+    Page 30: 500 items  total: 659
+    Page 31: 500 items  total: 680
+    Page 32: 500 items  total: 701
+    Page 33: 500 items  total: 722
+    Page 34: 500 items  total: 743
+    Page 35: 500 items  total: 764
+    Page 36: 500 items  total: 785
+    Page 37: 500 items  total: 806
+    Page 38: 500 items  total: 827
+    Page 39: 500 items  total: 848
+    Page 40: 500 items  total: 869
+    Page 41: 500 items  total: 891
+    Page 42: 500 items  total: 913
+    Page 43: 500 items  total: 934
+    Page 44: 500 items  total: 955
+    Page 45: 500 items  total: 976
+    Page 46: 500 items  total: 997
+    Page 47: 500 items  total: 1017
+    Page 48: 500 items  total: 1038
+    Page 49: 500 items  total: 1060
+    Page 50: 500 items  total: 1080
+    Page 51: 500 items  total: 1101
+    Page 52: 500 items  total: 1123
+    Page 53: 500 items  total: 1143
+    Page 54: 500 items  total: 1164
+    Page 55: 500 items  total: 1185
+    Page 56: 500 items  total: 1206
+    Page 57: 500 items  total: 1227
+    Page 58: 500 items  total: 1248
+    Page 59: 500 items  total: 1269
+    Page 60: 500 items  total: 1290
+    Page 61: 500 items  total: 1311
+    Page 62: 500 items  total: 1332
+    Page 63: 500 items  total: 1353
+    Page 64: 500 items  total: 1374
+    Page 65: 500 items  total: 1395
+    Page 66: 500 items  total: 1416
+    Page 67: 500 items  total: 1437
+    Page 68: 500 items  total: 1458
+    Page 69: 500 items  total: 1479
+    Page 70: 500 items  total: 1500
+    Page 71: 500 items  total: 1521
+    Page 72: 500 items  total: 1542
+    Page 73: 500 items  total: 1563
+    Page 74: 500 items  total: 1584
+    Page 75: 500 items  total: 1605
+    Page 76: 500 items  total: 1626
+    Page 77: 500 items  total: 1646
+    Page 78: 500 items  total: 1667
+    Page 79: 500 items  total: 1689
+    Page 80: 500 items  total: 1710
+    Page 81: 500 items  total: 1731
+    Page 82: 500 items  total: 1752
+    Page 83: 500 items  total: 1773
+    Page 84: 500 items  total: 1794
+    Page 85: 500 items  total: 1815
+    Page 86: 500 items  total: 1836
+    Page 87: 500 items  total: 1857
+    Page 88: 500 items  total: 1879
+    Page 89: 500 items  total: 1900
+    Page 90: 500 items  total: 1921
+    Page 91: 500 items  total: 1943
+    Page 92: 500 items  total: 1964
+    Page 93: 500 items  total: 1986
+    Page 94: 500 items  total: 2048
+    Page 95: 500 items  total: 2104
+    Page 96: 500 items  total: 2159
+    Page 97: 500 items  total: 2214
+    Page 98: 500 items  total: 2270
+    Page 99: 500 items  total: 2335
+    Page 100: 500 items  total: 2397
+    Page 101: 500 items  total: 2449
+    Page 102: 500 items  total: 2504
+    Page 103: 28 items  total: 2509
+  Clinical: (2509, 24)
+  METABRIC cached.
+
+=================================================================
+METABRIC: SUBTYPE CLASSIFICATION
+=================================================================
+  Aligned: 1980
+  PAM50 col: 'CLAUDIN_SUBTYPE'
+
+CLAUDIN_SUBTYPE
+LumA           700
+LumB           475
+Her2           224
+claudin-low    218
+Basal          209
+Normal         148
+NC               6
+Name: count, dtype: int64
+
+  ILC n=146
+  LumA    : n=700
+  LumB    : n=475
+  HER2    : n=224
+  TNBC    : n=209
+  CL      : n=218
+  ILC     : n=146
+
+=================================================================
+METABRIC: SURVIVAL RESOLUTION
+=================================================================
+  Patients: 1980
+  OS:  'OS_MONTHS'/'OS_STATUS'
+  RFS: 'RFS_MONTHS'/'RFS_STATUS'
+  RFS: n=1975  events=1975  med=102.1mo
+  OS: n=1979  events=1143  med=116.5mo
+  Using RFS.
+
+=================================================================
+METABRIC: SURVIVAL ANALYSES
+Endpoint: RFS (months)
+=================================================================
+
+  LumA: n=700
+  valid=698  events=698
+  Figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s3_results/results/cs_s3_meta_km_luma.png
+  HR=0.983  p_cox=0.6582  p_lr=0.6529
+  [~] M-1: PARTIAL  HR=0.983 lr_p=0.6529 n_ev=698 (dir OK, p≥0.05)
+
+  LumB: n=475
+  valid=475  events=475
+  Figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s3_results/results/cs_s3_meta_km_lumb.png
+  HR=1.014  p_cox=0.7642  p_lr=0.3240
+  [~] M-2: PARTIAL  HR=1.014 lr_p=0.3240 n_ev=475 (dir OK, p≥0.05)
+
+  ILC: n=146
+  valid=146  events=146
+  Figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s3_results/results/cs_s3_meta_km_ilc.png
+  HR=1.229  p_cox=0.0305  p_lr=0.5631
+  [~] M-3: PARTIAL  HR=1.229 lr_p=0.5631 n_ev=146 (dir OK, p≥0.05)
+  [✗] M-4: FAILED  0/3 confirmed
+
+=================================================================
+METABRIC: LumB TFF1/ESR1 DECOUPLING (M-5)
+=================================================================
+  LumA n=700  LumB n=475
+
+  Gene         LumA mean   LumB mean     ratio
+  ------------------------------------------------
+  ESR1             0.574       0.663     1.155
+  TFF1             0.437       0.337     0.771
+  TFF3             0.424       0.401     0.946
+  FOXA1           -0.272      -0.690     2.538
+  HDAC1            0.044       0.032     0.734
+  HDAC2           -0.326      -0.025     0.077
+  DNMT3A           0.064       0.002     0.025
+
+  TFF1/ESR1 LumA med: 0.8235
+  TFF1/ESR1 LumB med: 0.4872
+  MW p(LumA>LumB): 0.0019
+  [✓] M-5: CONFIRMED  LumA=0.823 LumB=0.487 p=0.0019
+  Figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s3_results/results/cs_s3_meta_decouple.png
+
+=================================================================
+PART B: GSE25066 DOWNLOAD
+=================================================================
+  Parsing: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s3_results/data/GSE25066_series_matrix.gz
+  Samples: 508
+  Clinical keys: ['sample id', 'source', 'age_years', 'er_status_ihc', 'pr_status_ihc', 'her2_status', 'er_status_ihc_esr1_for indeterminate', 'clinical_t_stage', 'clinical_nodal_status', 'clinical_ajcc_stage', 'grade', 'pathologic_response_pcr_rd', 'pathologic_response_rcb_class', 'drfs_1_event_0_censored', 'drfs_even_time_years']
+  Clinical: (508, 25)
+  GPL96 annot: downloading...
+    Trying: https://ftp.ncbi.nlm.nih.gov/geo/platforms/GPL0nnn/GPL96/annot/GPL96.annot.gz
+    Failed: HTTP Error 404: Not Found
+    Trying: ftp://ftp.ncbi.nlm.nih.gov/geo/platforms/GPL0nnn/GPL96/annot/GPL96.annot.gz
+    Failed: <urlopen error ftp error: 550 geo/platforms/GPL0nnn/GPL96/annot: No such file or directory>
+  GPL570 annot: downloading...
+    Trying: https://ftp.ncbi.nlm.nih.gov/geo/platforms/GPL570nnn/GPL570/annot/GPL570.annot.gz
+    Failed: HTTP Error 404: Not Found
+    Trying: ftp://ftp.ncbi.nlm.nih.gov/geo/platforms/GPL570nnn/GPL570/annot/GPL570.annot.gz
+    Failed: <urlopen error ftp error: 550 geo/platforms/GPL570nnn/GPL570/annot: No such file or directory>
+  GPL96 soft: downloading...
+    Trying: https://ftp.ncbi.nlm.nih.gov/geo/platforms/GPL0nnn/GPL96/soft/GPL96_family.soft.gz
+    Failed: HTTP Error 404: Not Found
+    Trying: ftp://ftp.ncbi.nlm.nih.gov/geo/platforms/GPL0nnn/GPL96/soft/GPL96_family.soft.gz
+    Failed: <urlopen error ftp error: 550 geo/platforms/GPL0nnn/GPL96/soft: No such file or directory>
+  GPL570 soft: downloading...
+    Trying: https://ftp.ncbi.nlm.nih.gov/geo/platforms/GPL570nnn/GPL570/soft/GPL570_family.soft.gz
+    Failed: HTTP Error 404: Not Found
+  Network probe map unavailable.
+  Using hard-coded canonical probe map.
+  Building probe map from eUtils (slow fallback)...
+  Hard-coded map: 55 probe entries for 39 genes
+  Target probes: 55
+  Probe rows matched: 44
+  Genes resolved: 34
+  Genes: ['AGR2', 'ALDH1A3', 'AR', 'CCND1', 'CD44', 'CDH1', 'CDH2', 'CDK4', 'CDKN1A', 'CLDN3', 'CLDN4', 'CTNNA1', 'DNMT3A', 'EGFR', 'ERBB2', 'ESR1', 'EZH2', 'FN1', 'FOXA1', 'GATA3', 'GREB1', 'HDAC1', 'HDAC2', 'KRT14', 'KRT5', 'MKI67', 'PDZK1', 'PGR', 'SNAI1', 'SOX10', 'TFF1', 'TFF3', 'TOP2A', 'VIM']
+  Expression: (508, 34)
+  GSE25066 cached.
+
+=================================================================
+GSE25066: SURVIVAL RESOLUTION
+=================================================================
+  Columns: ['sample id', 'source', 'age_years', 'er_status_ihc', 'pr_status_ihc', 'her2_status', 'er_status_ihc_esr1_for indeterminate', 'clinical_t_stage', 'clinical_nodal_status', 'clinical_ajcc_stage', 'grade', 'pathologic_response_pcr_rd', 'pathologic_response_rcb_class', 'drfs_1_event_0_censored', 'drfs_even_time_years', 'esr1_status', 'erbb2_status', 'set_class', 'chemosensitivity_prediction', 'ggi_class', 'pam50_class', 'dlda30_prediction', 'rcb_0_i_prediction', 'tissue', 'type_taxane']
+  t='drfs_even_time_years'  e='drfs_1_event_0_censored'  pcr='pathologic_response_pcr_rd'  pam50='pam50_class'
+  DRFS raw median: 2.738
+  Units: years → days
+  Valid: n=507  events=110  med=2.74yr
+  pCR rate: 20.3%
+
+=================================================================
+GSE25066: TNBC ANALYSES
+Endpoint: DRFS
+=================================================================
+  n_valid=507  events=110
+  Genes available: ['AR', 'EZH2', 'SOX10', 'FOXA1', 'MKI67', 'CDKN1A']
+
+  G-2: TNBC Depth Score vs DRFS
+  Figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s3_results/results/cs_s3_gse_km_tnbc.png
+  [✓] G-2: CONFIRMED  HR=1.509 p=0.0001
+
+  G-1: AR vs DRFS
+  AR Cox HR=1.018 p=0.8471
+  Figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s3_results/results/cs_s3_gse_ar_drfs.png
+  [✗] G-1: FAILED  HR≥1: AR HR=1.018 p=0.8471
+
+  G-3: EZH2 Paradox vs DRFS
+  EZH2 DRFS HR=1.363 p=0.0047
+  TCGA OS short HR=0.424 (chemo benefit)
+  Paradox=✓ (DRFS HR>1 expected)
+  EZH2 pCR=1 vs pCR=0 p=0.0000
+  EZH2 mean pCR=1: 8.923
+  EZH2 mean pCR=0: 8.069
+  Figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s3_results/results/cs_s3_ezh2_paradox.png
+  [✓] G-3: CONFIRMED  EZH2 DRFS HR=1.363 p=0.0047 (paradox)
+
+  G-4: LAR vs Basal DRFS
+  LAR n=254 med=2.77yr
+  Bas n=253 med=2.69yr
+  LR p=0.8428
+  [~] G-4: PARTIAL  LAR 2.77yr vs bas 2.69yr p=0.8428 (underpow)
+
+  Survival table: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s3_results/results/cs_s3_survival.csv
+
+=================================================================
+MASTER FIGURE
+=================================================================
+  Master: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s3_results/results/cs_s3_master.png
+
+=================================================================
+FINAL COMBINED SCORECARD
+=================================================================
+  CONFIRMED   : 13/25
+  PARTIAL     : 9/25
+  FAILED      : 3/25
+  PENDING     : 4
+  Scorecard: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s3_results/results/cs_s3_scorecard.csv
+
+=================================================================
+SCRIPT 3 COMPLETE
+Results: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s3_results/results
+
+Next: BRCA-S8g — Script 3 reasoning artifact
+=================================================================

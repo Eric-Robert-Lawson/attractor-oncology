@@ -752,6 +752,716 @@ RULE FOR COMPOSITE TYPES:
 
 ---
 
+---
+
+## AXIOM IV — THE ROOT LOCK
+### (Type 4 — Arrest at the Pre-Commitment Node)
+
+---
+
+### IV.1 Geometric statement
+
+```
+The cancer cell has not been displaced from a
+committed identity valley.
+It has not been blocked on the path to one.
+It has not fallen into the wrong one.
+
+It never left the origin point.
+
+The cell of origin is the most primitive progenitor
+in its tissue lineage — the cell that sits at the
+root of the Waddington landscape, before any
+commitment is made to any daughter identity.
+In normal tissue this cell differentiates and
+disappears into one of two or more committed
+lineages. In Type 4, the cell is locked at the
+root. It proliferates from the pre-commitment node.
+
+There is no "correct valley" to return to.
+There is no wrong valley to escape from.
+There is no saddle point between progenitor and
+terminal state to unblock.
+
+The false attractor IS the pre-commitment state
+itself — expanded, stabilized, and proliferating.
+
+           Committed A          Committed B
+             attractor            attractor
+                ↓                    ↓
+          ████████████          ████████████
+          ██ normal  ██         ██ normal  ██
+          ██���█████████          ████████████
+                 ↑                 ↑
+                  ╲               ╱
+                   ╲             ╱
+                    ╲           ╱
+                     ╲         ╱
+                      ▼       ▼
+                  ░░░░░░░░░░░░░░░
+                  ░░   ROOT    ░░  ← Cancer cell
+                  ░░   LOCK   ░░     locked here
+                  ░░░░░░░░░░░░░░░
+                        ↑
+                  Normal stem cell
+                  should transit through
+                  this node and not
+                  return to it
+
+The key structural distinction from Types 1–3:
+  Type 1: cell is above a single valley, blocked
+  Type 2: cell is inside a wrong valley
+  Type 3: cell is inside the correct valley, too deep
+  Type 4: the concept of "valley" does not apply
+           — the cell is at the root node that
+           precedes all valley formation
+```
+
+### IV.2 Expression signature
+
+```
+WHAT IS SUPPRESSED:
+  NOT a specific identity TF programme.
+  The suppression is TOTAL and BILATERAL:
+  both possible committed daughter programmes
+  are absent simultaneously.
+
+  In a two-daughter lineage (e.g., luminal vs.
+  myoepithelial in breast):
+    Luminal programme:        ABSENT
+    Myoepithelial programme:  ABSENT
+    Neither daughter identity is present.
+
+  What is specifically suppressed:
+    — Claudin tight junction proteins (CLDN3/4/7)
+      which mark the epithelial commitment step
+    — Terminal luminal TFs (ESR1, FOXA1, GATA3)
+    — Terminal basal/myoepithelial TFs (TP63, KRT14)
+    — The DIFFERENTIATION GATE itself — not one
+      specific gene but the capacity to commit
+      to either daughter identity
+
+WHAT IS ELEVATED:
+  The identity programme of the STEM/PROGENITOR
+  STATE at the root node:
+    — Mesenchymal ECM genes (FN1, VIM, CDH2)
+    — Partial EMT TFs (SNAI1)
+    — Surface stem markers (CD44)
+    — Cancer-testis antigens (GAGE family, CT45
+      family, STRA8, DPPA2) — de-repressed germline-
+      restricted loci, reflecting epigenetic
+      disinhibition consistent with a cell that has
+      never committed to a somatic identity programme
+
+WHAT IS DISTINCT FROM ALL OTHER TYPES:
+  In Types 1, 2, and 3, the cancer cell has a
+  recognizable relationship to ONE committed
+  identity programme (either blocked approaching
+  it, displaced into a wrong one, or over-committed
+  to the correct one).
+
+  In Type 4, the cancer cell has NO recognizable
+  relationship to any committed identity programme.
+  It is equidistant from all of them.
+  Its defining markers are the absence of commitment
+  markers combined with the presence of pre-
+  commitment stem/progenitor markers.
+
+KEY DIAGNOSTIC — THE BILATERAL ABSENCE TEST:
+  If the correct lineage TFs are absent (Question 2
+  in the diagnostic algorithm says NO), the algorithm
+  asks: is the cell in a different normal identity?
+  For Type 4, the answer is also NO.
+  The algorithm then asks: is the cell in an earlier
+  progenitor state? For Type 4, the answer is:
+  the cell IS the earliest progenitor. There is no
+  earlier state to point to. This is where the
+  three-type algorithm reaches its boundary.
+
+  The additional diagnostic question required for
+  Type 4 detection:
+
+    QUESTION 4b (when both committed identities
+    are absent AND no earlier progenitor is
+    identifiable):
+
+    Does the cancer arise from a stem cell
+    that is the ROOT of its tissue lineage
+    — the cell from which ALL committed daughter
+    identities derive?
+
+    YES → TYPE 4 — Root Lock
+          The false attractor IS the stem state.
+          The cancer is not displaced from the
+          landscape — it is proliferating from
+          the landscape's origin point.
+
+DEPTH AXIS FOR TYPE 4:
+  Unlike Types 1–3, where depth is measured as
+  distance from a specific committed identity,
+  Type 4 depth is measured as:
+
+    HOW COMPLETELY HAS THE CELL ABANDONED
+    ANY DIFFERENTIATION COMMITMENT?
+
+  Deep Type 4 cell (maximum depth):
+    All committed identity markers absent
+    (ESR1=0, FOXA1=0, GATA3=0, CLDN3/4/7=0)
+    Stem programme fully expressed
+    (VIM+, FN1+, SNAI1+, CDH2+)
+    Immune programme maximally active
+    CT antigen de-repression maximal
+
+  Shallow Type 4 cell (minimum depth):
+    Partial residual committed identity markers
+    (some CLDN3/4/7 retained, some ESR1/FOXA1)
+    Reduced stem programme
+    The cell is near the entrance to a commitment
+    valley but has not entered it
+
+  The depth axis in Type 4 is therefore the
+  REVERSE of Types 1–3: deeper means MORE
+  progenitor-like, less differentiation-committed.
+  In Types 1–3, deeper means more displaced from
+  the correct identity. In Type 4, deeper means
+  more completely locked at the root.
+```
+
+### IV.3 Confirmed examples
+
+```
+Claudin-low breast cancer (BRCA-S7 series,
+2026-03-05):
+  Normal cell of origin: mammary stem cell
+    (most primitive cell in breast hierarchy,
+    precedes luminal/myoepithelial commitment)
+  False attractor: locked stem/progenitor state
+  Bilateral absence:
+    Luminal programme absent (ESR1, FOXA1, GATA3
+    low in deep subset — depth axis confirmed r=-0.39
+    to -0.51 for luminal TFs)
+    Myoepithelial programme absent (KRT14, KRT5,
+    TP63 all reduced vs. normal breast)
+  Defining structural fingerprint:
+    CLDN3/4/7 loss — lowest of all BRCA subtypes
+    Depth correlations: r(CLDN3/depth)=-0.637,
+    r(CLDN4/depth)=-0.641, r(CLDN7/depth)=-0.619
+    These are the strongest depth correlates
+    in the entire analysis.
+  Stem programme elevated:
+    FN1 +26.4% (p=2.34e-49) — strongest mesenchymal
+    CDH2 +48.2% (p=3.31e-29) — N-cadherin switch
+    SNAI1 elevated; r(VIM, SNAI1)=+0.347
+  CT antigen de-repression confirmed:
+    GAGE1, GAGE2D, GAGE4, GAGE12D, GAGE12J
+    CT45A3, CT45A4, STRA8, DPPA2
+    All elevated vs. normal in unfiltered scan
+    Not predicted — emerged from data
+    Interpreted as: epigenetic signature of
+    a cell that never committed to somatic identity
+  Immune programme strongly elevated:
+    FOXP3 +66.7%, PDCD1 +52.5%, TIGIT +51.6%,
+    LAG3 +30.6% (all p<1e-15)
+    This is the most robustly confirmed prediction
+    in the claudin-low analysis.
+
+  Data source: TCGA-BRCA bulk RNA-seq (HiSeqV2)
+  n=268 geometry-identified (mixed purity; pure
+  claudin-low n estimated ~40-60 in TCGA-BRCA)
+  Document: BRCA-S7a (predictions), BRCA-S7b
+  (script1_results_and_reasoning.md)
+  Date confirmed: 2026-03-05
+```
+
+### IV.4 Drug logic
+
+```
+For Type 4 cancers, the therapeutic objective is:
+
+  FORCE COMMITMENT — PUSH THE CELL OUT OF
+  THE ROOT NODE AND INTO ANY DAUGHTER VALLEY.
+
+The cell is not blocked approaching a valley (Type 1).
+It is not trapped in a wrong valley (Type 2).
+It is not over-committed to the right valley (Type 3).
+It has never entered any valley.
+
+The minimal control set is the set of interventions
+that force commitment to either available daughter
+identity — it does not matter which one, because
+any committed identity is more stable and less
+malignant than the root lock state.
+
+Two strategies:
+
+  COMMITMENT FORCING:
+    Activate the differentiation gate directly.
+    In breast claudin-low: restore claudin
+    expression (tight junction formation initiates
+    epithelial commitment), restore FOXA1/GATA3
+    (luminal commitment), or restore TP63/KRT14
+    signalling (myoepithelial commitment).
+    The cell can go either direction. Either is
+    better than no direction.
+    Note: This is distinct from Type 1 drug logic.
+    In Type 1, you push the cell toward ONE specific
+    blocked valley. In Type 4, you push it toward
+    ANY valley because there is no single correct
+    destination — any committed state dissolves
+    the false attractor.
+
+  IMMUNE EXPLOITATION (Type 4 specific):
+    Type 4 cancers are uniquely immune-infiltrated
+    compared to Types 1, 2, and 3.
+    The epigenetic disinhibition of CT antigens
+    in the root lock state creates a de facto
+    neoantigen landscape — germline antigens that
+    the immune system has never tolerized to.
+    CT antigen-directed immunotherapy (cancer
+    vaccines, CAR-T targeting CT antigens,
+    checkpoint blockade to release the exhausted
+    TIL population) is Type 4 specific.
+    In claudin-low: FOXP3, PDCD1, TIGIT, LAG3
+    all strongly elevated → exhausted TIL
+    population is present and large.
+    Checkpoint blockade (anti-PD-1/PD-L1,
+    anti-TIGIT, anti-LAG3) is geometrically
+    supported by the immune infiltration
+    pattern — and the CT antigen de-repression
+    provides the antigen landscape that makes
+    the immune response durable if released.
+
+  DIFFERENTIATION-IMMUNE COMBINATION (predicted):
+    Commitment forcing + checkpoint release may be
+    synergistic in Type 4:
+    — Commitment forcing drives the cell toward a
+      committed identity, reducing the CT antigen
+      signal as epigenetics stabilize
+    — Checkpoint release allows the exhausted TIL
+      population to kill the cells currently in
+      the deep root lock state before they commit
+    — The combination addresses both the live
+      tumour (immune) and the future state
+      (commitment forcing prevents re-entry into
+      root lock)
+    This combination has no direct clinical trial
+    analogue yet — it is a framework-derived
+    prediction.
+
+Drug classes:
+  — Checkpoint inhibitors: anti-PD-1 (pembrolizumab),
+    anti-PD-L1, anti-TIGIT, anti-LAG3
+    (confirmed geometry; approved in TNBC overlap)
+  — CT antigen-directed CAR-T or cancer vaccines
+    (GAGE family, CT45 antigens — experimental)
+  — Claudin restoration strategies
+    (experimental — no current approved agents)
+  — Differentiation inducers targeting the
+    luminal commitment axis (FOXA1/GATA3 activators)
+  — PARP inhibitors if BRCA1 dysfunction present
+    (conditional on BRCA1 expression proxy)
+
+Resistance prediction for Type 4:
+  Resistance will occur through PARTIAL COMMITMENT:
+  the cell partially enters a commitment valley
+  (acquires some luminal or basal markers) to
+  escape immune pressure while retaining the root
+  lock depth structure. This is the claudin-low →
+  TNBC transition observed clinically (claudin-low
+  treated as TNBC, initially responds, then
+  progresses as cells with partial basal identity
+  are selected). The resistant cells will look
+  more like TNBC (Type 2) than claudin-low (Type 4).
+  This predicts: Type 4 resistance should be
+  treated with Type 2 drug logic (EZH2 inhibition)
+  — the cell has transitioned from root lock
+  to false basal identity.
+```
+
+---
+
+## AXIOM IV ADDENDUM — WHY THE THREE-TYPE ALGORITHM NEEDED EXTENSION
+
+```
+The diagnostic algorithm in Part IV of this document
+ends at three types. The algorithm was complete for
+all 14 cancer validations from which it was derived.
+
+Claudin-low was the first cancer analyzed that
+caused the algorithm to reach a boundary condition:
+
+  QUESTION 4 (correct identity TFs absent):
+  Is the cell expressing identity TFs of a
+  DIFFERENT normal cell type?
+    → NO
+
+  Is the cell expressing identity TFs of an
+  EARLIER progenitor state?
+    → This question cannot be answered for
+      a cell that IS the earliest progenitor.
+      The question has no referent.
+
+  The algorithm did not fail — it reached a case
+  it was not designed to handle. This is the
+  correct behaviour of a falsifiable framework.
+
+  The extension (TYPE 4) was not added to rescue
+  a failed analysis. It was added because the
+  claudin-low data produced a coherent, internally
+  consistent structural picture (claudin loss as
+  depth axis, bilateral identity absence, CT antigen
+  de-repression, immune infiltration) that does not
+  fit Types 1, 2, or 3 but DOES fit a geometrically
+  distinct configuration of the Waddington landscape.
+
+  The Type 4 classification is as empirically
+  derived as the original three types:
+    Not assumed before data.
+    Emerged from the structural analysis.
+    Consistent with published claudin-low biology.
+    Produces drug logic that matches known clinical
+    observations (checkpoint response in claudin-low/
+    TNBC-like tumours; poor response to cytotoxic
+    therapy; no ER or HER2 target).
+    Falsifiable by future analysis.
+
+  The updated diagnostic algorithm (Question 4b)
+  is stated in section IV.2 above.
+```
+
+---
+
+## PART II (UPDATED) — THE CROSS-TYPE COMPARISON TABLE
+
+```
+Property           Type 1          Type 2          Type 3          Type 4
+                 BLOCKED         WRONG VALLEY    CORRECT VALLEY  ROOT LOCK
+                 APPROACH        (False Identity) FLOOR REMOVED   (Pre-commitment)
+────────────────────────────────────────────────────────────────────────────────────
+Cell position    Above correct   Inside wrong    Inside correct  AT THE ROOT —
+in landscape     valley          valley          valley, too     before any valley
+                                                 deep            is entered
+
+Identity TFs     ABSENT          ABSENT          PRESENT or      ABSENT bilaterally
+of correct                                       OVER-EXPRESSED  — both possible
+lineage                                                          daughter identities
+
+Identity TFs     PRESENT         ABSENT          ABSENT          PRESENT — the
+of progenitor    (retained —     (different      (no alternative root progenitor
+state            the stuck cell) identity        identity)       state itself is
+                                 expressed)                      the false attractor
+
+FA markers       = Progenitor    = Wrong-        = Correct       = Pre-commitment
+are...           identity        identity        identity        stem markers
+                 markers         markers         genes,          (VIM, FN1, CDH2,
+                                                 elevated        CD44, SNAI1) +
+                                                                 CT antigen
+                                                                 de-repression
+
+What is the      The saddle      The convergence The arrest      The differentiation
+convergence      point TF the    node (EZH2,     axis (CDKN1A,   gate — the
+node?            cell cannot     BCL2, OLIG2)    TGFBR2, SMAD3)  bilateral commitment
+                 activate                                         signal to enter
+                                                                 either daughter
+                                                                 valley
+
+Ligand           No              No              YES — arrest    YES — immune
+paradox?                                         ligand up,      infiltration
+                                                 receptor absent despite CT antigen
+                                                                 de-repression
+                                                                 (immune present
+                                                                 but exhausted)
+
+Therapeutic      Complete the    Dissolve the    Restore the     Force commitment
+goal             journey         false attractor walls / arrest  to any daughter
+                                                                 valley + release
+                                                                 exhausted immune
+                                                                 infiltrate
+
+Drug logic       Activate        Inhibit         Compensate      CT antigen
+                 switch gene /   convergence     (CDK4/6i) OR    immunotherapy +
+                 remove the      node            restore arrest  checkpoint release
+                 block           (EZH2i, BCL2i,  axis causally   + differentiation
+                                 OLIG2i)                         inducers
+
+Resistance       Block reforms   New convergence Alternative     Partial commitment
+mechanism        (alternative    node replaces   cycling         (cell enters a
+                 lock forms)     inhibited node  bypasses        committed valley
+                                                 CDK4/6          under immune
+                                                                 pressure →
+                                                                 resembles Type 2)
+
+Depth metric     Switch gene     Convergence     Arrest axis     Bilateral absence
+                 expression      node expression expression      depth: all
+                 (lower=deeper)  / basin depth   (lower=deeper)  committed identity
+                                                                 markers absent,
+                                                                 stem markers
+                                                                 maximal =
+                                                                 deepest
+
+Canonical        AML, MDS,       TNBC (EZH2),    LumA (CDKN1A/  Claudin-low
+examples         B-ALL, CML      GBM (OLIG2),    TGFBR2 axis)   (BRCA-S7 series)
+                                 CLL (BCL2), MM
+
+Drug             CRISPRa (AML)   Venetoclax      Palbociclib     Pembrolizumab
+confirmation     Imatinib (CML)  (CLL) ✓         (LumA) ✓        (TNBC-adjacent
+status           ATRA (APL) ✓    Tazemetostat    All confirmed   checkpoint) ✓
+                                 (TNBC) ✓                        CT antigen CAR-T
+                                 CT-179 (GBM) ✓                  (preclinical)
+```
+
+---
+
+## PART V (UPDATED) — PREDICTIONS GENERATED BY THE AXIOMS
+
+```
+[Original predictions A–E stated 2026-03-04 — unchanged]
+
+PREDICTION A — ILC is Type 3 with architectural axis:
+  ✓ CONFIRMED 2026-03-05 (BRCA-S6 series)
+  ILC showed: luminal identity TFs hyperactivated
+  ABOVE normal (ESR1 +9.4%, FOXA1 +15.4%, GATA3 +11.9%)
+  CDH1 partial mRNA reduction; protein loss via
+  mutation (~65%) and methylation (~35%)
+  No basal or mesenchymal programme
+  CDH1-based depth axis orthogonal to ESR1 axis
+  Classification confirmed: TYPE 3 VARIANT —
+  ADHESION LOCK DISSOLUTION
+
+PREDICTION B — Early PRAD may be Type 3:
+  Not yet re-examined. Pending.
+
+PREDICTION C — Composite type predicts combination therapy:
+  Partial confirmation: PARP + EZH2 combination
+  in TNBC is in active trials (consistent with
+  composite Type 1 → Type 2 prediction).
+  Full confirmation pending trial readout.
+
+PREDICTION D — No Type 3 cancer will show oncogene
+  activation as primary driver:
+  Confirmed in ILC (CDH1 loss — tumour suppressor)
+  Confirmed in LumA (TGFBR2/SMAD3/CDKN1A loss)
+  Claudin-low (Type 4): primary events are
+  programme-level dedifferentiation, not oncogene
+  amplification — consistent with the extended
+  principle: TYPE 4 also shows tumour suppressor
+  loss / differentiation gate failure rather
+  than oncogene activation.
+
+PREDICTION E — Drug resistance mechanisms differ by type:
+  Type 3 resistance via CCNE1/CDK2 confirmed in
+  LumA CDK4/6i resistance literature (consistent).
+  Type 4 resistance prediction (see IV.4):
+  partial commitment → Type 2 phenotype.
+  Clinically observed as claudin-low → TNBC
+  progression under treatment. Not yet formally
+  tested in this series.
+
+NEW PREDICTION F — TYPE 4 WILL BE FOUND IN OTHER
+  TISSUE STEM CELL CANCERS:
+  Stated 2026-03-05 after claudin-low analysis.
+
+  If Type 4 geometry (root lock at pre-commitment
+  node) is a real structural category and not a
+  claudin-low specific finding, it should be
+  identifiable in other cancers that arise from
+  primitive tissue stem cells:
+
+    Candidate 1: Embryonal carcinoma / germ cell
+      tumours (arise from primordial germ cells —
+      the most primitive stem cells in the body).
+      Expected signature: OCT4/SOX2/NANOG elevated,
+      bilateral somatic identity absent, CT antigen
+      de-repression maximal.
+
+    Candidate 2: Medulloblastoma (arise from
+      cerebellar granule cell progenitors or
+      neural stem cells depending on subtype).
+      WNT/SHH subtypes may be Type 1 (blocked
+      approach to granule cell identity). Group 3
+      medulloblastoma (MYC-amplified, most
+      aggressive) may be Type 4 (root lock in
+      neural stem compartment).
+
+    Candidate 3: Small cell lung cancer (SCLC)
+      (proposed to arise from pulmonary
+      neuroendocrine progenitors).
+      SCLC has: bilateral identity loss (neither
+      luminal nor basal lung identity), high
+      immune infiltration in some subtypes, CT
+      antigen expression, no specific committed
+      identity programme. This may be a Type 4
+      geometry in the lung.
+
+    Falsification condition for Prediction F:
+      If no other cancer analyzed using the
+      geometry-first protocol produces a Type 4
+      classification — if every future analysis
+      fits cleanly into Types 1, 2, or 3 — then
+      Type 4 is a claudin-low artifact of the
+      mammary stem cell biology and not a universal
+      structural category. In that case the
+      taxonomy reverts to three types and claudin-low
+      is re-examined for composite type classification.
+
+NEW PREDICTION G — CT ANTIGEN DE-REPRESSION IS A
+  TYPE 4 DIAGNOSTIC MARKER ACROSS TISSUE TYPES:
+  Stated 2026-03-05.
+
+  In claudin-low, the unfiltered scan revealed GAGE
+  family, CT45 family, STRA8, and DPPA2 elevation as
+  the dominant signal in the top 30 gained genes.
+  This was not predicted — it emerged from data.
+
+  If Type 4 is a real structural category, CT antigen
+  de-repression should be present as an unfiltered
+  scan finding in EVERY Type 4 cancer, regardless of
+  tissue of origin. The mechanism is consistent across
+  tissue types: a cell that has never committed to a
+  somatic identity programme retains epigenetic access
+  to germline loci that committed cells silence.
+
+  Test: in any future cancer analysis classified as
+  Type 4 by the diagnostic algorithm, check whether
+  GAGE family and CT antigen genes appear in the
+  unfiltered top 30 gained genes.
+  If YES → supports Type 4 universality.
+  If NO  → suggests Type 4 is tissue-specific or
+           CT antigen de-repression is not mechanistically
+           linked to the root lock geometry.
+```
+
+---
+
+## FRAMEWORK LESSONS UPDATED — VERSION 2.0
+
+```
+[Lessons 17–19 stated 2026-03-04 — unchanged]
+
+LESSON 20 (from claudin-low analysis, 2026-03-05):
+  The three-type diagnostic algorithm has a boundary
+  condition. When the correct lineage TFs are absent
+  AND no wrong-identity programme is present AND no
+  earlier progenitor state is identifiable, the cell
+  of origin may be the ROOT PROGENITOR of the lineage.
+  This is not a failure of the algorithm. It is a
+  signal that a fourth type may be present.
+  Apply Question 4b (stated in Axiom IV.2) before
+  concluding the analysis is indeterminate.
+
+LESSON 21 (from claudin-low analysis, 2026-03-05):
+  CT antigen de-repression in the unfiltered scan
+  is a Type 4 diagnostic flag.
+  If GAGE family or CT45 genes appear in the top
+  30 gained genes before any panel is applied, and
+  the correct identity TFs are absent, consider
+  Type 4 before Type 2.
+  CT antigen de-repression is a signal of epigenetic
+  disinhibition consistent with a pre-commitment
+  state — not with a Type 2 false identity.
+  In Type 2, the CT antigens are not expected to
+  dominate the unfiltered scan because the cell has
+  a stable (wrong) identity that maintains epigenetic
+  silencing of germline loci.
+
+LESSON 22 (from claudin-low analysis, 2026-03-05):
+  The depth axis in Type 4 is bidirectional relative
+  to all committed identities simultaneously.
+  It is not sufficient to measure depth on a single
+  identity axis (as in Types 1–3). The correct Type 4
+  depth score requires measuring:
+    — Loss of ALL available committed identities
+      (bilateral or multilateral absence score)
+    — Gain of stem/progenitor markers
+    — Gain of CT antigen expression
+  The combination of these three components defines
+  the depth of the root lock false attractor. A cell
+  scoring high on only one component may be in a
+  Type 2 or Type 3 geometry. Only the combination
+  of all three is diagnostic of Type 4.
+
+LESSON 23 (from claudin-low analysis, 2026-03-05):
+  Immune exhaustion (FOXP3, PDCD1, TIGIT, LAG3
+  simultaneously elevated) is a structural feature
+  of deep Type 4 false attractors. The immune system
+  is present and attempting to clear the tumour but
+  is being suppressed. This is different from:
+    Type 2 (TNBC): immune programme present but
+    primarily through basal identity immune genes
+    Type 3 (LumA/ILC): immune programme relatively
+    low — consistent with identity-committed cells
+    that are less immunogenic
+  Type 4 tumours should be the most responsive to
+  checkpoint therapy of all four types, because the
+  TIL population is large, active, and blocked only
+  by checkpoint exhaustion — not by absence of
+  tumour antigens or absence of TIL recruitment.
+```
+
+---
+
+## STATUS AND VERSION HISTORY (UPDATED)
+
+```
+document:           ATTRACTOR_GEOMETRY_AXIOMS.md
+document_number:    90
+version:            2.0
+date:               2026-03-05
+author:             Eric Robert Lawson
+                    OrganismCore
+status:             LIVING DOCUMENT
+
+version_history:
+  1.0  2026-03-04  Initial derivation
+                   Three types named and specified
+                   Derived from 14 cancer validations
+                   Confirmed examples listed per type
+                   Cross-type comparison table built
+                   Diagnostic algorithm stated
+                   Novel predictions generated (A-E)
+                   Framework lessons 17-19 added
+
+  2.0  2026-03-05  TYPE 4 added — ROOT LOCK
+                   Derived from claudin-low analysis
+                   (BRCA-S7 series)
+                   Axiom IV stated (IV.1–IV.4)
+                   Diagnostic algorithm extended
+                   (Question 4b added to Part IV)
+                   Cross-type comparison table
+                   extended to four columns
+                   Prediction A confirmed (ILC Type 3) ✓
+                   Predictions F and G added
+                   Framework lessons 20-23 added
+                   CENTRAL CLAIM updated:
+                   "three distinct forms" → "four
+                   distinct forms" (see below)
+
+update_to_central_claim:
+  Version 1.0 stated:
+    "That relationship takes three distinct forms."
+  Version 2.0 corrects:
+    "That relationship takes at least four distinct
+    forms. The fourth was identified during the
+    claudin-low breast cancer analysis (BRCA-S7,
+    2026-03-05). Whether further types exist is
+    unknown. The document remains open."
+
+to_be_updated_when:
+  - A second confirmed Type 4 cancer is identified
+    (updates confirmed examples in IV.3)
+  - Prediction F or G is confirmed or falsified
+  - Composite type involving Type 4 is identified
+    (e.g., Type 4 → Type 2 transition under
+    selective pressure — predicted in IV.4
+    resistance section)
+  - A fifth structural type is identified
+  - Claudin-low Script 2 produces survival data
+    that tests the depth score clinically
+    (update IV.4 drug logic with clinical evidence)
+```
+
+---
+
 ## PART IV — DIAGNOSTIC ALGORITHM
 
 ```

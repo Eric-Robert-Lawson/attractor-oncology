@@ -1,0 +1,468 @@
+=================================================================
+BRCA LUMINAL B — SCRIPT 1
+OrganismCore — Document BRCA-S5b
+Date: 2026-03-05
+=================================================================
+
+SELF-CONTAINED: All data downloaded to:
+  /Users/ericlawson/cancer/BRCA/DEEP_DIVE/luminal_b/lumb_s1_analysis/data
+No path crawling. No cache from other scripts.
+
+FIX vs v1: global SC_DIR removed from acquire_data().
+  sc_dir is now a local variable returned to main().
+  load_metadata() and load_sc_expression() take sc_dir
+  as an argument — no module-level state mutation.
+
+=================================================================
+STEP 0: DATA ACQUISITION — SELF-CONTAINED
+  All files downloaded to: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/luminal_b/lumb_s1_analysis/data
+  Dataset: GSE176078 — Wu et al. 2021
+=================================================================
+
+--- scRNA-seq (GSE176078 merged matrix TAR) ---
+  Already extracted: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/luminal_b/lumb_s1_analysis/data/Wu_etal_2021_BRCA_scRNASeq
+    OK: count_matrix_sparse.mtx (2395.4 MB)
+    OK: count_matrix_genes.tsv (0.3 MB)
+    OK: count_matrix_barcodes.tsv (2.5 MB)
+    OK: metadata.csv (11.0 MB)
+
+--- Bulk RNA-seq (GSE176078, optional) ---
+  Already present: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/luminal_b/lumb_s1_analysis/data/GSE176078_Wu_etal_2021_bulkRNAseq_raw_counts.txt.gz
+=================================================================
+STEP 1: LOAD METADATA + LumB LABEL DETECTION
+=================================================================
+  Cells: 100064
+  Columns: ['orig.ident', 'nCount_RNA', 'nFeature_RNA', 'percent.mito', 'subtype', 'celltype_subset', 'celltype_minor', 'celltype_major']
+
+  All cell types (celltype_subset):
+    T_cells_c1_CD4+_IL7R                       n=7786
+    Cancer LumA SC                             n=7742
+    Cancer Cycling                             n=5359
+    T_cells_c4_CD8+_ZFP36                      n=5063
+    T_cells_c0_CD4+_CCR7                       n=4952
+    Endothelial ACKR1                          n=4611
+    Cancer Basal SC                            n=4312
+    T_cells_c2_CD4+_T-regs_FOXP3               n=4246
+    Cancer Her2 SC                             n=3708
+    Plasmablasts                               n=3524
+    PVL Differentiated s3                      n=3487
+    Cancer LumB SC                             n=3368
+    T_cells_c7_CD8+_IFNG                       n=3168
+    B cells Memory                             n=2581
+    CAFs MSC iCAF-like s1                      n=2309
+    CAFs myCAF like s5                         n=2265
+    T_cells_c3_CD4+_Tfh_CXCL13                 n=2247
+    Myeloid_c10_Macrophage_1_EGR1              n=2150
+    Myeloid_c1_LAM1_FABP5                      n=2122
+    Luminal Progenitors                        n=1992
+    T_cells_c8_CD8+_LAG3                       n=1955
+    T_cells_c9_NK_cells_AREG                   n=1846
+    Endothelial CXCL12                         n=1644
+    T_cells_c11_MKI67                          n=1528
+    Myeloid_c12_Monocyte_1_IL1B                n=1339
+    Mature Luminal                             n=1265
+    PVL Immature s1                            n=1169
+    Endothelial RGS5                           n=1147
+    Myeloid_c2_LAM2_APOE                       n=1126
+    T_cells_c10_NKT_cells_FCGR3A               n=1122
+    Myoepithelial                              n=1098
+    T_cells_c6_IFIT1                           n=1017
+    Myeloid_c8_Monocyte_2_S100A9               n=935
+    CAFs MSC iCAF-like s2                      n=844
+    PVL_Immature s2                            n=717
+    B cells Naive                              n=625
+    CAFs myCAF like s4                         n=602
+    CAFs Transitioning s3                      n=553
+    Myeloid_c9_Macrophage_2_CXCL10             n=505
+    Cycling_Myeloid                            n=463
+    Myeloid_c11_cDC2_CD1C                      n=337
+    Myeloid_c4_DCs_pDC_IRF7                    n=331
+    T_cells_c5_CD8+_GZMK                       n=284
+    Endothelial Lymphatic LYVE1                n=203
+    Myeloid_c3_cDC1_CLEC9A                     n=156
+    Myeloid_c0_DC_LAMP3                        n=131
+    Myeloid_c7_Monocyte_3_FCGR3A               n=54
+    Cycling PVL                                n=50
+    Myeloid_c5_Macrophage_3_SIGLEC1            n=26
+
+  LABEL DETECTION:
+    'Cancer LumB SC' present: True (n=3368)
+    'Cancer LumA SC' present: True (n=7742)
+    'Cancer Basal SC' present: True (n=4312)
+    'Mature Luminal' present: True (n=1265)
+    'Luminal Progenitors' present: True (n=1992)
+
+  STRATEGY: DIRECT_LABEL — using 'Cancer LumB SC' directly.
+
+  FINAL POPULATION SIZES:
+    LumB (strategy=DIRECT_LABEL): 3368
+    LumA SC:                    7742
+    Basal SC (TNBC ref):        4312
+    Mature Luminal (normal):    1265
+    Luminal Progenitors:        1992
+=================================================================
+STEP 2: LOAD EXPRESSION (MTX -> log1p)
+=================================================================
+  Loading local cache: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/luminal_b/lumb_s1_analysis/results/expr_cache_lumb_s1.csv (26.5 MB)
+  Cached shape: (100064, 41)
+=================================================================
+STEP 3: CLASSIFY POPULATIONS
+  Strategy: DIRECT_LABEL
+=================================================================
+  Expr/meta overlap: 100064 cells
+  mature      : 1265 cells
+  prog        : 1992 cells
+  luma        : 7742 cells
+  basal       : 4312 cells
+  lumb (direct):  3368 cells
+
+  FINAL POPULATION SIZES:
+    mature      : 1265 cells
+    prog        : 1992 cells
+    luma        : 7742 cells
+    basal       : 4312 cells
+    lumb        : 3368 cells
+
+=================================================================
+SECTION 1: TOP MOVERS — UNFILTERED
+Read ALL THREE comparisons before Section 4.
+=================================================================
+
+--- 1a: LumB vs Mature Luminal ---
+
+  LumB vs Mature_Luminal  (n=3368 vs n=1265)
+
+  TOP 15 LOST:
+  Gene                 Ref    Cancer   Change%           p-value
+  --------------------------------------------------------------
+  KRT5              0.0759    0.0042    -94.5%    p=1.81e-45 ***
+  SOX10             0.0082    0.0005    -93.5%    p=2.32e-09 ***
+  KRT14             0.1339    0.0134    -90.0%    p=4.11e-67 ***
+  CDKN1A            1.4956    0.1816    -87.9%      p<1e-100 ***
+  CCNE1             0.0126    0.0021    -83.7%    p=1.29e-07 ***
+  TGFBR2            0.0420    0.0132    -68.6%    p=3.35e-11 ***
+  CDK6              0.0522    0.0177    -66.1%    p=3.04e-12 ***
+  RB1               0.1854    0.0727    -60.8%    p=1.08e-35 ***
+  NCOA1             0.2822    0.1168    -58.6%    p=4.58e-41 ***
+  CDK2              0.1219    0.0647    -46.9%    p=1.27e-13 ***
+  KDM1A             0.1363    0.0748    -45.2%    p=1.41e-12 ***
+  PGR               0.3548    0.1997    -43.7%    p=2.03e-14 ***
+  NKX3-1            0.0862    0.0571    -33.7%    p=7.74e-05 ***
+  AR                0.9379    0.6448    -31.3%    p=1.18e-28 ***
+  NCOA2             0.2025    0.1423    -29.7%    p=8.65e-07 ***
+
+  TOP 15 GAINED:
+  Gene                 Ref    Cancer   Change%           p-value
+  --------------------------------------------------------------
+  TOP2A             0.0063    0.0528   +731.7%    p=3.89e-16 ***
+  MKI67             0.0016    0.0099   +505.2%    p=9.96e-04 ***
+  SPI1              0.0088    0.0219   +149.6%    p=7.90e-04 ***
+  CCND1             0.8115    1.8368   +126.3%      p<1e-100 ***
+  PCNA              0.2486    0.4918    +97.9%    p=3.50e-36 ***
+  DNMT3A            0.0691    0.1253    +81.4%    p=3.49e-09 ***
+  GATA3             1.1115    1.8801    +69.1%    p=7.97e-88 ***
+  ESR1              0.7489    1.1344    +51.5%    p=1.75e-43 ***
+  CDKN2A            0.0692    0.0938    +35.5%    p=6.74e-05 ***
+  FOXA1             0.3934    0.4834    +22.9%    p=4.44e-07 ***
+  HDAC2             0.4506    0.5476    +21.5%    p=1.34e-04 ***
+  EZH2              0.0414    0.0486    +17.6%      p=0.2004  ns
+  MYC               1.1010    1.2633    +14.7%    p=1.27e-03  **
+  DNMT3B            0.0105    0.0115     +9.7%      p=0.5663  ns
+  TP53              0.1458    0.1497     +2.7%      p=0.5057  ns
+
+--- 1b: LumB vs LumA (CRITICAL TEST) ---
+  FOXA1 direction in this comparison is the
+  single most important result of this script.
+
+  LumB vs LumA  (n=3368 vs n=7742)
+
+  TOP 15 LOST:
+  Gene                 Ref    Cancer   Change%           p-value
+  --------------------------------------------------------------
+  OLIG2             0.0001    0.0000   -100.0%      p=0.5097  ns
+  CDKN1A            0.5914    0.1816    -69.3%      p<1e-100 ***
+  CCNE1             0.0040    0.0021    -48.0%      p=0.0691  ns
+  RB1               0.1170    0.0727    -37.9%    p=1.89e-15 ***
+  NKX3-1            0.0785    0.0571    -27.3%      p=0.0243   *
+  TET2              0.0744    0.0561    -24.5%    p=3.83e-05 ***
+  NCOA1             0.1414    0.1168    -17.4%    p=1.62e-04 ***
+  AR                0.7512    0.6448    -14.2%    p=1.58e-12 ***
+  CDK6              0.0204    0.0177    -13.5%      p=0.3692  ns
+  SPDEF             0.9882    0.8800    -10.9%    p=3.03e-13 ***
+  PARP1             0.6176    0.5614     -9.1%    p=4.59e-05 ***
+  FOXA1             0.5221    0.4834     -7.4%    p=4.51e-03  **
+  KDM1A             0.0781    0.0748     -4.3%      p=0.5054  ns
+
+  TOP 15 GAINED:
+  Gene                 Ref    Cancer   Change%           p-value
+  --------------------------------------------------------------
+  MKI67             0.0006    0.0099  +1487.4%    p=9.38e-19 ***
+  TOP2A             0.0052    0.0528   +910.8%    p=5.90e-78 ***
+  SPI1              0.0053    0.0219   +314.9%    p=2.04e-20 ***
+  CD274             0.0028    0.0086   +209.6%    p=1.68e-06 ***
+  DNMT3A            0.0508    0.1253   +146.7%    p=2.03e-51 ***
+  PCNA              0.2021    0.4918   +143.4%      p<1e-100 ***
+  CCND1             0.8135    1.8368   +125.8%      p<1e-100 ***
+  HDAC2             0.2745    0.5476    +99.5%      p<1e-100 ***
+  SOX10             0.0003    0.0005    +98.1%      p=0.8174  ns
+  CDKN2A            0.0484    0.0938    +93.9%    p=2.88e-26 ***
+  MYC               0.6738    1.2633    +87.5%      p<1e-100 ***
+  HDAC1             0.2160    0.3771    +74.6%    p=1.23e-64 ***
+  ESR1              0.6901    1.1344    +64.4%      p<1e-100 ***
+  TGFBR2            0.0082    0.0132    +60.9%    p=1.65e-03  **
+  TP53              0.0949    0.1497    +57.8%    p=3.21e-21 ***
+
+--- 1c: LumB vs Luminal Progenitor ---
+
+  LumB vs Luminal_Progenitor  (n=3368 vs n=1992)
+
+  TOP 15 LOST:
+  Gene                 Ref    Cancer   Change%           p-value
+  --------------------------------------------------------------
+  SOX10             0.2109    0.0005    -99.7%      p<1e-100 ***
+  KRT5              0.8950    0.0042    -99.5%      p<1e-100 ***
+  KRT14             1.0521    0.0134    -98.7%      p<1e-100 ***
+  TGFBR2            0.2654    0.0132    -95.0%      p<1e-100 ***
+  CDK6              0.2898    0.0177    -93.9%      p<1e-100 ***
+  CCNE1             0.0246    0.0021    -91.6%    p=9.24e-19 ***
+  CDKN1A            1.3015    0.1816    -86.0%      p<1e-100 ***
+  RB1               0.1792    0.0727    -59.4%    p=1.72e-36 ***
+  NCOA1             0.2510    0.1168    -53.5%    p=2.64e-30 ***
+  TET2              0.0969    0.0561    -42.1%    p=2.28e-09 ***
+  KDM1A             0.1270    0.0748    -41.1%    p=5.03e-09 ***
+  EED               0.0942    0.0592    -37.2%    p=1.23e-07 ***
+  TP53              0.2371    0.1497    -36.8%    p=2.04e-13 ***
+  NKX3-1            0.0803    0.0571    -28.9%    p=4.39e-06 ***
+  CDK2              0.0895    0.0647    -27.7%    p=1.30e-04 ***
+
+  TOP 15 GAINED:
+  Gene                 Ref    Cancer   Change%           p-value
+  --------------------------------------------------------------
+  PGR               0.0193    0.1997   +935.9%    p=6.97e-93 ***
+  ESR1              0.1161    1.1344   +876.7%      p<1e-100 ***
+  FOXA1             0.0522    0.4834   +826.2%      p<1e-100 ***
+  TOP2A             0.0058    0.0528   +814.8%    p=2.09e-24 ***
+  AR                0.0953    0.6448   +576.8%      p<1e-100 ***
+  GATA3             0.5142    1.8801   +265.6%      p<1e-100 ***
+  MKI67             0.0028    0.0099   +257.4%    p=8.28e-04 ***
+  CD274             0.0024    0.0086   +252.8%    p=1.50e-03  **
+  SPDEF             0.2686    0.8800   +227.6%      p<1e-100 ***
+  SPI1              0.0079    0.0219   +178.4%    p=7.56e-06 ***
+  CCND1             0.6927    1.8368   +165.2%      p<1e-100 ***
+  PCNA              0.2217    0.4918   +121.9%    p=4.06e-65 ***
+  CDKN2A            0.0449    0.0938   +108.9%    p=1.36e-18 ***
+  ERBB2             0.2490    0.4901    +96.8%    p=1.47e-56 ***
+  DNMT3A            0.0731    0.1253    +71.5%    p=7.15e-11 ***
+
+  Primary results (vs Mature) saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/luminal_b/lumb_s1_analysis/results/lumb_s1_results.csv
+
+=================================================================
+SECTION 2: PCA GEOMETRY
+Landscape position — read before Section 4.
+=================================================================
+  Removed 1136 library-size outliers.
+
+  Variance explained:
+    PC1: 14.50%
+    PC2: 9.73%
+    PC3: 4.17%
+    PC4: 3.65%
+    PC5: 2.98%
+
+  PC1 top positive loadings:
+    CCND1               +0.2800
+    HDAC2               +0.2767
+    PARP1               +0.2751
+    CDK4                +0.2735
+    MYC                 +0.2653
+    HDAC1               +0.2554
+    PCNA                +0.2189
+    CDK6                +0.2051
+    KRT5                +0.1965
+    KDM1A               +0.1938
+
+  PC1 top negative loadings:
+    TOP2A               +0.0613
+    CD274               +0.0541
+    SPI1                +0.0534
+    PGR                 +0.0507
+    MKI67               +0.0479
+    FOXA1               +0.0405
+    DNMT3B              +0.0388
+    NKX2-1              +0.0047
+    CDX2                -0.0000
+    OLIG2               -0.0025
+
+  PC1 mean per population:
+    Mature          mean= +0.0607  n=1230
+    Progenitor      mean= +0.4745  n=1851
+    LumA            mean= -0.7725  n=7457
+    LumB            mean= +0.2858  n=3145
+    TNBC            mean= +1.0126  n=3860
+
+  LumB vs LumA PC1 separation: SEPARATED  p=8.66e-91
+    LumB mean=0.2858  LumA mean=-0.7725
+
+=================================================================
+SECTION 3: DEPTH SCORE (BRCA-S5a P4)
+  w1=0.4*(1-norm(CDKN1A))
+  w2=0.4*(1-norm(mean(FOXA1,GATA3)))
+  w3=0.2*norm(MKI67)
+=================================================================
+  C1 (1-norm(CDKN1A)): mean=0.9359
+  C2 (1-norm(['FOXA1', 'GATA3'])): mean=0.6324
+  C3 (norm(MKI67)): mean=0.0072
+
+  Formula: w=0.4*CDKN1A_axis + w=0.4*identity(['FOXA1', 'GATA3']) + w=0.2*MKI67
+  Depth score (3368 LumB cells):
+    Mean=0.6288  Median=0.6338  Std=0.1141
+    Min=0.1421  Max=0.9154  Q25=0.5542  Q75=0.7138
+
+  LumB vs LumA depth (joint normalisation, CDKN1A axis):
+    LumB mean=0.9359  std=0.1389
+    LumA mean=0.8676  std=0.1762
+    p(LumB vs LumA depth): 1.2037e-124
+
+  Top depth correlations (LumB, |r| ranked):
+  Gene                      r  p-value
+  ------------------------------------
+  GATA3               -0.8173  p=0.00e+00 ***
+  CCND1               -0.6636  p=0.00e+00 ***
+  MYC                 -0.6167  p=0.00e+00 ***
+  CDKN1A              -0.6000  p=0.00e+00 ***
+  ESR1                -0.5966  p=9.88e-324 ***
+  SPDEF               -0.5683  p=1.82e-287 ***
+  FOXA1               -0.5458  p=6.92e-261 ***
+  HDAC2               -0.5395  p=8.46e-254 ***
+  PCNA                -0.5199  p=1.40e-232 ***
+  AR                  -0.4960  p=1.21e-208 ***
+  PARP1               -0.4917  p=1.40e-204 ***
+  CDK4                -0.4909  p=8.50e-204 ***
+  ERBB2               -0.4591  p=3.12e-175 ***
+  HDAC1               -0.4479  p=6.57e-166 ***
+  TP53                -0.2890  p=8.83e-66 ***
+  NCOA2               -0.2714  p=6.15e-58 ***
+  DNMT3A              -0.2708  p=1.08e-57 ***
+  NCOA1               -0.2574  p=4.23e-52 ***
+  PGR                 -0.2034  p=8.95e-33 ***
+  RB1                 -0.1733  p=3.96e-24 ***
+  KDM1A               -0.1730  p=4.85e-24 ***
+  CDKN2A              -0.1706  p=2.00e-23 ***
+  TOP2A               -0.1555  p=1.13e-19 ***
+  CDK2                -0.1490  p=3.53e-18 ***
+  EED                 -0.1364  p=1.85e-15 ***
+
+=================================================================
+SECTION 4: PREDICTION PANEL CHECK
+Predictions locked 2026-03-05 in BRCA-S5a.
+=================================================================
+
+  P1 — IDENTITY TFs vs MATURE (predicted: RETAINED):
+  Gene           Mature     LumB     %chg               p  LumA_ref  Verdict
+  ---------------------------------------------------------------------------
+  ✓ FOXA1        0.3934   0.4834   +22.9%  p=4.44e-07 ***  ref=  37.3%  ELEVATED
+  ✓ GATA3        1.1115   1.8801   +69.1%  p=7.97e-88 ***  ref=  33.8%  ELEVATED
+  ✓ ESR1         0.7489   1.1344   +51.5%  p=1.75e-43 ***  ref= -30.1%  ELEVATED
+  ✗ PGR          0.3548   0.1997   -43.7%  p=2.03e-14 ***  ref= -54.8%  SUPPRESSED
+  ✗ SPDEF        1.1943   0.8800   -26.3%  p=2.18e-26 ***  ref=     ?%  SUPPRESSED
+
+  P1b — IDENTITY TFs: LumB vs LumA (CRITICAL TEST):
+  Predicted: FOXA1 < LumA, GATA3 < LumA, ESR1 ~= LumA
+  Gene             LumA     LumB    %diff               p  Predicted  -> Result
+  ------------------------------------------------------------------------
+  ✗ FOXA1        0.5221   0.4834    -7.4%  p=4.51e-03  **  pred=LOWER   -> EQUAL  <- CRITICAL
+  ✗ GATA3        1.3230   1.8801   +42.1%    p<1e-100 ***  pred=LOWER   -> HIGHER
+  ✗ ESR1         0.6901   1.1344   +64.4%    p<1e-100 ***  pred=EQUAL   -> HIGHER
+  ✗ PGR          0.1950   0.1997    +2.4%    p=0.0663  ns  pred=LOWER   -> EQUAL
+  ✓ SPDEF        0.9882   0.8800   -10.9%  p=3.03e-13 ***  pred=LOWER   -> LOWER
+
+  FOXA1 verdict (P1b): EQUAL
+  NOT CONFIRMED: LumB and LumA share FOXA1 level.
+    Difference is proliferative, not differentiation-state.
+
+  P2 — PROLIFERATION vs LumA:
+  Gene             LumA     LumB    %diff               p  r_depth  Verdict
+  --------------------------------------------------------------------
+  MKI67          0.0006   0.0099 +1487.4%  p=9.38e-19 ***  +0.066  UP
+  CCND1          0.8135   1.8368  +125.8%    p<1e-100 ***  -0.664  UP
+  CDK4           0.3463   0.4568   +31.9%  p=3.68e-21 ***  -0.491  UP
+  MYC            0.6738   1.2633   +87.5%    p<1e-100 ***  -0.617  UP
+  TOP2A          0.0052   0.0528  +910.8%  p=5.90e-78 ***  -0.155  UP
+  CDKN1A         0.5914   0.1816   -69.3%    p<1e-100 ***  -0.600  DOWN
+
+  P3 — EZH2 GRADIENT (CRITICAL TEST):
+  Predicted: Mature < LumA (+18.5%) < LumB < TNBC
+    LumA vs Mature:    +17.2%  (ref: +18.5% ns)
+    LumB vs Mature:    +17.6%  p=0.2004  ns
+    TNBC vs Mature:   +269.7%
+    r(EZH2, depth) in LumB: -0.1049
+  P3 FLAT — EZH2 equal to LumA. No EZH2i differentiation.
+
+  P5 — ER CIRCUIT (LumA vs LumB vs Mature):
+  Predicted: PGR more suppressed in LumB than LumA
+  Gene              LumA%      LumB%  Result
+  ----------------------------------------------
+  = ESR1       LumA=    -7.9%  LumB=   +51.5%  EQUAL/HIGHER
+  = PGR        LumA=   -45.1%  LumB=   -43.7%  EQUAL/HIGHER
+  + NCOA1      LumA=   -49.9%  LumB=   -58.6%  MORE BROKEN
+  = NCOA2      LumA=   -41.4%  LumB=   -29.7%  EQUAL/HIGHER
+  = TGFBR2     LumA=   -80.5%  LumB=   -68.6%  EQUAL/HIGHER
+  r(ESR1, PGR) within LumB: r=+0.2342  p=3.5344e-43
+  r(ESR1, PGR) within LumA: r=+0.3328  p=1.2455e-199
+
+  P6 — CONTROLS (expected absent):
+  ELEVATED-UNEXPECTED KRT5         -94.5%  p=1.81e-45 ***
+  ELEVATED-UNEXPECTED KRT14        -90.0%  p=4.11e-67 ***
+  ELEVATED-UNEXPECTED SOX10        -93.5%  p=2.32e-09 ***
+  ELEVATED-UNEXPECTED CDX2          +nan%  p=1.0000  ns
+  ELEVATED-UNEXPECTED NKX2-1        +nan%  p=1.0000  ns
+
+  P7 — EPIGENETIC PANEL (LumB vs Mature):
+  Gene           Mature     LumB     %chg               p  r_depth
+  ----------------------------------------------------------
+  EZH2           0.0414   0.0486   +17.6%    p=0.2004  ns  -0.105
+  HDAC1          0.3936   0.3771    -4.2%    p=0.1961  ns  -0.448
+  HDAC2          0.4506   0.5476   +21.5%  p=1.34e-04 ***  -0.540
+  KDM1A          0.1363   0.0748   -45.2%  p=1.41e-12 ***  -0.173
+  DNMT3A         0.0691   0.1253   +81.4%  p=3.49e-09 ***  -0.271
+  DNMT3B         0.0105   0.0115    +9.7%    p=0.5663  ns  -0.091
+  EED            0.0707   0.0592   -16.3%    p=0.1094  ns  -0.136
+  TET2           0.0692   0.0561   -18.9%    p=0.0546  ns  -0.117
+
+  P9 — CROSS-SUBTYPE GRADIENT:
+  Predicted ESR1/FOXA1/GATA3: LumA > LumB > TNBC (DESC)
+  Predicted EZH2:             LumA < LumB < TNBC (ASC)
+  Gene             LumA     LumB     TNBC  Gradient?
+  ------------------------------------------------------
+  + ESR1       LumA=0.6901  LumB=1.1344  TNBC=0.0245  -> PART
+  + FOXA1      LumA=0.5221  LumB=0.4834  TNBC=0.0759  -> DESC
+  + GATA3      LumA=1.3230  LumB=1.8801  TNBC=0.5181  -> PART
+  + EZH2       LumA=0.0485  LumB=0.0486  TNBC=0.1530  -> ASC
+  + MKI67      LumA=0.0006  LumB=0.0099  TNBC=0.0146  -> ?
+  + KRT5       LumA=0.0035  LumB=0.0042  TNBC=0.4613  -> ?
+  + KRT14      LumA=0.0105  LumB=0.0134  TNBC=0.4337  -> ?
+
+=================================================================
+SECTION 5: NOVEL SIGNALS
+Signals not in the locked panel (p<0.05).
+=================================================================
+
+  Novel SUPPRESSED in LumB vs Mature:
+    (none beyond panel)
+
+  Novel ELEVATED in LumB vs Mature:
+    (none beyond panel)
+
+=================================================================
+STEP 7: BULK RNA-SEQ ANALYSIS (OPTIONAL)
+=================================================================
+  Bulk shape: (58388, 24)
+  Target genes in bulk: 41
+
+  Bulk depth scores (24 tumors):
+    Mean=0.5725  Std=0.1442  Min=0.3343  Max=0.8255
+
+=================================================================
+GENERATING FIGURE
+=================================================================
+  Figure saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/luminal_b/lumb_s1_analysis/results/lumb_s1_figure.png

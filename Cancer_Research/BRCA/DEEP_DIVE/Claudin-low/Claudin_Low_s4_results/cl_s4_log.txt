@@ -1,0 +1,210 @@
+=================================================================
+BRCA CLAUDIN-LOW — SCRIPT 4 (v6)
+OrganismCore — BRCA-S7k | 2026-03-05 | TYPE 4
+Output: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s4_results
+=================================================================
+
+=================================================================
+METABRIC ANALYSIS
+=================================================================
+
+=================================================================
+STEP 1: DISCOVER METABRIC MOLECULAR PROFILE
+=================================================================
+  METABRIC profiles: attempt 1 — https://www.cbioportal.org/api/studies/brca_metabric/molecular-profile...
+  METABRIC profiles: saved 2,191 B
+  Profiles: ['brca_metabric_cna', 'brca_metabric_methylation_promoters_rrbs', 'brca_metabric_mrna', 'brca_metabric_mrna_median_all_sample_Zscores', 'brca_metabric_mutations']
+  Selected: brca_metabric_mrna_median_all_sample_Zscores
+
+=================================================================
+STEP 2: GET METABRIC SAMPLE IDs
+=================================================================
+  METABRIC samples: attempt 1 — https://www.cbioportal.org/api/studies/brca_metabric/samples?pageSize=...
+  METABRIC samples: saved 519,586 B
+  Sample count: 2509
+
+=================================================================
+STEP 3: FETCH METABRIC EXPRESSION VIA POST
+  profile: brca_metabric_mrna_median_all_sample_Zscores
+=================================================================
+  Requesting 32 genes, 2509 samples
+  METABRIC POST sampleListId: POST attempt 1
+  METABRIC POST sampleListId: saved 16,257,556 B
+  sampleListId: 59400 data points
+  sampleListId: matrix (30, 1980)
+  sampleListId: sig genes = 10/10
+  Saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s4_results/data/metabric_expr.tsv
+
+=================================================================
+LOAD: METABRIC EXPRESSION
+=================================================================
+  Loaded metabric_expr.tsv: (30, 1980)
+  Gene overlap — rows:30 cols:0
+  Sig genes: 10/10
+  Final shape: (30, 1980)
+    CLDN3      OK
+    CLDN4      OK
+    CLDN7      OK
+    CDH1       OK
+    ESR1       OK
+    VIM        OK
+    CD44       OK
+    SNAI1      OK
+    ZEB1       OK
+    FN1        OK
+    FOXA1      OK
+    SPDEF      OK
+    GATA3      OK
+    MKI67      OK
+
+=================================================================
+STEP 5: ACQUIRE METABRIC CLINICAL
+=================================================================
+  METABRIC clinical API: attempt 1 — https://www.cbioportal.org/api/studies/brca_metabric/clinical-data?cli...
+  METABRIC clinical API: saved 7,969,135 B
+  Clinical: (2509, 24)
+
+=================================================================
+LOAD: METABRIC CLINICAL
+=================================================================
+  Loaded metabric_clinical.tsv: (2509, 24)
+  Columns: ['AGE_AT_DIAGNOSIS', 'BREAST_SURGERY', 'CHEMOTHERAPY', 'CLAUDIN_SUBTYPE', 'COHORT', 'ER_IHC', 'HER2_SNP6', 'HISTOLOGICAL_SUBTYPE', 'HORMONE_THERAPY', 'INFERRED_MENOPAUSAL_STATE', 'INTCLUST', 'LATERALITY', 'LYMPH_NODES_EXAMINED_POSITIVE', 'NPI', 'OS_MONTHS', 'OS_STATUS', 'RADIO_THERAPY', 'RFS_MONTHS', 'RFS_STATUS', 'SAMPLE_COUNT']
+  OS: time=OS_MONTHS  event=OS_STATUS
+  METABRIC: CL n=476/1980
+  CT genes active: 7
+  Memory genes: ['FOXA1', 'SPDEF', 'GATA3']
+  METABRIC survival matched: 1979 (months)
+
+=================================================================
+BLOCK 1 — DEPTH SURVIVAL: METABRIC
+=================================================================
+  ESR1-low stratum: n=238
+    METABRIC depth tertile: n=79/79 ev=35/39 p=0.991 HR≈1.025
+  [EXT-P1] NOT CONFIRMED
+
+=================================================================
+BLOCK 2 — INDIVIDUAL GENE SURVIVAL
+=================================================================
+
+  ── EXT-P2: CLDN3 ──
+    CLDN3: n=238/237 ev=114/118 p=0.910 HR≈0.974
+  [EXT-P2] NOT CONFIRMED
+
+  ── EXT-P2b: MKI67 ──
+    MKI67: n=237/238 ev=131/101 p=0.0014 ** HR≈1.510
+  [EXT-P2b] CONFIRMED
+
+  ── EXT-P3: immune null ──
+    immune composite: n=237/238 ev=114/118 p=0.455 HR≈1.086
+  [EXT-P3] CONFIRMED (null=p>0.15)
+
+=================================================================
+BLOCK 3 — SCRIPT 3 REPLICATION
+=================================================================
+
+  ── EXT-P5 Treg:eff ──
+    EXT-P5 Treg:eff: n=94/93 ev=42/51 p=0.327 HR≈0.815
+  [EXT-P5] NOT CONFIRMED
+
+  ── EXT-P6 CT×memory ──
+    mem-low=0.0660 mem-high=-0.0660 p=0.0004 **
+  [EXT-P6] CONFIRMED
+
+  ── EXT-P7 memory OS null ──
+    EXT-P7 mem OS: n=237/238 ev=115/117 p=0.533 HR≈1.089
+  [EXT-P7] CONFIRMED (null=p>0.30)
+
+=================================================================
+GSE96058 ANALYSIS
+=================================================================
+
+=================================================================
+STEP 6: ACQUIRE GSE96058
+=================================================================
+  GSE96058 expr: attempt 1 — https://ftp.ncbi.nlm.nih.gov/geo/series/GSE96nnn/GSE96058/suppl/GSE960...
+  GSE96058 expr: saved 591,676,211 B
+  GSE96058 mat1: attempt 1 — https://ftp.ncbi.nlm.nih.gov/geo/series/GSE96nnn/GSE96058/matrix/GSE96...
+  GSE96058 mat1: saved 218,719 B
+  GSE96058 mat2: attempt 1 — https://ftp.ncbi.nlm.nih.gov/geo/series/GSE96nnn/GSE96058/matrix/GSE96...
+  GSE96058 mat2: saved 42,331 B
+
+=================================================================
+LOAD: GSE96058
+=================================================================
+  GSE96058 expr: (30865, 3409)
+  Expr col examples: ['F1', 'F2', 'F3']
+  Parsed 3069 sample titles
+  title→geoAcc bridge: 3069 entries
+    'F1' → 'GSM2528079'
+    'F2' → 'GSM2528080'
+    'F3' → 'GSM2528081'
+  GSE96058 clinical after GSE96058-GPL11154_series_matrix.txt.gz: (3069, 26)
+  Parsed 340 sample titles
+  title→geoAcc bridge: 340 entries
+    'F7' → 'GSM2528085'
+    'F8' → 'GSM2528086'
+    'F142' → 'GSM2528220'
+  GSE96058 clinical after GSE96058-GPL18573_series_matrix.txt.gz: (3409, 26)
+  GSE96058 clinical total: (3409, 26)
+  Cols: ['title', 'scan-b_external_id', 'instrument_model', 'age_at_diagnosis', 'tumor_size', 'lymph_node_group', 'lymph_node_status', 'er_status', 'pgr_status', 'her2_status', 'ki67_status', 'nhg', 'er_prediction_mgc', 'pgr_prediction_mgc', 'her2_prediction_mgc', 'ki67_prediction_mgc', 'nhg_prediction_mgc', 'er_prediction_sgc', 'pgr_prediction_sgc', 'her2_prediction_sgc', 'ki67_prediction_sgc', 'pam50_subtype', 'overall_survival_days', 'overall_survival_event', 'endocrine_treated', 'chemo_treated']
+  title→geoAcc entries total: 3409
+  PAM50 'pam50_subtype': {'LumA': np.int64(1709), 'LumB': np.int64(767), 'Basal': np.int64(360), 'Her2': np.int64(348), 'Normal': np.int64(225)}
+  Survival: time='overall_survival_days' event='overall_survival_event'
+  Units: DAYS → will convert to months
+
+  NOTE: GSE96058 PAM50 = 5-class (no claudin-low).
+  EXT-P4/P8/P9 → N/A.  EXT-P1b → will run.
+
+=================================================================
+BLOCK 4 — GSE96058
+=================================================================
+  GSE96058-geo: CL n=1021/3409
+  GSE96058 survival matched: 3409 (days→months)
+
+  ── EXT-P8 overlap ──
+  [EXT-P8] N/A — GSE96058 PAM50 has no claudin-low category
+  ESR1-low geo CL: n=510
+
+  ── EXT-P1b: depth vs OS geo CL ──
+    EXT-P1b geo: n=170/170 ev=26/13 p=0.025 * HR≈2.098
+  [EXT-P1b] CONFIRMED
+
+=================================================================
+GENERATING FIGURE
+=================================================================
+  Figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s4_results/cl_s4_figure.png
+
+=================================================================
+PREDICTION SCORECARD
+=================================================================
+  ID         Dataset        n_h   n_l         p      HR  Status
+  ────────────────────────────────────────────────────────────────────
+  EXT-P1     METABRIC        79    79     0.991   1.025  NOT CONFIRMED
+  EXT-P2     METABRIC       238   237     0.910   0.974  NOT CONFIRMED
+  EXT-P2b    METABRIC       237   238     0.001   1.510  CONFIRMED
+  EXT-P3     METABRIC       237   238     0.455   1.086  CONFIRMED
+  EXT-P5     METABRIC        94    93     0.327   0.815  NOT CONFIRMED
+  EXT-P6     METABRIC       238   238     0.000  -1.000  CONFIRMED
+  EXT-P7     METABRIC       237   238     0.533   1.089  CONFIRMED
+  EXT-P8     GSE96058      1021     0       nan     nan  canonical CL N/A in SCAN-B PAM50
+  EXT-P1b    GSE96058       170   170     0.025   2.098  CONFIRMED
+  EXT-P9     GSE96058         0     0       nan     nan  canonical CL N/A in SCAN-B PAM50
+  EXT-P4     GSE96058         0     0       nan     nan  canonical CL N/A in SCAN-B PAM50
+
+  Confirmed: 5 / 11
+  Scorecard: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s4_results/cl_s4_scorecard.csv
+
+=================================================================
+SCRIPT 4 COMPLETE
+=================================================================
+  Log:       /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s4_results/cl_s4_log.txt
+  Figure:    /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s4_results/cl_s4_figure.png
+  Scorecard: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s4_results/cl_s4_scorecard.csv
+
+  KEY QUESTIONS FOR BRCA-S7l:
+  1. EXT-P1:  depth HR>2.0, p<0.05 METABRIC?
+  2. EXT-P1b: depth HR>2.0, p<0.05 GSE96058?
+  3. EXT-P5:  Treg:eff OS confirmed?
+  4. EXT-P7:  memory null replicated?
+  5. EXT-P6:  CT antigen memory split replicated?
+  NOTE: EXT-P4/P8/P9 N/A — no canonical CL in GSE96058 PAM50.

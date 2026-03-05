@@ -1,0 +1,215 @@
+=================================================================
+BRCA CLAUDIN-LOW — SCRIPT 3
+OrganismCore — Document BRCA-S7g | 2026-03-05
+TYPE 4 — ROOT LOCK
+
+ANALYSES:
+  A: Treg/effector ratio (Morel JCI 2017 test)
+  B: CT antigen depth correlation (Axioms Pred G test)
+  C: Lineage memory subgroups (Pommier 2020 test)
+Output: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s3_results
+=================================================================
+=================================================================
+STEP 1: LOAD DATA
+=================================================================
+  Found: Expression
+  Found: Clinical
+  Found: Survival
+  Expression shape: (20530, 1218)
+
+=================================================================
+STEP 2: REBUILD POPULATIONS
+=================================================================
+  claudin_low (Stratum A): n=268
+  Stratum B (ESR1-low):    n=177
+  Stratum C (Basal+Norm):  n=79
+
+=================================================================
+STEP 3: COMPUTE DEPTH SCORES
+=================================================================
+  Depth scores: n=594
+
+=================================================================
+STEP 4: BUILD SURVIVAL VECTORS
+=================================================================
+  Samples with survival: 1201
+  Claudin-low covered: 266/268
+
+=================================================================
+STEP 5: COMPUTE SCORE DICTIONARIES
+=================================================================
+
+  Gene availability check:
+    FOXP3        FOUND
+    PDCD1        FOUND
+    TIGIT        FOUND
+    CD8A         FOUND
+    GZMB         FOUND
+    PRF1         FOUND
+    GAGE1        FOUND
+    GAGE2D       FOUND
+    GAGE4        FOUND
+    GAGE12D      FOUND
+    GAGE12J      FOUND
+    CT45A3       FOUND
+    CT45A4       FOUND
+    STRA8        FOUND
+    DPPA2        FOUND
+    FOXA1        FOUND
+    SPDEF        FOUND
+    GATA3        FOUND
+
+  Treg/effector scores computed: n=268
+
+  CT antigen genes available: ['GAGE1', 'GAGE2D', 'GAGE4', 'GAGE12D', 'GAGE12J', 'CT45A3', 'CT45A4', 'STRA8', 'DPPA2']
+  CT composite score: n=268 genes=9
+
+  Lineage memory genes available: ['FOXA1', 'SPDEF', 'GATA3']
+  Lineage memory scores: n=268
+
+=================================================================
+ANALYSIS A — TREG/EFFECTOR IMMUNE RATIO
+  Source: Morel JCI 2017
+=================================================================
+
+  ── S3-P1: FOXP3/CD8A ratio vs depth score (Stratum A) ──
+    FOXP3/CD8A vs depth: r=+0.0609 p=0.320  (Spearman rs=+0.0439 p=0.474)  n=268
+  Status: [NOT CONFIRMED]
+
+  Additional Treg/effector correlations with depth:
+    foxp3_gzmb: r=-0.0894 p=0.144  (Spearman rs=-0.1429 p=0.019 *)  n=268
+    tigit_cd8a: r=+0.0176 p=0.775  (Spearman rs=+0.1165 p=0.057 (trend))  n=268
+    composite_treg: r=-0.1112 p=0.069 (trend)  (Spearman rs=-0.0235 p=0.702)  n=268
+    FOXP3: r=-0.0322 p=0.599  (Spearman rs=+0.0687 p=0.262)  n=268
+    CD8A: r=-0.0731 p=0.233  (Spearman rs=+0.0419 p=0.495)  n=268
+    GZMB: r=+0.0824 p=0.179  (Spearman rs=+0.1321 p=0.031 *)  n=268
+    TIGIT: r=-0.0284 p=0.644  (Spearman rs=+0.0912 p=0.136)  n=268
+
+  ── S3-P2: FOXP3/CD8A ratio vs OS (Stratum B) ──
+    S3-P2 [FOXP3/CD8A tertile, Stratum B]: n_h=59 n_l=59 ev_h=9 ev_l=4  p=0.178  HR≈2.160
+  Status: [NOT CONFIRMED]
+
+  ── S3-P3: Composite Treg:effector ratio vs OS (Stratum B) ──
+  Testing all immune metrics for comparison:
+    FOXP3/CD8A: n_h=59 n_l=59 ev_h=9 ev_l=4  p=0.178  HR≈2.160
+    FOXP3/GZMB: n_h=59 n_l=58 ev_h=7 ev_l=5  p=0.629  HR≈1.338
+    TIGIT/CD8A: n_h=59 n_l=59 ev_h=7 ev_l=5  p=0.668  HR≈1.344
+    Composite Treg:Eff: n_h=59 n_l=58 ev_h=10 ev_l=4  p=0.171  HR≈2.212
+    FOXP3: n_h=59 n_l=59 ev_h=9 ev_l=5  p=0.343  HR≈1.720
+    CD8A: n_h=59 n_l=59 ev_h=8 ev_l=7  p=0.862  HR≈0.976
+    GZMB: n_h=58 n_l=59 ev_h=5 ev_l=5  p=0.956  HR≈1.075
+    TIGIT: n_h=59 n_l=59 ev_h=10 ev_l=6  p=0.510  HR≈1.460
+
+  Best single immune predictor: Composite Treg:Eff p=0.171 HR=2.212
+    S3-P3 [Composite tertile, Stratum B]: n_h=59 n_l=58 ev_h=10 ev_l=4  p=0.171  HR≈2.212
+  Composite is best predictor: True
+  Status: [CONFIRMED]
+
+=================================================================
+ANALYSIS B — CT ANTIGEN DEPTH CORRELATION AND SURVIVAL
+  Source: Axioms Prediction G
+=================================================================
+
+  ── S3-P4: CT antigen genes vs depth score ──
+  Individual CT antigen correlations with depth:
+    GAGE1: r=+0.0320 p=0.602  (Spearman rs=+0.0577 p=0.347)  n=268
+    GAGE2D: r=+0.0079 p=0.898  (Spearman rs=+0.0119 p=0.847)  n=268
+    GAGE4: r=+0.1688 p=0.006 *  (Spearman rs=+0.0902 p=0.141)  n=268
+    GAGE12D: r=+0.0664 p=0.279  (Spearman rs=+0.0132 p=0.830)  n=268
+    GAGE12J: r=+0.0554 p=0.367  (Spearman rs=-0.0459 p=0.454)  n=268
+    CT45A3: r=+0.0532 p=0.386  (Spearman rs=+0.0768 p=0.210)  n=268
+    CT45A4: r=+0.0756 p=0.218  (Spearman rs=+0.0606 p=0.323)  n=268
+    STRA8: r=+0.0541 p=0.377  (Spearman rs=+0.1161 p=0.058 (trend))  n=268
+    DPPA2: r=+0.0870 p=0.156  (Spearman rs=+0.0375 p=0.541)  n=268
+    CT composite vs depth: r=+0.1185 p=0.053 (trend)  (Spearman rs=+0.1315 p=0.031 *)  n=268
+  CT genes r>0.20: 0/9
+  Status: [NOT CONFIRMED]
+
+  ── S3-P5: CT composite score vs OS (Stratum B) ──
+    S3-P5 [CT composite tertile, Stratum B]: n_h=59 n_l=58 ev_h=8 ev_l=6  p=0.763  HR≈1.219
+  Status: [NOT CONFIRMED]
+
+  ── S3-P6: CT composite vs FOXP3/CD8A ratio ──
+    CT composite vs FOXP3/CD8A: r=+0.1014 p=0.098 (trend)  (Spearman rs=+0.0930 p=0.129)  n=268
+  Status: [NOT CONFIRMED]
+
+=================================================================
+ANALYSIS C — LINEAGE MEMORY SUBGROUP ANALYSIS
+  Source: Pommier Nature Comm 2020
+=================================================================
+
+  Lineage memory split (Stratum B):
+    Memory-high (≥ median): n=89
+    Memory-low  (< median): n=88
+    Memory score median = 0.2336
+
+  ── S3-P7: Memory-low vs memory-high OS (Stratum B) ──
+    S3-P7 [memory-low vs memory-high]: n_h=87 n_l=89 ev_h=8 ev_l=9  p=0.878  HR≈1.043
+  Status: [NOT CONFIRMED]
+
+  ── S3-P8: CT antigen score in memory groups ──
+    CT score — memory-low mean=0.1806  memory-high mean=-0.1253
+    Mann-Whitney (memory-low > memory-high): p=8.86e-09 **
+  Status: [CONFIRMED]
+
+  ── S3-P9: Depth score in memory groups ──
+    Depth — memory-low mean=1.0845  memory-high mean=0.3422
+    Mann-Whitney (memory-low deeper): p=5.52e-08 **
+  Status: [CONFIRMED]
+
+  ── S3-P10: FOXP3/CD8A ratio in memory groups ──
+    FOXP3/CD8A — memory-low mean=0.8635  memory-high mean=0.8080
+    Mann-Whitney (memory-low higher): p=0.008 *
+  Status: [CONFIRMED]
+
+  Intermediate CSVs saved:
+    /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s3_results/cl_s3_immune_ratios.csv
+    /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s3_results/cl_s3_ct_antigen.csv
+    /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s3_results/cl_s3_lineage_memory.csv
+
+=================================================================
+STEP 10: GENERATE FIGURE
+=================================================================
+  Figure saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s3_results/cl_s3_figure.png
+
+=================================================================
+STEP 11: PREDICTION SCORECARD SUMMARY
+=================================================================
+
+  ID       Analysis   Gene                   Str          p   metric  Status
+  ───────────────────────────────────────────────────────────────────────────
+  S3-P1    A          FOXP3/CD8A             A        0.320    0.061  NOT CONFIRMED
+  S3-P2    A          FOXP3/CD8A             B        0.178    2.160  NOT CONFIRMED
+  S3-P3    A          composite_treg         B        0.171    2.212  CONFIRMED
+  S3-P4    B          ct_composite           A        0.053    0.119  NOT CONFIRMED
+  S3-P5    B          ct_composite           B        0.763    1.219  NOT CONFIRMED
+  S3-P6    B          ct_vs_treg_ratio       A        0.098    0.101  NOT CONFIRMED
+  S3-P7    C          lineage_memory_OS      B        0.878    1.043  NOT CONFIRMED
+  S3-P8    C          ct_vs_memory           B        0.000      nan  CONFIRMED
+  S3-P9    C          depth_vs_memory        B        0.000    3.170  CONFIRMED
+  S3-P10   C          treg_ratio_vs_memory   B        0.008    1.069  CONFIRMED
+
+  Confirmed: 4 / 10
+  Scorecard saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s3_results/cl_s3_scorecard.csv
+
+=================================================================
+SCRIPT 3 COMPLETE
+=================================================================
+  Output: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s3_results
+  Log:        /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s3_results/cl_s3_log.txt
+  Figure:     /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s3_results/cl_s3_figure.png
+  Scorecard:  /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s3_results/cl_s3_scorecard.csv
+  Immune CSV: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s3_results/cl_s3_immune_ratios.csv
+  CT CSV:     /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s3_results/cl_s3_ct_antigen.csv
+  Memory CSV: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s3_results/cl_s3_lineage_memory.csv
+
+  NEXT STEP:
+    Write script3_results_and_reasoning.md (BRCA-S7h)
+    Geometry read first — no prediction framing.
+    Key questions:
+      Does FOXP3/CD8A ratio predict OS better than
+        total immune score (S2-P3 was null)?
+      Does CT antigen track depth (first Pred G test)?
+      Does lineage memory split separate OS curves?
+      Do memory-low and memory-high differ in CT antigen
+        AND Treg ratio (linking all three analyses)?

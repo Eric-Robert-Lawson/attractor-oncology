@@ -1,0 +1,235 @@
+=================================================================
+BRCA CLAUDIN-LOW — SCRIPT 2
+OrganismCore — Document BRCA-S7d | 2026-03-05
+
+ATTRACTOR TYPE: TYPE 4 — ROOT LOCK
+ANALYSIS: SURVIVAL + PREDICTION TESTS
+Output directory: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s2_results
+=================================================================
+=================================================================
+STEP 0: SURVIVAL DATA ACQUISITION
+=================================================================
+  Found: Expression — TCGA_BRCA_HiSeqV2.gz
+  Found: Clinical — TCGA_BRCA_clinicalMatrix.tsv
+
+-- Pancan survival supplement --
+  Trying: https://pancanatlas.xenahubs.net/download/Survival_SupplementalTable_S1_20171025
+  Downloading TCGA pancan survival ...
+  OK: TCGA_pancan_survival.tsv (2.4 MB)
+
+=================================================================
+STEP 1: LOAD EXPRESSION MATRIX
+=================================================================
+  Shape (genes x samples): (20530, 1218)
+  Sample example: ['TCGA-AR-A5QQ-01', 'TCGA-D8-A1JA-01']
+
+=================================================================
+STEP 2: LOAD CLINICAL + SURVIVAL
+=================================================================
+  Clinical shape: (1247, 193)
+  Pancan survival shape: (12591, 34)
+  Columns: ['sample', '_PATIENT', 'cancer type abbreviation', 'age_at_initial_pathologic_diagnosis', 'gender', 'race', 'ajcc_pathologic_tumor_stage', 'clinical_stage']
+  Survival index set to: 'sample'
+  OS time col:  OS.time
+  OS event col: OS
+  Clinical fallback — time: OS_Time_nature2012, event: OS_event_nature2012
+
+=================================================================
+STEP 3: REBUILD POPULATIONS
+  (Replicating Script 1 classification exactly)
+=================================================================
+  Tumour: 1097  Normal: 114
+  Claudin-low (Stratum A): n=268
+  Stratum B (ESR1-low):    n=177
+  Stratum C (Basal+Normal-PAM50): n=79
+
+  Population summary:
+    claudin_low          n=268
+    stratum_b            n=177
+    stratum_c            n=79
+    normal               n=114
+    luma                 n=357
+    lumb                 n=168
+    her2                 n=58
+    basal                n=119
+
+=================================================================
+STEP 4: BUILD SURVIVAL VECTORS
+=================================================================
+  Pancan survival: time='OS.time', event='OS'
+  Pancan matches: 1201
+  Total samples with survival: 1201
+
+  Survival coverage per population:
+    claudin_low          266/268 with survival data
+    stratum_b            176/177 with survival data
+    stratum_c            78/79 with survival data
+    normal               113/114 with survival data
+    luma                 354/357 with survival data
+    lumb                 165/168 with survival data
+    her2                 55/58 with survival data
+    basal                117/119 with survival data
+
+=================================================================
+STEP 5: COMPUTE DEPTH SCORES
+=================================================================
+  Depth scores computed for 970 tumour samples
+  Range: -3.3547 to 6.3093
+  Mean:  0.0000
+  Std:   1.0409
+
+=================================================================
+STEP 6: CROSS-SUBTYPE KAPLAN-MEIER
+  Geometry read BEFORE prediction tests.
+  No prediction framing. Read what is there.
+=================================================================
+
+  Population             n_surv   events    median_OS
+  ────────────────────────────────────────────────────
+  Normal                    113       44       2520.0
+  Claudin-low               266       33       3873.0
+  LumA                      354       39       4456.0
+  LumB                      165       18       3941.0
+  HER2                       55        8       6456.0
+  TNBC/Basal                117       13          inf
+
+  Pairwise log-rank: Claudin-low vs each subtype:
+    CL vs Normal: n_high=266 n_low=113  events_h=33 events_l=44  p=0.000 *  HR≈0.377
+    CL vs LumA: n_high=266 n_low=354  events_h=33 events_l=39  p=0.158  HR≈1.246
+    CL vs LumB: n_high=266 n_low=165  events_h=33 events_l=18  p=0.998  HR≈1.011
+    CL vs HER2: n_high=266 n_low=55  events_h=33 events_l=8  p=0.658  HR≈0.776
+    CL vs TNBC/Basal: n_high=266 n_low=117  events_h=33 events_l=13  p=0.291  HR≈1.335
+
+=================================================================
+STEP 7: PREDICTION TESTS
+  Predictions from BRCA-S7c tested here.
+  Geometry was read first (Step 6).
+=================================================================
+
+  ─────────────────────────────────────────────────────
+  S2-P1 — DEPTH SCORE vs OS (Stratum A, n=268)
+  Prediction: depth-high = worse OS (HR > 1.0)
+  ─────────────────────────────────────────────────────
+    S2-P1 [depth tertile, Stratum A]: n_high=89 n_low=88  events_h=12 events_l=10  p=0.525  HR≈1.262
+  Status: [NOT CONFIRMED]
+
+  ─────────────────────────────────────────────────────
+  S2-P7 — DEPTH SCORE vs OS (Stratum B, ESR1-low)
+  Prediction: HR(B) >= HR(A) — purity test
+  ─────────────────────────────────────────────────────
+    S2-P7 [depth tertile, Stratum B]: n_high=59 n_low=58  events_h=8 events_l=3  p=0.064 (trend)  HR≈3.112
+  Status: [CONFIRMED]
+  HR(A)=1.262  HR(B)=3.112
+  Depth signal HOLDS in ESR1-low purified subset
+
+  ────────────────���────────────────────────────────────
+  STRATUM C — Depth score vs OS (Basal+Normal-PAM50)
+  ─────────────────────────────────────────────────────
+    depth tertile, Stratum C: n_high=26 n_low=26  events_h=5 events_l=2  p=0.168  HR≈3.253
+
+  ──────────────────────���──────────────────────────────
+  S2-P2 — CLDN3 expression vs OS (Stratum A)
+  Prediction: CLDN3-low = worse OS
+  ─────────────────────────────────────────────────────
+    S2-P2 [CLDN3 tertile, high vs low]: n_high=89 n_low=88  events_h=7 events_l=11  p=0.407  HR≈0.641
+  (HR < 1.0 means CLDN3-high = better = prediction confirmed)
+  Status: [NOT CONFIRMED]
+
+  ─────────────────────────────────────────────────────
+  S2-P3 — IMMUNE SCORE vs OS (Stratum A)
+  Prediction: immune-high = BETTER OS (HR < 1.0)
+  ─────────────────────────────────────────────────────
+  Immune genes present: ['FOXP3', 'PDCD1', 'TIGIT', 'LAG3']
+    S2-P3 [immune score tertile]: n_high=89 n_low=88  events_h=13 events_l=13  p=0.950  HR≈1.044
+  NOTE: HR > 1.0 — immune-high doing WORSE (Treg interpretation)
+  Status: [NOT CONFIRMED]
+
+  ─────────────────────────────────────────────────────
+  S2-P4 — MKI67 vs OS (Stratum A)
+  Prediction: MKI67-high = worse OS (HR > 1.0)
+  ─────────────────────────────────────────────────────
+    S2-P4 [MKI67 tertile]: n_high=89 n_low=88  events_h=13 events_l=11  p=0.982  HR≈1.068
+  Status: [NOT CONFIRMED]
+
+  ─────────────────────────────────────────────────────
+  S2-P5 — CLAUDIN-LOW vs LumA and TNBC survival
+  Prediction: CL < LumA (worse), CL ≈ TNBC
+  ─────────────────────────────────────────────────────
+    S2-P5 [CL vs LumA]: n_high=266 n_low=354  events_h=33 events_l=39  p=0.158  HR≈1.246
+    S2-P5 [CL vs TNBC]: n_high=266 n_low=117  events_h=33 events_l=13  p=0.291  HR≈1.335
+  CL worse than LumA: YES
+  CL comparable to TNBC (p>0.10): YES
+  Status: [CONFIRMED]
+
+  ─────────────────────────────────────────────────────
+  S2-P6 — PARP1 vs OS independent of MKI67 (NEGATIVE)
+  Prediction: PARP1 does NOT predict OS independently
+  ─────────────────────────────────────────────────────
+    S2-P6 [PARP1 tertile]: n_high=89 n_low=88  events_h=10 events_l=12  p=0.672  HR≈0.864
+  Status: [CONFIRMED (null as predicted)]
+
+  ─────────────────────────────────────────────────────
+  S2-P8 — CD274 (PD-L1) vs OS (NEGATIVE prediction)
+  Prediction: CD274 does NOT predict OS in TCGA cohort
+  ─────────────────────────────────────────────────────
+    S2-P8 [CD274 tertile]: n_high=89 n_low=88  events_h=14 events_l=12  p=0.785  HR≈1.092
+  Status: [CONFIRMED (null as predicted)]
+
+  Scorecard saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s2_results/cl_s2_scorecard.csv
+
+=================================================================
+STEP 8: COX MULTIVARIATE
+  depth_score + MKI67 + ERBB2 within claudin-low
+  Tests: is depth score independent of proliferation?
+=================================================================
+  Cox input: n=266
+
+  Cox PH results:
+    depth_score_z          HR=1.1163 [0.739–1.685]  p=0.601
+    MKI67_z                HR=0.8423 [0.560–1.267]  p=0.410
+    ERBB2_z                HR=0.8236 [0.525–1.291]  p=0.397
+
+  Depth score in multivariate: p=0.601
+  Depth score is not independently significant after MKI67/ERBB2 adjustment
+
+=================================================================
+STEP 9: GENERATE FIGURE
+=================================================================
+  Figure saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s2_results/cl_s2_figure.png
+
+=================================================================
+STEP 10: PREDICTION SCORECARD SUMMARY
+  Protocol v2.0: geometry read first (Step 6).
+  All predictions now scored.
+=================================================================
+
+  ID         Axis                   Stratum             p       HR  Status
+  ───────────────────────────────────────────────────────────────────────────
+  S2-P1      depth_score            A               0.525    1.262  NOT CONFIRMED
+  S2-P7      depth_score            B               0.064    3.112  CONFIRMED
+  S2-P1-C    depth_score            C               0.168    3.253  SEE NOTE
+  S2-P2      CLDN3                  A               0.407    0.641  NOT CONFIRMED
+  S2-P3      immune_composite       A               0.950    1.044  NOT CONFIRMED
+  S2-P4      MKI67                  A               0.982    1.068  NOT CONFIRMED
+  S2-P5a     CL vs LumA             A               0.158    1.246  CONFIRMED
+  S2-P5b     CL vs TNBC             A               0.291    1.335  CONFIRMED
+  S2-P6      PARP1                  A               0.672    0.864  CONFIRMED (null as predicted)
+  S2-P8      CD274                  A               0.785    1.092  CONFIRMED (null as predicted)
+
+  Predictions confirmed (including negatives): 5 / 10
+
+  Survival CSV saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s2_results/cl_s2_survival.csv
+
+=================================================================
+SCRIPT 2 COMPLETE
+=================================================================
+  Output directory: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s2_results
+  Log:      /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s2_results/cl_s2_log.txt
+  Figure:   /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s2_results/cl_s2_figure.png
+  Survival: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s2_results/cl_s2_survival.csv
+  Scorecard:/Users/ericlawson/cancer/BRCA/DEEP_DIVE/claudin-low/Claudin_Low_s2_results/cl_s2_scorecard.csv
+
+  NEXT STEP:
+    Write script2_results_and_reasoning.md (BRCA-S7d)
+    Read KM geometry on its own terms first.
+    Score all 8 predictions against the output.

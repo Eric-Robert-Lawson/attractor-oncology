@@ -1,0 +1,898 @@
+\documentclass[11pt, a4paper]{article}
+
+% ── PACKAGES ──────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{margin=2.2cm}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue,
+    pdftitle={FOXA1/EZH2 Dual IHC Protocol Specification:
+              Antibody Selection, Staining Conditions,
+              Scoring Method, and Calibration Study Design},
+    pdfauthor={Eric Robert Lawson / OrganismCore}
+}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{authblk}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{multirow}
+\usepackage{mdframed}
+
+% ── COLOURS ───────────────────────────────────────────────────
+\definecolor{repobox}{RGB}{240,247,255}
+\definecolor{protocolbox}{RGB}{245,255,245}
+\definecolor{warningbox}{RGB}{255,248,210}
+\definecolor{gapbox}{RGB}{255,235,235}
+\definecolor{scorebox}{RGB}{250,245,255}
+\definecolor{decisionbox}{RGB}{235,255,235}
+\definecolor{headerblue}{RGB}{30,80,160}
+
+% ── HEADER / FOOTER ───────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\footnotesize FOXA1/EZH2 IHC Protocol Specification
+       --- OrganismCore}
+\rhead{\footnotesize Version 1.0 \textbar{} 2026-03-06}
+\rfoot{\small Page \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\setlength{\headheight}{24pt}
+\addtolength{\topmargin}{-10pt}
+
+% ── SECTION FORMATTING ────────────────────────────────────────
+\titleformat{\section}
+  {\large\bfseries\color{headerblue}}
+  {\thesection}{1em}{}[\titlerule]
+\titleformat{\subsection}
+  {\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\small\bfseries\itshape}{\thesubsubsection}{1em}{}
+
+% ══════════════════════════════════════════════════════════════
+\title{
+    \vspace{-1em}
+    \textbf{FOXA1/EZH2 Dual IHC Protocol Specification}\\[0.5em]
+    \large Antibody Selection, Staining Conditions,
+    H-Score Calculation, Tissue Controls,
+    and Calibration Study Design\\[0.4em]
+    \normalsize Supporting document for
+    CS-LIT-1 (\href{https://doi.org/10.5281/zenodo.18883922}
+    {DOI: 10.5281/zenodo.18883922}) and
+    CS-LIT-22 (\href{https://doi.org/10.5281/zenodo.18892788}
+    {DOI: 10.5281/zenodo.18892788})\\[0.3em]
+    \small Version 1.0 --- Pre-calibration specification.
+    Cut-points to be determined in the concordance study
+    described in Section~\ref{sec:calibration}.
+}
+
+\author[1]{Eric Robert Lawson}
+\affil[1]{OrganismCore \textbar{}
+    \href{mailto:OrganismCore@proton.me}
+    {OrganismCore@proton.me} \textbar{}
+    ORCID: 0009-0002-0414-6544}
+
+\date{March 6, 2026}
+
+% ══════════════════════════════════════════════════════════════
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+% ── VERSION NOTE ──────────────────────────────────────────────
+\begin{mdframed}[backgroundcolor=warningbox,
+                 linecolor=orange!70!black,
+                 linewidth=1pt]
+\textbf{VERSION NOTE:} This is a pre-calibration
+protocol specification. Antibody recommendations
+and staining conditions are based on published
+breast cancer IHC literature and manufacturer
+datasheets. The H-score cut-points for subtype
+classification (Section~\ref{sec:cutpoints}) are
+provisional estimates derived from scRNA-seq
+ratio values and require calibration against
+PAM50-classified FFPE tissue before clinical
+deployment. See Section~\ref{sec:calibration}
+for the calibration study design.
+\end{mdframed}
+
+\vspace{0.5em}
+
+\tableofcontents
+
+\newpage
+
+% ══���═══════════════════════════════════════════════════════════
+\section{Purpose and Scope}
+% ══════════════════════════════════════════════════════════════
+
+This document provides the complete technical
+specification for running the FOXA1/EZH2 dual IHC
+ratio assay on formalin-fixed, paraffin-embedded
+(FFPE) breast cancer tissue. It is intended for
+use by:
+
+\begin{itemize}
+    \item Pathologists and histotechnologists
+    implementing the assay in a clinical or
+    research setting
+    \item Researchers designing the IHC
+    concordance study described in CS-LIT-22
+    \item Institutions evaluating the assay
+    for inclusion in a breast cancer
+    diagnostic panel
+\end{itemize}
+
+The document covers:
+\begin{enumerate}
+    \item Antibody clone selection with catalogue
+    references and manufacturer datasheet links
+    \item Staining protocol for manual and
+    automated platforms
+    \item Tissue section preparation
+    \item Scoring method and H-score calculation
+    \item Provisional cut-points and the
+    calibration study needed to confirm them
+    \item Positive and negative tissue controls
+    \item Troubleshooting guidance
+\end{enumerate}
+
+% ══════════════════════════════════════════════════════════════
+\section{Antibody Specifications}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{FOXA1 Antibody}
+
+\begin{center}
+\begin{tabular}{p{4.5cm}p{9cm}}
+\toprule
+\textbf{Field} & \textbf{Specification} \\
+\midrule
+Target protein & FOXA1 (Forkhead Box A1;
+    Hepatocyte Nuclear Factor 3-alpha) \\[0.3em]
+\textbf{Recommended clone} &
+    \textbf{D4E2 (XP Rabbit Monoclonal)} \\[0.3em]
+Manufacturer & Cell Signaling Technology \\[0.3em]
+Catalogue number & CST \#53528 \\[0.3em]
+Host species & Rabbit \\[0.3em]
+Clonality & Monoclonal \\[0.3em]
+Immunogen & Synthetic peptide corresponding
+    to human FOXA1 \\[0.3em]
+Molecular weight & ${\sim}49$~kDa \\[0.3em]
+Cellular localisation & Nuclear (exclusively) \\[0.3em]
+Validated for FFPE IHC & Yes (manufacturer
+    validated) \\[0.3em]
+Manufacturer IHC datasheet &
+    \href{https://www.cellsignal.com/products/primary-antibodies/foxa1-d4e2-xp-rabbit-mab/53528}
+    {cellsignal.com \#53528} \\[0.3em]
+\textbf{Alternative clone} &
+    SP87 (Rabbit Monoclonal) ---
+    Abcam ab170933;
+    equivalent performance in
+    published FOXA1 IHC studies \\[0.3em]
+Why this antibody & D4E2 is validated in
+    breast cancer IHC by the manufacturer
+    and by multiple published studies.
+    Nuclear-only staining pattern simplifies
+    scoring. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{EZH2 Antibody}
+
+\begin{center}
+\begin{tabular}{p{4.5cm}p{9cm}}
+\toprule
+\textbf{Field} & \textbf{Specification} \\
+\midrule
+Target protein & EZH2 (Enhancer of Zeste
+    Homolog 2; KMT6) \\[0.3em]
+\textbf{Recommended clone} &
+    \textbf{D2H1 (XP Rabbit Monoclonal)} \\[0.3em]
+Manufacturer & Cell Signaling Technology \\[0.3em]
+Catalogue number & CST \#5246 \\[0.3em]
+Host species & Rabbit \\[0.3em]
+Clonality & Monoclonal \\[0.3em]
+Immunogen & Synthetic peptide corresponding
+    to human EZH2 (around residue 700) \\[0.3em]
+Molecular weight & ${\sim}85$~kDa \\[0.3em]
+Cellular localisation & Nuclear (exclusively) \\[0.3em]
+Validated for FFPE IHC & Yes (manufacturer
+    validated) \\[0.3em]
+Manufacturer IHC datasheet &
+    \href{https://www.cellsignal.com/products/primary-antibodies/ezh2-d2h1-xp-rabbit-mab/5246}
+    {cellsignal.com \#5246} \\[0.3em]
+\textbf{Alternative clone} &
+    AC22 (Mouse Monoclonal) ---
+    Leica Biosystems NCL-L-EZH2;
+    widely used in published breast
+    cancer EZH2 IHC studies;
+    requires anti-mouse secondary \\[0.3em]
+Why this antibody & D2H1 is the most
+    extensively published EZH2 IHC
+    antibody in breast cancer.
+    Nuclear-only staining pattern matches
+    FOXA1, enabling consistent
+    H-score comparison on adjacent
+    or sequential sections. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{mdframed}[backgroundcolor=protocolbox,
+                 linecolor=green!50!black,
+                 linewidth=1pt]
+\textbf{NOTE ON ANTIBODY MATCHING:}
+Both D4E2 (FOXA1) and D2H1 (EZH2) are rabbit
+monoclonal antibodies from the same manufacturer
+(Cell Signaling Technology). This means:
+\begin{itemize}[noitemsep]
+    \item The same secondary antibody (anti-rabbit
+    HRP polymer) can be used for both stains
+    when run sequentially
+    \item Protocol conditions (blocking, incubation,
+    detection) are directly comparable
+    \item Both produce exclusively nuclear staining,
+    simplifying H-score calculation to nuclear
+    compartment only
+\end{itemize}
+\end{mdframed}
+
+% ══════════════════════════════════════════════════════════════
+\section{Tissue Section Preparation}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Section thickness and preparation}
+
+\begin{itemize}
+    \item \textbf{Section thickness:} 3--4~$\mu$m
+    (standard diagnostic IHC thickness)
+    \item \textbf{Sections required per case:}
+    Two serial or near-serial sections ---
+    one for FOXA1, one for EZH2. Sections should
+    be taken within 10 levels of each other to
+    ensure the same tumour area is represented
+    in both stains.
+    \item \textbf{Mounting:} Charged or
+    poly-L-lysine coated slides (APES-coated
+    slides acceptable) to prevent section
+    detachment during antigen retrieval
+    \item \textbf{Drying:} 60$^\circ$C oven,
+    minimum 60 minutes, after mounting
+    \item \textbf{Tumour content:} Select
+    section with $\geq 20\%$ invasive tumour
+    cells. A pathologist should mark the tumour
+    area on the H\&E before IHC scoring.
+\end{itemize}
+
+\subsection{FFPE block age and RNA quality}
+
+IHC does not require RNA. FFPE blocks of any
+age are suitable provided:
+\begin{itemize}[noitemsep]
+    \item Standard formalin fixation was used
+    (10\% neutral buffered formalin, 6--72 hours)
+    \item The block has not undergone repeated
+    freeze-thaw cycling
+    \item Section quality is adequate (no tears,
+    folds, or edge artefacts in tumour area)
+\end{itemize}
+
+This is a significant advantage over PAM50/Prosigna,
+which requires adequate RNA integrity and is
+unreliable on poorly fixed or archival tissue.
+
+% ══════════════════════════════════════════════════════════════
+\section{Staining Protocol}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Manual protocol (all platforms)}
+
+\begin{center}
+\begin{tabular}{p{0.8cm}p{5cm}p{7.5cm}}
+\toprule
+\textbf{Step} & \textbf{Procedure} &
+\textbf{Conditions / Notes} \\
+\midrule
+1 & Deparaffinise &
+    Xylene, $3 \times 5$ min; or equivalent
+    deparaffinisation solution \\[0.3em]
+2 & Rehydrate &
+    Graded ethanol series: 100\%, 95\%, 70\%,
+    distilled water, $2$ min each \\[0.3em]
+3 & Endogenous peroxidase block &
+    3\% $\text{H}_2\text{O}_2$ in methanol
+    or water, 10 min, room temperature (RT).
+    Wash $3\times$ PBS. \\[0.3em]
+4 & \textbf{Antigen retrieval ---
+    FOXA1 (D4E2)} &
+    \textbf{HIER, Citrate buffer pH~6.0
+    (e.g. Dako S1699).}
+    Pressure cooker or steamer, 20 min at
+    $95$--$100^\circ$C.
+    Cool 20--30 min at RT.
+    Wash $2\times$ PBS. \\[0.3em]
+4 & \textbf{Antigen retrieval ---
+    EZH2 (D2H1)} &
+    \textbf{HIER, EDTA buffer pH~9.0
+    (e.g. Dako S2367 or Leica AR9640).}
+    Pressure cooker or steamer, 20 min at
+    $98^\circ$C.
+    Cool 20--30 min at RT.
+    Wash $2\times$ PBS.
+    \textit{Note: run FOXA1 and EZH2
+    sections separately for antigen
+    retrieval due to different buffer
+    requirements.} \\[0.3em]
+5 & Serum block &
+    5\% normal goat serum (or equivalent
+    protein block) in PBS, 30 min, RT.
+    Do not wash. Tip off excess. \\[0.3em]
+6 & \textbf{Primary antibody ---
+    FOXA1} &
+    \textbf{D4E2 (CST \#53528) at 1:100
+    in antibody diluent (e.g. Dako S0809).}
+    60 min at RT in humidified chamber.
+    Wash $3\times$ PBS, 5 min each. \\[0.3em]
+6 & \textbf{Primary antibody ---
+    EZH2} &
+    \textbf{D2H1 (CST \#5246) at 1:100
+    in antibody diluent.}
+    60 min at RT in humidified chamber.
+    Wash $3\times$ PBS, 5 min each. \\[0.3em]
+7 & Secondary antibody &
+    Anti-rabbit HRP-polymer
+    (e.g. Dako EnVision$+$ System HRP,
+    Rabbit, K4003; or equivalent).
+    30 min at RT.
+    Wash $3\times$ PBS. \\[0.3em]
+8 & Chromogen development &
+    DAB (3,3'-diaminobenzidine)
+    substrate-chromogen solution.
+    3--8 min at RT.
+    Monitor microscopically.
+    Stop with distilled water when
+    brown nuclear staining is visible
+    and background is minimal. \\[0.3em]
+9 & Counterstain &
+    Mayer's haematoxylin, 2 min.
+    Blueing in running tap water, 5 min. \\[0.3em]
+10 & Dehydrate and mount &
+    Graded ethanol, xylene, permanent
+    mounting medium (e.g. DPX). \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Automated platform adaptations}
+
+\begin{center}
+\begin{tabular}{p{3.5cm}p{5cm}p{5cm}}
+\toprule
+\textbf{Platform} & \textbf{FOXA1 (D4E2)} &
+\textbf{EZH2 (D2H1)} \\
+\midrule
+Ventana BenchMark
+(Roche) &
+CC1 (Tris-EDTA pH~8.5) standard,
+36 min at $100^\circ$C.
+D4E2 diluted 1:100 in Ventana
+antibody diluent.
+OptiView DAB detection. &
+CC1 standard, 36 min $100^\circ$C.
+D2H1 diluted 1:100.
+OptiView DAB detection. \\[0.4em]
+Dako AutoStainer
+(Agilent) &
+EnVision Flex target retrieval
+low pH (citrate equivalent),
+20 min $98^\circ$C.
+D4E2 1:100 in Flex antibody
+diluent. &
+EnVision Flex target retrieval
+high pH (EDTA equivalent),
+20 min $98^\circ$C.
+D2H1 1:100. \\[0.4em]
+Leica Bond RX &
+Epitope Retrieval Solution 1
+(citrate pH 6), ER1, 20 min.
+D4E2 1:100.
+Bond Polymer Refine detection. &
+Epitope Retrieval Solution 2
+(EDTA pH 9), ER2, 20 min.
+D2H1 1:100.
+Bond Polymer Refine detection. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{Tissue Controls}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\begin{tabular}{p{3cm}p{4.5cm}p{4.5cm}}
+\toprule
+\textbf{Control type} & \textbf{FOXA1} &
+\textbf{EZH2} \\
+\midrule
+\textbf{Positive tissue control} &
+Luminal A breast carcinoma
+(known ER$+$, LumA by PAM50 or
+clinical behaviour).
+Should show strong diffuse
+nuclear staining. &
+TNBC or basal-like breast carcinoma
+(known high EZH2 by prior IHC
+or literature).
+Should show strong diffuse
+nuclear staining. \\[0.4em]
+\textbf{Negative tissue control} &
+Claudin-low or TNBC breast
+carcinoma (FOXA1-absent).
+Should show absent or
+near-absent nuclear staining. &
+Normal breast stroma.
+Should show weak or absent
+nuclear staining. \\[0.4em]
+\textbf{Internal positive control} &
+Normal ductal epithelium
+on same section.
+Luminal cells should show
+moderate FOXA1 staining. &
+Mitotically active cells
+(inflammatory cells, proliferating
+stroma) often show EZH2 staining;
+use as process control only. \\[0.4em]
+\textbf{Negative reagent control} &
+Omit primary antibody; use
+isotype-matched IgG at same
+concentration. &
+Omit primary antibody; use
+isotype-matched IgG at same
+concentration. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{Scoring Method}
+\label{sec:scoring}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{What to score}
+
+\begin{mdframed}[backgroundcolor=scorebox,
+                 linecolor=purple!50!black,
+                 linewidth=1pt]
+\textbf{SCORE INVASIVE CANCER CELLS ONLY.}
+Exclude:
+\begin{itemize}[noitemsep]
+    \item Normal ductal and lobular epithelium
+    \item Stromal fibroblasts and endothelial cells
+    \item Tumour-infiltrating lymphocytes (TILs)
+    \item Myoepithelial cells
+    \item Necrotic areas
+\end{itemize}
+A pathologist should mark the invasive tumour area
+on the H\&E before IHC scoring. Score the marked
+area only. This is critical: the ratio derives its
+subtype-discriminating power from cancer cell
+expression, and stromal/immune cell EZH2 expression
+would inflate the denominator and distort the ratio.
+\end{mdframed}
+
+\subsection{H-score calculation}
+
+The H-score is a semi-quantitative scoring system
+that accounts for both staining intensity and
+proportion of positive cells. It is computed as:
+
+\begin{equation}
+\text{H-score} = \sum_{i=1}^{3} i \cdot p_i
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $p_1$ = percentage of invasive cancer
+    cells with \textbf{weak} (1$+$) nuclear staining
+    \item $p_2$ = percentage of invasive cancer
+    cells with \textbf{moderate} (2$+$) nuclear
+    staining
+    \item $p_3$ = percentage of invasive cancer
+    cells with \textbf{strong} (3$+$) nuclear
+    staining
+    \item Percentages are estimated to the nearest
+    5\% and must sum to $\leq 100\%$ (unstained
+    cells are not counted in the sum)
+\end{itemize}
+
+\textbf{H-score range: 0--300.}
+
+\begin{center}
+\begin{tabular}{p{3cm}p{5cm}p{5cm}}
+\toprule
+\textbf{Staining
+intensity} &
+\textbf{Visual description} &
+\textbf{Practical example} \\
+\midrule
+0 (negative) &
+No discernible nuclear staining
+above background &
+FOXA1 in claudin-low; EZH2 in
+normal stroma \\[0.3em]
+1$+$ (weak) &
+Light brown nuclear tinge;
+identifiable but faint;
+clearly above background &
+FOXA1 in TNBC (residual low
+expression) \\[0.3em]
+2$+$ (moderate) &
+Clearly brown nuclear staining;
+unambiguous; not intense &
+FOXA1 in LumB; EZH2 in LumA \\[0.3em]
+3$+$ (strong) &
+Intense brown nuclear staining;
+immediately evident at low power &
+FOXA1 in LumA; EZH2 in TNBC \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Example H-score calculation}
+
+A TNBC tumour section shows:
+\begin{itemize}
+    \item FOXA1: 5\% cells at 1$+$, 2\% at 2$+$,
+    0\% at 3$+$
+    \item $\text{FOXA1 H-score} = (1 \times 5) +
+    (2 \times 2) + (3 \times 0) = 9$
+\end{itemize}
+\begin{itemize}
+    \item EZH2: 20\% cells at 1$+$, 45\% at 2$+$,
+    30\% at 3$+$
+    \item $\text{EZH2 H-score} = (1 \times 20) +
+    (2 \times 45) + (3 \times 30) = 20 + 90 + 90 = 200$
+\end{itemize}
+
+\textbf{FOXA1/EZH2 ratio} $= 9 / 200 = 0.045$
+
+This falls below 0.2, consistent with the
+TNBC/CL range in the predicted framework.
+
+\subsection{Minimum tumour cell count}
+
+Score a minimum of \textbf{200 invasive cancer
+cells} for each stain. For small biopsies where
+$<200$ cells are available, score all visible
+invasive cells and note the count.
+
+\subsection{Inter-observer assessment}
+
+For the calibration study, each slide should be
+independently scored by \textbf{two pathologists}
+with no prior knowledge of the other's score.
+Inter-observer reliability should be calculated
+as:
+\begin{itemize}
+    \item Intraclass correlation coefficient (ICC)
+    for continuous H-score values
+    \item Cohen's $\kappa$ for categorical subtype
+    assignment
+    \item Target: ICC $> 0.80$, $\kappa > 0.70$
+    before clinical deployment
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════════
+\section{Provisional Cut-Points}
+\label{sec:cutpoints}
+% ══════════════════════════════════════════════════════════════
+
+\begin{mdframed}[backgroundcolor=warningbox,
+                 linecolor=orange!70!black,
+                 linewidth=1pt]
+\textbf{IMPORTANT:} The following cut-points
+are provisional estimates. They are derived by
+mapping the scRNA-seq ratio values (FOXA1/EZH2
+mean expression per subtype) to approximate
+H-score ratio equivalents based on known
+expression patterns in published IHC literature.
+\textbf{They must be calibrated against
+PAM50-classified FFPE tissue before clinical use.}
+See Section~\ref{sec:calibration} for the
+calibration study design.
+\end{mdframed}
+
+\begin{center}
+\colorbox{decisionbox}{
+\begin{minipage}{0.92\textwidth}
+\vspace{0.8em}
+\textbf{FOXA1/EZH2 IHC H-SCORE RATIO ---
+PROVISIONAL DECISION TABLE}\\[0.6em]
+\begin{tabular}{p{3cm}p{2.5cm}p{6.5cm}}
+\toprule
+\textbf{Subtype} &
+\textbf{Provisional ratio range} &
+\textbf{Treatment logic
+(from framework)} \\
+\midrule
+Luminal A &
+$> 1.5$ &
+ET engages directly.
+CDK4/6 inhibitor (palbociclib,
+ribociclib, abemaciclib) + ET
+is the primary entry. \\[0.4em]
+Luminal B &
+$0.8$--$1.5$ &
+Chromatin lock on ER output.
+HDACi (entinostat) + ET.
+CDK4/6i also active. \\[0.4em]
+HER2-enriched &
+$0.3$--$0.8$ &
+Anti-HER2 first (trastuzumab
+$\pm$ pertuzumab).
+ET thereafter if HR$+$. \\[0.4em]
+TNBC &
+$0.02$--$0.15$ &
+Epigenetic lock.
+Tazemetostat $\rightarrow$
+fulvestrant (see CS-LIT-16). \\[0.4em]
+Claudin-low &
+$< 0.02$ &
+No epigenetic lock to dissolve.
+Anti-TIGIT $\rightarrow$
+anti-PD-1 sequence required. \\[0.4em]
+ILC
+(exception) &
+$> 2.0$ and
+CDH1-absent &
+FOXA1 hyperactivated above LumA.
+Fulvestrant $>$ AI.
+Full ER degradation required. \\
+\bottomrule
+\end{tabular}
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\vspace{0.5em}
+
+\textbf{Note on ILC identification:} ILC sits
+above LumA on the ratio (FOXA1 hyperactivated,
+EZH2 low). It is identified by three features
+together: (1) ratio $>2.0$; (2) CDH1-absent
+by IHC or clinical/morphological confirmation
+of lobular histology; (3) characteristic
+single-file infiltration pattern on H\&E.
+CDH1 IHC can be added as a third stain
+if lobular vs ductal distinction is required.
+
+% ══════════════════════════════════════════════════════════════
+\section{Calibration Study Design}
+\label{sec:calibration}
+% ═══════════════════��══════════════════════════════════════════
+
+This section describes the single study needed
+to translate the provisional cut-points into
+clinically validated IHC thresholds.
+
+\subsection{Study type}
+
+\textbf{Retrospective IHC concordance study.}
+No new patient recruitment. No treatment
+changes. Observational only.
+
+\subsection{Study population}
+
+Archived FFPE breast cancer tissue from patients
+with:
+\begin{itemize}[noitemsep]
+    \item Available PAM50/Prosigna result
+    (from a prior clinical or research assay)
+    OR available PAM50 result from a freshly
+    run parallel assay on the same tissue
+    \item Confirmed invasive breast carcinoma
+    (any subtype)
+    \item Adequate tumour content in FFPE
+    block ($\geq 20\%$ invasive tumour cells)
+\end{itemize}
+
+\textbf{Target sample size:}
+$n = 300$--$400$ cases minimum, with
+representation from all five subtypes:
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+\textbf{PAM50 subtype} &
+\textbf{Target n} &
+\textbf{Minimum acceptable} \\
+\midrule
+Luminal A & 80--100 & 50 \\
+Luminal B & 80--100 & 50 \\
+HER2-enriched & 50--60 & 30 \\
+Basal/TNBC & 60--80 & 40 \\
+Claudin-low & 30--40 & 20 \\
+\textbf{Total} & \textbf{300--380} & \textbf{190} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{ILC cases:} Include a minimum of
+30 lobular carcinoma cases (CDH1-absent, any
+PAM50 subtype) as a separate analysis arm.
+
+\subsection{Primary endpoint}
+
+Agreement between FOXA1/EZH2 IHC ratio
+classification and PAM50 subtype classification,
+measured by:
+\begin{itemize}
+    \item \textbf{Cohen's $\kappa$:} Target $\geq 0.70$
+    \item \textbf{Overall concordance:}
+    Target $\geq 75\%$ (ideally $\geq 85\%$)
+    \item \textbf{AUC for binary classification tasks:}
+    LumA vs Basal, LumA vs LumB
+    (pre-specified; target AUC $\geq 0.75$)
+\end{itemize}
+
+\subsection{Secondary endpoints}
+
+\begin{itemize}
+    \item Inter-observer reliability between
+    two independent pathologists
+    (ICC for H-scores; $\kappa$ for categorical
+    assignment; target ICC $> 0.80$)
+    \item Calibrated cut-point values in IHC
+    H-score units (to replace the provisional
+    cut-points in Section~\ref{sec:cutpoints})
+    \item Correlation between IHC ratio and
+    clinical outcome where outcome data are
+    available (exploratory; not a primary endpoint)
+\end{itemize}
+
+\subsection{What this study does not require}
+
+\begin{itemize}[noitemsep]
+    \item No new patient recruitment
+    \item No treatment changes to any patient
+    \item No regulatory approval beyond
+    standard institutional ethics
+    for tissue research (most jurisdictions
+    classify this as minimal-risk retrospective
+    tissue research)
+    \item No new laboratory equipment
+    \item No bioinformatics infrastructure
+\end{itemize}
+
+\subsection{Estimated resource requirements}
+
+\begin{center}
+\begin{tabular}{p{5cm}p{7.5cm}}
+\toprule
+\textbf{Resource} & \textbf{Estimate} \\
+\midrule
+Antibody cost &
+FOXA1 D4E2 (CST \#53528): ${\sim}$\$400
+for 100 tests per vial. EZH2 D2H1
+(CST \#5246): ${\sim}$\$400 per vial.
+For 400 cases: approximately \$1,500--\$3,000
+total in antibody costs. \\[0.3em]
+IHC consumables &
+Slides, coverslips, DAB, haematoxylin,
+buffers: approximately \$2,000--\$4,000
+for 400 cases. \\[0.3em]
+Pathologist time &
+Scoring 400 $\times$ 2 slides $\times$ 2
+pathologists: approximately 40--60 hours
+total. \\[0.3em]
+Statistician time &
+Concordance analysis, ROC, cut-point
+determination: approximately 10--20 hours. \\[0.3em]
+\textbf{Total estimated cost} &
+\textbf{\$5,000--\$15,000 depending on
+institution and existing PAM50 data
+availability.} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{Troubleshooting}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\begin{tabular}{p{4cm}p{4cm}p{5cm}}
+\toprule
+\textbf{Problem} &
+\textbf{Likely cause} &
+\textbf{Solution} \\
+\midrule
+No or very weak staining
+(both antibodies) &
+Antigen retrieval failure;
+antibody inactivation;
+inadequate section adhesion &
+Increase retrieval time.
+Check antibody storage ($-20^\circ$C).
+Use freshly cut sections ($<6$ weeks). \\[0.4em]
+High background on EZH2 &
+Insufficient peroxidase block;
+non-specific binding &
+Extend $\text{H}_2\text{O}_2$
+block to 15 min.
+Increase serum block concentration. \\[0.4em]
+FOXA1 cytoplasmic staining &
+Non-specific binding;
+cross-reactivity &
+Only count nuclear staining.
+Cytoplasmic FOXA1 is not scored
+for this ratio. \\[0.4em]
+CL ratio appears higher than
+TNBC (inconsistent with framework) &
+Stromal cells being scored;
+EZH2 in TILs included in count &
+Re-score cancer cells only.
+Exclude all non-cancer nuclei.
+This is the most common scoring error. \\[0.4em]
+Poor section quality (tears,
+folds, loss of antigen) &
+Block quality; section age;
+inadequate drying &
+Re-cut from block.
+Use sections cut within 2 weeks. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{Document Status and Contact}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Field} & \textbf{Value} \\
+\midrule
+Document type &
+IHC Protocol Specification v1.0 \\
+Status &
+Pre-calibration. Cut-points provisional. \\
+Author &
+Eric Robert Lawson, OrganismCore \\
+Contact &
+OrganismCore@proton.me \\
+ORCID &
+0009-0002-0414-6544 \\
+CS-LIT-1 DOI &
+\href{https://doi.org/10.5281/zenodo.18883922}
+{10.5281/zenodo.18883922} \\
+CS-LIT-22 DOI &
+\href{https://doi.org/10.5281/zenodo.18892788}
+{10.5281/zenodo.18892788} \\
+Repository &
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{Eric-Robert-Lawson/attractor-oncology} \\
+Version history &
+v1.0 (2026-03-06): Initial release \\
+Next version trigger &
+Publication of calibration study results;
+update cut-points to validated IHC values \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\end{document}

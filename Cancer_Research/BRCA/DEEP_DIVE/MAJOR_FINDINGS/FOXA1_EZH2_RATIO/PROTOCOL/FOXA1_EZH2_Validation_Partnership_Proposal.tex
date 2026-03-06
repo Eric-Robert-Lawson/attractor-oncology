@@ -1,0 +1,464 @@
+\documentclass[11pt, a4paper]{article}
+
+% ── PACKAGES ──────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue
+}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{authblk}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{mdframed}
+\usepackage{multirow}
+
+% ── COLOURS ───────────────────────────────────────────────────
+\definecolor{headerblue}{RGB}{20,60,140}
+\definecolor{findingbox}{RGB}{240,250,240}
+\definecolor{askbox}{RGB}{235,245,255}
+\definecolor{equitybox}{RGB}{255,245,230}
+\definecolor{statsbox}{RGB}{248,240,255}
+
+% ── PAGE STYLE ────────────────────────────────���───────────────
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\footnotesize FOXA1/EZH2 IHC Validation
+       Partnership Proposal}
+\rhead{\footnotesize OrganismCore \textbar{} 2026-03-06}
+\rfoot{\small Page \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\setlength{\headheight}{24pt}
+\addtolength{\topmargin}{-10pt}
+
+% ── SECTION FORMATTING ────────────────────────────────────────
+\titleformat{\section}
+  {\large\bfseries\color{headerblue}}
+  {\thesection}{1em}{}[\titlerule]
+\titleformat{\subsection}
+  {\normalsize\bfseries}{\thesubsection}{1em}{}
+
+% ══════════════════════════════════════════════════════════════
+\title{
+    \vspace{-1.5em}
+    {\color{headerblue}\textbf{Validation Partnership
+    Proposal}}\\[0.4em]
+    \large\textbf{FOXA1/EZH2 Dual IHC as a Universal
+    Breast Cancer Treatment Classifier}\\[0.3em]
+    \normalsize Two stains. One number. Six subtypes.
+    Same-day results. \$50--\$100 per patient.\\[0.5em]
+    \small\textit{A retrospective concordance study
+    against PAM50 in archival FFPE tissue --- the single
+    remaining step to clinical deployment}
+}
+
+\author[1]{Eric Robert Lawson}
+\affil[1]{OrganismCore (Independent Research) \textbar{}
+    \href{mailto:OrganismCore@proton.me}
+    {OrganismCore@proton.me} \textbar{}
+    ORCID: \href{https://orcid.org/0009-0002-0414-6544}
+    {0009-0002-0414-6544}}
+
+\date{March 6, 2026}
+
+% ══════════════════════════════════════════════════════════════
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+\vspace{-0.5em}
+\noindent\rule{\textwidth}{1.5pt}
+\vspace{0.3em}
+
+% ── SUMMARY BOX ───────────────────────────────────────────────
+\begin{mdframed}[backgroundcolor=findingbox,
+                 linecolor=green!50!black,
+                 linewidth=1.5pt]
+\textbf{In brief:}
+
+A ratio of two standard IHC proteins (FOXA1 $\div$
+EZH2) was derived from first principles using
+Waddington attractor geometry applied to 19,542 single
+cancer cells. It correctly orders all six major breast
+cancer subtypes and maps each to its therapeutic
+treatment logic. Validated computationally across
+${\sim}$7,500 patients in seven independent datasets
+(TCGA, METABRIC, CPTAC, GSE25066, and three others).
+
+\medskip
+The test costs \$50--\$100 per patient. It uses
+equipment present in any pathology laboratory. It
+produces results the same day as the biopsy workup.
+It requires no RNA, no proprietary platform, and no
+shipping to a reference laboratory.
+
+\medskip
+One study is needed before clinical deployment: a
+retrospective IHC concordance study against PAM50 in
+$n=300$--$400$ archived FFPE cases with known subtype
+classification. No new patients. No treatment changes.
+Estimated cost: \$5,000--\$15,000 in consumables.
+
+\medskip
+\textbf{We are seeking one or more pathology/oncology
+partners to run this study.}
+\end{mdframed}
+
+\vspace{0.8em}
+
+% ══════════════════════════════════════════════════════════════
+\section{The Problem: Molecular Subtyping Is
+Inaccessible to Most Breast Cancer Patients}
+% ══════════════════════════════════════════════════════════════
+
+Breast cancer causes approximately 685,000 deaths
+per year globally. The majority of these deaths
+occur in low- and middle-income countries, where
+the current gold standard for molecular subtyping
+--- PAM50/Prosigna --- is unavailable.
+
+\begin{center}
+\begin{tabular}{p{5cm}p{4.5cm}p{4.5cm}}
+\toprule
+& \textbf{PAM50/Prosigna} &
+\textbf{FOXA1/EZH2 IHC ratio} \\
+\midrule
+Cost per patient &
+\$3,000--\$4,000 &
+\$50--\$100 \\
+Platform &
+NanoString nCounter
+(proprietary, \$150k--\$250k) &
+Standard IHC scanner \\
+RNA required &
+Yes (degrades; strict
+handling needed) &
+No \\
+Laboratory type &
+Specialised, certified &
+Any pathology lab \\
+Turnaround &
+Days to weeks &
+Same day \\
+Output &
+Subtype label only &
+Subtype $+$ mechanism $+$
+treatment logic \\
+Global access &
+Major centres in
+wealthy countries only &
+Universal \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Without molecular subtyping, ER$+$ patients (Luminal
+A and Luminal B, two different diseases) receive the
+same treatment. Triple-negative patients (TNBC and
+Claudin-low, with opposite treatment implications)
+receive the same treatment. The ambiguity is not
+academic --- it affects treatment choices that
+determine outcomes.
+
+% ══════════════════════════════════════════════════════════════
+\section{The Finding: The FOXA1/EZH2 Ratio}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{What it is and how it was derived}
+
+FOXA1 is the pioneer transcription factor that opens
+chromatin for the luminal identity programme. EZH2 is
+the epigenetic repressor (PRC2 catalytic subunit) that
+silences that same programme. Their ratio measures the
+balance between identity maintenance and identity
+suppression --- the biological axis that determines
+both subtype and therapeutic vulnerability.
+
+The ratio was derived from Waddington landscape
+attractor geometry applied to 19,542 single cancer
+cells from 26 patients (GSE176078, Wu et al.\ 2021,
+\textit{Nature Genetics}). The predicted ordering
+was locked before any confirmatory analysis was run.
+It was confirmed exactly.
+
+\subsection{The validated values and treatment logic}
+
+\begin{center}
+\begin{tabular}{p{2.5cm}p{1.5cm}p{7.5cm}}
+\toprule
+\textbf{Subtype} &
+\textbf{Ratio} &
+\textbf{Treatment logic} \\
+\midrule
+Luminal A & $9.38$ &
+Luminal programme intact. CDK4/6 inhibitor +
+endocrine therapy. \\[0.3em]
+Luminal B & $8.10$ &
+Chromatin lock. HDACi (entinostat) + ET.
+CDK4/6i also active. \\[0.3em]
+HER2-enriched & $3.34$ &
+HER2 amplicon. Anti-HER2 first, ET thereafter. \\[0.3em]
+TNBC & $0.52$ &
+EZH2 epigenetic lock. Tazemetostat removes
+lock $\rightarrow$ fulvestrant engages restored ER. \\[0.3em]
+Claudin-low & $0.10$ &
+No lock to dissolve. Immune only.
+Anti-TIGIT $\rightarrow$ anti-PD-1 sequence. \\[0.3em]
+ILC & Inverted &
+FOXA1 hyperactivated above LumA. Structural lock.
+Fulvestrant $>$ AI. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{The computational evidence base}
+
+\begin{mdframed}[backgroundcolor=statsbox,
+                 linecolor=purple!40!black,
+                 linewidth=1pt]
+\begin{itemize}[noitemsep]
+    \item \textbf{Ordering confirmed:}
+    TCGA-BRCA $n=837$ PAM50-labelled patients,
+    Kruskal-Wallis $p = 2.87 \times 10^{-103}$
+    \item \textbf{Survival stratification:}
+    TCGA-BRCA KM $p=0.0031$ ($n=1{,}218$);
+    METABRIC KM $p<0.0001$ ($n=1{,}980$) ---
+    two independent cohorts, two platforms
+    \item \textbf{ROC classification:}
+    LumA vs Basal: AUC $0.828$--$0.901$;
+    LumA vs LumB: AUC $0.796$--$0.873$
+    (replicated in METABRIC and TCGA independently)
+    \item \textbf{Protein-level confirmation:}
+    CPTAC-BRCA iTRAQ mass spectrometry,
+    $n=122$, Spearman $r=-0.492$,
+    $p<0.0001$
+    \item \textbf{Treatment response:}
+    GSE25066 $n=508$, chemotherapy response
+    prediction $p < 0.0001$; endocrine therapy
+    benefit in METABRIC HR$+$ patients
+    $p=0.0027$, $\Delta = 18.7$ months RFS
+    \item \textbf{Seven independent datasets.
+    Four measurement platforms. Zero biological
+    contradictions.}
+\end{itemize}
+\end{mdframed}
+
+\vspace{0.3em}
+\noindent Published preprints:
+\begin{itemize}[noitemsep]
+    \item CS-LIT-1 (ratio ordering axis):
+    \href{https://doi.org/10.5281/zenodo.18883922}
+    {doi.org/10.5281/zenodo.18883922}
+    \item CS-LIT-22 (IHC decision tool):
+    \href{https://doi.org/10.5281/zenodo.18892788}
+    {doi.org/10.5281/zenodo.18892788}
+    \item Full series (17 preprints, all with DOI):
+    \href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+    {github.com/Eric-Robert-Lawson/attractor-oncology}
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════════
+\section{The One Remaining Step}
+% ══════════════════════════════════════════════════════════════
+
+The computational validation is complete across
+seven datasets. The biological mechanism is confirmed
+by two independent published papers (Schade et al.\
+\textit{Nature} 2024; Toska et al.\ \textit{Nature
+Medicine} 2017).
+
+\textbf{The remaining gap is IHC calibration.}
+The scRNA-seq ratio values (9.38, 8.10, 3.34, 0.52,
+0.10) must be translated into IHC H-score cut-points.
+This requires running the two-stain IHC protocol on
+FFPE tissue where the PAM50 subtype is already known,
+and determining the H-score thresholds that correctly
+separate subtypes.
+
+This is not a conceptual gap. It is instrument
+calibration --- the same step applied to ER, PR,
+HER2, and Ki67 before their routine clinical adoption.
+
+% ══════════════════════════════════════════════════════════════
+\section{The Partnership Ask}
+% ═════════════════════════════════════════════════���════════════
+
+\begin{mdframed}[backgroundcolor=askbox,
+                 linecolor=blue!50!black,
+                 linewidth=1.5pt]
+\textbf{What we are asking for:}
+
+\begin{enumerate}
+    \item \textbf{Access to archived FFPE breast cancer
+    tissue} from $n=300$--$400$ cases where PAM50
+    subtype classification is known (from prior
+    research or clinical assay)
+    \item \textbf{FOXA1 and EZH2 IHC} run on those
+    sections using the protocol specification provided
+    (see attached Protocol Document)
+    \item \textbf{H-score scoring} by one or two
+    pathologists, scored blinded to PAM50 subtype
+    \item \textbf{Concordance analysis} comparing
+    ratio-based classification to PAM50 classification
+\end{enumerate}
+
+\textbf{What we provide:}
+
+\begin{enumerate}
+    \item Complete antibody specification (clones,
+    catalogue numbers, dilutions, antigen retrieval
+    conditions, controls) --- see attached Protocol
+    Document
+    \item Scoring guide (H-score method, what to
+    score, how to calculate the ratio)
+    \item Analysis framework and statistical plan
+    (concordance, ROC, cut-point optimisation,
+    inter-observer kappa)
+    \item Full computational validation dataset and
+    scripts (publicly available in the repository)
+    \item Co-authorship on the resulting publication
+\end{enumerate}
+
+\textbf{What this study does NOT require:}
+
+\begin{itemize}[noitemsep]
+    \item No new patient recruitment
+    \item No changes to any patient's treatment
+    \item No new laboratory equipment beyond
+    standard IHC capability
+    \item No RNA extraction, no bioinformatics
+    \item Minimal regulatory burden (retrospective
+    tissue research with no patient contact)
+\end{itemize}
+\end{mdframed}
+
+% ══════════════════════════════════════════════════════════════
+\section{Estimated Resources Required}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\begin{tabular}{p{5cm}p{7.5cm}}
+\toprule
+\textbf{Resource} & \textbf{Estimate} \\
+\midrule
+Antibody reagents &
+${\sim}$\$1,500--\$3,000 total
+(FOXA1: CST D4E2 \#53528;
+EZH2: CST D2H1 \#5246;
+both widely available globally) \\[0.3em]
+IHC consumables &
+${\sim}$\$2,000--\$4,000 for 400 cases \\[0.3em]
+Pathologist scoring time &
+${\sim}$40--60 hours
+(2 pathologists, 400 cases,
+2 stains each) \\[0.3em]
+Statistical analysis &
+${\sim}$10--20 hours \\[0.3em]
+\textbf{Total cost (consumables)} &
+\textbf{\$5,000--\$15,000} \\[0.3em]
+\textbf{Timeline} &
+\textbf{3--6 months from tissue
+access to publication submission} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{Why This Matters Beyond Your Institution}
+% ══════════════════════════════════════════════════════════════
+
+\begin{mdframed}[backgroundcolor=equitybox,
+                 linecolor=orange!60!black,
+                 linewidth=1pt]
+A validated FOXA1/EZH2 IHC protocol would be
+immediately deployable in every pathology laboratory
+worldwide that currently runs breast cancer IHC
+workups --- including settings where PAM50 is
+completely inaccessible.
+
+Approximately 1.2--1.5 million breast cancer patients
+per year currently receive no molecular subtype
+information because PAM50 is unavailable or
+unaffordable in their healthcare system. For these
+patients, the treatment decision is made on three
+binary receptor stains (ER, PR, HER2) with no
+further molecular refinement.
+
+A validated two-stain IHC ratio test would change
+that for every one of those patients, at a cost
+increment of \$20--\$40 per case --- added to
+a workup that is already being performed.
+
+The validation study that enables this deployment
+costs \$5,000--\$15,000 in consumables.
+
+Your institution's participation in this study
+would be directly credited in the first publication
+of a diagnostic tool with this scale of potential
+global health impact.
+\end{mdframed}
+
+% ══════════════════════════════════════════════════════════════
+\section{Next Steps}
+% ══════════════════════════════════════════════════════════════
+
+If your institution has archival FFPE breast cancer
+tissue with PAM50 data and is interested in this
+partnership:
+
+\begin{enumerate}
+    \item \textbf{Contact} Eric Robert Lawson at
+    \href{mailto:OrganismCore@proton.me}
+    {OrganismCore@proton.me}
+    \item \textbf{Confirm} approximate number of
+    cases available with PAM50 subtype data
+    \item \textbf{Review} the attached Protocol
+    Specification Document and confirm IHC
+    capability for FOXA1 (D4E2) and EZH2 (D2H1)
+    \item \textbf{Proceed} to institutional ethics
+    review (retrospective tissue research, minimal
+    risk pathway in most jurisdictions)
+\end{enumerate}
+
+All computational data, scripts, and validation
+evidence are publicly available and can be
+reviewed immediately at:
+
+\begin{center}
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{\texttt{github.com/Eric-Robert-Lawson/attractor-oncology}}
+\end{center}
+
+\vspace{0.5em}
+\noindent\rule{\textwidth}{0.4pt}
+\vspace{0.3em}
+
+\begin{center}
+\small
+Eric Robert Lawson \textbar{} OrganismCore \textbar{}
+\href{mailto:OrganismCore@proton.me}
+{OrganismCore@proton.me}\\
+ORCID: \href{https://orcid.org/0009-0002-0414-6544}
+{0009-0002-0414-6544} \textbar{}
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{GitHub Repository} \textbar{}
+CS-LIT-1:
+\href{https://doi.org/10.5281/zenodo.18883922}
+{10.5281/zenodo.18883922} \textbar{}
+CS-LIT-22:
+\href{https://doi.org/10.5281/zenodo.18892788}
+{10.5281/zenodo.18892788}
+\end{center}
+
+\end{document}

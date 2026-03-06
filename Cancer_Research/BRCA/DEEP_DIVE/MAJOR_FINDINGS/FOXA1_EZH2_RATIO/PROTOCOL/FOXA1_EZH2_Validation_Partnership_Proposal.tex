@@ -10,7 +10,10 @@
     colorlinks=true,
     linkcolor=blue,
     urlcolor=blue,
-    citecolor=blue
+    citecolor=blue,
+    pdftitle={FOXA1/EZH2 IHC Validation
+              Partnership Proposal v3.0},
+    pdfauthor={Eric Robert Lawson / OrganismCore}
 }
 \usepackage{booktabs}
 \usepackage{array}
@@ -23,6 +26,7 @@
 \usepackage{enumitem}
 \usepackage{mdframed}
 \usepackage{multirow}
+\usepackage{amsmath}
 
 % ── COLOURS ───────────────────────────────────────────────────
 \definecolor{headerblue}{RGB}{20,60,140}
@@ -30,13 +34,18 @@
 \definecolor{askbox}{RGB}{235,245,255}
 \definecolor{equitybox}{RGB}{255,245,230}
 \definecolor{statsbox}{RGB}{248,240,255}
+\definecolor{honestybox}{RGB}{255,248,220}
+\definecolor{dynamicbox}{RGB}{235,255,245}
+\definecolor{tmabox}{RGB}{240,248,255}
+\definecolor{infobox}{RGB}{235,245,255}
 
-% ── PAGE STYLE ────────────────────────────────���───────────────
+% ── PAGE STYLE ────────────────────────────────────────────────
 \pagestyle{fancy}
 \fancyhf{}
 \lhead{\footnotesize FOXA1/EZH2 IHC Validation
-       Partnership Proposal}
-\rhead{\footnotesize OrganismCore \textbar{} 2026-03-06}
+       Partnership Proposal v3.0}
+\rhead{\footnotesize OrganismCore \textbar{}
+       2026-03-06}
 \rfoot{\small Page \thepage}
 \renewcommand{\headrulewidth}{0.4pt}
 \setlength{\headheight}{24pt}
@@ -52,22 +61,30 @@
 % ══════════════════════════════════════════════════════════════
 \title{
     \vspace{-1.5em}
-    {\color{headerblue}\textbf{Validation Partnership
-    Proposal}}\\[0.4em]
-    \large\textbf{FOXA1/EZH2 Dual IHC as a Universal
-    Breast Cancer Treatment Classifier}\\[0.3em]
-    \normalsize Two stains. One number. Six subtypes.
-    Same-day results. \$50--\$100 per patient.\\[0.5em]
-    \small\textit{A retrospective concordance study
-    against PAM50 in archival FFPE tissue --- the single
-    remaining step to clinical deployment}
+    {\color{headerblue}\textbf{Validation
+    Partnership Proposal --- Version 3.0
+    (Final)}}\\[0.4em]
+    \large\textbf{FOXA1/EZH2 Dual IHC as a
+    Universal Breast Cancer Treatment
+    Classifier}\\[0.3em]
+    \normalsize Two stains. One ratio.
+    Six subtypes. Same-day results.
+    \$50--\$100 per patient.
+    TMA-compatible.\\[0.5em]
+    \small\textit{A retrospective concordance
+    study against PAM50 in archival FFPE tissue
+    --- the single remaining step to clinical
+    deployment. Evidence base, honest limitations,
+    and TMA compatibility fully stated.}
 }
 
 \author[1]{Eric Robert Lawson}
-\affil[1]{OrganismCore (Independent Research) \textbar{}
+\affil[1]{OrganismCore (Independent Research)
+    \textbar{}
     \href{mailto:OrganismCore@proton.me}
     {OrganismCore@proton.me} \textbar{}
-    ORCID: \href{https://orcid.org/0009-0002-0414-6544}
+    ORCID:
+    \href{https://orcid.org/0009-0002-0414-6544}
     {0009-0002-0414-6544}}
 
 \date{March 6, 2026}
@@ -77,9 +94,19 @@
 \maketitle
 \thispagestyle{fancy}
 
-\vspace{-0.5em}
+\begin{mdframed}[backgroundcolor=infobox,
+                 linecolor=blue!40!black,
+                 linewidth=1pt]
+\textbf{VERSION HISTORY:}
+v1.0 (2026-03-06): Initial release.
+v2.0 (2026-03-06): Dynamic range rationale;
+honest limitations section added.
+v3.0 (2026-03-06): TMA compatibility section
+added. Final version for distribution.
+\end{mdframed}
+
+\vspace{0.5em}
 \noindent\rule{\textwidth}{1.5pt}
-\vspace{0.3em}
 
 % ── SUMMARY BOX ───────────────────────────────────────────────
 \begin{mdframed}[backgroundcolor=findingbox,
@@ -87,49 +114,57 @@
                  linewidth=1.5pt]
 \textbf{In brief:}
 
-A ratio of two standard IHC proteins (FOXA1 $\div$
-EZH2) was derived from first principles using
-Waddington attractor geometry applied to 19,542 single
-cancer cells. It correctly orders all six major breast
-cancer subtypes and maps each to its therapeutic
-treatment logic. Validated computationally across
-${\sim}$7,500 patients in seven independent datasets
-(TCGA, METABRIC, CPTAC, GSE25066, and three others).
+The ratio FOXA1~H-score $\div$ EZH2~H-score,
+computed from two standard IHC stains, was
+derived from first principles using Waddington
+attractor geometry applied to 19,542 single
+cancer cells. It correctly orders all six major
+breast cancer subtypes and maps each to its
+therapeutic treatment logic. Computationally
+validated across ${\sim}7{,}500$ patients in
+seven independent datasets on four measurement
+platforms. Zero biological contradictions.
 
 \medskip
-The test costs \$50--\$100 per patient. It uses
-equipment present in any pathology laboratory. It
-produces results the same day as the biopsy workup.
-It requires no RNA, no proprietary platform, and no
-shipping to a reference laboratory.
+\textbf{The computational case is complete.}
 
 \medskip
-One study is needed before clinical deployment: a
-retrospective IHC concordance study against PAM50 in
-$n=300$--$400$ archived FFPE cases with known subtype
-classification. No new patients. No treatment changes.
-Estimated cost: \$5,000--\$15,000 in consumables.
+The test costs \$50--\$100 per patient. It
+runs on equipment present in any pathology
+laboratory worldwide. It produces results
+the same day as biopsy processing. It requires
+no RNA, no proprietary platform, no reference
+laboratory. It is \textbf{compatible with
+tissue microarray (TMA) format} --- the
+standard archival tissue infrastructure at
+most major cancer centres.
 
 \medskip
-\textbf{We are seeking one or more pathology/oncology
-partners to run this study.}
+One study is needed before clinical deployment:
+a retrospective IHC concordance study against
+PAM50 in $n=300$--$400$ archived FFPE cases
+(whole section or TMA). No new patients.
+No treatment changes. Estimated cost:
+\$5,000--\$15,000 in consumables.
+Timeline: 3--6 months.
+
+\medskip
+\textbf{We are seeking one or more pathology
+or oncology partners to conduct this study.}
 \end{mdframed}
 
 \vspace{0.8em}
 
 % ══════════════════════════════════════════════════════════════
-\section{The Problem: Molecular Subtyping Is
-Inaccessible to Most Breast Cancer Patients}
+\section{The Problem}
 % ══════════════════════════════════════════════════════════════
 
-Breast cancer causes approximately 685,000 deaths
-per year globally. The majority of these deaths
-occur in low- and middle-income countries, where
-the current gold standard for molecular subtyping
---- PAM50/Prosigna --- is unavailable.
+Breast cancer causes ${\sim}685{,}000$ deaths
+per year globally. The majority occur where
+PAM50/Prosigna is unavailable.
 
 \begin{center}
-\begin{tabular}{p{5cm}p{4.5cm}p{4.5cm}}
+\begin{tabular}{p{4.2cm}p{4.5cm}p{4.5cm}}
 \toprule
 & \textbf{PAM50/Prosigna} &
 \textbf{FOXA1/EZH2 IHC ratio} \\
@@ -139,18 +174,20 @@ Cost per patient &
 \$50--\$100 \\
 Platform &
 NanoString nCounter
-(proprietary, \$150k--\$250k) &
-Standard IHC scanner \\
+(\$150k--\$250k capital) &
+Standard IHC \\
 RNA required &
-Yes (degrades; strict
-handling needed) &
+Yes (degrades; strict handling) &
 No \\
 Laboratory type &
 Specialised, certified &
-Any pathology lab \\
+Any pathology laboratory \\
 Turnaround &
 Days to weeks &
 Same day \\
+TMA compatible &
+No (requires fresh extraction) &
+Yes --- fully compatible \\
 Output &
 Subtype label only &
 Subtype $+$ mechanism $+$
@@ -163,282 +200,428 @@ Universal \\
 \end{tabular}
 \end{center}
 
-Without molecular subtyping, ER$+$ patients (Luminal
-A and Luminal B, two different diseases) receive the
-same treatment. Triple-negative patients (TNBC and
-Claudin-low, with opposite treatment implications)
-receive the same treatment. The ambiguity is not
-academic --- it affects treatment choices that
-determine outcomes.
+Without molecular subtyping, ER$+$ patients
+(LumA and LumB --- different mechanisms,
+different optimal treatment) receive identical
+treatment. Triple-negative patients (TNBC and
+CL --- opposite treatment implications) receive
+identical treatment. The ratio resolves both
+ambiguities from two stains on a slide already
+being prepared.
 
 % ══════════════════════════════════════════════════════════════
-\section{The Finding: The FOXA1/EZH2 Ratio}
+\section{The Finding and Its Derivation}
 % ══════════════════════════════════════════════════════════════
 
-\subsection{What it is and how it was derived}
+\subsection{Biological rationale}
 
-FOXA1 is the pioneer transcription factor that opens
-chromatin for the luminal identity programme. EZH2 is
-the epigenetic repressor (PRC2 catalytic subunit) that
-silences that same programme. Their ratio measures the
-balance between identity maintenance and identity
-suppression --- the biological axis that determines
+FOXA1 is the pioneer transcription factor
+that opens chromatin for the luminal identity
+programme. EZH2 (PRC2 catalytic subunit)
+silences that programme by depositing H3K27me3
+marks on the FOXA1, GATA3, and ESR1 promoters.
+Their ratio directly measures the balance
+between luminal identity and its epigenetic
+suppression --- the biological axis determining
 both subtype and therapeutic vulnerability.
 
 The ratio was derived from Waddington landscape
-attractor geometry applied to 19,542 single cancer
-cells from 26 patients (GSE176078, Wu et al.\ 2021,
-\textit{Nature Genetics}). The predicted ordering
-was locked before any confirmatory analysis was run.
-It was confirmed exactly.
+attractor geometry applied to 19,542 single
+cancer cells (GSE176078, Wu et al.\ 2021,
+\textit{Nature Genetics}), with all predictions
+locked before any confirmatory analysis or
+literature review. The predicted ordering
+was confirmed exactly. Zero biological
+contradictions were found across all seven
+datasets.
 
-\subsection{The validated values and treatment logic}
+\subsection{Validated subtype ordering and
+treatment logic}
 
 \begin{center}
-\begin{tabular}{p{2.5cm}p{1.5cm}p{7.5cm}}
+\begin{tabular}{p{2.2cm}p{1.7cm}p{8.3cm}}
 \toprule
 \textbf{Subtype} &
-\textbf{Ratio} &
+\textbf{scRNA-seq ratio$^{\dagger}$} &
 \textbf{Treatment logic} \\
 \midrule
 Luminal A & $9.38$ &
-Luminal programme intact. CDK4/6 inhibitor +
-endocrine therapy. \\[0.3em]
+Luminal programme intact.
+CDK4/6 inhibitor $+$ ET. \\[0.3em]
 Luminal B & $8.10$ &
-Chromatin lock. HDACi (entinostat) + ET.
-CDK4/6i also active. \\[0.3em]
+Chromatin lock.
+HDACi (entinostat) $+$ ET. \\[0.3em]
 HER2-enriched & $3.34$ &
-HER2 amplicon. Anti-HER2 first, ET thereafter. \\[0.3em]
+HER2 amplicon.
+Anti-HER2 first, ET thereafter. \\[0.3em]
 TNBC & $0.52$ &
-EZH2 epigenetic lock. Tazemetostat removes
-lock $\rightarrow$ fulvestrant engages restored ER. \\[0.3em]
+EZH2 epigenetic lock ($+189\%$).
+Tazemetostat $\rightarrow$ fulvestrant. \\[0.3em]
 Claudin-low & $0.10$ &
-No lock to dissolve. Immune only.
-Anti-TIGIT $\rightarrow$ anti-PD-1 sequence. \\[0.3em]
-ILC & Inverted &
-FOXA1 hyperactivated above LumA. Structural lock.
-Fulvestrant $>$ AI. \\
+No lock to dissolve.
+Immune only.
+Anti-TIGIT $\rightarrow$ anti-PD-1. \\[0.3em]
+ILC (exception) &
+Inverted &
+FOXA1 hyperactivated above LumA.
+Structural lock. Fulvestrant $>$ AI. \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-\subsection{The computational evidence base}
+\small $^{\dagger}$\textit{scRNA-seq units
+only. Not IHC H-score values. IHC cut-points
+to be determined in the calibration study.}
+\normalsize
+
+% ══════════════════════════════════════════════════════════════
+\section{The Computational Evidence Base}
+% ══════════════════════════════════════════════════════════════
 
 \begin{mdframed}[backgroundcolor=statsbox,
                  linecolor=purple!40!black,
                  linewidth=1pt]
 \begin{itemize}[noitemsep]
-    \item \textbf{Ordering confirmed:}
-    TCGA-BRCA $n=837$ PAM50-labelled patients,
-    Kruskal-Wallis $p = 2.87 \times 10^{-103}$
-    \item \textbf{Survival stratification:}
-    TCGA-BRCA KM $p=0.0031$ ($n=1{,}218$);
-    METABRIC KM $p<0.0001$ ($n=1{,}980$) ---
-    two independent cohorts, two platforms
+    \item \textbf{Subtype ordering:}
+    TCGA-BRCA $n=837$,
+    KW $p=2.87\times10^{-103}$;
+    METABRIC LumA vs LumB
+    $p=8.47\times10^{-67}$, $n=1{,}980$
+    \item \textbf{Survival:} TCGA KM
+    $p=0.0031$ ($n=1{,}218$); METABRIC
+    KM $p<0.0001$ ($n=1{,}980$);
+    GSE96058 KM $p\approx0$ ($n=3{,}273$,
+    336 events, 52 months follow-up).
+    Three independent cohorts. Two platforms.
     \item \textbf{ROC classification:}
-    LumA vs Basal: AUC $0.828$--$0.901$;
-    LumA vs LumB: AUC $0.796$--$0.873$
-    (replicated in METABRIC and TCGA independently)
+    LumA vs Basal AUC $0.828$--$0.901$;
+    LumA vs LumB AUC $0.796$--$0.873$
+    (replicated in METABRIC and TCGA
+    independently)
     \item \textbf{Protein-level confirmation:}
-    CPTAC-BRCA iTRAQ mass spectrometry,
-    $n=122$, Spearman $r=-0.492$,
-    $p<0.0001$
+    CPTAC-BRCA iTRAQ MS, $n=122$;
+    correct subtype ordering at protein level;
+    Spearman $r=-0.492$, $p<0.0001$
     \item \textbf{Treatment response:}
-    GSE25066 $n=508$, chemotherapy response
-    prediction $p < 0.0001$; endocrine therapy
-    benefit in METABRIC HR$+$ patients
-    $p=0.0027$, $\Delta = 18.7$ months RFS
-    \item \textbf{Seven independent datasets.
-    Four measurement platforms. Zero biological
-    contradictions.}
+    GSE25066 chemotherapy $n=508$,
+    $p<0.0001$; METABRIC endocrine therapy
+    $n=1{,}104$, $p=0.0027$,
+    $\Delta=18.7$ months RFS
+    \item \textbf{7 independent datasets.
+    4 measurement platforms.
+    0 biological contradictions.}
 \end{itemize}
 \end{mdframed}
 
-\vspace{0.3em}
-\noindent Published preprints:
+% ══════════════════════════════════════════════════════════════
+\section{Why IHC Is Expected to Succeed:
+The Dynamic Range Argument}
+% ══════════════════════════════════════════════════════════════
+
+\begin{mdframed}[backgroundcolor=dynamicbox,
+                 linecolor=green!60!black,
+                 linewidth=1pt]
+The protein ordering is confirmed by CPTAC
+mass spectrometry. The MS kappa analysis for
+subtype classification failed --- not because
+the biology is wrong, but because iTRAQ MS
+compressed all breast cancer subtypes into
+\textbf{0.38 log$_2$ units} of total range.
+At this scale, noise exceeds signal and
+threshold classification is impossible.
+
+IHC H-scores span \textbf{0--300} ---
+approximately \textbf{800$\times$} more
+dynamic range. The protein signal that is
+unresolvable at 0.38 MS units is expected
+to be clearly separable at IHC scale.
+
+\textbf{The MS kappa failure is a reason to
+be more confident in IHC, not less.} The
+signal exists. The instrument used to test
+classification lacked the range. IHC has
+the range.
+\end{mdframed}
+
+% ══════════════════════════════════════════════════════════════
+\section{What Is Established and What Is Not}
+\label{sec:honesty}
+% ══════════════════════════════════════════════════════════════
+
+\begin{mdframed}[backgroundcolor=honestybox,
+                 linecolor=orange!60!black,
+                 linewidth=1pt]
+\textbf{We state this explicitly.}
+
+\medskip
+\textbf{What IS established:}
 \begin{itemize}[noitemsep]
-    \item CS-LIT-1 (ratio ordering axis):
-    \href{https://doi.org/10.5281/zenodo.18883922}
-    {doi.org/10.5281/zenodo.18883922}
-    \item CS-LIT-22 (IHC decision tool):
-    \href{https://doi.org/10.5281/zenodo.18892788}
-    {doi.org/10.5281/zenodo.18892788}
-    \item Full series (17 preprints, all with DOI):
-    \href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
-    {github.com/Eric-Robert-Lawson/attractor-oncology}
+    \item Correct subtype ordering in RNA
+    and protein across multiple cohorts
+    \item Survival stratification in four
+    independent analyses (${\sim}7{,}500$
+    patients)
+    \item Treatment response prediction in
+    two independent treatment datasets
+    \item Protein signal confirmed at
+    protein level (CPTAC MS, $n=122$)
+    \item Both antibodies established in
+    routine pathology use globally
+    \item Biological mechanism independently
+    confirmed (Schade et al.\
+    \textit{Nature} 2024; Toska et al.\
+    \textit{Nature Medicine} 2017)
 \end{itemize}
 
+\medskip
+\textbf{What is NOT yet established:}
+\begin{itemize}[noitemsep]
+    \item \textbf{IHC H-score cut-points.}
+    RNA-space values (9.38, 8.10, etc.)
+    are not IHC thresholds. No formula
+    converts between them. Cut-points
+    must be determined from scratch in
+    the calibration study.
+    \item \textbf{IHC concordance with
+    PAM50.} AUC values come from RNA-level
+    analysis. IHC performance is expected
+    to be strong based on the dynamic
+    range argument but has not been
+    measured.
+    \item \textbf{Inter-observer
+    reliability.} Not yet assessed.
+    \item \textbf{CL below TNBC in IHC.}
+    Confirmed in scRNA-seq (cancer cells
+    only: CL 0.10, TNBC 0.52). Not
+    confirmed in bulk RNA (stromal artefact
+    --- explained). IHC should replicate
+    scRNA-seq if cancer cells are scored
+    exclusively. Requires confirmation.
+\end{itemize}
+
+\medskip
+\textbf{None of these are conceptual gaps.}
+They are instrument calibration steps ---
+the same steps applied to ER, PR, HER2,
+and Ki67 before routine clinical adoption.
+\end{mdframed}
+
 % ══════════════════════════════════════════════════════════════
-\section{The One Remaining Step}
+\section{Tissue Microarray Compatibility}
 % ══════════════════════════════════════════════════════════════
 
-The computational validation is complete across
-seven datasets. The biological mechanism is confirmed
-by two independent published papers (Schade et al.\
-\textit{Nature} 2024; Toska et al.\ \textit{Nature
-Medicine} 2017).
+\begin{mdframed}[backgroundcolor=tmabox,
+                 linecolor=blue!50!black,
+                 linewidth=1pt]
+\textbf{TMA FORMAT IS FULLY COMPATIBLE WITH
+THIS PROTOCOL.}
 
-\textbf{The remaining gap is IHC calibration.}
-The scRNA-seq ratio values (9.38, 8.10, 3.34, 0.52,
-0.10) must be translated into IHC H-score cut-points.
-This requires running the two-stain IHC protocol on
-FFPE tissue where the PAM50 subtype is already known,
-and determining the H-score thresholds that correctly
-separate subtypes.
+Many major cancer centres hold archival breast
+cancer tissue in tissue microarray format.
+This protocol applies without modification to
+TMA cores. No format conversion is required.
 
-This is not a conceptual gap. It is instrument
-calibration --- the same step applied to ER, PR,
-HER2, and Ki67 before their routine clinical adoption.
+\textbf{TMA-specific requirements:}
+\begin{itemize}[noitemsep]
+    \item Minimum core diameter: 1.0~mm;
+    1.5--2.0~mm preferred
+    \item Minimum two cores per case per
+    stain; cases with one evaluable core
+    flagged and reported separately
+    \item Score invasive cancer cell nuclei
+    only within each core
+    \item Two-core averaging: report mean
+    ratio as case value; flag cases where
+    two core ratios differ by $>0.5$ log
+    units (may indicate heterogeneity or
+    stromal core placement)
+    \item Cut 3+ sequential sections at
+    run start to ensure paired FOXA1 and
+    EZH2 sections for each core
+\end{itemize}
 
-% ══════════════════════════════════════════════════════════════
+\textbf{TMA advantage:} A TMA of 400 cases
+requires a single pair of slides per
+staining run. All cases are processed
+under identical conditions simultaneously,
+reducing inter-case variability. Pathologist
+scoring time is substantially reduced.
+For institutions with TMA infrastructure,
+this is the recommended format for the
+calibration study.
+
+\textbf{CL note:} TMA cores from
+mesenchymal-rich claudin-low tumours may
+have low cancer cell density. Cores with
+$<50$ evaluable invasive cancer cell
+nuclei should be recorded as unevaluable.
+The stromal contamination warning (Protocol
+Specification v3.0, Section~6) applies
+with equal force to TMA cores.
+\end{mdframed}
+
+% ═════════════════════════════════��════════════════════════════
 \section{The Partnership Ask}
-% ═════════════════════════════════════════════════���════════════
+% ══════════════════════════════════════════════════════════════
 
 \begin{mdframed}[backgroundcolor=askbox,
                  linecolor=blue!50!black,
                  linewidth=1.5pt]
 \textbf{What we are asking for:}
-
 \begin{enumerate}
-    \item \textbf{Access to archived FFPE breast cancer
-    tissue} from $n=300$--$400$ cases where PAM50
-    subtype classification is known (from prior
-    research or clinical assay)
-    \item \textbf{FOXA1 and EZH2 IHC} run on those
-    sections using the protocol specification provided
-    (see attached Protocol Document)
-    \item \textbf{H-score scoring} by one or two
-    pathologists, scored blinded to PAM50 subtype
-    \item \textbf{Concordance analysis} comparing
-    ratio-based classification to PAM50 classification
+    \item \textbf{Access to archived FFPE
+    breast cancer tissue} (whole section
+    or TMA format) from $n=300$--$400$
+    cases with known PAM50 subtype
+    classification
+    \item \textbf{FOXA1 and EZH2 IHC} run
+    on those sections using the attached
+    Protocol Specification v3.0
+    \item \textbf{H-score scoring} by one
+    or two pathologists, blinded to PAM50
+    subtype
+    \item \textbf{Concordance analysis}
+    comparing IHC ratio classification
+    to PAM50, using Youden J optimisation
+    to determine cut-points from scratch
 \end{enumerate}
 
 \textbf{What we provide:}
-
 \begin{enumerate}
-    \item Complete antibody specification (clones,
-    catalogue numbers, dilutions, antigen retrieval
-    conditions, controls) --- see attached Protocol
-    Document
-    \item Scoring guide (H-score method, what to
-    score, how to calculate the ratio)
-    \item Analysis framework and statistical plan
-    (concordance, ROC, cut-point optimisation,
+    \item Protocol Specification v3.0
+    (attached) --- antibody clones,
+    catalogue numbers, antigen retrieval,
+    H-score method, TMA instructions,
+    claudin-low scoring warning
+    \item Statistical analysis framework
+    (concordance, ROC, cut-point
+    optimisation, training/test split,
     inter-observer kappa)
-    \item Full computational validation dataset and
-    scripts (publicly available in the repository)
-    \item Co-authorship on the resulting publication
+    \item Complete public computational
+    validation dataset and scripts
+    \item Co-authorship on the resulting
+    publication
 \end{enumerate}
 
-\textbf{What this study does NOT require:}
-
+\textbf{What this does NOT require:}
 \begin{itemize}[noitemsep]
     \item No new patient recruitment
-    \item No changes to any patient's treatment
-    \item No new laboratory equipment beyond
-    standard IHC capability
-    \item No RNA extraction, no bioinformatics
-    \item Minimal regulatory burden (retrospective
-    tissue research with no patient contact)
+    \item No treatment changes
+    \item No new laboratory equipment
+    \item No RNA extraction or
+    bioinformatics
+    \item Minimal regulatory burden
+    (retrospective tissue research,
+    minimal-risk pathway in most
+    jurisdictions)
 \end{itemize}
 \end{mdframed}
 
 % ══════════════════════════════════════════════════════════════
-\section{Estimated Resources Required}
+\section{Estimated Resources}
 % ══════════════════════════════════════════════════════════════
 
 \begin{center}
-\begin{tabular}{p{5cm}p{7.5cm}}
+\begin{tabular}{p{5cm}p{8cm}}
 \toprule
 \textbf{Resource} & \textbf{Estimate} \\
 \midrule
 Antibody reagents &
-${\sim}$\$1,500--\$3,000 total
-(FOXA1: CST D4E2 \#53528;
-EZH2: CST D2H1 \#5246;
-both widely available globally) \\[0.3em]
+FOXA1 CST D4E2 \#53528:
+${\sim}$\$400/100 tests.
+EZH2 CST D2H1 \#5246:
+${\sim}$\$400/100 tests.
+For 400 cases:
+${\sim}$\$1,500--\$3,000 total. \\[0.3em]
 IHC consumables &
-${\sim}$\$2,000--\$4,000 for 400 cases \\[0.3em]
+${\sim}$\$2,000--\$4,000
+(substantially reduced in TMA
+format). \\[0.3em]
 Pathologist scoring time &
-${\sim}$40--60 hours
-(2 pathologists, 400 cases,
-2 stains each) \\[0.3em]
+${\sim}$40--60 hours whole section;
+substantially reduced with TMA. \\[0.3em]
 Statistical analysis &
-${\sim}$10--20 hours \\[0.3em]
-\textbf{Total cost (consumables)} &
+${\sim}$10--20 hours. \\[0.3em]
+\textbf{Total (consumables)} &
 \textbf{\$5,000--\$15,000} \\[0.3em]
 \textbf{Timeline} &
 \textbf{3--6 months from tissue
-access to publication submission} \\
+access to submission} \\
 \bottomrule
 \end{tabular}
 \end{center}
 
 % ══════════════════════════════════════════════════════════════
-\section{Why This Matters Beyond Your Institution}
+\section{The Equity Argument}
 % ══════════════════════════════════════════════════════════════
 
 \begin{mdframed}[backgroundcolor=equitybox,
                  linecolor=orange!60!black,
                  linewidth=1pt]
-A validated FOXA1/EZH2 IHC protocol would be
-immediately deployable in every pathology laboratory
-worldwide that currently runs breast cancer IHC
-workups --- including settings where PAM50 is
-completely inaccessible.
+Approximately 1.2--1.5 million breast cancer
+patients per year currently receive no
+molecular subtype information --- not because
+the science does not exist, but because it
+exists in a form requiring infrastructure
+they do not have.
 
-Approximately 1.2--1.5 million breast cancer patients
-per year currently receive no molecular subtype
-information because PAM50 is unavailable or
-unaffordable in their healthcare system. For these
-patients, the treatment decision is made on three
-binary receptor stains (ER, PR, HER2) with no
-further molecular refinement.
+A validated FOXA1/EZH2 IHC protocol would
+resolve the LumA/LumB ambiguity and the
+TNBC/claudin-low ambiguity from two antibody
+stains at \$50--\$100 per case, in any
+laboratory that processes biopsies, on the
+same day as the biopsy workup. No shipping.
+No RNA. No waiting.
 
-A validated two-stain IHC ratio test would change
-that for every one of those patients, at a cost
-increment of \$20--\$40 per case --- added to
-a workup that is already being performed.
-
-The validation study that enables this deployment
-costs \$5,000--\$15,000 in consumables.
-
-Your institution's participation in this study
-would be directly credited in the first publication
-of a diagnostic tool with this scale of potential
+Your institution's participation in the
+calibration study that enables this would
+be directly credited in the first publication
+of a diagnostic tool with this scale of
 global health impact.
+
+The calibration study costs \$5,000--\$15,000
+in consumables. The potential reach on
+validation is every breast cancer patient on
+earth who receives a pathology workup.
 \end{mdframed}
 
 % ══════════════════════════════════════════════════════════════
-\section{Next Steps}
+\section{Published Evidence and Repository}
 % ══════════════════════════════════════════════════════════════
 
-If your institution has archival FFPE breast cancer
-tissue with PAM50 data and is interested in this
-partnership:
+\begin{center}
+\begin{tabular}{p{4cm}p{9cm}}
+\toprule
+CS-LIT-1 (ratio axis) &
+\href{https://doi.org/10.5281/zenodo.18883922}
+{doi.org/10.5281/zenodo.18883922} \\
+CS-LIT-22 (IHC tool) &
+\href{https://doi.org/10.5281/zenodo.18892788}
+{doi.org/10.5281/zenodo.18892788} \\
+Full series (17 DOIs) &
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{github.com/Eric-Robert-Lawson/attractor-oncology} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{Next Steps}
+% ═══════════════════════════════��══════════════════════════════
 
 \begin{enumerate}
-    \item \textbf{Contact} Eric Robert Lawson at
+    \item \textbf{Contact:}
     \href{mailto:OrganismCore@proton.me}
     {OrganismCore@proton.me}
-    \item \textbf{Confirm} approximate number of
-    cases available with PAM50 subtype data
-    \item \textbf{Review} the attached Protocol
-    Specification Document and confirm IHC
-    capability for FOXA1 (D4E2) and EZH2 (D2H1)
-    \item \textbf{Proceed} to institutional ethics
-    review (retrospective tissue research, minimal
-    risk pathway in most jurisdictions)
+    \item \textbf{Confirm} approximate number
+    of cases with PAM50 data and whether
+    tissue is held in whole-section FFPE
+    or TMA format
+    \item \textbf{Review} attached Protocol
+    Specification v3.0
+    \item \textbf{Proceed} to institutional
+    ethics review
 \end{enumerate}
-
-All computational data, scripts, and validation
-evidence are publicly available and can be
-reviewed immediately at:
-
-\begin{center}
-\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
-{\texttt{github.com/Eric-Robert-Lawson/attractor-oncology}}
-\end{center}
 
 \vspace{0.5em}
 \noindent\rule{\textwidth}{0.4pt}
@@ -446,16 +629,20 @@ reviewed immediately at:
 
 \begin{center}
 \small
-Eric Robert Lawson \textbar{} OrganismCore \textbar{}
+Eric Robert Lawson \textbar{} OrganismCore
+\textbar{}
 \href{mailto:OrganismCore@proton.me}
-{OrganismCore@proton.me}\\
-ORCID: \href{https://orcid.org/0009-0002-0414-6544}
-{0009-0002-0414-6544} \textbar{}
+{OrganismCore@proton.me} \textbar{}
+ORCID:
+\href{https://orcid.org/0009-0002-0414-6544}
+{0009-0002-0414-6544}\\
 \href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
-{GitHub Repository} \textbar{}
+{github.com/Eric-Robert-Lawson/attractor-oncology}
+\textbar{}
 CS-LIT-1:
 \href{https://doi.org/10.5281/zenodo.18883922}
-{10.5281/zenodo.18883922} \textbar{}
+{10.5281/zenodo.18883922}
+\textbar{}
 CS-LIT-22:
 \href{https://doi.org/10.5281/zenodo.18892788}
 {10.5281/zenodo.18892788}

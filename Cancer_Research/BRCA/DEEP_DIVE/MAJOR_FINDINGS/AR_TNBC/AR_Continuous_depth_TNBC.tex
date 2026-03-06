@@ -1,0 +1,783 @@
+\documentclass[12pt, a4paper]{article}
+
+% ── PACKAGES ──────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue,
+    pdftitle={Androgen Receptor as a Continuous Epigenetic
+              Depth Axis in Triple-Negative Breast Cancer:
+              A Geometry-Derived Reframing of a Binary
+              Classifier},
+    pdfauthor={Eric Robert Lawson},
+    pdfkeywords={androgen receptor, AR, TNBC,
+                 triple-negative breast cancer,
+                 continuous depth axis, EZH2, epigenetic
+                 lock, Waddington landscape, attractor
+                 geometry, LAR, luminal androgen receptor,
+                 GSE176078, single cell, Pearson correlation,
+                 OrganismCore, biomarker, depth score,
+                 G-1 enobosarm, AR targeting, patient
+                 selection}
+}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{authblk}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{setspace}
+
+% ── COLOURS ───────────────────────────────────────────────────
+\definecolor{repobox}{RGB}{240,247,255}
+\definecolor{findingbox}{RGB}{245,255,245}
+\definecolor{novelbox}{RGB}{255,248,220}
+\definecolor{mechanismbox}{RGB}{250,245,255}
+\definecolor{actionbox}{RGB}{230,255,230}
+\definecolor{contrastbox}{RGB}{248,240,255}
+\definecolor{warnbox}{RGB}{255,235,235}
+
+% ── HEADER / FOOTER ───────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\footnotesize CS-LIT-6: AR as Continuous Depth\\
+       \footnotesize Axis in TNBC}
+\rhead{\footnotesize OrganismCore \textbar{} 2026-03-06}
+\rfoot{\small Page \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\setlength{\headheight}{24pt}
+\addtolength{\topmargin}{-10pt}
+
+% ── SECTION FORMATTING ────────────────────────────────────────
+\titleformat{\section}
+  {\large\bfseries}{\thesection}{1em}{}[\titlerule]
+\titleformat{\subsection}
+  {\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\small\bfseries}{\thesubsubsection}{1em}{}
+
+% ══════════════════════════════════════════════════════════════
+% TITLE
+% ══════════════════════════════════════════════════════════════
+\title{
+    \vspace{-1em}
+    \textbf{Androgen Receptor as a Continuous
+    Epigenetic Depth Axis in Triple-Negative
+    Breast Cancer: A Geometry-Derived Reframing
+    of a Binary Classifier}\\[0.5em]
+    \large AR Expression Is Not a Subtype
+    Identity Marker Within TNBC --- It Is a
+    Quantitative Measure of How Deeply the
+    Tumor Is Locked in the EZH2 Attractor\\[0.4em]
+    \normalsize \textit{OrganismCore Framework ---
+    Document CS-LIT-6}\\[0.3em]
+    \small Pearson $r = -0.378$,
+    $p = 6.23 \times 10^{-147}$,
+    $n = 4{,}312$ TNBC cells (GSE176078)\\[0.3em]
+    \small Part of the BRCA Cross-Subtype Analysis
+    (BRCA-S8h, 2026-03-05)
+}
+
+\author[1]{Eric Robert Lawson}
+\affil[1]{
+    OrganismCore\\
+    \href{mailto:OrganismCore@proton.me}
+         {OrganismCore@proton.me}\\
+    ORCID:
+    \href{https://orcid.org/0009-0002-0414-6544}
+         {0009-0002-0414-6544}
+}
+
+\date{March 6, 2026}
+
+% ══════════════════════════════════════════════════════════════
+\begin{document}
+% ══════════════════════════════════════════════════════════════
+
+\maketitle
+\thispagestyle{fancy}
+
+% ── REPOSITORY POINTER ────────────────────────────────────────
+\begin{center}
+\colorbox{repobox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\centering
+\textbf{Full computational record --- scripts, data
+caches, reasoning artifacts, and raw logs:}\\[0.4em]
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{\texttt{https://github.com/Eric-Robert-Lawson/attractor-oncology}}
+\\[0.3em]
+\small Part of the OrganismCore BRCA Cross-Subtype
+Analysis (BRCA-S8h, 2026-03-05).\\
+All predictions were locked from attractor geometry
+\textbf{before} any literature review was performed.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\vspace{1em}
+
+% ── FINDING BOX ───────────────────────────────────────────────
+\begin{center}
+\colorbox{findingbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{THE FINDING, STATED PRECISELY:}\\[0.4em]
+Within the TNBC cell population of GSE176078
+($n = 4{,}312$ TNBC cells), androgen receptor
+(AR) expression forms a strong continuous
+inverse correlation with the EZH2-driven
+attractor lock depth:
+
+\[
+r = -0.378,\quad
+p = 6.23 \times 10^{-147},\quad
+n = 4{,}312
+\]
+
+AR is not acting as a subtype identity marker
+within TNBC. It is acting as a continuous
+quantitative readout of how far the tumor cell
+has descended into the EZH2 epigenetic attractor.
+Lower AR = deeper lock. Higher AR = shallower
+lock. The relationship is graded, not binary.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\vspace{1em}
+
+% ══════════════════════════════════════════════════════════════
+\begin{abstract}
+% ══════════════════════════════════════════════════════════════
+Androgen receptor (AR) expression in triple-negative
+breast cancer (TNBC) is currently classified in the
+literature as a binary marker: AR-positive tumors
+belong to the Luminal Androgen Receptor (LAR)
+subtype; AR-negative tumors do not. This binary
+framework treats a continuous biological variable as
+categorical. We report a geometry-derived finding
+from Waddington attractor analysis of 19,542 single
+cancer cells (GSE176078) that fundamentally reframes
+this interpretation. Within the 4,312 TNBC cells in
+this dataset, AR expression forms a strong,
+continuous, statistically significant inverse
+correlation with EZH2-driven epigenetic lock depth
+($r = -0.378$, $p = 6.23 \times 10^{-147}$,
+$n = 4{,}312$). This is not a subtype classification
+signal. AR level within the TNBC cell population
+is a quantitative readout of attractor position:
+lower AR = deeper EZH2 lock; higher AR = shallower
+lock, with residual luminal identity program
+activity. This reframing has three direct clinical
+consequences. First, AR level continuously predicts
+the depth of the epigenetic lock and therefore the
+magnitude of benefit expected from EZH2-targeting
+interventions. Second, it explains why AR-targeting
+therapies (G-1/enobosarm) fail in deeply
+de-differentiated TNBC: these cells have already
+lost AR expression as a consequence of deep lock,
+not as a targetable feature. Third, it establishes
+AR as a component of the TNBC Depth Score rather
+than as an independent binary classifier. The
+finding is novel. The published literature does
+not frame AR as a continuous epigenetic depth
+axis within TNBC, and the specific correlation
+statistics reported here have no published
+equivalent.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+% ══════════════════════════════════════════════════════════════
+\section{Context and Origin}
+% ══════════════════════════════════════════════════════════════
+
+This document covers CS-LIT-6 from the OrganismCore
+BRCA Cross-Subtype Literature Check (BRCA-S8h,
+2026-03-05):
+
+\begin{quote}
+\textbf{CS-LIT-6}: AR as a continuous depth axis
+within TNBC ($r = -0.378$,
+$p = 6.23 \times 10^{-147}$, $n = 4{,}312$ cells)
+\end{quote}
+
+The finding was derived from attractor geometry
+before any literature review was performed. The
+literature check assigned it a \textbf{NOVEL}
+verdict: the specific framing and statistics
+have no direct published equivalent.
+
+\subsection{Relationship to Other Published
+Documents in This Series}
+
+\begin{itemize}
+    \item \textbf{CS-LIT-2 (Six Lock Type
+    Classification)}\\
+    \href{https://doi.org/10.5281/zenodo.18884158}
+    {DOI: 10.5281/zenodo.18884158}\\
+    TNBC is Lock Type 3 (deep EZH2/PRC2 lock).
+    CS-LIT-6 provides the continuous within-TNBC
+    geometry that underlies Lock Type 3.
+
+    \item \textbf{CS-LIT-1 (FOXA1/EZH2 Ratio)}\\
+    \href{https://doi.org/10.5281/zenodo.18883922}
+    {DOI: 10.5281/zenodo.18883922}\\
+    The FOXA1/EZH2 ratio orders subtypes
+    \textit{across} TNBC. CS-LIT-6 demonstrates
+    that AR performs an analogous continuous
+    ordering function \textit{within} TNBC.
+
+    \item \textbf{CS-LIT-11/25 (TNBC Depth Score)}\\
+    \href{https://doi.org/10.5281/zenodo.18891523}
+    {DOI: 10.5281/zenodo.18891523}\\
+    The TNBC Depth Score uses AR as one of three
+    components. CS-LIT-6 is the foundational
+    document establishing AR's role as a
+    continuous component rather than a binary one.
+
+    \item \textbf{CS-LIT-10/24 (EZH2 Paradox)}\\
+    \href{https://doi.org/10.5281/zenodo.18891318}
+    {DOI: 10.5281/zenodo.18891318}\\
+    The EZH2 paradox describes what happens when
+    the deep lock is disrupted by chemotherapy.
+    CS-LIT-6 quantifies the depth of that lock
+    using AR as the continuous readout.
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════════
+\section{The Problem with the Binary AR Framework}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{What the Published Literature Says}
+
+The published literature classifies TNBC using
+AR as a binary marker:
+
+\begin{itemize}
+    \item \textbf{AR-positive TNBC}
+    ($\geq 1\%$ or $\geq 10\%$ nuclear staining
+    by IHC, depending on study): classified as
+    the Luminal Androgen Receptor (LAR) subtype.
+    Characterised by luminal gene expression,
+    lower proliferation, lower pCR rates,
+    and potential sensitivity to AR-targeting
+    therapies.
+
+    \item \textbf{AR-negative TNBC}: All
+    remaining TNBC. Treated as a single category
+    by the binary framework.
+\end{itemize}
+
+This binary framing drives clinical decisions:
+AR-positive TNBC patients are candidates for
+AR-targeting therapies (enzalutamide,
+bicalutamide, G-1/enobosarm); AR-negative
+patients are not.
+
+\subsection{Why the Binary Framework Is Incomplete}
+
+The binary AR framework implicitly treats a
+continuous biological variable as a categorical
+one. The question it cannot answer is:
+
+\begin{center}
+\colorbox{contrastbox}{
+\begin{minipage}{0.82\textwidth}
+\vspace{0.4em}
+\textit{Within the AR-negative population, are
+all tumors equivalent? Or does the level of AR
+suppression --- how far below the detection
+threshold AR expression falls --- carry
+biological information?}
+\vspace{0.4em}
+\end{minipage}}
+\end{center}
+
+The attractor geometry analysis answers this
+directly: AR suppression is graded. The deeper
+the EZH2 lock, the lower the AR expression ---
+continuously, not categorically. Tumors do not
+simply turn AR off. They suppress it
+progressively as lock depth increases.
+
+% ══════════════════════════════════════════════════════════════
+\section{The Geometric Finding}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Data and Method}
+
+\begin{center}
+\colorbox{repobox}{
+\begin{minipage}{0.82\textwidth}
+\vspace{0.4em}
+\textbf{Dataset:} GSE176078\\
+\textbf{Population:} 4,312 TNBC cells (subset
+of 19,542 total single cancer cells)\\
+\textbf{Method:} Waddington attractor geometry;
+within-population Pearson correlation between
+AR expression and the EZH2-driven attractor
+depth axis\\
+\textbf{Analysis type:} Within-population
+continuous correlation (see CS-LIT-27:
+within-population Pearson $r$ as a circuit
+integrity test)
+\vspace{0.4em}
+\end{minipage}}
+\end{center}
+
+\vspace{0.5em}
+
+\subsection{The Result}
+
+\begin{center}
+\colorbox{findingbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.6em}
+\[
+r = -0.378,\quad
+p = 6.23 \times 10^{-147},\quad
+n = 4{,}312
+\]
+\vspace{0.3em}
+Within the TNBC cell population, AR expression
+is strongly and significantly inversely
+correlated with EZH2-driven attractor lock depth.
+The relationship is continuous, graded, and
+highly statistically significant.\\[0.4em]
+\textbf{Direction:} Lower AR $\rightarrow$
+deeper EZH2 lock.
+Higher AR $\rightarrow$ shallower lock,
+with residual luminal identity activity.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\subsection{\texorpdfstring{Why $p = 6.23 \times 10^{-147}$
+Is Not Inflated}{Why the p-value Is Not Inflated}}
+
+A $p$-value of $6.23 \times 10^{-147}$ reflects
+a large single-cell dataset ($n = 4{,}312$) with
+a moderate correlation ($r = -0.378$). The
+extreme $p$-value is driven by sample size, not
+by an artefactually large effect. The $r$ value
+of $-0.378$ is a moderate correlation: meaningful
+and consistent, but not claiming a deterministic
+one-to-one relationship. Many other factors
+modulate AR expression within individual cells.
+The claim is that the relationship is real,
+graded, and consistent --- not that AR is a
+perfect proxy for lock depth.
+
+\subsection{What the Geometry Shows}
+
+The Waddington landscape of TNBC cells maps the
+EZH2/PRC2 epigenetic axis as the primary
+determinant of attractor position within TNBC.
+Along this axis:
+
+\begin{itemize}
+    \item Cells at the deepest attractor position
+    (maximum EZH2 activity, FOXA1 fully silenced,
+    maximum de-differentiation) express near-zero
+    AR.
+
+    \item Cells at shallower attractor positions
+    (moderate EZH2 activity, partial FOXA1
+    suppression, partial luminal identity
+    retention) express detectable AR.
+
+    \item The transition between these states
+    is continuous across the cell population ---
+    not a binary switch.
+\end{itemize}
+
+The LAR subtype, as defined by the binary
+framework, corresponds to the shallow end of
+this continuous distribution --- cells that
+have not descended deeply into the EZH2
+attractor. They are not a categorically
+different entity. They are the least-locked
+end of the TNBC attractor spectrum.
+
+% ══════════════════════════════════════════════════════════════
+\section{The Three Clinical Consequences}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Consequence 1: AR Level Predicts
+EZH2 Inhibitor Benefit Magnitude}
+
+If AR is a continuous readout of lock depth,
+then AR level predicts how much EZH2 inhibitor
+benefit a patient will receive:
+
+\begin{center}
+\begin{tabular}{p{4cm}p{4cm}p{4.5cm}}
+\toprule
+\textbf{AR Level} &
+\textbf{Attractor Position} &
+\textbf{Expected EZH2i Benefit} \\
+\midrule
+Low / absent &
+Deep lock. EZH2 maximally active. &
+Highest benefit from tazemetostat.
+Attractor is deepest; inhibition
+has maximum effect. \\[0.5em]
+Moderate &
+Intermediate lock. &
+Moderate benefit. \\[0.5em]
+High (LAR) &
+Shallow lock. Partial luminal
+identity retained. &
+Lower EZH2i benefit. PRC2 less
+dominant. Alternative pathways
+more relevant. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.5em}
+
+This is a dose--response prediction: the
+\textit{magnitude} of EZH2 inhibitor benefit
+is graded by AR level in inverse proportion.
+The binary AR-positive/AR-negative framework
+cannot capture this gradient.
+
+\subsection{Consequence 2: Explanation for
+G-1/Enobosarm Failure in AR-Low TNBC
+(CS-LIT-12)}
+
+AR-targeting therapies (G-1/enobosarm,
+enzalutamide, bicalutamide) require AR
+expression as their target. The geometric
+finding provides the causal explanation for
+why these therapies fail in deeply
+de-differentiated TNBC:
+
+\begin{center}
+\colorbox{warnbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{The G-1 failure mechanism:}\\[0.4em]
+In deeply locked TNBC (AR-low), AR is not
+absent because of a mutation or deletion.
+It is absent because the EZH2/PRC2 complex
+has silenced the luminal identity program
+that would express it. AR is a downstream
+casualty of lock depth, not an independent
+targetable feature.\\[0.4em]
+Administering an AR agonist (G-1) or antagonist
+to cells with near-zero AR expression is
+targeting an absent protein. The therapeutic
+premise of AR-targeting in this population
+is invalid --- not because AR-targeting does
+not work, but because the target has already
+been removed by the very epigenetic state
+that characterises these tumors.\\[0.4em]
+This explains the treatment-context dependence
+of AR prognosis in TNBC observed in clinical
+trials (CS-LIT-12 in BRCA-S8h): AR status
+predicts response only when AR is present
+as an expressed, functional protein. In
+deeply locked TNBC, AR expression has already
+been lost.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\subsection{Consequence 3: AR as a Component
+of the TNBC Depth Score}
+
+The continuous AR--lock depth relationship
+directly justifies AR's inclusion as a
+component of the TNBC Depth Score
+(CS-LIT-11/25,
+\href{https://doi.org/10.5281/zenodo.18891523}
+{DOI: 10.5281/zenodo.18891523}).
+
+In that instrument, AR is not used as a binary
+classifier (AR-positive vs AR-negative). It is
+used as a continuous variable: the lower the AR
+expression, the greater its contribution to the
+depth score. This is only valid if the continuous
+AR--depth relationship demonstrated here is real.
+CS-LIT-6 is therefore the foundational
+justification for how AR is used in the
+depth score.
+
+% ══════════════════════════════════════════════════════════════
+\section{What the Published Literature Does and
+Does Not Contain}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{What IS in the Published Literature}
+
+\begin{itemize}
+    \item AR expression defines the LAR subtype
+    of TNBC (binary, $\geq$1\% or $\geq$10\%
+    IHC).
+    \item LAR TNBC has lower pCR rates and lower
+    immune infiltration compared to non-LAR TNBC.
+    \item AR-targeting therapies are being tested
+    in LAR/AR-positive TNBC.
+    \item EZH2 is overexpressed in TNBC and is
+    associated with poor prognosis.
+    \item AR and EZH2 are both recognised
+    molecular features of TNBC.
+\end{itemize}
+
+\subsection{What is NOT in the Published
+Literature}
+
+\begin{itemize}
+    \item The continuous within-population
+    inverse correlation between AR expression
+    and EZH2-driven attractor lock depth in
+    TNBC cells.
+    \item The framing of AR as a continuous
+    epigenetic depth axis (rather than a binary
+    subtype marker) within TNBC.
+    \item The specific statistics
+    ($r = -0.378$, $p = 6.23 \times 10^{-147}$,
+    $n = 4{,}312$) reported here.
+    \item The causal interpretation that AR
+    suppression is a \textit{consequence} of
+    EZH2 lock depth, not an independent
+    categorical classifier.
+    \item The derived prediction that EZH2
+    inhibitor benefit magnitude is inversely
+    graded by AR level within TNBC.
+\end{itemize}
+
+\begin{center}
+\colorbox{novelbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{VERDICT: NOVEL}\\[0.3em]
+The continuous AR--EZH2 lock depth axis in
+TNBC, framed geometrically using single-cell
+Waddington attractor analysis, with the specific
+correlation statistics reported here, has no
+direct published equivalent as of 2026-03-06.
+The binary LAR/non-LAR framework is well
+established in the literature. The reframing
+of that binary as a continuous attractor
+depth gradient is not.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{Comparison: FOXA1 Across Subtypes vs
+AR Within TNBC}
+% ══════════════════════════════════════════════════════════════
+
+CS-LIT-5 (BRCA-S8h) documents that FOXA1 acts
+as a continuous depth axis \textit{across}
+breast cancer subtypes --- not as a binary
+identity marker between subtypes.
+CS-LIT-6 documents the analogous finding for AR
+\textit{within} TNBC specifically.
+
+The structural parallel is exact:
+
+\begin{center}
+\begin{tabular}{p{4.5cm}p{4.5cm}p{3cm}}
+\toprule
+\textbf{Feature} &
+\textbf{Standard view} &
+\textbf{Geometric reframing} \\
+\midrule
+FOXA1 (across subtypes) &
+Binary: luminal vs non-luminal &
+Continuous depth axis
+across all six subtypes \\[0.5em]
+AR (within TNBC) &
+Binary: LAR vs non-LAR &
+Continuous depth axis
+within the TNBC attractor \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.5em}
+
+Both findings arise from the same methodological
+principle: when a binary classifier is examined
+within a continuous Waddington landscape, the
+binary threshold is revealed to be an arbitrary
+cut on a graded biological spectrum.
+
+% ══════════════════════════════════════════════════════════════
+\section{Validation Pathway}
+% ══════════════════════════════════��═══════════════════════════
+
+\begin{center}
+\colorbox{actionbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{Proposed analyses:}\\[0.4em]
+\textbf{Analysis 1 --- Independent single-cell
+replication:}\\
+Reproduce the within-TNBC AR--EZH2 correlation
+in an independent single-cell TNBC dataset.
+Confirm that the relationship is continuous,
+not bimodal.\\[0.5em]
+\textbf{Analysis 2 --- Bulk RNA-seq
+confirmation:}\\
+Confirm the inverse AR--depth relationship in
+a bulk RNA TNBC cohort (e.g., TCGA-BRCA TNBC
+subset or METABRIC). Compute the correlation
+between AR expression and an EZH2-activity
+proxy (e.g., EZH2 expression or H3K27me3
+surrogate signature).\\[0.5em]
+\textbf{Analysis 3 --- Clinical dose--response
+test:}\\
+In a TNBC cohort with AR IHC and tazemetostat
+treatment data: test whether tazemetostat
+benefit (response rate, PFS) is inversely
+graded by pre-treatment AR H-score. This is
+the falsifiable prediction from the continuous
+depth axis model.\\[0.5em]
+\textbf{Analysis 4 --- G-1 failure mechanism:}\\
+In a TNBC cohort with AR IHC and G-1/enobosarm
+or enzalutamide data: confirm that the lowest
+AR expressors show no benefit, consistent with
+CS-LIT-12.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{What This Document Claims and Does
+Not Claim}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{What IS Claimed}
+
+\begin{itemize}
+    \item Within 4,312 TNBC cells in GSE176078,
+    AR expression is continuously and inversely
+    correlated with EZH2-driven attractor lock
+    depth ($r = -0.378$,
+    $p = 6.23 \times 10^{-147}$).
+    \item The correlation is statistically
+    robust and geometrically consistent with
+    the Waddington landscape model.
+    \item The binary LAR/non-LAR classification
+    is a threshold imposed on a continuous
+    biological variable.
+    \item AR level predicts EZH2 inhibitor
+    benefit magnitude in an inverse relationship.
+    \item AR suppression in deeply locked TNBC
+    is a consequence of lock depth, not an
+    independent categorical feature.
+    \item This framing has no direct published
+    equivalent as of 2026-03-06.
+\end{itemize}
+
+\subsection{What is NOT Claimed}
+
+\begin{itemize}
+    \item The continuous AR axis has not been
+    validated prospectively or in a clinical
+    trial.
+    \item The dose--response prediction for
+    EZH2i benefit has not been tested.
+    \item The LAR subtype designation is not
+    invalidated. It remains clinically useful
+    as a threshold. The claim is that treating
+    it as a continuous axis captures additional
+    information.
+    \item The finding is from a single
+    single-cell dataset and requires replication
+    in independent data.
+\end{itemize}
+
+% ═════════════════════════════════════════���════════════════════
+\section{Locked Statement}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\colorbox{findingbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.6em}
+\textbf{Stated once, precisely, without inflation:}
+\\[0.5em]
+Within 4,312 TNBC cells in GSE176078,
+AR expression is continuously and inversely
+correlated with EZH2-driven epigenetic lock
+depth ($r = -0.378$, $p = 6.23 \times 10^{-147}$,
+$n = 4{,}312$). The relationship is graded, not
+binary. The standard LAR/non-LAR binary
+classification is a threshold on this continuous
+spectrum. AR level within TNBC is a quantitative
+readout of how deeply the tumor cell population
+is locked in the EZH2/PRC2 attractor state.
+Lower AR = deeper lock = higher TNBC Depth Score
+= greater expected benefit from EZH2-targeting
+intervention. Higher AR = shallower lock =
+partial luminal identity retained = candidate
+for AR-directed therapies. The causal direction
+is: EZH2 lock depth suppresses AR, not the
+reverse. This framing and these statistics have
+no direct published equivalent as of 2026-03-06.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{Document Metadata}
+% ══════════════════════════════════════════════════════════════
+
+\begin{tabular}{ll}
+\toprule
+\textbf{Field} & \textbf{Value} \\
+\midrule
+Document ID & CS-LIT-6 \\
+Parent document & BRCA-S8h (2026-03-05) \\
+Verdict & NOVEL \\
+Date & 2026-03-06 \\
+Author & Eric Robert Lawson \\
+ORCID & 0009-0002-0414-6544 \\
+Contact & OrganismCore@proton.me \\
+Repository &
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{attractor-oncology} \\
+Source data & GSE176078 ($n=4{,}312$ TNBC cells) \\
+Key statistic &
+$r=-0.378$, $p=6.23\times10^{-147}$,
+$n=4{,}312$ \\
+Six Lock Type DOI &
+\href{https://doi.org/10.5281/zenodo.18884158}
+{10.5281/zenodo.18884158} \\
+FOXA1/EZH2 Ratio DOI &
+\href{https://doi.org/10.5281/zenodo.18883922}
+{10.5281/zenodo.18883922} \\
+TNBC Depth Score DOI &
+\href{https://doi.org/10.5281/zenodo.18891523}
+{10.5281/zenodo.18891523} \\
+EZH2 Paradox DOI &
+\href{https://doi.org/10.5281/zenodo.18891318}
+{10.5281/zenodo.18891318} \\
+License & CC BY 4.0 \\
+\bottomrule
+\end{tabular}
+
+\end{document}

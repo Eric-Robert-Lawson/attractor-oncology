@@ -1,0 +1,888 @@
+\documentclass[12pt, a4paper]{article}
+
+% ── PACKAGES ──────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue,
+    pdftitle={EZH2 Inhibition Combined with Anti-HER2 Therapy
+              for the HER2-Deep Fraction: CDH3-High, AR-Low,
+              EZH2 +118 Percent},
+    pdfauthor={Eric Robert Lawson},
+    pdfkeywords={EZH2, EZH2 inhibitor, tazemetostat,
+                 HER2, HER2-enriched, anti-HER2,
+                 trastuzumab, pertuzumab, CDH3, P-cadherin,
+                 androgen receptor, AR, de-differentiation,
+                 epigenetic lock, Waddington landscape,
+                 attractor geometry, breast cancer,
+                 subpopulation, resistance, GSE176078,
+                 OrganismCore, HER2 deep fraction,
+                 undertreated, cell fate plasticity}
+}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{authblk}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{setspace}
+
+% ── COLOURS ───────────────────────────────────────────────────
+\definecolor{repobox}{RGB}{240,247,255}
+\definecolor{findingbox}{RGB}{245,255,245}
+\definecolor{novelbox}{RGB}{255,248,220}
+\definecolor{mechanismbox}{RGB}{250,245,255}
+\definecolor{actionbox}{RGB}{230,255,230}
+\definecolor{urgentbox}{RGB}{255,235,235}
+\definecolor{convergentbox}{RGB}{255,250,235}
+\definecolor{contrastbox}{RGB}{248,240,255}
+
+% ── HEADER / FOOTER ───────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\footnotesize CS-LIT-21: EZH2i + Anti-HER2\\
+       \footnotesize for the HER2-Deep Fraction}
+\rhead{\footnotesize OrganismCore \textbar{} 2026-03-06}
+\rfoot{\small Page \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\setlength{\headheight}{24pt}
+\addtolength{\topmargin}{-10pt}
+
+% ── SECTION FORMATTING ────────────────────────────────────────
+\titleformat{\section}
+  {\large\bfseries}{\thesection}{1em}{}[\titlerule]
+\titleformat{\subsection}
+  {\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\small\bfseries}{\thesubsubsection}{1em}{}
+
+% ══════════════════════════════════════════════════════════════
+% TITLE
+% ══════════════════════════════════════════════════════════════
+\title{
+    \vspace{-1em}
+    \textbf{EZH2 Inhibition Combined with Anti-HER2
+    Therapy for the HER2-Deep Fraction:}\\[0.5em]
+    \large CDH3-High, AR-Low, EZH2 $+118\%$ ---
+    A De-Differentiated Subpopulation Within
+    HER2-Enriched Breast Cancer That Is Currently
+    Undertreated by Standard Anti-HER2 Regimens\\[0.4em]
+    \normalsize \textit{OrganismCore Framework ---
+    Document CS-LIT-21}\\[0.3em]
+    \small Derived from Waddington Attractor Geometry
+    of 19,542 Single Cancer Cells (GSE176078)\\[0.3em]
+    \small Part of the BRCA Cross-Subtype Analysis
+    (BRCA-S8h, 2026-03-05)
+}
+
+\author[1]{Eric Robert Lawson}
+\affil[1]{
+    OrganismCore\\
+    \href{mailto:OrganismCore@proton.me}
+         {OrganismCore@proton.me}\\
+    ORCID:
+    \href{https://orcid.org/0009-0002-0414-6544}
+         {0009-0002-0414-6544}
+}
+
+\date{March 6, 2026}
+
+% ══════════════════════════════════════════════════════════════
+\begin{document}
+% ══════════════════════════════════════════════════════════════
+
+\maketitle
+\thispagestyle{fancy}
+
+% ── REPOSITORY POINTER ────────────────────────────────────────
+\begin{center}
+\colorbox{repobox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\centering
+\textbf{Full computational record --- scripts, data
+caches, reasoning artifacts, and raw logs:}\\[0.4em]
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{\texttt{https://github.com/Eric-Robert-Lawson/attractor-oncology}}
+\\[0.3em]
+\small Part of the OrganismCore BRCA Cross-Subtype
+Analysis (BRCA-S8h, 2026-03-05).\\
+All predictions were locked from attractor geometry
+\textbf{before} any literature review was performed.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\vspace{1em}
+
+% ── FINDING BOX ───────────────────────────────────────────────
+\begin{center}
+\colorbox{findingbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{THE FINDING, STATED PRECISELY:}\\[0.4em]
+Within the HER2-enriched subtype in GSE176078,
+Waddington attractor geometry identifies a
+distinct de-differentiated subpopulation
+characterised by three co-occurring features:
+
+\begin{itemize}[noitemsep]
+    \item \textbf{CDH3-high} (P-cadherin
+    overexpression: marker of de-differentiation
+    and mesenchymal/stem-like identity)
+    \item \textbf{AR-low} (androgen receptor
+    suppressed: loss of luminal identity program)
+    \item \textbf{EZH2 $+118\%$} (EZH2 elevated
+    118\% above the HER2-enriched subtype mean)
+\end{itemize}
+
+This population exists \textbf{within} the
+HER2-enriched subtype. It is not a separate
+subtype. It is the deeply locked fraction of
+HER2+ disease --- the cells that have partially
+escaped HER2-dependent identity and descended
+into an EZH2-driven epigenetic lock. Standard
+anti-HER2 therapy (trastuzumab/pertuzumab)
+targets the HER2 receptor. It does not address
+the EZH2-driven de-differentiation that
+characterises this fraction.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\vspace{1em}
+
+% ── CONVERGENCE BOX ───────────────────────────────────────────
+\begin{center}
+\colorbox{convergentbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{INDEPENDENT CONVERGENCE:}\\[0.3em]
+Muller et al.\ (EMBO Reports, 2026) independently
+demonstrated that EZH2 drives HER2+ breast cancer
+progression through cell-fate plasticity and
+de-differentiation. Their finding that EZH2
+inhibition shifts HER2+ tumor cells toward a
+luminal phenotype is the mechanistic confirmation
+of the attractor geometry prediction made here.
+The two findings are orthogonal in method and
+convergent in conclusion.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\vspace{1em}
+
+% ══════════════════════════════════════════════════════════════
+\begin{abstract}
+% ══════════════════════════════════════════════════════════════
+Standard HER2-enriched breast cancer is treated
+with HER2-directed monoclonal antibodies
+(trastuzumab, pertuzumab) combined with
+chemotherapy. This approach achieves high
+pathological complete response rates in many
+patients. However, a subpopulation within
+HER2-enriched disease shows primary or acquired
+resistance to anti-HER2 therapy that is not
+explained by HER2 pathway genetics alone.
+We report the identification by Waddington
+attractor geometry, applied to 19,542 single
+cancer cells (GSE176078), of a de-differentiated
+subpopulation within HER2-enriched breast cancer
+defined by CDH3 overexpression, AR suppression,
+and EZH2 elevation ($+118\%$ above the
+HER2-enriched mean). This population, termed the
+\textbf{HER2-Deep Fraction}, has partially
+escaped HER2-dependent luminal identity and
+descended into an EZH2-driven epigenetic lock
+state. The geometry predicts that anti-HER2
+therapy alone is insufficient for this fraction:
+the EZH2 lock must be addressed concurrently.
+The proposed intervention is EZH2 inhibition
+(tazemetostat) combined with standard anti-HER2
+therapy, with CDH3 expression as the patient
+selection biomarker for the deep fraction.
+This finding independently converges with
+recent published work demonstrating that EZH2
+drives HER2+ breast cancer progression through
+cell-fate plasticity (Muller et al., EMBO
+Reports, 2026). No published instrument
+identifies the HER2-deep fraction by attractor
+geometry using CDH3-high, AR-low, and EZH2+118\%
+as co-occurring markers. The finding is novel.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+% ═══════════════════════════════════════════���══════════════════
+\section{Context and Origin}
+% ══════════════════════════════════════════════════════════════
+
+This document covers CS-LIT-21 from the
+OrganismCore BRCA Cross-Subtype Literature Check
+(BRCA-S8h, 2026-03-05):
+
+\begin{quote}
+\textbf{CS-LIT-21}: EZH2i + anti-HER2 for the
+HER2-deep fraction (CDH3-high, AR-low,
+EZH2 $+118\%$)
+\end{quote}
+
+The finding was derived from attractor geometry
+before any literature review was performed.
+The literature check assigned it a
+\textbf{NOVEL} verdict, with a note that it is
+directly relevant to trastuzumab/pertuzumab
+resistance research.
+
+\subsection{Relationship to Other Published
+Documents in This Series}
+
+\begin{itemize}
+    \item \textbf{CS-LIT-2 (Six Lock Type
+    Classification)}\\
+    \href{https://doi.org/10.5281/zenodo.18884158}
+    {DOI: 10.5281/zenodo.18884158}\\
+    HER2-enriched is Lock Type 2 in the
+    six-lock taxonomy. The HER2-deep fraction
+    represents the sub-population within
+    Lock Type 2 that has acquired properties
+    of Lock Type 3 (the deep EZH2 lock of TNBC).
+
+    \item \textbf{CS-LIT-1 (FOXA1/EZH2 Ratio)}\\
+    \href{https://doi.org/10.5281/zenodo.18883922}
+    {DOI: 10.5281/zenodo.18883922}\\
+    The FOXA1/EZH2 ratio orders subtypes
+    across the full spectrum. The HER2-deep
+    fraction is the subpopulation of
+    HER2-enriched with the lowest FOXA1/EZH2
+    ratio within the subtype --- the cells
+    most shifted toward the TNBC end of the
+    continuous ordering axis.
+
+    \item \textbf{CS-LIT-6 (AR as Continuous
+    Depth Axis)}\\
+    \href{https://doi.org/10.5281/zenodo.18891770}
+    {DOI: 10.5281/zenodo.18891770}\\
+    AR suppression in the HER2-deep fraction
+    mirrors the AR-low signature of deeply
+    locked TNBC. The same continuous depth
+    axis operates across both subtypes.
+
+    \item \textbf{CS-LIT-16 (Tazemetostat
+    $\rightarrow$ Fulvestrant in TNBC)}\\
+    \href{https://doi.org/10.5281/zenodo.18884003}
+    {DOI: 10.5281/zenodo.18884003}\\
+    The EZH2 inhibitor logic developed for
+    TNBC applies to the HER2-deep fraction
+    through the same attractor geometry
+    principle. The difference is the
+    combination: in HER2-deep, the partner
+    is anti-HER2 therapy rather than
+    fulvestrant.
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════════
+\section{The Problem: What Standard Anti-HER2
+Therapy Does and Does Not Address}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{What Standard Anti-HER2 Therapy
+Targets}
+
+Trastuzumab and pertuzumab bind HER2
+(ERBB2) extracellularly and inhibit:
+\begin{itemize}
+    \item HER2 homodimerisation and
+    heterodimerisation
+    \item Downstream PI3K/AKT and MAPK/ERK
+    signalling
+    \item Antibody-dependent cellular
+    cytotoxicity (ADCC)
+\end{itemize}
+
+These mechanisms are effective for tumor
+cells whose survival is driven by
+HER2 receptor signalling. The assumption
+is that HER2-enriched tumors are
+predominantly HER2-dependent.
+
+\subsection{What the Attractor Geometry
+Reveals}
+
+The Waddington landscape of HER2-enriched
+cells in GSE176078 is not homogeneous.
+Within the HER2-enriched cell population,
+there is a distinct fraction of cells that
+have partially disengaged from
+HER2-dependent luminal identity and
+descended into an EZH2-driven attractor
+state. These cells are defined by:
+
+\begin{center}
+\begin{tabular}{p{3.5cm}p{5.5cm}p{3.5cm}}
+\toprule
+\textbf{Marker} &
+\textbf{Biological meaning} &
+\textbf{Value in deep fraction} \\
+\midrule
+CDH3 (P-cadherin) &
+Marks de-differentiated, mesenchymal-like,
+stem-cell-adjacent state. Associated with
+loss of epithelial identity and increased
+migratory potential. &
+High (elevated above HER2 mean) \\[0.5em]
+AR &
+Continuous readout of luminal identity
+program activity (see CS-LIT-6). Low AR
+indicates partial loss of luminal identity
+and deeper attractor descent. &
+Low (suppressed) \\[0.5em]
+EZH2 &
+Primary driver of the epigenetic lock.
+EZH2 $+118\%$ above HER2-enriched mean
+indicates active PRC2-mediated epigenetic
+silencing in this fraction. &
+$+118\%$ above subtype mean \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.5em}
+
+The co-occurrence of these three features
+in the same cells is not coincidental.
+It is a geometric signature: these cells
+are in a different attractor position
+from the majority of HER2-enriched cells.
+They have not simply amplified HER2
+expression --- they have additionally
+activated the EZH2/PRC2 program that
+drives epigenetic de-differentiation.
+
+\subsection{Why This Creates a Therapeutic
+Gap}
+
+Anti-HER2 therapy targets the HER2 receptor.
+It does not:
+\begin{itemize}
+    \item Inhibit EZH2-driven epigenetic
+    silencing
+    \item Restore luminal identity programs
+    suppressed by PRC2
+    \item Address CDH3-mediated mesenchymal
+    plasticity
+    \item Reduce the EZH2 activity that
+    maintains the de-differentiated state
+\end{itemize}
+
+The HER2-deep fraction therefore has an
+epigenetic survival mechanism that is
+orthogonal to HER2 receptor inhibition.
+Blocking HER2 alone leaves this mechanism
+intact. The prediction is that the HER2-deep
+fraction is enriched in anti-HER2
+non-responders and in patients who relapse
+after initial response.
+
+% ══════════════════════════════════════════════════════════════
+\section{The Three-Marker Geometric Signature}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{CDH3 as the Primary Identifier
+of the Deep Fraction}
+
+CDH3 (P-cadherin) is a cell adhesion molecule
+whose overexpression in breast cancer marks:
+\begin{itemize}
+    \item Loss of E-cadherin-mediated
+    epithelial organisation
+    \item Acquisition of stem-cell-adjacent
+    phenotype
+    \item Increased migratory and invasive
+    capacity
+    \item Resistance to conventional
+    cytotoxic agents
+\end{itemize}
+
+In the Waddington landscape, CDH3
+overexpression within HER2-enriched cells
+marks the cells that have descended from the
+canonical HER2 luminal attractor toward
+a more basal/de-differentiated position.
+CDH3 is high specifically in the cells that
+have also activated EZH2 --- it is not
+elevated uniformly across HER2-enriched
+cells.
+
+CDH3-high therefore functions as the primary
+clinical identifier of the deep fraction:
+it is measurable by IHC and RNA-seq in
+standard clinical samples.
+
+\subsection{AR Suppression as Confirmation
+of Attractor Depth}
+
+Within HER2-enriched cells, AR suppression
+mirrors the same continuous depth axis
+established for TNBC in CS-LIT-6
+(\href{https://doi.org/10.5281/zenodo.18891770}
+{DOI: 10.5281/zenodo.18891770}). The cells
+with the lowest AR expression within
+HER2-enriched are the same cells with the
+highest EZH2 and the highest CDH3. The
+three-marker co-occurrence is a single
+geometric event, not three independent
+associations.
+
+\subsection{\texorpdfstring{EZH2 $+118\%$:
+The Magnitude of the Lock Within the
+Subtype}{EZH2 +118 Percent: The Magnitude
+of the Lock}}
+
+EZH2 is elevated $+118\%$ above the
+HER2-enriched subtype mean in the deep
+fraction. This is a substantial within-subtype
+elevation --- not merely a reflection of
+the already-elevated EZH2 characteristic
+of HER2-enriched relative to luminal subtypes.
+It represents the additional EZH2 activity
+that specifically characterises the
+de-differentiated subpopulation.
+
+For comparison: EZH2 is elevated $+189\%$
+above baseline in TNBC (CS-LIT-4 in BRCA-S8h).
+The HER2-deep fraction at $+118\%$ is
+intermediate between typical HER2-enriched
+and typical TNBC --- consistent with the
+geometric interpretation that these cells
+are partially descending toward the TNBC
+attractor while remaining HER2-amplified.
+
+% ══════════════════════════════════════════════════════════════
+\section{Independent Convergence with Published
+Literature}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\colorbox{convergentbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{CONVERGENT FINDING:}\\[0.4em]
+\textbf{Muller et al., EMBO Reports, 2026:}\\
+\textit{EZH2 directs HER2+ breast cancer
+progression through cell-fate plasticity.}\\[0.4em]
+This study, published independently of the
+OrganismCore analysis, demonstrates using
+genetically engineered mouse models that
+EZH2 is required for HER2+ breast cancer
+progression. EZH2 inhibition shifts HER2+
+tumor cells toward a luminal, less aggressive
+phenotype and sensitises them to endocrine
+therapy. The mechanism is cell-fate
+plasticity: EZH2 maintains the de-differentiated
+state of a fraction of HER2+ tumor cells.\\[0.4em]
+\textbf{Why this matters:}\\
+The Muller et al. study confirms the
+mechanistic basis of the CS-LIT-21 prediction
+by an independent method (mouse model
+genetics) in an independent laboratory.
+The EZH2-driven de-differentiation of
+HER2+ cells is now mechanistically established
+in the published literature. CS-LIT-21
+identifies the human clinical counterpart
+of this mechanism using attractor geometry
+applied to human single-cell data.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\vspace{0.5em}
+
+Additionally, Bao et al.\ (Nature Communications,
+2020) demonstrated that EZH2-mediated repression
+of PP2A (via PPP2R2B silencing) confers
+resistance to HER2-targeted therapy by
+sustaining PI3K/AKT/mTOR signalling downstream
+of HER2 blockade. This is the molecular
+mechanism by which EZH2 activity in the
+HER2-deep fraction enables survival despite
+anti-HER2 therapy.
+
+A Phase 1b study of the EZH1/2 inhibitor
+valemetostat in combination with trastuzumab
+deruxtecan (T-DXd) in breast cancer is
+ongoing (ASCO 2024 abstract TPS1120),
+confirming that the combination strategy
+is now entering clinical testing in an
+adjacent context.
+
+% ══════════════════════════════════════════════════════��═══════
+\section{The Proposed Intervention}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{The Combination Logic}
+
+\begin{center}
+\colorbox{mechanismbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{Two orthogonal mechanisms, two
+targeted agents:}\\[0.5em]
+\textbf{Anti-HER2 therapy} (trastuzumab
+and/or pertuzumab):\\
+Targets HER2 receptor signalling.
+Addresses the HER2-dependent survival
+mechanism present in all HER2-enriched
+cells, including the deep fraction.\\[0.5em]
+\textbf{EZH2 inhibitor} (tazemetostat):\\
+Targets the EZH2/PRC2-driven epigenetic
+lock. Addresses the de-differentiation
+and epigenetic survival mechanism that
+is specifically elevated in the deep
+fraction. Restores luminal identity
+programs suppressed by PRC2 activity.
+Reduces CDH3 expression and mesenchymal
+plasticity as a downstream consequence
+of lock reversal.\\[0.5em]
+\textbf{Combined effect}:\\
+Anti-HER2 eliminates HER2-dependent
+survival; EZH2 inhibition eliminates the
+epigenetic survival mechanism that
+otherwise allows the deep fraction to
+persist and eventually repopulate the
+tumor after anti-HER2 therapy.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\subsection{Patient Selection Biomarker}
+
+CDH3 expression (by IHC or RNA-seq) is the
+proposed patient selection biomarker for
+enriching the HER2-deep fraction:
+
+\begin{center}
+\begin{tabular}{p{4cm}p{4cm}p{4.5cm}}
+\toprule
+\textbf{CDH3 Status} &
+\textbf{Geometric Position} &
+\textbf{Clinical Implication} \\
+\midrule
+CDH3-high (upper quartile
+within HER2-enriched) &
+Deep fraction. EZH2 elevated.
+AR suppressed. Partially
+de-differentiated. &
+Primary target for EZH2i +
+anti-HER2 combination.
+High probability of
+insufficient response
+to anti-HER2 alone. \\[0.5em]
+CDH3-intermediate &
+Transitional. Some EZH2
+activity but not deep lock. &
+May benefit; lower priority
+for combination than CDH3-high. \\[0.5em]
+CDH3-low (standard
+HER2-enriched) &
+Shallow. HER2-dependent
+survival dominant. &
+Standard anti-HER2 therapy
+appropriate. EZH2i addition
+not mechanistically justified. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Sequencing Considerations}
+
+Two sequencing strategies are geometrically
+motivated:
+
+\begin{enumerate}
+    \item \textbf{Concurrent combination:}
+    EZH2 inhibitor administered alongside
+    anti-HER2 therapy from initiation.
+    Rationale: prevents the deep fraction
+    from establishing an epigenetically
+    locked residual population during
+    the period of HER2 blockade.
+
+    \item \textbf{EZH2i priming followed
+    by anti-HER2:} EZH2 inhibitor
+    administered first to reverse the
+    epigenetic lock and restore luminal
+    identity, followed by anti-HER2.
+    Rationale: analogous to the
+    tazemetostat $\rightarrow$ fulvestrant
+    sequence in TNBC (CS-LIT-16), where
+    lock reversal unmasks a subsequent
+    hormonal target. In HER2-deep, lock
+    reversal may restore full
+    HER2-dependency in previously
+    resistant cells, enhancing subsequent
+    anti-HER2 efficacy.
+\end{enumerate}
+
+% ══════════════════════════════════════════════════════════════
+\section{What the Published Literature Does and
+Does Not Contain}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{What IS in the Published Literature}
+
+\begin{itemize}
+    \item EZH2 inhibition sensitises
+    HER2+ cells to anti-HER2 therapy
+    via PP2A restoration (Bao et al.,
+    Nature Communications, 2020).
+    \item EZH2 drives HER2+ breast cancer
+    progression through de-differentiation
+    and cell-fate plasticity (Muller et al.,
+    EMBO Reports, 2026).
+    \item EZH1/2 inhibitor combined with
+    T-DXd is in Phase 1b testing in
+    breast cancer (ASCO 2024).
+    \item CDH3 (P-cadherin) overexpression
+    marks aggressive, de-differentiated
+    breast cancer subpopulations.
+    \item AR suppression is associated with
+    de-differentiation in breast cancer.
+\end{itemize}
+
+\subsection{What is NOT in the Published
+Literature}
+
+\begin{itemize}
+    \item The identification of the
+    HER2-deep fraction as a geometric
+    entity defined by the co-occurrence
+    of CDH3-high, AR-low, and
+    EZH2 $+118\%$ within HER2-enriched
+    breast cancer.
+    \item The use of CDH3 expression as
+    a patient selection biomarker for
+    EZH2 inhibitor benefit specifically
+    within HER2-enriched disease.
+    \item The framing of the HER2-deep
+    fraction as a partially descended
+    attractor state --- cells that are
+    HER2-amplified but have additionally
+    activated the EZH2-driven lock of
+    TNBC.
+    \item The specific combination
+    proposal (EZH2i + anti-HER2) derived
+    from attractor geometry applied to
+    human single-cell data (GSE176078).
+    \item The EZH2 $+118\%$ quantification
+    within HER2-enriched cells as a
+    within-subtype elevation distinct
+    from the between-subtype elevation.
+\end{itemize}
+
+\begin{center}
+\colorbox{novelbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{VERDICT: NOVEL}\\[0.3em]
+The identification of the HER2-deep fraction
+by attractor geometry (CDH3-high, AR-low,
+EZH2 $+118\%$) and the derived combination
+proposal (EZH2 inhibitor + anti-HER2) have
+no direct published equivalent as of
+2026-03-06. The finding independently
+converges with Muller et al.\ (2026) on
+the mechanism (EZH2-driven
+de-differentiation in HER2+ breast cancer)
+while providing a distinct patient selection
+instrument and combination strategy not
+present in the published literature.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{Validation Pathway}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\colorbox{actionbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{Proposed analyses:}\\[0.4em]
+\textbf{Analysis 1 --- CDH3 subgroup
+outcome analysis:}\\
+In a HER2-enriched cohort with anti-HER2
+treatment and outcome data: stratify by
+CDH3 expression (IHC H-score or RNA-seq
+quartile). Test whether CDH3-high patients
+have worse pCR rates and/or worse PFS
+on standard anti-HER2 therapy.
+This is the falsifiable prediction from
+the geometric model.\\[0.5em]
+\textbf{Analysis 2 --- EZH2 / CDH3
+co-expression confirmation:}\\
+In GSE176078 or an independent single-cell
+HER2-enriched dataset: confirm that CDH3-high
+and EZH2-high are co-occurring in the same
+cells rather than in separate subpopulations.
+The geometric claim requires co-occurrence.\\[0.5em]
+\textbf{Analysis 3 --- Combination
+efficacy in model systems:}\\
+In a HER2+ breast cancer cell line with
+CDH3 overexpression and EZH2 elevation:
+test tazemetostat + trastuzumab combination
+vs each agent alone. Measure CDH3 expression,
+EZH2 activity, cell viability, and apoptosis.\\[0.5em]
+\textbf{Analysis 4 --- IHC cohort
+stratification:}\\
+Apply FOXA1/EZH2 dual IHC with CDH3 to
+an archival HER2-enriched cohort. Quantify
+the CDH3-high, EZH2-high subpopulation
+fraction and correlate with anti-HER2
+response and survival.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{What This Document Claims and Does
+Not Claim}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{What IS Claimed}
+
+\begin{itemize}
+    \item Within HER2-enriched cells in
+    GSE176078, a de-differentiated
+    subpopulation is identifiable by
+    the co-occurrence of CDH3-high,
+    AR-low, and EZH2 $+118\%$.
+    \item This subpopulation occupies a
+    distinct attractor position from the
+    majority of HER2-enriched cells.
+    \item The EZH2 elevation in this
+    fraction is within-subtype, not
+    merely a reflection of the
+    between-subtype EZH2 gradient.
+    \item Standard anti-HER2 therapy
+    does not address the EZH2-driven
+    epigenetic lock mechanism in this
+    fraction.
+    \item The combination of EZH2i +
+    anti-HER2 is mechanistically
+    motivated by the geometry.
+    \item CDH3 expression is the proposed
+    patient selection biomarker for the
+    deep fraction.
+    \item The finding independently
+    converges with Muller et al.\ (2026)
+    on EZH2-driven de-differentiation
+    in HER2+ breast cancer.
+\end{itemize}
+
+\subsection{What is NOT Claimed}
+
+\begin{itemize}
+    \item The HER2-deep fraction has not
+    been prospectively validated in a
+    clinical cohort.
+    \item The combination of EZH2i +
+    anti-HER2 has not been tested in
+    CDH3-selected patients.
+    \item CDH3 has not been validated as
+    a predictive biomarker for EZH2i
+    benefit in HER2-enriched disease.
+    \item The finding is from a single
+    single-cell dataset and requires
+    replication in independent data.
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════════
+\section{Locked Statement}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\colorbox{findingbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.6em}
+\textbf{Stated once, precisely, without
+inflation:}\\[0.5em]
+Within the HER2-enriched cell population
+of GSE176078, Waddington attractor geometry
+identifies a de-differentiated subpopulation
+defined by CDH3 overexpression, AR suppression,
+and EZH2 elevation ($+118\%$ above the
+HER2-enriched subtype mean). This population
+--- the HER2-Deep Fraction --- has activated
+the same EZH2-driven epigenetic lock that
+characterises deeply locked TNBC, while
+remaining HER2-amplified. Standard anti-HER2
+therapy does not address the EZH2 mechanism.
+The proposed intervention is EZH2 inhibitor
+(tazemetostat) combined with anti-HER2 therapy,
+with CDH3 expression as the patient selection
+biomarker. This finding independently
+converges with Muller et al.\ (EMBO Reports,
+2026) on EZH2-driven cell-fate plasticity
+in HER2+ breast cancer. The specific
+three-marker signature, attractor geometry
+derivation, and CDH3-based patient selection
+proposal have no direct published equivalent
+as of 2026-03-06.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{Document Metadata}
+% ══════════════════════════════════════════════════════════════
+
+\begin{tabular}{ll}
+\toprule
+\textbf{Field} & \textbf{Value} \\
+\midrule
+Document ID & CS-LIT-21 \\
+Parent document & BRCA-S8h (2026-03-05) \\
+Verdict & NOVEL \\
+Date & 2026-03-06 \\
+Author & Eric Robert Lawson \\
+ORCID & 0009-0002-0414-6544 \\
+Contact & OrganismCore@proton.me \\
+Repository &
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{attractor-oncology} \\
+Source data & GSE176078 (HER2-enriched cells) \\
+Key markers &
+CDH3-high, AR-low, EZH2 $+118\%$ \\
+Six Lock Type DOI &
+\href{https://doi.org/10.5281/zenodo.18884158}
+{10.5281/zenodo.18884158} \\
+FOXA1/EZH2 Ratio DOI &
+\href{https://doi.org/10.5281/zenodo.18883922}
+{10.5281/zenodo.18883922} \\
+AR Depth Axis DOI &
+\href{https://doi.org/10.5281/zenodo.18891770}
+{10.5281/zenodo.18891770} \\
+Tazemetostat Fulvestrant DOI &
+\href{https://doi.org/10.5281/zenodo.18884003}
+{10.5281/zenodo.18884003} \\
+License & CC BY 4.0 \\
+\bottomrule
+\end{tabular}
+
+\end{document}

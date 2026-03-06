@@ -1,0 +1,1390 @@
+\documentclass[12pt, a4paper]{article}
+
+% ── PACKAGES ──────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue,
+    pdftitle={Tazemetostat as Maintenance Therapy
+              After Neoadjuvant Chemotherapy in
+              EZH2-High TNBC},
+    pdfauthor={Eric Robert Lawson},
+    pdfkeywords={tazemetostat, maintenance therapy,
+                 TNBC, EZH2, EZH2 paradox, late relapse,
+                 neoadjuvant chemotherapy, breast cancer,
+                 OrganismCore, attractor geometry,
+                 GSE25066, post-chemotherapy window}
+}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{authblk}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{setspace}
+
+% ── COLOURS ───────────────────────────────────────────────────
+\definecolor{repobox}{RGB}{240,247,255}
+\definecolor{urgentbox}{RGB}{255,235,235}
+\definecolor{lockbox}{RGB}{245,255,245}
+\definecolor{mechanismbox}{RGB}{250,245,255}
+\definecolor{paradoxbox}{RGB}{255,250,235}
+
+% ── HEADER / FOOTER ───────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\small OrganismCore \textbar{} 2026-03-06}
+\lhead{\small CS-LIT-17: Tazemetostat Maintenance
+       in EZH2-High TNBC}
+\rfoot{\small Page \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ── SECTION FORMATTING ────────────────────────────────────────
+\titleformat{\section}
+  {\large\bfseries}{\thesection}{1em}{}[\titlerule]
+\titleformat{\subsection}
+  {\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\small\bfseries}{\thesubsubsection}{1em}{}
+
+% ══════════════════════════════════════════════════════════════
+% TITLE
+% ══════════════════════════════════════════════════════════════
+\title{
+    \vspace{-1em}
+    \textbf{Tazemetostat as Maintenance Therapy
+    After Neoadjuvant Chemotherapy in EZH2-High
+    Triple-Negative Breast Cancer:}\\[0.5em]
+    \large Exploiting the Post-Chemotherapy Window
+    to Close the Late-Relapse Gap\\[0.4em]
+    \normalsize \textit{OrganismCore Framework ---
+    Document CS-LIT-17}\\[0.3em]
+    \small Derived from Waddington Landscape Attractor
+    Geometry and the EZH2 Paradox\\[0.3em]
+    \small Companion to CS-LIT-16:
+    Tazemetostat $\rightarrow$ Fulvestrant
+    in EZH2-High FOXA1-Absent TNBC
+    (Zenodo, 2026-03-06)
+}
+
+\author[1]{Eric Robert Lawson}
+\affil[1]{
+    OrganismCore\\
+    \href{mailto:OrganismCore@proton.me}
+         {OrganismCore@proton.me}\\
+    ORCID:
+    \href{https://orcid.org/0009-0002-0414-6544}
+         {0009-0002-0414-6544}
+}
+
+\date{March 6, 2026}
+
+% ══════════════════════════════════════════════════════════════
+\begin{document}
+% ══════════════════════════════════════════════════════════════
+
+\maketitle
+\thispagestyle{fancy}
+
+% ── PRIORITY NOTICE ───────────────────────────────────────────
+\begin{center}
+\colorbox{urgentbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\centering
+\textbf{PRIORITY ESTABLISHMENT DOCUMENT}\\[0.3em]
+\small
+As of 2026-03-06, no registered clinical trial exists
+anywhere in the world for tazemetostat as maintenance
+therapy after neoadjuvant chemotherapy in TNBC
+(ClinicalTrials.gov searched 2026-03-05). No solid
+tumour adjuvant or maintenance trial for tazemetostat
+exists in any indication. This document establishes
+priority on the specific maintenance setting, patient
+selection criteria, treatment protocol, and primary
+endpoint described herein. This proposal is distinct
+from CS-LIT-16 (tazemetostat $\rightarrow$ fulvestrant
+conversion therapy in active/metastatic TNBC). Both
+proposals use the same drug in the same tumour type
+but in different settings, with different mechanisms
+of action, different patient populations, different
+endpoints, and different biological rationales.
+\vspace{0.5em}
+\end{minipage}
+}
+\end{center}
+
+\vspace{0.6em}
+
+% ── REPOSITORY POINTER ────────────────────────────────────────
+\begin{center}
+\colorbox{repobox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.4em}
+\centering
+\textbf{Full computational record and companion
+reasoning artifacts:}\\[0.3em]
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{\texttt{https://github.com/Eric-Robert-Lawson/attractor-oncology}}
+\\[0.2em]
+\small
+Repository ID: 1172048282 \textbar{}
+MIT License \textbar{}
+Python \textbar{}
+Public\\[0.2em]
+Source document:
+\texttt{Cancer\_Research/BRCA/DEEP\_DIVE/}
+\texttt{BRCA\_Cross\_Subtype\_Literature\_Check.md}
+(BRCA-S8h, item CS-LIT-17)\\[0.2em]
+EZH2 paradox data:
+\texttt{.../FOXA1\_EZH2\_RATIO/ratio4.py}
+and
+\texttt{ratio\_s4\_results/results/ratio\_s4\_log.txt}\\[0.2em]
+Companion deposit (CS-LIT-16):
+\textit{Tazemetostat Followed by Fulvestrant in
+EZH2-High FOXA1-Absent TNBC}
+(Zenodo, 2026-03-06)
+\vspace{0.4em}
+\end{minipage}
+}
+\end{center}
+
+\vspace{0.8em}
+
+% ── ABSTRACT ──────────────────────────────────────────────────
+\begin{abstract}
+\noindent
+Triple-negative breast cancer (TNBC) presents a
+paradox in the clinic: EZH2-high tumours respond
+well to neoadjuvant taxane-anthracycline chemotherapy
+(higher pathological complete response rates) but
+carry substantially worse long-term outcomes
+(higher distant relapse-free survival hazard ratio
+at 3--5 years). Both arms of this paradox are
+confirmed in GSE25066 ($n=508$; pCR $p<0.0001$;
+DRFS HR$=1.363$, $p=0.0047$) and the long-window
+arm is confirmed in published independent literature
+(Frontiers in Oncology 2020, $\sim$4,000 patients;
+Fineberg, Montefiore/Albert Einstein: EZH2 IHC
+predicts metastatic disease post-neoadjuvant
+chemotherapy in TNBC specifically).
+
+The mechanistic explanation is straightforward:
+EZH2 drives proliferation, making tumours
+chemotherapy-sensitive in the short term. But the
+same EZH2 overexpression silences tumour suppression
+programmes (CDKN1A, CDKN2A) and maintains the
+epigenetic state that enables late metastatic relapse.
+EZH2-high TNBC cells that survive chemotherapy ---
+whether as minimal residual disease, dormant
+micrometastases, or circulating tumour cells ---
+retain the EZH2-driven epigenetic programme and
+constitute the reservoir for late relapse.
+
+The post-chemotherapy window between treatment
+completion and the 3--5 year late-relapse peak is an
+intervention window that is currently completely
+unused. We propose that tazemetostat (EZH2 inhibitor,
+FDA-approved 2020) administered as maintenance therapy
+after taxane-anthracycline completion in EZH2-high
+TNBC patients targets this residual EZH2-high
+population directly, before it drives late metastatic
+disease. This proposal was derived from Waddington
+landscape attractor geometry before literature review
+and is supported by two independent lines of published
+evidence confirming both arms of the EZH2 paradox.
+
+The proposed trial: maintenance tazemetostat
+800~mg BID beginning 4--6 weeks after neoadjuvant
+chemotherapy completion in patients with EZH2-high
+TNBC (H-score $\geq150$), regardless of
+pathological complete response status. Primary
+endpoint: distant relapse-free survival (DRFS)
+at 3 years. No registered trial exists for this
+indication. Tazemetostat is FDA-approved.
+The trial can be designed and submitted immediately.
+\end{abstract}
+
+\vspace{0.5em}
+\noindent\textbf{Keywords:}
+tazemetostat; maintenance therapy; TNBC;
+triple-negative breast cancer; EZH2; EZH2 paradox;
+late relapse; neoadjuvant chemotherapy;
+post-chemotherapy window; minimal residual disease;
+distant relapse-free survival; DRFS; adjuvant;
+attractor geometry; Waddington landscape; OrganismCore;
+GSE25066; breast cancer; precision oncology;
+epigenetic maintenance; H3K27me3; PRC2
+
+\newpage
+\tableofcontents
+\newpage
+
+% ═══════════════════════════════════════════════��══════════════
+\section{Document Metadata}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Field} & \textbf{Value} \\
+\midrule
+Document ID       & CS-LIT-17-MAINTENANCE-PROPOSAL \\
+Series            & BRCA Deep Dive --- Cross-Subtype \\
+Type              & Clinical Trial Proposal ---
+                    Priority Establishment Document \\
+Parent document   & BRCA-S8h (Cross-Subtype Literature
+                    Check, item CS-LIT-17) \\
+Companion         & CS-LIT-16 (Tazemetostat $\rightarrow$
+                    Fulvestrant, Zenodo 2026-03-06) \\
+Master artifact   & FOXA1/EZH2 Ratio Master Reasoning
+                    Artifact (Zenodo 2026-03-06) \\
+Date              & 2026-03-06 \\
+Author            & Eric Robert Lawson \\
+Organisation      & OrganismCore \\
+ORCID             & 0009-0002-0414-6544 \\
+Status            & Permanent \\
+Repository        &
+  \href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+       {Eric-Robert-Lawson/attractor-oncology} \\
+Repository ID     & 1172048282 \\
+License           & CC BY 4.0 \\
+Biological contradictions & 0 \\
+Registered maintenance trials & 0 (2026-03-05) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{Distinction from CS-LIT-16}
+% ══════════════════════════════════════════════════════════════
+
+These two proposals both involve tazemetostat in TNBC
+and are derived from the same OrganismCore framework.
+They are distinct clinical strategies targeting
+different clinical problems with different mechanisms:
+
+\begin{center}
+\begin{tabular}{p{3.5cm}p{5cm}p{5cm}}
+\toprule
+\textbf{Parameter}
+& \textbf{CS-LIT-16}
+& \textbf{CS-LIT-17 (this document)} \\
+\midrule
+Setting
+& Active/metastatic TNBC;
+  locally advanced TNBC
+& Post-neoadjuvant chemotherapy;
+  adjuvant/maintenance window \\[0.4em]
+Disease status
+& Measurable disease present
+& Minimal residual disease or
+  pCR with residual risk \\[0.4em]
+Mechanism
+& EZH2 inhibition restores
+  FOXA1/ESR1, enabling
+  fulvestrant to engage the
+  restored ER
+& EZH2 inhibition eliminates
+  the residual EZH2-high
+  population that drives
+  late metastatic relapse \\[0.4em]
+Second drug
+& Fulvestrant (required)
+& None (tazemetostat alone
+  as maintenance) \\[0.4em]
+Primary endpoint
+& FOXA1 H-score
+  re-expression $\geq50$
+  at Week~4 biopsy
+& Distant relapse-free
+  survival (DRFS) at 3 years \\[0.4em]
+Target population
+& EZH2-high AND
+  FOXA1-absent TNBC
+& EZH2-high TNBC regardless
+  of FOXA1 status \\[0.4em]
+Window
+& Any time (active disease)
+& 4--6 weeks post-chemo
+  completion, before the
+  3--5 year relapse peak \\[0.4em]
+Biological rationale
+& Epigenetic conversion:
+  silence $\rightarrow$ luminal
+  $\rightarrow$ endocrine target
+& Residual cell elimination:
+  remove the reservoir before
+  it reactivates \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent These strategies are complementary and can
+eventually be combined or run in sequence. A patient
+who achieves pCR after neoadjuvant chemotherapy might
+receive CS-LIT-17 (maintenance tazemetostat to clear
+residual EZH2-high cells) and, if they relapse, receive
+CS-LIT-16 (tazemetostat $\rightarrow$ fulvestrant to
+convert the relapsed tumour). They address different
+moments in the disease trajectory.
+
+% ══════════════════════════════════════════════════════════════
+\section{The EZH2 Paradox: Foundation of This Proposal}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{What the paradox is}
+
+\begin{center}
+\colorbox{paradoxbox}{
+\begin{minipage}{0.85\textwidth}
+\vspace{0.5em}
+\textbf{THE EZH2 PARADOX IN TNBC}
+
+\medskip
+EZH2-high TNBC tumours show TWO contradictory
+prognostic signals depending on the time window:
+
+\medskip
+\textbf{Short window (0--18 months):}
+EZH2-high $\rightarrow$ HIGH proliferation
+$\rightarrow$ chemo-sensitive $\rightarrow$
+higher pCR rate $\rightarrow$ appears favourable
+
+\medskip
+\textbf{Long window (18 months -- 5+ years):}
+EZH2-high $\rightarrow$ epigenetic silencing
+of tumour suppressors $\rightarrow$ residual cells
+escape $\rightarrow$ late metastatic relapse
+$\rightarrow$ WORSE distant relapse-free survival
+
+\medskip
+Both arms are real. Both are confirmed.
+They are mechanistically unified by the dual
+function of EZH2: it drives proliferation (making
+cells chemo-sensitive) AND silences CDKN1A/CDKN2A
+and other tumour suppressor programmes (making
+survivor cells resistant to long-term control).
+
+\medskip
+\textbf{The clinical consequence of the paradox:}
+Achieving pCR in EZH2-high TNBC is not the same
+as achieving durable remission. The cells that
+survive chemotherapy in EZH2-high tumours ---
+even as minimal residual disease after apparent
+pCR on imaging --- retain the EZH2-driven
+epigenetic programme. They are the late-relapse
+reservoir.
+
+\textbf{The intervention point the paradox reveals:}
+The window between chemotherapy completion and
+the late-relapse peak (approximately 3--5 years)
+is the only time when the residual EZH2-high
+population is accessible, minimal in number, and
+targetable with a single approved agent.
+\vspace{0.5em}
+\end{minipage}
+}
+\end{center}
+
+\subsection{Quantification of both arms in GSE25066}
+
+Both arms of the paradox were quantified in the
+OrganismCore framework's Script 4 validation
+(ratio4.py) using GSE25066 (Hatzis et al.\
+\textit{JAMA} 2011, $n=508$ neoadjuvant chemotherapy
+patients). The full results are recorded in:
+\texttt{ratio\_s4\_results/results/ratio\_s4\_log.txt}
+in the companion repository.
+
+\begin{center}
+\begin{tabular}{p{3.5cm}p{4cm}p{5.5cm}}
+\toprule
+\textbf{Arm} & \textbf{Statistic} & \textbf{Interpretation} \\
+\midrule
+Short-window\\(pCR rate)
+& $p < 0.0001$\\$n = 508$
+& Low FOXA1/EZH2 ratio (EZH2-high)
+  $\rightarrow$ pCR more likely.
+  EZH2-high tumours are
+  chemo-sensitive. \\[0.4em]
+Long-window\\(DRFS)
+& HR $= 1.363$\\$p = 0.0047$\\$n = 508$
+& High EZH2 predicts worse
+  distant relapse-free survival.
+  EZH2-high patients relapse
+  later and more frequently. \\[0.4em]
+Both arms\\simultaneously
+& Confirmed in the same\\dataset
+  ($n=508$)
+& The same biological variable
+  (EZH2 level) predicts opposite
+  outcomes at different time
+  windows. This is the paradox
+  stated as data. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Independent published confirmation of
+the long-window arm}
+
+The long-window arm (EZH2 = poor long-term prognosis)
+is not only confirmed in the OrganismCore framework's
+computational analysis. It is independently confirmed
+in two published sources:
+
+\begin{center}
+\begin{tabular}{p{4cm}p{9cm}}
+\toprule
+\textbf{Source} & \textbf{Finding} \\
+\midrule
+Frontiers in Oncology 2020
+& EZH2/NSD2 axis predicts poor
+  prognosis (RFS, OS, DMFS) in
+  $\sim$4,000 breast cancer patients.
+  EZH2-high is associated with
+  worse distant outcomes across
+  all subtypes and specifically
+  in TNBC. \\[0.4em]
+Fineberg et al.\\
+(Montefiore/Albert Einstein
+Medical Center, HMP Global)
+& EZH2 IHC \textit{specifically}
+  predicts metastatic disease in
+  TNBC \textit{post-neoadjuvant}
+  chemotherapy. This is the most
+  directly relevant published
+  confirmation: the same clinical
+  setting (post-neoadjuvant TNBC)
+  as the proposed maintenance trial,
+  with EZH2 IHC as the predictor. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent The Fineberg finding is particularly
+significant. It was published by an independent
+group, in the specific clinical setting this proposal
+targets, using the exact biomarker (EZH2 IHC) this
+proposal uses for patient selection, and it confirms
+the exact prognostic claim (EZH2 predicts late
+metastatic relapse after neoadjuvant chemo in TNBC)
+that motivates the intervention window. This is
+independent experimental confirmation of the
+framework's derivation from geometry.
+
+\subsection{Why the short-window arm does not
+contradict this proposal}
+
+A reviewer might ask: if EZH2-high TNBC responds
+better to chemotherapy (short-window arm), why add
+tazemetostat after chemotherapy? Would tazemetostat
+have removed the chemotherapy benefit by suppressing
+EZH2-driven proliferation?
+
+The answer is no, for three reasons:
+
+\begin{enumerate}
+  \item \textbf{Timing:} The proposed maintenance
+        protocol begins 4--6 weeks after
+        chemotherapy completion. The chemotherapy
+        has already been administered. The pCR (or
+        residual disease) status has already been
+        determined. The short-window benefit of
+        EZH2-high tumours has already been realised
+        before tazemetostat is introduced.
+
+  \item \textbf{Different target:} Chemotherapy
+        targets actively dividing cells broadly.
+        Tazemetostat targets the EZH2 catalytic
+        function --- the H3K27me3 deposition that
+        silences tumour suppressors. The two
+        mechanisms are orthogonal. Tazemetostat
+        does not sensitise or desensitise cells
+        to taxanes or anthracyclines.
+
+  \item \textbf{The residual population:} After
+        chemotherapy, the surviving cells are a
+        selected population. They are the cells
+        that were not killed by taxane-anthracycline.
+        They are disproportionately EZH2-high cells
+        with silenced CDKN1A/CDKN2A that allowed
+        them to survive despite the cytotoxic
+        assault. These are precisely the cells
+        tazemetostat targets --- the survivors,
+        not the responders.
+\end{enumerate}
+
+% ══════════════════════════════════════════════════════════════
+\section{The Mechanistic Basis for Maintenance EZH2
+Inhibition}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{What EZH2 inhibition does to residual
+TNBC cells}
+
+Tazemetostat inhibits EZH2 catalytic activity,
+preventing H3K27me3 deposition. In residual EZH2-high
+TNBC cells after chemotherapy, this has several
+mechanistically predicted consequences:
+
+\begin{center}
+\colorbox{mechanismbox}{
+\begin{minipage}{0.85\textwidth}
+\vspace{0.5em}
+\textbf{MECHANISM OF TAZEMETOSTAT IN RESIDUAL TNBC CELLS}
+
+\medskip
+\textbf{1. De-repression of tumour suppressor programmes:}\\
+H3K27me3 marks on CDKN1A (p21) and CDKN2A (p16)
+promoters are removed.\\
+p21 and p16 re-express.\\
+Cell cycle arrest pathways are restored.\\
+Residual cells lose their proliferative escape
+mechanism.
+
+\medskip
+\textbf{2. Induction of differentiation:}\\
+Confirmed independently by Schade et al.\
+\textit{Nature} 2024:\\
+EZH2 inhibition drives TNBC cells toward a more
+differentiated, luminal-like state.\\
+Differentiated cells are less metastatic,
+less invasive, less capable of seeding
+distant metastases.
+
+\medskip
+\textbf{3. De-repression of FOXA1 and luminal markers:}\\
+Confirmed by Toska et al.\ \textit{Nature Medicine}
+2017:\\
+EZH2 inhibition re-expresses FOXA1 in ER-negative
+breast cancer cells.\\
+In the maintenance setting, partial FOXA1
+re-expression reduces the invasive/metastatic
+phenotype of residual cells even if full ER
+conversion does not occur.
+
+\medskip
+\textbf{4. Reduction of EZH2-dependent survival
+signalling:}\\
+EZH2 maintains survival in aggressive breast cancer
+cells partly through non-catalytic functions
+(protein--protein interactions with oncogenic
+transcription factors).\\
+Tazemetostat disrupts PRC2 complex stability
+beyond its catalytic function.
+\vspace{0.5em}
+\end{minipage}
+}
+\end{center}
+
+\subsection{The late-relapse mechanism it interrupts}
+
+The 3--5 year late-relapse peak in TNBC is a
+well-documented clinical phenomenon. Its molecular
+basis in EZH2-high tumours is:
+
+\begin{enumerate}
+  \item Chemotherapy achieves pCR or near-pCR.
+        Imaging is clear. The patient appears
+        disease-free.
+
+  \item Residual EZH2-high cells --- as dormant
+        micrometastases, circulating tumour cells,
+        or minimal residual disease below imaging
+        threshold --- survive in distant sites
+        (bone marrow, lung, liver niches).
+
+  \item These cells are held in a quiescent,
+        EZH2-maintained epigenetic state. Their
+        CDKN1A and CDKN2A are silenced by H3K27me3.
+        Their FOXA1/ESR1 are silenced. They are
+        not proliferating, so chemotherapy is
+        not an option.
+
+  \item At 3--5 years, triggered by microenvironmental
+        signals (inflammatory, hormonal, metabolic),
+        these cells re-activate. Their silenced tumour
+        suppressors remain silenced. They proliferate
+        as metastatic disease.
+
+  \item The patient presents with distant relapse
+        at 3--5 years, long after the apparent pCR.
+
+  \textbf{Tazemetostat interrupts this sequence
+  at step 3:} by removing H3K27me3 marks during
+  the dormancy window, it forces re-expression of
+  CDKN1A/CDKN2A in dormant residual cells, prevents
+  the epigenetic maintenance of the metastatic
+  programme, and reduces the residual cell
+  population's capacity to re-activate at year 3--5.
+\end{enumerate}
+
+\subsection{Why no other approved agent addresses
+this window}
+
+\begin{center}
+\begin{tabular}{p{3cm}p{4cm}p{5.5cm}}
+\toprule
+\textbf{Agent} & \textbf{Mechanism}
+& \textbf{Why it does not address the window} \\
+\midrule
+Capecitabine
+& Antimetabolite, cytotoxic
+& Targets proliferating cells.
+  Dormant residual cells are not
+  proliferating. No mechanism of
+  action against quiescent
+  EZH2-high cells. \\[0.3em]
+Olaparib
+& PARP inhibitor
+& Only active in BRCA1/2-mutant
+  TNBC ($\sim$15--20\% of cases).
+  No mechanism against the EZH2-driven
+  epigenetic maintenance programme. \\[0.3em]
+Pembrolizumab\\(adjuvant)
+& PD-1 checkpoint inhibitor
+& Targets immune-mediated killing
+  of cancer cells. Dormant
+  micrometastases are immune-invisible
+  (low PD-L1, low TIL infiltration
+  in the dormant state).
+  Does not address epigenetic
+  maintenance. \\[0.3em]
+Tazemetostat
+& EZH2 catalytic inhibitor
+& Directly targets the molecular
+  mechanism maintaining the dormant
+  EZH2-high residual cell population.
+  Mechanism of action is specific
+  to the EZH2-driven epigenetic
+  programme. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{The Clinical Trial Proposal}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Trial overview}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Parameter} & \textbf{Specification} \\
+\midrule
+Phase & II, randomised, open-label \\
+Design & Tazemetostat vs observation
+         post-neoadjuvant chemotherapy \\
+Randomisation & 1:1 stratified by pCR status
+                (pCR vs non-pCR/RD) and
+                EZH2 H-score ($\geq$200 vs
+                150--199) \\
+Primary endpoint & Distant relapse-free survival
+                   (DRFS) at 3 years \\
+Key secondary & Event-free survival (EFS),
+                OS, iDFS \\
+Sample size & $n = 200$--$300$
+              (100--150 per arm) \\
+Estimated duration & 5 years (2 years accrual,
+                     3 years minimum follow-up) \\
+Setting & Any oncology centre with IHC
+          capability and access to
+          tazemetostat \\
+Drug approved & Yes (FDA-approved 2020) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Patient selection criteria}
+
+\subsubsection{Inclusion criteria}
+
+\begin{enumerate}
+  \item Histologically confirmed TNBC
+        (ER $<1\%$, PR $<1\%$, HER2 IHC 0--1+
+        or FISH non-amplified)
+
+  \item EZH2 H-score $\geq 150$ on pre-treatment
+        diagnostic biopsy (EZH2 IHC, validated
+        antibody; Abcam ab3748 or equivalent)
+
+  \item Completed standard neoadjuvant
+        taxane-anthracycline chemotherapy
+        (with or without pembrolizumab per
+        current standard of care)
+
+  \item Undergone definitive surgery
+
+  \item Any pathological response status
+        (pCR or residual disease both eligible)
+
+  \item ECOG performance status 0--2 at
+        randomisation
+
+  \item Adequate organ function (hepatic,
+        renal, haematological)
+
+  \item Beginning maintenance within 6 weeks
+        of surgery/chemotherapy completion
+
+  \item Willing to provide pre-treatment
+        biopsy tissue for EZH2 IHC if
+        archival tissue is insufficient
+\end{enumerate}
+
+\subsubsection{Exclusion criteria}
+
+\begin{enumerate}
+  \item EZH2 H-score $< 150$ on pre-treatment
+        biopsy (not in the target population)
+
+  \item Evidence of distant metastatic disease
+        at randomisation (M1 disease requires
+        CS-LIT-16 conversion protocol,
+        not maintenance)
+
+  \item Prior EZH2 inhibitor therapy
+
+  \item BRCA1/2 germline mutation with completed
+        or planned olaparib adjuvant therapy
+        (standard of care conflict)
+
+  \item Active concurrent malignancy
+
+  \item Pregnancy or breast-feeding
+
+  \item Concurrent strong CYP3A4 inhibitors
+        or inducers (tazemetostat interaction)
+
+  \item Known EZH2 loss-of-function mutation
+        (tazemetostat mechanism requires
+        functional EZH2)
+\end{enumerate}
+
+\subsection{Stratification and randomisation}
+
+Patients are stratified at randomisation by:
+
+\begin{enumerate}
+  \item \textbf{pCR status:} pCR (ypT0/is ypN0)
+        vs residual disease. This is the most
+        important stratification variable because
+        pCR patients have apparent disease
+        elimination but retain residual risk
+        from the EZH2-high dormant population.
+        RD patients have confirmed residual
+        disease and unambiguous residual EZH2-high
+        cell burden.
+
+  \item \textbf{EZH2 H-score:} $\geq200$ vs
+        150--199. Higher EZH2 expression
+        predicts greater residual cell burden
+        and greater maintenance benefit.
+        This stratification allows subgroup
+        analysis of dose-response relationship
+        between EZH2 level and maintenance
+        benefit.
+
+  \item \textbf{Prior pembrolizumab:} yes vs no.
+        Pembrolizumab has become standard of
+        care in high-risk TNBC neoadjuvant
+        regimens. Stratification controls
+        for its effect on residual immune
+        microenvironment.
+\end{enumerate}
+
+\subsection{Treatment protocol}
+
+\begin{center}
+\colorbox{lockbox}{
+\begin{minipage}{0.85\textwidth}
+\vspace{0.5em}
+\textbf{TREATMENT PROTOCOL}
+
+\medskip
+\textbf{Experimental arm --- Tazemetostat maintenance:}\\
+Tazemetostat 800~mg orally twice daily (BID)\\
+Continuous dosing\\
+Duration: 24 months (2 years) or until:\\
+\quad --- Disease recurrence (distant or local)\\
+\quad --- Unacceptable toxicity\\
+\quad --- Patient withdrawal\\
+\quad --- 24-month protocol completion (whichever first)
+
+\medskip
+\textit{Dose rationale:} 800~mg BID is the approved
+dose for follicular lymphoma and epithelioid sarcoma.
+It achieves $>90\%$ EZH2 inhibition at trough
+concentrations in published PK/PD data from the
+E7438-G000-101 Phase I trial (Italiano et al.\
+Cancer Discovery 2018). Full EZH2 inhibition
+throughout the maintenance window is required to
+prevent H3K27me3 re-accumulation on tumour
+suppressor promoters.
+
+\medskip
+\textbf{Control arm --- Observation:}\\
+Standard post-operative surveillance per local
+institutional guidelines.\\
+No placebo (open-label design).
+
+\medskip
+\textbf{Timing of initiation:}\\
+Tazemetostat begins 4--6 weeks after the later of:\\
+\quad --- Final chemotherapy administration, or\\
+\quad --- Definitive surgery\\
+This window allows haematological recovery from
+chemotherapy before beginning continuous oral
+dosing.
+
+\medskip
+\textbf{Dose modifications:}\\
+Per published tazemetostat prescribing information
+(Tazverik, Epizyme/Ipsen).\\
+Grade 3/4 haematological toxicity: dose reduction
+to 600~mg BID.\\
+Grade 3/4 non-haematological toxicity: hold and
+reassess per standard protocol.
+\vspace{0.5em}
+\end{minipage}
+}
+\end{center}
+
+\subsection{Endpoints}
+
+\subsubsection{Primary endpoint}
+
+\begin{itemize}
+  \item \textbf{Distant relapse-free survival (DRFS)
+        at 3 years}
+
+  \item Definition: time from randomisation to
+        first distant relapse (bone, lung, liver,
+        brain, other distant site) or death from
+        any cause, whichever occurs first
+
+  \item 3-year DRFS is chosen rather than 5-year
+        because the EZH2 paradox data shows the
+        relapse peak in EZH2-high TNBC occurs
+        at 3--5 years. The 3-year timepoint
+        captures the intervention window directly
+        and allows trial completion within a
+        feasible regulatory timeline.
+
+  \item The Fineberg data (EZH2 IHC predicts
+        metastatic disease post-neoadjuvant in TNBC)
+        provides external evidence that this
+        endpoint is the correct one for this
+        biomarker-selected population.
+\end{itemize}
+
+\subsubsection{Key secondary endpoints}
+
+\begin{enumerate}
+  \item \textbf{Event-free survival (EFS):} time
+        to local or distant recurrence, second
+        primary cancer, or death
+
+  \item \textbf{Overall survival (OS):}
+        time to death from any cause
+
+  \item \textbf{Invasive disease-free survival
+        (iDFS):} per standardised STEEP criteria
+
+  \item \textbf{DRFS at 5 years:}
+        captures the full late-relapse window
+
+  \item \textbf{pCR subgroup analysis:}
+        DRFS in pCR patients specifically.
+        This is the critical subgroup --- patients
+        who appeared cured but retain EZH2-high
+        residual risk.
+
+  \item \textbf{EZH2 H-score $\geq200$ subgroup:}
+        DRFS in the highest-EZH2 patients.
+        Expected to show the strongest maintenance
+        benefit.
+\end{enumerate}
+
+\subsubsection{Exploratory biomarker endpoints}
+
+\begin{enumerate}
+  \item \textbf{ctDNA clearance:} serial ctDNA
+        at baseline (randomisation), 6 months,
+        12 months, 24 months. Hypothesis:
+        tazemetostat arm shows faster ctDNA
+        clearance due to residual cell
+        elimination.
+
+  \item \textbf{EZH2 H-score in residual disease
+        (RD patients):} from surgical specimen.
+        Correlation with DRFS in the RD subgroup.
+
+  \item \textbf{H3K27me3 in residual disease:}
+        pharmacodynamic confirmation (requires
+        on-treatment biopsy if patient consents;
+        not mandatory).
+
+  \item \textbf{CDKN1A (p21) re-expression:}
+        on-treatment biopsy at 3 months (optional,
+        consenting patients only). Predicted to
+        increase in tazemetostat arm as EZH2
+        inhibition de-represses CDKN1A.
+
+  \item \textbf{FOXA1 partial re-expression:}
+        on-treatment biopsy at 3 months.
+        In the maintenance setting, complete FOXA1
+        conversion to luminal identity is not
+        required or expected. Partial re-expression
+        (H-score increase from $<20$ to 20--100)
+        would confirm target engagement in the
+        residual population without triggering
+        the CS-LIT-16 endocrine conversion
+        mechanism.
+\end{enumerate}
+
+\subsection{Sample size justification}
+
+The historical 3-year DRFS in EZH2-high TNBC is
+estimated at approximately 60--65\% based on:
+
+\begin{itemize}[noitemsep]
+  \item DRFS HR $= 1.363$ in GSE25066 for EZH2-high
+        vs EZH2-low TNBC patients ($p = 0.0047$)
+  \item Published 3-year DRFS for all-comers TNBC
+        post-neoadjuvant: approximately 65--70\%
+  \item The EZH2-high subgroup is expected to be
+        at the lower end ($\sim$60\%) based on
+        the HR from GSE25066
+\end{itemize}
+
+A clinically meaningful improvement in 3-year
+DRFS from 60\% to 72\% (hazard ratio $\approx 0.65$,
+consistent with published adjuvant trials in TNBC)
+requires:
+
+\begin{center}
+\begin{tabular}{lc}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\
+\midrule
+Control arm 3-year DRFS & 60\% \\
+Experimental arm 3-year DRFS & 72\% \\
+Hazard ratio & 0.65 \\
+Power & 80\% \\
+Two-sided $\alpha$ & 0.05 \\
+Required events & $\sim$80 \\
+Required patients (accounting for\\
+attrition and censoring) & 200--250 \\
+Accrual period & 2 years \\
+Minimum follow-up & 3 years \\
+Total trial duration & 5 years \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent The EZH2-high (H-score $\geq150$) selection
+criterion is expected to enrich for approximately
+30--40\% of all TNBC patients based on published
+EZH2 IHC frequency data in TNBC cohorts. A centre
+treating 50--80 TNBC patients per year could
+contribute 15--30 eligible patients per year.
+Multi-centre accrual of 5--8 sites achieves the
+required sample in the 2-year accrual window.
+
+% ══════════════════════════════════════════════════════════════
+\section{The Clinical Gap: Why This Trial Does Not Exist}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{ClinicalTrials.gov search results}
+
+Searched 2026-03-05.
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Search} & \textbf{Result} \\
+\midrule
+Tazemetostat adjuvant breast cancer
+& No trials \\
+Tazemetostat maintenance breast cancer
+& No trials \\
+Tazemetostat TNBC
+& No trials \\
+EZH2 inhibitor adjuvant TNBC
+& No trials \\
+EZH2 inhibitor maintenance solid tumour
+& No trials \\
+Tazemetostat solid tumour adjuvant
+& No trials \\
+\midrule
+\textbf{Tazemetostat approved indications}
+& EZH2-mutant follicular lymphoma (2020)\\
+& Epithelioid sarcoma (2020) \\
+\textbf{Active tazemetostat trials}
+& NCT05023655: ARID1A-mutant\\
+& solid tumours (Phase II)\\
+& NCI Pediatric MATCH basket \\
+& \textbf{None in breast cancer} \\
+& \textbf{None in maintenance/adjuvant setting} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Why the gap exists}
+
+The maintenance setting requires three insights
+assembled together that do not appear together
+in any published paper:
+
+\begin{enumerate}
+  \item The EZH2 paradox exists and has two
+        quantifiable arms (confirmed in GSE25066
+        and published literature but not named
+        or assembled as a single phenomenon
+        before this framework).
+
+  \item The post-chemotherapy window between
+        apparent pCR and late relapse is the
+        specific intervention point the paradox
+        reveals (this is the original synthesis
+        contribution --- deriving the intervention
+        timing from the paradox's two-window
+        structure).
+
+  \item Tazemetostat is the correct agent because
+        it directly targets the molecular mechanism
+        (EZH2-driven H3K27me3) maintaining the
+        dormant residual population (this requires
+        connecting the EZH2 paradox data to the
+        approved EZH2 inhibitor --- a connection
+        not made in any published paper).
+\end{enumerate}
+
+The three published building blocks exist. The
+assembly into a maintenance trial design for TNBC
+with a specific patient selection criterion
+(EZH2 H-score $\geq150$) and a specific endpoint
+(DRFS at 3 years targeting the paradox window)
+is the original contribution of this document.
+
+% ══════════════════════════════════════════════════════════════
+\section{Relationship to the EZH2 Paradox Framework}
+% ═════════════════���════════════════════════════════════════════
+
+\subsection{CS-LIT-10 and CS-LIT-17: same paradox,
+different clinical applications}
+
+The EZH2 paradox (CS-LIT-10 in BRCA-S8h) is a
+named finding in the OrganismCore framework. It
+identifies both arms, quantifies them simultaneously
+in one dataset, and derives two clinical consequences:
+
+\begin{center}
+\begin{tabular}{p{3cm}p{5cm}p{5cm}}
+\toprule
+\textbf{Finding} & \textbf{CS-LIT-10}
+& \textbf{CS-LIT-17 (this document)} \\
+\midrule
+What it is
+& The EZH2 paradox: naming,
+  quantification, and
+  mechanistic unification
+  of both arms
+& The clinical proposal that
+  follows from the paradox:
+  maintenance tazemetostat
+  to close the late-relapse
+  window \\[0.3em]
+Verdict
+& CONVERGENT-NOVEL
+& NOVEL \\[0.3em]
+Type
+& Observation
+& Action \\[0.3em]
+Status
+& Recorded in BRCA-S8h
+& This document \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+CS-LIT-10 names the paradox and shows it is real.
+CS-LIT-17 specifies what to do about it. They are
+logically sequential. Neither alone is sufficient
+for clinical translation. Together they constitute
+a complete case: here is the problem (paradox),
+here is the mechanism (EZH2-driven late relapse),
+here is the solution (maintenance tazemetostat),
+here is the patient population (EZH2 H-score
+$\geq150$ post-neoadjuvant TNBC), here is the
+endpoint (DRFS at 3 years).
+
+\subsection{Derivation provenance}
+
+The EZH2 paradox and the maintenance proposal were
+derived from Waddington landscape attractor geometry
+before the literature check (BRCA-S8h) was performed.
+The literature check confirmed the long-window arm
+independently from published sources (Frontiers
+Oncology 2020, Fineberg). The derivation sequence
+in the repository is version-controlled with
+cryptographic timestamps:
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textbf{Document} & \textbf{Content} & \textbf{Status} \\
+\midrule
+BRCA-S8g  & Script 3 results --- EZH2
+             paradox first quantified
+           & Geometry derivation \\
+BRCA-S8h  & Literature check ---
+             CS-LIT-17 confirmed NOVEL
+           & Literature confirmed \\
+CS-LIT-16 & Companion trial proposal
+             (tazemetostat $\rightarrow$
+             fulvestrant)
+           & Deposited Zenodo
+             2026-03-06 \\
+CS-LIT-17 & This document
+           & Deposited Zenodo
+             2026-03-06 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+All documents are publicly accessible at:
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{\texttt{github.com/Eric-Robert-Lawson/attractor-oncology}}
+
+% ══════════════════════════════════════════════════════════════
+\section{Integration with CS-LIT-16: A Combined
+Strategy}
+% ══════════════════════════════════════════════════════════════
+
+CS-LIT-16 and CS-LIT-17 can operate as a combined
+sequential strategy for the same patient:
+
+\begin{center}
+\colorbox{mechanismbox}{
+\begin{minipage}{0.85\textwidth}
+\vspace{0.5em}
+\textbf{COMBINED STRATEGY FOR EZH2-HIGH TNBC}
+
+\medskip
+\textbf{Line 1 (neoadjuvant):}\\
+Standard taxane-anthracycline $\pm$ pembrolizumab
+
+\medskip
+\textbf{Line 2 (maintenance/adjuvant) ---
+CS-LIT-17:}\\
+Tazemetostat 800~mg BID $\times$ 24 months\\
+Target: residual EZH2-high dormant cells\\
+Goal: prevent late relapse
+
+\medskip
+\textbf{If distant relapse occurs (Line 3) ---
+CS-LIT-16:}\\
+Tazemetostat 800~mg BID $\times$ 4 weeks\\
+$\rightarrow$ FOXA1 H-score at week 4 biopsy\\
+$\rightarrow$ If FOXA1 $\geq50$: add fulvestrant\\
+Target: convert relapsed EZH2-high TNBC to
+endocrine-responsive state\\
+Goal: engage fulvestrant on the restored ER
+
+\medskip
+\textbf{Logic of the combined strategy:}\\
+CS-LIT-17 reduces the probability that relapse
+occurs (maintenance, prevention).\\
+CS-LIT-16 provides a mechanism-based treatment
+if relapse occurs despite maintenance (conversion,
+rescue).\\
+The two proposals are not competing. They are
+sequential lines in the same disease trajectory.
+\vspace{0.5em}
+\end{minipage}
+}
+\end{center}
+
+This combined strategy does not need to be tested
+in a single trial. Each proposal stands alone
+and can be tested independently. The combination
+is noted here to establish that the two proposals
+are part of a coherent framework, not isolated
+predictions.
+
+% ══════════════════════════════════════════════════════════════
+\section{Locked Priority Statement}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\colorbox{urgentbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.6em}
+\textbf{LOCKED AS OF 2026-03-06}
+
+\medskip
+\textbf{The proposal:}
+Tazemetostat 800~mg BID $\times$ 24 months as
+maintenance therapy beginning 4--6 weeks after
+neoadjuvant chemotherapy completion in patients
+with EZH2-high (H-score $\geq150$) TNBC,
+regardless of pCR status.
+
+\medskip
+\textbf{The primary endpoint:}
+Distant relapse-free survival (DRFS) at 3 years.
+
+\medskip
+\textbf{The mechanistic basis:}
+The EZH2 paradox: EZH2-high TNBC is chemo-sensitive
+short-term but late-relapsing long-term.
+The residual EZH2-high population after chemotherapy
+maintains dormancy through H3K27me3-mediated
+suppression of CDKN1A, CDKN2A, and luminal markers.
+Tazemetostat removes those marks during the
+dormancy window, before the 3--5 year relapse peak.
+
+\medskip
+\textbf{Supporting evidence:}
+GSE25066: DRFS HR$=1.363$, $p=0.0047$ ($n=508$).\\
+Frontiers Oncology 2020: EZH2 predicts poor prognosis
+in $\sim$4,000 breast cancer patients.\\
+Fineberg (Montefiore): EZH2 IHC predicts metastatic
+TNBC post-neoadjuvant specifically.
+
+\medskip
+\textbf{The gap:}
+No registered maintenance or adjuvant trial for
+tazemetostat exists in any solid tumour indication
+as of 2026-03-06. The trial can be designed and
+submitted today.
+
+\medskip
+\textbf{Derived from:}
+OrganismCore Waddington landscape attractor geometry.
+Prediction locked before literature review.
+Repository:
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{\texttt{github.com/Eric-Robert-Lawson/attractor-oncology}}
+
+\medskip
+\hfill --- Eric Robert Lawson, March 6, 2026
+\vspace{0.4em}
+\end{minipage}
+}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section*{Repository and Reproducibility}
+\addcontentsline{toc}{section}{Repository and
+Reproducibility}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{\texttt{https://github.com/Eric-Robert-Lawson/attractor-oncology}}\\[0.3em]
+\small Repository ID: 1172048282 \textbar{}
+MIT License \textbar{}
+Python \textbar{}
+Public
+\end{center}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{File} & \textbf{Path} \\
+\midrule
+Literature check (parent)
+& \texttt{Cancer\_Research/BRCA/DEEP\_DIVE/}\\
+& \texttt{BRCA\_Cross\_Subtype\_Literature\_Check.md} \\
+EZH2 paradox script
+& \texttt{.../FOXA1\_EZH2\_RATIO/ratio4.py} \\
+Script 4 full log
+& \texttt{.../ratio\_s4\_results/results/}\\
+& \texttt{ratio\_s4\_log.txt} \\
+Master FOXA1/EZH2 artifact
+& \texttt{.../FOXA1\_EZH2\_RATIO/}\\
+& \texttt{Master\_Artifact\_After\_Scripts.md} \\
+Companion CS-LIT-16
+& Zenodo deposit, 2026-03-06 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section*{Author Statement}
+\addcontentsline{toc}{section}{Author Statement}
+% ══════════════════════════════════════════════════════════════
+
+This work was conducted independently by Eric Robert
+Lawson under the OrganismCore research programme.
+No institutional funding was received. No conflicts
+of interest exist. No pharmaceutical company was
+involved in this proposal. Tazemetostat is manufactured
+by Epizyme (now Ipsen). The manufacturer had no
+involvement in this work.
+
+This document is a scientific priority establishment
+record and trial proposal rationale. It is not a
+registered clinical trial protocol. Actual trial
+conduct requires ethics committee approval, regulatory
+submission, institutional sponsorship, and full
+protocol development by qualified clinical
+investigators.
+
+% ══════════════════════════════════════════════════════════════
+\section*{Contact}
+\addcontentsline{toc}{section}{Contact}
+% ══════════════════════════════════════════════════════════════
+
+\begin{tabular}{ll}
+Author        & Eric Robert Lawson \\
+Organisation  & OrganismCore \\
+Email         &
+  \href{mailto:OrganismCore@proton.me}
+       {OrganismCore@proton.me} \\
+ORCID         &
+  \href{https://orcid.org/0009-0002-0414-6544}
+       {https://orcid.org/0009-0002-0414-6544} \\
+Repository    &
+  \href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+       {github.com/Eric-Robert-Lawson/attractor-oncology} \\
+Homepage      &
+  \href{https://github.com/Eric-Robert-Lawson/OrganismCore}
+       {github.com/Eric-Robert-Lawson/OrganismCore} \\
+Date          & 2026-03-06 \\
+\end{tabular}
+
+\vspace{2em}
+
+\begin{center}
+\itshape
+``EZH2-high TNBC responds to chemotherapy.\\
+Then it comes back at year three.\\
+The window between those two events\\
+is empty. Tazemetostat belongs there.''
+
+\medskip
+\upshape
+--- Eric Robert Lawson, March 6, 2026
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\end{document}

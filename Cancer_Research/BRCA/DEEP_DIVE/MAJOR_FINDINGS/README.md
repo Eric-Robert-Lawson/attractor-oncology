@@ -66,3 +66,9 @@
 
 ---
 
+**Entinostat Benefit in HR+ Breast Cancer Is a Luminal B-Specific Effect: The DNMT3A/HDAC2 Chromatin Lock on ER Output as the Mechanistic Basis for Subtype-Enriched Patient Selection, with Implications for NCT07235618**
+
+[https://doi.org/10.5281/zenodo.18893147](https://doi.org/10.5281/zenodo.18893147)
+
+---
+

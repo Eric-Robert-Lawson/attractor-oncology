@@ -90,3 +90,9 @@
 
 ---
 
+**Anti-TIGIT Before Anti-PD-1 in Claudin-Low, Memory-Low Breast Cancer: Patient Selection by Lineage Memory Score and FOXP3/CD8A Ratio (HR=2.212) as the Mechanistic Solution to Anti-TIGIT Trial Failures**[
+
+https://doi.org/10.5281/zenodo.18894331](https://doi.org/10.5281/zenodo.18894331)
+
+---
+

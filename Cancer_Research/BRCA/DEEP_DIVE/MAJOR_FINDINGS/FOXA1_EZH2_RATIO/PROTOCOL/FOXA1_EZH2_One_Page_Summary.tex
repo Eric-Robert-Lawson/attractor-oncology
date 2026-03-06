@@ -1,0 +1,320 @@
+\documentclass[9pt, a4paper]{article}
+
+% ── PACKAGES ──────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{top=1.4cm, bottom=1.4cm,
+          left=1.6cm, right=1.6cm}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue,
+    pdftitle={FOXA1/EZH2 IHC Classifier ---
+              One-Page Summary},
+    pdfauthor={Eric Robert Lawson / OrganismCore}
+}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{mdframed}
+\usepackage{multicol}
+\usepackage{fancyhdr}
+\usepackage{tabularx}
+
+% ── COLOURS ───────────────────────────────────────────────────
+\definecolor{headerblue}{RGB}{20,60,140}
+\definecolor{derivebox}{RGB}{235,245,255}
+\definecolor{warningbox}{RGB}{255,245,200}
+\definecolor{statsbox}{RGB}{248,240,255}
+\definecolor{askbox}{RGB}{240,255,240}
+\definecolor{equitybox}{RGB}{255,245,230}
+\definecolor{mechbox}{RGB}{245,245,255}
+
+% ── PAGE STYLE ────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\scriptsize\textbf{FOXA1/EZH2 Dual IHC
+       Breast Cancer Classifier}}
+\rhead{\scriptsize OrganismCore \textbar{}
+       Eric Robert Lawson \textbar{} 2026-03-06}
+\rfoot{\scriptsize
+       \href{mailto:OrganismCore@proton.me}
+       {OrganismCore@proton.me} \textbar{}
+       ORCID: 0009-0002-0414-6544 \textbar{}
+       \href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+       {github.com/Eric-Robert-Lawson/attractor-oncology}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\setlength{\headheight}{11pt}
+\setlength{\footskip}{14pt}
+
+% ── SECTION FORMATTING ────────────────────────────────────────
+\titleformat{\section}
+  {\small\bfseries\color{headerblue}}
+  {}{0em}{}[\vspace{-4pt}\textcolor{headerblue}
+  {\rule{\linewidth}{0.4pt}}]
+\titlespacing{\section}{0pt}{4pt}{2pt}
+
+\setlength{\parskip}{2pt}
+\setlength{\parindent}{0pt}
+\setlength{\columnsep}{0.5cm}
+
+% ══════════════════════════════════════════════════════════════
+\begin{document}
+\thispagestyle{fancy}
+
+% ── TITLE BLOCK ───────────────────────────────────────────────
+\begin{center}
+{\large\bfseries\color{headerblue}
+FOXA1/EZH2 Dual IHC Breast Cancer Classifier}\\[0.15em]
+{\small Two stains. One ratio. Six subtypes.
+Same-day results. \$50--\$100 per patient.
+TMA-compatible.}
+\end{center}
+
+\vspace{0.15em}
+\noindent\rule{\textwidth}{1.2pt}
+\vspace{0.1em}
+
+% ── DERIVATION BOX — COMPACT ──────────────────────────────────
+\begin{mdframed}[backgroundcolor=derivebox,
+                 linecolor=blue!50!black,
+                 linewidth=0.8pt,
+                 innertopmargin=3pt,
+                 innerbottommargin=3pt,
+                 innerleftmargin=6pt,
+                 innerrightmargin=6pt,
+                 skipabove=0pt,
+                 skipbelow=0pt]
+{\small\textbf{\color{headerblue}HOW THIS WAS
+DERIVED --- READ THIS FIRST}}
+
+\smallskip
+{\small
+\textbf{Not found by mining data. Derived from
+first principles.}
+(1)~Waddington attractor geometry applied to
+19,542 single cancer cells identified FOXA1 and
+EZH2 as mechanistic opposites on the primary
+breast cancer identity axis ---
+\textbf{before any clinical dataset was opened.}
+(2)~Predicted ordering LumA $>$ LumB $>$ HER2
+$>$ TNBC $>$ Claudin-low was
+\textbf{locked in a timestamped document before
+any confirmatory analysis was run.}
+(3)~Tested in seven independent datasets
+(${\sim}7{,}500$ patients, 4 platforms):
+\textbf{confirmed exactly in all seven.}
+
+\smallskip
+\textit{The statistics below are confirmations
+of a pre-specified prediction --- not the source
+of it. Eliminates overfitting and data dredging
+as explanations. Timestamped before-document is
+publicly verifiable.}}
+\end{mdframed}
+
+\vspace{0.2em}
+
+% ── THREE COLUMN BODY ─────────────────────────────────────────
+\begin{multicols}{3}
+
+% ── COL 1: MECHANISM + CLASSIFIES ─────────────────────────────
+\section{Biological Mechanism}
+
+{\small
+\textbf{FOXA1} --- pioneer transcription factor.
+Opens luminal cell identity programme.
+High = identity active.
+
+\smallskip
+\textbf{EZH2} --- PRC2 catalytic subunit.
+Deposits H3K27me3 on FOXA1, GATA3, ESR1
+promoters. High = identity silenced.
+
+\smallskip
+\textbf{Ratio = which force is winning.}
+Determines subtype and treatment vulnerability.
+
+\smallskip
+\textit{Independently confirmed: Schade et al.\
+(\textit{Nature} 2024); Toska et al.\
+(\textit{Nat.\ Med.} 2017). Neither group
+knew of this framework.}}
+
+\section{What It Classifies}
+
+{\small
+\begin{tabular}{@{}p{1.55cm}p{2.3cm}@{}}
+\toprule
+\textbf{Subtype} & \textbf{Treatment} \\
+\midrule
+Luminal A    & CDK4/6i $+$ ET \\[0.15em]
+Luminal B    & HDACi $+$ ET \\[0.15em]
+HER2-enr.    & Anti-HER2 first \\[0.15em]
+TNBC         & Tazemetostat\\
+             & $\rightarrow$ fulvestrant \\[0.15em]
+Claudin-low  & Anti-TIGIT\\
+             & $\rightarrow$ anti-PD-1 \\[0.15em]
+ILC          & Fulvestrant $>$ AI \\
+\bottomrule
+\end{tabular}}
+
+\columnbreak
+
+% ── COL 2: CONFIRMATIONS ──────────────────────────────────────
+\section{Confirmations of the\\Pre-Specified Prediction}
+
+\begin{mdframed}[backgroundcolor=statsbox,
+                 linecolor=purple!40!black,
+                 linewidth=0.6pt,
+                 innertopmargin=2pt,
+                 innerbottommargin=2pt,
+                 innerleftmargin=4pt,
+                 innerrightmargin=4pt,
+                 skipabove=0pt,
+                 skipbelow=2pt]
+{\small
+\begin{itemize}[noitemsep,
+                leftmargin=*,
+                topsep=0pt,
+                itemsep=1pt]
+    \item Ordering: TCGA $n{=}837$,\\
+    $p{=}2.87{\times}10^{-103}$
+    \item LumA/LumB: METABRIC $n{=}1{,}980$,\\
+    $p{=}8.47{\times}10^{-67}$
+    \item Survival: 4 cohorts,
+    ${\sim}7{,}500$ patients
+    \item AUC LumA vs Basal:
+    $0.828$--$0.901$
+    \item AUC LumA vs LumB:
+    $0.796$--$0.873$\\
+    {\scriptsize(replicated METABRIC + TCGA
+    independently)}
+    \item Protein: CPTAC MS $n{=}122$,\\
+    $r{=}{-}0.492$, $p{<}0.0001$
+    \item Chemo: GSE25066 $n{=}508$,\\
+    $p{<}0.0001$
+    \item ET: METABRIC $n{=}1{,}104$,\\
+    $p{=}0.0027$,
+    $\Delta{=}18.7$ months RFS
+    \item \textbf{Contradictions: 0}
+\end{itemize}}
+\end{mdframed}
+
+\section{Not Yet Established}
+
+\begin{mdframed}[backgroundcolor=warningbox,
+                 linecolor=orange!60!black,
+                 linewidth=0.6pt,
+                 innertopmargin=2pt,
+                 innerbottommargin=2pt,
+                 innerleftmargin=4pt,
+                 innerrightmargin=4pt,
+                 skipabove=0pt,
+                 skipbelow=0pt]
+{\small\textbf{IHC H-score cut-points
+do not yet exist.}
+
+RNA AUC values confirm the signal.
+Thresholds must be derived from stained
+tissue vs PAM50 using Youden J.
+
+\textbf{Instrument calibration only.
+Same step as ER, PR, HER2, Ki67.
+The only remaining step.}}
+\end{mdframed}
+
+\columnbreak
+
+% ── COL 3: ASK + WHY IT MATTERS ───────────────────────────────
+\section{The Ask}
+
+\begin{mdframed}[backgroundcolor=askbox,
+                 linecolor=green!50!black,
+                 linewidth=0.6pt,
+                 innertopmargin=2pt,
+                 innerbottommargin=2pt,
+                 innerleftmargin=4pt,
+                 innerrightmargin=4pt,
+                 skipabove=0pt,
+                 skipbelow=2pt]
+{\small
+$300$--$400$ archived FFPE cases with
+PAM50 (whole section \textbf{or} TMA).
+
+FOXA1 CST D4E2 \#53528 $+$
+EZH2 CST D2H1 \#5246.
+
+H-score blinded to subtype.
+
+No new patients.
+No treatment changes.
+
+\textbf{\$5,000--\$15,000 consumables.
+3--6 months.}
+
+\smallskip
+\textit{In return: Protocol v3.0,
+statistical framework,
+co-authorship, open access (MIT).}}
+\end{mdframed}
+
+\section{Why This Matters}
+
+\begin{mdframed}[backgroundcolor=equitybox,
+                 linecolor=orange!50!black,
+                 linewidth=0.6pt,
+                 innertopmargin=2pt,
+                 innerbottommargin=2pt,
+                 innerleftmargin=4pt,
+                 innerrightmargin=4pt,
+                 skipabove=0pt,
+                 skipbelow=2pt]
+{\small
+PAM50: \$3,000--\$4,000.
+Proprietary RNA platform.
+Inaccessible to the majority
+of the world's breast cancer patients.
+
+\smallskip
+This test: \$50--\$100.
+Standard IHC. Any laboratory.
+Same day. No RNA. No shipping.
+
+\smallskip
+\textbf{${\sim}1.2$--$1.5$M patients/year
+receive no molecular subtype information.
+This test, on validation,
+reaches all of them.}}
+\end{mdframed}
+
+\section{Published Evidence}
+
+{\small
+\textbf{CS-LIT-1}
+(${\sim}7{,}500$ patients):\\
+\href{https://doi.org/10.5281/zenodo.18883922}
+{\scriptsize doi.org/10.5281/zenodo.18883922}
+
+\smallskip
+\textbf{CS-LIT-22} (IHC tool):\\
+\href{https://doi.org/10.5281/zenodo.18892788}
+{\scriptsize doi.org/10.5281/zenodo.18892788}
+
+\smallskip
+\textbf{Full repository}:\\
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{\scriptsize github.com/Eric-Robert-Lawson/\\
+attractor-oncology}}
+
+\end{multicols}
+
+\end{document}

@@ -1,0 +1,617 @@
+\documentclass[12pt, a4paper]{article}
+
+% ── PACKAGES ──────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue,
+    pdftitle={CDKN1A (p21) Level as a Quantitative
+              Predictor of CDK4/6 Inhibitor Benefit
+              Magnitude in Luminal A Breast Cancer},
+    pdfauthor={Eric Robert Lawson},
+    pdfkeywords={CDKN1A, p21, CDK4/6 inhibitor,
+                 palbociclib, ribociclib, abemaciclib,
+                 luminal A, breast cancer, biomarker,
+                 attractor geometry, Waddington landscape,
+                 MONARCH, PALOMA, MONALEESA,
+                 OrganismCore, cell cycle, endocrine therapy}
+}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{authblk}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{setspace}
+
+% ── COLOURS ───────────────────────────────────────────────────
+\definecolor{repobox}{RGB}{240,247,255}
+\definecolor{findingbox}{RGB}{245,255,245}
+\definecolor{novelbox}{RGB}{255,248,220}
+\definecolor{mechanismbox}{RGB}{250,245,255}
+\definecolor{actionbox}{RGB}{230,255,230}
+\definecolor{warnbox}{RGB}{255,235,235}
+
+% ── HEADER / FOOTER ───────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\small OrganismCore \textbar{} 2026-03-06}
+\lhead{\small CS-LIT-14: CDKN1A as Quantitative CDK4/6i
+       Benefit Predictor in LumA}
+\rfoot{\small Page \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ── SECTION FORMATTING ────────────────────────────────────────
+\titleformat{\section}
+  {\large\bfseries}{\thesection}{1em}{}[\titlerule]
+\titleformat{\subsection}
+  {\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\small\bfseries}{\thesubsubsection}{1em}{}
+
+% ══════════════════════════════════════════════════════════════
+% TITLE
+% ══════════════════════════════════════════════════════════════
+\title{
+    \vspace{-1em}
+    \textbf{CDKN1A (p21) Level as a Quantitative
+    Predictor of CDK4/6 Inhibitor Benefit Magnitude
+    in Luminal A Breast Cancer:}\\[0.5em]
+    \large A Geometry-Derived Biomarker Hypothesis
+    with Mechanistic Grounding and Proposed
+    Validation in MONARCH, PALOMA, and
+    MONALEESA Trial Datasets\\[0.4em]
+    \normalsize \textit{OrganismCore Framework ---
+    Document CS-LIT-14}\\[0.3em]
+    \small Derived from Waddington Attractor Geometry
+    Analysis of 19,542 Single Cancer Cells (GSE176078)\\[0.3em]
+    \small Part of the Six Lock Type Classification
+    of Breast Cancer (CS-LIT-2, Zenodo 2026-03-06)
+}
+
+\author[1]{Eric Robert Lawson}
+\affil[1]{
+    OrganismCore\\
+    \href{mailto:OrganismCore@proton.me}
+         {OrganismCore@proton.me}\\
+    ORCID:
+    \href{https://orcid.org/0009-0002-0414-6544}
+         {0009-0002-0414-6544}
+}
+
+\date{March 6, 2026}
+
+% ══════════════════════════════════════════════════════════════
+\begin{document}
+% ══════════════════════════════════════════════════════════════
+
+\maketitle
+\thispagestyle{fancy}
+
+% ── REPOSITORY POINTER ────────────────────────────────────────
+\begin{center}
+\colorbox{repobox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\centering
+\textbf{Full computational record --- scripts, data caches,
+reasoning artifacts, and raw logs:}\\[0.4em]
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{\texttt{https://github.com/Eric-Robert-Lawson/attractor-oncology}}
+\\[0.3em]
+\small Part of the OrganismCore BRCA Cross-Subtype
+Analysis Series (BRCA-S8h, 2026-03-05).\\
+All predictions were locked from attractor geometry
+\textbf{before} any literature review was performed.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\vspace{1em}
+
+% ── NOVEL NOTICE ──────────────────────────────────────────────
+\begin{center}
+\colorbox{novelbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{VERDICT: NOVEL}\\[0.3em]
+This finding has no direct published equivalent as of
+2026-03-06. CDKN1A loss is established as a resistance
+mechanism; the specific hypothesis advanced here---that
+\emph{baseline quantitative p21 level predicts the
+magnitude of benefit}, not merely binary sensitivity or
+resistance---has not been formally published or
+prospectively validated. This document establishes
+priority and proposes the validation pathway.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\vspace{1em}
+
+% ════════════════════════════════════���═════════════════════════
+\begin{abstract}
+% ══════════════════════════════════════════════════════════════
+Luminal A breast cancer is the most prevalent breast cancer
+subtype and the primary population for CDK4/6 inhibitor
+therapy. Current clinical use of palbociclib, ribociclib, and
+abemaciclib does not stratify patients by the magnitude of
+expected benefit --- all HR+/HER2$-$ patients are treated as
+a uniform population. We report a geometry-derived hypothesis,
+originating from Waddington attractor analysis of 19,542
+single cancer cells (GSE176078), that baseline quantitative
+CDKN1A (p21) expression level predicts not merely whether a
+Luminal A patient will respond to CDK4/6 inhibition, but
+\emph{how much benefit they will derive}. The geometric
+basis is as follows: in Luminal A, CDKN1A loss is the
+primary identified lock mechanism --- the attractor is
+maintained by CDK-mediated suppression of differentiation
+programs, and CDKN1A is the quantitative gate on that
+suppression. Higher residual p21 means the lock is
+shallower and more susceptible to CDK4/6 inhibition;
+lower p21 means the lock is deeper and the CDK4/6i
+effect is correspondingly attenuated. This produces a
+continuous dose--response relationship between p21 level
+and CDK4/6i benefit magnitude that is not captured by
+binary resistance/sensitivity classification. We propose
+this hypothesis as a specific, falsifiable, quantitative
+prediction testable in existing trial biobank datasets
+from MONARCH, PALOMA, and MONALEESA, requiring no new
+patient recruitment.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+% ══════════════════════════════════════════════════════════════
+\section{Context and Origin}
+% ══════════════════════════════════════════════════════���═══════
+
+This document is part of the OrganismCore BRCA Cross-Subtype
+Analysis (Document BRCA-S8h, 2026-03-05), which applied
+Waddington attractor geometry to 19,542 single cancer cells
+across all six major breast cancer subtypes (GSE176078).
+
+The analysis produced 30 pre-specified items subjected to
+a post-hoc literature check. CS-LIT-14 was recorded as a
+NOVEL finding --- no published equivalent for the quantitative
+continuous-predictor formulation was identified.
+
+The parent document establishing the six-lock taxonomy within
+which this finding sits is:
+
+\begin{itemize}
+    \item \textbf{CS-LIT-2}: A Six Lock Type Classification
+    of Breast Cancer (Zenodo, 2026-03-06,
+    \href{https://doi.org/10.5281/zenodo.18884157}
+    {DOI: 10.5281/zenodo.18884157})
+\end{itemize}
+
+All findings in this series were derived from attractor
+geometry \textbf{before} any literature review was
+performed. The prediction was locked. The literature was
+checked afterward. The NOVEL verdict means no published
+equivalent was found at the time of the check.
+
+% ══════════════════════════════════════════════════════════════
+\section{The Luminal A Lock --- Geometric Basis}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{What Attractor Geometry Reveals in Luminal A}
+
+Luminal A occupies the shallowest attractor position in the
+FOXA1/EZH2 ordering axis across all six breast cancer subtypes
+(FOXA1/EZH2 ratio = 9.38, the highest of any subtype).
+This position reflects high FOXA1 expression and low EZH2
+activity --- the identity programs of the luminal lineage are
+substantially intact. The Waddington valley is shallow and
+relatively accessible.
+
+The question the geometry raises is: if the attractor is
+already shallow, what is holding the cell in a cancerous
+state? What is the specific lock mechanism in Luminal A?
+
+The answer derived from the attractor geometry is
+\textbf{CDK-mediated cell cycle dysregulation as the primary
+maintaining force}. In Luminal A, the chromatin programs
+of luminal identity are largely present. What is disrupted
+is the cell cycle gate --- specifically, the suppression of
+CDKN1A (p21), which functions as the quantitative brake on
+CDK4/6-mediated proliferative drive.
+
+\subsection{CDKN1A as the Quantitative Gate}
+
+In normal luminal epithelium, p21 imposes context-dependent
+cell cycle arrest, allowing differentiation programs to
+consolidate. In Luminal A cancer, p21 is suppressed or
+functionally attenuated --- not necessarily through mutation
+or complete loss, but through quantitative downregulation
+sufficient to allow persistent CDK4/6 activity to drive
+proliferation.
+
+This creates a \textbf{continuous relationship} between
+p21 level and lock depth:
+
+\begin{center}
+\colorbox{mechanismbox}{
+\begin{minipage}{0.82\textwidth}
+\vspace{0.5em}
+\textbf{Geometric mechanism:}\\[0.4em]
+High p21 (CDKN1A) $\rightarrow$ shallow lock $\rightarrow$
+CDK4/6i strongly effective \\[0.3em]
+Intermediate p21 $\rightarrow$ intermediate lock $\rightarrow$
+CDK4/6i moderately effective \\[0.3em]
+Low p21 $\rightarrow$ deep lock via alternative CDK pathway
+engagement $\rightarrow$ CDK4/6i attenuated \\[0.3em]
+Very low / absent p21 $\rightarrow$ CDK2 bypass available
+$\rightarrow$ CDK4/6i resistance
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\vspace{0.5em}
+
+The established literature treats CDKN1A loss as a
+\textbf{binary resistance mechanism} --- present or absent.
+This framework predicts a \textbf{quantitative continuous
+relationship}: baseline p21 level predicts the
+\emph{magnitude} of CDK4/6i benefit across the full range
+of expression, not merely the binary resistant/sensitive
+boundary.
+
+% ══════════════════════════════════════════════════════════════
+\section{The Precise Hypothesis}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\colorbox{findingbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.6em}
+\textbf{The specific, falsifiable prediction:}\\[0.5em]
+In Luminal A HR+/HER2$-$ breast cancer patients treated
+with a CDK4/6 inhibitor plus endocrine therapy, baseline
+quantitative CDKN1A (p21) expression level --- measured
+as a continuous variable, not a binary cutoff --- will
+correlate positively and monotonically with progression-free
+survival benefit from CDK4/6 inhibition.\\[0.4em]
+Specifically:
+\begin{enumerate}[leftmargin=*, itemsep=3pt]
+    \item Patients in the highest quartile of baseline
+    CDKN1A expression will derive the largest PFS benefit
+    from CDK4/6i addition to endocrine therapy.
+    \item Patients in the lowest quartile of baseline
+    CDKN1A expression will derive the smallest PFS benefit,
+    approaching the endocrine-therapy-alone arm.
+    \item The relationship will be monotonic across
+    quartiles, not threshold-dependent.
+    \item This gradient will be most pronounced in
+    Luminal A (PAM50 LumA) compared with Luminal B
+    (PAM50 LumB), because the CDK lock is the
+    \emph{primary} mechanism in LumA and a
+    \emph{secondary} mechanism in LumB.
+\end{enumerate}
+\vspace{0.4em}
+\end{minipage}}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{What Distinguishes This From the Existing Literature}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{What the Literature Currently Contains}
+
+The existing literature on CDKN1A and CDK4/6 inhibitors
+addresses three distinct claims:
+
+\begin{enumerate}
+    \item \textbf{CDKN1A loss causes resistance.}
+    This is established. Complete or near-complete loss
+    of p21 allows CDK2 to compensate for CDK4/6
+    inhibition, maintaining cell cycle progression.
+    This is a binary resistance mechanism.
+
+    \item \textbf{p21 upregulation is a pharmacodynamic
+    marker of CDK4/6i activity.}
+    This is established. Entinostat and CDK4/6 inhibitors
+    both upregulate p21 as a downstream effect.
+    Post-treatment p21 level reflects drug action.
+
+    \item \textbf{p21 restoration re-sensitises resistant
+    cells.}
+    This is established in preclinical models.
+    Restoring p21 expression recovers CDK4/6i
+    sensitivity.
+\end{enumerate}
+
+\subsection{What the Literature Does Not Contain}
+
+None of the above three claims is equivalent to the
+hypothesis advanced here. This document proposes:
+
+\begin{itemize}
+    \item \textbf{Baseline} p21 level (pre-treatment,
+    not post-treatment pharmacodynamic response)
+    \item As a \textbf{continuous quantitative predictor}
+    (not binary resistance/sensitivity)
+    \item Of \textbf{benefit magnitude} (not just
+    whether a response occurs)
+    \item Specifically in \textbf{Luminal A} as a
+    subtype-stratified prediction
+    \item Testable as a \textbf{monotonic gradient across
+    expression quartiles}
+\end{itemize}
+
+This is a different and more specific claim. It is
+falsifiable in existing trial biobank data without new
+patient recruitment.
+
+% ══════════════════════════════════════════════════════════════
+\section{Mechanistic Grounding}
+% ═════════════════════════════════════════════════════════���════
+
+\subsection{Why the Relationship Should Be Continuous,
+Not Binary}
+
+CDK4/6 inhibitors work by releasing p21 and p27 from
+sequestration by cyclin D--CDK4/6 complexes, allowing
+these inhibitors to block Rb phosphorylation and arrest
+the cell cycle at G1. The efficiency of this arrest is
+directly proportional to the available pool of functional
+p21. A cell with high baseline p21 has more arrest
+capacity available to be engaged by CDK4/6 inhibition.
+A cell with low but non-zero p21 has less. A cell with
+near-zero p21 has minimal arrest capacity, and CDK2
+can substitute.
+
+This is not a switch. It is a gradient. The geometry
+predicts the clinical consequence of that gradient:
+a monotonic relationship between baseline p21 and
+CDK4/6i benefit.
+
+\subsection{Why This Is Subtype-Specific to Luminal A}
+
+In Luminal B, the attractor is maintained by multiple
+co-active mechanisms --- the DNMT3A/HDAC2 chromatin lock
+on ER output (CS-LIT-8/9) operates in parallel with CDK
+dysregulation. The CDK axis is not the sole or primary
+lock. Consequently, p21 level in LumB is a less clean
+predictor of CDK4/6i benefit because other lock
+mechanisms can maintain the attractor even when the
+CDK gate is partially restored.
+
+In Luminal A, the CDK axis \emph{is} the primary lock.
+The chromatin programs are intact. The cell cycle gate is
+the specific vulnerability. p21 level in LumA therefore
+maps more directly and cleanly onto CDK4/6i benefit
+than in any other subtype.
+
+This subtype specificity is a testable prediction:
+the CDKN1A--benefit gradient should be steeper in
+PAM50 LumA than in PAM50 LumB when both populations
+are analysed in the same trial dataset.
+
+% ══════════════════════════════════════════════════════════════
+\section{Proposed Validation Pathway}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Why No New Patients Are Required}
+
+The MONARCH, PALOMA, and MONALEESA trial series enrolled
+thousands of HR+/HER2$-$ patients with paired baseline
+tumor biopsies and detailed outcome data. Correlative
+biomarker analyses are standard in these trials. The
+biobank material to test this hypothesis exists.
+
+\subsection{Specific Validation Design}
+
+\begin{center}
+\colorbox{actionbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{Proposed analysis (requires no new recruitment):}
+\begin{enumerate}[leftmargin=*, itemsep=4pt]
+    \item \textbf{Dataset:} Baseline tumor RNA-seq or
+    qRT-PCR from any MONARCH, PALOMA, or MONALEESA
+    trial biobank with available PAM50 subtyping and
+    PFS outcome data.
+    \item \textbf{Population:} Restrict to PAM50 Luminal
+    A patients receiving CDK4/6i + endocrine therapy
+    versus endocrine therapy alone.
+    \item \textbf{Measurement:} Baseline CDKN1A
+    expression as a continuous variable (normalised
+    mRNA counts or IHC H-score).
+    \item \textbf{Analysis:} Divide CDKN1A into
+    quartiles. Compare PFS benefit of CDK4/6i addition
+    across quartiles using interaction term in Cox
+    proportional hazards model (CDK4/6i arm $\times$
+    CDKN1A quartile).
+    \item \textbf{Primary endpoint:} Monotonic gradient
+    in CDK4/6i benefit across CDKN1A quartiles
+    (Q1 $<$ Q2 $<$ Q3 $<$ Q4).
+    \item \textbf{Secondary endpoint:} Steeper gradient
+    in PAM50 LumA versus PAM50 LumB (subtype
+    interaction test).
+    \item \textbf{Falsification criterion:} A flat or
+    non-monotonic relationship across quartiles falsifies
+    the quantitative continuous prediction. A U-shaped
+    relationship would falsify the directional hypothesis.
+\end{enumerate}
+\vspace{0.4em}
+\end{minipage}}
+\end{center}
+
+\subsection{What a Positive Result Would Mean Clinically}
+
+If the monotonic gradient is confirmed:
+
+\begin{itemize}
+    \item Baseline CDKN1A measurement (by IHC or RNA)
+    becomes a patient stratification tool for CDK4/6i
+    prescribing in Luminal A.
+    \item Patients with high p21 would be identified as
+    the subgroup deriving the largest absolute benefit,
+    strengthening the case for CDK4/6i in that group.
+    \item Patients with very low p21 would be identified
+    as the subgroup deriving minimal benefit from CDK4/6i,
+    redirecting clinical attention toward alternative
+    lock-breaking strategies for that population.
+    \item The measurement is a standard RNA expression
+    value or a simple IHC stain --- implementable in any
+    clinical laboratory.
+\end{itemize}
+
+\subsection{Relevant Trial Contacts}
+
+The hypothesis is most directly testable in datasets
+controlled by the following groups:
+
+\begin{itemize}
+    \item \textbf{MONARCH series (abemaciclib):}
+    Eli Lilly oncology biomarker research group;
+    principal investigators of MONARCH-2 and MONARCH-3.
+    \item \textbf{PALOMA series (palbociclib):}
+    Pfizer oncology; principal investigators of
+    PALOMA-2 and PALOMA-3 correlative science arms.
+    \item \textbf{MONALEESA series (ribociclib):}
+    Novartis oncology; principal investigators of
+    MONALEESA-2, MONALEESA-3, and MONALEESA-7.
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════════
+\section{Relationship to the Six Lock Type Classification}
+% ══════════════════════════════════════════════════════════════
+
+This finding is the drug prediction derived from
+Lock Type 1 (Luminal A) in the six-lock taxonomy
+(CS-LIT-2). The complete taxonomy is:
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textbf{Subtype} & \textbf{Lock Type} &
+\textbf{Primary Drug Target} \\
+\midrule
+Luminal A & CDK-mediated gate (CDKN1A loss) &
+CDK4/6 inhibitors \\
+Luminal B & DNMT3A/HDAC2 chromatin lock &
+HDAC inhibitors (entinostat) \\
+HER2-enriched & EZH2 lock (deep fraction) &
+EZH2i + anti-HER2 \\
+TNBC & EZH2 PRC2 epigenetic lock &
+Tazemetostat \\
+Claudin-low & Structural immune lock &
+Anti-TIGIT sequence \\
+ILC & Structural FOXA1 lock (inverse) &
+Fulvestrant over AI \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.5em}
+
+CS-LIT-14 is the quantitative refinement of the
+Luminal A drug prediction: not merely that CDK4/6
+inhibitors are the correct drug class, but that
+\emph{baseline p21 level predicts the magnitude of
+benefit within that drug class}.
+
+% ═════════════════════════════════════��══════════���═════════════
+\section{What This Document Claims and Does Not Claim}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{What IS claimed}
+
+\begin{itemize}
+    \item The geometric basis for a continuous
+    quantitative relationship between baseline CDKN1A
+    level and CDK4/6i benefit magnitude in Luminal A
+    is mechanistically grounded and geometrically derived.
+    \item This specific quantitative formulation has not
+    been published as a formal hypothesis with a
+    prospective validation design.
+    \item The hypothesis is falsifiable with existing
+    trial biobank data requiring no new patient
+    recruitment.
+    \item The subtype specificity to Luminal A
+    (versus Luminal B) is a testable and distinguishing
+    prediction.
+\end{itemize}
+
+\subsection{What is NOT claimed}
+
+\begin{itemize}
+    \item This has not been validated in any dataset.
+    No clinical data are presented in this document.
+    \item The quantitative cutoffs for clinically
+    meaningful p21 strata have not been determined.
+    \item This does not replace or supersede the
+    established binary resistance literature. It extends
+    it into a continuous prediction that the binary
+    literature does not address.
+    \item Clinical implementation requires prospective
+    validation.
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════════
+\section{Locked Statement}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\colorbox{findingbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.6em}
+\textbf{Stated once, precisely, without inflation:}\\[0.5em]
+Waddington attractor geometry applied to 19,542 single
+breast cancer cells (GSE176078) identifies CDKN1A loss
+as the primary lock mechanism in Luminal A breast cancer.
+This geometry predicts that baseline quantitative p21
+level will function as a continuous predictor of CDK4/6
+inhibitor benefit magnitude --- not merely as a binary
+resistance marker --- with the largest benefit in
+p21-high patients and the smallest in p21-low patients.
+This prediction is specific to Luminal A, mechanistically
+grounded, falsifiable in existing trial datasets, and
+has no direct published equivalent as of 2026-03-06.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{Document Metadata}
+% ══════════════════════════════════════════════════════════════
+
+\begin{tabular}{ll}
+\toprule
+\textbf{Field} & \textbf{Value} \\
+\midrule
+Document ID & CS-LIT-14 \\
+Parent document & BRCA-S8h (2026-03-05) \\
+Verdict & NOVEL \\
+Date & 2026-03-06 \\
+Author & Eric Robert Lawson \\
+ORCID & 0009-0002-0414-6544 \\
+Contact & OrganismCore@proton.me \\
+Repository &
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{attractor-oncology} \\
+Source data & GSE176078 (19,542 single cancer cells) \\
+Parent DOI &
+\href{https://doi.org/10.5281/zenodo.18884157}
+{10.5281/zenodo.18884157} (CS-LIT-2) \\
+License & CC BY 4.0 \\
+\bottomrule
+\end{tabular}
+
+\end{document}

@@ -72,3 +72,9 @@
 
 ---
 
+**LumB DNMT3A/HDAC2 Co-Expression Coupling: A Subtype-Specific Chromatin Co-Repressor Circuit That Locks ER Output in Luminal B and Is Absent in Luminal A — Mechanistic Foundation for Differential HDAC Inhibitor Sensitivity**
+
+[https://doi.org/10.5281/zenodo.18893501](https://doi.org/10.5281/zenodo.18893501)
+
+---
+

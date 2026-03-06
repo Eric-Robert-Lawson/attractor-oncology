@@ -60,3 +60,9 @@
 
 ---
 
+**FOXA1/EZH2 Dual IHC as a Point-of-Care Breast Cancer Decision Tool: Two Stains, One Number, Six Subtypes — A Universal Treatment Stratification Instrument Derived from Waddington Attractor Geometry**
+
+[https://doi.org/10.5281/zenodo.18892788](https://doi.org/10.5281/zenodo.18892788)
+
+---
+

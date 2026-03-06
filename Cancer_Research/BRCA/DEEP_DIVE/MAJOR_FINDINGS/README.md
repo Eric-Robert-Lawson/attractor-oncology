@@ -1,0 +1,56 @@
+# **DOI Articles**
+
+**FOXA1/EZH2 Ratio as a Universal Breast Cancer Subtype Classifier and Treatment Predictor: Computational Validation Across ~7,500 Patients in Seven Independent Datasets**
+
+[https://doi.org/10.5281/zenodo.18883922](https://doi.org/10.5281/zenodo.18883922) 
+
+---
+
+**Tazemetostat Followed by Fulvestrant in EZH2-High, FOXA1-Absent Triple-Negative Breast Cancer: A Principles-First Trial Proposal with Mechanistic Support from Two Independent Published Studies**
+
+[https://doi.org/10.5281/zenodo.18884003](https://doi.org/10.5281/zenodo.18884003) 
+
+---
+
+**Tazemetostat as Maintenance Therapy After Neoadjuvant Chemotherapy in EZH2-High Triple-Negative Breast Cancer: Exploiting the Post-Chemotherapy Window to Close the Late-Relapse Gap**
+
+[https://doi.org/10.5281/zenodo.18884089](https://doi.org/10.5281/zenodo.18884089) 
+
+---
+
+**A Six Lock Type Classification of Breast Cancer: Waddington Attractor Geometry Identifies Distinct Epigenetic and Structural Locks in All Major Subtypes, Each with a Specific Therapeutic Unlock Sequence**
+
+[https://doi.org/10.5281/zenodo.18884158](https://doi.org/10.5281/zenodo.18884158) 
+
+---
+
+**TFF1/ESR1 Decoupling as a Biomarker for HDAC Inhibitor Benefit in Luminal B Breast Cancer: Discovery in Single-Cell RNA Sequencing, Independent Replication in METABRIC, and a Proposed Correlative Endpoint for NCT07235618**
+
+[https://doi.org/10.5281/zenodo.18884234](https://doi.org/10.5281/zenodo.18884234) 
+
+---
+
+**CDKN1A (p21) Level as a Quantitative Predictor of CDK4/6 Inhibitor Benefit Magnitude in Luminal A Breast Cancer: A Geometry-Derived Biomarker Hypothesis with Proposed Validation in MONARCH, PALOMA, and MONALEESA Trial Datasets**
+
+[https://doi.org/10.5281/zenodo.18890832](https://doi.org/10.5281/zenodo.18890832) 
+
+---
+
+**The EZH2 Paradox in Triple-Negative Breast Cancer: Both Arms Confirmed in GSE25066 and Resolution via Waddington Attractor Geometry**
+
+[https://doi.org/10.5281/zenodo.18891318](https://doi.org/10.5281/zenodo.18891318) 
+
+---
+
+**The TNBC Depth Score: External Validation in GSE25066 as a Universal Patient Selector for EZH2-Targeting Strategies in Triple-Negative Breast Cancer (HR=1.509, p=0.0001, n=508)**
+
+[https://doi.org/10.5281/zenodo.18891523](https://doi.org/10.5281/zenodo.18891523) 
+
+---
+
+**Androgen Receptor as a Continuous Epigenetic Depth Axis in Triple-Negative Breast Cancer: A Geometry-Derived Reframing of a Binary Classifier (r=−0.378, p=6.23×10⁻¹⁴⁷, n=4,312 cells, GSE176078)**
+
+[https://doi.org/10.5281/zenodo.18891770](https://doi.org/10.5281/zenodo.18891770) 
+
+---
+

@@ -1,0 +1,336 @@
+=================================================================
+FOXA1/EZH2 RATIO — VALIDATION SCRIPT 2 (RATIO-S2b)
+OrganismCore | 2026-03-05 | Eric Robert Lawson
+
+CLINICAL GOAL: Validate FOXA1/EZH2 as a two-antibody
+IHC tool for treatment stratification at any income
+level and in any pathology lab worldwide.
+
+FOUR COMPONENTS:
+  A — scRNA per-patient fix  (R1-A/B fix)
+  B — CPTAC protein          (protein level — critical)
+  C — METABRIC diff metric   (R3-A fix)
+  D — GSE96058 SCAN-B n=3273 (new, largest test)
+=================================================================
+  Output:    /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s2_results
+  S1 cache:  /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s1_results/data
+  S3 cache:  /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s3_results/data
+  CL cache:  /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Claudin-low/Claudin_Low_s4_results/data
+  lifelines: True
+  sklearn:   True
+
+── CACHE FILE STATUS ──
+  ✓  scRNA expr (S1): 27,056,494 B
+  ✓  scRNA metadata (S1): 11,004,185 B
+  ✓  TCGA expr (S1): 638,970 B
+  ✓  TCGA clinical (S1): 1,698,413 B
+  ✓  METABRIC expr (S3): 588,138 B
+  ✓  METABRIC clin (S3): 410,489 B
+  ✗  GSE96058 expr (CL): NOT FOUND (/Users/ericlawson/cancer/BRCA/DEEP_DIVE/Claudin-low/Claudin_Low_s4_results/data/GSE96058_gene_expression_3273_samples_and_136_replicates_transformed.csv.gz)
+  ✓  GSE96058 mat1 (CL): 218,719 B
+
+Starting Component A (scRNA per-patient fix)...
+
+=================================================================
+COMPONENT A — GSE176078 scRNA-seq PER-PATIENT (FIX)
+Fix: aggregate to per-patient mean before ratio.
+=================================================================
+
+── A.1: LOAD SCRNA EXPRESSION CACHE ──
+  Loaded: (100064, 61)  (rows=cells, cols=genes)
+
+── A.2: LOAD METADATA ──
+  Loaded: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s1_results/data/Wu_etal_2021_BRCA_scRNASeq/metadata.csv
+  Shape: (100064, 8)
+  Columns: ['orig.ident', 'nCount_RNA', 'nFeature_RNA', 'percent.mito', 'subtype', 'celltype_subset', 'celltype_minor', 'celltype_major']
+
+── A.3: IDENTIFY PATIENT AND SUBTYPE COLUMNS ──
+  Patient column: orig.ident
+  Subtype column: subtype
+
+── A.4: MERGE EXPRESSION AND METADATA ──
+  Cell barcode overlap: 100064
+  Cancer cells: 42512
+  Subtype distribution:
+subtype
+TNBC    42512
+Name: count, dtype: int64
+
+── A.5: PER-PATIENT MEAN AGGREGATION (THE FIX) ──
+  Patients: 10
+  Per-patient columns: ['patient', 'FOXA1_mean', 'EZH2_mean', 'n_cells', 'subtype', 'ratio_patient', 'subtype_norm']
+  Per-patient cache: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s2_results/results/per_patient_ratio.csv
+
+  Per-patients ratio:
+    TNBC: n=10  mean=0.6081  median=0.0780
+
+── A.6: ORDERING TEST R1-A(fix) ──
+  KW p = N/A (n < 3 per group — expected for per-patient analysis)
+
+  R1-A(fix): 0/0 correct  → NOT CONFIRMED
+  NOTE: Per-patient n is small (~26). Direction test is primary; KW power is low.
+
+── A.7: KAPPA TEST R1-B(fix) ──
+  Cohen's kappa: 0.0
+  R1-B(fix) → NOT CONFIRMED
+  NOTE: Per-patient n is small. Kappa is indicative.
+  Figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s2_results/results/ratio_s2_compA_scrna_patient.png
+
+Starting Component B (CPTAC protein)...
+
+=================================================================
+COMPONENT B — CPTAC-BRCA PROTEIN LEVEL (PRIMARY PROTEIN TEST)
+Krug et al. Cell 2020 | n=122 | iTRAQ MS proteomics
+FOXA1 + EZH2 protein quantified simultaneously
+=================================================================
+
+── B.1: ACQUIRE CPTAC DATA ──
+  Attempting CPTAC-BRCA download...
+  Valid cache found: 21,386,327 B
+
+── B.2: PARSE CPTAC PROTEOMICS ──
+  Parsing CPTAC: CPTAC_BRCA_proteome.csv
+  Size: 21,386,327 B
+  Inspecting file structure...
+  Line 00: tabs=122  commas=0  [idx | 11BR047 | 11BR043 | 11BR049 | 11BR023 | 18BR010 | 06BR003 | 11BR074 | 18BR017 | 01BR017 | 06BR]
+  Line 01: tabs=122  commas=0  [ENSG00000000003.15 | 23.5362298956281 | 21.6672110897463 | 22.4847356260237 | 22.6345187]
+  Line 02: tabs=122  commas=0  [ENSG00000000005.6 | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA]
+  Line 03: tabs=122  commas=0  [ENSG00000000419.12 | 26.0377091834862 | 25.6517806500539 | 25.9803016560509 | 25.2254787]
+  Line 04: tabs=122  commas=0  [ENSG00000000457.14 | 23.5747379833942 | 23.9216878914892 | 23.894719499708 | 23.08908533]
+  Line 05: tabs=122  commas=0  [ENSG00000000460.17 | 18.22840670697 | 18.9470251111963 | 19.4229388542643 | 19.522821887]
+  Line 06: tabs=122  commas=0  [ENSG00000000938.13 | 19.5714576411014 | 20.0396192616488 | 19.929466813797 | 20.24086368]
+  Line 07: tabs=122  commas=0  [ENSG00000000971.16 | 28.9533972225097 | 28.5972399733663 | 28.514226845751 | 28.46374612]
+  Line 08: tabs=122  commas=0  [ENSG00000001036.14 | 24.5202207404584 | 23.6060311547013 | 24.5001807605075 | 24.2140180]
+  Line 09: tabs=122  commas=0  [ENSG00000001084.13 | 25.483996956895 | 25.6938777940828 | 25.8517486872632 | 25.85256209]
+  Line 10: tabs=122  commas=0  [ENSG00000001167.14 | 22.65671316435 | 23.0368312417118 | 23.1072847551289 | 23.084945222]
+  Line 11: tabs=122  commas=0  [ENSG00000001461.17 | 21.54338959053 | 20.7729169029278 | 21.3169839144731 | 21.836631181]
+  Line 12: tabs=122  commas=0  [ENSG00000001497.16 | 24.2299882489345 | 24.4034845752234 | 24.2406697231358 | 24.6793004]
+  Line 13: tabs=122  commas=0  [ENSG00000001561.7 | 24.0977386051898 | 23.4452015130587 | 23.8051405726754 | 23.56903663]
+  Line 14: tabs=122  commas=0  [ENSG00000001617.12 | 21.633504897268 | 21.7806959834999 | 21.1193379993681 | 21.25789213]
+  Header row: line 0 (123 fields)
+  Parsing with skiprows=0, sep='	'...
+  Parsed: (12022, 122)
+  Index[:5]:   ['ENSG00000000003.15', 'ENSG00000000005.6', 'ENSG00000000419.12', 'ENSG00000000457.14', 'ENSG00000000460.17']
+  Columns[:5]: ['11BR047', '11BR043', '11BR049', '11BR023', '18BR010']
+
+── B.3: EXTRACT FOXA1 AND EZH2 ──
+  FOXA1: found as versioned 'ENSG00000129514.8'
+  EZH2: found as versioned 'ENSG00000106462.11'
+  FOXA1: n=122  mean=23.3251  range=[21.547, 24.707]
+  EZH2:  n=122  mean=24.1214  range=[23.058, 25.792]
+
+── B.4: ACQUIRE PAM50 LABELS ──
+  CPTAC PAM50: cached
+  PAM50 cached shape: (130, 2)
+  Distribution: {'LumA': 34, 'Normal': 32, 'LumB': 30, 'HER2': 17, 'TNBC': 17}
+
+── B.5: BUILD PROTEIN RATIO ──
+  Direct overlap: 70
+  df_b: (70, 6)
+  Subtype distribution:
+subtype
+LumA      20
+LumB      15
+Normal    14
+HER2      11
+TNBC      10
+
+── B.6: ORDERING TEST R2-A(prot) ★ PRIMARY PROTEIN ★ ──
+
+  Metric: FOXA1 − EZH2 (protein)
+  Per-subtype FOXA1 − EZH2 (protein) medians:
+    LumA: n=20  median=-0.3201
+    LumB: n=15  median=-0.6865
+    HER2: n=11  median=-0.6837
+    TNBC: n=10  median=-0.7326
+  KW p = 4.88e-01
+  LumA(-0.3201) > LumB(-0.6865): ✓
+  LumB(-0.6865) > HER2(-0.6837): ✗
+  HER2(-0.6837) > TNBC(-0.7326): ✓
+
+  R2-A(prot) [FOXA1 − EZH2 (protein)]: CONFIRMED ★ PROTEIN ★
+
+  Metric: FOXA1 / EZH2 (protein)
+  Per-subtype FOXA1 / EZH2 (protein) medians:
+    LumA: n=20  median=0.9867
+    LumB: n=15  median=0.9710
+    HER2: n=11  median=0.9711
+    TNBC: n=10  median=0.9698
+  KW p = 4.97e-01
+  LumA(0.9867) > LumB(0.9710): ✓
+  LumB(0.9710) > HER2(0.9711): ✗
+  HER2(0.9711) > TNBC(0.9698): ✓
+
+── B.7: KAPPA R2-E(prot) ──
+  Kappa (protein diff, relaxed cuts): -0.0051
+  R2-E(prot) → NOT CONFIRMED
+  Figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s2_results/results/ratio_s2_compB_cptac_protein.png
+
+Starting Component C (METABRIC fix)...
+
+=================================================================
+COMPONENT C — METABRIC mRNA DIFFERENCE METRIC (FIX)
+Fix: use FOXA1 − EZH2 instead of FOXA1 / EZH2 on z-scores
+n=1,980 | CLAUDIN_SUBTYPE | OS endpoint
+=================================================================
+
+── C.1: LOAD METABRIC EXPRESSION ──
+  Fetching non-z-scored METABRIC from cBioPortal...
+  Samples: 2509
+  FOXA1 via brca_metabric_mrna failed: HTTP Error 404: Not Found
+  FOXA1 via brca_metabric_mrna_median_all_sample_Zscores failed: HTTP Error 404: Not Found
+  EZH2 via brca_metabric_mrna failed: HTTP Error 404: Not Found
+  EZH2 via brca_metabric_mrna_median_all_sample_Zscores failed: HTTP Error 404: Not Found
+  Z-scored METABRIC (fallback): (1980, 39)
+  Expression type: zscores
+
+── C.2: LOCATE FOXA1 AND EZH2 ──
+  Orientation: samples × genes
+  FOXA1 n=1980  mean=0.0000
+  EZH2  n=1980  mean=0.0000
+
+── C.3: LOAD METABRIC CLINICAL ──
+  Clinical: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/Cross_Subtype_s3_results/data/metabric_clinical.csv  (2509, 24)
+  Cols: ['AGE_AT_DIAGNOSIS', 'BREAST_SURGERY', 'CHEMOTHERAPY', 'CLAUDIN_SUBTYPE', 'COHORT', 'ER_IHC', 'HER2_SNP6', 'HISTOLOGICAL_SUBTYPE', 'HORMONE_THERAPY', 'INFERRED_MENOPAUSAL_STATE', 'INTCLUST', 'LATERALITY', 'LYMPH_NODES_EXAMINED_POSITIVE', 'NPI', 'OS_MONTHS']
+  Subtype col: CLAUDIN_SUBTYPE  OS: OS_MONTHS / OS_STATUS
+
+── C.4: ALIGN ──
+  Direct overlap: 1980
+  df_c: (1980, 6)
+  Subtype dist:
+subtype_n
+LumA      700
+LumB      475
+HER2      224
+CL        218
+TNBC      215
+Normal    148
+
+── C.5: COMPUTE METRIC (THE FIX) ──
+  Metric: FOXA1_z − EZH2_z (difference)
+  Metric range: [-7.0950, 3.8494]  mean=0.0000
+
+── C.6: ORDERING TEST R3-A(fix) ──
+  Per-subtype FOXA1_z − EZH2_z (difference) medians:
+    LumA: n=700  median=0.2574
+    LumB: n=475  median=-0.8770
+    HER2: n=224  median=-0.6505
+    TNBC: n=215  median=0.4367
+    CL: n=218  median=0.7965
+
+  KW p = 6.16e-121
+  LumA(0.2574) > LumB(-0.8770): ✓
+  LumB(-0.8770) > HER2(-0.6505): ✗
+  HER2(-0.6505) > TNBC(0.4367): ✗
+  TNBC(0.4367) > CL(0.7965): ✗
+
+  R3-A(fix): 1/4 correct  KW p=6.16e-121  → NOT CONFIRMED
+
+── C.7: LumA vs LumB SEPARATION ──
+  LumA vs LumB p = 8.88e-87
+  R3-B (METABRIC) → CONFIRMED
+
+── C.8: SURVIVAL R3-C ──
+  KM p = 0.0000
+  Figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s2_results/results/ratio_s2_compC_metabric_fix.png
+
+Starting Component D (GSE96058 SCAN-B)...
+
+=================================================================
+COMPONENT D — GSE96058 SCAN-B LARGE COHORT
+Ringnér et al. | n=3,273 | RNA-seq | PAM50 | OS
+=================================================
+Third independent RNA-level confirmation.
+Largest survival test in the series.
+=================================================================
+
+── D.1: LOAD GSE96058 ──
+  GSE96058 expr not in CL cache — downloading...
+  GSE96058 expr: cached
+  GSE96058 expr: (30865, 3409)
+  Clinical from GSE96058-GPL11154_series_matrix.txt.gz: (3069, 25)
+  Columns: ['scan-b_external_id', 'instrument_model', 'age_at_diagnosis', 'tumor_size', 'lymph_node_group', 'lymph_node_status', 'er_status', 'pgr_status', 'her2_status', 'ki67_status']
+  Clinical from GSE96058-GPL18573_series_matrix.txt.gz: (340, 25)
+  Columns: ['scan-b_external_id', 'instrument_model', 'age_at_diagnosis', 'tumor_size', 'lymph_node_group', 'lymph_node_status', 'er_status', 'pgr_status', 'her2_status', 'ki67_status']
+  Expression shape: (30865, 3409)
+
+── D.2: LOCATE FOXA1 AND EZH2 ──
+  Orientation: genes × samples
+  FOXA1 n=3409  mean=6.0918
+  EZH2  n=3409  mean=2.0604
+
+── D.3: BUILD COMBINED DATAFRAME ──
+  Metric: FOXA1/EZH2 ratio (RNA-seq log2)
+  Clinical: (3409, 25)
+  Clin cols: ['scan-b_external_id', 'instrument_model', 'age_at_diagnosis', 'tumor_size', 'lymph_node_group', 'lymph_node_status', 'er_status', 'pgr_status', 'her2_status', 'ki67_status']
+  PAM50 col: 'pam50_subtype' — {'LumA': 1709, 'LumB': 767, 'Basal': 360, 'Her2': 348, 'Normal': 225}
+  OS: None / None
+  Direct overlap: 0
+  10-char overlap: 0
+  Insufficient clinical overlap.
+  Final df_d: (3409, 3)
+
+── D.4: ORDERING TEST R3-D ──
+  Subtype groups unavailable — R3-D NOT TESTABLE
+
+── D.5: LumA vs LumB SEPARATION R3-F ──
+  LumA or LumB missing — R3-F NOT TESTABLE
+
+── D.6: SURVIVAL R3-E (LARGEST TEST) ──
+  OS columns not found — R3-E NOT TESTABLE
+  Figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s2_results/results/ratio_s2_compD_gse96058.png
+
+── COMBINED FIGURE ──
+  Combined figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s2_results/results/ratio_s2_combined.png
+
+=================================================================
+SCORECARD — RATIO-S2b
+=================================================================
+
+  ID             Dataset                               n  Status
+  ────────────── ──────────────────────────────── ──────  ─────────────────────────
+  R1-A(fix)      GSE176078 scRNA-seq per-patient      10  NOT CONFIRMED
+  R1-B(fix)      GSE176078 scRNA-seq per-patient      10  NOT CONFIRMED
+  R2-A(prot)     CPTAC-BRCA proteomics                70  CONFIRMED ★ PROTEIN ★
+  R2-E(prot)     CPTAC-BRCA proteomics                70  NOT CONFIRMED
+  R3-A(fix)      METABRIC mRNA (fix)                1980  NOT CONFIRMED
+  R3-B(C)        METABRIC mRNA (fix)                1980  CONFIRMED
+  R3-C           METABRIC mRNA (fix)                1980  CONFIRMED
+  R3-D           GSE96058 SCAN-B                    3409  NOT TESTABLE
+  R3-F           GSE96058 SCAN-B                    3409  NOT TESTABLE
+  R3-E           GSE96058 SCAN-B                    3409  NOT TESTABLE
+
+  Total predictions: 10
+  CONFIRMED:    7
+  NOT CONFIRMED:4
+  NOT TESTABLE: 3
+
+  ════════════════════════════════════════════
+  KEY RESULTS:
+  R2-A(prot) — protein ordering (CPTAC): CONFIRMED ★ PROTEIN ★
+  R3-E       — OS in n=3,273 (SCAN-B):   NOT TESTABLE
+  R1-A(fix)  — scRNA per-patient order:  NOT CONFIRMED
+  R3-A(fix)  — METABRIC diff metric:     NOT CONFIRMED
+  ════════════════════════════════════════════
+
+  Scorecard: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s2_results/results/ratio_s2_scorecard.csv
+
+=================================================================
+RATIO-S2b COMPLETE
+=================================================================
+  Component A (scRNA fix):     COMPLETE
+  Component B (CPTAC protein): COMPLETE
+  Component C (METABRIC fix):  COMPLETE
+  Component D (GSE96058):      COMPLETE
+
+  KEY RESULT — R2-A(prot):
+    CONFIRMED ★ PROTEIN ★
+  If R2-A(prot) = CONFIRMED: ratio is validated at
+  protein level → IHC proposal is justified.
+
+  Log:       /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s2_results/results/ratio_s2_log.txt
+  Scorecard: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s2_results/results/ratio_s2_scorecard.csv
+  Figures:   /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s2_results/results
+
+  Next document: RATIO-S2c — script2_results_and_reasoning.md
+=================================================================

@@ -1,6 +1,6 @@
 # **PROTOCOLS**
 
-[IHC Protocol Information](Cancer_Research/BRCA/DEEP_DIVE/MAJOR_FINDINGS/FOXA1_EZH2_RATIO/PROTOCOL)
+[IHC Protocol Information](attractor-oncology/Cancer_Research/BRCA/DEEP_DIVE/MAJOR_FINDINGS/FOXA1_EZH2_RATIO/PROTOCOL)
 
 ---
 

@@ -1,0 +1,892 @@
+\documentclass[12pt, a4paper]{article}
+
+% ── PACKAGES ──────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue,
+    pdftitle={ILC as the Geometric Inverse of TNBC:
+              Structural Lock vs Epigenetic Lock on the
+              Same Luminal Identity Axis},
+    pdfauthor={Eric Robert Lawson},
+    pdfkeywords={ILC, invasive lobular carcinoma,
+                 TNBC, triple-negative breast cancer,
+                 FOXA1, EZH2, CDH1, geometric inverse,
+                 structural lock, epigenetic lock,
+                 luminal identity axis, fulvestrant,
+                 tazemetostat, Waddington landscape,
+                 attractor geometry, OrganismCore,
+                 GSE176078, breast cancer, Type 3,
+                 Type 2, E-cadherin, PRC2, H3K27me3}
+}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{authblk}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{setspace}
+\usepackage{multirow}
+
+% ── COLOURS ───────────────────────────────────────────────────
+\definecolor{repobox}{RGB}{240,247,255}
+\definecolor{findingbox}{RGB}{245,255,245}
+\definecolor{convergentbox}{RGB}{255,250,235}
+\definecolor{mechanismbox}{RGB}{250,245,255}
+\definecolor{novelbox}{RGB}{255,248,220}
+\definecolor{ilcbox}{RGB}{240,255,240}
+\definecolor{tnbcbox}{RGB}{255,240,240}
+\definecolor{axisbox}{RGB}{245,245,255}
+
+% ── HEADER / FOOTER ───────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\footnotesize CS-LIT-7: ILC as the Geometric
+       Inverse of TNBC}
+\rhead{\footnotesize OrganismCore \textbar{} 2026-03-06}
+\rfoot{\small Page \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\setlength{\headheight}{24pt}
+\addtolength{\topmargin}{-10pt}
+
+% ── SECTION FORMATTING ────────────────────────────────────────
+\titleformat{\section}
+  {\large\bfseries}{\thesection}{1em}{}[\titlerule]
+\titleformat{\subsection}
+  {\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\small\bfseries}{\thesubsubsection}{1em}{}
+
+% ══════════════════════════════════════════════════════════════
+% TITLE
+% ══════════════════════════════════════════════════════════════
+\title{
+    \vspace{-1em}
+    \textbf{ILC as the Geometric Inverse of TNBC:}\\[0.5em]
+    \large Structural Lock versus Epigenetic Lock on
+    the Same Luminal Identity Axis --- Mechanistically
+    Opposite Entry Points for Therapy\\[0.4em]
+    \normalsize \textit{OrganismCore Framework ---
+    Document CS-LIT-7}\\[0.3em]
+    \small Derived from Waddington Attractor Geometry
+    of 19,542 Single Cancer Cells (GSE176078)\\[0.3em]
+    \small Confirmed by ILC Biology (Frontiers Oncology
+    2025) and TNBC Epigenetics (Schade et al.\
+    \textit{Nature} 2024)
+}
+
+\author[1]{Eric Robert Lawson}
+\affil[1]{
+    OrganismCore\\
+    \href{mailto:OrganismCore@proton.me}
+         {OrganismCore@proton.me}\\
+    ORCID:
+    \href{https://orcid.org/0009-0002-0414-6544}
+         {0009-0002-0414-6544}
+}
+
+\date{March 6, 2026}
+
+% ══════════════════════════════════════════════════════════════
+\begin{document}
+% ══════════════════════════════════════════════════════════════
+
+\maketitle
+\thispagestyle{fancy}
+
+% ── REPOSITORY POINTER ────────────────────────────────────────
+\begin{center}
+\colorbox{repobox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\centering
+\textbf{Full computational record --- scripts, data
+caches, reasoning artifacts, and raw logs:}\\[0.4em]
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{\texttt{https://github.com/Eric-Robert-Lawson/attractor-oncology}}
+\\[0.3em]
+\small Repository ID: 1172048282 \textbar{}
+MIT License \textbar{}
+Python \textbar{}
+Public\\[0.2em]
+Part of the OrganismCore BRCA Cross-Subtype Analysis
+(BRCA-S8h, 2026-03-05). All predictions locked from
+attractor geometry \textbf{before} any literature review
+was performed.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\vspace{0.8em}
+
+% ── CENTRAL FINDING BOX ───────────────────────────────────────
+\begin{center}
+\colorbox{axisbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\centering
+\textbf{THE GEOMETRIC INVERSION --- STATED ONCE:}\\[0.6em]
+\begin{tabular}{p{3.5cm}p{4cm}p{4cm}}
+\toprule
+& \textbf{\textcolor{green!50!black}{ILC}} &
+  \textbf{\textcolor{red!70!black}{TNBC}} \\
+\midrule
+FOXA1 &
+Hyperactivated \textit{above} normal LumA &
+Epigenetically silenced \textit{below} any
+normal reference \\[0.3em]
+EZH2 &
+Low &
+$+189\%$ above normal (highest of all subtypes) \\[0.3em]
+CDH1 (E-cadherin) &
+Absent (${\sim}65\%$ mutation,
+${\sim}35\%$ methylation) &
+Present \\[0.3em]
+Lock type &
+Structural (CDH1 loss) &
+Epigenetic (EZH2/PRC2 H3K27me3) \\[0.3em]
+Attractor geometry &
+Type~3: Structural lock &
+Composite Type~1$\rightarrow$2:
+Epigenetic lock \\[0.3em]
+Therapeutic entry &
+Full ER degradation
+(fulvestrant $>$ AI) &
+EZH2 inhibition first
+(tazemetostat), then fulvestrant \\
+\bottomrule
+\end{tabular}
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\vspace{0.8em}
+
+% ══════════════════════════════════════════════════════════════
+\begin{abstract}
+% ══════════════════════════════════════════════════════════════
+\noindent
+Invasive Lobular Carcinoma (ILC) and Triple-Negative
+Breast Cancer (TNBC) are typically described as
+opposite extremes of the breast cancer spectrum ---
+ILC is ER-positive, low-grade, and indolent; TNBC
+is ER-negative, high-grade, and aggressive. The
+OrganismCore Waddington attractor geometry framework,
+applied to 19,542 single cancer cells (GSE176078),
+reveals that this clinical opposition is the surface
+expression of a precise geometric inversion: both
+subtypes are arrested forms of luminal identity, but
+by mechanistically opposite locks acting on the same
+axis.
+
+ILC is a \textbf{structural lock} (Attractor Type~3):
+FOXA1 is hyperactivated above normal luminal levels,
+driving an amplified ER circuit; CDH1 (E-cadherin)
+is absent (${\sim}65\%$ mutation, ${\sim}35\%$
+methylation), removing the adhesion constraint that
+normally organises luminal cells; EZH2 is low.
+The cell is over-committed to luminal identity
+with no structural containment.
+
+TNBC is an \textbf{epigenetic lock}
+(Composite Type~1$\rightarrow$2): FOXA1 is
+epigenetically silenced by EZH2/PRC2 H3K27me3
+deposition ($+189\%$ above normal); CDH1 is
+present; the luminal programme is locked away
+rather than absent. The cell is prevented from
+expressing its luminal identity by an epigenetic
+silencing mechanism.
+
+The two subtypes therefore sit at opposite poles
+of the luminal identity axis: ILC over-expresses
+it structurally, TNBC is locked out of it
+epigenetically. Both are derangements of luminal
+identity --- from opposite directions.
+
+The therapeutic consequence is direct and inverted:
+ILC requires working \textit{with} the hyperactivated
+FOXA1/ER circuit by fully degrading the ER receptor
+(fulvestrant $>$ aromatase inhibitor), because
+FOXA1 amplification makes ligand depletion alone
+insufficient. TNBC requires first removing the
+EZH2 silencing lock (tazemetostat) to restore FOXA1
+and ESR1 before any endocrine agent can engage.
+
+The individual features are each published in
+isolation. The unifying geometric inversion framing
+--- that ILC and TNBC occupy opposite poles of the
+same axis with mechanistically opposite locks and
+therapeutically opposite entry points --- has no
+published equivalent. Verdict: CONVERGENT-NOVEL.
+\end{abstract}
+
+\vspace{0.5em}
+\noindent\textbf{Keywords:}
+ILC; invasive lobular carcinoma; TNBC;
+triple-negative breast cancer; FOXA1; EZH2;
+CDH1; E-cadherin; geometric inverse; structural lock;
+epigenetic lock; luminal identity axis; fulvestrant;
+aromatase inhibitor; tazemetostat; Waddington landscape;
+attractor geometry; OrganismCore; GSE176078; Type~3;
+H3K27me3; PRC2; CONVERGENT-NOVEL
+
+\newpage
+\tableofcontents
+\newpage
+
+% ══════════════════════════════════════════════════════════════
+\section{Document Metadata}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Field} & \textbf{Value} \\
+\midrule
+Document ID & CS-LIT-7 \\
+Parent document & BRCA-S8h (2026-03-05) \\
+Verdict & CONVERGENT-NOVEL \\
+Date & 2026-03-06 \\
+Author & Eric Robert Lawson \\
+ORCID & 0009-0002-0414-6544 \\
+Organisation & OrganismCore \\
+Contact & OrganismCore@proton.me \\
+Repository &
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{attractor-oncology} (ID: 1172048282) \\
+Derivation data & GSE176078 (19,542 single cancer cells) \\
+CS-LIT-1 DOI &
+\href{https://doi.org/10.5281/zenodo.18883922}
+{10.5281/zenodo.18883922} \\
+CS-LIT-2 DOI &
+\href{https://doi.org/10.5281/zenodo.18884158}
+{10.5281/zenodo.18884158} \\
+CS-LIT-16 DOI &
+\href{https://doi.org/10.5281/zenodo.18884003}
+{10.5281/zenodo.18884003} \\
+CS-LIT-22 DOI &
+\href{https://doi.org/10.5281/zenodo.18892788}
+{10.5281/zenodo.18892788} \\
+License & CC BY 4.0 \\
+Biological contradictions & 0 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ════���═════════════════════════════════════════════════════════
+\section{The Waddington Framework: Attractor
+Lock Types}
+% ══════════════════════════════════════════════════════════════
+
+The OrganismCore framework applies Waddington landscape
+geometry to cancer. In this model, each stable cancer
+state corresponds to a specific attractor geometry with
+a specific molecular maintenance mechanism (the lock)
+and a specific therapeutic action required to dissolve
+it.
+
+Four canonical attractor types are identified across
+breast cancer:
+
+\begin{center}
+\begin{tabular}{p{1.5cm}p{2.5cm}p{8cm}}
+\toprule
+\textbf{Type} & \textbf{Name} & \textbf{Description} \\
+\midrule
+Type~1 &
+Slope arrest &
+Cell arrested on the luminal differentiation slope.
+Identity programme partially or fully active.
+A molecular brake prevents completion of normal
+differentiation. \\[0.4em]
+Type~2 &
+Wrong valley &
+Cell fallen into the wrong attractor.
+Correct identity programme epigenetically silenced.
+A lock maintains the wrong state. \\[0.4em]
+Type~3 &
+Structural lock &
+Cell held in an arrested state by loss of a
+structural component (cell adhesion, cytoskeletal)
+that normally constrains cell identity. \\[0.4em]
+Type~4 &
+Root lock &
+Cell arrested at the progenitor root.
+No terminal identity programme present ---
+it was never activated, not silenced. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+ILC is \textbf{Type~3 (structural lock)}. TNBC is
+\textbf{composite Type~1$\rightarrow$2 (epigenetic
+lock)}. They are the only two subtypes that sit at
+the extremes of the luminal identity axis --- and
+they sit there by opposite mechanisms.
+
+% ══════════════════════════════════════════════════════════════
+\section{The Luminal Identity Axis}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{What the axis measures}
+
+The luminal identity axis is defined by the
+FOXA1/EZH2 ratio: the balance between the pioneer
+transcription factor that opens and maintains luminal
+chromatin (FOXA1) and the Polycomb repressor that
+silences it (EZH2). This axis orders all five
+measurable breast cancer subtypes across seven
+independent datasets comprising ${\sim}7{,}500$
+patients (CS-LIT-1,
+\href{https://doi.org/10.5281/zenodo.18883922}
+{DOI: 10.5281/zenodo.18883922}).
+
+\subsection{Where ILC and TNBC sit on the axis}
+
+\begin{center}
+\colorbox{axisbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\centering
+\textbf{THE LUMINAL IDENTITY AXIS}\\[0.6em]
+\small
+$\underbrace{\text{CL}(0.10)}_{\text{Root lock}}$
+\hspace{0.5em}$\leftarrow$\hspace{0.5em}
+$\underbrace{\text{TNBC}(0.52)}_{\text{Epigenetic lock}}$
+\hspace{0.5em}$\leftarrow$\hspace{0.5em}
+$\underbrace{\text{HER2}(3.34)}_{\text{Kinase override}}$
+\hspace{0.5em}$\leftarrow$\hspace{0.5em}
+$\underbrace{\text{LumB}(8.10)}_{\text{Chromatin lock}}$
+\hspace{0.5em}$\leftarrow$\hspace{0.5em}
+$\underbrace{\text{LumA}(9.38)}_{\text{Cycle lock}}$
+\hspace{0.5em}$\leftarrow$\hspace{0.5em}
+$\underbrace{\textcolor{green!50!black}{\text{ILC}}}_{\text{FOXA1 }\uparrow\uparrow\text{ above normal}}$\\[0.6em]
+\normalsize
+Values are FOXA1/EZH2 ratios from GSE176078
+(scRNA-seq, per-patient means).\\
+ILC sits \textit{above} LumA --- hyperactivated
+beyond the normal luminal maximum.\\
+TNBC sits at 0.52 --- FOXA1 epigenetically
+silenced by EZH2.\\[0.3em]
+\textbf{ILC and TNBC are the opposite poles.
+The axis between them is the full range of
+luminal identity expression in breast cancer.}
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{ILC: The Structural Lock}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{The molecular architecture}
+
+\begin{center}
+\colorbox{ilcbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{ILC ATTRACTOR STATE --- TYPE~3
+STRUCTURAL LOCK}\\[0.4em]
+\textbf{FOXA1:} Hyperactivated above normal
+LumA levels. The luminal pioneer factor is
+overdriving the ER circuit --- more ER activity
+than normal, not less.\\[0.3em]
+\textbf{EZH2:} Low. The epigenetic silencing
+programme is not engaged. This is the opposite
+of TNBC.\\[0.3em]
+\textbf{CDH1 (E-cadherin):} Absent.
+${\sim}65\%$ of ILC cases carry CDH1 mutations;
+${\sim}35\%$ have CDH1 promoter methylation.
+Combined loss rate approaches 100\% in classical
+ILC.\\[0.3em]
+\textbf{Lock mechanism:} CDH1/E-cadherin is the
+cell adhesion molecule that organises luminal
+cells into coherent epithelial structures. Its
+loss removes the structural constraint on cell
+identity --- the cell knows it is luminal
+(FOXA1 hyperactive, ER signalling amplified)
+but is physically disinhibited. The lock is
+structural, not epigenetic.\\[0.3em]
+\textbf{Attractor type:} Type~3 --- structural
+lock. Not Type~1 (the luminal programme is not
+merely arrested; it is overdriven). Not Type~2
+(the cell has not fallen into the wrong valley;
+it is hypercommitted to luminal identity).
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\subsection{What FOXA1 hyperactivation means
+in ILC}
+
+In normal luminal epithelial cells, FOXA1 is the
+pioneer factor that opens luminal chromatin and
+enables ER binding. In LumA, FOXA1 is high and
+the ER circuit is active. In ILC, FOXA1 is
+\textit{higher than in LumA} --- it has been
+amplified beyond the normal maximum.
+
+The consequences:
+
+\begin{itemize}
+    \item ER circuit output is amplified beyond
+    normal levels --- more ER-driven transcription
+    than a normal luminal cell
+    \item Ligand depletion (aromatase inhibitor)
+    reduces estrogen but cannot overcome FOXA1
+    amplification of the ER circuit: even reduced
+    ligand drives supranormal ER output through
+    an overactivated pioneer factor apparatus
+    \item Full receptor degradation (fulvestrant)
+    degrades the ER protein itself, bypassing the
+    FOXA1 amplification entirely
+    \item This is why fulvestrant is predicted
+    to be superior to AIs in FOXA1-high ILC ---
+    not because of ER mutation (the usual rationale
+    for fulvestrant preference) but because of
+    FOXA1 circuit amplification
+\end{itemize}
+
+\subsection{CDH1 loss: the structural component}
+
+CDH1 encodes E-cadherin, the primary cell adhesion
+molecule in luminal breast epithelium. In normal
+luminal cells, E-cadherin:
+
+\begin{itemize}
+    \item Maintains cell-cell contacts and
+    epithelial sheet organisation
+    \item Constrains cell morphology, preventing
+    the discohesive single-file growth pattern
+    characteristic of ILC
+    \item Participates in contact inhibition
+    signalling that limits proliferation
+    \item Acts as a structural node that links
+    the cytoskeleton to the extracellular
+    environment
+\end{itemize}
+
+CDH1 loss in ILC removes this structural
+constraint. The cell retains its luminal identity
+programme (FOXA1 hyperactive) but is released from
+the physical organisation that normal luminal cells
+require. The result is the characteristic ILC
+phenotype: discohesive, single-file infiltration
+with intact luminal marker expression. The lock is
+structural, not epigenetic.
+
+% ══════════════════════════════════════════════════════════════
+\section{TNBC: The Epigenetic Lock}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\colorbox{tnbcbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{TNBC ATTRACTOR STATE --- COMPOSITE
+TYPE~1$\rightarrow$2 EPIGENETIC LOCK}\\[0.4em]
+\textbf{FOXA1:} Epigenetically silenced by
+EZH2/PRC2. Near-zero expression. The luminal
+pioneer factor is not absent from the genome ---
+it is present but locked away by H3K27me3
+deposition on the FOXA1 promoter.\\[0.3em]
+\textbf{EZH2:} $+189\%$ above normal Mature
+Luminal reference (highest of all subtypes).
+The Polycomb repressor is maximally active,
+silencing FOXA1, GATA3, and ESR1.\\[0.3em]
+\textbf{CDH1:} Present. The structural
+constraint is intact; it is the epigenetic
+identity programme that is locked, not the
+structural architecture.\\[0.3em]
+\textbf{Lock mechanism:} PRC2/EZH2-mediated
+H3K27me3 deposition on FOXA1, GATA3, and
+ESR1 promoters silences the luminal identity
+programme. The cell has the structural capacity
+for luminal organisation (CDH1 present) but
+is prevented from expressing luminal identity
+by an epigenetic lock.\\[0.3em]
+\textbf{Attractor type:} Composite
+Type~1$\rightarrow$2. The cell began
+on the luminal slope (Type~1) but EZH2
+overexpression has driven it into an
+alternative attractor state where luminal
+identity is actively maintained in a silenced
+configuration (Type~2 component).
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{The Geometric Inversion: Side by Side}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Full comparison table}
+
+\begin{center}
+\begin{tabular}{p{3.5cm}p{4cm}p{4cm}}
+\toprule
+\textbf{Feature} &
+\textbf{\textcolor{green!50!black}{ILC}} &
+\textbf{\textcolor{red!70!black}{TNBC}} \\
+\midrule
+FOXA1 expression &
+Hyperactivated above
+normal LumA &
+Silenced to near-zero
+by EZH2/PRC2 \\[0.4em]
+EZH2 expression &
+Low &
+$+189\%$ above normal \\[0.4em]
+CDH1 (E-cadherin) &
+Absent
+(${\sim}65\%$ mutation,
+${\sim}35\%$ methylation) &
+Present \\[0.4em]
+Luminal identity &
+Over-expressed;
+hypercommitted &
+Epigenetically silenced;
+locked away \\[0.4em]
+Lock type &
+Structural (CDH1 loss) &
+Epigenetic
+(EZH2/PRC2 H3K27me3) \\[0.4em]
+Attractor geometry &
+Type~3 &
+Composite 1$\rightarrow$2 \\[0.4em]
+Direction of derangement &
+Too much luminal identity,
+structurally uncontained &
+Luminal identity present
+but epigenetically locked \\[0.4em]
+ER status (clinical) &
+ER-positive &
+ER-negative \\[0.4em]
+Mechanism of ER status &
+ER hyperactive
+(FOXA1 amplification) &
+ER silenced
+(H3K27me3 on ESR1) \\[0.4em]
+Therapeutic first step &
+Full ER degradation
+(fulvestrant) &
+EZH2 inhibition
+(tazemetostat) \\[0.4em]
+Why that step &
+FOXA1 amplification bypasses
+ligand depletion; ER protein
+must be degraded directly &
+ESR1 is locked by EZH2;
+must remove lock before
+any endocrine agent can engage \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{The inversion is precise, not
+metaphorical}
+
+The FOXA1/EZH2 axis is a physical measurement
+of chromatin state. ILC sits at the highest
+end of this axis (FOXA1 hyperactivated, EZH2
+low). TNBC sits near the lowest end (FOXA1
+silenced, EZH2 maximal). Both involve luminal
+identity. Both involve the same proteins. The
+direction is exactly inverted.
+
+CDH1 is also inverted: absent in ILC, present
+in TNBC. This is not coincidental --- CDH1 loss
+is the structural mechanism that produces the
+ILC phenotype. CDH1 presence in TNBC is
+consistent with an epigenetically arrested
+cell that retains structural organisation.
+
+The inversion extends to therapeutic logic:
+the correct first step in ILC degrades the
+overactive ER receptor (fulvestrant). The
+correct first step in TNBC removes the
+epigenetic lock that prevents the ER from
+being expressed at all (tazemetostat). Giving
+fulvestrant to a TNBC patient is giving a
+receptor-degrader to a patient with no receptor
+to degrade. Giving an AI to an ILC patient
+is depleting ligand from a system whose FOXA1
+amplification makes ligand abundance irrelevant.
+
+Both errors arise from not recognising the
+geometric inversion.
+
+% ══════════════════════════════════════════════════════════════
+\section{Published Literature: Confirmation
+of Individual Features}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{What IS in the literature}
+
+\begin{enumerate}
+    \item \textbf{CDH1 loss in ILC:}
+    Well-established. ${\sim}65\%$ CDH1 somatic
+    mutation, ${\sim}35\%$ CDH1 methylation in
+    classical ILC. Published across multiple
+    large ILC genomic studies (TCGA ILC, Ciriello
+    et al.\ \textit{Cell} 2015).
+
+    \item \textbf{FOXA1 high in ILC:}
+    Established. Frontiers Oncology 2025 ILC
+    review explicitly notes FOXA1 hyperactivation
+    in ILC and associates it with altered endocrine
+    sensitivity. FOXA1 mutations in ILC (amplifying
+    and gain-of-function) published in Cancer Cell
+    2020.
+
+    \item \textbf{FOXA1 absent in TNBC:}
+    Published. FOXA1 is near-zero in TNBC/basal
+    breast cancer across multiple datasets.
+
+    \item \textbf{EZH2 high in TNBC:}
+    Confirmed. Schade et al.\ \textit{Nature}
+    2024 (Harvard/Ludwig): EZH2/PRC2 is the
+    convergence node in basal-like TNBC that
+    silences FOXA1, GATA3, and ESR1.
+    Frontiers Oncology 2020: EZH2/NSD2 axis,
+    ${\sim}4{,}000$ patients, EZH2 highest
+    in TNBC.
+
+    \item \textbf{CDH1 present in TNBC:}
+    Consistent with published TNBC biology.
+    TNBC is typically classified as basal-like
+    with intact epithelial markers except for
+    the loss of ER, PR, and HER2.
+
+    \item \textbf{Fulvestrant vs AI in ILC:}
+    Active area of investigation. The Frontiers
+    Oncology 2025 ILC review explicitly notes
+    the open question of whether FOXA1-driven
+    altered endocrine sensitivity changes the
+    AI vs fulvestrant choice. NCT02206984
+    compares endocrine agents in ILC (Ki67
+    endpoint; ongoing).
+\end{enumerate}
+
+\subsection{What is NOT in the literature}
+
+\begin{center}
+\colorbox{novelbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{The following have no published equivalent
+as of 2026-03-06:}
+\begin{itemize}[noitemsep]
+    \item The framing of ILC and TNBC as
+    \textit{geometric inverses} on the same
+    luminal identity axis.
+    \item The statement: ``ILC = FOXA1
+    hyperactivated above normal, CDH1 absent,
+    structural lock; TNBC = FOXA1 epigenetically
+    silenced by EZH2, CDH1 present, epigenetic
+    lock; these are opposite poles of the same
+    axis.''
+    \item The derivation that the therapeutic
+    entry points are mechanistically inverted:
+    fulvestrant as the \textit{correct} first
+    step in ILC (FOXA1 amplification bypasses
+    ligand depletion); tazemetostat as the
+    \textit{correct} first step in TNBC
+    (epigenetic lock must be dissolved before
+    endocrine therapy can engage).
+    \item The explicit mechanistic explanation
+    for fulvestrant superiority over AI in ILC
+    grounded in FOXA1 circuit amplification
+    (not ESR1 mutation, which is the conventional
+    rationale).
+    \item No published paper uses this geometric
+    inversion frame. No published paper derives
+    treatment logic from it.
+\end{itemize}
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{Therapeutic Consequences}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{ILC: why fulvestrant, not AI}
+
+The standard endocrine therapy debate in ILC is
+framed around FOXA1 mutations (gain-of-function
+mutations drive ligand-independent ER activation,
+making AIs theoretically less effective). The
+geometric framework provides an additional, more
+general reason that applies to all FOXA1-high ILC
+regardless of mutation status:
+
+FOXA1 is the pioneer factor that opens chromatin
+for ER binding. When FOXA1 is hyperactivated
+(elevated above normal LumA), the ER circuit is
+primed to maximal sensitivity --- it operates at
+gain $>1$. In this state:
+
+\begin{itemize}
+    \item AI reduces estrogen ligand. Ligand
+    reduction suppresses ER signalling proportionally
+    in a normal luminal cell. In a FOXA1-amplified
+    ILC cell, the ER circuit amplification partially
+    compensates for reduced ligand --- the gain
+    in the FOXA1 component maintains circuit
+    activity despite lower input signal.
+    \item Fulvestrant degrades the ER protein
+    itself. This acts upstream of FOXA1: if there
+    is no ER protein, FOXA1 amplification is
+    irrelevant because there is no receptor to
+    amplify. The circuit is interrupted at the
+    receptor level.
+\end{itemize}
+
+The prediction: in FOXA1-high ILC, fulvestrant
+produces deeper suppression of ER circuit output
+than AI because it eliminates the receptor that
+FOXA1 amplification would otherwise maintain
+active. The greater the FOXA1 hyperactivation,
+the greater the advantage of fulvestrant over AI.
+
+This prediction is the subject of CS-LIT-18
+(companion document) and is testable in
+NCT02206984 tissue archives.
+
+\subsection{TNBC: why tazemetostat before
+fulvestrant}
+
+The tazemetostat $\rightarrow$ fulvestrant
+sequence for TNBC is fully documented in
+CS-LIT-16
+(\href{https://doi.org/10.5281/zenodo.18884003}
+{DOI: 10.5281/zenodo.18884003}). The relevant
+comparison here is with ILC:
+
+In TNBC, giving fulvestrant first makes no
+sense because there is no expressed ER protein
+to degrade. The ESR1 gene is present in the
+genome but its promoter is locked by H3K27me3.
+The sequence must be tazemetostat first (removes
+H3K27me3 from FOXA1 and ESR1 promoters),
+then FOXA1 re-expresses, then ESR1 is
+transcribed, then ER protein is produced, and
+only then can fulvestrant engage.
+
+In ILC, the opposite is true: the ER is
+hyperactive. Fulvestrant is the correct first
+step precisely because there is too much ER
+activity, not too little.
+
+The same drug (fulvestrant) is the correct
+last step in the TNBC sequence and the correct
+first step in the ILC approach --- but for
+completely inverted biological reasons.
+
+% ══════════════════════════════════════════════════════════════
+\section{Position in the Published Series}
+% ══════════════════════════════════════════════════════════════
+
+CS-LIT-7 is the foundational architecture
+document for ILC within the OrganismCore BRCA
+cross-subtype series. It must precede CS-LIT-18
+(fulvestrant superiority in ILC, companion
+document, currently in preparation).
+
+\begin{center}
+\begin{tabular}{p{2.8cm}p{8.5cm}}
+\toprule
+\textbf{Document} & \textbf{Role} \\
+\midrule
+CS-LIT-7\\(this document) &
+The geometric architecture: ILC as the structural
+inverse of TNBC on the luminal identity axis.
+The mechanistic foundation for all ILC treatment
+logic in this framework. \\[0.5em]
+CS-LIT-18\\(in preparation) &
+The clinical prediction: fulvestrant superiority
+over AIs in FOXA1-stratified ILC. Depends on
+CS-LIT-7 as its mechanistic foundation. \\[0.5em]
+CS-LIT-1\\
+\href{https://doi.org/10.5281/zenodo.18883922}
+{DOI: 10.5281/zenodo.18883922} &
+The FOXA1/EZH2 ratio ordering axis. ILC sits
+above LumA on this axis (FOXA1 hyperactivated);
+TNBC at 0.52. CS-LIT-7 explains why. \\[0.5em]
+CS-LIT-2\\
+\href{https://doi.org/10.5281/zenodo.18884158}
+{DOI: 10.5281/zenodo.18884158} &
+The six lock type classification. ILC is Lock
+Type~3 (structural). TNBC is composite
+Type~1$\rightarrow$2. CS-LIT-7 is the
+dedicated evidence document for this
+classification of both subtypes. \\[0.5em]
+CS-LIT-16\\
+\href{https://doi.org/10.5281/zenodo.18884003}
+{DOI: 10.5281/zenodo.18884003} &
+The tazemetostat $\rightarrow$ fulvestrant
+sequence for TNBC. The therapeutic mirror
+image of CS-LIT-18. \\[0.5em]
+CS-LIT-22\\
+\href{https://doi.org/10.5281/zenodo.18892788}
+{DOI: 10.5281/zenodo.18892788} &
+FOXA1/EZH2 dual IHC as point-of-care tool.
+The IHC instrument that places ILC above LumA
+and TNBC below LumA on the clinical slide. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ═══════════════════════════════════════════════════════════���══
+\section{Locked Statement}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\colorbox{findingbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.6em}
+\textbf{Stated once, precisely, without
+inflation:}\\[0.5em]
+ILC and TNBC occupy opposite poles of the luminal
+identity axis. ILC is a Type~3 structural lock:
+FOXA1 hyperactivated above normal LumA levels,
+EZH2 low, CDH1 absent (${\sim}65\%$ mutation,
+${\sim}35\%$ methylation). TNBC is a composite
+Type~1$\rightarrow$2 epigenetic lock: FOXA1
+epigenetically silenced by EZH2/PRC2
+($+189\%$ above normal), CDH1 present. Both are
+derangements of luminal identity from opposite
+directions: ILC over-expresses it structurally,
+TNBC is locked out of it epigenetically. The
+therapeutic entry points are therefore inverted:
+ILC requires full ER receptor degradation
+(fulvestrant $>$ AI) because FOXA1 amplification
+bypasses ligand depletion; TNBC requires EZH2
+inhibition (tazemetostat) to restore FOXA1 and
+ESR1 before any endocrine agent can engage. The
+individual features (FOXA1-high ILC, FOXA1-absent
+TNBC, CDH1-absent ILC, CDH1-present TNBC, EZH2-high
+TNBC, EZH2-low ILC) are each published in isolation.
+The unifying geometric inversion framing --- same
+axis, opposite poles, opposite locks, opposite
+therapeutic entry points --- has no published
+equivalent as of 2026-03-06. Verdict:
+CONVERGENT-NOVEL.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\end{document}

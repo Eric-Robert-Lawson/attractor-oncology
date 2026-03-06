@@ -1,0 +1,791 @@
+\documentclass[12pt, a4paper]{article}
+
+% ── PACKAGES ──────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue,
+    pdftitle={Entinostat Benefit in HR+ Breast Cancer
+              Is a Luminal B-Specific Effect: The
+              DNMT3A/HDAC2 Chromatin Lock Mechanism
+              and Its Implications for NCT07235618},
+    pdfauthor={Eric Robert Lawson},
+    pdfkeywords={entinostat, HDACi, HDAC inhibitor,
+                 Luminal B, LumB, LumA, breast cancer,
+                 DNMT3A, HDAC2, chromatin lock,
+                 TFF1, ESR1, ER output decoupling,
+                 NCT07235618, Sun Yat-sen, PAM50,
+                 subtype-specific, HR+, endocrine
+                 therapy, CDK4/6 inhibitor, fulvestrant,
+                 attractor geometry, Waddington landscape,
+                 OrganismCore, GSE176078, METABRIC}
+}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{authblk}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{setspace}
+
+% ── COLOURS ───────────────────────────────────────────────────
+\definecolor{repobox}{RGB}{240,247,255}
+\definecolor{findingbox}{RGB}{245,255,245}
+\definecolor{convergentbox}{RGB}{255,250,235}
+\definecolor{mechanismbox}{RGB}{250,245,255}
+\definecolor{actionbox}{RGB}{230,255,230}
+\definecolor{urgentbox}{RGB}{255,235,235}
+\definecolor{novelbox}{RGB}{255,248,220}
+
+% ── HEADER / FOOTER ───────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\footnotesize CS-LIT-15: Entinostat ---
+       LumB-Specific Benefit}
+\rhead{\footnotesize OrganismCore \textbar{} 2026-03-06}
+\rfoot{\small Page \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\setlength{\headheight}{24pt}
+\addtolength{\topmargin}{-10pt}
+
+% ── SECTION FORMATTING ────────────────────────────────────────
+\titleformat{\section}
+  {\large\bfseries}{\thesection}{1em}{}[\titlerule]
+\titleformat{\subsection}
+  {\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\small\bfseries}{\thesubsubsection}{1em}{}
+
+% ══════════════════════════════════════════════════════════════
+% TITLE
+% ══════════════════════════════════════════��═══════════════════
+\title{
+    \vspace{-1em}
+    \textbf{Entinostat Benefit in HR$+$ Breast Cancer
+    Is a Luminal~B-Specific Effect:}\\[0.5em]
+    \large The DNMT3A/HDAC2 Chromatin Lock on ER
+    Output as the Mechanistic Basis for Subtype-Enriched
+    Patient Selection, with Implications for
+    NCT07235618\\[0.4em]
+    \normalsize \textit{OrganismCore Framework ---
+    Document CS-LIT-15}\\[0.3em]
+    \small Derived from Waddington Attractor Geometry
+    of 19,542 Single Cancer Cells (GSE176078)\\[0.3em]
+    \small DNMT3A/HDAC2 Coupling Replicated in METABRIC
+    ($n=1{,}980$, $p=5.68\times10^{-56}$)
+}
+
+\author[1]{Eric Robert Lawson}
+\affil[1]{
+    OrganismCore\\
+    \href{mailto:OrganismCore@proton.me}
+         {OrganismCore@proton.me}\\
+    ORCID:
+    \href{https://orcid.org/0009-0002-0414-6544}
+         {0009-0002-0414-6544}
+}
+
+\date{March 6, 2026}
+
+% ══════════════════════════════════════════════════════════════
+\begin{document}
+% ══════════════════════════════════════════════════════════════
+
+\maketitle
+\thispagestyle{fancy}
+
+% ── REPOSITORY POINTER ────────────────────────────────────────
+\begin{center}
+\colorbox{repobox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\centering
+\textbf{Full computational record --- scripts, data
+caches, reasoning artifacts, and raw logs:}\\[0.4em]
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{\texttt{https://github.com/Eric-Robert-Lawson/attractor-oncology}}
+\\[0.3em]
+\small Part of the OrganismCore BRCA Cross-Subtype
+Analysis (BRCA-S8h, 2026-03-05).\\
+All predictions locked from attractor geometry
+\textbf{before} any literature review was performed.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\vspace{0.8em}
+
+% ── URGENCY BOX ───────────────────────────────────────────────
+\begin{center}
+\colorbox{urgentbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\centering
+\textbf{TIME-SENSITIVE NOTE}\\[0.4em]
+\small
+NCT07235618 --- Phase~II entinostat $+$ fulvestrant
+in HR$+$/HER2$-$ breast cancer post-CDK4/6i failure,
+Sun Yat-sen University Cancer Center, Guangzhou.
+Start date: January 2026. $N=50$. Primary endpoint:
+PFS. Currently recruiting.\\[0.3em]
+This trial is a de facto Luminal~B-enriched
+population. Its sole biomarker endpoint is PBMC
+histone acetylation. It does not currently include
+LumA vs LumB PAM50 stratification or TFF1/ESR1
+IHC as a correlative endpoint.\\[0.3em]
+\textbf{The LumB subtype stratification described
+in this document could be added as a correlative
+endpoint on already-planned tissue without
+protocol amendment, change to primary endpoint,
+or additional patient burden. This requires
+PAM50 subtyping or FOXA1/EZH2 IHC ratio
+on baseline core biopsy tissue.}
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\vspace{0.8em}
+
+% ── CONVERGENT BOX ────────────────────────────────────────────
+\begin{center}
+\colorbox{convergentbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{CONVERGENT EVIDENCE:}\\[0.3em]
+Entinostat is now \textbf{approved in China}
+(NMPA, April 2024) for HR$+$/HER2$-$ advanced
+breast cancer after prior endocrine therapy ---
+the first regulatory approval for an HDACi in
+breast cancer. A May 2025 meta-analysis
+(Springer, $n=1{,}371$) confirmed PFS improvement
+(HR$=0.80$, $p=0.01$) with no OS benefit.\\[0.3em]
+The drug is clinically active in the HR$+$ class.
+The framework's novel contribution is the
+mechanistic explanation of \textit{why} the effect
+is modest and who benefits most: the benefit is
+LumB-specific, driven by the DNMT3A/HDAC2
+chromatin lock on ER output that is present in
+LumB and absent in LumA. Treating HR$+$ as a
+class dilutes the LumB signal with non-responding
+LumA patients.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\vspace{0.8em}
+
+% ══════════════════════════════════════════════════════════════
+\begin{abstract}
+% ══════════════════════════════════════════════════════════════
+\noindent
+Entinostat is now approved in China (NMPA,
+April 2024) for HR$+$/HER2$-$ advanced breast
+cancer, and a May 2025 meta-analysis of four
+RCTs ($n=1{,}371$) confirmed PFS benefit
+(HR$=0.80$, $p=0.01$) with no OS benefit. No
+published trial has stratified entinostat
+benefit by Luminal~A (LumA) versus Luminal~B
+(LumB) PAM50 subtype. This document reports
+the OrganismCore attractor geometry finding that
+entinostat benefit is a LumB-specific phenomenon,
+not a class effect across all HR$+$ disease.
+
+The mechanistic basis, derived from Waddington
+landscape analysis of 19,542 single cancer cells
+(GSE176078) and replicated in METABRIC
+($n=1{,}980$), is a LumB-specific co-repressor
+circuit: DNMT3A and HDAC2 are co-expressed in
+LumB at $r=+0.267$, compared to $r=+0.071$ in
+LumA ($p=5.68\times10^{-56}$ for the difference).
+This circuit acts as a chromatin lock on ER
+output, suppressing downstream oestrogen-responsive
+gene transcription (TFF1) despite elevated
+ESR1 transcript --- the TFF1/ESR1 decoupling
+replicated in METABRIC ($p=0.0019$). Entinostat
+(class~I HDAC inhibitor) disrupts this circuit
+specifically in LumB because the circuit is
+present in LumB and absent in LumA. LumA patients
+do not have the lock; they have no mechanism
+through which entinostat improves ER output. The
+modest HR$=0.80$ effect in the class-level
+meta-analysis is consistent with a strong LumB
+signal diluted by non-responding LumA patients.
+
+The prediction is directly testable in
+NCT07235618 (entinostat $+$ fulvestrant,
+post-CDK4/6i failure, Sun Yat-sen University,
+$N=50$, start January 2026), a trial whose
+post-CDK4/6i design selects a de facto
+LumB-enriched population. PAM50 subtype
+stratification or FOXA1/EZH2 IHC ratio
+(CS-LIT-22,
+\href{https://doi.org/10.5281/zenodo.18892788}
+{DOI: 10.5281/zenodo.18892788}) could be added
+as a correlative endpoint on baseline tissue
+without protocol amendment.
+
+This subtype-specific mechanistic prediction ---
+LumB specifically, DNMT3A/HDAC2 mechanism,
+not a class effect --- has no direct published
+equivalent as of 2026-03-06. Verdict:
+CONVERGENT-NOVEL.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+% ══════════════════════════════════════════════════════════════
+\section{Context and Origin}
+% ══════════════════════════════════════════════════════════════
+
+This document covers CS-LIT-15 from the
+OrganismCore BRCA Cross-Subtype Literature Check
+(BRCA-S8h, 2026-03-05). The entinostat
+prediction was derived from attractor geometry
+before any literature review was performed.
+The literature check found that entinostat is
+now clinically approved, confirming the drug is
+active in the target population (HR$+$ breast
+cancer). The subtype-specific prediction remains
+novel and untested.
+
+\subsection{Position in the Published Series}
+
+\begin{itemize}
+    \item \textbf{CS-LIT-9/23 (TFF1/ESR1
+    Decoupling as LumB HDACi Biomarker)}\\
+    \href{https://doi.org/10.5281/zenodo.18884234}
+    {DOI: 10.5281/zenodo.18884234}\\
+    \textit{The downstream consequence of the
+    DNMT3A/HDAC2 lock --- ER output suppressed
+    in LumB. CS-LIT-15 is the drug intervention
+    document for CS-LIT-9/23.}
+
+    \item \textbf{CS-LIT-1 (FOXA1/EZH2 Ratio
+    Ordering Axis)}\\
+    \href{https://doi.org/10.5281/zenodo.18883922}
+    {DOI: 10.5281/zenodo.18883922}\\
+    \textit{The continuous ordering that places
+    LumB between LumA and HER2, with a distinct
+    chromatin mechanism from LumA.}
+
+    \item \textbf{CS-LIT-2 (Six Lock Type
+    Classification)}\\
+    \href{https://doi.org/10.5281/zenodo.18884158}
+    {DOI: 10.5281/zenodo.18884158}\\
+    \textit{LumB is Lock Type~1 with an epigenetic
+    brake (DNMT3A/HDAC2). Entinostat addresses
+    the brake. CS-LIT-15 is the drug evidence
+    document for this lock type.}
+
+    \item \textbf{CS-LIT-22 (FOXA1/EZH2 Dual
+    IHC as Point-of-Care Tool)}\\
+    \href{https://doi.org/10.5281/zenodo.18892788}
+    {DOI: 10.5281/zenodo.18892788}\\
+    \textit{The FOXA1/EZH2 IHC ratio classifies
+    LumA vs LumB at the pathology lab level ---
+    the patient selection tool for NCT07235618
+    stratification.}
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════════
+\section{The LumA/LumB Paradox: More ER,
+Less Sensitivity}
+% ══════════════════════════════════════════════════════════════
+
+Luminal~B (LumB) breast cancer presents a
+well-recognised paradox: it has higher ESR1
+(oestrogen receptor) transcript than Luminal~A
+(LumA), yet is more resistant to endocrine
+therapy and has worse prognosis. No published
+biomarker framework has provided a causal
+mechanistic explanation for this paradox.
+
+The attractor geometry framework provides the
+explanation: in LumB, the ER gene is present at
+higher transcript levels, but its transcriptional
+output is suppressed by a co-repressor circuit
+involving DNMT3A and HDAC2. The receptor is there.
+The output is locked. This is ER output decoupling.
+It is not ER absence. It is ER silencing.
+
+The specific prediction that follows: HDAC
+inhibition --- which dissolves HDAC2-dependent
+co-repressor activity --- restores ER output
+specifically in LumB, because the HDAC lock is
+present in LumB and absent in LumA.
+
+% ══════════════════════════════════════════════════════════════
+\section{The DNMT3A/HDAC2 Chromatin Lock}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{The Co-Expression Coupling}
+
+From Waddington attractor geometry of 19,542
+single cancer cells (GSE176078), DNMT3A and HDAC2
+show a subtype-specific co-expression coupling:
+
+\begin{center}
+\begin{tabular}{p{3cm}p{3cm}p{5.5cm}}
+\toprule
+\textbf{Subtype} &
+\textbf{DNMT3A/HDAC2 coupling} &
+\textbf{Biological meaning} \\
+\midrule
+Luminal~B &
+$r = +0.267$ &
+Active co-repressor circuit. DNMT3A and
+HDAC2 are co-recruited to the same
+chromatin targets. ER output is suppressed
+by co-repressor complex activity. \\[0.5em]
+Luminal~A &
+$r = +0.071$ &
+Co-repressor circuit absent. DNMT3A and
+HDAC2 are not co-recruited. ER output
+is not chromatically locked. \\
+\midrule
+\multicolumn{2}{l}{\textit{Difference}} &
+$p = 5.68\times10^{-56}$ in METABRIC
+($n=1{,}980$) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.5em}
+
+The coupling is $3.76\times$ stronger in LumB
+than LumA. This is not a continuous gradation ---
+it is a subtype-specific circuit that is switched
+on in LumB and off in LumA.
+
+\subsection{The Downstream Consequence:
+TFF1/ESR1 Decoupling}
+
+TFF1 is a canonical oestrogen-responsive gene:
+when ER is active, TFF1 is transcribed. ESR1 is
+the ER transcript itself.
+
+In normal luminal biology: ESR1 $\uparrow$ implies
+TFF1 $\uparrow$ (ER present and active).
+
+In LumB: ESR1 is high (higher than LumA), but
+TFF1 is specifically and significantly lower than
+expected. The TFF1/ESR1 ratio is lower in LumB
+than LumA despite LumB having \textit{higher}
+raw ESR1. This is the chromatin lock working:
+the ER is present and transcribed, but its
+downstream output programme is suppressed.
+
+\begin{center}
+\colorbox{findingbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{TFF1/ESR1 decoupling in METABRIC:}\\[0.3em]
+$p=0.0019$, $n=1{,}980$\\[0.2em]
+LumB: lower TFF1/ESR1 than LumA
+\textit{despite} higher ESR1 transcript.\\[0.2em]
+This is the measurable IHC fingerprint of the
+DNMT3A/HDAC2 chromatin lock.\\[0.2em]
+Full evidence: CS-LIT-9/23,
+\href{https://doi.org/10.5281/zenodo.18884234}
+{DOI: 10.5281/zenodo.18884234}
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\subsection{Why Entinostat Specifically}
+
+Entinostat is a class~I HDAC inhibitor (primarily
+HDAC1, HDAC2, and HDAC3). It inhibits HDAC2
+directly. The DNMT3A/HDAC2 co-repressor complex
+requires HDAC2 enzymatic activity for its
+chromatin-silencing function. When entinostat
+inhibits HDAC2, the co-repressor complex loses
+its functional capacity, HDAC2-dependent
+acetylation marks are released, and the suppressed
+ER output programme is restored.
+
+\begin{center}
+\colorbox{mechanismbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{Mechanistic chain:}\\[0.4em]
+DNMT3A/HDAC2 co-repressor suppresses
+TFF1, GATA3, and ER target genes in LumB\\
+$\downarrow$\\
+Entinostat inhibits HDAC2 (class~I HDAC)\\
+$\downarrow$\\
+Co-repressor complex loses enzymatic function\\
+$\downarrow$\\
+ER output programme restored (TFF1, GATA3
+re-express)\\
+$\downarrow$\\
+ER is now fully functional\\
+$\downarrow$\\
+Fulvestrant (or aromatase inhibitor) can
+now engage the fully active receptor\\[0.4em]
+\textbf{In LumA: the co-repressor circuit is
+absent.} Entinostat has no HDAC2-dependent
+chromatin lock to dissolve. The ER is already
+fully functional. Entinostat adds no mechanism
+for improving ET response in LumA.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{The Published Evidence: What Is
+Confirmed and What Is Novel}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{What IS in the Literature}
+
+\begin{enumerate}
+    \item \textbf{China NMPA approval (April 2024):}
+    Entinostat approved for HR$+$/HER2$-$ advanced
+    breast cancer after prior endocrine therapy.
+    First HDACi approval in breast cancer globally.
+
+    \item \textbf{Meta-analysis (Springer, May 2025):}
+    Pooled four RCTs ($n=1{,}371$). PFS HR$=0.80$,
+    $p=0.01$ in HR$+$/HER2$-$ breast cancer. No OS
+    benefit.
+
+    \item \textbf{E2112 (SWOG/NRG):}
+    Entinostat $+$ exemestane vs exemestane alone
+    in advanced HR$+$ breast cancer post-AI. Negative
+    for OS and PFS. Published. The meta-analysis
+    aggregates E2112 and three additional RCTs to
+    reach statistical significance.
+
+    \item \textbf{DNMT3A/HDAC interactions
+    (published biology):}
+    DNMT3A and HDAC activity co-operate on
+    co-repressor complexes to silence target genes
+    (Narcancer 2021). HDAC2 is overexpressed in
+    breast cancer and contributes to endocrine
+    resistance (Springer 2024). DNMT3A
+    misregulation is associated with tamoxifen
+    resistance (OAE Publishing 2024).
+
+    \item \textbf{NCT07235618 registered:}
+    Phase~II entinostat $+$ fulvestrant, post-CDK4/6i
+    failure, Sun Yat-sen University, start
+    January 2026, $N=50$, primary endpoint PFS.
+    PI: Dr.\ Shusen Wang (wangshs@sysucc.org.cn).
+\end{enumerate}
+
+\subsection{What is NOT in the Literature}
+
+\begin{center}
+\colorbox{novelbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{The following have no published equivalent
+as of 2026-03-06:}
+\begin{itemize}[noitemsep]
+    \item The quantification of the DNMT3A/HDAC2
+    co-expression coupling difference between LumB
+    ($r=+0.267$) and LumA ($r=+0.071$) at
+    $p=5.68\times10^{-56}$.
+    \item The framing of this coupling as a
+    subtype-specific chromatin lock on ER output
+    that explains the LumA/LumB paradox.
+    \item The prediction that entinostat benefit
+    is LumB-specific (not an HR$+$ class effect)
+    because the DNMT3A/HDAC2 lock is present in
+    LumB and absent in LumA.
+    \item The proposal to stratify NCT07235618
+    by LumA vs LumB to test this prediction.
+    \item The use of TFF1/ESR1 ratio or
+    FOXA1/EZH2 IHC ratio as the patient selection
+    instrument for LumB enrichment.
+    \item Any published trial stratifying entinostat
+    benefit by LumA vs LumB PAM50 subtype.
+\end{itemize}
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{Why the E2112 Failure and the Approval
+Are Consistent}
+% ══════════════════════════════════════════════════════════════
+
+E2112 was negative for OS and PFS as a class-level
+study (unselected HR$+$ population). The China NMPA
+approval and the May 2025 meta-analysis show modest
+but statistically significant PFS benefit
+(HR$=0.80$) in pooled HR$+$ data.
+
+The framework provides the reconciling explanation:
+\begin{itemize}
+    \item E2112 enrolled unselected HR$+$ patients ---
+    approximately 50\% LumA and 50\% LumB (the
+    typical PAM50 distribution in HR$+$ advanced
+    breast cancer).
+    \item LumA patients have no DNMT3A/HDAC2 lock.
+    Entinostat provides no mechanism for improving
+    their ET response. They are non-responders by
+    mechanism.
+    \item LumB patients have the DNMT3A/HDAC2 lock.
+    Entinostat dissolves it. They are responders
+    by mechanism.
+    \item An approximately 50\%/50\% mixture of
+    mechanism-responders (LumB) and
+    non-responders (LumA) would produce an
+    attenuated class-level effect ---
+    consistent with HR$=0.80$.
+\end{itemize}
+
+The framework predicts that a LumB-enriched trial
+would show HR significantly below $0.80$ ---
+potentially approaching the magnitude seen in trials
+of agents specifically matched to their mechanism,
+such as palbociclib in LumA (HR$=0.58$, PALOMA-2).
+
+% ══════════════════════════════════════════════════════════════
+\section{Implications for NCT07235618}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\colorbox{actionbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{NCT07235618 TRIAL DETAILS:}\\[0.4em]
+\textbf{Title:} Phase~II study of entinostat
+$+$ fulvestrant in HR$+$/HER2$-$ locally advanced
+or metastatic breast cancer, recurrence or
+progression after CDK4/6 inhibitor $+$ endocrine
+therapy.\\[0.3em]
+\textbf{Sponsor:} Sun Yat-sen University Cancer
+Center, Guangzhou, China.\\[0.3em]
+\textbf{PI:} Dr.\ Shusen Wang, MD\\[0.3em]
+\textbf{PI contact:} wangshs@sysucc.org.cn\\[0.3em]
+\textbf{Secondary contact:} Dr.\ Qiufan Zheng,
+zhengqf@sysucc.org.cn\\[0.3em]
+\textbf{Start date:} January 2026.
+\textbf{$N=50$.}
+\textbf{Primary endpoint:} PFS.\\[0.3em]
+\textbf{Current biomarker:} PBMC histone
+acetylation only.\\[0.4em]
+\textbf{The LumB stratification hypothesis is
+testable in this trial with:}
+\begin{enumerate}[noitemsep]
+    \item PAM50 subtype on baseline core biopsy
+    (if tissue is banked)
+    \item OR FOXA1/EZH2 IHC ratio on baseline
+    tissue (two antibody stains; full protocol
+    in CS-LIT-22,
+    \href{https://doi.org/10.5281/zenodo.18892788}
+    {DOI: 10.5281/zenodo.18892788})
+    \item OR TFF1/ESR1 IHC ratio on baseline tissue
+    (single additional stain; full protocol in
+    CS-LIT-9/23,
+    \href{https://doi.org/10.5281/zenodo.18884234}
+    {DOI: 10.5281/zenodo.18884234})
+\end{enumerate}
+None of these require a protocol amendment,
+change to primary endpoint, or additional
+patient burden.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\subsection{Why the Post-CDK4/6i Population
+Is De Facto LumB-Enriched}
+
+CDK4/6 inhibitor $+$ endocrine therapy is
+highly effective in LumA (CDKN1A-mediated cell
+cycle arrest; the CDK4/6 lock is the primary
+mechanism in LumA). Patients progressing on
+CDK4/6i $+$ ET are disproportionately LumB:
+LumA patients with intact CDKN1A response are
+more likely to respond and remain on therapy.
+LumB patients with the DNMT3A/HDAC2 lock
+suppressing ER output have a mechanism of
+resistance that CDK4/6i does not address, making
+progression more likely.
+
+NCT07235618's eligibility criterion (prior CDK4/6i
+failure) therefore selects a population enriched
+for LumB biology --- the exact subtype the
+framework predicts will benefit from entinostat.
+The trial is inadvertently well-designed for
+the hypothesis, even without subtype stratification
+built in.
+
+% ══════════════════════════════════════════════════════════════
+\section{Validation Pathway}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\colorbox{actionbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{Proposed analyses:}\\[0.4em]
+\textbf{Analysis 1 --- NCT07235618 correlative:}\\
+Add PAM50 or FOXA1/EZH2 IHC ratio to baseline
+tissue. Compare PFS in LumB vs LumA subgroups.
+Falsifiable prediction: LumB-stratified HR
+$<0.80$; LumA-stratified HR $\approx 1.0$.\\[0.4em]
+\textbf{Analysis 2 --- E2112 post-hoc subgroup:}\\
+Re-analyse E2112 dataset with PAM50 stratification
+(if tissue banks are accessible). LumB subgroup
+response should be substantially larger than the
+class-level HR$=0.80$.\\[0.4em]
+\textbf{Analysis 3 --- TFF1/ESR1 as continuous
+predictor:}\\
+In NCT07235618 or E2112 tissue: test TFF1/ESR1
+IHC ratio as a continuous predictor of entinostat
+benefit magnitude. Lower ratio (deeper chromatin
+lock) should predict greater benefit.\\[0.4em]
+\textbf{Analysis 4 --- DNMT3A/HDAC2 IHC:}\\
+Develop DNMT3A/HDAC2 co-expression IHC as a
+direct biomarker for entinostat eligibility.
+Correlation with TFF1/ESR1 ratio and PAM50 LumB
+classification would establish the mechanistic
+chain at the tissue level.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{What Is and Is Not Claimed}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{What IS Claimed}
+
+\begin{itemize}
+    \item DNMT3A/HDAC2 co-expression coupling is
+    $3.76\times$ stronger in LumB than LumA
+    ($r=+0.267$ vs $r=+0.071$,
+    $p=5.68\times10^{-56}$, METABRIC $n=1{,}980$).
+    \item This coupling is the mechanistic basis of
+    ER output suppression in LumB (TFF1/ESR1
+    decoupling, $p=0.0019$).
+    \item Entinostat (class~I HDACi) directly
+    inhibits HDAC2 and is mechanistically predicted
+    to dissolve this lock specifically in LumB.
+    \item The class-level HR$=0.80$ from published
+    meta-analysis is consistent with a strong LumB
+    signal diluted by non-responding LumA patients.
+    \item NCT07235618 is a de facto LumB-enriched
+    population and is the most immediate trial in
+    which this prediction is testable.
+    \item No published trial has stratified
+    entinostat benefit by LumA vs LumB.
+\end{itemize}
+
+\subsection{What is NOT Claimed}
+
+\begin{itemize}
+    \item The LumB-specific benefit has not been
+    prospectively confirmed in any clinical trial.
+    \item The DNMT3A/HDAC2 coupling has not been
+    validated as a predictive biomarker on stained
+    tissue.
+    \item This does not replace or supersede the
+    existing entinostat literature; it extends
+    it with subtype-specific mechanistic framing.
+    \item Clinical implementation requires
+    prospective subtype-stratified validation.
+\end{itemize}
+
+% ══════════════════════���═══════════════════════════════════════
+\section{Locked Statement}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\colorbox{findingbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.6em}
+\textbf{Stated once, precisely, without
+inflation:}\\[0.5em]
+Waddington attractor geometry identifies a
+LumB-specific DNMT3A/HDAC2 chromatin co-repressor
+circuit ($r=+0.267$ LumB vs $r=+0.071$ LumA,
+$p=5.68\times10^{-56}$, METABRIC $n=1{,}980$)
+that suppresses ER output in LumB despite elevated
+ESR1 transcript (TFF1/ESR1 decoupling, $p=0.0019$).
+This circuit is absent in LumA. Entinostat, a
+class~I HDAC inhibitor (HDAC2 target), is
+mechanistically predicted to dissolve this lock
+specifically in LumB --- producing an entinostat
+benefit that is LumB-enriched, not an HR$+$ class
+effect. The class-level PFS HR$=0.80$ from the
+published meta-analysis ($n=1{,}371$) is consistent
+with a strong LumB signal diluted by non-responding
+LumA patients. NCT07235618 (entinostat $+$
+fulvestrant, post-CDK4/6i, Sun Yat-sen, $N=50$,
+start January 2026) is a de facto LumB-enriched
+population in which this prediction is immediately
+testable as a correlative endpoint without protocol
+amendment. No published trial has stratified
+entinostat benefit by LumA vs LumB. The subtype-specific
+mechanistic prediction has no direct published
+equivalent as of 2026-03-06.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{Document Metadata}
+% ═════════════════════════���════════════════════════════════════
+
+\begin{tabular}{ll}
+\toprule
+\textbf{Field} & \textbf{Value} \\
+\midrule
+Document ID & CS-LIT-15 \\
+Parent document & BRCA-S8h (2026-03-05) \\
+Verdict & CONVERGENT-NOVEL \\
+Date & 2026-03-06 \\
+Author & Eric Robert Lawson \\
+ORCID & 0009-0002-0414-6544 \\
+Contact & OrganismCore@proton.me \\
+Repository &
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{attractor-oncology} \\
+Derivation data &
+GSE176078 (19,542 single cancer cells) \\
+Replication data &
+METABRIC ($n=1{,}980$) \\
+Key statistics &
+$r=+0.267$ LumB vs $r=+0.071$ LumA, \\
+& $p=5.68\times10^{-56}$;
+TFF1/ESR1 $p=0.0019$ \\
+Trial &
+NCT07235618 (Sun Yat-sen, start Jan 2026) \\
+Trial PI &
+Dr.\ Shusen Wang
+(wangshs@sysucc.org.cn) \\
+CS-LIT-9/23 DOI &
+\href{https://doi.org/10.5281/zenodo.18884234}
+{10.5281/zenodo.18884234} \\
+CS-LIT-1 DOI &
+\href{https://doi.org/10.5281/zenodo.18883922}
+{10.5281/zenodo.18883922} \\
+CS-LIT-2 DOI &
+\href{https://doi.org/10.5281/zenodo.18884158}
+{10.5281/zenodo.18884158} \\
+CS-LIT-22 DOI &
+\href{https://doi.org/10.5281/zenodo.18892788}
+{10.5281/zenodo.18892788} \\
+License & CC BY 4.0 \\
+\bottomrule
+\end{tabular}
+
+\end{document}

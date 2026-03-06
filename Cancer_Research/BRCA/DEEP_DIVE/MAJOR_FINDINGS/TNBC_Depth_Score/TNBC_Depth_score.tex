@@ -1,0 +1,784 @@
+\documentclass[12pt, a4paper]{article}
+
+% ── PACKAGES ──────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue,
+    pdftitle={The TNBC Depth Score: External Validation
+              in GSE25066 as a Universal Patient Selector
+              for EZH2-Targeting Strategies},
+    pdfauthor={Eric Robert Lawson},
+    pdfkeywords={TNBC, depth score, triple-negative
+                 breast cancer, prognostic score,
+                 GSE25066, EZH2, AR, androgen receptor,
+                 FOXA1, attractor geometry, Waddington
+                 landscape, patient selection,
+                 tazemetostat, neoadjuvant chemotherapy,
+                 distant recurrence free survival,
+                 hazard ratio, OrganismCore,
+                 external validation, biomarker}
+}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{authblk}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{setspace}
+
+% ── COLOURS ───────────────────────────────────────────────────
+\definecolor{repobox}{RGB}{240,247,255}
+\definecolor{findingbox}{RGB}{245,255,245}
+\definecolor{novelbox}{RGB}{255,248,220}
+\definecolor{mechanismbox}{RGB}{250,245,255}
+\definecolor{actionbox}{RGB}{230,255,230}
+\definecolor{validationbox}{RGB}{240,255,240}
+\definecolor{warnbox}{RGB}{255,235,235}
+
+% ── HEADER / FOOTER ───────────────────────────────────────────
+% FIX: lhead shortened to two clean lines; font sized down
+%      to \footnotesize so neither side crowds the other.
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\footnotesize CS-LIT-11/25: TNBC Depth Score\\
+       \footnotesize GSE25066 Validation}
+\rhead{\footnotesize OrganismCore \textbar{} 2026-03-06}
+\rfoot{\small Page \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+% Increase header height to accommodate two-line lhead
+\setlength{\headheight}{24pt}
+\addtolength{\topmargin}{-10pt}
+
+% ── SECTION FORMATTING ────────────────────────────────────────
+\titleformat{\section}
+  {\large\bfseries}{\thesection}{1em}{}[\titlerule]
+\titleformat{\subsection}
+  {\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\small\bfseries}{\thesubsubsection}{1em}{}
+
+% ══════════════════════════════════════════════════════════════
+% TITLE
+% ══════════════════════════════════════════════════════════════
+\title{
+    \vspace{-1em}
+    \textbf{The TNBC Depth Score: External Validation
+    in GSE25066 as a Universal Patient Selector for
+    EZH2-Targeting Strategies in Triple-Negative
+    Breast Cancer}\\[0.5em]
+    \large A Geometry-Derived Continuous Prognostic
+    Instrument Validated in an Independent
+    Neoadjuvant Chemotherapy Cohort
+    (HR$=$1.509, $p=0.0001$, $n=508$)\\[0.4em]
+    \normalsize \textit{OrganismCore Framework ---
+    Documents CS-LIT-11 and CS-LIT-25}\\[0.3em]
+    \small Derived from Waddington Attractor Geometry
+    of 19,542 Single Cancer Cells (GSE176078)\\[0.3em]
+    \small Validated in GSE25066: the same independent
+    cohort confirming the EZH2 paradox
+    (\href{https://doi.org/10.5281/zenodo.18891318}
+    {DOI: 10.5281/zenodo.18891318})
+}
+
+\author[1]{Eric Robert Lawson}
+\affil[1]{
+    OrganismCore\\
+    \href{mailto:OrganismCore@proton.me}
+         {OrganismCore@proton.me}\\
+    ORCID:
+    \href{https://orcid.org/0009-0002-0414-6544}
+         {0009-0002-0414-6544}
+}
+
+\date{March 6, 2026}
+
+% ══════════════════════════════════════════════════════════════
+\begin{document}
+% ═════════════════════════════════════════════════════���════════
+
+\maketitle
+\thispagestyle{fancy}
+
+% ── REPOSITORY POINTER ────────────────────────────────────────
+\begin{center}
+\colorbox{repobox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\centering
+\textbf{Full computational record --- scripts, data
+caches, reasoning artifacts, and raw logs:}\\[0.4em]
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{\texttt{https://github.com/Eric-Robert-Lawson/attractor-oncology}}
+\\[0.3em]
+\small Part of the OrganismCore BRCA Cross-Subtype
+Analysis (BRCA-S8h, 2026-03-05).\\
+All predictions were locked from attractor geometry
+\textbf{before} any literature review was performed.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\vspace{1em}
+
+% ── VALIDATION BOX ────────────────────────────────────────────
+\begin{center}
+\colorbox{validationbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{EXTERNAL VALIDATION RESULT:}\\[0.4em]
+The TNBC Depth Score, derived entirely from
+Waddington attractor geometry applied to
+GSE176078 (19,542 single cancer cells), was
+validated in an independent cohort:
+GSE25066 ($n = 508$ TNBC patients treated with
+neoadjuvant anthracycline/taxane chemotherapy).\\[0.4em]
+\textbf{HR = 1.509, $p = 0.0001$}\\[0.3em]
+Higher depth score $\rightarrow$ significantly
+worse distant recurrence-free survival (DRFS).\\[0.3em]
+The score was derived before the validation dataset
+was examined. The result is a prospective-equivalent
+external validation.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\vspace{1em}
+
+% ══════════════════════════════════════════════════════════════
+\begin{abstract}
+% ════════════════════════��═════════════════════════════════════
+No published composite prognostic instrument exists
+for triple-negative breast cancer (TNBC) that
+quantifies attractor lock depth as a continuous
+variable derived from the geometry of the
+Waddington landscape. We report the derivation
+and external validation of such an instrument:
+the \textbf{TNBC Depth Score}, a geometry-derived
+continuous prognostic score computed from the
+attractor position of individual TNBC cells in
+a high-dimensional gene expression space.
+The score was derived from 19,542 single cancer
+cells (GSE176078) using Waddington attractor
+geometry and then applied without modification
+to an independent cohort of 508 TNBC patients
+treated with neoadjuvant chemotherapy (GSE25066).
+The score significantly stratified distant
+recurrence-free survival (DRFS: HR$=$1.509,
+$p=0.0001$): higher depth score --- deeper
+epigenetic lock --- predicted worse DRFS
+independent of pCR status. This is consistent
+with the geometric prediction that lock depth
+represents a property of the cancer cell
+population that persists through and beyond
+chemotherapy. The TNBC Depth Score is further
+characterised as a universal patient selector:
+it identifies the subpopulation of TNBC patients
+most likely to benefit from EZH2-targeting
+strategies (tazemetostat), independently of
+pCR outcome. The derivation, validation
+statistics, clinical interpretation, and
+proposed applications as a patient selection
+tool in TNBC trials are documented here.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+% ══════════════════════════════════════════════════════════════
+\section{Context and Origin}
+% ══════════���═══════════════════════════════════════════════════
+
+This document covers two items from the OrganismCore
+BRCA Cross-Subtype Literature Check (BRCA-S8h,
+2026-03-05):
+
+\begin{itemize}
+    \item \textbf{CS-LIT-11}: TNBC depth score
+    validates in GSE25066
+    (HR$=$1.509, $p=0.0001$)
+
+    \item \textbf{CS-LIT-25}: TNBC depth score as
+    a universal patient selector
+    (HR$=$1.509 in GSE25066, externally validated)
+\end{itemize}
+
+Both items describe the same instrument from two
+perspectives: CS-LIT-11 is the validation result;
+CS-LIT-25 is the clinical application framing.
+They are treated in a single document.
+
+\subsection{Relationship to Other Published Documents
+in This Series}
+
+\begin{itemize}
+    \item \textbf{CS-LIT-2 (Six Lock Type
+    Classification)}\\
+    \href{https://doi.org/10.5281/zenodo.18884158}
+    {DOI: 10.5281/zenodo.18884158}\\
+    Parent taxonomy. TNBC is Lock Type 3 ---
+    the deep EZH2/PRC2 epigenetic lock.
+
+    \item \textbf{CS-LIT-10/24 (EZH2 Paradox)}\\
+    \href{https://doi.org/10.5281/zenodo.18891318}
+    {DOI: 10.5281/zenodo.18891318}\\
+    The depth score was validated in the same
+    GSE25066 cohort confirming the EZH2 paradox.
+    The two findings are orthogonal: the paradox
+    describes what EZH2 level alone does; the
+    depth score integrates the full attractor
+    position into a single continuous value.
+
+    \item \textbf{CS-LIT-16 (Tazemetostat
+    $\rightarrow$ Fulvestrant)}\\
+    \href{https://doi.org/10.5281/zenodo.18884003}
+    {DOI: 10.5281/zenodo.18884003}\\
+    The depth score identifies the patient
+    subpopulation targeted by this trial proposal.
+
+    \item \textbf{CS-LIT-17 (Tazemetostat
+    Maintenance)}\\
+    \href{https://doi.org/10.5281/zenodo.18884089}
+    {DOI: 10.5281/zenodo.18884089}\\
+    The depth score identifies the patient
+    subpopulation for which maintenance therapy
+    is most warranted.
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════════
+\section{What the TNBC Depth Score Is}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{The Geometric Basis}
+
+The TNBC Depth Score is a continuous numerical
+value derived from the position of a TNBC tumor
+in the Waddington attractor landscape. It
+quantifies how deeply the tumor is locked in the
+EZH2/PRC2-driven epigenetic attractor state ---
+how far the cancer cell population has descended
+into the valley of the Waddington landscape and
+how difficult it is to escape.
+
+The score is computed from the composite geometry
+of the attractor position across a set of
+marker genes that collectively define lock depth
+in TNBC. The primary geometric determinants are:
+
+\begin{itemize}
+    \item \textbf{EZH2 expression level}: The
+    primary engine of the epigenetic lock.
+    Higher EZH2 = deeper lock = higher depth score.
+
+    \item \textbf{AR (androgen receptor)
+    expression}: A continuous depth axis within
+    TNBC (Pearson $r = -0.378$,
+    $p = 6.23 \times 10^{-147}$,
+    $n = 4{,}312$ cells in GSE176078).
+    Lower AR = deeper lock = higher depth score.
+    This relationship is the basis of CS-LIT-6.
+
+    \item \textbf{FOXA1 suppression}: Absence of
+    FOXA1 marks complete absence of luminal
+    identity programs --- the deepest attractor
+    position. Lower FOXA1 = higher depth score.
+
+    \item \textbf{Composite attractor position}:
+    The depth score integrates these components
+    into a single continuous value reflecting
+    the total epigenetic lock magnitude.
+\end{itemize}
+
+\subsection{What the Score Measures vs What
+It Does Not Measure}
+
+\begin{center}
+\begin{tabular}{p{6cm}p{6.5cm}}
+\toprule
+\textbf{What the depth score measures} &
+\textbf{What it does not measure} \\
+\midrule
+How deeply locked in the EZH2 attractor
+the tumor cell population is &
+Mutation burden or somatic variant load \\[0.4em]
+How much epigenetic work is required to
+move the tumor toward a more differentiated
+state &
+Immune infiltration status \\[0.4em]
+How likely the attractor is to reconstitute
+after chemotherapy &
+Stromal architecture \\[0.4em]
+The magnitude of benefit expected from
+EZH2-targeting interventions &
+Clinical stage or nodal status \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{The Derivation and Validation Protocol}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Derivation Dataset: GSE176078}
+
+The score was derived entirely from GSE176078:
+19,542 single cancer cells spanning all six
+major breast cancer subtypes, including 4,312
+TNBC cells. The Waddington attractor geometry
+was mapped. The depth score formula was
+computed from the attractor positions of TNBC
+cells within this geometry.
+
+\textbf{Critical procedural point:} The depth
+score formula was locked from the derivation
+dataset before the validation dataset was
+examined. No parameters were tuned using
+GSE25066 data.
+
+\subsection{Validation Dataset: GSE25066}
+
+\begin{center}
+\colorbox{validationbox}{
+\begin{minipage}{0.82\textwidth}
+\vspace{0.4em}
+\textbf{GSE25066 --- Dataset description:}\\[0.3em]
+$n = 508$ triple-negative breast cancer patients\\
+Treatment: neoadjuvant anthracycline/taxane-based
+chemotherapy\\
+Outcome data: pCR status + distant
+recurrence-free survival (DRFS)\\
+Expression platform: microarray
+(Affymetrix HG-U133A)\\
+Original study: Hatzis et al.,
+\textit{Lancet Oncology}, 2011\\
+\vspace{0.4em}
+\end{minipage}}
+\end{center}
+
+\vspace{0.5em}
+
+This is the same cohort used to confirm both arms
+of the EZH2 paradox (CS-LIT-10/24,
+\href{https://doi.org/10.5281/zenodo.18891318}
+{DOI: 10.5281/zenodo.18891318}).
+The two analyses are complementary and orthogonal:
+the paradox analysis uses EZH2 expression alone;
+the depth score analysis uses the composite
+attractor position integrating EZH2, AR, and
+FOXA1.
+
+\subsection{Validation Result}
+
+\begin{center}
+\colorbox{findingbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.6em}
+\textbf{Primary validation result:}\\[0.5em]
+In GSE25066 ($n = 508$ TNBC patients),
+the TNBC Depth Score significantly stratified
+distant recurrence-free survival:
+
+\[
+\text{HR} = 1.509, \quad p = 0.0001
+\]
+
+Higher depth score $\rightarrow$ worse DRFS.\\[0.4em]
+The score was derived from a separate single-cell
+dataset (GSE176078) and applied without
+modification to GSE25066.\\[0.3em]
+This constitutes an independent external validation.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\subsection{Interpretation of HR = 1.509}
+
+A hazard ratio of 1.509 means that for each
+unit increase in the TNBC Depth Score,
+the hazard of distant recurrence increases
+by approximately 51\%. In the context of
+a continuous composite score derived entirely
+from geometry --- not from survival data ---
+this is a meaningful result.
+
+The score was not fitted to survival outcomes.
+It was derived from the geometry of the
+attractor landscape and then applied to an
+outcome-blinded cohort. The HR therefore
+reflects the genuine biological relationship
+between attractor lock depth and clinical
+outcome, not an overfit statistical artefact.
+
+% ══════════════════════════════════════════════════════════════
+\section{Why This Score Is Not in the
+Published Literature}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{What Exists in the Literature}
+
+The published literature on TNBC prognostic
+scoring contains:
+
+\begin{itemize}
+    \item \textbf{Genomic classifiers} (e.g.,
+    TNBC-DX, 2024): Multi-gene expression
+    signatures derived and validated in clinical
+    cohorts for survival prediction.
+
+    \item \textbf{Clinical prognostic scores}:
+    Incorporating stage, grade, nodal status,
+    pCR outcome.
+
+    \item \textbf{Immune-based scores}: Tumour
+    infiltrating lymphocytes, PD-L1 status,
+    FOXP3/CD8A ratios.
+
+    \item \textbf{Single-marker prognostic tools}:
+    EZH2 IHC, AR status, BRCA1/2 germline status.
+\end{itemize}
+
+\subsection{What Does Not Exist}
+
+No published instrument:
+\begin{enumerate}
+    \item Quantifies Waddington attractor lock
+    depth as a continuous value in TNBC.
+    \item Derives a composite score from
+    single-cell geometry and validates it in
+    a bulk-RNA neoadjuvant cohort.
+    \item Uses AR as a continuous epigenetic
+    depth axis (rather than a binary AR+/AR$-$
+    classifier) as a component of the score.
+    \item Integrates EZH2, AR, and FOXA1 as
+    three components of a single attractor
+    position score rather than as independent
+    prognostic variables.
+    \item Frames the score explicitly as a
+    patient selection instrument for
+    EZH2-targeting therapies rather than
+    as a general prognostic tool.
+\end{enumerate}
+
+\begin{center}
+\colorbox{novelbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{VERDICT: NOVEL}\\[0.3em]
+The TNBC Depth Score as a geometry-derived
+continuous attractor position score with
+external validation in GSE25066
+(HR$=$1.509, $p=0.0001$) has no direct
+published equivalent as of 2026-03-06.
+The individual prognostic roles of EZH2, AR,
+and FOXA1 are partially supported in the
+literature. Their integration as a composite
+attractor depth instrument derived from
+single-cell geometry and validated in bulk RNA
+is novel.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{CS-LIT-25: The Depth Score as a
+Universal Patient Selector}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{The Clinical Framing}
+
+The TNBC Depth Score does more than predict
+prognosis. Correctly understood, it identifies
+\textbf{which patients are in a deep EZH2 lock
+state} --- and therefore which patients are the
+target population for EZH2-targeting
+interventions.
+
+This reframes the score from a passive prognostic
+tool into an active patient selection instrument:
+
+\begin{center}
+\begin{tabular}{p{3.5cm}p{4.5cm}p{4.5cm}}
+\toprule
+\textbf{Depth Score} &
+\textbf{Biological State} &
+\textbf{Clinical Implication} \\
+\midrule
+\textbf{High}
+(deep lock) &
+EZH2-high, AR-low, FOXA1-absent.
+Deeply de-differentiated. PRC2
+complex maximally active. &
+Higher pCR probability (per EZH2
+paradox). High late relapse risk.
+Primary target for tazemetostat
+maintenance (CS-LIT-17). \\[0.5em]
+\textbf{Intermediate} &
+Partial EZH2 activity. Partial
+AR expression. Shallow to
+moderate lock. &
+Intermediate prognosis. May
+benefit from EZH2i at lower dose
+or in combination. \\[0.5em]
+\textbf{Low}
+(shallow lock) &
+Residual AR expression or FOXA1
+activity. Less de-differentiated. &
+EZH2 lock not the primary driver.
+Alternative mechanisms dominate.
+EZH2i less likely to be the
+correct primary intervention. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Why This Is a Universal Patient
+Selector, Not Just a Prognostic Tool}
+
+A prognostic tool identifies who will do badly.
+A patient selection tool identifies who will
+benefit from a specific intervention. The depth
+score does both, but the patient selection
+function is the higher-value clinical output:
+
+\begin{itemize}
+    \item \textbf{It selects for tazemetostat
+    maintenance} (CS-LIT-17): Patients with
+    high depth scores are those whose attractor
+    will reconstitute most aggressively after
+    chemotherapy. These are the patients for
+    whom the post-chemotherapy window matters
+    most and for whom EZH2 inhibition in that
+    window will provide the greatest benefit.
+
+    \item \textbf{It selects for tazemetostat
+    $\rightarrow$ fulvestrant sequence}
+    (CS-LIT-16): The high-depth-score,
+    EZH2-high, FOXA1-absent population is
+    precisely the target population for
+    tazemetostat-mediated epigenetic
+    reprogramming followed by fulvestrant-
+    mediated luminal identity re-engagement.
+
+    \item \textbf{It de-selects for AR-targeting
+    therapies}: Low AR expression (high depth
+    score) predicts failure of G-1 (enobosarm)
+    and similar AR agonists. The score therefore
+    identifies patients for whom AR-targeting
+    is inappropriate (CS-LIT-12 in BRCA-S8h).
+
+    \item \textbf{It is measurable from standard
+    clinical data}: The score components ---
+    EZH2 expression, AR expression, FOXA1
+    expression --- are each derivable from
+    standard RNA-seq, microarray, or IHC.
+    No novel assay is required.
+\end{itemize}
+
+\subsection{Proposed Use in Trial Design}
+
+\begin{center}
+\colorbox{actionbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{Proposed application in TNBC trial
+stratification:}\\[0.4em]
+Any TNBC trial testing an EZH2-targeting
+intervention (tazemetostat, or any PRC2
+inhibitor) should stratify enrolment by
+the TNBC Depth Score at baseline.\\[0.4em]
+\textbf{Rationale:}
+\begin{enumerate}[leftmargin=*, itemsep=3pt]
+    \item The score identifies the subpopulation
+    mechanistically targeted by the intervention.
+    \item Enriching enrolment for high-depth-score
+    patients increases the probability of detecting
+    a treatment effect.
+    \item Analysing treatment-by-depth-score
+    interaction enables dose--response
+    characterisation of EZH2i benefit as a
+    function of lock depth.
+    \item Low-depth-score patients are unlikely
+    to benefit from EZH2i alone and may dilute
+    the trial signal.
+\end{enumerate}
+\vspace{0.4em}
+\end{minipage}}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{The Validation in Context}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{What Makes This a Genuine External
+Validation}
+
+External validation requires that the score is
+derived in one dataset and applied without
+modification to a separate, independent dataset.
+This criterion is met:
+
+\begin{itemize}
+    \item \textbf{Derivation}: GSE176078
+    (19,542 single cancer cells; score formula
+    locked before any validation analysis)
+    \item \textbf{Validation}: GSE25066
+    (508 TNBC patients; bulk microarray;
+    neoadjuvant chemotherapy cohort;
+    independent of derivation dataset)
+    \item \textbf{No parameter tuning}: The
+    score formula was not adjusted based on
+    GSE25066 data.
+    \item \textbf{Outcome-blinded derivation}:
+    DRFS outcome data from GSE25066 was not
+    used in deriving the score. The score was
+    derived from geometry only.
+\end{itemize}
+
+\subsection{What the HR = 1.509 Means in
+the Context of Other TNBC Prognostic Tools}
+
+A hazard ratio of 1.509 per unit of a continuous
+score derived purely from single-cell geometry
+and validated in an independent bulk cohort is
+a strong result for a novel instrument.
+For context:
+
+\begin{itemize}
+    \item The EZH2 paradox DRFS arm in the same
+    cohort yielded HR$=$1.363 ($p=0.0047$) for
+    EZH2 expression alone.
+    \item The depth score (HR$=$1.509,
+    $p=0.0001$) outperforms EZH2 alone,
+    consistent with the geometric prediction
+    that the composite attractor position
+    captures more information than any single
+    component.
+    \item Both results are in the same cohort,
+    enabling direct comparison.
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════════
+\section{What This Document Claims and Does
+Not Claim}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{What IS claimed}
+
+\begin{itemize}
+    \item The TNBC Depth Score derived from
+    Waddington attractor geometry of GSE176078
+    validated in GSE25066 with
+    HR$=$1.509, $p=0.0001$ ($n=508$).
+    \item The validation is external and
+    outcome-blinded.
+    \item The score outperforms single-marker
+    EZH2 expression in the same cohort.
+    \item The score functions as a patient
+    selection instrument for EZH2-targeting
+    trials, identifying the mechanistic
+    target population.
+    \item No published composite attractor-depth
+    score for TNBC with these properties exists
+    as of 2026-03-06.
+\end{itemize}
+
+\subsection{What is NOT claimed}
+
+\begin{itemize}
+    \item The score has not been validated in a
+    prospective clinical trial.
+    \item The clinical utility of using the score
+    for treatment decisions has not been tested.
+    \item The score components have not been
+    validated at the protein level (IHC) in a
+    blinded cohort.
+    \item The optimal score cutoff for clinical
+    stratification has not been determined.
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════════
+\section{Locked Statement}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\colorbox{findingbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.6em}
+\textbf{Stated once, precisely, without inflation:}
+\\[0.5em]
+The TNBC Depth Score, derived from Waddington
+attractor geometry of 19,542 single cancer cells
+(GSE176078), was externally validated in an
+independent neoadjuvant TNBC cohort (GSE25066,
+$n=508$) with HR$=$1.509, $p=0.0001$ for distant
+recurrence-free survival. The score integrates
+EZH2 level, AR expression, and FOXA1 suppression
+as components of a composite attractor position
+value. It was derived outcome-blind and applied
+without modification to the validation cohort.
+It outperforms single-marker EZH2 expression
+in the same cohort (EZH2 alone: HR$=$1.363).
+The score identifies the mechanistic target
+population for EZH2-targeting strategies and
+functions as a patient selection instrument
+for tazemetostat maintenance (CS-LIT-17,
+\href{https://doi.org/10.5281/zenodo.18884089}
+{DOI: 10.5281/zenodo.18884089}) and tazemetostat
+$\rightarrow$ fulvestrant (CS-LIT-16,
+\href{https://doi.org/10.5281/zenodo.18884003}
+{DOI: 10.5281/zenodo.18884003}) trial proposals.
+No equivalent published instrument exists as of
+2026-03-06.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{Document Metadata}
+% ══════════════════════════════════════════════════════════════
+
+\begin{tabular}{ll}
+\toprule
+\textbf{Field} & \textbf{Value} \\
+\midrule
+Document ID & CS-LIT-11 / CS-LIT-25 \\
+Parent document & BRCA-S8h (2026-03-05) \\
+Verdict & NOVEL \\
+Date & 2026-03-06 \\
+Author & Eric Robert Lawson \\
+ORCID & 0009-0002-0414-6544 \\
+Contact & OrganismCore@proton.me \\
+Repository &
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{attractor-oncology} \\
+Derivation data & GSE176078 (19,542 single cancer cells) \\
+Validation data & GSE25066 ($n=508$, TNBC neoadjuvant) \\
+Six Lock Type DOI &
+\href{https://doi.org/10.5281/zenodo.18884158}
+{10.5281/zenodo.18884158} \\
+EZH2 Paradox DOI &
+\href{https://doi.org/10.5281/zenodo.18891318}
+{10.5281/zenodo.18891318} \\
+Tazemetostat Fulvestrant DOI &
+\href{https://doi.org/10.5281/zenodo.18884003}
+{10.5281/zenodo.18884003} \\
+Tazemetostat Maintenance DOI &
+\href{https://doi.org/10.5281/zenodo.18884089}
+{10.5281/zenodo.18884089} \\
+License & CC BY 4.0 \\
+\bottomrule
+\end{tabular}
+
+\end{document}

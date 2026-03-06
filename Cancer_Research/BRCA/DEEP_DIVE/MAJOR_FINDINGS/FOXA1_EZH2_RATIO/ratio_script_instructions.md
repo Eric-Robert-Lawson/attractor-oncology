@@ -1,0 +1,1 @@
+You must take the python files and the folders, put into DEEP_DIVE directory. Reproduce the cross-analysis with the scripts, then we will arrive at the ability to reproduce through the ratio scripts. For script 2 in particular, the CPTAC_BRCA_proteome.txt file is important for reproducing and must be taken from the repo to reproduce properly.

@@ -84,3 +84,9 @@
 
 ---
 
+**Fulvestrant Superiority Over Aromatase Inhibitors in FOXA1-Hyperactivated Invasive Lobular Carcinoma: A Geometry-Derived Mechanistic Prediction with Proposed Validation in NCT02206984 and Archived ILC Tissue Cohorts**
+
+[https://doi.org/10.5281/zenodo.18893995](https://doi.org/10.5281/zenodo.18893995)
+
+---
+

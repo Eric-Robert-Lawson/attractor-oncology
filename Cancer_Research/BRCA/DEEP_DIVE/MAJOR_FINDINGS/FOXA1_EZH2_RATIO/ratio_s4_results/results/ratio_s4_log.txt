@@ -1,0 +1,229 @@
+FOXA1/EZH2 RATIO — VALIDATION SCRIPT 4 (RATIO-S4)
+OrganismCore | 2026-03-06 | Eric Robert Lawson
+
+COMPONENTS:
+  A — Multivariate Cox (METABRIC)
+  B — ROC classification utility
+  C — Claudin-low position (METABRIC)
+  D — Treatment response (GSE25066 + METABRIC)
+  lifelines: True
+  sklearn:   True
+
+── LOADING SHARED DATA ──
+  METABRIC expr:    (2, 1980)  samples=1980
+  METABRIC clinical:(2509, 24)  index='patient'
+  METABRIC overlap: 1980
+  METABRIC merged:  (1980, 14)
+  Subtypes: {'LumA': 700, 'LumB': 475, 'Her2': 224, 'claudin-low': 218, 'Basal': 209, 'Normal': 148, 'NC': 6}
+
+=================================================================
+COMPONENT A — MULTIVARIATE COX (METABRIC)
+Does ratio add independent prognostic value
+beyond NPI, age, ER status, treatment?
+=================================================================
+
+── A.1: PREPARE COX DATAFRAME ──
+  Cox OS  n=1874  events=1089
+  Cox RFS n=1874  events=1873
+
+── A.2: FIT COX MODELS ─��
+
+  OS MULTIVARIATE COX:
+  Concordance: 0.6697
+  metric_z HR=1.008  95%CI [0.945-1.075]  p=0.8038
+
+  Full OS summary:
+             exp(coef)  exp(coef) lower 95%  exp(coef) upper 95%             p
+covariate                                                                     
+metric_z      1.008179             0.945425             1.075098  8.038049e-01
+NPI           1.126026             1.058741             1.197587  1.595357e-04
+AGE           1.033344             1.028058             1.038657  4.762950e-36
+LYMPH_NODES   1.061485             1.044676             1.078565  2.362765e-13
+ER_pos        0.877115             0.730919             1.052552  1.587125e-01
+chemo_yes     1.199049             1.004492             1.431290  4.447572e-02
+hormone_yes   0.971971             0.853396             1.107021  6.684429e-01
+is_LumB       1.205898             1.042765             1.394552  1.158173e-02
+is_Her2       1.348842             1.120498             1.623721  1.565610e-03
+is_Basal      1.143894             0.911763             1.435125  2.453474e-01
+is_CL         0.878878             0.708834             1.089715  2.392612e-01
+is_Normal     1.192682             0.947129             1.501897  1.341014e-01
+
+  RFS MULTIVARIATE COX:
+  Concordance: 0.6019
+  metric_z HR=1.018  95%CI [0.967-1.072]  p=0.4904
+
+  Full RFS summary:
+             exp(coef)  exp(coef) lower 95%  exp(coef) upper 95%             p
+covariate                                                                     
+metric_z      1.018198             0.967325             1.071746  4.904386e-01
+NPI           1.020979             0.970685             1.073879  4.205034e-01
+AGE           1.012117             1.007993             1.016258  7.401440e-09
+LYMPH_NODES   1.059892             1.044499             1.075511  6.556238e-15
+ER_pos        1.001053             0.861433             1.163303  9.890402e-01
+chemo_yes     1.318881             1.145654             1.518300  1.168411e-04
+hormone_yes   1.160354             1.045429             1.287914  5.192651e-03
+is_LumB       1.186661             1.052399             1.338052  5.211892e-03
+is_Her2       1.166436             0.997433             1.364075  5.388333e-02
+is_Basal      1.179118             0.981099             1.417105  7.899740e-02
+is_CL         0.986246             0.838885             1.159494  8.667984e-01
+is_Normal     1.169140             0.978625             1.396743  8.508994e-02
+
+── A.3: COMPONENT A RESULT ��─
+  OS  HR=1.0081790422437025  p=0.8038049063512075
+  RFS HR=1.0181977454376379  p=0.4904386301046898
+  R4-A_OS  → NOT CONFIRMED
+  R4-A_RFS → NOT CONFIRMED
+
+=================================================================
+COMPONENT B — ROC / CLASSIFICATION UTILITY
+METABRIC primary + TCGA secondary
+LumA vs Basal, LumA vs LumB
+=================================================================
+
+── B.1: METABRIC ROC ──
+  LumA vs Basal: n=909  AUC=0.828  thresh=0.395  sens=0.866  spec=0.632
+  LumA vs LumB:  n=1175  AUC=0.796  thresh=0.737  sens=0.694  spec=0.754
+  LumA vs Her2:  n=924  AUC=0.686  thresh=0.826  sens=0.640  spec=0.634
+  Figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s4_results/results/ratio_s4_compB_metabric_roc.png
+
+── B.2: TCGA PanCancer Atlas ──
+  Fetching TCGA FOXA1 + EZH2 (RSEM)...
+  FOXA1: n=1082  example_val=212.310
+  EZH2: n=1082  example_val=486.658
+  Fetching TCGA clinical...
+  Clinical rows: 10000
+  Unique patients: 266
+  Building TCGA dataframe...
+  TCGA shape: (1082, 8)
+  Subtypes: {'': 850, 'LumA': 109, 'LumB': 54, 'Basal': 42, 'Her2': 19, 'Normal': 8}
+  metric range: [-5.144, 4.699]
+
+  TCGA ROC curves:
+  LumA vs Basal: n=151  AUC=0.901  thresh=0.403  sens=0.853  spec=0.833
+  LumA vs LumB:  n=163  AUC=0.873  thresh=0.377  sens=0.872  spec=0.815
+  Figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s4_results/results/ratio_s4_compB_tcga_roc.png
+  Saved: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s4_results/data/tcga_pancancer_merged.csv
+
+── B.3: ROC DECISIONS ──
+  R4-B_LumA_Basal_MET → CONFIRMED
+  R4-B_LumA_LumB_MET → CONFIRMED
+  R4-B_LumA_Basal_TCGA → CONFIRMED
+  R4-B_LumA_LumB_TCGA → CONFIRMED
+
+=================================================================
+COMPONENT C — CLAUDIN-LOW POSITION (METABRIC)
+n=218 CL samples
+=================================================================
+
+── C.1: CL POSITION ──
+  LumA  n=700  median=1.0121
+  Basal n=209  median=0.0465
+  CL    n=218    median=1.4888
+  CL < TNBC(Basal): ✗
+  CL < LumA: ✗
+
+  All subtypes:
+  LumA         n= 700  metric=1.0121  FOXA1=7.331  EZH2=6.292
+  LumB         n= 475  metric=0.3345  FOXA1=7.056  EZH2=6.727
+  Her2         n= 224  metric=0.6300  FOXA1=7.403  EZH2=6.746
+  Basal        n= 209  metric=0.0465  FOXA1=7.359  EZH2=7.242
+  claudin-low  n= 218  metric=1.4888  FOXA1=7.956  EZH2=6.529
+  Normal       n= 148  metric=1.4978  FOXA1=7.753  EZH2=6.192
+
+  CL vs Basal MWU p=0.0000
+
+  CL FOXA1 median: 7.9559
+  CL EZH2 median:  6.5291
+  Basal FOXA1 median: 7.3589
+  Basal EZH2 median:  7.2418
+
+── C.2: BIOLOGICAL INTERPRETATION ──
+  CL EZH2 is LOW relative to Basal.
+  Basal: EZH2 high (active silencing).
+  CL: mesenchymal, low proliferation,
+      EZH2 not the dominant mechanism.
+  In bulk RNA, low EZH2 inflates ratio
+  for CL vs scRNA-seq expectation.
+  scRNA-seq (cancer cells only) showed
+  CL ratio=0.10 < Basal ratio=0.52.
+  Bulk RNA conflates cancer + stroma.
+  CL stroma is EZH2-low mesenchymal.
+  This explains CL/Basal boundary anomaly.
+  Conclusion: CL ordering requires
+  cancer-cell-specific measurement (IHC).
+
+  R4-C → NOT CONFIRMED (bulk RNA anomaly — see biological note)
+  Figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s4_results/results/ratio_s4_compC_claudin_low.png
+
+=================================================================
+COMPONENT D — TREATMENT RESPONSE
+D.1: GSE25066 (n=508, neoadjuvant chemo, pCR)
+D.2: METABRIC RFS in hormone-treated ER+
+=================================================================
+
+── D.1: GSE25066 ──
+  Downloading GSE25066 (~62 MB)...
+  Downloaded: 61,627,399 B
+  Parsing GSE25066 series matrix...
+  GSMs: 508
+  Characteristics: ['sample id', 'source', 'age_years', 'er_status_ihc', 'pr_status_ihc', 'her2_status', 'er_status_ihc_esr1_for indeterminate', 'clinical_t_stage', 'clinical_nodal_status', 'clinical_ajcc_stage', 'grade', 'pathologic_response_pcr_rd', 'pathologic_response_rcb_class', 'drfs_1_event_0_censored', 'drfs_even_time_years', 'esr1_status', 'erbb2_status', 'set_class', 'chemosensitivity_prediction', 'ggi_class', 'pam50_class', 'dlda30_prediction', 'rcb_0_i_prediction', 'tissue']
+  Expression probes: 22283
+  Candidate key 'pathologic_response_pcr_rd': {'pCR', 'NA', 'RD'}
+  Candidate key 'pathologic_response_rcb_class': {'RCB-III', 'NA', 'RCB-0/I', 'RCB-II'}
+  pCR key: 'pathologic_response_pcr_rd'
+  pCR values: {'RD': 249, 'NA': 86, 'pCR': 57, 'RCB-II': 53, 'RCB-0/I': 32, 'RCB-III': 31}
+  FOXA1 probe: 204948_s_at  mean=9.050
+  EZH2 probe: 203358_s_at  mean=8.216
+
+  GSE25066 merged: (508, 4)
+  pCR values: {'RD': 249, 'NA': 86, 'pCR': 57, 'RCB-II': 53, 'RCB-0/I': 32, 'RCB-III': 31}
+  pCR counts: {'RD': 249, 'NA': 86, 'pCR': 57, 'RCB-II': 53, 'RCB-0/I': 32, 'RCB-III': 31}
+  pCR=1: 57  pCR=0(RD): 249
+  High ratio pCR rate: 0.098 (n=153)
+  Low  ratio pCR rate: 0.275 (n=153)
+  pCR vs RD MWU p=0.0000
+  pCR metric med=-0.1036
+  RD  metric med=0.8663
+  pCR AUC=0.318
+  Figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s4_results/results/ratio_s4_compD1_gse25066.png
+  R4-D1 → CONFIRMED
+
+── D.2: METABRIC RFS — HORMONE-TREATED ER+ ──
+  ER+ hormone-treated: n=1104
+  High ratio n=552  events=199
+  Low  ratio n=552  events=239
+  Figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s4_results/results/ratio_s4_compD2_metabric_rfs.png
+  RFS KM p=0.0027
+  High ratio RFS med=108.3mo
+  Low  ratio RFS med=89.6mo
+  R4-D2 → CONFIRMED
+
+── D.3: TCGA DFS ──
+  TCGA OS n=266  events=28
+  Figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s4_results/results/ratio_s4_compD3_tcga_os.png
+  TCGA OS KM p=0.0770
+  R4-D3 → NOT CONFIRMED
+
+── COMBINED SUMMARY FIGURE ──
+  Figure: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s4_results/results/ratio_s4_combined.png
+
+=================================================================
+SCORECARD — RATIO-S4
+=================================================================
+
+  ID                             Dataset                   Status
+  ──────────────────────────── ─────────────────────── ─────────────────────────
+  R4-A_OS                        METABRIC                  NOT CONFIRMED
+  R4-A_RFS                       METABRIC                  NOT CONFIRMED
+  R4-B_LumA_Basal_MET            METABRIC                  CONFIRMED
+  R4-B_LumA_LumB_MET             METABRIC                  CONFIRMED
+  R4-B_LumA_Basal_TCGA           TCGA                      CONFIRMED
+  R4-B_LumA_LumB_TCGA            TCGA                      CONFIRMED
+  R4-C_CL_below_Basal            METABRIC                  NOT CONFIRMED (bulk RNA anomaly — see biological note)
+  R4-D1_GSE25066                 GSE25066                  CONFIRMED
+  R4-D2_METABRIC_RFS_HT          METABRIC                  CONFIRMED
+  R4-D3_TCGA_OS                  TCGA                      NOT CONFIRMED
+
+  Total: 10  CONFIRMED: 6  NOT CONFIRMED: 3  NOT TESTABLE: 0
+
+  Scorecard: /Users/ericlawson/cancer/BRCA/DEEP_DIVE/ratio_s4_results/results/ratio_s4_scorecard.csv

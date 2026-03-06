@@ -78,3 +78,9 @@
 
 ---
 
+**ILC as the Geometric Inverse of TNBC: Structural Lock versus Epigenetic Lock on the Same Luminal Identity Axis — Mechanistically Opposite Entry Points for Therapy**
+
+[https://doi.org/10.5281/zenodo.18893825](https://doi.org/10.5281/zenodo.18893825)
+
+---
+

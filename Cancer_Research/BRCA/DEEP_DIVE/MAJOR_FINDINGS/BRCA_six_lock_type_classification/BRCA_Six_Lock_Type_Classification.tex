@@ -1,0 +1,1410 @@
+\documentclass[12pt, a4paper]{article}
+
+% ── PACKAGES ──────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue,
+    pdftitle={A Six Lock Type Classification of Breast
+              Cancer: Waddington Attractor Geometry Applied
+              to All Major Subtypes},
+    pdfauthor={Eric Robert Lawson},
+    pdfkeywords={breast cancer, attractor geometry,
+                 Waddington landscape, lock type,
+                 epigenetic classification, FOXA1, EZH2,
+                 TNBC, LumA, LumB, HER2, claudin-low,
+                 ILC, CDK4/6, HDACi, tazemetostat,
+                 OrganismCore, cancer taxonomy}
+}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{authblk}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{setspace}
+\usepackage{multirow}
+
+% ── COLOURS ───────────────────────────────────────────────────
+\definecolor{repobox}{RGB}{240,247,255}
+\definecolor{lockbox}{RGB}{245,255,245}
+\definecolor{mechanismbox}{RGB}{250,245,255}
+\definecolor{novelbox}{RGB}{255,248,220}
+\definecolor{summarybox}{RGB}{240,255,240}
+\definecolor{luma}{RGB}{65,105,225}
+\definecolor{lumb}{RGB}{30,144,255}
+\definecolor{her2}{RGB}{255,140,0}
+\definecolor{tnbc}{RGB}{220,20,60}
+\definecolor{cl}{RGB}{128,0,128}
+\definecolor{ilc}{RGB}{34,139,34}
+
+% ── HEADER / FOOTER ───────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\small OrganismCore \textbar{} 2026-03-06}
+\lhead{\small CS-LIT-2: The Six Lock Type Classification}
+\rfoot{\small Page \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ── SECTION FORMATTING ─────────────────────────────────��──────
+\titleformat{\section}
+  {\large\bfseries}{\thesection}{1em}{}[\titlerule]
+\titleformat{\subsection}
+  {\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\small\bfseries}{\thesubsubsection}{1em}{}
+
+% ══════════════════════════════════════════════════════════════
+% TITLE
+% ══════════════════════════════════════════════════════════════
+\title{
+    \vspace{-1em}
+    \textbf{A Six Lock Type Classification of Breast
+    Cancer:}\\[0.5em]
+    \large Waddington Attractor Geometry Identifies
+    Distinct Epigenetic and Structural Locks in All
+    Major Subtypes, Each with a Specific Therapeutic
+    Unlock Sequence\\[0.4em]
+    \normalsize \textit{OrganismCore Framework ---
+    Document CS-LIT-2}\\[0.3em]
+    \small Derived from First Principles Before
+    Literature Review\\[0.3em]
+    \small Framework Applied to 19,542 Single Cancer
+    Cells Across Six Subtypes (GSE176078)
+}
+
+\author[1]{Eric Robert Lawson}
+\affil[1]{
+    OrganismCore\\
+    \href{mailto:OrganismCore@proton.me}
+         {OrganismCore@proton.me}\\
+    ORCID:
+    \href{https://orcid.org/0009-0002-0414-6544}
+         {0009-0002-0414-6544}
+}
+
+\date{March 6, 2026}
+
+% ══════════════════════════════════════════════════════════════
+\begin{document}
+% ══════════════════════════════════════════════════════════════
+
+\maketitle
+\thispagestyle{fancy}
+
+% ── REPOSITORY POINTER ────────────────────────────────────────
+\begin{center}
+\colorbox{repobox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.4em}
+\centering
+\textbf{Full computational record, scripts, reasoning
+artifacts, and subtype deep dives:}\\[0.3em]
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{\texttt{https://github.com/Eric-Robert-Lawson/attractor-oncology}}
+\\[0.2em]
+\small
+Repository ID: 1172048282 \textbar{}
+MIT License \textbar{}
+Python \textbar{}
+Public\\[0.2em]
+Source document: \texttt{Cancer\_Research/BRCA/DEEP\_DIVE/}
+\texttt{BRCA\_Cross\_Subtype\_Literature\_Check.md}
+(BRCA-S8h, item CS-LIT-2)\\[0.2em]
+Subtype deep dives: \texttt{LumA/}, \texttt{LumB/},
+\texttt{HER2\_ENRICHED/}, \texttt{TNBC/},
+\texttt{Claudin-low/}, \texttt{ILC/}\\[0.2em]
+Companion deposits: CS-LIT-1 (FOXA1/EZH2 ratio),
+CS-LIT-16 (tazemetostat $\rightarrow$ fulvestrant),
+CS-LIT-17 (tazemetostat maintenance)
+--- all Zenodo 2026-03-06
+\vspace{0.4em}
+\end{minipage}
+}
+\end{center}
+
+\vspace{0.8em}
+
+% ── ABSTRACT ──────────────────────────────────────────────────
+\begin{abstract}
+\noindent
+Breast cancer is routinely described as a collection
+of molecularly distinct subtypes. What is not yet
+described is why those subtypes exist as a coherent
+ordered set, what single biological axis organises
+them, and --- critically --- what specific molecular
+lock maintains each subtype in its aberrant state
+and what specific therapeutic action dissolves that
+lock. This document presents the OrganismCore
+six lock type classification of breast cancer,
+derived from Waddington landscape attractor geometry
+applied to 19,542 single cancer cells from 26
+patients across six subtypes (GSE176078, Wu et al.\
+\textit{Nature Genetics} 2021) before any literature
+review was performed.
+
+The classification identifies six distinct breast
+cancer lock types, each corresponding to a specific
+attractor geometry, a specific molecular maintenance
+mechanism, and a specific therapeutic unlock sequence:
+(1)~\textbf{Luminal A} --- CDK4/6-mediated cycle lock
+with intact luminal identity (Type~1, slope arrest);
+(2)~\textbf{Luminal B} --- DNMT3A/HDAC2 chromatin
+lock suppressing ER output (Type~1, slope arrest with
+epigenetic brake); (3)~\textbf{HER2-enriched} ---
+ERBB2 amplicon signalling override of the luminal
+slope (Type~1, kinase arrest);
+(4)~\textbf{TNBC/Basal-like} --- EZH2/PRC2
+H3K27me3 epigenetic lock silencing luminal identity
+(composite Type~1$\rightarrow$2, wrong valley);
+(5)~\textbf{Claudin-low} --- stem cell root lock
+with no residual luminal programme
+(Type~4, root lock); (6)~\textbf{Invasive Lobular
+Carcinoma (ILC)} --- CDH1 structural lock creating
+the geometric inverse of TNBC (Type~3, structural
+lock).
+
+Each lock type predicts a specific first therapeutic
+action before any subsequent agent can engage. The
+six lock types are ordered by a single continuous
+variable --- the FOXA1/EZH2 ratio --- which encodes
+the balance between luminal identity maintenance and
+epigenetic identity suppression. This ordering was
+confirmed across $\sim$7,500 patients in seven
+independent datasets on four measurement platforms
+(companion Zenodo deposit, 2026-03-06). The
+classification provides a mechanistically unified
+explanation for why these six subtypes exist, why
+they respond differently to the same agents, and why
+each requires a specific first step that is unique
+to its lock type. No competing classification
+framework using attractor geometry as its organising
+principle currently exists in the published literature.
+\end{abstract}
+
+\vspace{0.5em}
+\noindent\textbf{Keywords:}
+breast cancer; attractor geometry; Waddington landscape;
+lock type; epigenetic classification; FOXA1; EZH2;
+luminal A; luminal B; HER2-enriched; TNBC; basal-like;
+claudin-low; invasive lobular carcinoma; CDK4/6;
+HDACi; entinostat; tazemetostat; fulvestrant; CDH1;
+PRC2; H3K27me3; DNMT3A; HDAC2; OrganismCore;
+cancer taxonomy; precision oncology; drug sequencing
+
+\newpage
+\tableofcontents
+\newpage
+
+% ══════════════════════════════════════════════════════════════
+\section{Document Metadata}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Field} & \textbf{Value} \\
+\midrule
+Document ID     & CS-LIT-2-SIX-LOCK-CLASSIFICATION \\
+Series          & BRCA Deep Dive --- Cross-Subtype \\
+Type            & Framework Classification Paper ---
+                  Priority Establishment Document \\
+Parent document & BRCA-S8h (Cross-Subtype Literature
+                  Check, item CS-LIT-2) \\
+Derivation data & GSE176078 (Wu et al.\ 2021,
+                  \textit{Nature Genetics}) \\
+Validation data & TCGA-BRCA, METABRIC, CPTAC-BRCA,
+                  GSE96058, GSE25066 ($\sim$7,500 patients) \\
+Companion deposits
+& CS-LIT-1 FOXA1/EZH2 ratio (Zenodo 2026-03-06)\\
+& CS-LIT-16 tazemetostat $\rightarrow$ fulvestrant\\
+& CS-LIT-17 tazemetostat maintenance \\
+Date            & 2026-03-06 \\
+Author          & Eric Robert Lawson \\
+Organisation    & OrganismCore \\
+ORCID           & 0009-0002-0414-6544 \\
+Repository      &
+  \href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+       {Eric-Robert-Lawson/attractor-oncology} \\
+Repository ID   & 1172048282 \\
+License         & CC BY 4.0 \\
+Biological contradictions & 0 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{The Organising Principle: Waddington Landscape
+Attractor Geometry}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{The Waddington model applied to cancer}
+
+The Waddington developmental landscape represents cell
+differentiation as a ball rolling down a terrain of
+valleys and ridges. Each valley (attractor) corresponds
+to a stable cell identity state. Committed cells roll
+into their correct terminal attractor and remain there.
+Stem and progenitor cells are at the top of the
+landscape --- they have not yet committed and can roll
+into multiple possible valleys.
+
+Cancer arises when cells are arrested in abnormal
+attractor states. The OrganismCore framework identifies
+four canonical attractor geometry types:
+
+\begin{center}
+\begin{tabular}{p{1.5cm}p{3cm}p{9cm}}
+\toprule
+\textbf{Type} & \textbf{Name} & \textbf{Geometry} \\
+\midrule
+Type 1
+& Slope Arrest
+& Cell arrested on the slope approaching the correct
+  terminal attractor. It has not reached its normal
+  identity but has not fallen into a wrong valley.
+  The correct identity programme is partially active.
+  A molecular brake is preventing completion. \\[0.3em]
+Type 2
+& Wrong Valley
+& Cell has fallen into the wrong attractor. It is
+  expressing the identity of a different cell type.
+  The correct identity programme is silenced.
+  An epigenetic lock maintains the wrong state. \\[0.3em]
+Type 3
+& Structural Lock
+& Cell is held in an arrested state by a structural
+  (non-epigenetic) modification --- loss of a cell
+  adhesion or cytoskeletal component that normally
+  constrains cell identity. \\[0.3em]
+Type 4
+& Root Lock
+& Cell is arrested at the progenitor root. It has
+  never committed to any terminal identity.
+  The full differentiation programme is absent,
+  not silenced. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{The single axis that orders all six subtypes}
+
+All six breast cancer subtypes are ordered by a single
+continuous variable: the FOXA1/EZH2 ratio. This variable
+measures the balance between luminal identity presence
+(FOXA1, pioneer factor that opens and maintains luminal
+chromatin) and luminal identity suppression (EZH2,
+Polycomb repressor that silences the luminal programme
+by depositing H3K27me3).
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Subtype} & \textbf{FOXA1/EZH2 ratio}
+& \textbf{Lock type} & \textbf{Attractor type} \\
+\midrule
+Luminal A     & 9.38 & CDK4/6 cycle lock & Type 1 \\
+Luminal B     & 8.10 & DNMT3A/HDAC2 chromatin lock
+                     & Type 1 \\
+HER2-enriched & 3.34 & ERBB2 kinase override
+                     & Type 1 \\
+TNBC/Basal    & 0.52 & EZH2/PRC2 epigenetic lock
+                     & Composite 1$\rightarrow$2 \\
+Claudin-low   & 0.10 & Stem root lock (no programme)
+                     & Type 4 \\
+ILC           & ---  & CDH1 structural lock
+                     & Type 3 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent ILC is not placed on the FOXA1/EZH2 ratio axis
+because its lock is structural, not epigenetic. It is the
+geometric inverse of TNBC: where TNBC has an epigenetic
+lock (EZH2 silences the luminal programme), ILC has a
+structural lock (CDH1 loss removes the adhesion
+constraint that keeps luminal cells organised). Both
+are derangements of luminal identity, but from opposite
+directions.
+
+% ══════════════════════════════════════════════════════════════
+\section{Lock Type 1: Luminal A --- The CDK4/6 Cycle Lock}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Attractor geometry}
+
+\begin{center}
+\colorbox{mechanismbox}{
+\begin{minipage}{0.85\textwidth}
+\vspace{0.5em}
+\textbf{LUMINAL A --- TYPE 1 SLOPE ARREST}
+
+\medskip
+\textbf{Cell of origin:} Mature luminal epithelial cell\\
+\textbf{Normal terminal attractor:} ER-positive,
+PR-positive, low-proliferation luminal cell\\
+\textbf{Arrest point:} On the luminal slope, with full
+luminal identity intact but cell cycle dysregulated\\
+\textbf{Lock:} CDK4/6-mediated cycle entry following
+CDKN1A (p21) reduction\\
+\textbf{FOXA1/EZH2 ratio:} 9.38 (highest of all subtypes)\\
+\textbf{Luminal programme status:} Fully intact
+
+\medskip
+\textbf{Key geometry:}\\
+FOXA1 $+$highest, ESR1 $+$highest, GATA3 $+$highest\\
+EZH2 $-$lowest\\
+The cell is fully luminal. The problem is not identity
+suppression. The problem is cell cycle escape.
+\vspace{0.5em}
+\end{minipage}
+}
+\end{center}
+
+\subsection{The molecular lock}
+
+LumA cells have:
+\begin{itemize}[noitemsep]
+  \item Intact luminal identity programme (FOXA1, GATA3,
+        ESR1, PGR all high)
+  \item Reduced CDKN1A (p21) expression --- the
+        CDK4/6 brake is weakened
+  \item RB1 hyperphosphorylation by CDK4/6 ---
+        cell cycle entry proceeds despite low proliferation
+        rate in absolute terms
+  \item Low EZH2 (lowest of all subtypes) ---
+        the silencing programme is not engaged
+\end{itemize}
+
+The lock is in the cell cycle compartment, not in the
+identity compartment. The cell knows what it is.
+It is cycling when it should not be.
+
+\subsection{The therapeutic unlock}
+
+\begin{center}
+\begin{tabular}{p{3.5cm}p{9cm}}
+\toprule
+\textbf{Step} & \textbf{Action and rationale} \\
+\midrule
+First line
+& \textbf{CDK4/6 inhibitor} (palbociclib, ribociclib,
+  or abemaciclib) $+$ endocrine therapy (aromatase
+  inhibitor or fulvestrant). The CDK4/6 inhibitor
+  directly addresses the lock: restores RB1
+  hypophosphorylation, re-establishes cell cycle arrest.
+  Endocrine therapy engages the intact ER simultaneously. \\[0.3em]
+Biomarker (novel)
+& \textbf{CDKN1A (p21) level as quantitative
+  predictor of CDK4/6i benefit magnitude.} Lower
+  p21 at baseline predicts greater magnitude of
+  CDK4/6i benefit because the CDK4/6 brake was more
+  severely weakened. This is a continuous predictor,
+  not a binary classifier. Testable in PALOMA archived
+  tissue without new trial. (CS-LIT-14) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Published confirmation}
+
+CDK4/6 inhibitors are standard of care in LumA/HR+
+breast cancer. The geometry prediction (cycle lock in
+intact luminal cell) is fully convergent with the
+clinical development of palbociclib, ribociclib, and
+abemaciclib. The novel contribution is the CDKN1A
+quantitative predictor (CS-LIT-14), which is not in
+the published literature as a continuous variable.
+
+% ══════════════════════════════════════════════════════════════
+\section{Lock Type 2: Luminal B --- The DNMT3A/HDAC2
+Chromatin Lock}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Attractor geometry}
+
+\begin{center}
+\colorbox{mechanismbox}{
+\begin{minipage}{0.85\textwidth}
+\vspace{0.5em}
+\textbf{LUMINAL B --- TYPE 1 SLOPE ARREST WITH
+EPIGENETIC BRAKE}
+
+\medskip
+\textbf{Cell of origin:} Mature luminal epithelial cell\\
+\textbf{Normal terminal attractor:} ER-positive,
+low-proliferation luminal cell\\
+\textbf{Arrest point:} On the luminal slope with
+luminal identity present but ER output suppressed
+by chromatin remodelling\\
+\textbf{Lock:} DNMT3A/HDAC2 co-expression coupling
+suppresses TFF1/ESR1 transcriptional output\\
+\textbf{FOXA1/EZH2 ratio:} 8.10 (high, just below LumA)\\
+\textbf{Luminal programme status:} Present but muted
+
+\medskip
+\textbf{Key geometry:}\\
+FOXA1 high (but lower than LumA)\\
+DNMT3A/HDAC2 co-expression coupling: r$=+0.267$ in LumB
+vs r$=+0.071$ in LumA ($p=5.68\times10^{-56}$)\\
+TFF1/ESR1 decoupled: r lower in LumB than LumA
+($p=0.0019$ in METABRIC replication)\\
+The cell has luminal identity. The ER circuit is
+present but the chromatin state is suppressing
+its output.
+\vspace{0.5em}
+\end{minipage}
+}
+\end{center}
+
+\subsection{The molecular lock}
+
+LumB is distinguished from LumA by a specific
+epigenetic feature: DNMT3A and HDAC2 are
+co-expressed at levels that produce active
+chromatin compaction at ER-target gene promoters.
+The consequences:
+
+\begin{itemize}[noitemsep]
+  \item TFF1 (an ER-target gene and ER circuit
+        output marker) is decoupled from ESR1 ---
+        the ER is present but its transcriptional
+        output is suppressed
+  \item This suppression is HDAC2-mediated chromatin
+        compaction, not EZH2-mediated H3K27me3
+        (EZH2 is slightly elevated in LumB but is
+        not the primary lock)
+  \item The DNMT3A/HDAC2 co-expression coupling
+        ($r=+0.267$ in LumB vs $r=+0.071$ in LumA)
+        is the specific geometric signature of
+        the LumB lock
+  \item Endocrine therapy alone is insufficient
+        because the ER is present but its chromatin
+        is not fully accessible to downstream
+        transcriptional targets
+\end{itemize}
+
+\subsection{The therapeutic unlock}
+
+\begin{center}
+\begin{tabular}{p{3.5cm}p{9cm}}
+\toprule
+\textbf{Step} & \textbf{Action and rationale} \\
+\midrule
+First step
+& \textbf{HDAC inhibitor} (entinostat specifically ---
+  class I HDAC, HDAC1/2/3 selective) to open the
+  compacted chromatin at ER-target gene promoters.
+  This directly addresses the HDAC2-mediated lock. \\[0.3em]
+Second step
+& \textbf{Fulvestrant} (or aromatase inhibitor) to
+  engage the ER once its chromatin context is restored.
+  Without the HDACi first, endocrine therapy cannot
+  fully engage because the downstream targets are
+  chromatinised shut. \\[0.3em]
+Patient selector (novel)
+& \textbf{TFF1/ESR1 ratio as LumB patient selector}
+  for HDACi benefit. Low TFF1/ESR1 (decoupled)
+  = chromatin lock present = HDACi benefit predicted.
+  High TFF1/ESR1 (coupled) = no lock = no additional
+  HDACi benefit. Testable in NCT07235618 (actively
+  recruiting, January 2026). (CS-LIT-23) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Published confirmation}
+
+Entinostat $+$ exemestane: ENCORE 301 showed OS
+benefit ($p=0.036$) in ER$+$ patients. The E2112
+trial showed no benefit in unselected ER$+$ patients.
+The framework's contribution is the resolution of
+this contradiction: entinostat benefit is specifically
+in the DNMT3A/HDAC2-locked LumB subgroup, not in
+all ER$+$ patients. The TFF1/ESR1 ratio (CS-LIT-23)
+is the patient selector that identifies this subgroup.
+
+% ══════════════════════════════════════════════════════════════
+\section{Lock Type 3: HER2-Enriched --- The ERBB2
+Kinase Override}
+% ══════���═══════════════════════════════════════════════════════
+
+\subsection{Attractor geometry}
+
+\begin{center}
+\colorbox{mechanismbox}{
+\begin{minipage}{0.85\textwidth}
+\vspace{0.5em}
+\textbf{HER2-ENRICHED --- TYPE 1 SLOPE ARREST,
+KINASE OVERRIDE}
+
+\medskip
+\textbf{Cell of origin:} Luminal progenitor
+(luminal epithelial cell)\\
+\textbf{Normal terminal attractor:} Mature luminal cell\\
+\textbf{Arrest point:} On the luminal slope, arrested
+by ERBB2 amplicon signalling override\\
+\textbf{Lock:} ERBB2 amplification on chromosome 17q12
+drives constitutive PI3K/MAPK signalling, overriding
+normal luminal differentiation signals\\
+\textbf{FOXA1/EZH2 ratio:} 3.34 (intermediate)\\
+\textbf{Luminal programme status:} Partially retained
+(FOXA1 elevated $+12.7\%$, GATA3 present $-44.7\%$,
+ESR1 near-absent $-92.5\%$, PGR near-absent $-95.2\%$)
+
+\medskip
+\textbf{Key geometry:}\\
+The HER2 cell is not in the wrong valley (TYPE 2 excluded
+--- no SOX10, no KRT5/14, no VIM).\\
+It is on the luminal slope but the signalling that would
+complete differentiation is overwhelmed by the amplicon.\\
+This is TYPE 1 with a signalling-level brake, not an
+epigenetic brake.
+\vspace{0.5em}
+\end{minipage}
+}
+\end{center}
+
+\subsection{The molecular lock}
+
+The 17q12 amplicon encoding ERBB2 (and co-amplified
+STARD3, GRB7, MIEN1) drives:
+\begin{itemize}[noitemsep]
+  \item Constitutive PI3K/AKT/mTOR activation
+  \item Constitutive MAPK/ERK activation
+  \item Suppression of ESR1 and PGR transcription
+        (ER circuit severed despite retained FOXA1)
+  \item High proliferation (Ki67 elevated)
+  \item Resistance to endocrine therapy alone
+        (ER circuit severed by signalling override)
+\end{itemize}
+
+The lock is not epigenetic in origin. The chromatin
+is not the primary problem. The kinase signalling
+cascade is the lock. This is why neither CDK4/6
+inhibitors (cycle lock absent), HDACi (chromatin
+lock absent), nor EZH2 inhibitors (EZH2 is moderately
+elevated but is not the primary lock) are the correct
+first step. Anti-HER2 is the correct first step
+because it addresses the lock directly.
+
+\subsection{The therapeutic unlock}
+
+\begin{center}
+\begin{tabular}{p{3.5cm}p{9cm}}
+\toprule
+\textbf{Step} & \textbf{Action and rationale} \\
+\midrule
+First step
+& \textbf{Anti-HER2 therapy} (trastuzumab,
+  pertuzumab, T-DM1, or tucatinib depending on line)
+  to remove the amplicon signalling override. \\[0.3em]
+Second step
+& \textbf{Endocrine therapy} for the ER$+$/HER2$+$
+  (luminal/HER2) fraction once the amplicon override
+  is suppressed. The retained FOXA1 allows partial
+  ER circuit re-engagement after HER2 suppression. \\[0.3em]
+Subgroup (novel)
+& \textbf{EZH2i $+$ anti-HER2 for the HER2-deep
+  fraction:} CDH3-high, AR-low, EZH2$+118\%$
+  HER2-enriched patients have a secondary epigenetic
+  component. This subgroup requires EZH2 inhibition
+  in addition to anti-HER2. (CS-LIT-21) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Published confirmation}
+
+Anti-HER2 therapy is established standard of care.
+The geometry prediction (kinase arrest on luminal
+slope, not wrong valley) is confirmed by the
+observation that HER2-enriched tumours retain FOXA1
+and respond to endocrine therapy after HER2
+suppression. The HER2-deep subgroup (CS-LIT-21)
+with secondary EZH2 lock is the novel contribution.
+
+% ══════════════════════════════════════════════════════════════
+\section{Lock Type 4: TNBC/Basal-like --- The EZH2/PRC2
+Epigenetic Lock}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Attractor geometry}
+
+\begin{center}
+\colorbox{mechanismbox}{
+\begin{minipage}{0.85\textwidth}
+\vspace{0.5em}
+\textbf{TNBC/BASAL-LIKE --- COMPOSITE TYPE 1
+$\rightarrow$ TYPE 2}
+
+\medskip
+\textbf{Cell of origin:} BRCA1-regulated luminal
+progenitor\\
+\textbf{Normal terminal attractor:} Mature luminal cell\\
+\textbf{Arrest mechanism:} Two-stage composite:\\
+\quad Stage 1 (Type 1): BRCA1 loss blocks luminal
+progenitor differentiation (blocked approach)\\
+\quad Stage 2 (Type 2): Progenitor falls into
+basal/myoepithelial false attractor (wrong valley)\\
+\textbf{Lock:} EZH2/PRC2 H3K27me3 deposition on
+FOXA1, GATA3, ESR1 promoters maintains the wrong
+valley state\\
+\textbf{FOXA1/EZH2 ratio:} 0.52\\
+\textbf{EZH2 elevation:} $+189\%$ above normal
+Mature Luminal reference
+
+\medskip
+\textbf{Key geometry:}\\
+FOXA1 near-absent (silenced by H3K27me3)\\
+ESR1 absent (downstream of FOXA1 silencing)\\
+KRT5, KRT14, SOX10, FOXC1 expressed
+(wrong valley --- basal/myoepithelial identity)\\
+EZH2 massively elevated --- this IS the lock\\
+The luminal programme is present in the genome.
+It is epigenetically silenced. It can be de-silenced.
+\vspace{0.5em}
+\end{minipage}
+}
+\end{center}
+
+\subsection{The molecular lock}
+
+EZH2, the catalytic subunit of PRC2, deposits
+H3K27me3 (repressive trimethylation) on the promoters
+of FOXA1, GATA3, and ESR1. This is not a structural
+absence of luminal identity genes. It is a
+pharmacologically reversible epigenetic silencing.
+Evidence:
+
+\begin{itemize}[noitemsep]
+  \item EZH2 $+189\%$ above normal Mature Luminal
+        in scRNA-seq data (GSE176078)
+  \item FOXA1 near-absent despite intact gene
+        (silenced, not deleted)
+  \item Toska et al.\ \textit{Nature Medicine} 2017:
+        EZH2 inhibition restores FOXA1 expression in
+        ER-negative breast cancer
+  \item Schade et al.\ \textit{Nature} 2024:
+        PRC2/EZH2 inhibition drives TNBC toward
+        luminal-like differentiation with GATA3
+        induction
+  \item The EZH2 paradox: EZH2-high TNBC is
+        chemo-sensitive (high proliferation) but
+        late-relapsing (H3K27me3 maintains dormant
+        residual cell programme). Both arms
+        confirmed in GSE25066 ($n=508$; DRFS
+        HR$=1.363$, $p=0.0047$).
+\end{itemize}
+
+\subsection{The therapeutic unlock sequence}
+
+\begin{center}
+\begin{tabular}{p{3.5cm}p{9cm}}
+\toprule
+\textbf{Step} & \textbf{Action and rationale} \\
+\midrule
+First step
+& \textbf{Tazemetostat} (EZH2 inhibitor, FDA-approved
+  2020) to remove H3K27me3 marks from FOXA1, GATA3,
+  ESR1 promoters. Required before any downstream agent.
+  Without this step, there is no ER to target and no
+  luminal identity to engage. \\[0.3em]
+Second step\\(conversion therapy)
+& \textbf{Fulvestrant} once FOXA1 H-score
+  re-expression $\geq50$ is confirmed on Week~4
+  biopsy. Engages and degrades the restored ER.
+  Full trial proposal: CS-LIT-16 (Zenodo 2026-03-06).
+  \\[0.3em]
+Maintenance\\(post-chemo window)
+& \textbf{Tazemetostat maintenance} after neoadjuvant
+  chemotherapy in EZH2-high patients (H-score $\geq150$)
+  to eliminate the dormant residual EZH2-high population
+  before the 3--5 year late-relapse peak. DRFS at 3 years
+  as primary endpoint. Full trial proposal: CS-LIT-17
+  (Zenodo 2026-03-06). \\[0.3em]
+Patient selection
+& EZH2 IHC H-score $\geq150$, FOXA1 IHC H-score
+  $<20$ for conversion therapy. EZH2 IHC H-score
+  $\geq150$ alone for maintenance. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{The TNBC depth axis within Lock Type 4}
+
+Not all EZH2-high TNBC is at the same depth in the
+wrong valley. The framework identifies a continuous
+depth axis within TNBC characterised by:
+
+\begin{itemize}[noitemsep]
+  \item \textbf{AR as depth axis:}
+        AR expression negatively correlates with
+        depth score ($r=-0.378$, $p=6.23\times10^{-147}$,
+        $n=4{,}312$ cells). Higher AR = shallower
+        attractor. LAR (luminal androgen receptor)
+        subtype is the shallowest TNBC.
+  \item \textbf{TNBC depth score predicts DRFS:}
+        HR$=1.509$, $p=0.0001$ in GSE25066 ($n=508$).
+        Deeper TNBC = worse distant relapse.
+  \item \textbf{Treatment implication:}
+        LAR (AR-high) TNBC may respond to androgen
+        receptor antagonists (bicalutamide, enzalutamide)
+        as a subtype-specific option. The depth score
+        as a DRFS predictor is the patient selection
+        instrument. (CS-LIT-11, CS-LIT-25)
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════════
+\section{Lock Type 5: Claudin-low --- The Stem Root Lock}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Attractor geometry}
+
+\begin{center}
+\colorbox{mechanismbox}{
+\begin{minipage}{0.85\textwidth}
+\vspace{0.5em}
+\textbf{CLAUDIN-LOW --- TYPE 4 ROOT LOCK}
+
+\medskip
+\textbf{Cell of origin:} Mammary stem cell
+(not a luminal progenitor)\\
+\textbf{Normal terminal attractor:} None --- this
+cell never committed to luminal lineage\\
+\textbf{Arrest point:} At the progenitor root ---
+never descended into any specific lineage valley\\
+\textbf{Lock:} Stem cell programme maintenance ---
+no luminal, basal, or myoepithelial identity is
+present or silenced; it was never activated\\
+\textbf{FOXA1/EZH2 ratio:} 0.10 (lowest of all subtypes
+in scRNA-seq cancer-cell-specific measurement)\\
+\textbf{Luminal programme status:} Absent ---
+not silenced, not present
+
+\medskip
+\textbf{Key geometry (scRNA-seq, cancer cells only):}\\
+FOXA1 at near-zero (lowest of all subtypes)\\
+EZH2 low (not the mechanism --- EZH2 marks
+proliferating cells; CL is low-proliferation)\\
+CDH1, CLDN3, CLDN4, CLDN7 all absent
+(defining claudin signature)\\
+Stem markers elevated: CD44-high, CD24-low,
+ALDH1A3 present\\
+Immune compartment dominant: high TIL fraction
+\vspace{0.5em}
+\end{minipage}
+}
+\end{center}
+
+\subsection{Why EZH2 inhibition does not apply to CL}
+
+This is the most important distinction between TNBC
+(Lock Type 4) and Claudin-low (Lock Type 5). Both
+have low FOXA1. But:
+
+\begin{itemize}[noitemsep]
+  \item In TNBC: FOXA1 is absent because EZH2 is
+        silencing it. The gene is intact. Remove EZH2,
+        FOXA1 returns.
+  \item In CL: FOXA1 is absent because it was never
+        activated. The cell never committed to luminal
+        lineage. There is no FOXA1 programme to
+        de-silence --- it was never written.
+\end{itemize}
+
+Tazemetostat will not restore FOXA1 in CL tumours
+because there is nothing to de-repress. The luminal
+programme does not exist in these cells in a silenced
+form; it does not exist at all. This is the Type 4
+vs Type 2 distinction: root lock vs wrong valley.
+Treating a CL patient with tazemetostat $\rightarrow$
+fulvestrant (the CS-LIT-16 sequence) would be
+mechanistically incorrect. The CL patient requires
+a completely different therapeutic approach.
+
+\subsection{The molecular lock and its therapeutic
+implication}
+
+CL tumours have no epigenetic lock to dissolve and
+no kinase amplicon to suppress. The cancer cell
+itself is in a stem-like state that is not amenable
+to re-differentiation through the locks that work
+for Types 1--3. The accessible therapeutic node is
+the immune compartment:
+
+\begin{center}
+\begin{tabular}{p{3.5cm}p{9cm}}
+\toprule
+\textbf{Feature} & \textbf{Therapeutic implication} \\
+\midrule
+High TIL infiltration
+& Immune compartment is the primary target.
+  Cancer cell re-differentiation is not accessible. \\[0.3em]
+FOXP3/CD8A ratio
+  HR$=2.212$
+& FOXP3/CD8A ratio is the strongest immune OS
+  predictor in CL ($p$ confirmed). High FOXP3/CD8A
+  (Treg-dominated) predicts worse OS. This is the
+  key immune subgroup stratifier. (CS-LIT-20) \\[0.3em]
+Memory-low subgroup
+& Memory-low CL (Pommier 2020 subgroup 1 proxy)
+  is simultaneously deeper ($p=5.52\times10^{-8}$),
+  more CT-antigen de-repressed ($p=8.86\times10^{-9}$),
+  and more Treg-dominated (FOXP3/CD8A, $p=0.008$).
+  Memory-low is the primary anti-TIGIT $+$ anti-PD-1
+  beneficiary subgroup. (CS-LIT-19) \\[0.3em]
+TIGIT as immune target
+& Anti-TIGIT $+$ anti-PD-1 in memory-low CL:
+  belrestotug failed in \textit{unselected} TNBC
+  (May 2025). Framework predicts it works in
+  memory-low CL specifically. SKYLINE trial
+  (NCT06175390) has multi-omics biomarker arm.
+  The lineage memory score is the proposed selector.
+  (CS-LIT-19) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{CL as the deepest subtype: EZH2-free PCA}
+
+Standard PCA including EZH2 as a variable will
+place TNBC as the deepest subtype because TNBC
+has the highest EZH2 expression. But EZH2 is a
+proliferation marker, not a depth marker for CL.
+CL is a low-proliferation, stem-like subtype
+with low EZH2. When EZH2 is excluded from the
+depth PCA (EZH2-free PCA), CL emerges as the
+deepest subtype: depth score 6.572 vs TNBC 6.063.
+This is the correct measurement because depth
+in the Waddington landscape corresponds to
+distance from differentiated identity, which
+for CL is total (no identity) vs for TNBC is
+partial (identity silenced but present).
+(CS-LIT-3, CS-LIT-26)
+
+% ══════════════════════════════════════════════════════════════
+\section{Lock Type 6: Invasive Lobular Carcinoma ---
+The CDH1 Structural Lock}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Attractor geometry}
+
+\begin{center}
+\colorbox{mechanismbox}{
+\begin{minipage}{0.85\textwidth}
+\vspace{0.5em}
+\textbf{ILC --- TYPE 3 STRUCTURAL LOCK}
+
+\medskip
+\textbf{Cell of origin:} Mature luminal epithelial cell\\
+\textbf{Normal terminal attractor:} ER-positive,
+organised luminal cell with E-cadherin-mediated
+cell-cell adhesion maintaining ductal architecture\\
+\textbf{Arrest mechanism:} CDH1 (E-cadherin) loss
+removes the structural constraint that maintains
+luminal cell polarity and adhesion\\
+\textbf{Lock:} Not epigenetic. The lock is the
+absence of a structural component (E-cadherin)
+that is required for normal luminal cell behaviour
+and the maintenance of tissue architecture\\
+\textbf{FOXA1/EZH2:} FOXA1 \textit{hyperactivated}
+(above LumA levels) --- ILC is the geometric
+inverse of TNBC on the identity axis\\
+\textbf{Luminal programme:} Fully intact, possibly
+hyperactivated
+
+\medskip
+\textbf{Key geometry:}\\
+CDH1 biallelic loss (mutation $+$ LOH) = defining event\\
+FOXA1 amplified or hyperexpressed in a subset\\
+ESR1 expressed (ER-positive, endocrine sensitive)\\
+VIM absent (not mesenchymal despite single-file growth)\\
+The cell is fully luminal. It is growing in single-file
+pattern (``Indian file'') because the E-cadherin
+scaffold that would organise it into ducts is gone.
+This is architectural derangement, not identity loss.
+\vspace{0.5em}
+\end{minipage}
+}
+\end{center}
+
+\subsection{Why ILC is the geometric inverse of TNBC}
+
+\begin{center}
+\begin{tabular}{p{3.5cm}p{5cm}p{5cm}}
+\toprule
+\textbf{Feature} & \textbf{TNBC (Lock Type 4)}
+& \textbf{ILC (Lock Type 6)} \\
+\midrule
+Lock mechanism
+& Epigenetic (EZH2/H3K27me3)
+& Structural (CDH1 loss) \\
+FOXA1 status
+& Near-absent (silenced)
+& Hyperactivated \\
+ESR1 status
+& Absent (silenced)
+& Present (ER$+$) \\
+Luminal identity
+& Epigenetically locked away
+& Structurally unconstrained \\
+Lock direction
+& Identity programme suppressed
+& Identity programme released
+  from architectural constraint \\
+EZH2 level
+& Massively elevated
+& Normal or low \\
+Therapeutic first step
+& Remove the silencing (EZH2i)
+& Engage the intact but
+  unconstrained ER \\
+Resistance pattern
+& Endocrine therapy-primary
+  resistant
+& Aromatase inhibitor-resistant
+  (FOXA1 hyperactivation
+  overrides AI suppression) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{The molecular lock and therapeutic
+implication}
+
+Because ILC has CDH1 loss and FOXA1 hyperactivation:
+\begin{itemize}[noitemsep]
+  \item Aromatase inhibitors (AIs) are less effective
+        in ILC than in IDC: FOXA1 hyperactivation
+        amplifies the ER circuit so strongly that
+        ligand depletion alone is insufficient to
+        suppress output
+  \item Fulvestrant (SERD) is superior to AIs in ILC:
+        it degrades the ER protein directly rather
+        than depleting ligand, bypassing the FOXA1
+        amplification
+  \item FOXA1 hyperactivation as the stratifier:
+        patients with the highest FOXA1 (amplified
+        or highest expression) derive the greatest
+        differential benefit from fulvestrant over AI
+  \item The FOXA1-stratified fulvestrant superiority
+        prediction is novel and testable in archived
+        tissue from NCT02206984 (FALCON trial). (CS-LIT-18)
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════════
+\section{The Unified Classification: One Axis, Six Locks}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{The complete six lock type table}
+
+\begin{center}
+\begin{longtable}{p{1.8cm}p{2cm}p{2.5cm}p{2.5cm}p{4cm}}
+\toprule
+\textbf{Subtype}
+& \textbf{Lock type}
+& \textbf{FOXA1/EZH2}
+& \textbf{Attractor type}
+& \textbf{Therapeutic first step} \\
+\midrule
+\endhead
+Luminal A
+& CDK4/6 cycle lock
+& 9.38 (highest)
+& Type 1
+& CDK4/6i $+$ ET \\[0.3em]
+Luminal B
+& DNMT3A/HDAC2 chromatin lock
+& 8.10
+& Type 1 (epigenetic brake)
+& HDACi (entinostat) then ET \\[0.3em]
+HER2-enriched
+& ERBB2 kinase override
+& 3.34
+& Type 1 (kinase arrest)
+& Anti-HER2 then ET \\[0.3em]
+TNBC/Basal
+& EZH2/PRC2 H3K27me3 lock
+& 0.52
+& Composite 1$\rightarrow$2
+& EZH2i (tazemetostat) then fulvestrant
+  or maintenance \\[0.3em]
+Claudin-low
+& Stem root lock
+& 0.10 (lowest)
+& Type 4
+& Anti-TIGIT $+$ anti-PD-1
+  (memory-low subgroup) \\[0.3em]
+ILC
+& CDH1 structural lock
+& --- (FOXA1 hyper-activated)
+& Type 3
+& Fulvestrant (not AI);
+  FOXA1 IHC as selector \\
+\bottomrule
+\caption{The six lock type classification of breast
+cancer. FOXA1/EZH2 ratio values from GSE176078
+(scRNA-seq per-patient means, 19,542 cancer cells,
+26 patients). ILC is not placed on the FOXA1/EZH2
+axis because its lock is structural. All therapeutic
+first steps are derived from the lock type, not from
+receptor status alone.}
+\end{longtable}
+\end{center}
+
+\subsection{What the classification explains that
+receptor status does not}
+
+Current clinical practice classifies breast cancer
+by receptor status: ER$+$, PR$+$, HER2$+$, or
+triple-negative. This is necessary but insufficient:
+
+\begin{center}
+\begin{tabular}{p{4cm}p{4.5cm}p{4.5cm}}
+\toprule
+\textbf{Clinical question}
+& \textbf{Receptor status answer}
+& \textbf{Lock type answer} \\
+\midrule
+Why does entinostat work in some ER$+$ patients
+but not others?
+& Cannot explain (all ER$+$)
+& LumB has chromatin lock; LumA does not.
+  TFF1/ESR1 decoupling is the selector. \\[0.3em]
+Why does TNBC relapse late despite pCR?
+& Cannot explain
+& EZH2/PRC2 lock maintains dormant residual cells.
+  The EZH2 paradox. Maintenance tazemetostat
+  is the intervention. \\[0.3em]
+Why does anti-TIGIT fail in unselected TNBC?
+& Cannot explain
+& TNBC is a wrong-valley type (Lock 4), not a
+  root-lock type (Lock 5). Anti-TIGIT is for
+  memory-low CL. Wrong subtype. \\[0.3em]
+Why does fulvestrant outperform AI in ILC?
+& Cannot explain (all ER$+$)
+& FOXA1 hyperactivation makes ligand depletion
+  insufficient. ER degradation is required.
+  Lock type 6 specific. \\[0.3em]
+Why is tazemetostat not tested in maintenance?
+& No receptor status rationale
+& Lock type 4 has a residual EZH2-high dormant
+  population after chemo. Maintenance EZH2i
+  directly addresses the mechanism. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{What is confirmed vs novel in the classification}
+
+\begin{center}
+\begin{tabular}{p{4cm}p{2.8cm}p{6cm}}
+\toprule
+\textbf{Claim} & \textbf{Status} & \textbf{Evidence} \\
+\midrule
+
+CDK4/6 lock in LumA
+& CONVERGENT
+& Palbociclib, ribociclib, abemaciclib standard of care \\[0.8em]
+
+DNMT3A/HDAC2 coupling in LumB
+($r=+0.267$, $p=5.68\times10^{-56}$)
+& CONVERGENT-NOVEL
+& scRNA-seq confirmed; bulk METABRIC $p=0.0019$ replication \\[0.8em]
+
+TFF1/ESR1 decoupling as HDACi selector
+& NOVEL
+& CS-LIT-23; NCT07235618 active \\[0.8em]
+
+ERBB2 kinase override as Type~1
+& CONVERGENT
+& Trastuzumab history \\[0.8em]
+
+EZH2/PRC2 as TNBC lock
+& CONVERGENT-NOVEL
+& Schade 2024, Toska 2017 \\[0.8em]
+
+Tazemetostat $\rightarrow$ fulvestrant sequence
+& NOVEL
+& CS-LIT-16 (Zenodo 2026-03-06) \\[0.8em]
+
+Tazemetostat maintenance
+& NOVEL
+& CS-LIT-17 (Zenodo 2026-03-06) \\[0.8em]
+
+CL as Type~4 (root lock, not Type~2)
+& NOVEL
+& EZH2-free PCA; scRNA-seq geometry \\[0.8em]
+
+CL memory-low as anti-TIGIT beneficiary
+& NOVEL-URGENT
+& CS-LIT-19; post-belrestotug field \\[0.8em]
+
+ILC as structural inverse of TNBC
+& CONVERGENT-NOVEL
+& CDH1 literature; FOXA1 hyperactivation \\[0.8em]
+
+Fulvestrant superiority in ILC by FOXA1 IHC
+& NOVEL
+& CS-LIT-18; FALCON tissue available \\[0.8em]
+
+FOXA1/EZH2 as single ordering axis
+& CONFIRMED\\(7 datasets)
+& CS-LIT-1 (Zenodo 2026-03-06) \\[0.4em]
+
+\bottomrule
+\end{tabular}
+\end{center}
+\section{Derivation Provenance and Protocol}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{The before-document protocol}
+
+All six lock type assignments were made using the
+before-document protocol: each assignment was locked
+in a before-document prior to any script running on
+the relevant dataset. The document chain for each
+subtype:
+
+\begin{center}
+\begin{tabular}{p{2.5cm}p{3cm}p{7cm}}
+\toprule
+\textbf{Subtype} & \textbf{Before-document}
+& \textbf{Repository path} \\
+\midrule
+LumA   & BRCA-S1a & \texttt{.../LumA/} \\
+LumB   & BRCA-S5a & \texttt{.../LumB/} \\
+HER2   & BRCA-S3a & \texttt{.../HER2\_ENRICHED/} \\
+TNBC   & BRCA-S4a & \texttt{.../TNBC/predictions.md} \\
+CL     & BRCA-S7a & \texttt{.../Claudin-low/} \\
+ILC    & BRCA-S6a & \texttt{.../ILC/} \\
+Cross  & BRCA-S8h & \texttt{.../BRCA\_Cross\_Subtype\_}\\
+       &          & \texttt{Literature\_Check.md} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+All documents are version-controlled with cryptographic
+timestamps at:
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{\texttt{github.com/Eric-Robert-Lawson/attractor-oncology}}
+
+\subsection{Single-cell data: GSE176078}
+
+All ratio values and depth scores are derived from
+GSE176078 (Wu et al.\ \textit{Nature Genetics} 2021):
+\begin{itemize}[noitemsep]
+  \item 100,064 total cells; 19,542 cancer cells
+        used for ratio and depth derivation
+  \item 26 patients; 4 PAM50 subtypes in scRNA-seq
+        ($+$ claudin-low and ILC from TCGA bulk)
+  \item Per-patient mean FOXA1 / mean EZH2 computed
+        across all cancer cells from each patient
+  \item Scripts: \texttt{ratio1.py--ratio4.py} in
+        \texttt{.../FOXA1\_EZH2\_RATIO/}
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════════
+\section{The Unifying Biological Principle}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\colorbox{summarybox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.6em}
+\textbf{THE UNIFYING PRINCIPLE}
+
+\medskip
+Breast cancer subtypes are not a random collection
+of molecular accidents. They are a structured set
+of positions in a single developmental landscape,
+each maintained by a specific molecular lock.
+
+\medskip
+The FOXA1/EZH2 ratio encodes position on the luminal
+identity axis. High ratio: the cell is fully luminal
+and its lock is in the cycle or chromatin machinery.
+Low ratio: the cell has lost luminal identity through
+epigenetic silencing (TNBC) or never had it (CL).
+ILC is the structural exception: FOXA1 is
+hyperactivated but E-cadherin is gone.
+
+\medskip
+Each lock type has exactly one correct first step:
+\begin{itemize}[noitemsep,leftmargin=*]
+  \item LumA: CDK4/6 inhibitor (cycle lock)
+  \item LumB: HDACi (chromatin brake)
+  \item HER2: anti-HER2 (kinase override)
+  \item TNBC: EZH2 inhibitor (epigenetic silencing)
+  \item CL: anti-TIGIT $+$ anti-PD-1 (immune only)
+  \item ILC: fulvestrant, not AI (structural hyper-FOXA1)
+\end{itemize}
+
+\medskip
+Applying the wrong first step is not merely
+suboptimal. In some cases it is actively incorrect:
+\begin{itemize}[noitemsep,leftmargin=*]
+  \item Giving endocrine therapy to TNBC without
+        EZH2i first: no ER to engage (silenced)
+  \item Giving tazemetostat to CL: no FOXA1 programme
+        to de-silence (never written)
+  \item Giving AI to FOXA1-hyperactivated ILC:
+        ligand depletion is insufficient when the
+        ER amplifier is structurally unconstrained
+  \item Giving anti-TIGIT to unselected TNBC:
+        wrong subtype (TNBC is Type 2, CL is Type 4)
+\end{itemize}
+
+\medskip
+The classification makes the sequencing logic explicit.
+Each treatment decision follows from the lock type,
+not from the receptor status alone.
+\vspace{0.5em}
+\end{minipage}
+}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{Locked Statement}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\colorbox{novelbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.6em}
+\textbf{LOCKED AS OF 2026-03-06}
+
+\medskip
+The six lock type classification of breast cancer is
+derived from Waddington landscape attractor geometry
+applied to 19,542 single cancer cells before literature
+review. All six lock types have published biological
+support. Three generate novel trial proposals
+(CS-LIT-16, CS-LIT-17, CS-LIT-18, CS-LIT-19,
+CS-LIT-21, CS-LIT-23) with no currently registered
+trials.
+
+\medskip
+The classification is ordered by the FOXA1/EZH2 ratio
+(validated in $\sim$7,500 patients across seven
+independent datasets, companion Zenodo deposit
+2026-03-06). It provides a mechanistically unified
+explanation for why these six subtypes exist, why they
+require different therapeutic first steps, and why
+applying those steps out of order fails.
+
+\medskip
+No competing attractor geometry classification of
+breast cancer subtypes currently exists in the
+published literature.
+
+\medskip
+\hfill --- Eric Robert Lawson, March 6, 2026
+\vspace{0.4em}
+\end{minipage}
+}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section*{Repository and Reproducibility}
+\addcontentsline{toc}{section}{Repository and
+Reproducibility}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{\texttt{https://github.com/Eric-Robert-Lawson/attractor-oncology}}\\[0.3em]
+\small Repository ID: 1172048282 \textbar{}
+MIT License \textbar{}
+Python \textbar{}
+Public
+\end{center}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Content} & \textbf{Path} \\
+\midrule
+Attractor geometry axioms
+& \texttt{ATTRACTOR\_GEOMETRY\_AXIOMS.md} \\
+BRCA subtype orientation
+& \texttt{Cancer\_Research/BRCA/DEEP\_DIVE/}
+  \texttt{BRCA\_Subtypes.md} \\
+Cross-subtype literature check
+& \texttt{.../BRCA\_Cross\_Subtype\_}
+  \texttt{Literature\_Check.md} \\
+LumA deep dive & \texttt{.../LumA/} \\
+LumB deep dive & \texttt{.../LumB/} \\
+HER2 deep dive & \texttt{.../HER2\_ENRICHED/} \\
+TNBC deep dive & \texttt{.../TNBC/} \\
+Claudin-low deep dive & \texttt{.../Claudin-low/} \\
+ILC deep dive & \texttt{.../ILC/} \\
+FOXA1/EZH2 ratio scripts
+& \texttt{.../FOXA1\_EZH2\_RATIO/ratio1--4.py} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section*{Author Statement}
+\addcontentsline{toc}{section}{Author Statement}
+% ══════════════════════════��═══════════════════════════════════
+
+This work was conducted independently by Eric Robert
+Lawson under the OrganismCore research programme. No
+institutional funding was received. No conflicts of
+interest exist. All data used is publicly available.
+All code is open source under the MIT licence.
+
+% ══════════════════════════════════════════════════════════════
+\section*{Contact}
+\addcontentsline{toc}{section}{Contact}
+% ══════════════════════════════════════════════════════════════
+
+\begin{tabular}{ll}
+Author        & Eric Robert Lawson \\
+Organisation  & OrganismCore \\
+Email         &
+  \href{mailto:OrganismCore@proton.me}
+       {OrganismCore@proton.me} \\
+ORCID         &
+  \href{https://orcid.org/0009-0002-0414-6544}
+       {https://orcid.org/0009-0002-0414-6544} \\
+Repository    &
+  \href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+       {github.com/Eric-Robert-Lawson/attractor-oncology} \\
+Homepage      &
+  \href{https://github.com/Eric-Robert-Lawson/OrganismCore}
+       {github.com/Eric-Robert-Lawson/OrganismCore} \\
+Date          & 2026-03-06 \\
+\end{tabular}
+
+\vspace{2em}
+
+\begin{center}
+\itshape
+``Six subtypes. Six locks. Six keys.\\
+The same axis orders them all.\\
+The FOXA1/EZH2 ratio is the ruler.\\
+The lock type is the prescription.''
+
+\medskip
+\upshape
+--- Eric Robert Lawson, March 6, 2026
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\end{document}

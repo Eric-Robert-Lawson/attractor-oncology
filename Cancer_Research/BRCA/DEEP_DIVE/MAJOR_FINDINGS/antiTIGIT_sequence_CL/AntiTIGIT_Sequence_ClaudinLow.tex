@@ -1,0 +1,792 @@
+\documentclass[12pt, a4paper]{article}
+
+% ── PACKAGES ──────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue,
+    pdftitle={Anti-TIGIT Before Anti-PD-1 in
+              Claudin-Low Memory-Low Breast Cancer:
+              Patient Selection by Lineage Memory
+              Score and FOXP3/CD8A Ratio as the
+              Solution to Anti-TIGIT Trial Failures},
+    pdfauthor={Eric Robert Lawson},
+    pdfkeywords={anti-TIGIT, tiragolumab, TIGIT,
+                 claudin-low, memory-low, FOXP3, CD8A,
+                 Treg, checkpoint inhibitor, anti-PD-1,
+                 atezolizumab, SKYLINE, NCT06175390,
+                 belrestotug, breast cancer, triple-negative,
+                 patient selection, FOXA1, SPDEF, GATA3,
+                 CT antigen, attractor geometry,
+                 Waddington landscape, OrganismCore,
+                 GSE176078, Type 4, root lock,
+                 immune compartment, precision oncology}
+}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{authblk}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{setspace}
+\usepackage{multirow}
+
+% ── COLOURS ───────────────────────────────────────────────────
+\definecolor{repobox}{RGB}{240,247,255}
+\definecolor{findingbox}{RGB}{245,255,245}
+\definecolor{convergentbox}{RGB}{255,250,235}
+\definecolor{mechanismbox}{RGB}{250,245,255}
+\definecolor{novelbox}{RGB}{255,248,220}
+\definecolor{actionbox}{RGB}{230,255,230}
+\definecolor{urgentbox}{RGB}{255,235,235}
+\definecolor{failurebox}{RGB}{255,240,240}
+\definecolor{statbox}{RGB}{240,240,255}
+
+% ── HEADER / FOOTER ───────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\footnotesize CS-LIT-19/20: Anti-TIGIT Sequence
+       in Claudin-Low / Memory-Low}
+\rhead{\footnotesize OrganismCore \textbar{} 2026-03-06}
+\rfoot{\small Page \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\setlength{\headheight}{24pt}
+\addtolength{\topmargin}{-10pt}
+
+% ── SECTION FORMATTING ────────────────────────────────────────
+\titleformat{\section}
+  {\large\bfseries}{\thesection}{1em}{}[\titlerule]
+\titleformat{\subsection}
+  {\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\small\bfseries}{\thesubsubsection}{1em}{}
+
+% ══════════════════════════════════════════════════════════════
+% TITLE
+% ══════════════════════════════════════════════════════════════
+\title{
+    \vspace{-1em}
+    \textbf{Anti-TIGIT Before Anti-PD-1 in Claudin-Low,
+    Memory-Low Breast Cancer:}\\[0.5em]
+    \large Patient Selection by Lineage Memory Score
+    and FOXP3/CD8A Ratio as the Mechanistic Solution
+    to Anti-TIGIT Trial Failures\\[0.4em]
+    \normalsize \textit{OrganismCore Framework ---
+    Documents CS-LIT-19 and CS-LIT-20}\\[0.3em]
+    \small Derived from Waddington Attractor Geometry
+    of 19,542 Single Cancer Cells (GSE176078)\\[0.3em]
+    \small Confirmed by Taylor et al.\ \textit{JCI} 2017
+    and Pommier et al.\ \textit{Nature Communications} 2020
+}
+
+\author[1]{Eric Robert Lawson}
+\affil[1]{
+    OrganismCore\\
+    \href{mailto:OrganismCore@proton.me}
+         {OrganismCore@proton.me}\\
+    ORCID:
+    \href{https://orcid.org/0009-0002-0414-6544}
+         {0009-0002-0414-6544}
+}
+
+\date{March 6, 2026}
+
+% ══════════════════════════════════════════════════════════════
+\begin{document}
+% ══════════════════════════════════════════════════════════════
+
+\maketitle
+\thispagestyle{fancy}
+
+% ── REPOSITORY POINTER ────────────────────────────────────────
+\begin{center}
+\colorbox{repobox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\centering
+\textbf{Full computational record --- scripts, data
+caches, reasoning artifacts, and raw logs:}\\[0.4em]
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{\texttt{https://github.com/Eric-Robert-Lawson/attractor-oncology}}
+\\[0.3em]
+\small Repository ID: 1172048282 \textbar{}
+MIT License \textbar{}
+Python \textbar{}
+Public\\[0.2em]
+Part of the OrganismCore BRCA Cross-Subtype Analysis
+(BRCA-S8h, 2026-03-05).
+All predictions locked before literature review.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\vspace{0.8em}
+
+% ── TIME-SENSITIVE BOX ──��─────────────────────────────────────
+\begin{center}
+\colorbox{urgentbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\centering
+\textbf{TIME-SENSITIVE NOTE}\\[0.4em]
+\small
+SKYLINE (NCT06175390) --- Phase~II tiragolumab
+$+$ atezolizumab $+$ chemotherapy in TNBC, Institut
+Curie. PI: Prof.\ Fran\c{c}ois-Cl\'{e}ment Bidard.
+Enrollment open; estimated completion: July 2026.\\[0.3em]
+The trial includes a \textbf{multi-omics biomarker arm}.
+It does \textbf{not} currently use claudin-low subtype,
+memory-low lineage score, or FOXP3/CD8A ratio as
+patient stratification or correlative variables.\\[0.3em]
+These variables could be added to the biomarker
+analysis on already-planned tissue collection
+without protocol amendment.\\[0.4em]
+\textbf{Belrestotug (GSK/iTeos) discontinued May 2025}
+after Phase~II failures in PD-L1-high NSCLC and HNSCC.
+No claudin-low enrichment. No memory-low selection.
+No FOXP3/CD8A stratification. The failures are
+\textit{consistent with the framework}: unselected
+populations are not the predicted beneficiary.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\vspace{0.8em}
+
+% ══════════════════════════════════════════════════════════════
+\begin{abstract}
+% ══════════════════════════════════════════════════════════════
+\noindent
+Anti-TIGIT immunotherapy has failed in multiple
+Phase~II/III trials in unselected cancer populations
+(most recently belrestotug, May 2025, in PD-L1-high
+NSCLC and HNSCC). The OrganismCore Waddington
+attractor geometry framework, applied to 19,542 single
+cancer cells (GSE176078), identifies the specific
+patient population that is predicted to benefit from
+anti-TIGIT and the reason why unselected trials fail:
+the predicted beneficiary is the claudin-low,
+memory-low breast cancer subgroup specifically, and
+the sequence is required --- anti-TIGIT must precede
+anti-PD-1, not accompany it.
+
+\textbf{Finding CS-LIT-19 (the sequence):}
+Claudin-low (CL) breast cancer is the Type~4 root
+lock attractor --- no luminal identity programme,
+highest CT antigen load, highest immune infiltration,
+most stem-like. Within CL, the memory-low subgroup
+(FOXA1/SPDEF/GATA3 absent; Pommier et al.\
+\textit{Nature Communications} 2020) is the most
+deeply arrested and most immune-infiltrated
+subpopulation. Taylor et al.\ (\textit{JCI} 2017,
+Morel group) demonstrated that anti-PD-1 alone in
+claudin-low breast cancer amplifies Tregs before
+depleting them, making outcomes worse when given
+first. Only rigorous Treg depletion produces tumour
+growth delay. Anti-TIGIT (tiragolumab, ociperlimab)
+depletes Tregs via the TIGIT/CD155 co-inhibitory
+axis. The required sequence is therefore: anti-TIGIT
+first (Treg depletion) $\rightarrow$ anti-PD-1 second
+(checkpoint release with Tregs cleared). Reversing
+the sequence or using anti-PD-1 without prior Treg
+depletion worsens outcomes in CL.
+
+\textbf{Finding CS-LIT-20 (the patient selection
+instrument):}
+The FOXP3/CD8A ratio is the strongest single
+immune biomarker in claudin-low breast cancer
+(HR$=2.212$ in CL-specific survival analysis from
+GSE176078). High FOXP3/CD8A means Tregs dominate
+cytotoxic T cells --- the exact condition that
+anti-TIGIT addresses. The memory-low lineage score
+(FOXA1/SPDEF/GATA3 absent) identifies the
+subpopulation within CL with the highest CT
+antigen load and highest immune infiltration ---
+the patients for whom the immune compartment is
+the primary and potentially actionable target.
+
+\textbf{Why unselected trials fail:}
+Belrestotug was tested in PD-L1-high NSCLC and
+HNSCC --- neither is claudin-low breast cancer.
+Neither trial used FOXP3/CD8A stratification.
+Neither specified the anti-TIGIT first sequence as
+a protocol requirement. Anti-PD-1 in unselected
+populations amplifies Tregs as a resistance mechanism.
+The failures are mechanistically predictable from
+the framework and do not undermine the prediction
+for the specific selected population.
+
+NCT06175390 (SKYLINE; tiragolumab $+$ atezolizumab
+in TNBC; Institut Curie; PI: Prof.\ Bidard;
+enrolling until July 2026) has a multi-omics
+biomarker arm that provides an immediate opportunity
+to add claudin-low subtype and FOXP3/CD8A ratio as
+stratification variables without protocol amendment.
+
+Verdict: CONVERGENT-NOVEL.
+\end{abstract}
+
+\vspace{0.5em}
+\noindent\textbf{Keywords:}
+anti-TIGIT; tiragolumab; TIGIT; claudin-low;
+memory-low; FOXP3; CD8A; Treg; checkpoint inhibitor;
+anti-PD-1; atezolizumab; SKYLINE; NCT06175390;
+belrestotug; breast cancer; patient selection;
+FOXA1; SPDEF; GATA3; CT antigen; attractor geometry;
+Waddington landscape; OrganismCore; Type~4; root lock;
+immune compartment; precision oncology;
+CONVERGENT-NOVEL
+
+\newpage
+\tableofcontents
+\newpage
+
+% ══════════════════════════════════════════════════════════════
+\section{Document Metadata}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Field} & \textbf{Value} \\
+\midrule
+Document IDs & CS-LIT-19 and CS-LIT-20 \\
+Parent document & BRCA-S8h (2026-03-05) \\
+Verdict & CONVERGENT-NOVEL \\
+Date & 2026-03-06 \\
+Author & Eric Robert Lawson \\
+ORCID & 0009-0002-0414-6544 \\
+Organisation & OrganismCore \\
+Contact & OrganismCore@proton.me \\
+Repository &
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{attractor-oncology} (ID: 1172048282) \\
+Derivation data & GSE176078 (19,542 single cancer cells) \\
+Key supporting references &
+Taylor et al.\ \textit{JCI} 2017 \\
+& Pommier et al.\ \textit{Nat Comms} 2020 \\
+Target trial &
+NCT06175390 (SKYLINE; Institut Curie) \\
+Trial PI &
+Prof.\ Fran\c{c}ois-Cl\'{e}ment Bidard \\
+CS-LIT-2 DOI &
+\href{https://doi.org/10.5281/zenodo.18884158}
+{10.5281/zenodo.18884158} \\
+CS-LIT-6 DOI &
+\href{https://doi.org/10.5281/zenodo.18891770}
+{10.5281/zenodo.18891770} \\
+License & CC BY 4.0 \\
+Biological contradictions & 0 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{Claudin-Low: The Type~4 Root Lock Attractor}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Position in the six lock type classification}
+
+In the OrganismCore six lock type classification
+(CS-LIT-2,
+\href{https://doi.org/10.5281/zenodo.18884158}
+{DOI: 10.5281/zenodo.18884158}), claudin-low (CL)
+breast cancer is the \textbf{Type~4 root lock}:
+
+\begin{center}
+\begin{tabular}{p{3cm}p{9cm}}
+\toprule
+\textbf{Feature} & \textbf{Description} \\
+\midrule
+Attractor type &
+Type~4: Root lock. Cell arrested at the progenitor
+root. The luminal identity programme was never
+activated --- it is absent, not silenced. \\[0.4em]
+FOXA1/EZH2 ratio &
+$0.10$ --- lowest of all measurable subtypes.
+FOXA1 is near-zero (no luminal programme).
+EZH2 is elevated (the cell never committed). \\[0.4em]
+What this means &
+No FOXA1, GATA3, ESR1, or luminal circuit to
+target with endocrine therapy. The identity
+compartment cannot be the primary target.
+\textbf{The immune compartment is the only
+accessible therapeutic axis.} \\[0.4em]
+CL depth score &
+EZH2-free PCA: $6.572$ --- deepest subtype,
+exceeding TNBC ($6.063$) when measured
+without EZH2 distortion. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{The memory-low subgroup (Pommier et al.\
+\textit{Nature Communications} 2020)}
+
+Within claudin-low, Pommier et al.\ (2020) identified
+a memory-low subgroup (subgroup~1) defined by:
+
+\begin{itemize}
+    \item \textbf{FOXA1/SPDEF/GATA3 absent:}
+    No luminal lineage memory markers. The cell has
+    not retained any transcriptional memory of
+    luminal commitment.
+    \item \textbf{Highest CT antigen load:}
+    Cancer-testis antigens (MAGE-A1, NY-ESO-1,
+    SSX family) are de-repressed in deeply
+    undifferentiated cells --- epigenetic
+    de-repression of germline programmes. This
+    is the direct consequence of the root lock
+    geometry: cells at the progenitor root have
+    not silenced germline programmes.
+    \item \textbf{Highest immune infiltration:}
+    CT antigens are immunogenic. High CT antigen
+    expression drives immune cell recruitment.
+    The memory-low subgroup has the highest
+    immune infiltration of any CL subgroup.
+    \item \textbf{Most stem-like:}
+    The most undifferentiated subgroup within
+    the most undifferentiated subtype. The deepest
+    point in the framework's attractor landscape.
+\end{itemize}
+
+The memory-low subgroup is the primary predicted
+beneficiary of immune therapy --- not CL as a
+whole, and certainly not unselected TNBC.
+
+% ══════════════════════════════════════════════════════════════
+\section{Finding CS-LIT-19: The Required Sequence}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Why anti-PD-1 alone fails in CL}
+
+Taylor et al.\ (\textit{Journal of Clinical
+Investigation}, 2017, Morel group) is the
+definitive experimental paper on immune therapy
+in claudin-low breast cancer. The key findings:
+
+\begin{center}
+\colorbox{convergentbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{TAYLOR et al.\ JCI 2017 --- KEY FINDINGS:}\\[0.4em]
+\begin{enumerate}[noitemsep]
+    \item Anti-PD-1 alone in claudin-low mouse
+    mammary tumours \textbf{amplifies Tregs}
+    before depleting them --- the initial
+    response to PD-1 blockade in CL is Treg
+    expansion, not Treg depletion.
+    \item Giving anti-PD-1 first therefore
+    \textbf{worsens the immune suppression
+    environment} before potentially improving it.
+    Outcomes are worse when anti-PD-1 precedes
+    Treg depletion.
+    \item \textbf{Rigorous Treg depletion first}
+    (depleting FOXP3$^+$ cells) produces
+    substantial tumour growth delay in CL
+    models.
+    \item The mechanism: in CL, Tregs dominate
+    the immune environment via FOXP3 expression
+    and TIGIT/CD155 co-inhibitory signalling.
+    CD8$^+$ cytotoxic T cells are present but
+    are suppressed by Treg activity. Anti-PD-1
+    releases PD-1-suppressed T cells globally,
+    including Tregs --- enhancing Treg activity
+    before effector T cell activity.
+\end{enumerate}
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\subsection{Why anti-TIGIT specifically}
+
+Anti-TIGIT (tiragolumab, ociperlimab, vibostolimab)
+targets the TIGIT/CD155 co-inhibitory axis. TIGIT
+is expressed on Tregs and on exhausted CD8$^+$ T cells.
+CD155 (PVR) is expressed on tumour cells and antigen-
+presenting cells. The TIGIT/CD155 interaction:
+
+\begin{itemize}
+    \item Suppresses Treg-killing of tumour cells
+    (Tregs use TIGIT to maintain dominant
+    suppression)
+    \item Maintains CD8$^+$ T cell exhaustion
+    \item Anti-TIGIT disrupts both: it partially
+    depletes Tregs (via Fc-mediated ADCC of
+    TIGIT-expressing Tregs) and releases CD8$^+$
+    T cells from TIGIT-mediated exhaustion
+\end{itemize}
+
+Anti-TIGIT is the mechanistically correct Treg-depleting
+agent for the CL context because TIGIT is the
+co-inhibitory molecule through which Tregs dominate
+the CL immune microenvironment.
+
+\subsection{The required sequence}
+
+\begin{center}
+\colorbox{mechanismbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{THE REQUIRED SEQUENCE IN CL MEMORY-LOW:}\\[0.5em]
+\textbf{Step~1:} Anti-TIGIT (tiragolumab or
+equivalent)\\
+$\downarrow$\\
+TIGIT/CD155 axis disrupted\\
+Tregs depleted (ADCC on TIGIT$^+$ Tregs)\\
+CD8$^+$ T cell TIGIT-exhaustion partially reversed\\
+Immune microenvironment shifted from
+Treg-dominant to effector-permissive\\[0.5em]
+\textbf{Step~2:} Anti-PD-1 or anti-PD-L1
+(pembrolizumab, atezolizumab)\\
+$\downarrow$\\
+PD-1/PD-L1 axis disrupted in a Treg-cleared
+environment\\
+CD8$^+$ cytotoxic T cells activated against
+CT antigen-expressing tumour cells\\
+Durable anti-tumour immune response\\[0.5em]
+\textbf{If reversed (anti-PD-1 first):}\\
+Anti-PD-1 releases PD-1 brake globally\\
+Tregs expand (Taylor JCI 2017)\\
+Immune suppression worsens before improving\\
+The window for anti-TIGIT Treg depletion is
+compromised by prior Treg expansion
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\noindent The sequence is a protocol requirement, not
+a preference. The biology does not support
+administering these agents simultaneously or in
+reverse order in the CL memory-low population.
+
+% ══════════════════════════════════════════════════════════════
+\section{Finding CS-LIT-20: The Patient Selection
+Instrument --- FOXP3/CD8A Ratio}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{The ratio and its biological meaning}
+
+\begin{center}
+\colorbox{statbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\centering
+\textbf{FOXP3/CD8A RATIO IN CLAUDIN-LOW}\\[0.5em]
+\textbf{HR = 2.212 in CL-specific survival analysis
+(GSE176078)}\\[0.4em]
+High FOXP3/CD8A $\rightarrow$ Tregs dominate
+cytotoxic T cells\\
+Low FOXP3/CD8A $\rightarrow$ Cytotoxic T cells
+relatively dominant\\[0.3em]
+In CL, high FOXP3/CD8A patients carry HR$=2.212$
+for worse survival --- confirming that Treg
+dominance is the primary driver of poor outcomes
+in this subtype.\\[0.3em]
+\textbf{Anti-TIGIT directly addresses high
+FOXP3/CD8A: it depletes FOXP3$^+$ Tregs and
+releases CD8$^+$ T cells.}
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\subsection{How to use the ratio clinically}
+
+The FOXP3/CD8A ratio is computable from:
+\begin{itemize}
+    \item \textbf{IHC:} FOXP3 IHC (standard clinical
+    antibody, available in any oncology pathology lab)
+    $+$ CD8A IHC. H-score ratio or cell-count ratio.
+    \item \textbf{RNA-seq:} FOXP3 transcript /
+    CD8A transcript from bulk or single-cell data.
+    \item \textbf{NanoString / immune panel:}
+    Computable from any multi-gene immune panel
+    that includes both markers.
+\end{itemize}
+
+The prediction: within CL (identified by lineage
+memory score: FOXA1/SPDEF/GATA3 absent), patients
+with the highest FOXP3/CD8A ratio derive the greatest
+benefit from anti-TIGIT first $\rightarrow$ anti-PD-1
+second. The ratio is a continuous predictor of
+benefit magnitude, not a binary cut-point.
+
+\subsection{The two-variable patient selection
+instrument}
+
+Full patient selection for the predicted beneficiary
+population requires both variables:
+
+\begin{center}
+\begin{tabular}{p{4cm}p{7.5cm}}
+\toprule
+\textbf{Variable} & \textbf{Identification} \\
+\midrule
+\textbf{CL subtype + memory-low} &
+Lineage memory score: FOXA1, SPDEF, GATA3 all absent
+(IHC H-score $<10$ for each). This identifies the
+Type~4 root lock attractor within TNBC.
+Alternatively: PAM50 claudin-low call $+$
+low FOXA1/EZH2 ratio (CS-LIT-22,
+\href{https://doi.org/10.5281/zenodo.18892788}
+{DOI: 10.5281/zenodo.18892788}). \\[0.5em]
+\textbf{FOXP3/CD8A ratio} &
+IHC or RNA-based ratio. Quantifies Treg dominance.
+The patient selection confirms the Treg-dominant
+immune environment that anti-TIGIT addresses.
+High ratio ($>$ median in CL cohort) identifies
+the predicted primary beneficiary. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{The Anti-TIGIT Trial Failures: Why They
+Are Consistent with This Framework}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\colorbox{failurebox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{BELRESTOTUG (GSK/iTeos): DISCONTINUED
+MAY 2025}\\[0.4em]
+\textbf{Trials:}\\
+GALAXIES Lung-201 (NCT05565378): belrestotug
+$+$ dostarlimab (anti-PD-1) vs dostarlimab alone
+in PD-L1-high ($\geq50\%$ TPS) unresectable
+locally advanced or metastatic NSCLC.\\[0.3em]
+GALAXIES H\&N-202 (NCT06062420): belrestotug
+$+$ dostarlimab in PD-L1-positive recurrent or
+metastatic HNSCC.\\[0.4em]
+\textbf{Result:} Both trials failed to show
+meaningful improvement in PFS over dostarlimab
+monotherapy. ORR improved in NSCLC but not to
+clinical significance. Program discontinued.\\[0.4em]
+\textbf{Framework interpretation:}\\
+\begin{enumerate}[noitemsep]
+    \item Neither trial enrolled claudin-low
+    breast cancer. NSCLC and HNSCC are not
+    predicted beneficiary populations.
+    \item Neither trial used FOXP3/CD8A
+    stratification. Treg-dominant patients
+    were not selected.
+    \item Neither trial specified anti-TIGIT
+    first as a sequence requirement ---
+    both gave concurrent combination.
+    \item PD-L1-high selection is not the
+    same as CL memory-low selection: PD-L1
+    measures checkpoint expression, not the
+    Treg/CD8 dominance ratio that determines
+    anti-TIGIT benefit.
+\end{enumerate}
+\textbf{The failures are exactly what the
+framework predicts for unselected, non-CL,
+wrong-sequence populations.}\\[0.3em]
+They do not contradict the prediction for
+memory-low CL with high FOXP3/CD8A given
+anti-TIGIT first.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\begin{center}
+\begin{tabular}{p{4.5cm}p{3.5cm}p{3.5cm}}
+\toprule
+\textbf{Trial characteristic} &
+\textbf{Belrestotug} &
+\textbf{Framework prediction} \\
+\midrule
+Tumour type &
+NSCLC, HNSCC &
+CL breast cancer \\[0.3em]
+Patient selection &
+PD-L1 $\geq50\%$ TPS &
+Memory-low $+$ FOXP3/CD8A high \\[0.3em]
+Sequence &
+Concurrent combination &
+Anti-TIGIT first \\[0.3em]
+Treg stratification &
+None &
+Required \\[0.3em]
+Result &
+Failure &
+Predicted failure (wrong population,
+wrong sequence) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{SKYLINE (NCT06175390): The Immediate
+Opportunity}
+% ═════════════════════��════════════════════════════════════════
+
+\begin{center}
+\colorbox{actionbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{SKYLINE TRIAL DETAILS:}\\[0.4em]
+\textbf{Full title:} Phase~II study evaluating
+tiragolumab $+$ atezolizumab $+$ chemotherapy
+in TNBC.\\[0.3em]
+\textbf{Sponsor:} Institut Curie, Paris.\\[0.3em]
+\textbf{PI:} Prof.\ Fran\c{c}ois-Cl\'{e}ment Bidard.\\[0.3em]
+\textbf{Contact:} Institut Curie, 26 rue d'Ulm,
+75005 Paris, France. Tel: $+$33\,1\,44\,32\,46\,70.\\[0.3em]
+\textbf{Cohorts:} Neoadjuvant (early TNBC) and
+metastatic TNBC.\\[0.3em]
+\textbf{Enrollment:} Ongoing. Estimated
+completion: July 2026.\\[0.3em]
+\textbf{Biomarker arm:} Multi-omics biomarker
+collection included in trial design.\\[0.4em]
+\textbf{Current gap:}\\
+No claudin-low subtype annotation.\\
+No memory-low (FOXA1/SPDEF/GATA3) stratification.\\
+No FOXP3/CD8A ratio analysis.\\[0.4em]
+\textbf{Proposed addition (no protocol amendment
+needed):}\\
+CL subtype annotation from tumour RNA or IHC
+on already-planned biopsy tissue. FOXP3 and
+CD8A IHC on the same tissue. This adds three
+IHC stains (FOXA1, FOXP3, CD8A) and/or an RNA
+panel component. No additional patient visit.\\[0.4em]
+\textbf{The testable prediction in SKYLINE:}\\
+Within the TNBC cohort, patients classified as
+claudin-low memory-low with high FOXP3/CD8A
+ratio show substantially better response to
+tiragolumab $+$ atezolizumab than the
+non-CL TNBC patients. If the sequence is
+concurrently administered (as in the current
+protocol) rather than anti-TIGIT first, the
+prediction is attenuated but the direction
+should still hold in this enriched subgroup.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{What Is and Is Not in the Published
+Literature}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{What IS established}
+
+\begin{enumerate}
+    \item \textbf{Taylor et al.\ JCI 2017:}
+    Anti-PD-1 amplifies Tregs first in CL.
+    Treg depletion required before checkpoint
+    release in CL. This is the exact mechanistic
+    basis for the anti-TIGIT first sequence.
+
+    \item \textbf{Pommier et al.\ Nat Comms 2020:}
+    Memory-low CL subgroup (FOXA1/SPDEF/GATA3
+    absent) characterised. Highest CT antigen
+    load. Highest immune infiltration. Most
+    stem-like.
+
+    \item \textbf{FOXP3/CD8A imbalance in CL:}
+    Taylor 2017 and Pommier 2020 both describe
+    FOXP3-dominant, CD8-suppressed immune
+    microenvironment in CL as the mechanistic
+    basis for immune therapy resistance.
+
+    \item \textbf{TIGIT biology:}
+    TIGIT expressed on Tregs and exhausted
+    CD8$^+$ T cells. Anti-TIGIT Fc-mediated
+    ADCC of TIGIT$^+$ Tregs established.
+    TIGIT/CD155 axis in immune suppression:
+    published across multiple tumour types.
+
+    \item \textbf{CL Type~4 root lock:}
+    CS-LIT-2 (DOI: 10.5281/zenodo.18884158).
+    EZH2-free PCA depth 6.572 (deepest subtype).
+    No luminal identity programme to target.
+    Immune compartment is the primary axis.
+\end{enumerate}
+
+\subsection{What is NOT in the literature}
+
+\begin{center}
+\colorbox{novelbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\textbf{The following have no published equivalent
+as of 2026-03-06:}
+\begin{itemize}[noitemsep]
+    \item Any clinical trial selecting CL patients
+    for anti-TIGIT by claudin-low subtype.
+    \item Any trial using memory-low (FOXA1/SPDEF/GATA3
+    absent) as an enrichment criterion for
+    anti-TIGIT eligibility.
+    \item Any trial specifying anti-TIGIT first
+    $\rightarrow$ anti-PD-1 second as a protocol
+    requirement (rather than concurrent).
+    \item Any trial or paper using FOXP3/CD8A
+    ratio as a patient selection variable for
+    anti-TIGIT with HR$=2.212$ in CL-specific
+    survival analysis.
+    \item The mechanistic explanation linking
+    the belrestotug failures (wrong population,
+    wrong sequence) to the CL patient selection
+    framework.
+    \item The two-variable patient selection
+    instrument: memory-low lineage score $+$
+    FOXP3/CD8A ratio.
+\end{itemize}
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{Locked Statement}
+% ═════════════════════════════════════════════════════════���════
+
+\begin{center}
+\colorbox{findingbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.6em}
+\textbf{Stated once, precisely, without inflation:}
+\\[0.5em]
+Anti-TIGIT immunotherapy has failed in unselected
+cancer populations because the predicted beneficiary
+is specifically the claudin-low memory-low subgroup
+(FOXA1/SPDEF/GATA3 absent; highest CT antigen load;
+Pommier et al.\ Nat Comms 2020), the sequence
+matters (anti-TIGIT must precede anti-PD-1; Taylor
+et al.\ JCI 2017), and the patient selection
+instrument is the FOXP3/CD8A ratio (HR$=2.212$ in
+CL-specific survival analysis, GSE176078) not PD-L1
+TPS. Belrestotug failed in PD-L1-high NSCLC and
+HNSCC (May 2025) --- non-CL tumour types, no Treg
+stratification, concurrent rather than sequential
+dosing. These failures are mechanistically predicted
+by the framework and do not undermine the prediction
+for memory-low CL with high FOXP3/CD8A given
+anti-TIGIT first. SKYLINE (NCT06175390; tiragolumab
+$+$ atezolizumab $+$ chemotherapy in TNBC; Institut
+Curie; PI: Prof.\ Bidard; enrollment open until
+July 2026) has a multi-omics biomarker arm in which
+CL subtype annotation and FOXP3/CD8A ratio could be
+added without protocol amendment. No clinical trial
+has selected patients by CL subtype for anti-TIGIT,
+specified the anti-TIGIT first sequence as a protocol
+requirement, or used FOXP3/CD8A as a selection
+variable. Verdict: CONVERGENT-NOVEL.
+\vspace{0.5em}
+\end{minipage}}
+\end{center}
+
+\end{document}

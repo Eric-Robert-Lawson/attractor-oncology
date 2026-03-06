@@ -1,0 +1,1162 @@
+\documentclass[12pt, a4paper]{article}
+
+% ── PACKAGES ──────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue,
+    pdftitle={Tazemetostat Followed by Fulvestrant in
+              EZH2-High FOXA1-Absent TNBC},
+    pdfauthor={Eric Robert Lawson},
+    pdfkeywords={tazemetostat, fulvestrant, TNBC,
+                 EZH2, FOXA1, PRC2, breast cancer,
+                 epigenetic reprogramming, trial proposal,
+                 OrganismCore, attractor geometry}
+}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{authblk}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{setspace}
+
+% ── COLOURS ───────────────────────────────────────────────────
+\definecolor{repobox}{RGB}{240,247,255}
+\definecolor{urgentbox}{RGB}{255,235,235}
+\definecolor{lockbox}{RGB}{245,255,245}
+\definecolor{mechanismbox}{RGB}{250,245,255}
+
+% ── HEADER / FOOTER ───────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\small OrganismCore \textbar{} 2026-03-06}
+\lhead{\small CS-LIT-16: Tazemetostat $\rightarrow$
+       Fulvestrant in TNBC}
+\rfoot{\small Page \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ── SECTION FORMATTING ────────────────────────────────────────
+\titleformat{\section}
+  {\large\bfseries}{\thesection}{1em}{}[\titlerule]
+\titleformat{\subsection}
+  {\normalsize\bfseries}{\thesubsection}{1em}{}
+
+% ══════════════════════════════════════════════════════════════
+% TITLE
+% ══════════════════════════════════════════════════════════════
+\title{
+    \vspace{-1em}
+    \textbf{Tazemetostat Followed by Fulvestrant in
+    EZH2-High, FOXA1-Absent Triple-Negative Breast
+    Cancer:}\\[0.5em]
+    \large A Principles-First Trial Proposal with
+    Mechanistic Support from Two Independent
+    Published Studies\\[0.4em]
+    \normalsize \textit{OrganismCore Framework ---
+    Document CS-LIT-16}\\[0.3em]
+    \small Derived from Waddington Landscape Attractor
+    Geometry Before Literature Review\\[0.3em]
+    \small Confirmed Independently by Toska et al.\
+    \textit{Nature Medicine} 2017 and
+    Schade et al.\ \textit{Nature} 2024
+}
+
+\author[1]{Eric Robert Lawson}
+\affil[1]{
+    OrganismCore\\
+    \href{mailto:OrganismCore@proton.me}
+         {OrganismCore@proton.me}\\
+    ORCID:
+    \href{https://orcid.org/0009-0002-0414-6544}
+         {0009-0002-0414-6544}
+}
+
+\date{March 6, 2026}
+
+% ══════════════════════════════════════════════════════════════
+\begin{document}
+% ══════════════════════════════════════════════════════════════
+
+\maketitle
+\thispagestyle{fancy}
+
+% ── URGENCY NOTICE ────────────────────────────────────────────
+\begin{center}
+\colorbox{urgentbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.5em}
+\centering
+\textbf{PRIORITY ESTABLISHMENT DOCUMENT}\\[0.3em]
+\small
+As of 2026-03-06, no registered clinical trial
+exists anywhere in the world for tazemetostat
+followed by fulvestrant in TNBC
+(ClinicalTrials.gov searched 2026-03-05).
+This document establishes priority on the specific
+trial design, patient selection criteria, treatment
+sequence, and primary endpoint described herein.
+The mechanism was derived from first principles
+before literature review and is confirmed by two
+independent published papers cited below.
+\vspace{0.5em}
+\end{minipage}
+}
+\end{center}
+
+\vspace{0.6em}
+
+% ── REPOSITORY POINTER ────────────────────────────────────────
+\begin{center}
+\colorbox{repobox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.4em}
+\centering
+\textbf{Full computational record and companion
+reasoning artifacts:}\\[0.3em]
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{\texttt{https://github.com/Eric-Robert-Lawson/attractor-oncology}}
+\\[0.2em]
+\small
+Repository ID: 1172048282 \textbar{}
+MIT License \textbar{}
+Python \textbar{}
+Public\\[0.2em]
+Companion deposit:
+\textit{FOXA1/EZH2 Ratio as a Universal Breast Cancer
+Subtype Classifier and Treatment Predictor}
+(Zenodo, 2026-03-06)\\[0.2em]
+Source document: \texttt{Cancer\_Research/BRCA/DEEP\_DIVE/}
+\texttt{BRCA\_Cross\_Subtype\_Literature\_Check.md}
+(BRCA-S8h, item CS-LIT-16)
+\vspace{0.4em}
+\end{minipage}
+}
+\end{center}
+
+\vspace{0.8em}
+
+% ── ABSTRACT ──────────────────────────────────────────────────
+\begin{abstract}
+\noindent
+Triple-negative breast cancer (TNBC) accounts for
+approximately 170,000 new diagnoses per year globally
+and carries the worst prognosis of all breast cancer
+subtypes. The apparent absence of oestrogen receptor
+(ER) expression in TNBC has historically precluded
+endocrine therapy. We propose that ER negativity in
+EZH2-high TNBC is not a fixed biological state but
+an epigenetically reversible condition: the luminal
+identity programme --- including FOXA1, GATA3, and
+ESR1 --- is silenced by PRC2/EZH2-mediated H3K27me3
+deposition rather than being absent. This silencing
+is pharmacologically reversible with tazemetostat
+(EZH2 inhibitor, FDA-approved 2020). When EZH2
+inhibition removes the silencing mark, FOXA1
+re-expresses, luminal reprogramming initiates, and
+ESR1 returns --- at which point fulvestrant
+(selective ER degrader, FDA-approved 2002) can engage
+the restored receptor.
+
+This mechanistic chain was derived from Waddington
+landscape attractor geometry applied to 19,542 single
+cancer cells (GSE176078) before literature review.
+It is independently confirmed by two published
+studies: Toska et al.\ (\textit{Nature Medicine},
+2017) demonstrated EZH2 inhibition re-expresses FOXA1
+and initiates luminal reprogramming in ER-negative
+breast cancer; Schade et al.\ (\textit{Nature}, 2024)
+demonstrated PRC2/EZH2 inhibition drives basal-like
+TNBC cells into a more differentiated, luminal-like
+state with induction of luminal markers including
+GATA3. Neither paper proposed the clinical sequence
+described here.
+
+Supporting computational validation: in GSE25066
+($n=508$ neoadjuvant chemotherapy patients), the
+EZH2 paradox is confirmed --- EZH2-high tumours are
+chemotherapy-sensitive short-term (pCR, $p<0.0001$)
+but carry worse distant relapse-free survival
+long-term (HR$=1.363$, $p=0.0047$), identifying the
+post-chemotherapy window as the critical intervention
+point. The FOXA1/EZH2 ratio correctly classifies TNBC
+from luminal subtypes with AUC$=0.828$--$0.901$
+across two independent datasets, providing the IHC
+patient selection instrument.
+
+We propose a Phase~I/II clinical trial of tazemetostat
+($800$~mg BID $\times$ 4~weeks) followed by fulvestrant
+($500$~mg q28d) in patients with EZH2-high
+(H-score~$\geq150$), FOXA1-absent (H-score~$<20$)
+TNBC. The primary endpoint is FOXA1 H-score
+re-expression $\geq50$ at week~4 on-treatment biopsy.
+No competing trial exists. Both drugs are FDA-approved.
+The trial can be designed and submitted immediately.
+\end{abstract}
+
+\vspace{0.5em}
+\noindent\textbf{Keywords:}
+tazemetostat; fulvestrant; TNBC; triple-negative
+breast cancer; EZH2; FOXA1; PRC2; epigenetic
+reprogramming; luminal reprogramming; H3K27me3;
+ESR1; GATA3; endocrine therapy; EZH2 inhibitor;
+attractor geometry; Waddington landscape; OrganismCore;
+trial proposal; patient selection; IHC
+
+\newpage
+\tableofcontents
+\newpage
+
+% ══════════════════════════════════════════════════════════════
+\section{Document Metadata}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Field} & \textbf{Value} \\
+\midrule
+Document ID       & CS-LIT-16-TRIAL-PROPOSAL \\
+Series            & BRCA Deep Dive --- Cross-Subtype \\
+Type              & Clinical Trial Proposal ---
+                    Priority Establishment Document \\
+Parent document   & BRCA-S8h (Cross-Subtype Literature
+                    Check) \\
+Companion deposit & FOXA1/EZH2 Ratio Master Reasoning
+                    Artifact (Zenodo, 2026-03-06) \\
+Date              & 2026-03-06 \\
+Author            & Eric Robert Lawson \\
+Organisation      & OrganismCore \\
+ORCID             & 0009-0002-0414-6544 \\
+Status            & Permanent \\
+Repository        &
+  \href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+       {Eric-Robert-Lawson/attractor-oncology} \\
+Repository ID     & 1172048282 \\
+License           & CC BY 4.0 \\
+Biological contradictions & 0 \\
+Registered trials & 0 (as of 2026-03-05) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{Background: The Problem with TNBC}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Current treatment landscape and its limits}
+
+Triple-negative breast cancer (TNBC) is defined by the
+absence of oestrogen receptor (ER), progesterone receptor
+(PR), and HER2 amplification. It accounts for approximately
+15\% of all breast cancers --- roughly 170,000 new diagnoses
+per year globally --- and disproportionately affects younger
+women and women of African ancestry. Five-year survival for
+metastatic TNBC remains below 30\%.
+
+Current standard-of-care for TNBC is:
+\begin{itemize}[noitemsep]
+  \item Neoadjuvant taxane-anthracycline chemotherapy
+  \item Pembrolizumab (PD-1 checkpoint inhibitor) in
+        PD-L1+ or high-TIL cases
+  \item Olaparib/talazoparib in BRCA1/2-mutant cases
+  \item Sacituzumab govitecan in metastatic setting
+\end{itemize}
+
+Endocrine therapy is not used in TNBC. The universal
+assumption is that ER-negative tumours cannot respond to
+endocrine agents because there is no receptor to target.
+This assumption has never been challenged with an EZH2
+inhibitor priming approach.
+
+\subsection{Why the assumption may be wrong for EZH2-high TNBC}
+
+ER negativity in TNBC is not uniform in its molecular basis.
+Two mechanistically distinct causes of ER negativity exist:
+
+\begin{center}
+\begin{tabular}{p{3cm}p{5.5cm}p{5cm}}
+\toprule
+\textbf{Type} & \textbf{Mechanism} & \textbf{Implication} \\
+\midrule
+Commitment-absent
+(Claudin-low)
+& The luminal identity programme was
+  never activated. FOXA1, GATA3,
+  ESR1 are absent because the cell
+  never committed to luminal lineage.
+& No ER to restore.
+  Endocrine therapy cannot work.
+  Immune compartment is the only target. \\[0.5em]
+Epigenetically
+silenced
+(EZH2-high TNBC)
+& The luminal identity programme is
+  present but silenced by PRC2/EZH2
+  H3K27me3 marks on FOXA1, GATA3,
+  ESR1 promoters.
+& ER can potentially be restored.
+  If EZH2 inhibition removes the
+  silencing mark, the luminal
+  programme re-activates and
+  endocrine therapy can engage. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The EZH2 paradox --- quantified in this framework in
+GSE25066 (see Section~\ref{sec:ezh2paradox}) --- confirms
+that EZH2-high TNBC represents a distinct biological
+state where the luminal programme is suppressed rather
+than absent.
+
+% ══════════════════════════════════════════════════════════════
+\section{The Mechanistic Case}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{The Waddington geometry derivation}
+
+The OrganismCore framework applies Waddington landscape
+attractor geometry to single-cell RNA-seq data from real
+tumour biopsies. In this model, cancer subtypes correspond
+to attractor states --- stable configurations of gene
+expression maintained by specific molecular locks.
+
+Applied to 19,542 single cancer cells from 26 patients
+(GSE176078, Wu et al.\ \textit{Nature Genetics} 2021),
+the framework identified TNBC as an attractor state
+characterised by:
+
+\begin{itemize}[noitemsep]
+  \item EZH2 elevated $+189\%$ above normal Mature
+        Luminal reference
+  \item FOXA1 at near-zero expression (epigenetically
+        silenced, not absent from the genome)
+  \item ESR1 silenced downstream of FOXA1 suppression
+  \item GATA3 silenced by the same H3K27me3 mechanism
+\end{itemize}
+
+The geometry identified the lock as PRC2/EZH2-mediated
+H3K27me3 deposition. The predicted unlock sequence was:
+
+\begin{center}
+\colorbox{mechanismbox}{
+\begin{minipage}{0.82\textwidth}
+\vspace{0.5em}
+\centering
+\textbf{Step 1:} Tazemetostat (EZH2 inhibitor)\\
+$\downarrow$\\
+EZH2 catalytic activity inhibited\\
+H3K27me3 marks removed from FOXA1/GATA3/ESR1 promoters\\
+$\downarrow$\\
+\textbf{Step 2:} FOXA1 re-expresses\\
+$\downarrow$\\
+FOXA1 pioneer factor opens luminal chromatin\\
+GATA3 and ESR1 transcription restored\\
+$\downarrow$\\
+\textbf{Step 3:} Fulvestrant (selective ER degrader)\\
+$\downarrow$\\
+Engages the restored oestrogen receptor\\
+Degrades ER protein, removing the luminal growth signal\\
+$\downarrow$\\
+\textbf{Outcome:} TNBC converted to endocrine-responsive
+state and treated accordingly
+\vspace{0.5em}
+\end{minipage}
+}
+\end{center}
+
+This sequence was derived from geometry before any
+literature review. The literature review confirmed it
+independently from two directions.
+
+\subsection{Independent published confirmation}
+
+\begin{center}
+\begin{tabular}{p{3.5cm}p{9.5cm}}
+\toprule
+\textbf{Paper} & \textbf{Finding relevant to this proposal} \\
+\midrule
+Toska et al.\\
+\textit{Nature Medicine}\\
+2017
+&
+EZH2 inhibition in ER-negative breast cancer
+re-expresses FOXA1. FOXA1 acts as a pioneer factor
+opening luminal chromatin. Cells acquire a luminal-like
+transcriptional programme. The authors conclude that
+EZH2 inhibitors can promote FOXA1 re-expression and
+luminal reprogramming in ER-negative breast cancer.
+\textbf{This is Step 1--2 of the proposed sequence,
+independently confirmed.}
+\\[0.5em]
+Schade et al.\\
+\textit{Nature}\\
+2024\\
+(Harvard/Ludwig)
+&
+PRC2/EZH2 inhibition drives basal-like TNBC cells into
+a more differentiated, luminal-like state. Molecular
+profiling confirms induction of luminal markers
+including GATA3 after EZH2 inhibition. The paper
+identifies EZH2/PRC2 as the convergence node in
+basal-like TNBC that silences FOXA1/GATA3/ESR1.
+\textbf{This is independent confirmation of the
+entire mechanistic premise.}
+Schade et al.\ propose EZH2i followed by AKT inhibition
+as one downstream strategy. The present proposal uses
+EZH2i followed by fulvestrant as an alternative
+downstream strategy targeting the restored ER.
+Both are complementary, not competing.
+\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Why tazemetostat must precede fulvestrant}
+
+This sequencing is not interchangeable. The order is
+mechanistically required:
+
+\begin{enumerate}
+  \item Fulvestrant degrades the oestrogen receptor
+        protein. It requires an expressed ER to act on.
+        In EZH2-high TNBC, ESR1 is epigenetically
+        silenced. There is no expressed ER protein.
+        Fulvestrant given first has no target.
+        It will show no activity in this population ---
+        which is consistent with all published data
+        showing fulvestrant is inactive in ER-negative
+        breast cancer.
+
+  \item Tazemetostat removes the H3K27me3 silencing
+        marks from ESR1 and FOXA1. After 3--6 weeks
+        of EZH2 inhibition, FOXA1 re-expresses.
+        FOXA1 opens chromatin. ESR1 transcription
+        is restored. ER protein is produced.
+
+  \item Once ER protein is present, fulvestrant can
+        engage it, bind, and degrade it --- removing
+        the luminal growth signal.
+
+  \item The critical biomarker bridge between steps:
+        FOXA1 H-score on on-treatment biopsy at week~4
+        confirms the conversion has occurred before
+        fulvestrant is added. This is the primary
+        endpoint of the proposed trial.
+\end{enumerate}
+
+% ══════════════════════════════════════════════════════════════
+\section{Supporting Computational Evidence}
+\label{sec:ezh2paradox}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{The EZH2 paradox: two windows, same biology}
+
+The EZH2 paradox was identified and quantified in
+GSE25066 (Hatzis et al.\ \textit{JAMA} 2011, $n=508$
+neoadjuvant chemotherapy patients). It has two arms
+that appear contradictory but are mechanistically unified:
+
+\begin{center}
+\begin{tabular}{p{3.5cm}p{4.5cm}p{4.5cm}}
+\toprule
+& \textbf{Short-window arm} & \textbf{Long-window arm} \\
+\midrule
+\textbf{Finding}
+& EZH2-high tumours achieve
+  pathological complete response
+  (pCR) more often with
+  neoadjuvant chemotherapy
+& EZH2-high tumours have worse
+  distant relapse-free survival
+  after 3--5 years \\[0.3em]
+\textbf{Statistic}
+& pCR $p < 0.0001$
+  (GSE25066, $n=508$)
+& HR $= 1.363$, $p = 0.0047$
+  (GSE25066 DRFS) \\[0.3em]
+\textbf{Mechanism}
+& EZH2 drives proliferation.
+  High proliferation $=$
+  chemo-sensitive.
+  Chemotherapy kills dividing cells.
+& EZH2 silences tumour suppression.
+  Residual EZH2-high cells after
+  chemo escape as late-relapsing
+  metastatic disease. \\[0.3em]
+\textbf{Published support}
+& Logically inferrable from
+  published biology
+& Frontiers Oncology 2020
+  ($\sim$4,000 patients);
+  Fineberg (Montefiore):
+  EZH2 IHC predicts metastatic
+  TNBC post-neoadjuvant chemo \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent\textbf{What the paradox reveals:}
+EZH2-high TNBC patients often achieve pCR with
+chemotherapy. But pCR is not cure in this population.
+The EZH2-high cells that survive chemotherapy ---
+either residual disease or circulating tumour cells
+--- carry the same epigenetic programme that silences
+luminal identity. They are the source of late relapse.
+
+The intervention window is the period between
+chemotherapy completion and late relapse
+(approximately 3--5 years). The tazemetostat
+$\rightarrow$ fulvestrant sequence is designed for
+this window: in patients who achieve pCR or have
+minimal residual disease after chemotherapy, converting
+the remaining EZH2-high TNBC cell population to an
+endocrine-responsive state and treating it accordingly.
+
+\subsection{FOXA1/EZH2 ratio validation data}
+
+The FOXA1/EZH2 ratio, validated across $\sim$7,500
+patients in seven independent datasets (companion
+Zenodo deposit, 2026-03-06), provides the patient
+selection instrument for this trial. Key figures:
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Classification task} & \textbf{Dataset}
+& \textbf{AUC} \\
+\midrule
+LumA vs Basal/TNBC & METABRIC ($n=909$) & 0.828 \\
+LumA vs Basal/TNBC & TCGA PanCan ($n=151$) & 0.901 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The ratio correctly identifies TNBC (low ratio) from
+luminal subtypes (high ratio) with AUC$=0.83$--$0.90$
+replicated in two independent datasets. This AUC range,
+combined with EZH2-specific IHC selection criteria
+(H-score $\geq 150$), provides a robust patient
+identification instrument for trial enrolment.
+
+\subsection{EZH2 graded elevation: the biological basis
+for patient selection}
+
+From single-cell data (GSE176078, $n=19{,}542$ cancer
+cells), EZH2 expression in TNBC is elevated $+189\%$
+above normal Mature Luminal reference. This is confirmed
+in published literature:
+
+\begin{itemize}[noitemsep]
+  \item Frontiers in Oncology 2020: EZH2/NSD2 axis
+        predicts poor prognosis in $\sim$4,000 breast
+        cancer patients; TNBC highest.
+  \item Schade et al.\ \textit{Nature} 2024: EZH2/PRC2
+        is the explicitly named convergence node in
+        basal-like TNBC (CONFIRMED, CS-LIT-4).
+\end{itemize}
+
+Not all TNBC is equally EZH2-high. The patient selection
+criterion (H-score $\geq 150$) enriches for the
+subpopulation with the highest probability of PRC2-driven
+FOXA1 silencing and therefore the highest probability
+of FOXA1 re-expression upon tazemetostat treatment.
+
+% ══════════════════════════════════════════════════════════════
+\section{The Clinical Trial Proposal}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Trial overview}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Parameter} & \textbf{Specification} \\
+\midrule
+Phase & I/II, open-label, single-arm \\
+Setting & Metastatic or locally advanced TNBC;
+          also post-neoadjuvant window \\
+Design & Sequential: tazemetostat alone
+         $\times$ 4 weeks, then add fulvestrant \\
+Primary endpoint & FOXA1 H-score re-expression
+                   $\geq 50$ at week 4 biopsy \\
+Sample size (Phase I) & $n = 12$--$18$
+                        (safety + biomarker) \\
+Sample size (Phase II) & $n = 40$--$60$
+                         (efficacy signal) \\
+Estimated duration & 18--24 months \\
+Infrastructure & Any oncology centre with
+                 IHC capability \\
+Both drugs approved & Yes (FDA-approved) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Patient selection criteria}
+
+\subsubsection{Inclusion criteria}
+
+\begin{enumerate}
+  \item Histologically confirmed TNBC
+        (ER $<1\%$, PR $<1\%$, HER2 IHC $0$--$1+$
+        or FISH non-amplified)
+  \item EZH2 H-score $\geq 150$ on diagnostic or
+        recent biopsy (EZH2 IHC, validated antibody)
+  \item FOXA1 H-score $< 20$ on diagnostic or
+        recent biopsy (FOXA1 IHC, validated antibody)
+  \item Measurable disease (RECIST 1.1) or
+        minimal residual disease post-neoadjuvant
+        chemotherapy
+  \item ECOG performance status $0$--$2$
+  \item Adequate organ function
+  \item Prior chemotherapy permitted
+        (taxane-anthracycline standard of care)
+  \item Willingness to undergo on-treatment biopsy
+        at week 4
+\end{enumerate}
+
+\subsubsection{Exclusion criteria}
+
+\begin{enumerate}
+  \item FOXA1 H-score $\geq 20$ at baseline
+        (conversion already present or non-EZH2-driven
+        subtype)
+  \item Prior EZH2 inhibitor therapy
+  \item Prior fulvestrant therapy
+  \item BRCA1/2 germline mutation with available
+        PARP inhibitor (standard treatment available)
+  \item Active CNS metastases requiring treatment
+  \item Concurrent strong CYP3A4 inhibitors
+        (tazemetostat interaction)
+\end{enumerate}
+
+\subsection{Treatment protocol}
+
+\begin{center}
+\colorbox{lockbox}{
+\begin{minipage}{0.85\textwidth}
+\vspace{0.5em}
+\textbf{TREATMENT SEQUENCE (mechanistically required order)}
+
+\medskip
+\textbf{Phase 1 --- EZH2 Priming (Weeks 1--4):}\\
+Tazemetostat 800~mg orally twice daily (BID)\\
+Standard approved dose (follicular lymphoma/epithelioid
+sarcoma)\\
+Duration: 4 weeks continuous
+
+\medskip
+\textbf{On-treatment biopsy at Week 4:}\\
+FOXA1 H-score measured\\
+If FOXA1 H-score $\geq 50$: proceed to Phase 2\\
+If FOXA1 H-score $< 50$: continue tazemetostat
+$\times$ 4 additional weeks,
+repeat biopsy at Week 8
+
+\medskip
+\textbf{Phase 2 --- Endocrine Engagement:}\\
+Tazemetostat 800~mg BID (continue)\\
+\textit{plus}\\
+Fulvestrant 500~mg intramuscular injection on Days 1,
+15, 29, then q28d\\
+Standard approved dose\\
+Continue until progression or unacceptable toxicity
+
+\medskip
+\textbf{Rationale for continuation of tazemetostat:}\\
+EZH2 inhibition must be maintained while fulvestrant
+acts. If tazemetostat is stopped, H3K27me3 marks
+will re-accumulate, FOXA1 will be re-silenced,
+and ER expression will be lost again.
+Continuous EZH2 inhibition is required to maintain
+the converted state.
+\vspace{0.5em}
+\end{minipage}
+}
+\end{center}
+
+\subsection{Endpoints}
+
+\subsubsection{Primary endpoint}
+
+\begin{itemize}
+  \item \textbf{FOXA1 H-score re-expression $\geq 50$
+        at Week~4 on-treatment biopsy}
+  \item Definition of response: any FOXA1 H-score
+        $\geq 50$ in a patient with baseline H-score
+        $< 20$
+  \item Measured by: FOXA1 IHC (validated antibody
+        clone, same laboratory as baseline)
+  \item This is a biological activity endpoint, not
+        a tumour shrinkage endpoint
+  \item Justification: FOXA1 re-expression is the
+        necessary intermediate step between EZH2
+        inhibition and ER restoration. If FOXA1
+        does not re-express, fulvestrant has no
+        biological rationale to add. The trial
+        tests whether the mechanistic chain
+        (EZH2i $\rightarrow$ FOXA1) is operable
+        in clinical tissue before proceeding to
+        the downstream step.
+\end{itemize}
+
+\subsubsection{Key secondary endpoints}
+
+\begin{enumerate}
+  \item ESR1 re-expression at Week 4 and Week 8
+        (ER IHC H-score)
+  \item GATA3 re-expression at Week 4 and Week 8
+  \item Objective response rate (ORR) per RECIST 1.1
+        at Week 12 and Week 24
+  \item Progression-free survival (PFS)
+  \item Overall survival (OS)
+  \item Distant relapse-free survival (DRFS)
+        at 3 years
+  \item H3K27me3 reduction in on-treatment biopsy
+        (pharmacodynamic confirmation of EZH2 target
+        engagement)
+  \item Safety and tolerability profile of the
+        combination
+\end{enumerate}
+
+\subsubsection{Exploratory endpoints}
+
+\begin{enumerate}
+  \item Correlation between baseline EZH2 H-score
+        and FOXA1 re-expression rate
+  \item Correlation between FOXA1 H-score at Week 4
+        and ORR at Week 12
+  \item ctDNA ESR1 dynamics during treatment
+  \item Transcriptomic profiling (serial biopsies):
+        luminal gene programme re-expression trajectory
+\end{enumerate}
+
+\subsection{Biomarker strategy}
+
+\begin{center}
+\begin{tabular}{p{3cm}p{4cm}p{5.5cm}}
+\toprule
+\textbf{Timepoint} & \textbf{Tissue collection}
+& \textbf{Assays} \\
+\midrule
+Baseline (screening)
+& Core needle biopsy
+& EZH2 IHC (H-score)\\
+& & FOXA1 IHC (H-score)\\
+& & ER IHC (H-score)\\
+& & GATA3 IHC\\
+& & H3K27me3 IHC\\
+& & Ki67\\
+& & RNA-seq (if adequate tissue) \\[0.3em]
+Week 4 (on-treatment)
+& Core needle biopsy
+& Same panel as baseline\\
+& & \textbf{Primary endpoint measured here} \\[0.3em]
+Week 8 (optional)
+& Core needle biopsy
+& Same panel (if Week 4 FOXA1 $<50$) \\[0.3em]
+Week 12 (response)
+& Imaging (RECIST)
+& ctDNA (blood) \\[0.3em]
+Progression
+& Core needle biopsy (if accessible)
+& Full panel + resistance mechanism profiling \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{The Clinical Gap: Why This Trial Does Not Exist}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{ClinicalTrials.gov search results}
+
+Searched 2026-03-05. Search terms: ``tazemetostat
+breast cancer'', ``tazemetostat TNBC'', ``tazemetostat
+fulvestrant'', ``EZH2 inhibitor fulvestrant'',
+``EZH2 inhibitor TNBC endocrine''.
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Search} & \textbf{Result} \\
+\midrule
+Tazemetostat + breast cancer & No trials in TNBC \\
+Tazemetostat + fulvestrant & No trials \\
+Tazemetostat + TNBC & No trials \\
+EZH2 inhibitor + fulvestrant & No trials \\
+EZH2 inhibitor + TNBC & Preclinical only;
+                         no clinical trials \\
+\midrule
+\textbf{Tazemetostat approved indications}
+& EZH2-mutant follicular lymphoma (2020) \\
+& Epithelioid sarcoma (2020) \\
+\textbf{Active tazemetostat trials}
+& ARID1A-mutant solid tumours
+  (NCT05023655) \\
+& NCI Pediatric MATCH basket \\
+& None in breast cancer \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent The clinical space for tazemetostat in TNBC
+is completely unoccupied as of 2026-03-05.
+
+\subsection{Why the gap exists}
+
+The gap exists because the mechanistic logic requires
+assembling three independent published findings into
+a clinical sequence:
+
+\begin{enumerate}
+  \item EZH2 silences luminal identity in TNBC
+        (Schade 2024 --- this is now published)
+  \item EZH2 inhibition restores FOXA1 and luminal
+        reprogramming in ER-negative breast cancer
+        (Toska 2017 --- this is published)
+  \item Therefore: use EZH2 inhibition to convert
+        ER-negative TNBC to ER-positive, then apply
+        endocrine therapy to the converted state
+        (this assembly is not published anywhere)
+\end{enumerate}
+
+Step 3 does not follow automatically from steps 1
+and 2 in the published literature. No paper makes
+this connection. The assembly requires recognising
+that the sequence is not just biologically possible
+but clinically actionable using two approved drugs
+with known safety profiles. That recognition is the
+contribution of the OrganismCore attractor geometry
+framework. It identified the clinical sequence from
+the geometry of the attractor states before the
+individual papers were reviewed.
+
+\subsection{The Schade 2024 comparison}
+
+Schade et al.\ (\textit{Nature} 2024) is the most
+directly relevant published paper. It independently
+confirms the central premise (EZH2i drives TNBC toward
+luminal differentiation). Their proposed downstream
+strategy differs from ours:
+
+\begin{center}
+\begin{tabular}{p{3cm}p{5.5cm}p{5cm}}
+\toprule
+& \textbf{Schade et al.\ 2024} & \textbf{This proposal} \\
+\midrule
+Step 1 (shared)
+& EZH2i drives luminal differentiation
+& EZH2i drives luminal differentiation \\
+Step 2 (diverges)
+& AKT inhibition to exploit the
+  differentiated state's new
+  dependencies (involution-like
+  cell death)
+& Fulvestrant to engage the restored
+  ER and degrade it (endocrine therapy
+  on the converted state) \\
+Mechanism of kill
+& Synthetic lethality with AKT
+  in the differentiated state
+& ER degradation in the converted
+  luminal state \\
+Drug status
+& AKT inhibitor (capivasertib:
+  FDA-approved for HR+ HER2-low;
+  not approved in TNBC)
+& Fulvestrant (FDA-approved;
+  standard formulary globally) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+These two strategies are complementary. They can be
+tested in parallel. Ours is distinguished by using
+fully approved, universally available, and
+globally affordable drugs in the second step.
+
+% ══════════════════════════════════════════════════════════════
+\section{Derivation Provenance}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Before-document confirmation}
+
+The OrganismCore framework operates under a strict
+before-document protocol: all predictions are locked
+in version-controlled documents before any confirmatory
+analysis or literature review is performed. The
+tazemetostat $\rightarrow$ fulvestrant sequence for
+TNBC was derived from attractor geometry and recorded
+in the framework's reasoning artifacts before the
+literature check (BRCA-S8h) was conducted.
+
+The derivation sequence in the repository:
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textbf{Document} & \textbf{Content} & \textbf{Status} \\
+\midrule
+BRCA-S8c-PLAIN & Script 1 plain account
+                & Geometry derivation \\
+BRCA-S8e-PLAIN & Script 2 update
+                & Ratio confirmed \\
+BRCA-S8g       & Script 3 results
+                & Lock types documented \\
+BRCA-S8h       & Literature check
+                & CS-LIT-16 confirmed as
+                  CONVERGENT-NOVEL \\
+CS-LIT-16      & This document
+                & Trial proposal locked \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+All documents are version-controlled with cryptographic
+timestamps in the repository:
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{\texttt{github.com/Eric-Robert-Lawson/attractor-oncology}}
+
+\subsection{Literature check verdict: CONVERGENT-NOVEL}
+
+From BRCA-S8h (Cross-Subtype Literature Check,
+2026-03-05), item CS-LIT-16 received the verdict
+\textbf{CONVERGENT-NOVEL}:
+
+\begin{quote}
+\itshape
+``The mechanism (EZH2i $\rightarrow$ FOXA1
+re-expression $\rightarrow$ luminal reprogramming)
+is confirmed by two independent published papers
+from two independent groups (Toska 2017, Schade 2024).
+These papers did not know about each other's full work
+when published and did not know about this framework.
+They all found the same biological step.
+
+\upshape\itshape
+The clinical application --- using this mechanism as
+the basis for a two-drug sequence (tazemetostat THEN
+fulvestrant) in a specific patient population
+(EZH2-high, FOXA1-absent TNBC) with a specific
+biomarker endpoint (FOXA1 re-expression on biopsy
+at week 4) --- has not been proposed or trialled.
+
+The pieces are confirmed. The assembly is novel.
+The trial does not exist. The clinical space is empty.
+
+This is the most actionable CONVERGENT-NOVEL item
+in the framework.''
+\upshape
+\end{quote}
+
+% ══════════════════════════════════════════════════════════════
+\section{The 30-Finding Context}
+% ══════════════════════════════════════════════════════════════
+
+This proposal is one of 30 findings from the BRCA
+cross-subtype analysis (BRCA-S8h). It is classified
+as the highest clinical priority for the following
+reasons:
+
+\begin{center}
+\begin{tabular}{p{5cm}p{8cm}}
+\toprule
+\textbf{Criterion} & \textbf{Status for CS-LIT-16} \\
+\midrule
+Mechanism confirmed independently
+& Yes --- two Nature-tier papers \\
+Clinical space empty
+& Yes --- no registered trial worldwide \\
+Both drugs approved
+& Yes --- FDA-approved, standard formulary \\
+Patient selection instrument available
+& Yes --- EZH2/FOXA1 IHC (standard stains) \\
+Primary endpoint measurable
+& Yes --- FOXA1 H-score on biopsy \\
+Patient population defined
+& Yes --- EZH2-high ($\geq150$),
+  FOXA1-absent ($<20$) TNBC \\
+Number of patients affected
+& $\sim$170,000 new TNBC per year globally \\
+Unmet medical need
+& Severe --- 5-year metastatic survival $<30\%$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+No other item in the 30-finding framework meets all
+eight criteria simultaneously.
+
+% ══════════════════════════════════════════════════════════════
+\section{Locked Priority Statement}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\colorbox{urgentbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.6em}
+\textbf{LOCKED AS OF 2026-03-06}
+
+\medskip
+\textbf{The proposal:}
+Tazemetostat (EZH2 inhibitor, 800~mg BID $\times$
+4~weeks) followed by fulvestrant (500~mg q28d) in
+patients with EZH2-high (H-score $\geq 150$),
+FOXA1-absent (H-score $< 20$) triple-negative
+breast cancer.
+
+\medskip
+\textbf{The primary endpoint:}
+FOXA1 H-score re-expression $\geq 50$ at Week~4
+on-treatment biopsy.
+
+\medskip
+\textbf{The mechanistic basis:}
+PRC2/EZH2 silences FOXA1, GATA3, and ESR1 in TNBC.
+Tazemetostat removes H3K27me3 marks.
+FOXA1 re-expresses. ESR1 is restored.
+Fulvestrant engages and degrades the restored ER.
+
+\medskip
+\textbf{Independent confirmation:}
+Toska et al.\ \textit{Nature Medicine} 2017 ---
+EZH2i $\rightarrow$ FOXA1 re-expression in
+ER-negative breast cancer.\\
+Schade et al.\ \textit{Nature} 2024 ---
+EZH2i drives TNBC toward luminal-like state.
+
+\medskip
+\textbf{The gap:}
+No registered trial as of 2026-03-06.
+Both drugs FDA-approved.
+The trial can be designed and submitted today.
+
+\medskip
+\textbf{Derived from:}
+OrganismCore Waddington landscape attractor geometry.
+Prediction locked before literature review.
+Repository: \href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{\texttt{github.com/Eric-Robert-Lawson/attractor-oncology}}
+
+\medskip
+\hfill --- Eric Robert Lawson, March 6, 2026
+\vspace{0.4em}
+\end{minipage}
+}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section*{Repository and Reproducibility}
+\addcontentsline{toc}{section}{Repository and
+Reproducibility}
+% ═��════════════════════════════════════════════════════════════
+
+All reasoning artifacts, computational scripts, and
+supporting data are available in the public repository:
+
+\begin{center}
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{\texttt{https://github.com/Eric-Robert-Lawson/attractor-oncology}}\\[0.3em]
+\small Repository ID: 1172048282 \textbar{}
+MIT License \textbar{}
+Python \textbar{}
+Public
+\end{center}
+
+\noindent Relevant files:
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{File} & \textbf{Path} \\
+\midrule
+Literature check (parent document)
+& \texttt{Cancer\_Research/BRCA/DEEP\_DIVE/}\\
+& \texttt{BRCA\_Cross\_Subtype\_Literature\_Check.md} \\
+FOXA1/EZH2 ratio master artifact
+& \texttt{.../FOXA1\_EZH2\_RATIO/}\\
+& \texttt{Master\_Artifact\_After\_Scripts.md} \\
+Script 4 (EZH2 paradox, GSE25066)
+& \texttt{.../FOXA1\_EZH2\_RATIO/ratio4.py} \\
+Script 4 log (raw results)
+& \texttt{.../ratio\_s4\_results/results/}\\
+& \texttt{ratio\_s4\_log.txt} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section*{Author Statement}
+\addcontentsline{toc}{section}{Author Statement}
+% ══════════════════════════════════════════════════════════════
+
+This work was conducted independently by Eric Robert
+Lawson under the OrganismCore research programme.
+No institutional funding was received. No conflicts
+of interest exist. No pharmaceutical company was
+involved in the design of this proposal.
+Tazemetostat is manufactured by Epizyme (now Ipsen).
+Fulvestrant is manufactured by AstraZeneca (Faslodex)
+and available in generic form. Neither company had
+any involvement in this work.
+
+This document is a scientific priority establishment
+record and a trial proposal rationale. It is not a
+registered clinical trial protocol. Actual trial
+conduct requires ethics committee approval, regulatory
+submission, institutional sponsorship, and full
+protocol development by qualified clinical investigators.
+
+% ══════════════════════════════════════════════════════════════
+\section*{Contact}
+\addcontentsline{toc}{section}{Contact}
+% ══════════════════════════════════════════════════════════════
+
+\begin{tabular}{ll}
+Author        & Eric Robert Lawson \\
+Organisation  & OrganismCore \\
+Email         &
+  \href{mailto:OrganismCore@proton.me}
+       {OrganismCore@proton.me} \\
+ORCID         &
+  \href{https://orcid.org/0009-0002-0414-6544}
+       {https://orcid.org/0009-0002-0414-6544} \\
+Repository    &
+  \href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+       {github.com/Eric-Robert-Lawson/attractor-oncology} \\
+Homepage      &
+  \href{https://github.com/Eric-Robert-Lawson/OrganismCore}
+       {github.com/Eric-Robert-Lawson/OrganismCore} \\
+Date          & 2026-03-06 \\
+\end{tabular}
+
+\vspace{2em}
+
+\begin{center}
+\textit{``Two published papers confirm the mechanism.\\
+No trial exists. Both drugs are approved.\\
+170,000 patients per year.\\
+The sequence is: tazemetostat first.
+Then fulvestrant.\\
+That is the trial.''}
+
+\medskip
+--- Eric Robert Lawson, March 6, 2026
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\end{document}

@@ -1,7 +1,7 @@
 # BRCA INDIVIDUAL PATIENT GEOMETRIC ANALYSIS PROTOCOL
 ## A Principles-First Derivation Protocol for Individual Breast Cancer Cases
 ## OrganismCore — Eric Robert Lawson
-## 2026-03-07
+## 2026-03-07 | Updated: 2026-03-07
 
 ---
 
@@ -235,7 +235,161 @@ Every step that can be executed with the
 available data is executed.
 Every step that cannot is documented as
 a limitation, not skipped silently.
+
+GEOMETRY-FIRST (Protocol v2.0):
+  Step 0 is the unfiltered scan.
+  It runs before any named axis is applied.
+  It reveals what the data contains.
+  Steps 1 through 8 interpret what Step 0 found.
+  The drug map (Step 7) runs last.
+  This is the same order as the discovery
+  script for the population analysis:
+    unfiltered top-mover scan FIRST,
+    prediction panel tests SECOND.
 ```
+
+---
+
+### Step 0 — Unfiltered Displacement Scan
+### (Runs before any named axis is applied)
+
+```
+PURPOSE:
+  Let the data show what is displaced before
+  any interpretation is applied.
+  This step is not optional.
+  Skipping it and going directly to the
+  FOXA1/EZH2 ratio is the lookup table
+  error this protocol exists to prevent.
+
+─────────────────────────────────────────
+TIER 3 EXECUTION (full transcriptome):
+
+  1. Receive the patient's normalised
+     expression file (TPM or equivalent).
+
+  2. For every gene in the reference panel
+     (all 25 genes in BRCA_Reference_Values.md
+     Part II), compute the z-score:
+
+       z = (patient_value - MatureLum_mean)
+               / MatureLum_SD
+
+     Reference means and SDs:
+       BRCA_Reference_Values.md Part II
+       (Mature Luminal population,
+        GSE176078, n=1,265 cells)
+
+  3. Rank all computed z-scores by absolute
+     magnitude, descending.
+
+  4. Record the full ranked list.
+     Do not interpret yet.
+     The ranked list is the raw finding.
+
+  5. Observe without concluding:
+       Which genes show the largest displacement?
+       Which direction — suppressed (negative z)
+       or elevated (positive z)?
+       Are the top movers clustered in one
+       functional panel (switch genes, epigenetic
+       lock panel, claudin panel, immune panel)?
+       Or are they distributed across panels?
+       A coherent clustering in one panel =
+       an interpretable pattern.
+       A distributed, unclustered pattern =
+       noisy data or an atypical geometry.
+       Document which is present.
+
+  6. THIS RANKED LIST IS THE PRIMARY SIGNAL.
+     All subsequent steps derive from it.
+     The FOXA1/EZH2 ratio in Step 3 is
+     computed because the population analysis
+     confirmed it as the primary axis.
+     If Step 0 reveals a different dominant
+     signal in this specific patient — a gene
+     not leading the list in the population
+     — that is the finding. State it.
+
+─────────────────────────────────────────
+TIER 1 EXECUTION (IHC only):
+
+  Direct z-score computation is not possible.
+  The unfiltered scan equivalent is:
+
+  1. Map each available clinical marker to
+     its geometric role in the reference frame:
+
+       ER positive / H-score / %
+         → downstream proxy for ESR1 / FOXA1
+           axis activity
+       PR positive / H-score / %
+         → downstream proxy for PGR / FOXA1
+           + GATA3 axis activity
+         → PGR is more EZH2-sensitive than ESR1
+         → PR absent with ER present =
+           partial evidence of EZH2 competition
+       HER2 status (IHC 0/1+/2+/3+ and/or ISH)
+         → if amplified: alternative
+           non-luminal programme signal
+       Ki-67 %
+         → proliferation proxy = FA marker
+           elevation signal
+       Grade (1/2/3)
+         → attractor depth proxy
+       Histotype (IDC / ILC / other)
+         → structural constraint
+         → ILC = CDH1 loss prior probability high
+
+  2. Construct the proxy displacement vector:
+     For each available marker, state whether
+     it suggests a SUPPRESSED or ELEVATED
+     state relative to normal luminal tissue.
+     This is the Tier 1 equivalent of the
+     z-score ranking.
+
+  3. Identify the dominant signal from the
+     proxy vector before proceeding to Step 1.
+     "The dominant signal from available Tier 1
+     data is [ER high + PR low + Ki-67 high],
+     which suggests active luminal identity
+     with EZH2 competition at the PGR promoter.
+     This is a proxy inference. Direct gene
+     expression measurement would confirm
+     or revise it."
+
+  4. Document the resolution limit explicitly:
+     "Tier 1 data produces a constraint region,
+     not a point placement. The unfiltered scan
+     equivalent is limited to six proxy markers.
+     The following signals are absent and would
+     sharpen the geometry: [list what is missing]."
+
+─────────────────────────────────────────
+OUTPUT OF STEP 0:
+
+  TIER 3:
+    A ranked z-score table for all 25 panel
+    genes. The top 5 movers identified.
+    The dominant panel identified (which
+    functional group leads the displacement).
+    A qualitative statement of coherence:
+    coherent pattern / atypical pattern /
+    insufficient coverage.
+
+  TIER 1:
+    A proxy displacement vector.
+    The dominant signal identified.
+    The resolution limit stated.
+
+  In both cases: no axis named yet.
+  No attractor type named yet.
+  No drug target named yet.
+  The geometry has spoken.
+  Now it is time to listen to it.
+```
+
+---
 
 ### Step 1 — Establish the Reference Frame
 
@@ -279,6 +433,8 @@ Before any patient data is examined:
   This is the before-document principle
   applied to the individual patient case.
 ```
+
+---
 
 ### Step 2 — Examine the Data Without Conclusions
 
@@ -324,16 +480,63 @@ What exists in the data is the foundation.
 What does not exist is equally important.
 ```
 
-### Step 3 — Place on the Primary Axis
+---
+
+### Step 3 — Identify the Dominant Axis
+### (The axis is a result of the data — not assumed in advance)
 
 ```
-The primary axis of breast cancer geometry
-is the FOXA1/EZH2 axis.
-This was the result of the population
-saddle point scan. It is the confirmed axis.
+Using the displacement ranking from Step 0:
 
-For each data tier, the axis placement
-procedure is:
+  ASK FIRST — what does the ranked
+  displacement list show is dominant?
+
+  IF the top-displaced genes cluster in the
+  luminal switch gene panel (FOXA1, GATA3,
+  ESR1, PGR, SPDEF suppressed) AND the
+  epigenetic lock panel shows elevation
+  (EZH2, HDAC2, DNMT3A elevated):
+    → The FOXA1/EZH2 axis is confirmed
+      as the dominant axis for this patient.
+    → This matches the population finding.
+    → Proceed to compute the ratio below.
+
+  IF the top-displaced genes cluster in the
+  claudin panel (CLDN3, CLDN4, CLDN7 all
+  near-zero) AND luminal TFs are also
+  near-zero:
+    → The claudin/pre-commitment axis
+      is the dominant signal.
+    → Claudin-low geometry is the hypothesis.
+    → The FOXA1/EZH2 ratio will be near-zero
+      but this is a consequence of CL geometry,
+      not the primary finding.
+    → State the claudin collapse as the
+      dominant signal. State FOXA1/EZH2 as
+      a confirming signal.
+
+  IF CDH1 is near-zero AND FOXA1 is HIGH:
+    → Structural loss is the dominant signal.
+    → ILC geometry is the hypothesis.
+    → The FOXA1/EZH2 ratio will be high
+      because FOXA1 is preserved.
+    → State CDH1 loss as the dominant signal.
+    → State FOXA1/EZH2 ratio as context.
+
+  IF ERBB2 is strongly elevated AND
+  luminal TFs are suppressed:
+    → HER2 amplification is the dominant
+      signal.
+    → The axis is the ERBB2/luminal TF
+      displacement, not the FOXA1/EZH2 ratio.
+    → State this explicitly.
+
+  IF the displacement pattern is coherent
+  in the luminal switch + lock panels
+  (the most common case — confirmed in
+  >7,500 patients across seven datasets):
+    → Compute and report the FOXA1/EZH2 axis
+      position as below.
 
 ─────────────────────────────────────────
 TIER 3 (direct measurement):
@@ -447,6 +650,8 @@ TIER 1 (proxy inference):
   Tier 1 data alone."
 ```
 
+---
+
 ### Step 4 — Compute or Estimate Attractor Depth
 
 ```
@@ -546,6 +751,8 @@ TIER 1 (depth indicators only):
   Combine into qualitative depth estimate.
   State basis. State limitations.
 ```
+
+---
 
 ### Step 5 — Identify the Attractor Type
 
@@ -652,6 +859,8 @@ TIER 1 CLASSIFICATION:
     These require additional data.
 ```
 
+---
+
 ### Step 6 — Identify the Epigenetic Lock
 
 ```
@@ -752,12 +961,14 @@ HOW TO IDENTIFY THE LOCK FROM PATIENT DATA:
     would confirm or revise this inference."
 ```
 
+---
+
 ### Step 7 — Locate on the Drug Map
 
 ```
 The drug map is a consequence of the
 geometry, not an independent classification.
-Steps 3 through 6 produce the geometric
+Steps 0 through 6 produce the geometric
 description. The drug map follows from it.
 
 This step does not produce treatment
@@ -765,6 +976,13 @@ recommendations. It produces geometric
 observations about drug target relevance
 given the identified position, depth,
 type, and lock.
+
+This step runs SECOND — after the geometry
+is established from the data.
+Not before. Not alongside.
+The same principle as the discovery script:
+prediction panel tests run after the
+unfiltered scan, never before.
 
 ─────────────────────────────────────────
 FOR EACH DRUG TARGET RELEVANT TO BRCA:
@@ -842,6 +1060,8 @@ FOR EACH DRUG TARGET:
   Use geometric observation language throughout
 ```
 
+---
+
 ### Step 8 — Produce the Report
 
 ```
@@ -868,44 +1088,59 @@ SECTION 2 — REFERENCE FRAME
   patient. The map does not change patient
   to patient.)
 
-SECTION 3 — PRIMARY AXIS POSITION
+SECTION 3 — STEP 0 FINDING
+  State the top displaced genes from the
+  unfiltered scan (Tier 3) or the dominant
+  proxy signal (Tier 1/2).
+  State which functional panel led the
+  displacement.
+  State whether the pattern is coherent or
+  atypical.
+  This section makes explicit that the
+  geometry was read from the data before
+  any named axis was applied.
+
+SECTION 4 — PRIMARY AXIS POSITION
   State the result of Step 3.
-  Position on the FOXA1/EZH2 axis.
-  Where this falls relative to population
+  Position on the dominant axis as
+  identified from Step 0.
+  For the common case: FOXA1/EZH2 ratio
+  and where it falls relative to population
   medians.
-  What region of the attractor landscape
-  this corresponds to.
+  For atypical cases: state the dominant
+  axis revealed by Step 0 and the position
+  on that axis.
   Confidence level (Tier 1: region only /
   Tier 2: refined region / Tier 3: precise).
 
-SECTION 4 — ATTRACTOR DEPTH
+SECTION 5 — ATTRACTOR DEPTH
   State the result of Step 4.
   Depth score (Tier 3) or depth estimate
   (Tier 1/2).
   What population percentile (if computable).
   What the depth implies geometrically.
 
-SECTION 5 — ATTRACTOR TYPE
+SECTION 6 — ATTRACTOR TYPE
   State the attractor type from Step 5.
   State the basis (which data supports it).
   State confidence.
   If ILC: note composite classification.
   If TNBC/CL ambiguity: state explicitly.
 
-SECTION 6 — LOCK IDENTIFICATION
+SECTION 7 — LOCK IDENTIFICATION
   State the lock type from Step 6.
   Direct measurement or inference.
   What the lock implies for drug target
   geometry.
 
-SECTION 7 — DRUG TARGET GEOMETRY
+SECTION 8 — DRUG TARGET GEOMETRY
   State each drug target observation
   from Step 7.
   Relevant / Not relevant / Uncertain.
   Geometric basis for each.
   What data would resolve uncertain cases.
 
-SECTION 8 — THE KEY QUESTION FOR THE
+SECTION 9 — THE KEY QUESTION FOR THE
 CLINICAL TEAM
   One question only.
   Derived from the most clinically
@@ -923,7 +1158,7 @@ CLINICAL TEAM
   The question for your clinical team is:
   [specific clinical question]."
 
-SECTION 9 — HONEST UNCERTAINTY
+SECTION 10 — HONEST UNCERTAINTY
   What is established from available data.
   What cannot be established.
   What additional data would add.
@@ -931,7 +1166,7 @@ SECTION 9 — HONEST UNCERTAINTY
   (clinical factors, drug interactions,
   comorbidities, prior treatment history).
 
-SECTION 10 — WHAT THE GEOMETRY SHOWS
+SECTION 11 — WHAT THE GEOMETRY SHOWS
   Two to three sentences of plain language.
   Not biology jargon.
   Not framework language.
@@ -993,11 +1228,12 @@ The method is:
 For any of the 19 other cancer types
 with completed population analyses in
 this repository, the same steps apply.
-Step 1 names a different population
-analysis. Steps 3-6 use the genes and
-reference values from that analysis.
-Step 7 uses the drug predictions from
-that analysis.
+Step 0 runs on the reference panel for
+that cancer type. Step 1 names a different
+population analysis. Steps 3-6 use the
+genes and reference values from that
+analysis. Step 7 uses the drug predictions
+from that analysis.
 
 The method does not change.
 The reference frame changes.
@@ -1072,9 +1308,38 @@ folder:         Individual_Protocol/Breast_Cancer/
 type:           Cancer-type individual patient
                 protocol
 cancer_type:    BRCA (Breast Cancer)
-version:        1.0
+version:        2.0
 date:           2026-03-07
+date_updated:   2026-03-07
 status:         ACTIVE
+
+changes_from_v1.0:
+  Added Step 0 — Unfiltered Displacement Scan.
+  This is the geometry-first execution step
+  that runs before any named axis is applied.
+  It enforces the same epistemological order
+  as the discovery script: top-mover scan
+  first, prediction testing second.
+
+  Renamed Step 3 from "Place on the Primary
+  Axis" to "Identify the Dominant Axis."
+  The axis is a result of Step 0. It is not
+  applied in advance. The FOXA1/EZH2 axis
+  is named in Step 3 because Step 0 confirms
+  it as dominant — not because it was assumed.
+
+  Added Step 7 note: drug map runs SECOND,
+  after geometry is established. Explicit
+  parallel to discovery script protocol.
+
+  Added Section 3 to the report structure:
+  Step 0 Finding — the unfiltered scan result
+  must appear in the report before the axis
+  position. This documents that the geometry
+  was read from the data, not imposed on it.
+
+  Updated Part IV to reference Step 0 for
+  other cancer types.
 
 parent_document:
   Individual_Patient_Geometric_Analysis_Protocol.md
@@ -1102,4 +1367,5 @@ note:
   point scan, the top mover scan, the identity
   TF direction test — is what is universal.
   Not the specific genes.
+  Step 0 enforces this distinction in practice.
 ```

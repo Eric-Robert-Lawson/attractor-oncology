@@ -216,7 +216,7 @@ Five structurally unusual cancers were analyzed as deliberate stress tests on 20
 
 14 novel predictions pre-registered 2026-03-07. Structural contradictions: 0.
 
-Full record: Edge Case Geometric Derivations (Zenodo DOI pending upload)
+Full record: Edge Case Geometric Derivations [https://doi.org/10.5281/zenodo.18899766](https://doi.org/10.5281/zenodo.18899766)
 
 ---
 

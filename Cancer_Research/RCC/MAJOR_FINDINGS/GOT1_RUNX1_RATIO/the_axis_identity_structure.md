@@ -1,737 +1,841 @@
 # THE IDENTITY AXIS STRUCTURE
-## A Reasoning Artifact on What the Geometry Is Actually Revealing
+## Derived From First Principles Through the Attractor Geometry Axioms
+## Why the Two-Gene Ratio Is Not a Coincidence — It Is a Geometric Necessity
 ## OrganismCore — Eric Robert Lawson
 ## 2026-03-07
 
 ---
 
-## PREAMBLE — WHAT THIS DOCUMENT IS
+## PREAMBLE — THE NEW ANGLE BEING TAKEN
 
-This is a reasoning artifact, not a publication.
-It exists to record a geometric observation that
-emerged from two independent cancer analyses and
-that deserves to be named, examined, and
-understood before it is used.
+The previous reasoning artifact
+(Cross_Cancer_Identity_Axis_Structure_Reasoning_Artifact.md)
+established the Identity Axis Structure as an
+empirical observation: the geometry produced the
+same structural form in two independent cancers.
 
-The observation is this:
+This document takes the question one level deeper.
 
-In two different cancers — breast cancer (BRCA)
-and clear cell renal cell carcinoma (ccRCC) —
-the Waddington attractor geometry produced, in
-each case, a **two-gene ratio** on a single axis
-that:
+The question is not:
+*"Did the geometry produce the same form twice?"*
 
-1. Was derived from first principles before any
-   clinical data were examined
-2. Separated cancer subtypes or depth quartiles
-   with extraordinary statistical power
-3. Consisted of exactly two genes in structural
-   opposition: one gene measuring **identity
-   retained**, the other measuring **identity
-   suppressed**
-4. Could be translated to an IHC ratio using
-   two commercially available antibodies
+The question is:
+*"Given what the axioms say about cancer as a
+geometric structure, was this outcome inevitable?
+Was the two-gene ratio not just something the
+geometry found — but something the geometry
+could not have failed to find?"*
 
-The question this document investigates is
-whether this is coincidence or structure.
+The answer, argued here from the axioms upward,
+is yes.
 
-The answer is: **it is structure.**
-
-And that structure, if correctly understood,
-is not just a finding about two cancers.
-It is a finding about what cancer is.
+The Identity Axis Structure is not an empirical
+pattern observed in data.
+It is a **geometric necessity** that follows
+directly from the axiomatic structure of cancer
+as a false attractor in the Waddington landscape.
 
 ---
 
-## PART I — THE TWO RATIOS, STATED PRECISELY
+## PART I — THE FOUR AXIOM TYPES, RESTATED
+## (What they actually say about landscape geometry)
 
-### The BRCA ratio: FOXA1 / EZH2
-
-**FOXA1:**
-Pioneer transcription factor. Binds closed
-chromatin and opens it. Activates the luminal
-cell identity programme. Enables estrogen
-receptor and other luminal factors to bind.
-In breast tissue: FOXA1 is the gene whose
-activity keeps a cell recognisably a luminal
-breast epithelial cell.
-High FOXA1 = identity active.
-
-**EZH2:**
-Catalytic subunit of PRC2 (Polycomb Repressive
-Complex 2). Deposits H3K27me3 — the repressive
-histone mark. Targets FOXA1 promoter directly.
-Also targets GATA3 and ESR1 (the ER gene).
-High EZH2 = identity silenced.
-
-**The ratio:**
-FOXA1 H-score ÷ EZH2 H-score.
-When FOXA1 dominates: luminal identity active.
-When EZH2 dominates: luminal identity silenced.
-
-**What it produced:**
-A continuous ordering axis across all six major
-breast cancer subtypes, confirmed in seven
-independent datasets (n≈7,500 patients, four
-measurement platforms), pre-specified before
-any confirmatory analysis. AUC for LumA vs
-Basal 0.828–0.901. Pre-specified subtype
-ordering confirmed exactly.
+Document 90 (Attractor_Geometry_Axioms.md,
+derived from 14 cancer validations, first named
+during BRCA LumA deep dive 2026-03-04) describes
+four geometric configurations of the false
+attractor:
 
 ---
 
-### The ccRCC ratio: GOT1 / RUNX1
+### AXIOM I — THE BLOCKED APPROACH (Type 1)
 
-**GOT1:**
-Cytoplasmic aspartate aminotransferase. Central
-enzyme of the malate-aspartate shuttle and TCA
-anaplerosis. In normal proximal tubule (PT) cells,
-GOT1 maintains the metabolic programme that
-defines PT cell identity — the shuttle that
-keeps mitochondria running, that keeps the TCA
-cycle fed, that keeps the cell recognisably a
-proximal tubule cell.
-High GOT1 = metabolic identity active.
-Low GOT1 = metabolic identity collapsed.
+The cell is above the correct valley.
+It cannot complete differentiation.
+The false attractor is the progenitor state,
+stabilised by the absence of the switch gene
+needed to cross the saddle point.
 
-**RUNX1:**
-Transcription factor. Core-binding factor
-complex (with CBFB). In the ccRCC false
-attractor, RUNX1 drives EZH2, DNMT3A, KDM1A,
-HDAC1 — the full chromatin lock programme.
-It is the transcriptional hub of the false
-attractor. It rises continuously as the tumour
-commits deeper into the pathological state.
-High RUNX1 = chromatin lock dominant.
-Low RUNX1 = identity not yet locked.
+**Geometric signature of depth:**
+How far below the saddle point the switch gene
+expression sits.
+Lower switch gene = deeper stall =
+further from the correct valley.
 
-**The ratio:**
-norm(GOT1) − norm(RUNX1).
-(Equivalent to GOT1 / RUNX1 in direction.)
-When GOT1 dominates: PT identity retained,
-shallow attractor position.
-When RUNX1 dominates: identity collapsed,
-chromatin lock dominant, deep attractor.
-
-**What it produced:**
-Continuous OS stratification in TCGA-KIRC
-(n=532, pre-specified): Cox HR = 6.94
-[3.62–13.29], p = 5.09×10⁻⁹, C = 0.627.
-Quartile OS separation: Q4 vs Q1 p = 0.0001.
-20/21 individual gene OS directions confirmed.
+**The diagnostic ratio this implies:**
+Switch gene (falling) /
+False attractor marker (retained).
+This ratio decreases as the cell stalls deeper.
+It is the distance from the saddle point,
+expressed as a gene ratio.
 
 ---
 
-## PART II — THE STRUCTURAL COMPARISON
+### AXIOM II — THE WRONG VALLEY (Type 2)
 
-These two ratios came from completely
-independent analyses of completely different
-cancers, on different datasets, in different
-cells of origin, with different driver
-mutations, different attractor geometries,
-and different molecular landscapes.
+The cell has crossed into and stabilised in a
+false attractor — a different valley entirely.
+The false attractor has a convergence node:
+the single gene or pathway that simultaneously
+maintains switch gene suppression and false
+attractor marker elevation.
 
-Yet they share an identical structure:
+**Geometric signature of depth:**
+Convergence node expression level.
+Higher convergence node = deeper basin =
+harder to dissolve.
+
+**The diagnostic ratio this implies:**
+Normal identity programme gene (suppressed) /
+Convergence node (elevated).
+As the cell commits deeper to the false attractor,
+the suppressed identity gene falls and the
+convergence node rises.
+The ratio is the relative dominance of false
+attractor over correct identity.
+
+---
+
+### AXIOM III — THE OVERSHOT IDENTITY (Type 3)
+
+The cell is in the correct valley but has gone
+too deep. The arrest axis (CDKN1A, TGFBR2,
+SMAD3, or equivalent) has been dismantled.
+The identity programme is intact — in fact
+overexpressed — but the floor of the valley
+is gone.
+
+**Geometric signature of depth:**
+Arrest axis expression level.
+Lower arrest gene = deeper descent =
+further from the arrest point.
+
+**The diagnostic ratio this implies:**
+Identity programme gene (elevated, overshot) /
+Arrest axis gene (falling as depth increases).
+Wait — this is the inverse of the previous types.
+Here the identity gene rises with depth, and
+the arrest gene falls.
+But the ratio still changes monotonically with
+depth: identity/arrest rises as the cell descends.
+
+---
+
+### AXIOM IV — THE ROOT LOCK (Type 4)
+
+The cell never committed to any daughter identity.
+It is locked at the pre-commitment node —
+the root of the Waddington landscape.
+There is no correct valley to return to.
+There is no wrong valley to escape from.
+The false attractor IS the uncommitted state,
+expanded and proliferating.
+
+**Geometric signature of depth:**
+Commitment programme suppression.
+Lower commitment TF expression = more deeply
+locked at the root = more primitive.
+
+**The diagnostic ratio this implies:**
+Commitment programme gene (falling toward root) /
+Root identity marker (retained or elevated).
+As the cell locks deeper at the root, commitment
+programme falls and root markers are maintained.
+
+---
+
+## PART II — THE STRUCTURAL INVARIANT
+## THAT EMERGES FROM ALL FOUR AXIOMS
+
+Each axiom produces a different biological
+mechanism. Each involves different genes.
+Each describes a different geometric position
+in the Waddington landscape.
+
+But every single one, without exception,
+produces the same **mathematical form** of
+depth measurement:
 
 ```
-RATIO = [ GENE THAT HOLDS IDENTITY OPEN ]
-      ÷ [ GENE THAT DRIVES IDENTITY SHUT ]
+DEPTH INDEX = GENE THAT FALLS WITH DEPTH
+            / GENE THAT RISES WITH DEPTH
 ```
 
-This is not a coincidence of gene function.
-It is a **geometric inevitability** given what
-the Waddington landscape is measuring.
+Or equivalently:
 
-Here is why:
+```
+DEPTH INDEX = norm(FALLING GENE)
+            − norm(RISING GENE)
+```
 
-The Waddington landscape is a representation
-of attractor depth — how committed a cell is
-to its current state. The primary axis of
-any Waddington landscape, when measured
-correctly, will always be the axis that
-separates "cell identity intact" from
-"cell identity lost."
+This is not a coincidence of the four types.
+It is a **mathematical property of monotonic
+depth on any axis.**
 
-That axis will always have two poles:
-- The pole where identity-maintaining
-  programmes are dominant
-- The pole where identity-suppressing
-  programmes are dominant
+Any quantity that changes continuously and
+monotonically with position on a one-dimensional
+axis can be measured by:
+- A marker that increases toward one pole
+- A marker that decreases toward that pole
+- Their ratio as a continuous depth index
 
-And in a biological system, those two poles
-will always be representable by at least one
-gene per pole — one gene that marks "identity
-held," one gene that marks "identity taken."
+The Waddington attractor depth axis is
+one-dimensional within any given cancer type
+(the primary axis of the landscape is the
+axis of deepest variance, by definition of
+principal components in a high-dimensional
+expression space).
 
-The geometry does not know which genes those
-are in advance. It finds them from the data.
-But it will always find **some** version of
-this structure, because the structure is the
-axis. The genes are just the molecular
-implementation of what the axis is measuring.
-
-This is what the geometry produced in two
-independent cancer systems, and it produced
-the same structural form both times.
+**Therefore:** whatever two genes best represent
+the two poles of that one-dimensional axis will
+always form a ratio that measures depth.
+This is geometry, not biology.
+The biology determines which genes occupy the
+poles. The geometry determines that the poles
+will always be expressible as a ratio.
 
 ---
 
-## PART III — THE FOUR-PART STRUCTURE
-## OF AN IDENTITY AXIS GENE PAIR
+## PART III — WHY THE GENES AT THE POLES ARE
+## ALWAYS THE IDENTITY ANCHOR AND THE
+## FALSE ATTRACTOR HUB
 
-Both ratios share all four structural features:
+This is where the biology enters.
 
-### Feature 1: One gene marks identity retained
+The genes that best represent the "identity
+retained" pole and the "identity lost" pole
+of the depth axis are not arbitrary.
+They are determined by the axiomatic structure
+of the cancer type.
 
-In BRCA: FOXA1. A pioneer TF that opens
-chromatin to allow identity-defining factors
-to bind. Without FOXA1 activity, the luminal
-programme cannot be maintained.
+**For Type 1 (Blocked Approach):**
+The "identity retained" pole is the switch gene
+— the TF whose activity would complete the
+journey. The cell has some of this; more = closer
+to completing differentiation = shallower.
+The "identity lost" pole is the progenitor
+false attractor marker — what the cell holds
+onto because it cannot move forward.
+Ratio = switch gene / FA marker.
 
-In ccRCC: GOT1. A metabolic enzyme that
-maintains the TCA/shuttle machinery defining
-proximal tubule cellular metabolism. Without
-GOT1 activity, the PT metabolic identity
-cannot be sustained.
+**For Type 2 (Wrong Valley):**
+The "identity retained" pole is the correct
+identity gene that has been silenced by the
+convergence node. More = closer to correct
+identity = shallower.
+The "identity lost" pole is the convergence
+node itself — the gene most centrally
+maintaining the false attractor.
+Ratio = correct identity gene / convergence node.
 
-**The key insight:** The identity-retained
-gene does not have to be a transcription factor.
-In ccRCC it is a metabolic enzyme.
-What it must be is: the gene whose activity
-is necessary for the normal cell identity
-programme to run.
-In breast epithelium, that is a TF that opens
-the chromatin.
-In proximal tubule cells, that is an enzyme
-that runs the TCA cycle.
-The category is: **identity anchor**.
-The molecular type varies by tissue.
+**For Type 3 (Overshot Identity):**
+The "identity retained at normal depth" pole is
+the arrest axis gene — the gene that, when
+present, marks the normal arrested state.
+More arrest gene = closer to normal arrest =
+shallower.
+The "identity lost (overshot)" pole is the
+hyperactivated identity gene — whose excess
+marks how far past the arrest point the cell
+has gone.
+Ratio = arrest axis gene / identity gene.
+(Note: the ratio is inverted relative to Types
+1 and 2, but the relationship to depth is the
+same.)
 
-### Feature 2: One gene marks identity suppressed
+**For Type 4 (Root Lock):**
+The "identity retained" pole is any commitment
+programme gene — what would normally be
+activated as the cell left the root.
+The "identity lost (locked at root)" pole is
+the root identity marker.
+Ratio = commitment gene / root marker.
 
-In BRCA: EZH2. A Polycomb complex subunit
-that deposits H3K27me3 directly on the FOXA1
-promoter, and on GATA3 and ESR1 — silencing
-the entire luminal identity programme from
-the top.
-
-In ccRCC: RUNX1. A transcription factor hub
-that drives the chromatin lock programme
-(EZH2, DNMT3A, KDM1A, HDAC1, CBFB all
-co-rise with RUNX1). RUNX1 does not silence
-identity directly — it assembles and maintains
-the machinery that does.
-
-**The key insight:** The identity-suppressed
-gene does not have to be a direct epigenetic
-writer. In ccRCC, RUNX1 is a transcription
-factor that organises the chromatin lock,
-rather than being the lock itself.
-What it must be is: the gene whose activity
-most strongly marks the false attractor
-commitment state.
-The category is: **false attractor hub**.
-The molecular type varies by tissue.
-
-### Feature 3: The two genes are mechanistically
-### opposed on the same identity axis
-
-In BRCA: EZH2 writes H3K27me3 directly on
-the FOXA1 promoter. These two genes are in
-direct biochemical opposition — EZH2 silences
-FOXA1's own gene.
-
-In ccRCC: The opposition is one step less
-direct. GOT1 falls as TCA function collapses;
-RUNX1 rises as the chromatin lock assembles.
-The GOT1 collapse IS the metabolic context
-that enables the EZH2 lock to be sustained
-(because αKG depletion from OGDHL/GOT1
-loss allows EZH2-written marks to persist
-without being erased by TET2). They are
-linked by the TCA→αKG→EZH2 circuit.
-
-**The key insight:** The opposition does
-not have to be direct biochemical antagonism
-at a single locus. It can be indirect:
-the identity anchor gene's collapse creates
-the metabolic conditions that sustain the
-false attractor hub's dominance.
-Both are measuring the same axis —
-they just connect to it at different points
-in the molecular chain.
-
-### Feature 4: The ratio is IHC-translatable
-### using commercially available antibodies
-
-Both FOXA1 and EZH2 are in routine clinical
-IHC use. FOXA1 (CST D4E2) and EZH2 (CST D2H1)
-are used in breast pathology diagnostics.
-Two stains. One ratio.
-
-RUNX1 IHC has multiple commercially available
-validated clones (Leica EP206, Abcam EPR3099Y).
-GOT1 IHC antibodies exist and are used in
-neuroendocrine and hepatic panels.
-Both are nuclear or cytoplasmic markers.
-Two stains. One ratio.
-
-**The key insight:** The geometry found the
-biologically correct axis AND the axis
-happened — in both cases — to be expressible
-in two stains that are or can be routinely
-performed in any pathology laboratory.
-This is not a coincidence. A gene that is a
-major identity anchor or false attractor hub
-will, by definition, be highly expressed in
-a lineage-specific way and will have been
-studied by pathologists independently of
-the geometry. That is why antibodies exist.
+**In every type:** the ratio is between a gene
+marking the normal state and a gene marking
+the pathological committed state.
+The names change. The function is invariant.
 
 ---
 
-## PART IV — WHAT VARIES BETWEEN THE TWO AXES
+## PART IV — THE SPECIFIC ARGUMENT FOR BRCA
+## AND ccRCC (THROUGH THE AXIOM LENS)
 
-The structure is shared. The implementation
-differs. This is important to record honestly.
-
-| Property | BRCA axis | ccRCC axis |
-|---|---|---|
-| Identity anchor type | Pioneer TF (opens chromatin) | Metabolic enzyme (runs TCA) |
-| False attractor hub type | Epigenetic writer (PRC2/H3K27me3) | Transcription factor (assembles chromatin lock) |
-| Direct biochemical opposition | Yes — EZH2 methylates FOXA1 promoter | Indirect — GOT1 collapse enables EZH2 lock via αKG |
-| Number of subtypes ordered | 6 (LumA > LumB > HER2 > TNBC > CL > ILC) | Continuous depth (Q1→Q4, not discrete subtypes) |
-| What the ratio measures | Which subtype the cancer is | How deep in the false attractor the tumour is |
-| What it predicts | Subtype identity → treatment choice | Prognosis → treatment intensity and type |
-| IHC antibody clinical status | Both in routine breast IHC use | RUNX1: available, not routine in renal. GOT1: available, requires renal FFPE validation |
-| Calibration study status | Pre-calibration (n=300–400 needed) | Pre-calibration (n=200–400 needed) |
-
-The most important difference is:
-
-**In breast cancer, the ratio stratifies
-by subtype — it is a classifier.**
-
-**In ccRCC, the ratio stratifies by depth
-within one subtype — it is a depth meter.**
-
-These are different uses of the same
-geometric structure. The breast cancer
-landscape has six distinct attractor
-basins (six subtypes), and the ratio
-moves across all of them. The ccRCC
-landscape has one false attractor that
-a tumour commits to at varying depths,
-and the ratio measures how deep.
-
-Both are measuring position on the
-identity axis. The landscape is just
-organised differently in the two cancers.
+Now apply this to the two cancers that produced
+the Identity Axis Structure empirically.
 
 ---
 
-## PART V — WHY THIS STRUCTURE EXISTS
-## (The geometric explanation)
+### BRCA: Why FOXA1/EZH2 was inevitable
 
-The Waddington landscape is a representation
-of the gene regulatory network's energy
-surface. Cells sit in wells (attractors).
-Cancer involves transitions to pathological
-wells (false attractors).
+Breast cancer has six subtypes, which span
+multiple axiom types:
 
-The primary axis of the landscape — the axis
-that explains the most variance in gene
-expression across cells — will always be the
-axis that separates "cell identity intact"
-from "cell identity lost." This is true by
-definition, because:
+- LumA: **Type 3** (Overshot Identity).
+  The cell is in the correct luminal valley.
+  FOXA1, GATA3, ESR1 are elevated or retained.
+  The arrest axis (CDKN1A, TGFBR2) is dismantled.
+  Depth = distance from the arrest floor.
+  Depth gene (falling): CDKN1A.
+  Hub gene (rising with depth commitment): DNMT3A/HDAC2.
 
-1. The cell's gene regulatory network is
-   organised around maintaining cell identity.
-   The largest source of coordinated
-   transcriptional variance across a cancer
-   population is the axis that measures how
-   much of that organisation remains.
+- LumB: **Type 3 → Type 2 transition**.
+  Luminal identity retained but TFF1/ESR1 decoupled.
+  DNMT3A/HDAC2 rising = chromatin brake beginning.
+  The identity programme is still active but
+  increasingly locked by the chromatin machinery.
 
-2. Every cell type has an identity anchor
-   gene — the gene whose expression is
-   necessary for the canonical programme to
-   run. In luminal epithelium: FOXA1.
-   In proximal tubule: GOT1. In hepatocytes:
-   probably HNF4A. In neurons: probably
-   NEUROD1. These genes fall in cancer
-   because the identity programme they
-   support is being dismantled.
+- HER2-enriched: **Type 2 partial**.
+  Luminal identity eroding. HER2 kinase override
+  dominant. EZH2 beginning to rise. CDH3-high
+  fraction = deepest, most committed to false state.
 
-3. Every false attractor has a hub gene —
-   the gene most strongly associated with
-   the committed false attractor state.
-   In breast cancer: EZH2 (the Polycomb
-   writer silencing the identity programme).
-   In ccRCC: RUNX1 (the transcription factor
-   assembling the chromatin lock). These
-   genes rise in cancer because they are
-   part of what the false attractor IS.
+- TNBC: **Type 2** (Wrong Valley).
+  Luminal identity erased. Basal false attractor.
+  Convergence node: EZH2. (Confirmed independently:
+  Schade et al. Nature 2024, Toska et al.
+  Nat Med 2017.)
+  EZH2 silences FOXA1 promoter directly.
+  The ratio FOXA1/EZH2 = correct identity gene
+  / convergence node = the canonical Type 2
+  depth ratio.
 
-4. The ratio of these two genes — identity
-   anchor / false attractor hub — is
-   therefore the simplest possible continuous
-   measurement of where on the identity axis
-   a given tumour sample sits.
+- Claudin-low: **Type 4** (Root Lock).
+  No luminal identity. No basal programme.
+  Stuck at the mammary stem cell root.
+  EZH2 maximally dominant.
+  FOXA1 minimally expressed.
+  FOXA1/EZH2 at its minimum.
 
-**The geometry does not create this
-structure. It reveals it.**
-The structure was always there — in the
-molecular biology of cancer as a process
-of identity loss. The geometry provides
-a method for finding the two genes that
-most purely represent the two poles of
-that process in any given cancer type.
+- ILC: **Type 3 structural variant**.
+  FOXA1 hyperactivated (above normal).
+  CDH1 structurally lost (not epigenetically silenced).
+  FOXA1/EZH2 ratio high (correct identity
+  programme overshot, not silenced).
+  The ratio correctly identifies ILC as the
+  structural extreme of the Type 3 axis.
 
----
+**The FOXA1/EZH2 ratio is therefore not just
+a single measurement for one cancer type.**
+It is the primary axis of the entire breast cancer
+Waddington landscape, spanning all four axiom
+types across all six subtypes:
+- At the FOXA1-high end: Type 3 / Type 3-variant
+  (identity overshot or arrested)
+- Moving toward the EZH2-high end: Type 2
+  (wrong valley, convergence node dominant)
+- At the FOXA1-minimum/EZH2-maximum end:
+  Type 4 (root lock, all identity gone)
 
-## PART VI — THE LITERATURE CHECK ON
-## THIS STRUCTURAL OBSERVATION
+**Why these two genes?**
+FOXA1 is the most essential gene for the correct
+identity programme in luminal breast epithelium.
+Its activity is what makes a cell recognisably
+luminal. It falls monotonically as any cancer
+type moves away from luminal identity — whether
+by block (Type 1), false attractor (Type 2),
+structural dismantlement (Type 3/ILC), or root
+lock (Type 4/claudin-low).
 
-The individual components are known:
+EZH2 is the most essential gene for maintaining
+the false attractor states across all non-LumA
+types. Its activity is what keeps the luminal
+programme silenced. It rises monotonically as
+any cancer type commits deeper to non-luminal
+identity — whether by basal conversion (TNBC),
+root lock (CL), or chromatin braking (LumB).
 
-**Known:**
-- FOXA1 as a pioneer TF in luminal identity: confirmed (decades of literature)
-- EZH2 as a Polycomb silencer: confirmed (decades of literature)
-- EZH2 targeting FOXA1: confirmed (Toska et al. Nat Med 2017, Schade et al. Nature 2024)
-- RUNX1 as an adverse prognostic marker in ccRCC: confirmed (Cancer Research 2020, PeerJ 2019, IID 2024/2025)
-- GOT1 downregulation in ccRCC reflecting metabolic collapse: confirmed (Frontiers Oncology 2024, pan-cancer TCGA analysis)
-- EZH2 in lineage plasticity across prostate/breast/bladder: confirmed (Nature Commun 2024, Endocrinology 2023)
+The two genes are on opposite sides of the same
+axis because their molecular functions are on
+opposite sides of the same decision: FOXA1 opens
+luminal identity; EZH2 closes it.
 
-**The structural observation that is NOT in the literature:**
-
-No prior work has named, described, or
-published the following observation:
-
-> *In independent attractor geometry analyses
-> of two different cancer types, the primary
-> identity axis is in both cases expressible
-> as a two-gene ratio consisting of one
-> "identity anchor" gene and one "false
-> attractor hub" gene — and this ratio is
-> in both cases translatable to a two-stain
-> IHC assay using commercially available
-> antibodies.*
-
-The literature knows the individual components.
-The literature does not name the pattern.
-
-This is the novelty.
-Not that FOXA1 opens chromatin.
-Not that EZH2 silences identity.
-Not that RUNX1 is prognostic in ccRCC.
-Not that GOT1 reflects metabolic identity.
-
-The novelty is: **the geometry always finds
-the same structural form** — identity anchor
-vs false attractor hub — and that form is
-always IHC-translatable because the genes
-that represent the poles of the most
-biologically fundamental axis will always
-be the genes that have been independently
-studied and independently antibody-validated
-by pathologists who did not need the geometry
-to know these proteins were important.
+**The geometry could not have produced a
+different pair as the primary axis of the
+breast cancer landscape.** These are the two
+genes most strongly associated with the two
+poles of the most fundamental axis of cell
+identity in this tissue. Any other pair would
+produce a weaker signal because any other pair
+would be more downstream, less central, more
+type-specific rather than spanning all types.
 
 ---
 
-## PART VII — THE PREDICTION THIS STRUCTURE GENERATES
+### ccRCC: Why GOT1/RUNX1 was inevitable
 
-If this structural observation is correct —
-that the Waddington geometry will always
-produce a two-gene identity axis expressible
-as identity anchor / false attractor hub —
-then this is a **generative prediction**:
+ccRCC is a single-origin cancer (proximal tubule)
+with one false attractor of varying depth. It is
+predominantly **Type 2** (Wrong Valley), with
+depth variation (Q1–Q4) measuring how deeply
+committed to the false attractor each tumour is.
 
-**Apply the same geometry to a new cancer
-type. The geometry will produce a ratio.
-That ratio will consist of:**
-1. One gene marking the normal cell identity
-   of the tissue of origin (the identity
-   anchor — falling with depth/subtype
-   progression)
-2. One gene marking the committed false
-   attractor state of that cancer (the
-   false attractor hub — rising with
-   depth/subtype progression)
+The identity programme of the proximal tubule
+is not maintained by a transcription factor network
+the way luminal epithelial identity is. It is
+maintained by the metabolic programme that
+defines what a proximal tubule cell *does* —
+the TCA cycle, the malate-aspartate shuttle,
+the oxidative phosphorylation machinery.
 
-And both genes will be:
-- Expressible by IHC
-- Commercially antibody-available
-- Already studied independently by
-  pathologists who did not need the geometry
+**The correct identity gene (falling with depth)
+is therefore not a TF. It is a metabolic enzyme.**
+Specifically, GOT1 — the enzyme at the centre of
+the malate-aspartate shuttle and TCA anaplerosis.
+GOT1 falls because the metabolic programme it
+supports is being dismantled as the tumour commits
+deeper to the false attractor (HIF-driven
+glycolytic reprogramming, OGDHL loss,
+αKG depletion).
 
-This prediction can be tested in any cancer
-type for which single-cell or bulk RNA data
-exists.
+**The false attractor convergence node (rising
+with depth) is RUNX1.** RUNX1 is the
+transcription factor hub that assembles and
+maintains the chromatin lock programme in the
+ccRCC false attractor: it drives EZH2, DNMT3A,
+KDM1A, HDAC1, CBFB. It is the gene most
+strongly associated with committed false
+attractor state in this tissue.
 
-**The test:** Run the attractor geometry.
-Extract the primary axis. Identify the top
-positive and negative depth correlates.
-Check whether they fit the identity anchor /
-false attractor hub structure.
-Check whether IHC antibodies exist for both.
+**Why GOT1 and not a TF?**
+Because in proximal tubule cells, the identity
+programme is *metabolic in nature*, not
+transcriptional in nature. The cell's identity
+IS its metabolic specialisation. The gene that
+most centrally runs that metabolic programme
+is the gene that most purely represents the
+"identity retained" pole. In a tissue where
+identity is maintained by TF networks, the
+identity anchor will be a TF. In a tissue where
+identity is maintained by metabolic machinery,
+the identity anchor will be a metabolic enzyme.
 
-If this holds across three or more cancer
-types, it is a structural law of attractor
-geometry in cancer, not a coincidence of
-two analyses.
+**The axiom does not specify the molecular class
+of the identity anchor. It specifies the function:
+the gene most essential for maintaining the
+normal cell identity programme of the tissue
+of origin.**
 
----
-
-## PART VIII — THE PARTIAL TEST
-## (BRCA 30/30 and RCC)
-
-The BRCA coherence argument (BRCA_30_30_coherence.md)
-established that 30/30 findings in the breast
-cancer series had zero contradictions. This is
-not a statistical claim — it is a coherence
-argument: when a framework resolves paradoxes
-(like the EZH2 paradox) rather than creating
-them, it is more likely to be tracking
-real biology than pattern-matching noise.
-
-The structural observation in this document
-adds a new dimension to that coherence
-argument:
-
-**The same structural form of the identity
-axis — identity anchor vs false attractor hub,
-expressible as a two-gene IHC-translatable
-ratio — emerged independently in:**
-
-- Breast cancer (FOXA1/EZH2), confirmed
-  across 7 independent datasets, n≈7,500
-  patients, zero contradictions, pre-specified
-- ccRCC (GOT1/RUNX1), confirmed in TCGA-KIRC
-  n=532, pre-specified, HR=6.94, p=5×10⁻⁹,
-  zero contradictions
-
-**AND the EZH2 paradox — high EZH2 predicts
-both worse long-term outcome AND better
-short-term chemotherapy response, resolved
-by attractor depth — appeared independently
-in:**
-- Breast cancer TNBC (CS-LIT-10, GSE25066)
-- PRCC Type 2 (Script 4, TCGA-KIRP)
-
-Same mechanism. Different cancer. Different
-dataset. Different platform.
-
-These are not two independent confirmations
-of a single finding.
-They are two independent emergences of the
-same structural form from the same geometric
-method applied to different systems.
-
-That is a different kind of evidence.
+The molecular class is determined by the biology
+of the tissue. The structure of the ratio —
+identity anchor / false attractor hub — is
+determined by the geometry.
 
 ---
 
-## PART IX — THE NAMING QUESTION
+## PART V — THE CROSS-TYPE TABLE EXTENDED
+## (The Identity Axis Structure maps onto all four axiom types)
 
-This structural observation needs a name
-so it can be communicated, tested, and
-built upon.
+The existing cross-type comparison table in
+Document 90 has columns for:
+- Cell position in landscape
+- Identity TFs of correct lineage
+- Identity TFs of progenitor state
+- FA markers
+- Convergence node
+- Depth metric
 
-Proposed name: **The Identity Axis Structure**
+What is now visible is that the **depth metric
+column IS the Identity Axis Structure**, expressed
+in terms specific to each axiom type:
 
-Definition:
-> In a Waddington landscape analysis of any
-> cancer type, the primary attractor depth
-> axis is expressible as a two-gene ratio
-> consisting of one identity anchor gene
-> (marking retained normal cell identity,
-> falling with attractor depth) and one
-> false attractor hub gene (marking committed
-> pathological state, rising with attractor
-> depth). This structure is invariant across
-> cancer types despite variation in the
-> molecular identity of the genes occupying
-> each pole.
+| Property | Type 1 (Blocked) | Type 2 (Wrong Valley) | Type 3 (Overshot) | Type 4 (Root Lock) |
+|---|---|---|---|---|
+| **Identity Anchor gene** | Switch gene (TF of next differentiation stage) | Correct identity gene (silenced by convergence node) | Arrest axis gene (marking normal arrest floor) | Commitment programme gene (any lineage-committing TF) |
+| **False Attractor Hub gene** | FA marker (progenitor state retained) | Convergence node (EZH2, BCL2, OLIG2...) | Hyperactivated identity gene (past the floor) | Root identity marker (pre-commitment state) |
+| **Direction of Identity Anchor** | Falls with depth (switch gene suppressed deeper) | Falls with depth (more silenced by convergence node) | Falls with depth (arrest axis dismantled further) | Falls with depth (commitment blocked further) |
+| **Direction of FA Hub** | Rises with depth (more committed to progenitor) | Rises with depth (convergence node strengthens) | Rises with depth (identity more overshot) | Rises or flat (root state maintained) |
+| **The ratio** | Switch gene / FA progenitor marker | Correct identity gene / Convergence node | Arrest axis gene / Identity gene | Commitment gene / Root marker |
+| **BRCA example** | (LumB: TFF1 / DNMT3A as partial Type 1→2) | FOXA1 / EZH2 (canonical in TNBC/CL) | CDKN1A / ESR1 (LumA Type 3) | (FOXA1-min / EZH2-max in CL) |
+| **ccRCC example** | (GOT1 fall marking approach to false attractor) | GOT1 / RUNX1 (canonical in ccRCC depth) | — | — |
 
-The two poles:
-- **Pole 1 — The Identity Anchor:** The gene
-  most essential to maintaining the normal
-  cellular identity programme in the tissue
-  of origin. In luminal epithelium: a pioneer
-  TF (FOXA1). In proximal tubule: a metabolic
-  enzyme (GOT1). In other tissues: to be
-  determined by the geometry.
+**The critical observation:**
+FOXA1/EZH2 in BRCA spans multiple axiom types
+simultaneously because the breast cancer landscape
+contains multiple subtypes representing different
+axiom types, and these two genes happen to sit
+at the poles of the entire landscape rather than
+the poles of any single type.
 
-- **Pole 2 — The False Attractor Hub:** The
-  gene most central to the committed
-  pathological state. In breast cancer: an
-  epigenetic writer (EZH2). In ccRCC: a
-  transcription factor hub that assembles
-  the chromatin lock (RUNX1). In other
-  tissues: to be determined by the geometry.
+GOT1/RUNX1 in ccRCC is a pure Type 2 depth ratio
+because ccRCC is a single-type cancer with one
+false attractor and continuous depth variation.
 
-The ratio of Pole 1 / Pole 2 (or
-norm(Pole 1) − norm(Pole 2)) is the
-**Identity Axis Score** for that cancer.
-
----
-
-## PART X — THE HONESTLY STATED
-## ALTERNATIVE
-
-The most honest alternative explanation
-is simpler than the structural argument:
-
-*FOXA1 and GOT1 are both just "high
-expression in normal tissue, low expression
-in cancer" genes. EZH2 and RUNX1 are both
-just "bad prognosis genes." Any normal/
-cancer gene vs bad prognosis gene ratio
-would produce this result. There is no
-deep geometry here — just the fundamental
-pattern that normal tissue markers fall
-and oncogenes rise.*
-
-This alternative must be engaged directly.
-
-**Why it is not sufficient:**
-
-1. **Pre-specification:** Both ratios were
-   derived from geometry before any survival
-   or subtype data were examined. A generic
-   "normal-tissue-marker / oncogene" search
-   would produce many candidate pairs. The
-   geometry produced exactly one pair per
-   cancer as the primary axis — and that
-   pair confirmed pre-specified predictions
-   exactly. If the structure were generic,
-   many other pairs would perform as well.
-   In the BRCA analysis, FOXA1/EZH2 was not
-   the only possible ratio — it was the ratio
-   the geometry pointed to before the test.
-
-2. **Mechanistic specificity:** EZH2 does not
-   merely rise in breast cancer as a generic
-   oncogene. It specifically methylates the
-   FOXA1 promoter. The opposition is not just
-   statistical — it is biochemical and direct.
-   Similarly, GOT1 collapse in ccRCC is not
-   just "metabolic enzyme downregulated in
-   cancer" — it is specifically connected to
-   the αKG depletion that enables the RUNX1-
-   driven EZH2 lock to be sustained.
-
-3. **The subtype structure:** In breast cancer,
-   the ratio does not just separate cancer from
-   normal. It orders all six subtypes on a
-   continuous axis in the exact predicted
-   order. A generic normal/oncogene ratio would
-   not do this — it would separate
-   cancer from normal without internal subtype
-   ordering. The FOXA1/EZH2 ratio captures the
-   full geometry of the breast cancer landscape,
-   not just the normal-vs-cancer boundary.
-
-4. **The paradox resolution test:** Both the
-   BRCA EZH2 paradox (CS-LIT-10) and the PRCC
-   EZH2 paradox (Script 4) are resolved by the
-   attractor depth framework. A generic
-   statistical structure would not resolve
-   biological paradoxes — it would create them
-   or ignore them.
-
-The alternative is not wrong to consider.
-It is wrong to accept as sufficient.
+**These are two different uses of the same
+geometric structure, applied to two different
+landscape configurations.**
 
 ---
 
-## PART XI — WHAT THIS MEANS FOR
-## THE VALIDATION CAMPAIGN AND BEYOND
+## PART VI — THE DEEPER IMPLICATION:
+## WHY THE RATIO IS ALWAYS IHC-TRANSLATABLE
 
-**For the BRCA IHC calibration:**
-The Identity Axis Structure framing means
-that when the FOXA1/EZH2 IHC calibration
-study is completed, it is not just validating
-a breast cancer classifier.
-It is validating the first IHC-deployable
-implementation of the Identity Axis Structure
-in cancer diagnostics.
-That is a different and larger claim than
-"we validated a breast cancer subtyping test."
+This was noted empirically in the previous artifact.
+Through the axiom lens, it can now be explained.
 
-**For the ccRCC GOT1/RUNX1 calibration:**
-This is the second implementation of the
-same structure. When it is validated, the
-structural observation becomes a two-data-
-point argument. At three data points in
-independent cancer types, it becomes a
-structural law.
+**The identity anchor gene** is the gene most
+essential for maintaining the normal cell identity
+programme of the tissue of origin. This means:
+- It was one of the earliest genes studied by
+  pathologists and cell biologists working on
+  that tissue
+- It is highly tissue-specific in its expression
+  pattern, making it useful as a differential
+  diagnostic marker even before the false
+  attractor framework existed
+- Antibodies to it were developed as part of the
+  routine diagnostic effort for tumours of that
+  tissue type
+- Its clinical relevance was established
+  independently by the pathology community
 
-**For future cancer analyses:**
-The structure generates a hypothesis before
-any analysis is done:
-*"The geometry will find a two-gene ratio.
-One gene will mark identity retention.
-One gene will mark false attractor commitment.
-Both will be IHC-translatable."*
+**The false attractor hub gene** is the gene most
+centrally maintaining the committed pathological
+state. This means:
+- It is a high-value drug target, and drug targets
+  get antibody validation
+- It is frequently overexpressed across multiple
+  cancer types, which drives commercial antibody
+  development
+- Its prognostic value was noticed independently
+  by the oncology community even without the
+  framework (RUNX1 in ccRCC confirmed by Cancer
+  Research 2020, EZH2 in TNBC confirmed by
+  multiple groups)
 
-If the geometry of a new cancer type produces
-this structure — and especially if it does so
-before any survival data are examined — each
-instance is an independent confirmation of
-the structural law.
+**The structural argument:**
+The geometry selects the genes that are most
+biologically fundamental to the identity axis.
+Genes that are most biologically fundamental are
+the genes most likely to have been independently
+studied, clinically validated, and antibody-
+developed by the pathology and oncology communities
+operating independently of the framework.
 
-**For the field:**
-No prior paper has described or named this
-structure. The geometry-first derivation,
-combined with pre-specified prediction and
-independent confirmation, establishes priority
-on the structural observation itself — not
-just on the individual cancer findings.
+This is not circular. The pathology community
+knows which genes are important because patients
+show differential outcomes based on those genes.
+The geometry knows which genes are important
+because the expression landscape organises
+around them.
+
+Both methods point to the same genes because both
+methods are detecting the same biological reality.
+
+The IHC translatability is therefore not a lucky
+coincidence of the framework. It is a consequence
+of the fact that the framework finds the most
+biologically central genes, and the most
+biologically central genes are the ones that
+have been independently clinically validated.
 
 ---
 
-## PART XII — THE SINGLE STATEMENT
+## PART VII — THE COMPOSITE TYPE ARGUMENT
+## (TNBC as Type 1 → Type 2 cascade)
 
-The Waddington attractor geometry, applied
-independently to breast cancer and clear cell
-renal cell carcinoma, produced — in both cases
-and in both cases before any clinical data
-were examined — a two-gene ratio on the
-primary identity axis consisting of one gene
-marking normal cell identity retained and one
-gene marking the false attractor commitment
-state, each expressible as an IHC stain
-already independently validated by pathologists
-who had no knowledge of the framework.
+Document 90 introduces the composite type:
+TNBC as a Type 1 → Type 2 cascade.
+This is important for the Identity Axis
+Structure because it demonstrates something
+additional:
 
-This is not a statistical finding.
-It is a structural observation about what
-cancer is and what the geometry is measuring.
+In the composite type, the first transition
+(Type 1: BRCA1 loss, luminal progenitor
+cannot complete differentiation) feeds
+into the second transition (Type 2: cell
+falls into basal false attractor with EZH2
+as convergence node).
+
+**The FOXA1/EZH2 ratio captures both
+transitions simultaneously** because:
+- The Type 1 component is reflected in FOXA1
+  falling (luminal programme not completed)
+- The Type 2 component is reflected in EZH2
+  rising (basal false attractor convergence
+  node strengthening)
+
+A ratio that spans both stages of a composite
+type transition without requiring separate
+measurements for each stage is not merely
+convenient. It is evidence that the ratio
+is capturing the underlying one-dimensional
+axis that BOTH transitions move along.
+
+That one-dimensional axis is: the extent to
+which luminal identity is present or absent.
+Both the Type 1 block and the Type 2 commitment
+reduce luminal identity by different mechanisms.
+The ratio measures the net result regardless
+of mechanism.
+
+**Generalisation:** The Identity Axis Score
+for any cancer type measures the net position
+on the identity axis, not the mechanism that
+put the cell there. This is why it works across
+composite types and why a single ratio can
+span multiple axiom types simultaneously.
+
+---
+
+## PART VIII — THE METASTASIS ARGUMENT
+## (CS-11, cross_analysis_predictions.md)
+
+Cross-subtype prediction CS-11 (locked 2026-03-05)
+states:
+
+*"The metastatic transition is a depth shift
+within the existing attractor landscape — not
+a transition to a new attractor type.
+Metastatic LumA cells will show lower FOXA1
+and higher EZH2 than primary LumA cells."*
+
+This prediction, if confirmed, provides a
+third dimension to the Identity Axis Structure
+argument.
+
+**The argument:**
+If metastasis is a depth increase on the
+existing attractor axis — and if depth is
+measured by the FOXA1/EZH2 or GOT1/RUNX1
+ratio — then the ratio predicts not just
+subtype identity and prognosis at a single
+timepoint but the **direction and magnitude
+of disease progression** over time.
+
+A tumour with a low FOXA1/EZH2 ratio at
+primary diagnosis is not just classified
+differently from a high-ratio tumour.
+It is closer to the metastatic attractor state
+that any luminal tumour will drift toward
+if it progresses.
+
+**The Identity Axis Score is therefore a
+trajectory variable, not just a state variable.**
+It measures where the cell is now and
+predicts where it is heading.
+
+---
+
+## PART IX — WHAT THE AXIOMS SAY ABOUT WHERE
+## THE STRUCTURE WILL AND WILL NOT APPEAR
+
+The axiom framework predicts specific conditions
+under which the Identity Axis Structure will
+emerge clearly from geometry and conditions
+under which it may not.
+
+**Will produce clean Identity Axis Structure:**
+- Cancers where depth variation within a single
+  type is large (ccRCC: Q1→Q4 continuous depth)
+- Cancers where multiple types are ordered on
+  a single lineage axis (BRCA: six subtypes on
+  a single luminal identity axis from Type 3 to
+  Type 4)
+- Cancers where the false attractor has a single
+  dominant convergence node
+  (EZH2 in TNBC/CL, RUNX1 in ccRCC)
+
+**May produce weaker or more complex
+Identity Axis Structure:**
+- Cancers where multiple independent false
+  attractor axes compete (no single primary axis)
+- Cancers with composite type transitions at
+  multiple independent cell-of-origin populations
+- Cancers where the identity anchor and false
+  attractor hub are not expressed at the protein
+  level in a way that is IHC-distinguishable
+  (e.g., nuclear vs cytoplasmic
+  co-localisation confounds)
+- Cancers where the identity programme is
+  maintained by microRNA or lncRNA networks
+  rather than protein-coding genes
+  (ratio would need different measurement platform)
+
+The axiom framework therefore not only explains
+why the structure appears where it does —
+it predicts where it will be easier or harder
+to find.
+
+---
+
+## PART X — THE THEOREM, STATED PRECISELY
+
+Given:
+1. Cancer is a false attractor in the Waddington
+   epigenetic landscape (the foundational premise
+   of the entire series)
+2. False attractors have depth — a continuous
+   measure of how committed the cell is to the
+   pathological state (confirmed across all 14+
+   cancer analyses)
+3. The primary axis of depth in any Waddington
+   landscape is one-dimensional — it is the axis
+   of greatest variance in gene expression across
+   the cancer cell population
+4. Any one-dimensional depth axis is expressible
+   as a ratio of two genes: one marking the
+   "identity retained" pole, one marking the
+   "identity lost" pole (mathematical property of
+   monotonic axes)
+5. The genes most strongly representing these
+   two poles are, by axiomatic definition: the
+   identity anchor (the gene most essential for
+   maintaining the normal cell identity programme)
+   and the false attractor hub (the gene most
+   central to maintaining the pathological committed
+   state)
+
+Therefore:
+The geometry, when correctly applied, will always
+produce a two-gene ratio of the form
+(identity anchor) / (false attractor hub) as
+the primary depth measurement of any cancer's
+attractor landscape.
+
+This ratio will always be IHC-translatable because
+the identity anchor and false attractor hub genes
+are the most biologically fundamental genes in their
+respective roles, and the most biologically
+fundamental genes in any role are the ones that
+have been independently studied and antibody-
+validated by the clinical community operating
+without knowledge of the framework.
+
+**This is not a prediction.
+It is a theorem derived from the axioms.**
+
+The empirical observation — FOXA1/EZH2 in BRCA,
+GOT1/RUNX1 in ccRCC — is the first two
+instances of the theorem being confirmed
+in real cancer data.
+
+---
+
+## PART XI — THE HONEST LIMITS OF
+## THIS ARGUMENT
+
+1. **Two data points do not prove a theorem.**
+   The argument is deductive (from the axioms).
+   The axioms were derived from 14 cancer
+   analyses. But the specific prediction — that
+   the primary axis ratio will ALWAYS be
+   identity anchor / false attractor hub — has
+   been confirmed in only two cancers directly.
+   Three or more independent confirmations
+   would strengthen the claim from a deductive
+   argument to an empirically established
+   structural law.
+
+2. **The theorem is about the PRIMARY axis.**
+   Not every gene pair in a cancer analysis
+   will fit this structure. The claim is about
+   the single deepest axis — the one explaining
+   the most variance — not about all genes.
+   Secondary axes may have different structures.
+
+3. **The IHC translatability is a tendency,
+   not a guarantee.**
+   For some cancer types, the identity anchor
+   or false attractor hub may be a gene that
+   does not have validated IHC antibodies yet.
+   The argument says the most fundamental
+   genes TEND to be the ones with independent
+   clinical validation. It does not say this
+   is universal.
+
+4. **The axiom types were derived empirically.**
+   They were not assumed from theory and then
+   confirmed. They emerged from 14 validations.
+   A 15th or 20th cancer could reveal a 5th
+   axiom type that does not fit the current
+   structure. The theorem is conditional on
+   the axioms being complete.
+
+5. **The direction of the ratio may invert
+   for Type 3 cancers.**
+   In LumA (Type 3: Overshot Identity), the
+   identity gene (FOXA1, GATA3, ESR1) rises
+   with depth rather than falling. The arrest
+   axis gene (CDKN1A) falls. For pure Type 3
+   cancers, the depth ratio is arrest gene /
+   identity gene — inverted relative to
+   Type 2. The FOXA1/EZH2 ratio in BRCA
+   spans all types only because the landscape
+   contains both Type 2 and Type 3 subtypes,
+   and EZH2 (the convergence node of the
+   Type 2 subtypes) happens to also rise
+   continuously as depth increases across
+   even the Type 3 subtypes, making it a
+   pan-landscape marker. This is a property
+   of EZH2's role in the BRCA landscape
+   specifically, not of the theorem generally.
+
+---
+
+## PART XII — THE STRUCTURAL ARGUMENT,
+## COMPRESSED TO ITS CORE
+
+Cancer is depth on an axis.
+The axis has two poles.
+One pole is where the cell came from.
+One pole is where the cell is going.
+
+The gene that marks where the cell came from
+is the gene most essential for maintaining
+the normal identity of the cell's origin.
+The gene that marks where the cell is going
+is the gene most central to the false
+attractor the cell is falling into.
+
+Their ratio is the position on the axis.
+
+The geometry finds these genes because they
+are the strongest signals at the two poles.
+The IHC antibodies exist because these genes
+are biologically fundamental — and fundamental
+genes get studied.
+
+This is not coincidence.
+This is structure revealing itself through
+the method designed to find it.
 
 ---
 
 ## DOCUMENT METADATA
 
 ```
-document_id:   IDENTITY-AXIS-STRUCTURE-RA
-type:          Structural reasoning artifact
-               (cross-cancer geometric observation)
-date:          2026-03-07
-author:        Eric Robert Lawson / OrganismCore
-status:        REASONING ARTIFACT — NOT A PUBLICATION
-               (precursor to a formal cross-cancer
-               structural paper)
-cancers_analysed: BRCA (6 subtypes), ccRCC (depth)
-structural_form:  identity_anchor / false_attractor_hub
-instances:        2 (FOXA1/EZH2, GOT1/RUNX1)
-contradictions:   0
-novel_claim:      The Identity Axis Structure —
-                  named here for the first time
-prior_publication: None found
-next_step:        Apply geometry to third cancer type.
-                  If structure holds: formal cross-cancer
-                  structural paper.
-repository:       https://github.com/Eric-Robert-Lawson/attractor-oncology
+document_id:    IDENTITY-AXIS-FROM-AXIOMS-RA
+type:           Structural reasoning artifact
+                (principles-first derivation)
+supersedes:     Cross_Cancer_Identity_Axis_Structure_
+                Reasoning_Artifact.md
+                (extends it with deductive foundation)
+date:           2026-03-07
+author:         Eric Robert Lawson / OrganismCore
+derived_from:   Attractor_Geometry_Axioms.md (Doc 90)
+                FOXA1/EZH2 BRCA series
+                GOT1/RUNX1 ccRCC series (Script 4)
+                cross_analysis_predictions.md (CS-11)
+status:         REASONING ARTIFACT
+                Pre-publication structural argument
+                Not yet a formal paper
+central_claim:  The Identity Axis Structure is a
+                geometric necessity, not an empirical
+                coincidence. It follows deductively
+                from the axioms of cancer as a false
+                attractor in the Waddington landscape.
+instances:      FOXA1/EZH2 (BRCA, 7 datasets,
+                n≈7,500, pre-specified)
+                GOT1/RUNX1 (ccRCC, n=532, pre-specified,
+                HR=6.94, p=5×10⁻⁹)
+contradictions: 0
+next_action:    Apply geometry to third cancer type.
+                Identify identity anchor and false
+                attractor hub in the geometry output.
+                Confirm the structural form before
+                examining survival or clinical data.
+                Report whether the form holds.
+repository:     https://github.com/Eric-Robert-Lawson/
+                attractor-oncology
 ```

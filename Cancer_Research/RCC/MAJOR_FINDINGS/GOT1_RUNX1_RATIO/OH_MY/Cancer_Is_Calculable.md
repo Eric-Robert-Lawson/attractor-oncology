@@ -4,6 +4,8 @@
 ## OrganismCore — Eric Robert Lawson
 ## 2026-03-07
 
+**DOI: [https://doi.org/10.5281/zenodo.18899250](https://doi.org/10.5281/zenodo.18899250)**
+
 ---
 
 ## STATUS: ACTIVE — GOVERNING DOCUMENT

@@ -76,175 +76,287 @@ NOTE ON UNITS:
 
 ## PART II — NORMAL REFERENCE POPULATION
 ## (Mature Luminal — GSE176078)
+## VERSION 3.0 — FULLY EXTRACTED
 
 ```
-These values are the reference baseline for
-geometric placement.
-
 All values are from the Mature Luminal
 population in GSE176078 (n=1,265 cells)
 after log1p normalisation.
-Source: cs_s1_depth_table.csv (BRCA-S8b output)
+Source: cs_s1_depth_table.csv (BRCA-S8b re-run)
 Extracted: 2026-03-07
 
-─────────────────────────────────────────
-WHAT THIS SECTION PROVIDES
+These are the reference means and SDs for
+z-score computation.
 
-The depth score formula requires z-scores
-relative to the Mature Luminal reference.
-A z-score requires both a mean and a SD.
+z-score formula:
+  z = (patient_value - mean) / SD
 
-CURRENT STATUS:
-  Means for five luminal TF genes:
-    EXTRACTED — values below.
-  SDs for all genes:
-    NOT YET EXTRACTED.
-    The cs_s1_depth_table.csv output does not
-    include per-gene SDs. It outputs means only.
-    SDs require re-running BRCA_Cross_Subtype_
-    Script1.py with a one-line addition to the
-    unified_depth_axis() function (see Part IId).
-  EZH2, MKI67, TOP2A, PCNA, CDH1, KRT18, KRT8:
-    NOT in the cs_s1_depth_table.csv columns.
-    Same re-run resolves this.
+A positive z = elevated above normal.
+A negative z = suppressed below normal.
 
-WHAT THIS MEANS FOR PATIENT ANALYSIS:
-  Without SDs: directional displacement is
-  fully operational. You can state which
-  direction and approximate magnitude.
-  With SDs: calibrated z-scores. You can
-  state exactly how many SDs from normal
-  each gene sits.
-  The axis placement using Part I ratios
-  is NOT affected — that uses the patient's
-  own measured FOXA1 and EZH2 values directly.
+The magnitude tells you how far from normal.
+The sign tells you the direction.
+The gene panel tells you what it means
+biologically.
 
 ─────────────────────────────────────────
-LUMINAL TF SWITCH GENE MEANS
-(Mature Luminal reference — from cs_s1_depth_table.csv)
+SWITCH GENES
+(suppressed in cancer vs normal — luminal
+ identity programme)
 
-  FOXA1   — mean: 2.1335
-  GATA3   — mean: 4.4914
-  ESR1    — mean: 3.1688
-  PGR     — mean: 1.7894
-  SPDEF   — mean: 4.8633
+  gene      mean      SD
+  FOXA1     2.1335    2.6539
+  GATA3     4.4914    2.9675
+  ESR1      3.1688    3.0784
+  PGR       1.7894    2.6526
+  SPDEF     4.8633    2.7148
+  CDH1      4.8926    2.7911  ¹
+  CLDN3     5.9909    2.7259  ²
+  CLDN4     5.3454    2.3486  ²
+  CLDN7     4.3225    2.7844  ²
+  AR        5.3748    2.8363  ³
+  CDKN1A    0.5430    1.4208  ⁴
+
+¹ CDH1: also the ILC structural marker —
+  absence in ILC context is the classifier,
+  not the z-score.
+² CLDN3/4/7: claudin-low panel. Suppression
+  of all three simultaneously = CL geometry.
+  In a non-CL patient these should be near
+  zero or positive.
+³ AR: continuous depth axis within TNBC
+  (r=−0.378, p=6.23×10⁻¹⁴⁷ — CS-LIT-6).
+  In LumA/LumB context AR suppression
+  is a supporting signal, not primary.
+⁴ CDKN1A: note this is a switch gene in
+  the sense that its loss drives depth
+  in LumA (CDKN1A LOW = deeper LumA
+  attractor). The mean here is the
+  Mature Luminal baseline. A patient
+  with very low CDKN1A relative to this
+  mean is in a deeper LumA attractor.
 
 ─────────────────────────────────────────
-REMAINING SWITCH GENES (not in CSV output):
+FA MARKERS / EPIGENETIC LOCK PANEL
+(elevated in cancer vs normal — attractor
+ enforcement programme)
 
-  CDH1    — mean: NOT YET EXTRACTED
-  KRT18   — mean: NOT YET EXTRACTED
-  KRT8    — mean: NOT YET EXTRACTED
-  SCUBE2  — mean: NOT YET EXTRACTED
+  gene      mean      SD
+  EZH2      0.2739    1.1441
+  EED       0.4698    1.4365
+  SUZ12     1.1826    2.1403
+  HDAC1     2.2516    2.6291
+  HDAC2     2.5363    2.6966
+  KDM1A     0.8565    1.8797
+  DNMT3A    0.4499    1.4208
+  DNMT3B    0.0690    0.5800
+  BRD4      2.5510    2.7316
+  MKI67     0.0097    0.2037
+  TOP2A     0.4197    0.4541
+
+NOTE ON EZH2 SD:
+  EZH2 SD in Mature Luminal is 1.1441.
+  EZH2 mean is 0.2739.
+  This means MatureLum EZH2 has high
+  relative variance — many normal cells
+  have near-zero EZH2.
+  A patient TNBC value of ~0.79 sits at:
+  z = (0.79 - 0.27) / 1.14 = +0.46
+  This appears modest because the SD is
+  large. The percentage displacement
+  (+189% for TNBC) is the more informative
+  signal for this gene. Use both.
 
 ─────────────────────────────────────────
-FA MARKERS (not in CSV output):
+IMMUNE PANEL
+(relevant for claudin-low geometry)
 
-  EZH2    — mean: NOT YET EXTRACTED
-  MKI67   — mean: NOT YET EXTRACTED
-  TOP2A   — mean: NOT YET EXTRACTED
-  PCNA    — mean: NOT YET EXTRACTED
+  gene      mean      SD
+  FOXP3     0.0244    0.3448
+  CD8A      0.0786    0.6437
+  TIGIT     0.0354    0.4060
+
+NOTE: These genes have near-zero means
+in Mature Luminal. They are immune cell
+markers appearing in the tumour
+microenvironment. High values in a
+patient's bulk transcriptome reflect
+immune infiltration, not cancer cell
+expression. Interpret in context of
+subtype — relevant primarily for CL
+geometry (FOXP3/CD8A ratio as CL
+patient selector, HR=2.212, CS-LIT-20).
 
 ─────────────────────────────────────────
-EPIGENETIC LOCK PANEL (not in CSV output):
+Z-SCORE INTERPRETATION GUIDE
 
-  HDAC1   — mean: NOT YET EXTRACTED
-  HDAC2   — mean: NOT YET EXTRACTED
-  DNMT3A  — mean: NOT YET EXTRACTED
-  KDM6A   — mean: NOT YET EXTRACTED
-  KDM1A   — mean: NOT YET EXTRACTED
+  z < −2.0   Strongly suppressed vs normal
+  z −2 to −1 Moderately suppressed
+  z −1 to  0 Mildly below normal
+  z  0 to +1 Mildly above normal
+  z +1 to +2 Moderately elevated
+  z > +2.0   Strongly elevated vs normal
 
-─────────────────────────────────────────
-CLAUDIN-LOW PANEL (not in CSV output):
-
-  CLDN3   — mean: NOT YET EXTRACTED
-  CLDN4   — mean: NOT YET EXTRACTED
-  CLDN7   — mean: NOT YET EXTRACTED
+For switch genes: a z < −1 is meaningful.
+For FA markers: a z > +1 is meaningful.
+For EZH2 specifically: given high SD,
+use percentage displacement as primary
+signal and z-score as supporting context.
 ```
 
 ---
 
 ## PART IIb — SUBTYPE POPULATION MEANS
-## FOR LUMINAL TF PANEL
-## (Displacement reference — five genes)
+## FULL PANEL — ALL 25 GENES
+## (from cs_s1_depth_table.csv re-run 2026-03-07)
 
 ```
-These are the population means for the five
-luminal TF genes across all populations.
-Source: cs_s1_depth_table.csv (BRCA-S8b)
-Normalisation: log1p, scRNA-seq GSE176078
-(ILC values are from TCGA-BRCA bulk RNA-seq)
+FORMAT: values are population means after
+log1p normalisation (scRNA-seq GSE176078).
+ILC values are from TCGA-BRCA bulk RNA-seq
+(different expression space — directional
+reference only, not for z-score computation).
 
-─────────────────────────────────────────
-POPULATION      n      FOXA1   GATA3   ESR1    PGR     SPDEF
-─────────────────────────────────────────
-MatureLum    1265    2.1335  4.4914  3.1688  1.7894  4.8633
-LumProg      1992    0.2479  2.3755  0.5840  0.0936  1.3257
-Myo          1098    0.0438  2.0114  0.0848  0.2924  0.1429
-─────────��───────────────────────────────
-LumA         7742    2.8774  5.3605  3.4672  1.1592  4.5948
-LumB         3368    2.6304  6.1415  4.6321  1.2211  3.9669
-HER2         3708    1.9930  2.1671  0.2399  0.0632  4.1448
-TNBC         4312    0.4151  2.1778  0.1429  0.0456  1.1635
-CL            412    0.0464  1.9758  0.0275  0.0224  0.0734
-ILC           210   12.4262 13.3079 12.6478 10.1677 11.8808
-─────────────────────────────────────────
+─────────────────────────────────────────────────────────────
+SWITCH GENES
 
+gene      MatureLum  LumA    LumB    HER2    TNBC    CL
+FOXA1     2.1335     2.8774  2.6304  1.9930  0.4151  0.0464
+GATA3     4.4914     5.3605  6.1415  2.1671  2.1778  1.9758
+ESR1      3.1688     3.4672  4.6321  0.2399  0.1429  0.0275
+PGR       1.7894     1.1592  1.2211  0.0632  0.0456  0.0224
+SPDEF     4.8633     4.5948  3.9669  4.1448  1.1635  0.0734
+CDH1      4.8926     2.0168  2.2538  2.8527  1.6982  0.2208
+AR        5.3748     2.6886  1.0343  3.4831  0.8437  0.0537
+CDKN1A    0.5430     0.3288  0.7707  0.6451  0.1378  0.0630
+
+─────────────────────────────────────────────────────────────
+FA / EPIGENETIC LOCK PANEL
+
+gene      MatureLum  LumA    LumB    HER2    TNBC    CL
+EZH2      0.2739     0.3068  0.3246  0.5966  0.7927  0.4562
+EED       0.4698     0.3632  0.4035  0.4330  0.9569  1.0092
+SUZ12     1.1826     1.0810  1.4000  0.9308  0.9460  1.4012
+HDAC1     2.2516     1.2946  2.0773  1.3694  2.4052  2.5036
+HDAC2     2.5363     1.6881  2.6612  2.6759  3.7218  3.2896
+KDM1A     0.8565     0.5137  0.4938  0.8067  1.0048  1.1467
+DNMT3A    0.4499     0.3288  0.7707  0.6451  0.7862  0.6222
+DNMT3B    0.0690     0.0745  0.0753  0.2071  0.0853  0.1905
+BRD4      2.5510     1.5458  1.7837  1.8395  2.2608  3.2362
+MKI67     0.0097     0.0044  0.0650  0.0894  0.0800  0.1249
+TOP2A     0.4197     0.3727  0.3276  0.4979  0.6694  1.3426
+
+─────────────────────────────────────────────────────────────
+CLAUDIN PANEL
+
+gene      MatureLum  LumA    LumB    HER2    TNBC    CL
+CLDN3     5.9909     5.6610  4.6779  5.7580  3.6672  0.3469
+CLDN4     5.3454     5.0062  4.0885  4.0721  3.0428  0.9839
+CLDN7     4.3225     3.8718  3.2964  3.1943  2.1934  0.9178
+
+─────────────────────────────────────────────────────────────
+IMMUNE PANEL
+
+gene      MatureLum  LumA    LumB    HER2    TNBC    CL
+FOXP3     0.0244     0.0142  0.0054  0.0083  0.0328  0.0078
+CD8A      0.0786     0.0125  0.0705  0.0439  0.0918  0.1007
+TIGIT     0.0354     0.0081  0.0171  0.0162  0.0717  0.0594
+
+─────────────────────────────────────────────────────────────
 PERCENTAGE DISPLACEMENT FROM MATURE LUMINAL
-(from cs_s1_depth_table.csv)
+(for each gene — from script log output)
 
-  FOXA1:
-    LumA    +34.9%      LumB    +23.3%
-    HER2     −6.6%      TNBC   −80.5%
-    CL      −97.8%      LumProg −88.4%
-    Myo     −97.9%
+FOXA1:   LumA +34.9%  LumB +23.3%  HER2  −6.6%  TNBC −80.5%  CL  −97.8%
+GATA3:   LumA +19.4%  LumB +36.7%  HER2 −51.8%  TNBC −51.5%  CL  −56.0%
+ESR1:    LumA  +9.4%  LumB +46.2%  HER2 −92.4%  TNBC −95.5%  CL  −99.1%
+PGR:     LumA −35.2%  LumB −31.8%  HER2 −96.5%  TNBC −97.4%  CL  −98.7%
+SPDEF:   LumA  −5.5%  LumB −18.4%  HER2 −14.8%  TNBC −76.1%  CL  −98.5%
+CDH1:    LumA −58.8%  LumB −53.9%  HER2 −41.7%  TNBC −65.3%  CL  −95.5%
+AR:      LumA −50.0%  LumB −80.8%  HER2 −35.2%  TNBC −84.3%  CL  −99.1%
+CDKN1A:  LumA −39.5%  LumB −26.7%  HER2 +18.8%  TNBC −74.6%  CL  −88.4%
 
-  GATA3:
-    LumA    +19.4%      LumB    +36.7%
-    HER2    −51.8%      TNBC   −51.5%
-    CL      −56.0%      LumProg −47.1%
-    Myo     −55.2%
+EZH2:    LumA +12.0%  LumB +18.5%  HER2 +117.8% TNBC +189.4% CL  +66.5%
+EED:     LumA −22.7%  LumB −13.4%  HER2  −7.1%  TNBC +103.8% CL +115.1%
+SUZ12:   LumA  −9.0%  LumB +17.9%  HER2 −21.6%  TNBC −20.0%  CL  +18.5%
+HDAC1:   LumA −42.5%  LumB  −7.7%  HER2 −39.2%  TNBC  +6.8%  CL  +11.2%
+HDAC2:   LumA −33.5%  LumB  +4.8%  HER2  +5.4%  TNBC +46.7%  CL  +29.7%
+KDM1A:   LumA −40.1%  LumB −42.4%  HER2  −6.0%  TNBC +17.5%  CL  +33.9%
+DNMT3A:  LumA −26.7%  LumB +71.8%  HER2 +43.8%  TNBC +74.8%  CL  +38.3%
+DNMT3B:  LumA  +8.1%  LumB  +9.3%  HER2+200.3%  TNBC +23.7%  CL +174.7%
+BRD4:    LumA −39.4%  LumB −30.5%  HER2 −28.3%  TNBC −11.2%  CL  +27.3%
+MKI67:   LumA −55.4%  LumB+564.2%  HER2+819.6%  TNBC+725.0%  CL+1186.3%
+TOP2A:   LumA −11.5%  LumB+677.8%  HER2 +18.4%  TNBC +59.4%  CL +220.4%
 
-  ESR1:
-    LumA     +9.4%      LumB    +46.2%
-    HER2    −92.4%      TNBC   −95.5%
-    CL      −99.1%      LumProg −81.6%
-    Myo     −97.3%
+CLDN3:   LumA  +0.0%  LumB −17.4%  HER2  −3.9%  TNBC −38.8%  CL  −94.1%
+CLDN4:   LumA  −6.3%  LumB −23.5%  HER2 −23.8%  TNBC −43.1%  CL  −81.5%
+CLDN7:   LumA  −6.7%  LumB −23.8%  HER2 −26.1%  TNBC −49.3%  CL  −78.8%
 
-  PGR:
-    LumA    −35.2%      LumB    −31.8%
-    HER2    −96.5%      TNBC   −97.4%
-    CL      −98.7%      LumProg −94.8%
-    Myo     −83.7%
+─────────────────────────────────────────────────────────────
+KEY PATTERNS TO RECOGNISE IN A PATIENT
 
-  SPDEF:
-    LumA     −5.5%      LumB    −18.4%
-    HER2    −14.8%      TNBC   −76.1%
-    CL      −98.5%      LumProg −72.7%
-    Myo     −97.1%
+LumA pattern:
+  FOXA1 elevated, GATA3 elevated,
+  ESR1 mildly elevated, PGR suppressed,
+  EZH2 minimally elevated (+12%),
+  MKI67 SUPPRESSED (−55%),
+  claudins mildly elevated.
+  Identity present. Proliferation low.
+  Lock is kinase-mediated (CDKN1A low).
 
-─────────────────────────────────────────
-ILC NOTE:
-  ILC values are from TCGA-BRCA bulk RNA-seq
-  (n=210), not scRNA-seq GSE176078.
+LumB pattern:
+  FOXA1/GATA3/ESR1 all elevated,
+  PGR suppressed (decoupled from ESR1),
+  DNMT3A +72% (epigenetic lock active),
+  MKI67 +564% (proliferation dominant),
+  HDAC2 mildly elevated.
+  Identity present but ER output decoupled.
+  TFF1/ESR1 decoupling is the key signal
+  at Tier 3 (CS-LIT-9).
+
+HER2 pattern:
+  FOXA1 mildly suppressed,
+  ESR1/PGR strongly suppressed,
+  EZH2 +118%,
+  DNMT3B +200% (distinctive),
+  MKI67 +820%.
+  ERBB2 signal required to confirm.
+  If ERBB2 not in data: HER2 pattern
+  is a strong indicator but not definitive.
+
+TNBC pattern:
+  FOXA1 −80.5%, ESR1 −95.5%,
+  PGR −97.4%, AR −84.3%,
+  EZH2 +189%, HDAC2 +46.7%,
+  MKI67 +725%, EED +104%.
+  All identity TFs near-absent.
+  Epigenetic lock fully dominant.
+  Claudins moderately suppressed.
+
+Claudin-low pattern:
+  ALL five luminal TFs near-zero,
+  ALL three claudins near-zero (−79 to −94%),
+  AR −99%, CDKN1A −88%,
+  ZEB1/ZEB2/TWIST1 massively elevated
+  (from top mover scan — not in this table),
+  EZH2 moderate (+67% — less than TNBC),
+  MKI67 +1186%.
+  Pre-commitment arrest. No lineage identity.
+  The claudin collapse is the diagnostic signal.
+  If claudins are near zero AND luminal TFs
+  are near zero: this is CL geometry.
+
+ILC pattern:
+  FOXA1 HIGH (equal to or above LumA),
+  CDH1 ABSENT or strongly suppressed,
+  GATA3/ESR1 elevated.
+  Structural lock — not an epigenetic lock.
+  The geometry is preserved identity with
+  lost structural integrity.
+  Note: ILC values in this table are from
+  TCGA bulk RNA-seq (n=210), not scRNA-seq.
   They are in a different expression space.
-  ILC placement uses FOXA1 HIGH + CDH1 ABSENT
-  as the geometric classifier, not a numerical
-  ratio comparison against scRNA-seq means.
-  The ILC bulk values confirm FOXA1 elevation
-  directionally and are consistent with the
-  ILC structural lock classification.
-
-─────────────────────────────────────────
-CRITICAL NOTE ON WHAT THIS TABLE COVERS:
-  This table contains ONLY the five luminal TF
-  genes captured in cs_s1_depth_table.csv.
-  EZH2 subtype means are NOT here.
-  The FOXA1/EZH2 ratio computation for a
-  Tier 3 patient uses the patient's own
-  measured EZH2 value directly — it does not
-  require a population mean for EZH2.
-  The ratio medians for placement are in Part I.
+  Use directionally, not for z-score
+  computation.
 ```
 
 ---

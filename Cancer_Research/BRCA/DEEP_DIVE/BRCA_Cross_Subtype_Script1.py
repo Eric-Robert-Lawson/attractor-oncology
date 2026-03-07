@@ -899,10 +899,23 @@ def unified_depth_axis(pops, tcga_pops):
 
     ref = pops["MatureLum"]
     ref_means = ref.mean()
+    ref_stds  = ref.std()   # ← ADD THIS
 
-    # Gene availability check
-    avail = [g for g in LUMINAL_TFS if g in ref_means.index]
-    log(f"  Available luminal TFs: {avail}")
+    # Expanded gene panel for reference extraction
+    ALL_PANEL_GENES = list(dict.fromkeys(
+        LUMINAL_TFS
+        + EPIGENETIC
+        + ["EZH2", "MKI67", "TOP2A", "PCNA",
+           "CDH1", "KRT18", "KRT8", "SCUBE2",
+           "CLDN3", "CLDN4", "CLDN7",
+           "HDAC1", "HDAC2", "DNMT3A", "KDM6A",
+           "KDM1A", "AR", "CDKN1A",
+           "FOXP3", "CD8A", "TIGIT"]
+    ))
+
+    # Gene availability check — use expanded panel
+    avail = [g for g in ALL_PANEL_GENES if g in ref_means.index]
+    log(f"  Available panel genes: {len(avail)}")
 
     results = []
 
@@ -937,8 +950,10 @@ def unified_depth_axis(pops, tcga_pops):
                     pct_vs_ref = (pop_val - ref_val) / ref_val * 100
                 else:
                     pct_vs_ref = np.nan
-                row[f"{g}_mean"] = float(pop_val)
-                row[f"{g}_pct_vs_MatureLum"] = float(pct_vs_ref)
+            row[f"{g}_mean"] = float(pop_val)
+            row[f"{g}_std_MatureLum"] = float(ref_stds[g]) \
+                if g in ref_stds.index else np.nan   # ← ADD THIS
+            row[f"{g}_pct_vs_MatureLum"] = float(pct_vs_ref)
 
         # Luminal TF composite (mean of available pct changes)
         pct_cols = [f"{g}_pct_vs_MatureLum" for g in avail

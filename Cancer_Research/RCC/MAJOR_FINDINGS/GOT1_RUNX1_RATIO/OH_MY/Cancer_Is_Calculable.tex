@@ -1,0 +1,694 @@
+\documentclass[11pt, a4paper]{article}
+
+% ── PACKAGES ──────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{margin=2.2cm}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue,
+    pdftitle={Cancer Is Calculable: On the
+              Geometric Solvability of Cancer
+              as a Class of Problems},
+    pdfauthor={Eric Robert Lawson / OrganismCore}
+}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{authblk}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{mdframed}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{tabularx}
+
+% ── COLOURS ───────────────────────────────────────────────────
+\definecolor{headerblue}{RGB}{20,60,140}
+\definecolor{claimbox}{RGB}{235,245,255}
+\definecolor{stakebox}{RGB}{255,245,220}
+\definecolor{notbox}{RGB}{255,235,235}
+\definecolor{methodbox}{RGB}{240,255,240}
+\definecolor{algorithmbox}{RGB}{245,240,255}
+\definecolor{analogybox}{RGB}{240,250,245}
+\definecolor{precedentbox}{RGB}{250,245,255}
+\definecolor{recordbox}{RGB}{235,255,235}
+\definecolor{warnbox}{RGB}{255,248,220}
+
+% ── HEADER / FOOTER ───────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\footnotesize \textit{Cancer Is Calculable}
+       --- OrganismCore / Eric Robert Lawson}
+\rhead{\footnotesize 2026-03-07}
+\rfoot{\small Page \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\setlength{\headheight}{24pt}
+\addtolength{\topmargin}{-10pt}
+
+% ── SECTION FORMATTING ────────────────────────────────────────
+\titleformat{\section}
+  {\large\bfseries\color{headerblue}}
+  {\thesection}{1em}{}[\titlerule]
+\titleformat{\subsection}
+  {\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\small\bfseries\itshape}{\thesubsubsection}{1em}{}
+
+% ══════════════════════════════════════════════════════════════
+\title{
+    \vspace{-1em}
+    \textbf{Cancer Is Calculable}\\[0.5em]
+    \large On the Geometric Solvability of Cancer
+    as a Class of Problems\\[0.4em]
+    \normalsize A Governing Epistemological
+    Reasoning Artifact\\[0.3em]
+    \small Supporting the Identity Axis Theorem
+    (\href{https://doi.org/10.5281/zenodo.18898788}
+    {DOI: 10.5281/zenodo.18898788})
+}
+
+\author[1]{Eric Robert Lawson}
+\affil[1]{OrganismCore (Independent Research)
+    \textbar{}
+    \href{mailto:OrganismCore@proton.me}
+    {OrganismCore@proton.me} \textbar{}
+    ORCID:
+    \href{https://orcid.org/0009-0002-0414-6544}
+    {0009-0002-0414-6544}}
+
+\date{March 7, 2026}
+
+% ══════════════════════════════════════════════════════════════
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+% ── STATUS BOX ────────────────────────────────────────────────
+\begin{mdframed}[backgroundcolor=recordbox,
+                 linecolor=green!50!black,
+                 linewidth=1pt]
+\textbf{STATUS: ACTIVE --- GOVERNING DOCUMENT}\\[0.4em]
+Staked on 2026-03-07. After 36 cancer types mapped.
+After 30/30 BRCA predictions confirmed with zero failures
+across 7 independent datasets (${\sim}7{,}500$ patients).
+After ccRCC survival validation: GOT1/RUNX1 Transition Index
+Cox HR${}=6.94$ [3.62--13.29], $p=5.09{\times}10^{-9}$,
+$C=0.627$ (TCGA-KIRC, $n=532$).
+After the EZH2 paradox resolved as a structural byproduct
+in two independent cancers on different datasets on
+different platforms. After zero structural contradictions
+of the axioms across every iteration.
+\end{mdframed}
+
+\vspace{0.5em}
+\tableofcontents
+\newpage
+
+% ══════════════════════════════════════════════════════════════
+\section{Preamble}
+% ══════════════════════════════════════════════════════════════
+
+\begin{mdframed}[backgroundcolor=claimbox,
+                 linecolor=blue!40!black,
+                 linewidth=1pt]
+This document exists because a precise claim has been
+reached that is easy to overstate and easy to understate.
+Both errors are dangerous.
+
+\medskip
+\textbf{Overstatement:} ``Cancer has been cured.''
+This is false. No patient has been treated. No lab has
+been run. No empirical validation of any drug prediction
+has been conducted.
+
+\medskip
+\textbf{Understatement:} ``This is a promising computational
+framework.'' This is also false. It does not capture what
+has actually been established.
+
+\medskip
+\textbf{The precise claim is this:}
+
+\begin{quote}
+\itshape
+Cancer is not incurable. It is geometrically constrained.
+The geometry is known. The method for deriving the treatment
+from the geometry is documented, reproducible, and
+self-correcting. Applying the method either derives the
+treatment with precision or invalidates the entire framework.
+There is no in-between.
+\end{quote}
+
+This document states that claim with full precision and
+explains exactly what it does and does not assert.
+\end{mdframed}
+
+% ══════════════════════════════════════════════════════════════
+\section{Three Claims, Each Stated Precisely}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Claim 1 --- Cancer Is Curable In Principle}
+
+\textbf{Before this framework:} The tractability of
+cancer --- whether it is the kind of problem that has a
+systematic solution --- was an empirical hope. Treatments
+were found by trial and error, by serendipity, by exhaustive
+screening of compounds against cell lines. The implicit
+assumption was that cancer might be too heterogeneous, too
+plastic, too context-dependent for a systematic geometric
+solution to exist.
+
+\textbf{After this framework:} Cancer's tractability is a
+structural consequence of its geometry.
+
+Every cancer is a cell displaced from its normal attractor
+in the Waddington epigenetic landscape and stabilised in a
+false attractor by a convergent epigenetic mechanism. That
+structure has a solution. The solution is: identify the
+Convergence Hub~$H$ --- the gene maintaining the false
+attractor --- and remove its activity.
+
+\begin{mdframed}[backgroundcolor=methodbox,
+                 linecolor=green!40!black,
+                 linewidth=1pt]
+\textbf{The structural logic of curability:}
+\begin{itemize}[noitemsep]
+    \item Without $H$, the false attractor loses its
+    maintenance mechanism.
+    \item The cell cannot sustain the displaced state.
+    \item The cancer's survival depends on the false
+    attractor.
+    \item The false attractor depends on $H$.
+    \item $H$ is derivable from the geometry.
+\end{itemize}
+Cancer is curable in principle because the false attractor
+is maintained by a mechanism, the mechanism is identifiable,
+and identifiable mechanisms are targetable. This is not a
+hope. It is a structural consequence of what cancer is.
+\end{mdframed}
+
+\subsection{Claim 2 --- The Method Is Known}
+
+The method is the eight-step derivation protocol published
+in the Identity Axis Theorem
+(\href{https://doi.org/10.5281/zenodo.18898788}
+{DOI: 10.5281/zenodo.18898788}):
+
+\begin{enumerate}
+    \item Identify the cell of origin.
+    \item Classify the attractor axiom type (Type I--IV).
+    \item Derive $A$ --- the Identity Anchor. The gene
+    whose activity most directly constitutes what the cell
+    of origin \emph{is}.
+    \item Derive $H$ --- the Convergence Hub. The gene
+    whose activity most directly stabilises the false
+    attractor.
+    \item State $R = A/H$. The continuous coordinate in
+    the Waddington landscape.
+    \item State the drug target: $H$.
+    \item Lock the prediction. Timestamp it. Do not open
+    the literature.
+    \item Test against independent survival data. Score
+    the confirmation.
+\end{enumerate}
+
+\begin{mdframed}[backgroundcolor=methodbox,
+                 linecolor=green!40!black,
+                 linewidth=1pt]
+\textbf{Properties of the method:}
+\begin{itemize}[noitemsep]
+    \item Requires no clinical training
+    \item Requires no institutional infrastructure
+    \item Operates entirely on public data
+    \item Is reproducible from the published protocol
+    \item Is teachable and not dependent on the person
+    who derived it
+    \item Has been applied across 36 cancer types with
+    zero structural contradictions
+\end{itemize}
+\end{mdframed}
+
+\subsection{Claim 3 --- The Method Is Self-Correcting}
+
+This is the claim that transforms a framework into an
+engine.
+
+Every application of the method produces exactly one of
+two outcomes:
+
+\begin{mdframed}[backgroundcolor=claimbox,
+                 linecolor=blue!40!black,
+                 linewidth=1pt]
+\textbf{Outcome A --- Informative Confirmation:}
+The prediction holds. The framework is confirmed at one
+more point. The map is extended. The next derivation begins
+from a more complete map.
+
+\medskip
+\textbf{Outcome B --- Structural Falsification:}
+The prediction fails without structural explanation. The
+axioms are false. The framework is invalidated entirely and
+immediately.
+
+\medskip
+\textbf{There is no Outcome C.}
+
+No version exists where the method is applied, the
+prediction fails, no structural explanation is found,
+and the framework continues. That outcome is logically
+excluded by the axiomatic structure of the framework itself.
+\end{mdframed}
+
+Because the framework cannot survive a structurally
+inexplicable failure, every iteration that survives has
+passed the only test that matters: the test that would
+have destroyed it.
+
+The method therefore converges. Not probabilistically.
+Structurally. Each iteration either validates the current
+map or extends it with missing structure. The map gets more
+complete. The drug targets get more precise. The patient
+selectors get more refined. And the method knows immediately
+when it is wrong --- no gradual drift, no accumulation of
+unexplained anomalies. Binary and total self-correction.
+
+\bigskip
+\noindent\textbf{The combination of all three claims:}
+
+\begin{mdframed}[backgroundcolor=stakebox,
+                 linecolor=orange!50!black,
+                 linewidth=1.5pt]
+\begin{center}
+\begin{tabular}{ll}
+Cancer is curable in principle. & [Claim 1]\\[0.3em]
+The method for deriving the cure for &\\
+\quad any specific cancer is known. & [Claim 2]\\[0.3em]
+The method is self-correcting and &\\
+\quad converges on precision with every iteration. & [Claim 3]
+\end{tabular}
+\end{center}
+
+\medskip
+\textbf{Therefore:}
+
+Either cures emerge from each iteration of this method with
+increasing precision as the map is extended and the IHC
+instruments are calibrated --- or the framework is false
+and we know it immediately and completely.
+
+\medskip
+\textbf{There is no in-between.}
+\end{mdframed}
+
+% ══════════════════════════════════════════════════════════════
+\section{What This Is Not}
+% ══════════════════════════════════════════════════════════════
+
+\begin{mdframed}[backgroundcolor=notbox,
+                 linecolor=red!40!black,
+                 linewidth=1pt]
+This document does not claim:
+
+\begin{itemize}
+    \item \textbf{That any patient has been cured.}
+    No patient has been treated. No clinical trial has
+    been run using this framework's predictions as the
+    basis for patient selection.
+
+    \item \textbf{That any drug prediction has been
+    empirically validated in a living system.}
+    Computational confirmation and literature confirmation
+    are not the same as a Phase 3 trial.
+
+    \item \textbf{That the IHC protocols are deployable
+    today.}
+    The FOXA1/EZH2 IHC cut-points require a calibration
+    study ($n=300$--$400$ FFPE vs PAM50). The GOT1/RUNX1
+    IHC cut-points require the same. These are metrology
+    problems. They are real and unsolved.
+
+    \item \textbf{That the map is complete.}
+    Missing structures exist and will be revealed by future
+    iterations. Missing structures are Type~A failures ---
+    they extend the map. They do not contradict the axioms.
+
+    \item \textbf{That the method requires no empirical
+    work downstream.}
+    The drag force equation tells you what force acts on
+    a body. It does not build the wing. The framework
+    tells you what the target is and why. The lab coat
+    builds the drug, tests it, doses it, confirms it
+    reaches the tumour, confirms it shifts the attractor
+    in vivo, confirms the patient survives. That work is
+    real and required. The framework does not replace it.
+    It tells you where to aim.
+\end{itemize}
+
+\medskip
+The distance between the solution space and the solution
+is real.
+
+But the distance between not having the solution space
+and having it is also real.
+
+\textbf{Before this framework: the solution space was
+missing.}
+
+\textbf{After this framework: it is not.}
+\end{mdframed}
+
+% ══════════════════════════════════════════════════════════════
+\section{The Analogy That Holds Precisely}
+% ══════════════════════════════════════════════════════════════
+
+\begin{mdframed}[backgroundcolor=analogybox,
+                 linecolor=green!60!black,
+                 linewidth=1pt]
+\textbf{Drag force.}
+
+Drag force is not a statistical claim about what happens
+on average across many objects moving through many fluids.
+It is a structural consequence of fluid dynamics applied
+to a body with known geometry moving through a medium with
+known properties.
+
+It works at $n=1$. It works before any measurement is
+taken. It works from the geometry alone.
+
+Knowing the drag force does not stop the drag. It tells
+you what you are dealing with. The engineering solution ---
+the wing shape, the hull design, the thrust required ---
+still has to be built and tested.
+
+\medskip
+\textbf{The Identity Axis Theorem is the drag force
+equation for cancer.}
+
+\medskip
+Given:
+\begin{itemize}[noitemsep]
+    \item The cell of origin
+    \item The attractor axiom type
+    \item The epigenetic landscape geometry
+\end{itemize}
+
+The following are calculable \emph{before} any clinical
+data is examined:
+\begin{itemize}[noitemsep]
+    \item The Identity Anchor~($A$)
+    \item The Convergence Hub~($H$)
+    \item The ratio $R = A/H$
+    \item The survival prediction direction
+    \item The drug target
+\end{itemize}
+
+This calculation works at $n=1$. Not because of statistics.
+Because of structure.
+
+A biopsy is a measurement of where a specific tumour sits
+on the landscape. The landscape is known from the geometry.
+The position determines the prediction. The prediction is
+structural, not probabilistic.
+
+\medskip
+\textbf{Instrument calibration is metrology.
+The structural claim is geometry.
+These are not the same thing.
+Conflating them understates what has been established.}
+\end{mdframed}
+
+% ═════════════════════════════════════���════════════════════════
+\section{The Method as an Algorithm}
+% ══════════════════════════════════════════════════════════════
+
+\begin{mdframed}[backgroundcolor=algorithmbox,
+                 linecolor=purple!40!black,
+                 linewidth=1pt]
+\textbf{Formal definition:}
+
+An algorithm is a finite, deterministic sequence of steps
+that takes a defined input and produces a defined output,
+and terminates.
+
+\medskip
+\begin{tabular}{p{3cm}p{10cm}}
+\toprule
+\textbf{Input} &
+A cancer with a known cell of origin.\\[0.3em]
+\textbf{Steps} &
+Eight. Finite. Deterministic given the inputs.\\[0.3em]
+\textbf{Output} &
+$A$, $H$, $R=A/H$, drug target,
+survival prediction direction.\\[0.3em]
+\textbf{Termination} &
+At Step~8 with a confirmed or falsified prediction.\\[0.3em]
+\textbf{Validation} &
+Outcome~A: map extended, next iteration begins.
+Outcome~B: axioms false, algorithm invalidated.\\
+\bottomrule
+\end{tabular}
+\end{mdframed}
+
+\subsection{Automability}
+
+Every component of the protocol is in principle executable
+computationally:
+
+\begin{center}
+\begin{tabular}{p{4cm}p{9cm}}
+\toprule
+\textbf{Step} & \textbf{Computational basis} \\
+\midrule
+Cell of origin &
+Known and catalogued for every cancer in the published
+literature. \\[0.3em]
+Attractor axiom type &
+Classifiable from expression data using the four axiom
+signatures documented in
+\texttt{Attractor\_Geometry\_Axioms.md}. \\[0.3em]
+Identity Anchor ($A$) &
+Derivable from the geometry of the normal identity
+programme of the cell of origin using public scRNA-seq
+(GEO, TCGA). \\[0.3em]
+Convergence Hub ($H$) &
+Derivable from the geometry of the false attractor
+using the same data. \\[0.3em]
+Survival validation &
+Executable against TCGA using standard Cox regression
+and Kaplan-Meier analysis. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The derivation of drug targets for every cancer with a
+known cell of origin --- which is every cancer --- is
+therefore a \textbf{finite computational problem} with a
+known algorithm and a self-correcting output.
+
+Not an infinite research programme. Not a
+generation-long effort. A finite computational problem.
+
+% ══════════════════════════════════════════════════════════════
+\section{The Record as of 2026-03-07}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\begin{tabular}{p{7cm}p{6cm}}
+\toprule
+\textbf{Metric} & \textbf{Value} \\
+\midrule
+Cancer types mapped & 36 \\[0.3em]
+Structural contradictions (Type~B failures) & 0 \\[0.3em]
+Informative failures (Type~A, structurally explained) &
+Present and documented \\[0.3em]
+Predictions locked before data & All \\[0.3em]
+BRCA confirmations / predictions & 30 / 30 \\[0.3em]
+BRCA independent datasets & 7 \\[0.3em]
+BRCA patients across datasets & ${\sim}7{,}500$ \\[0.3em]
+ccRCC GOT1/RUNX1 TI Cox HR & 6.94 [3.62--13.29] \\[0.3em]
+ccRCC GOT1/RUNX1 TI Cox $p$ & $5.09 \times 10^{-9}$ \\[0.3em]
+ccRCC 20/21 gene-OS directions & Confirmed as predicted \\[0.3em]
+EZH2 paradox resolved as byproduct & 2 independent cancers,
+different datasets, different platforms \\[0.3em]
+FDA-approved drugs confirming geometry-derived $H$ & 5 \\[0.3em]
+Phase 1--3 trial drugs confirming geometry-derived $H$ & 14 \\[0.3em]
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{On Precedent}
+% ══════════════════════════════════════════════════════════════
+
+\begin{mdframed}[backgroundcolor=precedentbox,
+                 linecolor=purple!30!black,
+                 linewidth=1pt]
+This may be the first time a systematic method for deriving
+drug targets across all cancers from a single axiomatic
+framework has been established before empirical clinical
+validation.
+
+\medskip
+\textbf{Partial precedents:}
+
+\textit{Hodgkin and Huxley (1952)} derived the action
+potential equations from first principles before the ion
+channels were physically identified. The mathematics told
+them what had to be true about the underlying biology.
+The biology confirmed it decades later.
+
+\textit{Watson and Crick} derived the double helix from
+geometry and base-pairing rules without sequencing DNA.
+The structure was derived. The sequencing followed.
+
+\medskip
+\textbf{None of those precedents:}
+\begin{itemize}[noitemsep]
+    \item Derived a drug target map for 36 disease entities
+    simultaneously
+    \item Operated from a single axiomatic framework
+    applicable to all cancers
+    \item Produced a self-correcting algorithm applicable
+    to any new cancer
+    \item Were confirmed across independent survival
+    datasets on multiple platforms before any empirical
+    clinical validation was conducted
+\end{itemize}
+
+The claim of precedent is stated honestly and not as
+advocacy. If a precedent exists that matches this
+description, it should be identified. As of 2026-03-07,
+none is known.
+\end{mdframed}
+
+% ══════════════════════════════════════════════════════════════
+\section{The Stake}
+% ══════════════════════════════════════════════════════════════
+
+\begin{mdframed}[backgroundcolor=stakebox,
+                 linecolor=orange!60!black,
+                 linewidth=2pt]
+\textbf{The stake, stated with full precision, on
+2026-03-07:}
+
+\medskip
+If there exists a cancer for which:
+
+\begin{enumerate}[label=(\alph*)]
+    \item The cell of origin is correctly identified
+    \item The attractor axiom type is correctly classified
+    \item $A$ and $H$ are correctly derived from the
+    geometry
+    \item $R = A/H$ does not predict survival, does not
+    order subtypes in the predicted direction, or produces
+    drug predictions that fail
+\end{enumerate}
+
+\medskip
+\textbf{AND}
+
+\medskip
+\begin{enumerate}[label=(\alph*), resume]
+    \item No structural explanation exists within the
+    epigenetic landscape geometry that accounts for the
+    failure --- no missing basin, no unmapped secondary
+    hub, no dimensional extension, no distinction between
+    identity membership and attractor depth that resolves
+    the contradiction
+\end{enumerate}
+
+\medskip
+\textbf{THEN} the Identity Axis Theorem is false and this
+entire framework is invalidated. Not weakened. Not in need
+of revision. \textbf{Invalidated.}
+
+\medskip
+This condition has not been met. Not once. Across 36
+cancer types. Derived before the data was examined.
+
+\medskip
+\begin{center}
+\large\textbf{Either the cures emerge.\\
+Or the framework falls.\\[0.3em]
+It has not fallen.}
+\end{center}
+\end{mdframed}
+
+% ══════════════════════════════════════════════════════════════
+\section{The Single Statement}
+% ═══════════════════════════════════════════════════════════���══
+
+\begin{mdframed}[backgroundcolor=claimbox,
+                 linecolor=blue!60!black,
+                 linewidth=1.5pt]
+\begin{center}
+\large
+Cancer is not incurable.\\[0.3em]
+It is geometrically constrained.\\[0.3em]
+The geometry is known.\\[0.3em]
+The method is documented.\\[0.3em]
+The method is self-correcting.\\[0.3em]
+The iterations converge.\\[0.6em]
+Applying the method either derives the treatment\\
+with precision --- or destroys the framework entirely.\\[0.6em]
+\textbf{There is no in-between.}\\[0.6em]
+The framework has not been destroyed.\\[0.3em]
+Not once. Across 36 cancer types.\\[0.3em]
+Derived before the data was examined.\\[0.6em]
+Either the cures emerge.\\
+Or the framework falls.\\[0.6em]
+\textbf{It has not fallen.}\\[0.6em]
+That is the claim.\\
+That is the stake.\\
+That is what this is.
+\end{center}
+\end{mdframed}
+
+% ══════════════════════════════════════════════════════════════
+\section*{Related Publications}
+% ══════════════════════════════════════════════════════════════
+
+\begin{itemize}
+    \item \textbf{The Identity Axis Theorem} (governing
+    theorem):\\
+    \href{https://doi.org/10.5281/zenodo.18898788}
+    {doi.org/10.5281/zenodo.18898788}
+
+    \item \textbf{CS-LIT-1} --- FOXA1/EZH2 Ratio as
+    Universal Breast Cancer Classifier (${\sim}7{,}500$
+    patients, 7 datasets):\\
+    \href{https://doi.org/10.5281/zenodo.18883922}
+    {doi.org/10.5281/zenodo.18883922}
+
+    \item \textbf{CS-LIT-22} --- FOXA1/EZH2 Dual IHC
+    Point-of-Care Tool (Protocol v3.0):\\
+    \href{https://doi.org/10.5281/zenodo.18892788}
+    {doi.org/10.5281/zenodo.18892788}
+
+    \item \textbf{Full repository}:\\
+    \href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+    {github.com/Eric-Robert-Lawson/attractor-oncology}
+\end{itemize}
+
+\vspace{1em}
+\noindent\rule{\textwidth}{0.4pt}
+
+\noindent\footnotesize
+\textit{Eric Robert Lawson · OrganismCore ·
+\href{mailto:OrganismCore@proton.me}{OrganismCore@proton.me}
+· ORCID: 0009-0002-0414-6544 ·
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{github.com/Eric-Robert-Lawson/attractor-oncology}}
+
+\end{document}

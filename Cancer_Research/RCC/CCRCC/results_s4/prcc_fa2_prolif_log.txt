@@ -1,0 +1,58 @@
+PRCC FA-2 PROLIFERATION-DEPTH COMBINED SCORE
+OrganismCore | 2026-03-07
+Predictions locked before run (see header)
+============================================================
+
+Type 2 frame: n=142  events=31
+
+Building composite scores...
+  TI_FA2 × MKI67 product: built
+  TI_FA2 + MKI67 sum: built
+  CDK4 × MKI67 product: built
+  EZH2 + MKI67 sum: built
+
+============================================================
+COX — COMPOSITE SCORES vs INDIVIDUAL GENES
+Locked predictions: see header
+============================================================
+
+  Predictor                   HR   CI_lo   CI_hi          p       C  n
+  -----------------------------------------------------------------
+  MKI67                   3.4026  2.2976  5.0389   9.81e-10  0.8372  142
+  CDK4                    1.7395  0.9902  3.0560     0.0541  0.5805  142
+  EZH2                    1.8488  1.1863  2.8811     0.0066  0.6408  142
+  TI_FA2                  1.0769  0.4294  2.7007     0.8745  0.4834  142
+  TI_MKI_product         40.6799  5.2191 317.0762     0.0004  0.6209  142
+  TI_MKI_sum              7.8571  2.5811 23.9182     0.0003  0.6766  142
+  CDK4_MKI_product       270.2400 35.2962 2069.0522   6.99e-08  0.7628  142
+  EZH2_MKI_sum           19.7487  6.4223 60.7279   1.94e-07  0.7683  142
+
+============================================================
+P1 VERDICT: TI_FA2 × MKI67 vs MKI67 alone
+============================================================
+  MKI67 alone C=0.8372
+  TI×MKI67    C=0.6209
+  P1: NOT CONFIRMED ✗
+
+============================================================
+P3 VERDICT: EZH2 independent of MKI67 (multivariate)
+============================================================
+  Multivariate Cox  n=142
+  Covariate         HR           p
+  -----------------------------------
+  EZH2          0.1897      0.0041
+  P3 (EZH2 independent): CONFIRMED ✓
+  MKI67        10.2232    2.34e-07
+  CDK4          1.6679      0.0725
+  TI_FA2        1.2460      0.6125
+
+============================================================
+KM: TI×MKI67 PRODUCT — TERTILE SPLIT
+============================================================
+  Low: n=48  events=9  median=infd
+  Mid: n=46  events=6  median=infd
+  High: n=48  events=16  median=1771d
+  Low vs High log-rank p = 0.3248
+
+Figure: /Users/ericlawson/cancer/RCC/CCRCC/ccrcc_false_attractor/results_s4/prcc_fa2_prolif_figure.png
+CSV: /Users/ericlawson/cancer/RCC/CCRCC/ccrcc_false_attractor/results_s4/prcc_fa2_prolif_score.csv

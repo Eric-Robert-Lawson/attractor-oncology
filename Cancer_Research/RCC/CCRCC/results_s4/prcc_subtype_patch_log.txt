@@ -1,0 +1,87 @@
+PRCC SUBTYPE OS PATCH
+OrganismCore | 2026-03-07
+============================================================
+
+1. GDC SUBTYPES
+   /Users/ericlawson/cancer/RCC/PRCC/prcc_false_attractor/KIRP_GDC_subtypes.tsv
+   cols: ['SAMPLE_ID', 'SUBTYPE']
+   rows: 187
+   Sample col : SAMPLE_ID
+   Subtype col: SUBTYPE
+   Values: {'Type 2': np.int64(105), 'Type 1': np.int64(82)}
+   Normalised: {'Type2': np.int64(105), 'Type1': np.int64(82)}
+
+2. SURVIVAL
+   n=351  events=59
+
+3. TI FILES
+   TI_FA1: n=290  range=-0.9304–1.0000
+   TI_FA2: n=290  range=-0.8115–0.9085
+
+4. EXPRESSION (key genes)
+   Tumour samples: 291
+
+5. MASTER FRAME
+   Total: n=401
+   Type distribution:
+     Type1: n=92  events=5
+     Type2: n=142  events=31
+
+============================================================
+ANALYSIS 1 — TYPE 1 vs TYPE 2 OS
+============================================================
+  Type1 n=92  events=5
+  Type2 n=142  events=31
+  Log-rank p = 0.0018
+  Type1 median OS: infd
+  Type2 median OS: infd
+  S4-P5b (Type2 < Type1): CONFIRMED ✓
+
+============================================================
+ANALYSIS 2 — FA-1 TI vs OS (TYPE 1 only)
+  Prediction: TI_FA1 predicts OS within Type 1
+============================================================
+  Type1 with TI_FA1: n=92  events=5
+  Cox (TI_FA1 in Type1): HR=0.0015 [0.0000–0.1945]  p=0.0089  C=0.1070
+  KM split: TI1-High median=infd  TI1-Low median=infd
+           log-rank p=0.0470
+  S4-P5a (FA1 TI in Type1): CONFIRMED ✓
+
+============================================================
+ANALYSIS 3 — FA-2 TI vs OS (TYPE 2 only)
+  Prediction: TI_FA2 (LAMC2/SLC7A9) predicts OS in Type 2
+============================================================
+  Type2 with TI_FA2: n=142  events=31
+  Cox (TI_FA2 in Type2): HR=1.0769 [0.4294–2.7007]  p=0.8745  C=0.4834
+  KM split: TI2-High median=infd  TI2-Low median=infd
+           log-rank p=0.3852
+  FA-2 TI in Type2: NOT CONFIRMED ✗
+
+============================================================
+ANALYSIS 4 — CDK4 vs OS (TYPE 2 only)
+  CDK4 was the strongest gene predictor (pooled HR=3.06)
+  Expected to be even stronger within Type 2
+============================================================
+  CDK4       HR=1.7395 [0.9902–3.0560]  p=0.0541  C=0.5805  n=142
+  MKI67      HR=3.4026 [2.2976–5.0389]  p=9.81e-10  C=0.8372  n=142
+  EZH2       HR=1.8488 [1.1863–2.8811]  p=0.0066  C=0.6408  n=142
+  RUNX1      HR=1.1932 [0.9957–1.4298]  p=0.0557  C=0.6163  n=142
+  FH         HR=0.7650 [0.4939–1.1848]  p=0.2300  C=0.4086  n=142
+  OGDHL      HR=0.9205 [0.8210–1.0320]  p=0.1556  C=0.2934  n=142
+
+  Figure saved: /Users/ericlawson/cancer/RCC/CCRCC/ccrcc_false_attractor/results_s4/prcc_subtype_figure.png
+
+  Results saved: /Users/ericlawson/cancer/RCC/CCRCC/ccrcc_false_attractor/results_s4/prcc_subtype_os_patch.csv
+
+============================================================
+PATCH SCORECARD
+============================================================
+  Type1_vs_Type2             CONFIRMED ✓  p=0.0018
+  FA1_TI_Type1               CONFIRMED ✓  p=0.0470
+  FA2_TI_Type2               NOT CONFIRMED ✗  p=0.3852
+  gene_CDK4_Type2              p=0.0541
+  gene_MKI67_Type2             p=9.81e-10
+  gene_EZH2_Type2              p=0.0066
+  gene_RUNX1_Type2             p=0.0557
+  gene_FH_Type2                p=0.2300
+  gene_OGDHL_Type2             p=0.1556

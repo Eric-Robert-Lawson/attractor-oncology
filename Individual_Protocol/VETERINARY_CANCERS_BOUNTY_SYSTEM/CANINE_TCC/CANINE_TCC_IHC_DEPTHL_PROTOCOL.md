@@ -1,50 +1,68 @@
 # CANINE TCC — IHC DEPTH SCORE PROTOCOL
-## FOXA1 / DNMT3A Patient Selection and Treatment Tier Test
+## FOXA1 / DNMT3A / EZH2 Patient Selection and Hub Identification Test
 ## OrganismCore — Eric Robert Lawson
 ## 2026-03-08
 
 ---
 
-## STATUS: ACTIVE — REQUIRED BEFORE AZACITIDINE IS STARTED
+## STATUS: ACTIVE — REQUIRED BEFORE AZACITIDINE OR TAZEMETOSTAT
 
 ```
-This test is required before the
-treatment tier decision is made.
+This test has two functions:
 
-Piroxicam can start on clinical
-diagnosis — it is the established
-first-line drug and carries no
-IHC-gating requirement.
+FUNCTION 1 — PATIENT SELECTION:
+  Confirms whether azacitidine
+  (DNMT3A-dominant cases) or
+  tazemetostat (EZH2-dominant cases)
+  is the correct second drug
+  for this specific patient.
+  Without this test, you may
+  treat a DNMT3A-negative patient
+  with azacitidine — and the drug
+  targets a lock that is not
+  the primary maintenance mechanism
+  in that patient.
+  That is not a framework failure.
+  That is a wrong-target treatment
+  that the IHC test would have
+  prevented.
 
-Azacitidine requires the IHC
-depth score before it is added.
+FUNCTION 2 — DEPTH SCORE:
+  Establishes the depth of the
+  false attractor in this patient —
+  predicting how fast and how
+  completely the response will be.
+  High R (FOXA1 > DNMT3A):
+  shallow, fast response expected.
+  Low R (DNMT3A >> FOXA1):
+  deep, slower response expected.
 
-The test determines:
-  Whether this patient has the
-  DNMT3A-dominant methylation lock
-  that azacitidine is designed
-  to address.
+PIROXICAM CAN START BEFORE THIS TEST.
+  Piroxicam is standard first-line
+  care. It does not require the
+  depth test. It can begin immediately
+  on diagnosis.
+  The depth test runs in parallel
+  while piroxicam is being tolerated
+  and the owner decides about
+  escalation.
+  The IHC result is ready before
+  the first piroxicam re-check
+  at week 4–6 in most labs.
+  The vet sees the depth score
+  at the same visit they assess
+  the piroxicam response.
+  Decision and data arrive together.
 
-  The depth score — how consolidated
-  the false attractor is — which
-  predicts whether piroxicam alone
-  is sufficient or whether DNMT3A
-  inhibition is required.
+THREE PROTEINS ARE TESTED:
+  FOXA1 — the Identity Anchor.
+  DNMT3A — the primary Convergence Hub.
+  EZH2 — the secondary Convergence Hub.
 
-  The correct treatment tier for
-  this specific patient.
-
-Without this test:
-  Azacitidine should not be added.
-  The case cannot contribute to
-  the depth score prediction record.
-  The bounty cannot be claimed for
-  the geometric contribution.
-
-The test is run on the biopsy tissue
-that was already obtained for
-histopathological confirmation of TCC.
-No new biopsy is required in most cases.
+  Three stains. One block.
+  One IHC panel.
+  One result that determines
+  which drug to add and when.
 ```
 
 ---
@@ -52,83 +70,102 @@ No new biopsy is required in most cases.
 ## WHAT IS BEING MEASURED
 
 ```
-TWO PROTEINS:
+PROTEIN 1 — FOXA1
+(Forkhead Box A1)
+  The Identity Anchor.
+  The master transcription factor
+  of luminal urothelial identity.
+  Nuclear staining.
+  Cancer cell nuclei only.
 
-  PROTEIN 1 — FOXA1
-  (Forkhead Box A1)
-    The Identity Anchor.
-    The master luminal urothelial
-    transcription factor.
-    Nuclear staining.
-    Cancer cell nuclei only.
-    High FOXA1 = luminal programme
-    still partially active.
-    Low FOXA1 = luminal programme
-    suppressed by DNMT3A methylation.
+  High H-score (> 150):
+    FOXA1 programme partially active.
+    Luminal identity is not fully lost.
+    Shallow false attractor.
 
-  PROTEIN 2 — DNMT3A
-  (DNA Methyltransferase 3A)
-    The Convergence Hub.
-    The de novo methylation enzyme
-    maintaining the false attractor.
-    Nuclear staining.
-    All cell types will show some
-    DNMT3A staining — it is
-    expressed in normal cells.
-    Score CANCER CELL NUCLEI ONLY.
-    High DNMT3A in cancer cells =
-    active methylation programme
-    locking the false attractor.
-    Low DNMT3A = methylation lock
-    not yet the dominant mechanism.
+  Low H-score (< 80):
+    FOXA1 programme heavily suppressed.
+    Deep false attractor.
+    Luminal identity largely silenced.
 
-THE RATIO:
-  R = FOXA1 H-score /
-      DNMT3A H-score
+PROTEIN 2 — DNMT3A
+(DNA methyltransferase 3A)
+  The primary Convergence Hub.
+  The de novo methyltransferase
+  maintaining the epigenetic lock.
+  Nuclear staining.
+  Cancer cell nuclei only.
 
-  R > 1.5 (FOXA1 clearly dominant):
-    Shallow attractor.
-    Luminal programme accessible.
-    DNMT3A lock not consolidated.
-    Piroxicam monotherapy is the
-    correct first step.
-    Full azacitidine combination
-    not indicated until piroxicam
-    response assessed at week 8.
+  High H-score (> 150):
+    Active DNMT3A lock.
+    Heavy CpG methylation of
+    FOXA1 programme promoters.
+    Azacitidine is the correct drug.
 
-  R 0.7–1.5:
-    Intermediate attractor depth.
-    DNMT3A lock developing.
-    Piroxicam first.
-    Low threshold to add azacitidine
-    at week 8 if response is
-    incomplete.
-    Consider azacitidine from the
-    start if DNMT3A H-score > 200.
+  Low H-score (< 80):
+    DNMT3A is not the primary
+    maintenance mechanism.
+    Check EZH2. If EZH2 is high:
+    tazemetostat is correct drug.
+    If both DNMT3A and EZH2 low:
+    seek re-assessment.
 
-  R < 0.7 (DNMT3A dominant):
-    Deep attractor.
-    DNMT3A lock consolidated.
-    Luminal programme largely
-    inaccessible.
-    Piroxicam + azacitidine
-    combination from the start.
-    Piroxicam alone is unlikely
-    to produce durable control.
+PROTEIN 3 — EZH2
+(Enhancer of Zeste Homolog 2)
+  The secondary Convergence Hub.
+  The PRC2 catalytic subunit.
+  Nuclear staining.
+  Cancer cell nuclei only.
 
-NOTE ON R THRESHOLDS:
-  These cut-points are derived
-  from the geometric framework
-  and human urothelial carcinoma
-  expression data. They have not
-  been validated against clinical
-  outcomes in canine TCC yet.
-  That validation is what the
-  bounty case series will produce.
-  Use them as the decision guide
-  and document the ratio in every
-  case so the thresholds can be
-  refined with accumulating data.
+  High H-score (> 150) with
+  DNMT3A low:
+    EZH2 is the primary hub.
+    Tazemetostat, not azacitidine.
+
+  High H-score with DNMT3A also high:
+    Dual-hub case.
+    Both locks active simultaneously.
+    Consider sequential or combination
+    therapy. Discuss with oncologist.
+    Contact OrganismCore@proton.me
+    for geometric assessment.
+
+  Low H-score:
+    EZH2 is not a dominant hub.
+    If DNMT3A also low: atypical case.
+    Do not proceed with either
+    escalation drug without re-assessment.
+
+THE RATIO AND THE DECISION:
+  R = FOXA1 H-score / DNMT3A H-score
+
+  R > 1.5, DNMT3A high:
+    Shallow DNMT3A lock.
+    Piroxicam + azacitidine.
+    Best expected response.
+    Fastest demethylation return.
+
+  R 0.5–1.5, DNMT3A high:
+    Intermediate depth.
+    Piroxicam + azacitidine.
+    Moderate response expected.
+    Monitor for EZH2 hub switching
+    from month 3.
+
+  R < 0.5, DNMT3A high, EZH2 moderate:
+    Deep DNMT3A lock.
+    Piroxicam + azacitidine.
+    Slower response. More cycles needed.
+    Higher EZH2 monitoring threshold.
+
+  DNMT3A low, EZH2 high:
+    Wrong drug if azacitidine planned.
+    Piroxicam + tazemetostat.
+
+  Both low:
+    Atypical geometry.
+    Do not escalate without
+    contacting OrganismCore@proton.me.
 ```
 
 ---
@@ -137,304 +174,323 @@ NOTE ON R THRESHOLDS:
 
 ```
 TISSUE REQUIRED:
-  Existing cystoscopy or surgical
-  biopsy FFPE block from TCC
-  diagnosis confirmation.
-  Or FNA cell block if tissue
-  biopsy not performed.
-  Minimum tissue: 2mm core
-  for two IHC stains.
-  Archival blocks acceptable —
-  FOXA1 and DNMT3A are stable
-  antigens detectable in routine
-  archival FFPE.
+  Existing FFPE biopsy block from
+  cystoscopy, catheter biopsy,
+  traumatic catheterisation,
+  or surgical specimen.
+  The block obtained at diagnosis
+  for histopathology.
+  No new biopsy required in
+  most cases.
+  Minimum viable tissue:
+  2mm core is sufficient for
+  three IHC stains.
+  If tissue is limited: prioritise
+  FOXA1 + DNMT3A. Run EZH2
+  as third stain only if the
+  DNMT3A result is ambiguous
+  (H-score 80–150).
 
 ANTIBODIES:
 
   FOXA1:
-    Clone: D4E2 (CST #53528)
-      or EP211 (Abcam ab23738)
-      or equivalent validated
-      rabbit monoclonal.
-    Species reactivity:
-      CST D4E2 confirmed cross-
-      reactive with canine tissue.
-      Abcam EP211 confirmed
-      cross-reactive with canine
-      urothelial tissue.
-    Dilution: 1:200–1:400
-      (laboratory-optimised).
-    Antigen retrieval:
-      Citrate buffer pH 6.0,
-      20 minutes, HIER.
-      Or TE buffer pH 9.0 for
-      some platforms.
-    Detection: HRP-DAB standard.
+    Clone: D4E2 (Cell Signaling
+    Technology #53528).
+    Species: Rabbit monoclonal.
+    Cross-reactivity with canine
+    urothelial tissue: confirmed.
+    Same antibody as human BRCA
+    FOXA1/EZH2 protocol — already
+    in use at IHC labs running the
+    BRCA calibration protocol.
+    Dilution: 1:400–1:800.
+    Antigen retrieval: HIER,
+    citrate buffer pH 6.0,
+    20 minutes pressure cooker
+    or equivalent.
     Expected staining: nuclear,
-      luminal urothelial cells
-      and cancer cells.
+    luminal urothelial cells and
+    cancer cells.
 
   DNMT3A:
-    Clone: D23G1 (CST #3598)
-      or ab2850 (Abcam)
-      or equivalent validated
-      rabbit monoclonal.
-    Species reactivity:
-      CST D23G1 confirmed cross-
-      reactive with canine tissue.
-    Dilution: 1:100–1:300
-      (laboratory-optimised).
-    Antigen retrieval:
-      Citrate buffer pH 6.0,
-      20 minutes, HIER.
-    Detection: HRP-DAB standard.
+    Clone: D23G1 or equivalent
+    validated rabbit monoclonal.
+    Cell Signaling Technology #3598
+    or Abcam ab2850 or equivalent.
+    Species reactivity: confirmed
+    cross-reactive with canine tissue
+    (DNMT3A is highly conserved).
+    Dilution: 1:200–1:400.
+    Antigen retrieval: HEIR,
+    citrate buffer pH 6.0,
+    20 minutes.
     Expected staining: nuclear,
-      present in cancer cells,
-      stromal cells, and
-      inflammatory cells.
+    proliferating cells and
+    cancer cells.
 
-  CRITICAL WARNING — DNMT3A:
-    DNMT3A stains multiple cell types.
+    CRITICAL NOTE — DNMT3A:
+    DNMT3A stains stromal fibroblasts,
+    inflammatory cells, and
+    endothelial cells as well as
+    cancer cells.
     Score CANCER CELL NUCLEI ONLY.
-    The cancer cells in TCC are the
-    atypical urothelial cells — large,
-    pleomorphic, with high nuclear-to-
-    cytoplasmic ratio, forming
-    papillary fronds or solid nests.
-    Ignore all stromal fibroblasts,
-    endothelial cells, smooth muscle,
-    and inflammatory cells.
-    Misidentification of stromal cells
-    as cancer cells in DNMT3A scoring
-    will give a falsely high H-score
-    and push the ratio toward deep
-    classification incorrectly.
-    A veterinary pathologist familiar
-    with TCC morphology must perform
-    or supervise the scoring.
+    The pathologist must identify
+    the urothelial carcinoma cell
+    population clearly before scoring.
+    In TCC, the neoplastic cells
+    are typically larger, more
+    pleomorphic, and in cohesive
+    nests or papillary structures.
+    Stromal staining must not be
+    included in the cancer cell score.
+    This is the single most
+    technically important instruction
+    in this protocol.
+
+  EZH2:
+    Clone: D2H1 (Cell Signaling
+    Technology #5246).
+    Species: Rabbit monoclonal.
+    Cross-reactivity with canine
+    tissue: confirmed.
+    Same antibody as human BRCA
+    FOXA1/EZH2 protocol.
+    Dilution: 1:400–1:800.
+    Antigen retrieval: HIER,
+    citrate buffer pH 6.0,
+    20 minutes.
+    Expected staining: nuclear,
+    cancer cells stronger than
+    normal urothelium.
 
 SCORING — H-SCORE METHOD:
   Standard H-score for each protein.
-  Cancer cell nuclei only.
+  Score cancer cell nuclei only.
 
   H-score formula:
     (% weak positive nuclei × 1) +
     (% moderate positive nuclei × 2) +
     (% strong positive nuclei × 3)
+
   Range: 0–300 for each protein.
+
   Assess minimum 200 cancer cell
   nuclei per stain.
   Score at 20× objective.
-  Confirm at 40× for intensity.
+  Confirm intensity classification
+  at 40× where needed.
 
   Record:
     FOXA1 H-score (0–300).
     DNMT3A H-score (0–300).
+    EZH2 H-score (0–300).
     R = FOXA1 / DNMT3A.
-    Depth classification.
+    Hub classification (primary hub).
+    Treatment decision.
     Pathologist name and date.
 
 CONTROLS:
-  Positive control:
-    Normal canine bladder tissue
-    (FOXA1 positive in luminal
-    urothelial cells).
-    Or human bladder tissue
-    with confirmed luminal TCC.
+  Positive control for FOXA1:
+    Known FOXA1-positive urothelial
+    tissue or prostate tissue.
+    Human tonsil tissue is not
+    appropriate — use urothelial
+    positive control.
+  Positive control for DNMT3A:
+    Any proliferating tissue with
+    confirmed DNMT3A expression.
+    Human tonsil (germinal centres)
+    acceptable.
+  Positive control for EZH2:
+    Known EZH2-positive tissue.
+    Lymphoid tissue (germinal centres)
+    or any confirmed EZH2-high tumour.
   Negative control:
     Primary antibody omitted.
-    No staining expected.
+    No staining expected on any slide.
+
   Inter-observer reliability:
-    Score by two pathologists
-    if available.
-    ICC > 0.7 acceptable.
+    Ideally two pathologists score
+    independently, blinded to
+    clinical outcome and treatment plan.
+    ICC > 0.7 acceptable for
+    H-score agreement.
+    Use mean of two scores for
+    clinical decision if both available.
+    Document both scores in the
+    case record.
 
 TURNAROUND:
-  Reference lab: 3–7 days.
-  Academic veterinary pathology:
-  5–10 days.
+  Standard reference lab: 3–7 days.
+  Academic veterinary pathology
+  department: 5–10 days.
 
 ESTIMATED COST:
-  $100–250 for both stains.
-  One-time cost.
-  Required before azacitidine
-  is added.
+  $150–$300 for three stains
+  at most reference labs.
+  This is a one-time cost
+  per patient.
+  It determines which drug to use
+  and whether escalation is
+  warranted at all.
+  It is the patient selection step.
+  It is non-negotiable for any
+  case claiming the bounty.
 ```
 
 ---
 
 ## RESULT INTERPRETATION AND
-## TREATMENT TIER DECISION
+## TREATMENT DECISION TREE
 
 ```
-RESULT 1 — SHALLOW (R > 1.5):
+STEP 1:
+  Run FOXA1 and DNMT3A.
+  Calculate R = FOXA1 / DNMT3A.
 
-  FOXA1 dominant over DNMT3A.
-  Luminal programme partially active.
-  DNMT3A lock not yet consolidated.
+STEP 2:
+  Is DNMT3A H-score > 120?
+  ☐ YES → DNMT3A is active hub.
+           Go to STEP 3.
+  ☐ NO  → DNMT3A is not primary hub.
+           Run EZH2 if not already done.
+           Go to STEP 4.
 
-  TREATMENT TIER:
-    TIER 1 ONLY — Piroxicam monotherapy.
-    Standard dose per vet assessment.
-    No azacitidine at this stage.
+STEP 3 (DNMT3A POSITIVE):
+  What is the R value?
+  R > 1.5: SHALLOW.
+    Treatment: Piroxicam + azacitidine.
+    Expected: fastest and most
+    complete response.
+    Monitoring: standard schedule.
 
-  MONITORING:
-    Week 8 primary gate.
-    If incomplete response at week 8:
-    reassess for azacitidine addition.
-    If complete or partial response:
-    continue piroxicam alone.
+  R 0.5–1.5: INTERMEDIATE.
+    Treatment: Piroxicam + azacitidine.
+    Expected: moderate response.
+    Monitoring: watch EZH2 from month 3.
 
-  EXPECTED OUTCOME:
-    Best response probability
-    to piroxicam monotherapy.
-    These are the dogs in which
-    piroxicam's documented 70%
-    disease control applies most
-    strongly.
+  R < 0.5: DEEP.
+    Treatment: Piroxicam + azacitidine.
+    Expected: slower, more gradual
+    response over 3–6 cycles.
+    Consider adding EZH2 stain now
+    to establish EZH2 baseline for
+    later resistance monitoring.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STEP 4 (DNMT3A NEGATIVE):
+  Is EZH2 H-score > 150?
+  ☐ YES → EZH2 is primary hub.
+           Treatment: Piroxicam + tazemetostat.
+           NOT azacitidine.
+           Document as EZH2-dominant case.
 
-RESULT 2 — INTERMEDIATE (R 0.7–1.5):
+  ☐ NO  → Neither DNMT3A nor EZH2
+           is clearly dominant.
+           ATYPICAL CASE.
+           Do not escalate beyond
+           piroxicam without re-assessment.
+           Contact OrganismCore@proton.me
+           with full IHC results.
+           This is a Type A framework
+           finding — the map may need
+           extension for this subtype.
 
-  FOXA1 and DNMT3A approximately
-  co-expressed, or DNMT3A modestly
-  elevated over FOXA1.
-
-  TREATMENT TIER:
-    TIER 1 FIRST — Piroxicam.
-    If DNMT3A H-score > 200:
-      Consider starting azacitidine
-      concurrently from the start.
-      Discuss with vet.
-    If DNMT3A H-score ≤ 200:
-      Piroxicam alone for 8 weeks.
-      Low threshold to add azacitidine
-      if response is incomplete.
-
-  EXPECTED OUTCOME:
-    Moderate response probability
-    to piroxicam alone.
-    Azacitidine addition at week 8
-    likely to improve control.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-RESULT 3 — DEEP (R < 0.7):
-
-  DNMT3A dominant over FOXA1.
-  DNMT3A lock highly consolidated.
-  Luminal programme largely
-  inaccessible by FOXA1.
-
-  TREATMENT TIER:
-    TIER 1 + TIER 2 IMMEDIATELY.
-    Piroxicam + azacitidine
-    combination from start.
-    Piroxicam alone is geometrically
-    insufficient for deep attractor
-    cases.
-
-  EXPECTED OUTCOME:
-    Lower probability of durable
-    control with piroxicam alone.
-    Combination is the geometric
-    indication for this stratum.
-    Even with combination, deep
-    attractor cases carry the
-    lowest response probability.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-RESULT 4 — DNMT3A NEGATIVE
-(H-score < 20):
-
-  Unexpected.
-  DNMT3A is not the dominant
-  maintenance mechanism.
-
-  ACTION:
-    Piroxicam as standard care —
-    COX-2 inhibition is still
-    indicated regardless of depth
-    score.
-    For geometric re-assessment:
-    add EZH2 stain (CST D2H1 #5246).
-    If EZH2 high: the false attractor
-    may be PRC2-maintained rather
-    than DNMT3A-maintained.
-    This would indicate tazemetostat
-    rather than azacitidine as the
-    appropriate geometric escalation.
-    Contact OrganismCore@proton.me
-    for geometric re-assessment.
-
-  NOTE:
-    DNMT3A-negative TCC would be
-    an unexpected finding that
-    warrants investigation.
-    Document fully.
-    It is itself a publishable
-    observation within the
-    bounty framework.
+DUAL HUB CASE (both DNMT3A and
+EZH2 high, H-score > 150 each):
+  Both locks active simultaneously.
+  Consider:
+    Option A: azacitidine first,
+    monitor EZH2 at 8 weeks.
+    If EZH2 rises as DNMT3A responds:
+    add tazemetostat then.
+    Option B: discuss with oncologist
+    whether sequential or combination
+    from start is appropriate for
+    this patient's clinical status.
+  Document as dual-hub case.
+  Contact OrganismCore@proton.me.
+  This is a scientifically
+  interesting finding and will
+  be followed closely.
 ```
 
 ---
 
-## REPORTING TEMPLATE
+## IHC REPORTING TEMPLATE
 
 ```
-Complete and attach to case record.
+Complete this form and attach to
+the case record. Provide a copy
+to the supervising vet.
 
 PATIENT:
   Species: Dog
-  Breed: ________________
-  Age: _____ Sex: ________
+  Breed: _______________
+  Age: _____ Sex: ______
   Weight: _____ kg
+  Case ID: _____________
 
 DIAGNOSIS:
-  TCC/UC confirmed by:
+  Canine TCC / urothelial carcinoma
+  confirmed by:
   ☐ Histopathology
-  ☐ Cytology + clinical signs
-  ☐ BRAF V595E urine test positive
-  Date of diagnosis: __________
+  ☐ Cytology + ultrasound
+  ☐ CADET BRAF + ultrasound
+  Date of diagnosis: ___________
+  Staging (if known):
+    T: ___ N: ___ M: ___
 
-TISSUE:
-  Biopsy date: ______________
+TISSUE SUBMITTED:
+  Biopsy date: ________________
   Biopsy method:
-  ☐ Cystoscopic
-  ☐ Traumatic urinary catheter
+  ☐ Traumatic catheterisation
+  ☐ Cystoscopy
   ☐ Surgical
-  ☐ Ultrasound-guided FNA
-  Block ID: ________________
-  Lab performing IHC: _______
+  Block ID: __________________
+  Lab performing IHC: _________
 
 IHC RESULTS:
-  FOXA1 H-score: ________/300
-  DNMT3A H-score: _______/300
-  Ratio R = FOXA1/DNMT3A: ____
-  EZH2 H-score (if run): __/300
+  FOXA1 H-score: _______ / 300
+  DNMT3A H-score: _______ / 300
+  EZH2 H-score: ________ / 300
+    (if run)
+  Ratio R (FOXA1/DNMT3A): _____
 
-DEPTH CLASSIFICATION:
+HUB CLASSIFICATION:
+  ☐ DNMT3A-dominant
+    (DNMT3A H-score > 120,
+    EZH2 < DNMT3A)
+  ☐ EZH2-dominant
+    (EZH2 H-score > 150,
+    DNMT3A H-score < 120)
+  ☐ Dual-hub
+    (both > 150)
+  ☐ Atypical
+    (both low — seek re-assessment)
+
+DEPTH CLASSIFICATION
+(DNMT3A-dominant cases only):
   ☐ Shallow (R > 1.5)
-  ☐ Intermediate (R 0.7–1.5)
-  ☐ Deep (R < 0.7)
-  ☐ DNMT3A negative (< 20)
+  ☐ Intermediate (R 0.5–1.5)
+  ☐ Deep (R < 0.5)
 
 PATHOLOGIST:
-  Name: ___________________
-  Date: ___________________
-  Second scorer: ___________
-  ICC: ____________________
+  Name: ______________________
+  Second scorer (if applicable): __
+  ICC: _______
+  Date scored: ________________
 
-TREATMENT TIER DECISION:
-  ☐ Tier 1 only — piroxicam
-  ☐ Tier 1 + Tier 2 from start
-  ☐ Tier 1 first, reassess week 8
-  ☐ Geometric re-assessment
-    required (DNMT3A negative)
+TREATMENT DECISION:
+  ☐ Piroxicam + azacitidine
+    (DNMT3A-dominant)
+  ☐ Piroxicam + tazemetostat
+    (EZH2-dominant)
+  ☐ Piroxicam monotherapy pending
+    further assessment (atypical)
+  ☐ Contact OrganismCore for
+    re-assessment (dual-hub or atypical)
 
-Supervising veterinarian:
+Supervising veterinarian signature:
 _________________________________
 Date: ___________________________
 ```
@@ -448,8 +504,8 @@ document_id:
   CANINE_TCC_IHC_DEPTH_PROTOCOL
 
 type:
-  Patient selection and treatment
-  tier IHC protocol
+  Patient selection IHC protocol —
+  hub identification and depth score
 
 version: 1.0
 date: 2026-03-08
@@ -460,14 +516,24 @@ author:
 ORCID: 0009-0002-0414-6544
 contact: OrganismCore@proton.me
 
-required_before_azacitidine: YES
-piroxicam_gate: NO
-  Piroxicam can begin on clinical
-  diagnosis. IHC is required before
-  azacitidine is added.
+required_before_escalation:
+  YES — before azacitidine or
+  tazemetostat is started.
+  Piroxicam can start immediately
+  without waiting for IHC result.
+  IHC determines the escalation drug.
+
+technical_note:
+  DNMT3A stromal staining is the
+  primary scoring error risk.
+  Cancer cell nuclei ONLY.
+  The pathologist must identify
+  the neoplastic urothelial
+  population with confidence
+  before scoring.
 
 related_documents:
   CANINE_TCC_GEOMETRIC_DERIVATION.md
-  CANINE_TCC_TREATMENT_PROTOCOL.md
   CANINE_TCC_CASE_REPORT_TEMPLATE.md
+  VETERINARY_BOUNTY_SYSTEM.md
 ```

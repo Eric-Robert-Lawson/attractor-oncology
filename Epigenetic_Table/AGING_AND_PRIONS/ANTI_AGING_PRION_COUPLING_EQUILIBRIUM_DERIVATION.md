@@ -10,6 +10,8 @@
 
 **Framework DOI: [https://doi.org/10.5281/zenodo.18898788](https://doi.org/10.5281/zenodo.18898788)**
 
+**Publication DOI: [https://doi.org/10.5281/zenodo.18920273](https://doi.org/10.5281/zenodo.18920273)**
+
 ---
 
 ## STATUS: ACTIVE — NOVEL DERIVATION

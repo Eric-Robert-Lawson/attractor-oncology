@@ -11,6 +11,8 @@
 
 **Framework DOI: [https://doi.org/10.5281/zenodo.18898788](https://doi.org/10.5281/zenodo.18898788)**
 
+**Publication DOI: [https://doi.org/10.5281/zenodo.18919624](https://doi.org/10.5281/zenodo.18919624)**
+
 ---
 
 ## STATUS: ACTIVE — FORMAL DERIVATION RECORD

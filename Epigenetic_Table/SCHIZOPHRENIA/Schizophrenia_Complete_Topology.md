@@ -16,6 +16,8 @@
 
 **Framework DOI: [https://doi.org/10.5281/zenodo.18898788](https://doi.org/10.5281/zenodo.18898788)**
 
+**Publication DOI: [https://doi.org/10.5281/zenodo.18919627](https://doi.org/10.5281/zenodo.18919627)**
+
 ---
 
 ## STATUS: ACTIVE — CORRECTION AND EXTENSION

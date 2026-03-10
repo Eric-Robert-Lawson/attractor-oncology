@@ -7,9 +7,11 @@
 **Contact:** OrganismCore@proton.me  
 **Last updated:** 2026-03-10
 
-> **This repository is a dedicated cancer sub-repository of the OrganismCore framework.**  
+> **This repository is a dedicated Attractor Geometry sub-repository of the OrganismCore framework.**  
 > OrganismCore applies the same structural invariant across multiple domains beyond cancer.  
 > → [https://github.com/Eric-Robert-Lawson/OrganismCore](https://github.com/Eric-Robert-Lawson/OrganismCore)
+
+The initial focus is cancer, but the applications reach further. These are falsifiable, and should be tested. Anything that holds for novel geometric obserbations, is an advancement. Any advancement precipitating from the framework, is a massive success. Blind derivations already derive convergently with literature, But novel ones validated from the framework would be a big leap forward as a demonstration of principles first derivation, calculable causal factors, being applied to reality.
 
 ---
 

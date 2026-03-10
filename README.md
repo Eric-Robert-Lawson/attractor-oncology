@@ -1,11 +1,11 @@
 # Attractor Oncology
-### Waddington Landscape Geometry Applied to Cancer — Derivation, Validation, and Clinical Translation
+### Waddington Landscape Geometry Applied to Cancer and Disease — Derivation, Validation, and Clinical Translation
 #### OrganismCore — Eric Robert Lawson
 #### Independent mathematician · ORCID: [0009-0002-0414-6544](https://orcid.org/0009-0002-0414-6544)
 
 **License:** MIT  
 **Contact:** OrganismCore@proton.me  
-**Last updated:** 2026-03-07
+**Last updated:** 2026-03-10
 
 > **This repository is a dedicated cancer sub-repository of the OrganismCore framework.**  
 > OrganismCore applies the same structural invariant across multiple domains beyond cancer.  
@@ -23,7 +23,7 @@ If you are a scientist or clinician:
 
 If you have cancer or someone you love does:
   Read The Puddle first.
-  Then read HOW_THIS_HELPS_YOU_TODAY.
+  Then read HOW_THIS_HELPS_YOU.
   Then decide if you want to reach out.
 
 If you want to understand what this is
@@ -39,9 +39,9 @@ before reading anything technical:
 | Document | Audience | Purpose |
 |----------|----------|---------|
 | [The Puddle](The_Puddle.md) | Everyone | The framework in plain language. Read this first. |
-| [HOW_THIS_HELPS_YOU_TODAY](HOW_THIS_HELPS_YOU_TODAY.md) | Patients and families | What this framework offers you right now. |
-| [Patient Geometric Sovereignty](Patient_Geometric_Sovereignty_Reasoning_Artifact.md) | Patients | Your right to understand your own attractor geometry. |
-| [Personalized Attractor Medicine](Personalized_Attractor_Medicine_Reasoning_Artifact.md) | Scientists and clinicians | The full logical derivation of what this framework implies for medicine. |
+| [HOW_THIS_HELPS_YOU](HOW_THIS_HELPS_YOU.md) | Patients and families | What this framework offers you right now. |
+| [Patient Geometric Sovereignty](Patient_Geometric_Sovereignty.md) | Patients | Your right to understand your own attractor geometry. |
+| [Personalized Attractor Medicine](Personalized_Attractor_Medicine_Framework.md) | Scientists and clinicians | The full logical derivation of what this framework implies for medicine. |
 | [Workflow Protocol](Cancer_Research/Workflow_Protocol.md) | Researchers | The reproducible analysis protocol. |
 | [OrganismCore Cancer Framework](Cancer_Research/OrganismCore_Cancer_Framework.md) | Researchers | Full theoretical foundation. |
 
@@ -92,21 +92,22 @@ It is a structural one.
 
 ---
 
-## The Four Root-Level Proof Documents
+## The Five Root-Level Framework Documents
 
-The following four documents constitute the complete logical spine of this project. They are not cancer-specific. They apply to the framework as a whole. Read them in order.
+The following five documents constitute the complete logical spine of this project. They are not cancer-specific. They apply to the framework as a whole. Read them in order.
 
 | Document | Establishes | DOI |
 |----------|-------------|-----|
 | [falsifiability_theorem.md](falsifiability_theorem.md) | The framework can be destroyed. One counterexample without structural explanation falsifies it entirely. | — |
+| [The_Epistemic_Trajectory.md](The_Epistemic_Trajectory.md) | The disease table is a closed interdependent system. Failures converge asymptotically to zero as coverage converges to complete. This convergence is itself a falsifiable prediction. | — |
 | [CANCER_IS_CALCULABLE.md](Cancer_Is_Calculable.md) | Cancer is a geometric problem with a calculable solution. The hardest question — whether a systematic solution exists — is answered. | [10.5281/zenodo.18899250](https://doi.org/10.5281/zenodo.18899250) |
 | [TAZEMETOSTAT_GEOMETRIC_INDICATION.md](TAZEMETOSTAT_GEOMETRIC_INDICATION.md) | The framework independently derived EZH2 as the dominant convergence hub across ≥20 cancer types and tazemetostat as the geometry-derived universal epigenetic agent — before consulting the pharmacology. | [10.5281/zenodo.18899530](https://doi.org/10.5281/zenodo.18899530) |
 | [cancer_via_construction.md](cancer_via_construction.md) | **Level 3 generative proof.** Cancers can be derived from geometric coordinates without starting from the cancer. The derivation direction reverses. The framework generates cancer from geometry. This eliminates the pattern-matching objection. | [10.5281/zenodo.18899978](https://doi.org/10.5281/zenodo.18899978) |
 
 ```
-Method.        Epistemology.        Application.        Proof of generativity.
+Method.     Epistemology.     Trajectory.     Application.     Proof of generativity.
 
-This is a complete scientific argument in four documents.
+This is a complete scientific argument in five documents.
 ```
 
 ---
@@ -230,6 +231,13 @@ Full record: Edge Case Geometric Derivations [https://doi.org/10.5281/zenodo.188
 | [10.5281/zenodo.18899250](https://doi.org/10.5281/zenodo.18899250) | **Cancer Is Calculable** — Epistemological apex document. |
 | [10.5281/zenodo.18899530](https://doi.org/10.5281/zenodo.18899530) | **Tazemetostat Geometric Indication** — EZH2 as universal convergence hub. ≥20 cancer types. 5 novel indications + 2 contraindications pre-registered. |
 | [10.5281/zenodo.18899978](https://doi.org/10.5281/zenodo.18899978) | **Cancer Via Construction** — Level 3 generative proof. Derivation direction reversed. Mendeleev test passed. |
+
+### Epigenetic Table — Published DOIs
+
+| DOI | Title |
+|-----|-------|
+| [10.5281/zenodo.18920018](https://doi.org/10.5281/zenodo.18920018) | **Alzheimer's Disease as Attractor Medicine** — Two simultaneous identity drift events. Memory inaccessible ≠ memory erased. Sleep architecture as third hub. |
+| [10.5281/zenodo.18921509](https://doi.org/10.5281/zenodo.18921509) | **Motor Identity and Temporal Coherence** — Parkinson's, Essential Tremor, and a three-level taxonomy of motor identity failure. |
 
 ### Breast Cancer (BRCA) — 17 Published DOIs
 
@@ -399,6 +407,11 @@ The following were derived, documented, and pre-registered in a single session o
 - [TAZEMETOSTAT_GEOMETRIC_INDICATION.md](TAZEMETOSTAT_GEOMETRIC_INDICATION.md) — DOI: [10.5281/zenodo.18899530](https://doi.org/10.5281/zenodo.18899530)
 - [cancer_via_construction.md](cancer_via_construction.md) — DOI: [10.5281/zenodo.18899978](https://doi.org/10.5281/zenodo.18899978)
 
+**Since 2026-03-07 — Epigenetic Table:**
+- [Alzheimer's Disease as Attractor Medicine](Epigenetic_Table/Alzheimers/) published — DOI: [10.5281/zenodo.18920018](https://doi.org/10.5281/zenodo.18920018)
+- [Motor Identity and Temporal Coherence (Parkinson's + Essential Tremor)](Epigenetic_Table/Parkinsons/) published — DOI: [10.5281/zenodo.18921509](https://doi.org/10.5281/zenodo.18921509)
+- [The_Epistemic_Trajectory.md](The_Epistemic_Trajectory.md) added to root — asymptotic convergence of a closed interdependent disease table
+
 ---
 
 ## Key Results by Series
@@ -489,16 +502,21 @@ attractor-oncology/
 │
 ├── README.md                              ← you are here
 ├── The_Puddle.md                          ← read first
-├── HOW_THIS_HELPS_YOU_TODAY.md
-├── Patient_Geometric_Sovereignty_Reasoning_Artifact.md
-├── Personalized_Attractor_Medicine_Reasoning_Artifact.md
+├── HOW_THIS_HELPS_YOU.md
+├── Patient_Geometric_Sovereignty.md
+├── Personalized_Attractor_Medicine_Framework.md
+├── CANCER_IS_TEMPORARY.md
+├── ON_THE_AUTHOR_AND_THE_GEOMETRY.md
+├── Internal_Coherence_First_Observation.md
 │
-├── ── FOUR ROOT-LEVEL PROOF DOCUMENTS ──
+├── ── FIVE ROOT-LEVEL FRAMEWORK DOCUMENTS ──
 ├── falsifiability_theorem.md              ← the framework can be destroyed
+├── The_Epistemic_Trajectory.md            ← asymptotic convergence of a closed system
 ├── Cancer_Is_Calculable.md                ← cancer is calculable (DOI: .18899250)
 ├── TAZEMETOSTAT_GEOMETRIC_INDICATION.md   ← universal epigenetic agent (DOI: .18899530)
 ├── cancer_via_construction.md             ← Level 3 generative proof (DOI: .18899978)
 │
+├── The_Identity_Axis_Theorem_Protocol_and_SCLCY_Formal_Record.md
 ├── ETHICS.md
 ├── The_Commitment.md
 │
@@ -507,7 +525,6 @@ attractor-oncology/
 │   ├── OrganismCore_Cancer_Framework.md
 │   ├── Attractor_Geometry_Axioms.md
 │   ├── THE_TRIADIC_CONVERGENCE_RECORD.md
-│   ├── The_Identity_Axis_Theorem_Protocol_and_SCLCY_Formal_Record.md
 │   │
 │   ├── BRCA/                              ← 17 DOIs, complete
 │   │   └── DEEP_DIVE/
@@ -518,7 +535,7 @@ attractor-oncology/
 │   ├── RCC/                               ← 4 subtypes, Script 4 complete
 │   │   ├── CCRCC/
 │   │   ├── PRCC/
-│   ��   ├── chRCC/
+│   │   ├── chRCC/
 │   │   ├── cdRCC/
 │   │   ├── MAJOR_FINDINGS/
 │   │   └── Analysis_After_BRCA/
@@ -527,6 +544,22 @@ attractor-oncology/
 │   ├── CRC/ STAD/ PAAD/ ESCA/ HCC/ ICC/
 │   ├── LUAD/ GBM/ PRAD/ BLCA/ OV/
 │   └── SCLC/                              ← SCLC-Y novel prediction
+│
+├── Epigenetic_Table/                      ← framework extended beyond cancer
+│   ├── MENDELEEV_TABLE_OF_CANCER.md
+│   ├── SUBSTRATE_RELATIVISM_AND_UNIVERSAL_EPIGENETIC_PRINCIPLES.md
+│   ├── 0The_Grand_Unifying_Arch.md
+│   ├── 1The_Grand_Unifying_Arch.md
+│   ├── The_Horizon_Predictions.md
+│   ├── Down_Syndrome_Geometric_Audit.md
+│   ├── Doom_As_A_Symptom.md
+│   ├── Alzheimers/                        ← two-drift model (DOI: .18920018)
+│   ├── Parkinsons/                        ← motor identity class (DOI: .18921509)
+│   ├── AGING_AND_PRIONS/                  ← telomere + seven-node prion coupling
+│   ├── SCHIZOPHRENIA/                     ← Class 4 convergent multi-path failure
+│   ├── Huntingtons_Disease/
+│   ├── Vaccines/
+│   └── sleep_and_dreams/
 │
 ├── Individual_Protocol/
 │   └── Breast_Cancer/
@@ -544,6 +577,10 @@ attractor-oncology/
 - [10.5281/zenodo.18899250](https://doi.org/10.5281/zenodo.18899250) — **Cancer Is Calculable** (2026-03-07)
 - [10.5281/zenodo.18899530](https://doi.org/10.5281/zenodo.18899530) — **Tazemetostat Geometric Indication** (2026-03-07)
 - [10.5281/zenodo.18899978](https://doi.org/10.5281/zenodo.18899978) — **Cancer Via Construction** (2026-03-07)
+
+### Epigenetic Table
+- [10.5281/zenodo.18920018](https://doi.org/10.5281/zenodo.18920018) — **Alzheimer's Disease as Attractor Medicine** (2026-03-09)
+- [10.5281/zenodo.18921509](https://doi.org/10.5281/zenodo.18921509) — **Motor Identity and Temporal Coherence** (2026-03-09)
 
 ### Breast Cancer Series (CS-LIT)
 - [10.5281/zenodo.18883922](https://doi.org/10.5281/zenodo.18883922) — CS-LIT-1: FOXA1/EZH2 universal classifier (~7,500 patients)
@@ -584,11 +621,11 @@ Framework. Zenodo. https://doi.org/10.5281/zenodo.18899978
 
 ## For Patients and Families
 
-If you have been diagnosed with cancer, or someone you love has, this repository contains geometric analyses that may be relevant to understanding where a tumour sits in its attractor landscape and what that means for treatment.
+If you have been diagnosed with cancer, or someone you love has, this repository contains geometric analyses that may be relevant to understanding where a tumour sits in its attractor landscape and what the framework implies about drug targets.
 
 Read [The Puddle](The_Puddle.md) first. It is ten minutes and contains the whole framework in plain language.  
-Then read [HOW_THIS_HELPS_YOU_TODAY](HOW_THIS_HELPS_YOU_TODAY.md).  
-Then read [Patient Geometric Sovereignty](Patient_Geometric_Sovereignty_Reasoning_Artifact.md).
+Then read [HOW_THIS_HELPS_YOU](HOW_THIS_HELPS_YOU.md).  
+Then read [Patient Geometric Sovereignty](Patient_Geometric_Sovereignty.md).
 
 This framework is not a diagnosis. It is not a treatment recommendation. It is a geometric map. Your clinical team makes decisions. The map tells you where you are.
 

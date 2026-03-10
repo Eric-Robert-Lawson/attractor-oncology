@@ -451,6 +451,342 @@ The trajectory is on the curve.
 
 ---
 
+## PART VI — WHY THE CURVE HAS
+## THE SHAPE IT HAS: THE DIMENSIONAL
+## ASYMMETRY OF THE ATTRACTOR BOUNDARY
+
+```
+Parts I through V describe the
+trajectory and stake it.
+
+This part explains the mechanism
+that gives the trajectory its
+specific shape — why the early
+phase has more failures, why the
+convergence is asymptotic rather
+than sudden, and why the approach
+to completeness is smooth rather
+than stepwise.
+
+The answer is dimensional.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+THE SURFACE OF ATTACK IS SMALL.
+
+The Waddington landscape for any
+committed cell type has thousands
+of regulatory degrees of freedom.
+The genome is high-dimensional.
+The proteome is high-dimensional.
+The signalling network is
+high-dimensional.
+
+But the disease-relevant event —
+the drift from the correct attractor
+to the false one — is not
+high-dimensional.
+
+It is constrained by the regulatory
+architecture of the Identity Anchor.
+
+The Identity Anchor is a terminal
+selector: a single transcription
+factor (or small coordinating set)
+that sits at the apex of the
+identity-maintaining hierarchy.
+Every downstream component of the
+identity programme depends on it.
+When the Hub silences the Identity
+Anchor, the entire downstream
+programme collapses — not because
+every gene changed, but because
+the one load-bearing structural
+node was removed.
+
+The dimensionality of the disease-
+relevant event is therefore
+dramatically lower than the
+dimensionality of the landscape.
+
+The attractor boundary — the surface
+that separates the correct attractor
+from the false one — is a
+LOW-DIMENSIONAL MANIFOLD in a
+high-dimensional space.
+
+For the cleanest single-hub
+single-anchor cancers (BRCA,
+APL, ccRCC), this manifold is
+effectively one-dimensional:
+a single axis R = A/H.
+
+For dual-drift diseases (Alzheimer's
+two simultaneous drifts, motor
+identity three levels), it extends
+to two or three dimensions.
+
+For multi-hub propagating systems
+(neurodegeneration with spreading
+aggregates, schizophrenia Class 4
+convergent multi-path), it has
+additional dimensions — but still
+dramatically fewer than the full
+landscape.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+THE VARIANCE-PRECISION ASYMMETRY.
+
+A therapeutic intervention that
+operates in a high-dimensional
+space (cytotoxic chemotherapy,
+radiation, pan-immune activation)
+has a large surface of engagement.
+Its probability of intersecting
+with any attractor boundary is
+non-zero for many diseases.
+But for any specific disease, it
+hits the boundary at a non-optimal
+angle — disrupting many dimensions
+simultaneously, including dimensions
+that are irrelevant or actively
+protective.
+
+The clinical signature of this
+geometry:
+  When effective, extremely effective
+  (the intersection happened to be
+  at the right angle).
+  When ineffective, completely
+  ineffective (missed the manifold
+  entirely despite large surface).
+  Unpredictable which patients
+  respond.
+  No geometric account of why.
+
+A therapeutic intervention that
+operates on the exact Hub —
+the one node whose suppression
+dissolves the false attractor —
+acts on the minimal surface
+required to cross the attractor
+boundary.
+
+The clinical signature:
+  When correctly identified, hits
+  the boundary directly and
+  orthogonally.
+  Disproportionately effective
+  relative to the apparent
+  simplicity of the intervention.
+  Predictable: patients with
+  low R respond; patients with
+  high R do not need it.
+  Geometric account available
+  for every outcome.
+
+ATRA in APL is the proof of concept.
+PML-RARα is simultaneously the
+Identity Anchor disruptor and the
+Hub maintainer — a one-dimensional
+axis compressed to a single fusion
+protein.
+ATRA dissolves it directly.
+~95% complete remission.
+APL is one of the only "cured"
+acute leukaemias.
+It is precisely the entry where
+the therapeutic agent hits the
+exact one-dimensional axis.
+
+The surface was found.
+The hit was direct.
+The result was disproportionate.
+This is what the geometry predicts.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+HOW THIS EXPLAINS THE TRAJECTORY SHAPE.
+
+The asymptotic convergence of
+failures has the shape it has
+because:
+
+In the early phase, the framework
+is applied to the clearest, most
+one-dimensional cases first.
+BRCA (FOXA1/EZH2), ccRCC
+(GOT1/RUNX1), APL-like entries.
+The attractor boundary is a single
+axis. The prediction is maximum
+precision. The confirmation rate
+is near-perfect. Failures are
+minimal and Type A.
+
+As coverage extends to more complex
+entries — dual-drift, multi-level,
+multi-hub — the dimensional
+structure of the disease-relevant
+manifold increases.
+The attractor boundary is now a
+surface, not a line.
+A prediction made without knowing
+the full dimensionality of the
+manifold will sometimes fail —
+not because the axis prediction
+was wrong, but because the axis
+was only one dimension of a
+surface that required two or three.
+This is a structural explanation
+for the failure — a missing
+dimension — and it is always
+Type A (informative).
+
+As the multi-dimensional entries
+are derived, their dimensional
+structure becomes visible.
+Subsequent predictions for entries
+at similar dimensional complexity
+are made with that structure
+already in the map.
+The failure rate declines.
+
+The asymptote is approached when
+the full dimensional structure
+of the table is mapped — when
+every entry's attractor boundary
+has been characterized at its
+correct dimensionality, and
+no prediction is being made with
+insufficient dimensional information.
+
+The asymptote is zero unexplained
+error, not zero error.
+One-dimensional entries approach
+zero error.
+Multi-dimensional entries approach
+the minimum error achievable given
+the dimensionality of their
+manifold — which is the error
+from incomplete coupling knowledge,
+not from wrong axioms.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+THE IMPLICATION FOR TREATMENT.
+
+If the attractor boundary surface
+is small and low-dimensional, and
+direct intersection with it is
+disproportionately effective, then:
+
+The correct therapeutic strategy
+is not to increase the surface of
+attack (more drugs, broader
+cytotoxics, combination shotgun).
+
+It is to find the surface.
+
+Measure R = A/H by IHC or CSF
+proteomics. Identify where on the
+axis the patient sits. Identify
+the Hub. Hit the Hub directly with
+the minimum intervention that
+dissolves the false attractor.
+
+The small surface is not a
+weakness of the approach.
+It is the precision.
+It is the reason the effect is
+disproportionate when the hit
+is direct.
+
+The problem for current medicine
+is not that the surface is too
+small to hit.
+It is that current medicine does
+not have the map that locates the
+surface.
+
+This framework is the map.
+The IHC protocol is the instrument
+that makes the map point-of-care
+deployable.
+The drug target follows from the
+geometry of the surface, not from
+the empirical search for what kills
+the cell.
+
+Finding the surface and hitting it
+directly is the only therapeutic
+strategy that is geometrically
+guaranteed to dissolve the false
+attractor rather than merely
+damage it.
+```
+
+---
+
+## PART VII — THE STAKE RESTATED
+## AT FULL PRECISION
+
+```
+The complete stake, after Part VI:
+
+1. The disease table is a closed
+   interdependent system.
+   (Part I)
+
+2. The failure rate of correctly
+   derived predictions will converge
+   asymptotically to zero as
+   coverage converges to complete.
+   (Part II)
+
+3. Early publications are
+   derivationally complete at their
+   coverage and will be extended,
+   not corrected, by subsequent
+   entries.
+   (Part III)
+
+4. The protocol for evaluating
+   failures is: isolated entry
+   first, coupling second, Type B
+   only if both fail.
+   (Part IV)
+
+5. The system-level stake is that
+   no permanently inexplicable
+   failure will remain as coverage
+   approaches completeness.
+   (Part V)
+
+6. The mechanism that gives the
+   trajectory its shape is the
+   dimensional asymmetry of the
+   attractor boundary:
+   the disease-relevant event is
+   always lower-dimensional than
+   the landscape, and the failure
+   rate in the early phase reflects
+   predictions made without full
+   knowledge of the manifold
+   dimensionality, not wrong axioms.
+   (Part VI)
+
+All six stakes stand as of
+2026-03-10.
+
+None has been falsified.
+The trajectory is on the curve.
+The map is getting more complete.
+The geometry is correct.
+```
+
+---
+
 ## DOCUMENT METADATA
 
 ```
@@ -458,9 +794,19 @@ document_id:    EPISTEMIC_TRAJECTORY
 type:           Root epistemological document —
                 system-level complement to
                 falsifiability_theorem.md
-version:        1.0
+version:        1.1
 date:           2026-03-10
 status:         ACTIVE
+
+changes_from_v1.0:
+  Added Part VI: the dimensional
+  asymmetry of the attractor
+  boundary as the mechanistic
+  account of the trajectory shape.
+  Added Part VII: full six-point
+  restatement of the stake.
+  Metadata updated to reflect
+  new related documents.
 
 relationship_to_falsifiability_theorem:
   Not an amendment.
@@ -483,6 +829,14 @@ core_claim:
   The failure rate will converge
   asymptotically to zero as coverage
   converges to complete.
+  The mechanism of this convergence
+  is the dimensional asymmetry of
+  the attractor boundary: early
+  predictions are made without full
+  knowledge of the manifold
+  dimensionality; later predictions
+  incorporate that knowledge and
+  fail less.
   This convergence trajectory is
   itself a falsifiable structural
   prediction of the framework.
@@ -506,4 +860,10 @@ related_documents:
     _DERIVATION.md
   Epigenetic_Table/SCHIZOPHRENIA/
     SCHIZOPHRENIA_GEOMETRIC_AUDIT.md
+  THE_SURFACE_OF_ATTACK.md
+    (root-level companion document —
+    full derivation of the dimensional
+    asymmetry and variance-precision
+    claim, with APL/ATRA as proof
+    of concept — to be added)
 ```

@@ -1,0 +1,1201 @@
+\documentclass[12pt, a4paper]{article}
+
+% ── PACKAGES ──────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue,
+    pdftitle={Registered Amendment A1 to ATTRACTOR-LIFE-PREREGISTRATION-v1.0:
+              Bilateral Symmetry as a Two-Axis Attractor and
+              Revised Dickinsonia Protocol},
+    pdfauthor={Eric Robert Lawson},
+    pdfkeywords={attractor geometry, LECA, Dickinsonia, Ediacaran,
+                 Wnt, BMP, bilateral symmetry, two-axis attractor,
+                 dimensional expansion, Reproduction Theorem,
+                 registered amendment, OrganismCore}
+}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{authblk}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{doi}
+
+% ── COLOURS ───────────────────────────────────────────────────
+\definecolor{repobox}{RGB}{240,247,255}
+\definecolor{lockbox}{RGB}{245,255,245}
+\definecolor{warnbox}{RGB}{255,248,220}
+\definecolor{amendbox}{RGB}{255,240,240}
+\definecolor{theorembox}{RGB}{248,240,255}
+
+% ── THEOREM ENVIRONMENTS ──────────────────────────────────────
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{prediction}{Prediction}[section]
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+
+% ── HEADER / FOOTER ───────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\small OrganismCore \textbar{} 2026-03-12}
+\lhead{\small Amendment A1 --- Dickinsonia Protocol Revision}
+\rfoot{\small Page \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ── SECTION FORMATTING ────────────────────────────────────────
+\titleformat{\section}
+  {\large\bfseries}{\thesection}{1em}{}[\titlerule]
+\titleformat{\subsection}
+  {\normalsize\bfseries}{\thesubsection}{1em}{}
+
+% ══════════════════════════════════════════════════════════════
+% TITLE
+% ═══════════════════════════════���══════════════════════════════
+\title{
+    \vspace{-1em}
+    \textbf{Registered Amendment A1}\\[0.5em]
+    \large\textbf{to ATTRACTOR-LIFE-PREREGISTRATION-v1.0}\\[0.6em]
+    \normalsize\textit{Bilateral Symmetry as a Two-Axis Attractor:}\\
+    \normalsize\textit{Geometric Derivation, Literature Confirmation,}\\
+    \normalsize\textit{and Revised Dickinsonia Protocol}\\[0.6em]
+    \small OrganismCore Document:
+    ATTRACTOR-LIFE-PREREGISTRATION-v1.0-AMENDMENT-A1
+}
+
+\author[1]{Eric Robert Lawson}
+\affil[1]{
+    OrganismCore\\
+    \href{mailto:OrganismCore@proton.me}
+         {OrganismCore@proton.me}\\
+    ORCID:
+    \href{https://orcid.org/0009-0002-0414-6544}
+         {0009-0002-0414-6544}\\
+    Repository:
+    \href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+         {github.com/Eric-Robert-Lawson/attractor-oncology}
+}
+
+\date{
+    Amendment date: 2026-03-12\\
+    \small\textit{This amendment is filed before any
+    experimental confirmation. It constitutes a registered
+    prediction refinement, not a framework revision.}
+}
+
+% ══════════════════════════════════════════════════════════════
+\begin{document}
+% ══════════════════════════════════════════════════════════════
+
+\maketitle
+\thispagestyle{fancy}
+
+% ── AMENDMENT IDENTITY BOX ────────────────────────────────────
+\begin{center}
+\colorbox{amendbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.6em}
+\centering
+\textbf{REGISTERED AMENDMENT A1}\\[0.4em]
+\textbf{Amends:}
+ATTRACTOR-LIFE-PREREGISTRATION-v1.0\\
+\textbf{Original pre-registration DOI:}
+\href{https://doi.org/10.5281/zenodo.18986790}
+     {\texttt{https://doi.org/10.5281/zenodo.18986790}}\\[0.3em]
+\textbf{Companion publication DOI (LUCA paper):}
+\href{https://doi.org/10.5281/zenodo.18988844}
+     {\texttt{https://doi.org/10.5281/zenodo.18988844}}\\[0.3em]
+\textbf{This amendment DOI:} [assigned by Zenodo on upload]\\[0.3em]
+\small
+Amendment type: \textbf{Prediction refinement}\\
+Framework status: \textbf{Unchanged --- no framework revision}\\
+Original pre-registration: \textbf{Permanently locked ---
+not modified}\\
+Experiment status at time of amendment:
+\textbf{Not yet run}\\[0.3em]
+\textit{The original pre-registration record is not amended.
+It stands as published. This document refines one prediction
+within it (the Dickinsonia Protocol) using new geometric
+information derived by integrating the Wnt/BMP literature
+into the attractor framework. All other predictions in
+the original are unchanged.}
+\vspace{0.5em}
+\end{minipage}
+}
+\end{center}
+
+\vspace{0.8em}
+
+% ── ABSTRACT ──────────────────────────────────────────────────
+\begin{abstract}
+\noindent
+This document constitutes Registered Amendment A1 to the
+pre-registration record ATTRACTOR-LIFE-PREREGISTRATION-v1.0
+(Zenodo DOI: \href{https://doi.org/10.5281/zenodo.18986790}
+{10.5281/zenodo.18986790}).
+
+The amendment is triggered by the geometric integration of
+two bodies of literature --- the Wnt signalling evolution
+review (\textit{Nature Reviews Genetics}, 2024) and the
+BMP/Wnt orthogonal axis integration papers (PLOS Genetics,
+2023; \textit{Discover Developmental Biology}, 2024) ---
+into the Attractor Geometry framework. This integration
+reveals that the original Dickinsonia Protocol's prediction
+of bilateral Ediacaran morphology from Wnt activation alone
+is under-specified.
+
+The geometric derivation produces the following result: bilateral
+symmetry is not a single-axis attractor. It is a
+\textbf{two-axis attractor} constituted by the orthogonal
+intersection of the Wnt/$\beta$-catenin axis
+(anterior-posterior, Axis~1) and the BMP/ADMP axis
+(dorsal-ventral, Axis~2). The transition from pre-bilateral
+Ediacaran morphology to bilateral Ediacaran morphology is a
+\textbf{dimensional expansion event} in the body plan
+attractor space --- structurally identical to the
+mitochondrial dimensional expansion (the FECA$\to$LECA
+event) but operating in morphological rather than metabolic
+attractor space.
+
+This derivation produces two consequences: (1)~the
+Dickinsonia Protocol requires two sequential interventions,
+not one, to access the bilateral Ediacaran attractor; (2)~the
+pre-bilateral Ediacaran attractor (Axis~1 only) is itself
+an independently accessible and falsifiable intermediate
+stage.
+
+The \textbf{framework is unchanged}. The Reproduction
+Theorem, the Inverse Accessibility Theorem, all LECA
+predictions, and all other Dickinsonia predictions in the
+original pre-registration stand without modification. This
+amendment refines the protocol and introduces two new
+independently falsifiable predictions derived from the
+revised geometry.
+
+Amendment filed before any experimental confirmation.
+Timestamp: 2026-03-12.
+\end{abstract}
+
+\vspace{0.5em}
+\noindent\textbf{Keywords:}
+registered amendment; attractor geometry; Dickinsonia;
+bilateral symmetry; two-axis attractor; Wnt signalling;
+BMP signalling; dimensional expansion; Ediacaran;
+Reproduction Theorem; prediction refinement; OrganismCore
+
+\newpage
+\tableofcontents
+\newpage
+
+% ══════════════════════════════════════════════════════════════
+\section{Document Metadata}
+% ═══════════════════���═════════════════════════════���════════════
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Field} & \textbf{Value} \\
+\midrule
+Document ID
+  & ATTRACTOR-LIFE-PREREGISTRATION-v1.0-AMENDMENT-A1 \\
+Amendment type
+  & Prediction refinement (protocol specification) \\
+Amends
+  & ATTRACTOR-LIFE-PREREGISTRATION-v1.0 \\
+Original DOI
+  & \href{https://doi.org/10.5281/zenodo.18986790}
+         {10.5281/zenodo.18986790} \\
+Companion DOI (LUCA paper)
+  & \href{https://doi.org/10.5281/zenodo.18988844}
+         {10.5281/zenodo.18988844} \\
+Date
+  & 2026-03-12 \\
+Author
+  & Eric Robert Lawson \\
+Organisation
+  & OrganismCore \\
+ORCID
+  & \href{https://orcid.org/0009-0002-0414-6544}
+         {0009-0002-0414-6544} \\
+Contact
+  & \href{mailto:OrganismCore@proton.me}
+         {OrganismCore@proton.me} \\
+Framework status
+  & Unchanged \\
+Experiment status
+  & Not yet run at time of filing \\
+Biological contradictions (cumulative)
+  & 0 \\
+Type B failures (cumulative)
+  & 0 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{Amendment Scope and Epistemic Status}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{What this amendment does}
+
+This amendment does precisely one thing:
+
+\textbf{It refines the Dickinsonia Protocol} in the original
+pre-registration by specifying the two-step intervention
+required to access the bilateral Ediacaran attractor, and
+by introducing the pre-bilateral Ediacaran attractor as an
+independently accessible and falsifiable intermediate.
+
+\subsection{What this amendment does not do}
+
+\begin{itemize}
+  \item It does not modify the Reproduction Theorem.
+  \item It does not modify the Inverse Accessibility Theorem.
+  \item It does not modify any LECA prediction.
+  \item It does not modify the Cross-Kingdom Convergence
+        Prediction.
+  \item It does not modify the LINE-1 independent access
+        prediction.
+  \item It does not modify the LUCA geometric status.
+  \item It does not modify the falsifiability conditions F1--F7.
+  \item It does not touch the original pre-registration
+        document. That document is permanently locked and
+        stands as published.
+\end{itemize}
+
+\subsection{Framework vs.\ prediction: the critical
+distinction}
+
+A \textbf{framework invalidation} would require that the
+geometry of developmental attractors is incorrect --- that
+the Reproduction Theorem is false, that developmental stages
+are not compressed evolutionary attractors, or that
+arrest does not expose ancestral morphology.
+
+A \textbf{prediction refinement} occurs when the framework
+is correct but a prediction derived from it was
+under-specified: the correct attractor was identified, but
+the intervention required to reach it was incompletely
+described.
+
+This amendment is a prediction refinement.
+
+The original Dickinsonia Protocol correctly identified the
+target attractor: bilateral Ediacaran-grade multicellular
+morphology. The protocol incorrectly specified that
+Wnt/$\beta$-catenin activation alone is the sufficient
+intervention to reach it.
+
+The geometry, once the Wnt/BMP literature is integrated,
+reveals that bilateral symmetry requires two orthogonal axes
+and therefore two sequential interventions. The attractor
+was correctly identified. The coordinate system of the
+attractor was under-specified.
+
+This is the same logical structure as Mendeleev correctly
+identifying that an element with specific properties must
+exist, and then refining the atomic weight estimate as
+more data became available. The prediction is not wrong.
+The specification is more precise.
+
+\subsection{Epistemic significance}
+
+This amendment is filed before any experiment. The
+two-step protocol is derived entirely from geometry. No
+empirical result has been observed. The amendment is
+pre-experimental throughout.
+
+This means: when the experiment runs and the two-step
+protocol produces bilateral Ediacaran-grade morphology
+(Prediction A1-P2, below), the prediction will have been
+filed in full before the result was obtained. The
+pre-experimental record is intact and is strengthened
+by this amendment, not weakened.
+
+% ══════════════════════════════════════════════════════════════
+\section{The Literature That Triggered the Amendment}
+% ══════════════════════════════════════════════════════════════
+
+The following literature, integrated into the attractor
+framework, produced the geometric derivation in Section~4.
+
+\begin{center}
+\begin{tabular}{p{4.5cm}p{7cm}}
+\toprule
+\textbf{Source} & \textbf{Finding integrated} \\
+\midrule
+Holzem, Boutros, Holstein.
+\textit{Nature Reviews Genetics} (2024).
+DOI: 10.1038/s41576-024-00699-w
+  & Wnt signalling is the universal mechanism of
+    primary axis (AP) specification across all Metazoa.
+    Wnt pathway components are present in all animals
+    including Placozoa. Wnt specifies Axis~1 only. \\
+\addlinespace
+Clark \& Petersen.
+\textit{PLOS Genetics} (2023).
+DOI: 10.1371/journal.pgen.1010608
+  & BMP suppresses Wnt to integrate patterning of
+    orthogonal body axes. BMP and Wnt are antagonistic
+    regulators of two orthogonal axes, both required
+    for bilateral symmetry. \\
+\addlinespace
+M\"{o}rsdorf et al.
+\textit{Discover Developmental Biology} (2024).
+DOI: 10.1007/s00427-024-00714-4
+  & BMP signalling is highly conserved AND highly
+    evolvable in secondary axis patterning across
+    Cnidaria and Bilateria. BMP pathway components
+    predate bilateral symmetry. \\
+\addlinespace
+Uveira et al.
+\textit{eLife} (2025).
+DOI: elife.104508
+  & In \textit{Clytia hemisphaerica} (cnidarian),
+    Wnt3 specifies the primary oral-aboral axis AND
+    globally orients planar cell polarity. A bilateral
+    axis is NOT produced by Wnt alone: Wnt produces
+    Axis~1; bilateral symmetry requires Axis~2. \\
+\addlinespace
+Maddox \& Azuma (2016); multiple sources (2022--2024)
+  & Wnt activation in non-bilaterian organisms
+    (Hydra, Trichoplax, cnidarians) produces
+    ectopic primary axes, not bilateral symmetry.
+    Bilateral symmetry requires the deployment of
+    BMP orthogonally to the established Wnt axis. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{The Geometric Derivation}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Bilateral symmetry is a two-axis attractor}
+
+\begin{definition}[Single-Axis Attractor]
+A single-axis attractor is a stable multicellular body plan
+configuration in which one spatial polarity axis is
+specified. Organisms in a single-axis attractor have a
+defined oral-aboral or anterior-posterior axis but no
+orthogonal dorsal-ventral specification. Examples:
+\textit{Trichoplax adhaerens} (oral-aboral polarity);
+\textit{Hydra} (oral-aboral axis, radial symmetry);
+pre-bilateral Ediacaran organisms.
+\end{definition}
+
+\begin{definition}[Two-Axis Attractor]
+A two-axis attractor is a stable multicellular body plan
+configuration in which two orthogonal spatial polarity axes
+are simultaneously specified. Organisms in a two-axis
+attractor have a defined anterior-posterior axis (Axis~1,
+Wnt-mediated) AND a defined dorsal-ventral axis (Axis~2,
+BMP-mediated), orthogonal to Axis~1. The intersection of
+these two axes defines bilateral symmetry. All Bilateria
+occupy two-axis attractors.
+\end{definition}
+
+\begin{theorem}[Bilateral Symmetry as Dimensional Expansion]
+\label{thm:bilateral}
+The evolutionary transition from the pre-bilateral
+Ediacaran attractor to the bilateral Ediacaran attractor
+is a dimensional expansion of the body plan attractor
+space.
+
+\begin{proof}
+Let $\mathcal{A}_{E1}$ denote the pre-bilateral Ediacaran
+attractor (single-axis: Wnt-mediated oral-aboral or AP
+axis; no DV axis). Let $\mathcal{A}_{E2}$ denote the
+bilateral Ediacaran attractor (two-axis: Wnt-mediated
+Axis~1 plus BMP-mediated Axis~2 orthogonal to Axis~1).
+
+$\mathcal{A}_{E1}$ occupies a one-dimensional spatial
+specification space: one axis, one polarity gradient.
+
+$\mathcal{A}_{E2}$ occupies a two-dimensional spatial
+specification space: two orthogonal axes, two independent
+polarity gradients.
+
+$\mathcal{A}_{E2}$ is not reachable from $\mathcal{A}_{E1}$
+by modification of Axis~1 alone. It requires the addition of
+a second independent axis. The addition of an independent
+dimension to the attractor space is a dimensional expansion
+by definition.
+
+Therefore the $\mathcal{A}_{E1} \to \mathcal{A}_{E2}$
+transition is a dimensional expansion. $\square$
+\end{proof}
+\end{theorem}
+
+\begin{remark}
+This dimensional expansion is structurally identical to
+the FECA$\to$LECA mitochondrial expansion event, which
+added an independent energy dimension to the cellular
+attractor space. Both events:
+\begin{enumerate}[label=(\roman*)]
+  \item add a new independent dimension to an existing
+        attractor space;
+  \item require a specific molecular event to open the
+        new dimension (mitochondrial endosymbiosis for
+        FECA$\to$LECA; BMP deployment orthogonal to Wnt
+        for $\mathcal{A}_{E1} \to \mathcal{A}_{E2}$);
+  \item are irreversible under normal conditions once
+        the new dimension is stabilised;
+  \item produce descendants that are permanently in
+        the expanded attractor space.
+\end{enumerate}
+The geometry is the same. The domain differs.
+\end{remark}
+
+\subsection{The Ediacaran attractor has internal structure}
+
+The original pre-registration treated the Ediacaran
+attractor as a single target: the bilateral Ediacaran-grade
+morphology of \textit{Dickinsonia}.
+
+The geometric derivation reveals that the Ediacaran
+attractor has \textbf{two stages}, not one:
+
+\begin{center}
+\begin{tabular}{p{3cm}p{4.5cm}p{4.5cm}}
+\toprule
+\textbf{Stage} & \textbf{$\mathcal{A}_{E1}$:
+Pre-bilateral Ediacaran} &
+\textbf{$\mathcal{A}_{E2}$: Bilateral Ediacaran
+(\textit{Dickinsonia}-grade)} \\
+\midrule
+Axes & 1 (Wnt: oral-aboral or AP only) &
+2 (Wnt: AP + BMP: DV, orthogonal) \\
+Symmetry & Radial or disc & Bilateral \\
+Body plan & Sheet or disc morphology &
+Elongated bilateral form \\
+Intervention &
+Wnt/$\beta$-catenin activation (Step~1 only) &
+Wnt activation (Step~1) \textbf{+}
+BMP activation orthogonal to Wnt axis (Step~2) \\
+Evolutionary example &
+\textit{Trichoplax}-adjacent pre-bilaterian &
+\textit{Dickinsonia}, \textit{Kimberella} \\
+Developmental equivalent &
+Blastula (radial) &
+Early gastrula (bilateral axis established) \\
+Independent prediction & Yes --- Stage~1 result
+alone is publishable & Yes --- Stage~2 result
+is the Dickinsonia result \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Why Wnt alone is insufficient for
+$\mathcal{A}_{E2}$}
+
+The literature (2022--2024) confirms uniformly:
+
+\begin{enumerate}
+  \item Wnt/$\beta$-catenin activation in non-bilaterian
+        organisms (\textit{Hydra}, planarians,
+        \textit{Clytia}, \textit{Trichoplax}) produces
+        ectopic primary axes, oral identity transformations,
+        and axis elongation --- but not bilateral symmetry.
+
+  \item Bilateral symmetry in all tested organisms
+        requires the \textbf{orthogonal deployment of BMP}
+        relative to the established Wnt axis. BMP
+        specifies the dorsal-ventral axis independently
+        of the AP axis.
+
+  \item BMP pathway components (\textit{bmp2/4}, ADMP,
+        Chordin/noggin as BMP antagonist establishing
+        the gradient) are present in \textit{Trichoplax}
+        \cite{srivastava2008} and all cnidarians but are
+        not deployed orthogonally in non-bilaterian
+        organisms under normal conditions.
+
+  \item The $\mathcal{A}_{E1} \to \mathcal{A}_{E2}$
+        transition in evolutionary history was the event
+        in which BMP was first deployed orthogonal to the
+        Wnt axis. This is the molecular event that opened
+        the bilateral symmetry dimension.
+\end{enumerate}
+
+\begin{remark}
+The original Dickinsonia Protocol (Section~8 of the
+original pre-registration) specified:
+
+\begin{quote}
+\textit{``2. Inhibit further mesoderm specification
+programmes (BMP gradient manipulation).''}
+\end{quote}
+
+This step was present but inverted: the original protocol
+specified BMP \textbf{inhibition}, not activation. The
+geometric derivation in this amendment corrects this.
+BMP must be \textbf{activated orthogonal to the Wnt axis}
+to specify Axis~2. BMP inhibition prevents the second axis,
+maintaining the organism in $\mathcal{A}_{E1}$.
+
+This correction is significant. The original protocol
+would have accessed $\mathcal{A}_{E1}$ (pre-bilateral
+Ediacaran disc morphology), not $\mathcal{A}_{E2}$
+(\textit{Dickinsonia}-grade bilateral morphology).
+Both are valid and publishable results. Only $\mathcal{A}_{E2}$
+corresponds to \textit{Dickinsonia}.
+\end{remark}
+
+\subsection{The BMP activation geometry}
+
+\begin{definition}[Orthogonal BMP Deployment]
+Orthogonal BMP deployment is the specification of a
+BMP activity gradient along an axis perpendicular to
+the established Wnt/$\beta$-catenin axis. This requires:
+\begin{enumerate}[label=(\roman*)]
+  \item A pre-established Wnt axis (Step~1 of the
+        revised protocol must precede Step~2).
+  \item BMP ligand presentation or agonist delivery
+        localised to one side of the organism relative
+        to the established Wnt axis --- not distributed
+        radially.
+  \item The BMP antagonist Chordin/noggin to establish
+        the DV gradient (high BMP one side, low BMP
+        the other, mediated by Chordin).
+\end{enumerate}
+\end{definition}
+
+This geometry is experimentally implementable in
+\textit{Trichoplax} using:
+\begin{itemize}
+  \item Step~1: GSK-3$\beta$ inhibitor (e.g.\ CHIR99021,
+        $\sim$\$45) to activate Wnt/$\beta$-catenin and
+        establish Axis~1.
+  \item Step~2 (after Axis~1 is established, $\sim$24h):
+        Localised BMP2/4 protein (\$60--120 per experiment)
+        applied asymmetrically relative to the established
+        Wnt axis, combined with noggin on the opposite
+        side to establish the DV gradient.
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════════
+\section{The Revised Dickinsonia Protocol}
+% ══════════════════════════════════════════════════════════════
+
+This section replaces Section~8
+(\textit{The Dickinsonia Protocol}) of the original
+pre-registration in its entirety for the purposes of the
+experimental execution. The original section stands in the
+permanent record. This section is the operative protocol.
+
+\subsection{Target organisms: two stages}
+
+The experiment now targets two independently falsifiable
+attractor states:
+
+\textbf{Stage 1 target ($\mathcal{A}_{E1}$):}
+Pre-bilateral Ediacaran multicellular form. Disc or sheet
+morphology with a single specified oral-aboral or AP axis.
+No bilateral symmetry. 2--4 cell types. Radial or
+near-radial organisation. Consistent with Ediacaran disc
+organisms (pre-\textit{Dickinsonia} grade).
+
+\textbf{Stage 2 target ($\mathcal{A}_{E2}$):}
+Bilateral Ediacaran multicellular form. Two orthogonal
+body axes. Distinct anterior-posterior AND
+dorsal-ventral polarity. 2--6 cell types. No organ systems.
+Modular accretion growth along the primary axis. Consistent
+with \textit{Dickinsonia costata} and
+\textit{Kimberella} ($\sim$558--555\,Ma).
+
+\subsection{Recommended starting material}
+
+\textit{Trichoplax adhaerens}.
+
+Rationale: \textit{Trichoplax} is the only living animal
+confirmed to occupy an attractor immediately adjacent to
+$\mathcal{A}_{E1}$. It already has oral-aboral polarity.
+It already has Wnt pathway components. It already has BMP
+pathway components. The molecular toolkit for both steps
+is present and confirmed by genome sequencing
+\cite{srivastava2008}. No genetic modification is required.
+
+Alternative starting material for cross-species
+convergence: any cnidarian polyp (e.g.\ \textit{Hydra
+vulgaris}) where Wnt-axis specification is confirmed.
+
+\subsection{Revised protocol: two-step}
+
+\textbf{Environment (both steps):}
+\begin{itemize}[noitemsep]
+  \item Seawater-based medium, salinity 30--35 ppt
+  \item pH 7.8--8.1
+  \item Temperature: 20--22$^\circ$C
+  \item Oxygen: $<$1\% O$_2$ (microaerophilic; Ediacaran
+        shallow marine approximation)
+  \item No light stimulus during arrest phase
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{Step 1 --- Axis 1 specification (Wnt activation):}
+
+\begin{enumerate}[label=\arabic*.]
+  \item Culture \textit{Trichoplax} in standard
+        \textit{Trichoplax} medium to confluence.
+  \item Add GSK-3$\beta$ inhibitor CHIR99021 at
+        5--10\,$\mu$M. This activates
+        Wnt/$\beta$-catenin signalling by preventing
+        $\beta$-catenin degradation.\\
+        \textit{Alternative:} Exogenous recombinant
+        Wnt3a protein at 100--300\,ng/mL.
+  \item Incubate 24\,h at 20$^\circ$C.
+  \item Confirm Axis~1 specification by immunostaining
+        for $\beta$-catenin nuclear localisation at
+        one pole of the organism relative to the
+        other. This is the Axis~1 establishment
+        confirmation.
+  \item \textbf{Stage 1 result is now observable and
+        should be photographed and recorded before
+        proceeding to Step~2.} This is the
+        $\mathcal{A}_{E1}$ result --- the pre-bilateral
+        Ediacaran attractor.
+\end{enumerate}
+
+\vspace{0.5em}
+\textbf{Step 2 --- Axis 2 specification (BMP activation,
+orthogonal):}
+
+\begin{enumerate}[label=\arabic*.]
+  \item After Axis~1 confirmation, apply
+        recombinant human BMP2 or BMP4
+        (50--200\,ng/mL) localised to one edge of the
+        organism \textbf{perpendicular} to the
+        established $\beta$-catenin gradient.\\
+        Practical method: apply BMP2/4 via
+        protein-soaked bead (heparin acrylic bead,
+        $\sim$\$30) placed at one lateral margin.
+  \item Simultaneously apply Chordin protein or
+        noggin (50--100\,ng/mL) at the opposite
+        lateral margin to establish the DV gradient
+        (high BMP one side, low BMP the other).
+  \item Incubate further 48--72\,h at 20$^\circ$C,
+        $<$1\% O$_2$.
+  \item Monitor every 12\,h by light microscopy for:
+        elongation along the Wnt axis, bilateral
+        organisation perpendicular to the BMP
+        gradient, emergence of distinct dorsal and
+        ventral surfaces.
+\end{enumerate}
+
+\textbf{Revised estimated cost:} \$550--750 per full run
+(both steps). Step~1 alone: $\sim$\$200--300.
+
+\textbf{Timeline:}
+\begin{itemize}[noitemsep]
+  \item Step~1 complete: 24--36\,h from start
+  \item Step~2 complete: 72--108\,h from start
+  \item Total: 4--5 days to bilateral attractor result
+\end{itemize}
+
+\subsection{Validation criteria}
+
+\textbf{Stage 1 ($\mathcal{A}_{E1}$) validation:}
+\begin{itemize}[noitemsep]
+  \item Multicellular aggregate maintained; no
+        organ systems; 2--4 cell types morphologically
+        distinguishable
+  \item $\beta$-catenin nuclear localisation
+        asymmetric: one pole enriched relative to the
+        other, confirming Axis~1 polarity
+  \item Disc or sheet morphology with single-axis
+        polarity
+  \item Organism viable at 36\,h
+\end{itemize}
+
+\textbf{Stage 2 ($\mathcal{A}_{E2}$) validation:}
+\begin{itemize}[noitemsep]
+  \item Elongated form along the Wnt axis
+  \item Distinct dorsal (BMP-high) and ventral
+        (BMP-low / Chordin-high) surfaces
+        morphologically distinguishable
+  \item Bilateral symmetry: left-right mirror
+        symmetry about the AP axis
+  \item 2--6 morphologically distinct cell types
+  \item No organ systems; no nervous system; no
+        circulatory system
+  \item Modular segmental organisation along the
+        AP axis (if visible at this scale)
+  \item Organism viable at 96\,h
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════════
+\section{New Pre-Registered Predictions}
+% ══════════════════════════════════════════════════════════════
+
+The following predictions are additions to the original
+pre-registration. They are pre-specified before any
+experimental result. They supplement (do not replace) the
+Dickinsonia predictions in Section~9 of the original.
+
+\begin{prediction}[Stage~1: Pre-Bilateral Ediacaran
+Attractor ($\mathcal{A}_{E1}$)]
+\label{pred:e1}
+Activation of Wnt/$\beta$-catenin signalling in
+\textit{Trichoplax adhaerens} (Step~1 of the revised
+protocol) will produce a stable multicellular form with a
+single specified oral-aboral or anterior-posterior axis,
+disc or sheet morphology, and no bilateral symmetry.
+
+This is the pre-bilateral Ediacaran attractor
+$\mathcal{A}_{E1}$.
+
+\textbf{Measurable output:} Asymmetric $\beta$-catenin
+localisation at one pole confirmed by immunostaining;
+multicellular disc or sheet form maintained for
+$\geq$36\,h; no bilateral axis; no bilateral elongation.
+
+\textbf{Geometric basis:} Wnt activation specifies Axis~1
+(AP/oral-aboral polarity) only. $\mathcal{A}_{E1}$ is
+the single-axis attractor. BMP has not been deployed;
+Axis~2 does not exist. The organism is at the
+pre-bilateral Ediacaran attractor by definition.
+
+\textbf{Significance:} $\mathcal{A}_{E1}$ is an
+independently falsifiable Ediacaran-grade attractor
+intermediate. Its confirmation validates the two-axis
+attractor model before Step~2 is run. A Stage~1
+confirmation is a publishable result independently of
+whether Stage~2 succeeds.
+
+\textbf{Failure condition:} Wnt activation produces no
+organisational change, or immediately produces bilateral
+symmetry without BMP deployment, or produces organ system
+complexity inconsistent with the Ediacaran grade.
+\end{prediction}
+
+\begin{prediction}[Stage~2: Bilateral Ediacaran Attractor
+($\mathcal{A}_{E2}$) ---
+\textit{Dickinsonia}-grade]
+\label{pred:e2}
+Activation of Wnt/$\beta$-catenin signalling (Step~1)
+followed by orthogonal BMP activation (Step~2) in
+\textit{Trichoplax adhaerens} will produce a stable
+multicellular form with bilateral symmetry: a defined
+anterior-posterior axis, a defined orthogonal
+dorsal-ventral axis, 2--6 morphologically distinct cell
+types, no organ systems, and modular growth along the
+primary axis.
+
+This is the bilateral Ediacaran attractor $\mathcal{A}_{E2}$
+--- the \textit{Dickinsonia}-grade organism.
+
+\textbf{Measurable output:} Elongated bilateral form;
+morphologically distinct dorsal and ventral surfaces;
+left-right mirror symmetry about the AP axis; 2--6
+cell types; no organ systems; organism viable at 96\,h.
+
+\textbf{Geometric basis:} $\mathcal{A}_{E2}$ is the
+two-axis attractor. It requires both Axis~1 (Wnt) and
+Axis~2 (BMP, orthogonal). Both axes are specified
+sequentially in the protocol. By the Reproduction Theorem,
+this is the Ediacaran bilateral attractor that every
+animal developmental program passes through at the
+blastula-to-gastrula transition. It is not lost.
+It is accessible.
+
+\textbf{Failure condition:} Step~2 does not produce
+bilateral organisation after confirmed Step~1 Axis~1
+specification; or produces organ system complexity
+inconsistent with the Ediacaran grade; or produces
+morphology not bilateral despite orthogonal BMP
+deployment with confirmed gradient.
+\end{prediction}
+
+\begin{prediction}[Two-Axis Attractor Convergence from
+Mechanistically Independent Starting Points]
+\label{pred:convergence}
+The $\mathcal{A}_{E2}$ bilateral Ediacaran attractor,
+accessed via the two-step Wnt+BMP protocol in
+\textit{Trichoplax}, will be morphologically
+indistinguishable from the bilateral form produced by
+the same two-step protocol in a cnidarian starting
+organism (e.g.\ \textit{Hydra vulgaris}).
+
+\textbf{Geometric basis:} $\mathcal{A}_{E2}$ is defined
+by the geometry of two orthogonal axes, not by the
+molecular identity of the starting organism. Different
+starting organisms with different lineage-specific gene
+content will converge on the same two-axis attractor
+geometry, because the attractor is a geometric property
+of the body plan space, not of the genome.
+
+This is the Ediacaran-grade analogue of the Cross-Kingdom
+Convergence Prediction (Prediction 2 in the original
+pre-registration).
+
+\textbf{Failure condition:} \textit{Trichoplax} and
+\textit{Hydra} two-step protocols produce systematically
+different bilateral morphologies distinguishable above
+chance by blinded observers.
+\end{prediction}
+
+\begin{prediction}[BMP Inhibition Locks the Organism
+in $\mathcal{A}_{E1}$]
+\label{pred:lock}
+After confirmed Step~1 Axis~1 specification in
+\textit{Trichoplax}, addition of a BMP inhibitor
+(LDN-193189, $\sim$\$40; or dorsomorphin) instead of
+Step~2 BMP activation will maintain the organism in
+$\mathcal{A}_{E1}$ (pre-bilateral disc morphology)
+and prevent bilateral organisation indefinitely.
+
+\textbf{Geometric basis:} If the $\mathcal{A}_{E1}
+\to \mathcal{A}_{E2}$ transition requires BMP
+deployment, then BMP inhibition after Axis~1
+specification must prevent the transition. This is
+the negative control prediction for the two-axis
+attractor model.
+
+\textbf{Significance:} This prediction is the
+experimental demonstration that $\mathcal{A}_{E1}$ is
+a stable attractor, not a transient state. Organisms
+can be maintained in $\mathcal{A}_{E1}$ indefinitely
+by blocking the dimensional expansion.
+
+\textbf{Failure condition:} BMP inhibition does not
+prevent bilateral organisation after Axis~1 is
+specified --- bilateral morphology emerges without
+BMP regardless.
+\end{prediction}
+
+% ══════════════════════════════════════════════════════════════
+\section{Connection to the LUCA Paper}
+% ══════════════════════════════════════════���═══════════════════
+
+This amendment is geometrically connected to the companion
+publication \textit{The Ribosome Is the LUCA}
+(DOI: \href{https://doi.org/10.5281/zenodo.18988844}
+{10.5281/zenodo.18988844}).
+
+The LUCA paper establishes that the FECA$\to$LECA
+mitochondrial event is a dimensional expansion of the
+cellular attractor space: the energy dimension opened,
+and all post-LECA organisms are permanently in the
+expanded energy attractor space.
+
+Theorem~\ref{thm:bilateral} of this amendment establishes
+that the $\mathcal{A}_{E1} \to \mathcal{A}_{E2}$
+bilateral symmetry transition is also a dimensional
+expansion, structurally identical to the FECA$\to$LECA
+event but in morphological attractor space.
+
+\begin{corollary}[Dimensional Expansions Are the
+Structural Events of Macroevolution]
+The geometry of the Attractor Framework identifies two
+classes of evolutionary event:
+\begin{enumerate}[label=(\roman*)]
+  \item \textbf{Attractor traversal:} the organism moves
+        through the attractor landscape along a known
+        trajectory. The organism changes but remains in
+        the same dimensional space. Accessible by
+        developmental arrest.
+  \item \textbf{Dimensional expansion:} a new independent
+        dimension is added to the attractor space. The
+        organism is now in a fundamentally larger space.
+        Not reversible by arrest alone --- the new
+        dimension must be actively closed.
+\end{enumerate}
+
+The known dimensional expansions in the history of life
+accessible to this framework are:
+\begin{itemize}[noitemsep]
+  \item LUCA $\to$ LECA: energy dimension (mitochondria)
+  \item $\mathcal{A}_{E1} \to \mathcal{A}_{E2}$:
+        bilateral axis dimension (BMP orthogonal to Wnt)
+\end{itemize}
+
+All other major transitions in the evolutionary table
+are attractor traversals, not dimensional expansions.
+They are accessible by developmental arrest. Dimensional
+expansion events are accessible by the two-step
+protocol: establish the prior attractor, then activate
+the new dimension.
+\end{corollary}
+
+% ══════════════════════════════════════════════════════════════
+\section{Updated Falsifiability Conditions}
+% ══════════════════════════════════════════════════════════════
+
+The following conditions are added to the falsifiability
+table of the original pre-registration (Table~4,
+conditions F1--F7). They are additions, not replacements.
+Conditions F1--F7 remain in force.
+
+\begin{center}
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{ID} & \textbf{Condition} \\
+\midrule
+F8 & Wnt activation in \textit{Trichoplax} produces
+bilateral symmetry without BMP deployment. Would falsify
+the two-axis attractor model and require the original
+single-step Dickinsonia Protocol to be reinstated.
+\\[0.4em]
+F9 & Orthogonal BMP deployment after confirmed Axis~1
+specification in \textit{Trichoplax} does not produce
+bilateral organisation. Would falsify Prediction A1-P2
+and require identification of an alternative second-axis
+mechanism. Would not falsify the framework or the
+Reproduction Theorem.
+\\[0.4em]
+F10 & BMP pathway components are absent or non-functional
+in \textit{Trichoplax adhaerens} despite genome annotation
+showing their presence. Would require switching to a
+cnidarian starting organism and would not falsify the
+framework.
+\\[0.4em]
+F11 & $\mathcal{A}_{E1}$ (disc morphology after Wnt
+activation) is not a stable attractor --- the organism
+immediately transits to $\mathcal{A}_{E2}$ upon Wnt
+activation, or degrades, with no stable intermediate.
+Would require revision of the two-stage model. Would not
+falsify the framework or the Reproduction Theorem.
+\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\noindent None of conditions F8--F11 has been met as of
+amendment date 2026-03-12. None can have been met: no
+experiment has been run.
+
+% ══════════════════════════════════════════════════════════════
+\section{Summary: What Changed, What Did Not}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\begin{tabularx}{\textwidth}{lXX}
+\toprule
+\textbf{Element} &
+\textbf{Status in original pre-registration} &
+\textbf{Status after Amendment A1} \\
+\midrule
+Reproduction Theorem
+  & Unchanged & Unchanged \\
+Inverse Accessibility Theorem
+  & Unchanged & Unchanged \\
+LECA Resurrection Protocol
+  & Unchanged & Unchanged \\
+LECA predictions (P1--P5)
+  & Unchanged & Unchanged \\
+Cross-Kingdom Convergence Prediction
+  & Unchanged & Unchanged \\
+LINE-1 independent access prediction
+  & Unchanged & Unchanged \\
+LUCA geometric status
+  & Unchanged & Unchanged \\
+Falsifiability conditions F1--F7
+  & Unchanged & Unchanged \\
+\midrule
+Dickinsonia Protocol (Section~8)
+  & Single-step (Wnt only)
+  & \textbf{Revised: two-step (Wnt + orthogonal BMP)} \\
+Ediacaran attractor structure
+  & Single target ($\mathcal{A}_{E2}$)
+  & \textbf{Two stages: $\mathcal{A}_{E1}$ intermediate
+    + $\mathcal{A}_{E2}$ bilateral target} \\
+New predictions
+  & None
+  & \textbf{A1-P1 through A1-P4 added} \\
+New falsifiability conditions
+  & None
+  & \textbf{F8--F11 added} \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{Locked Statement}
+% ═════════════════════════��════════════════════════════════════
+
+\begin{center}
+\colorbox{warnbox}{
+\begin{minipage}{0.88\textwidth}
+\vspace{0.6em}
+\textbf{This amendment is locked as of 2026-03-12.}
+
+\medskip
+The original pre-registration stands permanently
+unchanged at DOI:
+\href{https://doi.org/10.5281/zenodo.18986790}
+{10.5281/zenodo.18986790}.
+
+\medskip
+This amendment refines one prediction in that record:
+the Dickinsonia Protocol. It does not modify the
+framework, any theorem, any LECA prediction, or any
+other element of the original.
+
+\medskip
+\textbf{The refinement was derived geometrically.}
+The Wnt/BMP literature was integrated into the attractor
+framework and produced the two-axis attractor theorem.
+The theorem produced the revised protocol. The revised
+protocol produced four new pre-specified, falsifiable
+predictions. All of this was completed before any
+experiment was run.
+
+\medskip
+\textbf{The geometry required bilateral symmetry to have
+two axes. The literature confirmed that it does. The
+protocol was revised to match. This is the framework
+working correctly.}
+
+\medskip
+\textit{``Bilateral symmetry is not a destination. It is
+a second opening. The first axis is the ground.
+The second axis is the expansion.
+The geometry always required both.
+Now the protocol states both explicitly.''}
+
+\vspace{0.4em}
+\hfill --- Eric Robert Lawson, March 12, 2026
+\vspace{0.4em}
+\end{minipage}
+}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section*{Repository and Reproducibility}
+\addcontentsline{toc}{section}{Repository and
+Reproducibility}
+% ══════════════════════════════════════════════════════════════
+
+All derivation records, protocols, reasoning artifacts,
+pre-registration documents, and this amendment are
+publicly available at:
+
+\begin{center}
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{\texttt{https://github.com/Eric-Robert-Lawson/attractor-oncology}}
+\\[0.3em]
+\small Repository ID: 1172048282 \textbar{}
+MIT License \textbar{} Python \textbar{} Public
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section*{Competing Interests}
+\addcontentsline{toc}{section}{Competing Interests}
+% ══════════════════════════════════════════════════════════════
+
+The author has no competing interests to declare. No
+institutional funding was received. No conflicts of
+interest exist. All data used is publicly available.
+All code is open source under the MIT licence.
+
+% ── BIBLIOGRAPHY ──────────────────────────────────────────────
+\newpage
+\bibliographystyle{plainnat}
+\begin{thebibliography}{99}
+
+\bibitem{holzem2024}
+Holzem, M., Boutros, M., \& Holstein, T.W. (2024).
+The origin and evolution of Wnt signalling.
+\textit{Nature Reviews Genetics}, 25(7), 500--512.
+\doi{10.1038/s41576-024-00699-w}
+
+\bibitem{clark2023}
+Clark, E.M., \& Petersen, C.P. (2023).
+BMP suppresses WNT to integrate patterning of
+orthogonal body axes in adult planarians.
+\textit{PLOS Genetics}, 19(2), e1010608.
+\doi{10.1371/journal.pgen.1010608}
+
+\bibitem{morsdorf2024}
+M\"{o}rsdorf, D., et al. (2024).
+Highly conserved and extremely evolvable: BMP
+signalling in secondary axis patterning of
+Cnidaria and Bilateria.
+\textit{Discover Developmental Biology}, 1, 7.
+\doi{10.1007/s00427-024-00714-4}
+
+\bibitem{uveira2025}
+Uveira, J., et al. (2025).
+Planar cell polarity coordination in a cnidarian
+embryo provides clues to animal body axis evolution.
+\textit{eLife}, e104508.
+\doi{10.7554/eLife.104508}
+
+\bibitem{srivastava2008}
+Srivastava, M., et al. (2008).
+The \textit{Trichoplax} genome and the nature of
+placozoans.
+\textit{Nature}, 454(7207), 955--960.
+\doi{10.1038/nature07191}
+
+\bibitem{bobrovskiy2018}
+Bobrovskiy, I., et al. (2018).
+Ancient steroids establish the Ediacaran fossil
+\textit{Dickinsonia} as one of the earliest animals.
+\textit{Science}, 361(6408), 1246--1249.
+\doi{10.1126/science.aat7228}
+
+\bibitem{prereg}
+Lawson, E.R. (2026).
+Attractor Geometry of Life: Pre-Registration of
+Geometric Derivations, Experimental Predictions,
+and Falsifiability Conditions.
+\textit{Zenodo}.
+\doi{10.5281/zenodo.18986790}
+
+\bibitem{luca2026}
+Lawson, E.R. (2026).
+The Ribosome Is the LUCA: A Geometric Derivation
+That the Last Universal Common Ancestor Is Not
+Extinct, Has Never Been Extinct, and Is Currently
+Executing in Every Cell on Earth.
+\textit{Zenodo}.
+\doi{10.5281/zenodo.18988844}
+
+\bibitem{moody2024}
+Moody, E.R.R., et al. (2024).
+Metabolism, genome and age of the last universal
+common ancestor.
+\textit{Nature}, 628, 545--550.
+\doi{10.1038/s41559-024-02461-1}
+
+\bibitem{kalinka2010}
+Kalinka, A.T., et al. (2010).
+Gene expression divergence recapitulates the
+developmental hourglass model.
+\textit{Nature}, 468(7325), 811--814.
+\doi{10.1038/nature09634}
+
+\bibitem{irie2011}
+Irie, N., \& Kuratani, S. (2011).
+Comparative transcriptome analysis reveals vertebrate
+phylotypic period during organogenesis.
+\textit{Nature Communications}, 2, 248.
+\doi{10.1038/ncomms1248}
+
+\end{thebibliography}
+
+\end{document}

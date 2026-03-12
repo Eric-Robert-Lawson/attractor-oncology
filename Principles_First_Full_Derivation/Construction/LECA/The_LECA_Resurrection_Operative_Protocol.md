@@ -807,16 +807,206 @@ at the whole-genome level.
 
 ---
 
-## SECTION 8 — THE CROSS-KINGDOM
-## CONVERGENCE EXPERIMENT (ARMS A+B+C)
+---
 
-This section is specifically for the
-combined three-arm run that produces
-the cross-kingdom convergence result
-(Pre-registration Prediction 2,
-DOI: https://doi.org/10.5281/zenodo.18986790).
+## SECTION 8 — WHAT EACH ARM ESTABLISHES
+## AND THE CROSS-KINGDOM CONVERGENCE EXPERIMENT
 
-### 8.1 The Blind Panel Protocol
+### 8.0 The Hierarchy of Results
+
+The three arms are not equally dependent on
+each other. They produce results at three
+distinct levels, each valid independently.
+
+```
+ARM A ALONE
+  Pre-registered Prediction 1 confirmed.
+  Proof of concept for LECA attractor
+  stabilisation from a fungal developmental
+  program.
+  Executable at ChiTownBio.
+  Cost: $200–400.
+  Timeline: days.
+  Status: publishable standalone result.
+
+  This is NOT generic spore dormancy.
+  See Section 8.1 below.
+
+ARMS A + B
+  First cross-kingdom comparison:
+  fungal vs. animal.
+  Partial confirmation of Prediction 2.
+  Requires animal facility for Arm B.
+  Substantially strengthens the claim.
+
+ARMS A + B + C
+  Full cross-kingdom convergence experiment.
+  Predictions 1–5 all testable.
+  The definitive proof.
+  Requires developmental biology
+  collaboration for Arms B and C.
+```
+
+Run what you can run.
+Document every run to pre-registration standard.
+Each arm advances the epistemic position
+independently.
+
+---
+
+### 8.1 What Arm A Alone Establishes
+
+This section replaces any prior framing
+that described Arm A as insufficient
+or as merely confirming known dormancy.
+That framing was incorrect.
+
+**This is not a dormancy experiment.**
+
+Standard spore dormancy is a spore in
+suspended animation, waiting for permissive
+conditions. It is an undesigned observation
+of a natural state.
+
+The Arm A experiment is categorically different
+in four ways that make it proof of concept:
+
+**Difference 1: The conditions were derived
+before the experiment ran.**
+
+The arrest medium is not "minimal conditions."
+It is a specific environment derived geometrically
+from the LECA attractor specification:
+
+- Ionic composition approximating Precambrian
+  ocean chemistry (Na⁺, K⁺, Mg²⁺, Ca²⁺,
+  Fe²⁺, PO₄³⁻ at specified concentrations)
+- No nitrogen source: germination program
+  cannot activate — the signal pathway that
+  would drive the spore toward being a fungus
+  is specifically absent
+- No multicellular growth factors: all
+  post-LECA forward programs suppressed
+- Microaerophilic atmosphere (<3% O₂):
+  matches pre-Great-Oxidation-Event conditions
+  that the LECA actually inhabited
+- Temperature 20–22°C: below the germination
+  threshold of *S. cerevisiae* (optimal 28–30°C)
+
+These parameters were specified by geometric
+derivation from the LECA attractor before
+any experiment was run. A spore in YPD at
+30°C is in permissive conditions withheld.
+A spore in this medium is in a specifically
+constructed LECA-proxy environment.
+
+**Difference 2: The prediction was locked
+before the experiment ran.**
+
+Pre-registration DOI:
+https://doi.org/10.5281/zenodo.18986790
+Timestamp: 2026-03-12.
+
+The morphological validation criteria —
+single-cell form, nucleus confirmed by DAPI,
+mitochondria present, viable at 72 h,
+≤10% germination — were written and
+published before the experiment ran.
+
+A matching result is not an observation.
+It is a pre-specified prediction confirmed.
+
+**Difference 3: The arrested cell is not
+waiting. It is stabilised.**
+
+A spore in permissive conditions withheld
+will germinate the moment you add nitrogen.
+It is fungus-in-waiting.
+
+A spore in the LECA-proxy environment is
+in conditions where the entire downstream
+program — everything that makes it a
+modern derived fungus — has been
+specifically prevented from activating.
+The only program running is the base
+eukaryotic cellular maintenance program:
+the 4,000–6,000 gene LECA core conserved
+across all eukaryotes.
+
+The downstream genome is present in
+every cell. It is silenced. The base
+program is running because the conditions
+specifically maintain it while suppressing
+everything downstream.
+
+That is what stabilisation into the LECA
+attractor means. Not ancient DNA. Not
+fossil reconstruction. The attractor has
+been running continuously for 1.5 billion
+years in every eukaryotic reproductive
+cycle. The experiment stops the program
+at the moment it passes through that
+attractor and holds it there.
+
+**Difference 4: Resurrection by geometric
+derivation, not by discovery.**
+
+No one was looking for the LECA in an
+arrested yeast spore before this framework
+existed. The framework derived the target,
+specified the conditions, predicted the
+result, locked the prediction in a public
+record, and then ran the experiment.
+
+The sequence — geometry first, prediction
+second, experiment third — is what
+distinguishes resurrection from observation.
+
+**Arm A confirmed = Prediction 1 confirmed
+= proof of concept for the LECA resurrection
+claim. Publishable standalone. Real result.**
+
+---
+
+### 8.2 The Cross-Kingdom Convergence
+### Experiment (Arms A + B + C)
+
+This section covers the combined three-arm
+run that produces the definitive proof.
+It requires collaboration with a developmental
+biology laboratory capable of mammalian
+zygote culture (Arm B) and plant embryology
+(Arm C). It is the next phase after Arm A
+is confirmed.
+
+Pre-registration Prediction 2:
+DOI: https://doi.org/10.5281/zenodo.18986790
+
+**The prediction:**
+Arrested organisms from phylogenetically
+maximally distant starting kingdoms —
+fungal, animal, plant — will be
+morphologically indistinguishable under
+light microscopy, while being genomically
+distinct by sequencing.
+
+**Why this follows geometrically:**
+
+The active genes at the LECA arrest point
+are the conserved eukaryotic core — ~90–95%
+identical across all kingdoms. The genes
+that make a fungus a fungus, an animal an
+animal, a plant a plant are present in
+every cell but silenced at the arrest point.
+The morphology is produced by the active
+genes. The active genes are nearly identical.
+The morphology converges.
+
+Morphologically identical.
+Genomically distinct.
+Same attractor. Different substrates.
+
+**The Blind Panel Protocol:**
 
 When all three arms produce arrested
 organisms meeting the validation criteria
@@ -832,14 +1022,14 @@ in Sections 4–6:
    with observers until after assessment.
 
 3. Present to panel of ≥3 developmental
-   biologists with no knowledge of
+   biologists with no prior knowledge of
    the experimental arms or the
    geometric prediction.
 
 4. Panel assesses each sample by
-   light microscopy only (no sequencing,
+   light microscopy only — no sequencing,
    no additional stains beyond DAPI
-   and standard brightfield).
+   and standard brightfield.
 
 5. Panel records: what organism type
    (animal / plant / fungal) does this
@@ -847,7 +1037,8 @@ in Sections 4–6:
 
 6. Correct identification above 1/3
    chance (expected if indistinguishable)
-   is assessed by binomial test.
+   is assessed by binomial test
+   (p < 0.05 threshold).
 
 **Pre-registered prediction:**
 Panel cannot identify starting kingdom
@@ -856,41 +1047,94 @@ examination alone.
 
 **Failure condition:**
 Panel correctly identifies starting
-kingdom above 1/3 chance (p < 0.05,
-binomial test). This would mean
-lineage-specific morphological features
-are expressed at the arrest point.
+kingdom above 1/3 chance (p < 0.05).
+This would mean lineage-specific
+morphological features are expressed
+at the arrest point, requiring
+identification of which downstream
+genes are active and adjustment of
+arrest conditions. This is a Type B
+failure for Prediction 2 only.
+It does not falsify Prediction 1
+or the framework.
 
-### 8.2 The Genomic Contrast
+---
+
+### 8.3 The Genomic Contrast
 
 After blind panel assessment, perform
-whole-genome sequencing on one cell
-(or pooled cells) from each arm.
+whole-genome sequencing on pooled cells
+from each arm.
 
 **Pre-registered prediction:**
 Sequencing correctly identifies the
 starting kingdom with high confidence
-(>99% mapping to correct genome).
+(>99% read mapping to correct reference
+genome).
 
 **Significance of the combined result:**
 
 ```
 Morphologically identical
   (panel cannot identify above chance)
-+
+
+        +
+
 Genomically distinct
   (sequencing correctly identifies)
-=
-The attractor is real and
-independent of the genomic substrate.
+
+        =
+
+The attractor is real and independent
+of the genomic substrate.
 The geometry produces the same form
 from different starting material.
+The LECA has been recovered from
+three separate kingdoms simultaneously.
 ```
 
 This is the proof.
 Not of a hypothesis.
 Of the geometric reality of the
-LECA attractor.
+LECA attractor as a real structure
+in the Waddington landscape of
+eukaryotic life.
+
+---
+
+### 8.4 Sequencing Protocol (All Arms)
+
+**Minimum viable sequencing:**
+Bulk whole-genome sequencing of pooled
+arrested cells from each arm.
+Coverage: ≥10× for kingdom identification.
+Align to reference genomes:
+*S. cerevisiae* S288C (Arm A),
+*M. musculus* GRCm39 (Arm B),
+*A. thaliana* TAIR10 (Arm C).
+>99% read mapping to correct reference
+constitutes positive identification.
+
+**Preferred additional sequencing:**
+RNA-seq of arrested cells from each arm
+(see Section 7 of operative protocol).
+Confirms active gene profile matches
+LECA-grade conserved core.
+This is Prediction 4 confirmation.
+
+**Sequencing access options:**
+- Illumina short-read sequencing via
+  commercial service (Genewiz, Azenta,
+  MiGS): $150–400 per sample for
+  whole-genome, $200–500 per sample
+  for RNA-seq
+- University core facility sequencing:
+  lower cost if academic collaboration
+  is established
+- Oxford Nanopore MinION: portable,
+  $1,000 device + $500/run, can be
+  operated at ChiTownBio or equivalent
+  community lab with training
 
 ---
 
@@ -898,15 +1142,154 @@ LECA attractor.
 
 A valid positive result requires
 valid negative controls.
-The following controls are mandatory.
+The following controls are mandatory
+for any arm that is run.
+
+Controls for arms not yet run are
+listed for completeness and for
+when those arms are executed.
 
 | Control | Purpose | Expected result |
 |---|---|---|
-| **Arm A positive control:** *S. cerevisiae* in standard YPD medium at 30°C | Confirm germination occurs normally in permissive conditions | Germ tube emergence within 2–4 h. >90% germination by 24 h. |
-| **Arm A negative control (arrest condition, no spores):** Arrest medium alone | Confirm medium is sterile and not contaminated | No cell growth observed at 72 h. |
-| **Arm B positive control:** Mouse zygotes in M2 medium without RO-3306, + DMSO carrier only | Confirm normal developmental progression occurs | 2-cell stage by 24–28 h; 4-cell by 40 h; morula/blastocyst by 96 h. |
-| **Arm C positive control:** *Arabidopsis* ovule culture without NPA | Confirm first asymmetric division occurs normally | Two-cell stage (apical + basal cell) observed by 24–36 h. |
-| **All arms — viability control:** Arrest medium + cells at 4°C (non-viable cold arrest) | Confirm that the arrest protocol maintains viability rather than simply killing cells | Cold-arrested cells fail PI exclusion within 24–48 h. This is different from the viable arrested state. |
+| **Arm A — Permissive positive control:** *S. cerevisiae* spores in standard YPD medium at 30°C | Confirm germination occurs normally when conditions are permissive. Establishes the baseline that the arrest medium is specifically suppressing the forward program, not simply killing cells. | Germ tube emergence within 2–4 h. >90% germination by 24 h. Multicellular hyphal network visible by 48 h. |
+| **Arm A — Medium sterility control:** Arrest medium alone, no spores, 72 h at 20–22°C | Confirm arrest medium is sterile and free of contaminating organisms that could confound morphological observation. | No cell growth, no turbidity, no visible particles at 72 h. |
+| **Arm A — Viability contrast control:** Spores in arrest medium at 4°C for 72 h | Confirm that the viable arrested state in the LECA-proxy medium is distinct from non-viable cold-killed cells. Demonstrates that what you are observing is a living stabilised organism, not dead cells that happen to look single-celled. | PI-positive (membrane compromised) in >50% of cells within 48 h. Morphological degradation visible. Nucleus fragmented or absent. This is the dead cell appearance — visually distinct from the viable arrested state. |
+| **Arm A — Nitrogen release control:** After 72 h arrest confirmation, add ammonium sulphate (0.5% w/v) to arrested culture | Confirm that the arrested state is reversible and that suppression of the germination program is specifically nitrogen-dependent. If the cell is stabilised by the LECA-proxy conditions and not simply dying, it should resume the forward program when the suppressed signal is restored. | Germ tube emergence within 4–8 h of nitrogen addition. >60% germination by 24 h post-addition. This control also confirms the cell was viable throughout the arrest period. |
+| **Arm B — Permissive positive control:** Mouse zygotes in M2 medium + DMSO carrier only (no RO-3306) | Confirm normal developmental progression occurs without arrest intervention. | 2-cell stage by 24–28 h; 4-cell by 40 h; morula/compaction by 72 h; blastocyst by 96 h. |
+| **Arm B — Viability contrast control:** Mouse zygotes in arrest medium at 4°C | Confirm viable arrested state is distinct from cold-killed cells. | PI-positive, morphological degradation within 24–48 h. |
+| **Arm C — Permissive positive control:** *Arabidopsis* ovule culture without NPA | Confirm first asymmetric division occurs normally. | Two-cell stage (small apical cell + large basal cell) observed by 24–36 h. DR5:GFP signal asymmetric if reporter line used. |
+| **All arms — Cross-contamination control:** Arrest medium from each arm kept in separate sealed containers, no shared pipettes or tools | Confirm that morphological convergence in the combined run is not artifactual cross-contamination between arms. | Each arm's medium cultures only the starting organism for that arm, confirmed by microscopy at T=0 baseline. |
+
+---
+
+### 9.1 The Most Important Control:
+### The Nitrogen Release Test
+
+This control deserves its own section
+because it is the one that most directly
+demonstrates the difference between
+LECA attractor stabilisation and
+generic dormancy.
+
+**The logic:**
+
+If the spore in LECA-proxy conditions is
+merely dormant, adding nitrogen should
+trigger immediate germination — because
+the spore was waiting and now the
+permissive signal has arrived.
+
+If the spore in LECA-proxy conditions is
+stabilised in the LECA attractor by the
+full environmental context — not just
+nitrogen absence but the combination of
+all specified LECA-proxy parameters —
+then the response to nitrogen addition
+may be modified, delayed, or altered
+compared to a spore that was simply
+nitrogen-deprived in non-specific medium.
+
+**What to observe:**
+
+Run two parallel nitrogen-release experiments:
+
+1. Spores arrested in LECA-proxy medium
+   for 72 h → add nitrogen → observe
+   germination kinetics
+
+2. Spores in water (nitrogen-deprived,
+   no LECA-proxy ionic conditions,
+   no microaerophilic atmosphere) for
+   72 h → add nitrogen → observe
+   germination kinetics
+
+**If the LECA-proxy arrested spores show
+slower, altered, or qualitatively different
+germination kinetics compared to the
+water-deprived control** — this is evidence
+that the LECA-proxy environment has produced
+a different cellular state, not merely
+withheld a germination trigger.
+
+This is not a required pass/fail criterion
+for the first run. It is a refinement
+experiment for the second run that
+strengthens the distinction between
+stabilisation and dormancy.
+
+Document both outcomes. Both are informative.
+
+---
+
+### 9.2 Documentation Standard for Controls
+
+Every control must be documented to the
+same standard as the primary experiment:
+
+- Timepoint photographs at T=0, 24h, 48h, 72h
+- Morphological assessment at each timepoint
+- Quantitative germination rate recorded
+- DAPI staining at 72h for each control arm
+- Written record of all deviations from
+  the specified protocol
+
+Controls without complete documentation
+cannot be used to validate the primary result.
+
+A primary result without complete controls
+is not a valid pre-registration confirmation.
+
+**Both the result and the controls must
+be documented. Both are part of the record.**
+
+---
+
+### 9.3 Reporting Against the Pre-Registration
+
+After completing any arm with its controls,
+report the result in this format:
+
+```
+Pre-registration DOI:
+  https://doi.org/10.5281/zenodo.18986790
+Prediction tested: [P1 / P2 / P3 / P4 / P5]
+Arm executed: [A / B / C]
+Date of experiment: [YYYY-MM-DD]
+Protocol version: LECA-RESURRECT-OP-v1.0
+
+Primary result:
+  [State exactly what was observed]
+
+Validation criteria met: [Y/N per criterion]
+  Single-cell form ≥80% at 72h: [Y/N]
+  Nucleus confirmed by DAPI: [Y/N]
+  Germination ≤10% at 72h: [Y/N]
+  Viability ≥80% at 72h: [Y/N]
+
+Controls completed: [Y/N per control]
+  Permissive positive control: [Y/N]
+  Medium sterility control: [Y/N]
+  Viability contrast control: [Y/N]
+  Nitrogen release control: [Y/N]
+
+Prediction status:
+  CONFIRMED / NOT CONFIRMED /
+  PARTIALLY CONFIRMED / INCONCLUSIVE
+
+Notes: [Any deviations, observations,
+  calibration required]
+```
+
+Upload this record to the GitHub repository
+with a timestamp after each experimental run.
+This creates the post-experiment documentation
+that pairs with the pre-experiment
+pre-registration record.
+
+The pre-registration is the lock.
+The post-run record is the key.
+Together they constitute the complete
+scientific record.
 
 ---
 

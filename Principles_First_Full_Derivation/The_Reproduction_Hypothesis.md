@@ -4,6 +4,8 @@
 ## OrganismCore — Eric Robert Lawson
 ## 2026-03-11
 
+# **[REPRODUCTION THEOREM IS HERE](https://github.com/Eric-Robert-Lawson/attractor-oncology/blob/main/Principles_First_Full_Derivation/Construction/Ediacaran/The_Reproduction_Theorem.md)**
+
 ---
 
 ## STATUS: ACTIVE — FORMAL HYPOTHESIS RECORD

@@ -15,3 +15,5 @@ I did the geometric derivation in following order: Dickinsonia, LECA, and LUCA.
 
 
 Pre-registration DOI: [https://doi.org/10.5281/zenodo.18986790](https://doi.org/10.5281/zenodo.18986790)
+
+LUCA Discovery DOI: [https://doi.org/10.5281/zenodo.18988844](https://doi.org/10.5281/zenodo.18988844)

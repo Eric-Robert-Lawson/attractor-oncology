@@ -7,6 +7,8 @@
 ## OrganismCore — Eric Robert Lawson
 ## 2026-03-12
 
+**DOI: [https://doi.org/10.5281/zenodo.18988844](https://doi.org/10.5281/zenodo.18988844)**
+
 ---
 
 ## STATUS: ACTIVE — VALIDATED GEOMETRIC DERIVATION

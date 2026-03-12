@@ -12,3 +12,6 @@ Dickinsonia = derivable, ediacaran life form, easy to develop but harder than LE
 
 
 I did the geometric derivation in following order: Dickinsonia, LECA, and LUCA. 
+
+
+Pre-registration DOI: [https://doi.org/10.5281/zenodo.18986790](https://doi.org/10.5281/zenodo.18986790)

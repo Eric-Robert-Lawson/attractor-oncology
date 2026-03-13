@@ -45,6 +45,15 @@ The derivation will make more
 sense after it does."
 ```
 
+and
+
+```
+```
+Success and failure of pre-registration is not what determines the success here, it is successfully deploying the protocol in a reproducible way and ensuring we understand the results correctly. If they match up with pre-registration the results are literal de-extinction. The other result is that they do not match pre-registration, which in itself is a statement revealing the geometric nature of life itself.
+
+There is actually no failure condition for running this experiment other than not running it properly, which is why I need your help.
+```
+```
 ---
 ## WHAT THIS DOCUMENT IS
 

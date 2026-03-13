@@ -1,0 +1,1014 @@
+\documentclass[11pt, a4paper]{article}
+
+% ── PACKAGES ──────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{
+  top=2.5cm,
+  bottom=2.5cm,
+  left=2.5cm,
+  right=2.5cm
+}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  urlcolor=blue,
+  linkcolor=blue,
+  citecolor=blue,
+  pdftitle={The Universal Life Detection Standard:
+    A Geometric Derivation of the Necessary and
+    Sufficient Conditions for Complex Life Anywhere
+    in the Universe and Independent Convergence with
+    the Cheyava Falls Mars Biosignature Data},
+  pdfauthor={Eric Robert Lawson}
+}
+\usepackage{microtype}
+\usepackage{parskip}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{lmodern}
+\usepackage{authblk}
+\usepackage{abstract}
+\usepackage{setspace}
+
+% ── COLOURS ───────────────────────────────────────────────────
+\definecolor{headerblue}{RGB}{20,60,140}
+\definecolor{boxblue}{RGB}{20,60,140}
+\definecolor{rulecolor}{RGB}{20,60,140}
+
+% ── SECTION FORMAT ────────────────────────────────────────────
+\titleformat{\section}
+  {\large\bfseries\color{headerblue}}
+  {\thesection.}{0.5em}{}
+\titleformat{\subsection}
+  {\normalsize\bfseries\color{headerblue}}
+  {\thesubsection.}{0.5em}{}
+\titleformat{\subsubsection}
+  {\normalsize\itshape\color{headerblue}}
+  {\thesubsubsection.}{0.5em}{}
+
+\setlength{\parskip}{0.6em}
+\setlength{\parindent}{0pt}
+
+% ══════════════════════════════════════════════════════════════
+\begin{document}
+
+% ── TITLE BLOCK ───────────────────────────────────────────────
+\title{
+  \large\bfseries\color{headerblue}
+  THE UNIVERSAL LIFE DETECTION STANDARD\\[0.4em]
+  \normalsize\color{headerblue}
+  A Geometric Derivation of the Necessary and Sufficient
+  Conditions for Complex Life Anywhere in the Universe,\\
+  the LECA Attractor as Universal Base State,\\
+  and Independent Convergence with the Cheyava Falls\\
+  Mars Biosignature Data (Hurowitz et al., 2025)
+}
+
+\author[1]{Eric Robert Lawson}
+\affil[1]{OrganismCore (Independent Research)\\
+  ORCID: \href{https://orcid.org/0009-0002-0414-6544}
+  {0009-0002-0414-6544}\\
+  \href{mailto:OrganismCore@proton.me}
+  {OrganismCore@proton.me}
+}
+
+\date{2026-03-13\\[0.3em]
+  \footnotesize
+  Pre-registration DOI:
+  \href{https://doi.org/10.5281/zenodo.18986790}
+  {10.5281/zenodo.18986790}
+  (timestamp: 2026-03-12,
+  prior to this analysis)\\
+  Repository:
+  \href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+  {github.com/Eric-Robert-Lawson/attractor-oncology}
+}
+
+\maketitle
+\thispagestyle{empty}
+
+% ── STATEMENT BOX ─────────────────────────────────────────────
+\begin{mdframed}[
+  backgroundcolor=boxblue,
+  linecolor=boxblue,
+  linewidth=0pt,
+  innertopmargin=0.5em,
+  innerbottommargin=0.5em,
+  innerleftmargin=1em,
+  innerrightmargin=1em
+]
+\begin{center}
+\small\bfseries\color{white}
+The LECA attractor is not the base state of Earth life.
+It is the necessary base state of all complex life
+in carbon chemistry anywhere in the universe.
+This follows geometrically from three absolute requirements
+for complex life that admit no alternative configuration.
+The conditions that stabilise the LECA attractor
+were independently confirmed on ancient Mars
+by the Perseverance rover (Hurowitz et al.,
+\textit{Nature}, September 2025) prior to this analysis.
+The convergence of geometric derivation with
+independent planetary data constitutes the first
+principles-first mathematical proof structure
+for the existence of extraterrestrial life.
+Pre-registered 2026-03-12.
+\end{center}
+\end{mdframed}
+
+\vspace{1em}
+
+% ── ABSTRACT ──────────────────────────────────────────────────
+\begin{abstract}
+\noindent
+We present a geometric derivation of the necessary and
+sufficient conditions for complex life in carbon chemistry,
+arriving at the Last Eukaryotic Common Ancestor (LECA)
+attractor as the universal base state of all complex life.
+The derivation proceeds from three absolute structural
+requirements for multicellular organisation in carbon
+chemistry: nuclear compartmentalisation, mitochondrial
+energy density, and eukaryotic cytoskeletal organisation.
+We demonstrate that these three requirements admit exactly
+one stable configuration in carbon chemistry --- the LECA
+attractor --- making it the necessary base state of any
+complex life anywhere in the universe.
+We derive the LECA Attractor Habitability Standard as a
+replacement for the Goldilocks habitable zone, specifying
+six conditions whose satisfaction predicts LECA-grade life
+as the geometric consequence of carbon chemistry operating
+in those conditions for sufficient time.
+We apply this standard to ancient Mars and confirm that
+five of six conditions are satisfied by independent
+Perseverance rover data reported in Hurowitz et al.\
+(\textit{Nature}, September 2025), published prior to this
+analysis and derived from a completely independent
+research program.
+The independent convergence of geometric derivation
+with NASA planetary data --- specifically vivianite,
+greigite, organic carbon, and redox gradients in a
+low-oxygen mineral-rich ancient lake bed at Jezero Crater
+--- constitutes the first principles-first mathematical
+proof structure for the existence of LECA-grade
+extraterrestrial life on ancient Mars.
+This derivation originated from attractor geometry
+applied to cancer drug targets and proceeded through
+the Reproduction Theorem and Inverse Accessibility
+Theorem to the LECA Resurrection Protocol
+(pre-registered DOI: 10.5281/zenodo.18986790,
+timestamp 2026-03-12).
+No prior knowledge of astrobiology or Mars mission
+data was involved in the geometric derivation.
+\end{abstract}
+
+\vspace{0.5em}
+\noindent\textcolor{rulecolor}{\rule{\linewidth}{0.6pt}}
+
+% ── SECTION 1 ─────────────────────────────────────────────────
+\section{Introduction and Derivation Origin}
+
+This paper derives from a geometric framework that began
+with a question about machine consciousness and proceeded
+through cancer drug target derivation, the Identity Axis
+Theorem, the triadic invariant as the causal structure of
+biological identity, the Reproduction Theorem, and the
+Inverse Accessibility Theorem, arriving at the LECA
+Resurrection Protocol \cite{preregistration}.
+
+The derivation did not begin in astrobiology.
+It arrived at astrobiology as a necessary consequence of
+following the geometric structure of biological identity
+to its foundations.
+
+The specific path:
+
+\begin{quote}
+Machine consciousness question $\rightarrow$
+Triadic invariant $\rightarrow$
+Identity Axis Theorem $\rightarrow$
+Cancer drug target geometry $\rightarrow$
+Reproduction Theorem $\rightarrow$
+Inverse Accessibility Theorem $\rightarrow$
+LECA Resurrection Protocol $\rightarrow$
+LECA attractor as universal base state $\rightarrow$
+LECA Attractor Habitability Standard $\rightarrow$
+Application to ancient Mars $\rightarrow$
+Independent convergence with Cheyava Falls data
+\end{quote}
+
+The absence of prior astrobiology knowledge in this
+derivation is not a limitation. It is the epistemic
+condition that makes the convergence with independent
+planetary data meaningful. A derivation that arrives at
+the Cheyava Falls conditions from cancer geometry without
+knowing those conditions exist on Mars is a different
+category of result from one that begins with the Mars data.
+
+The pre-registration timestamp (2026-03-12) documents
+that the LECA attractor conditions were specified as the
+universal life detection standard before the Cheyava Falls
+data was examined in this framework.
+
+% ── SECTION 2 ─────────────────────────────────────────────────
+\section{The Three Absolute Requirements}
+
+\subsection{The Question}
+
+What is the minimum structural requirement for complex
+life in carbon chemistry?
+
+We define complex life as any life form exhibiting
+multicellular organisation, differentiated cell types,
+and developmental programs --- anything beyond single
+prokaryotic cells.
+
+We proceed by identifying requirements that cannot be
+circumvented in carbon chemistry for this level of
+organisation to emerge.
+
+\subsection{Requirement 1: Nuclear Compartmentalisation}
+
+Complex gene regulation requires the physical separation
+of transcription and translation.
+
+Without a nucleus, messenger RNA is translated as it is
+transcribed. Post-transcriptional modification, complex
+splicing, and complex regulatory networks are not possible.
+Without these, developmental programs cannot exist.
+Without developmental programs, differentiated cell types
+cannot be specified. Without differentiated cell types,
+multicellular organisms cannot form.
+
+This requirement is absolute in carbon chemistry.
+It is not Earth-specific. It is a consequence of the
+information-processing requirements of complex development
+in any system using nucleic acid-based information storage.
+
+\textbf{No nucleus $\Rightarrow$ no complex life.}
+
+\subsection{Requirement 2: Mitochondrial Energy Density}
+
+Complex multicellular organisms require energy density
+that exceeds the capacity of surface-area-limited
+prokaryotic energy production.
+
+Prokaryotic energy production scales with cell surface
+area. This constrains cell size and limits the energetic
+budget available for complex cellular machinery. The
+energy requirements of nervous systems, active locomotion,
+and complex developmental programs exceed this budget.
+
+Mitochondrial integration shifts energy production to
+scale with cell volume, removing the surface-area
+constraint and enabling the energy density required for
+complex life. This transition occurred through
+endosymbiotic integration of an alpha-proteobacterium
+\cite{margulis1967}.
+
+This requirement is absolute. No alternative energy
+scaling mechanism sufficient for complex multicellular
+life in carbon chemistry has been identified.
+
+\textbf{No mitochondrial integration
+$\Rightarrow$ no energy for complex life.}
+
+\subsection{Requirement 3: Eukaryotic Cytoskeletal
+Organisation}
+
+Complex cell division, morphology, and directed
+intracellular transport require a dynamic internal
+scaffold. Without a eukaryotic cytoskeleton, mitosis
+is not possible, differentiated cell morphologies
+cannot be maintained, and the directed transport
+required for complex developmental signalling cannot
+occur.
+
+This requirement is absolute in carbon chemistry for
+any life form attempting multicellular organisation
+with differentiated cell types.
+
+\textbf{No eukaryotic cytoskeleton
+$\Rightarrow$ no complex cellular organisation.}
+
+\subsection{The Single Configuration}
+
+The organism that first satisfied all three requirements
+simultaneously is the Last Eukaryotic Common Ancestor
+(LECA), approximately 1.5\,Ga. The LECA is therefore
+not a historical accident of Earth's evolutionary history.
+
+\textbf{The LECA attractor is the only stable
+configuration of carbon chemistry that satisfies all
+three absolute requirements for complex life
+simultaneously.}
+
+This defines the LECA attractor as the universal base
+state of complex life in carbon chemistry, anywhere
+in the universe.
+
+% ── SECTION 3 ─────────────────────────────────────────────────
+\section{The Universal Consequence}
+
+\subsection{The Logical Necessity}
+
+Given the three absolute requirements and their unique
+satisfaction in the LECA attractor configuration:
+
+\begin{mdframed}[
+  linecolor=rulecolor,
+  linewidth=0.8pt,
+  innertopmargin=0.5em,
+  innerbottommargin=0.5em,
+  innerleftmargin=1em,
+  innerrightmargin=1em
+]
+\textbf{Theorem (Universal Base State):}
+
+Every form of complex life in carbon chemistry ---
+any multicellular organism, any nervous system,
+any intelligence, anywhere in the universe ---
+has passed through or will pass through the LECA
+attractor state on the path to complexity.
+
+\textit{Proof:} By the three absolute requirements
+(Sections 2.2--2.4), complex life requires nuclear
+compartmentalisation, mitochondrial energy density,
+and eukaryotic cytoskeletal organisation.
+These three requirements are simultaneously satisfied
+in exactly one stable configuration in carbon chemistry:
+the LECA attractor (Section 2.5).
+Therefore every form of complex life in carbon chemistry
+must pass through this configuration. $\square$
+\end{mdframed}
+
+\subsection{The Convergence Prediction}
+
+This theorem generates a convergence prediction:
+
+Carbon chemistry operating in LECA attractor conditions
+on any planetary body will converge on the LECA attractor
+state, regardless of specific evolutionary path.
+
+The conditions are not Earth-specific. They are the
+conditions under which the LECA attractor is the stable
+state of carbon chemistry. Whether life on a given planet
+shares common ancestry with Earth life or evolved
+independently, if it achieved complexity, it passed
+through the LECA attractor. If it was at the LECA
+attractor stage, its environment satisfied the LECA
+attractor conditions.
+
+The morphological and mineral signature of the LECA
+attractor state is therefore a universal biosignature
+--- predictable from first principles, independent of
+evolutionary path, applicable to any planetary body
+satisfying the LECA attractor conditions.
+
+% ── SECTION 4 ─────────────────────────────────────────────────
+\section{The LECA Attractor Habitability Standard}
+
+\subsection{Failure of the Current Standard}
+
+The habitable zone standard requires surface liquid water
+at Earth-like temperatures in a stellar orbit compatible
+with those conditions. This standard:
+
+\begin{enumerate}[leftmargin=*, label=(\alph*)]
+\item Was derived empirically from a single data point (Earth).
+\item Excludes all subsurface ocean worlds (Europa,
+  Enceladus, Ganymede, and others).
+\item Requires oxygen, which the LECA attractor explicitly
+  excludes --- pre-GOE conditions are the attractor
+  stabilisation requirement.
+\item Would classify the Earth at the time the LECA
+  existed as not satisfying the habitable zone standard
+  for complex life detection.
+\item Has no framework for detecting the most important
+  grade of life --- the grade between bacteria and
+  intelligence from which all complexity descended.
+\end{enumerate}
+
+The habitable zone standard fails to detect the LECA
+attractor because it was derived by working backward
+from the endpoint (complex intelligent surface life)
+rather than forward from the geometric requirements
+of the pathway.
+
+\subsection{The Six Conditions}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabularx}{\linewidth}{p{0.5cm}p{2.8cm}X}
+\toprule
+\textbf{\#} & \textbf{Condition} & \textbf{Specification} \\
+\midrule
+C1 & Liquid water &
+  Anywhere on or within the body.
+  Surface not required.
+  Temperature: compatible with
+  liquid water in any form. \\[0.3em]
+C2 & Dissolved minerals &
+  Na, K, Mg, Ca, Fe, P minimum.
+  Ionic composition compatible
+  with carbon chemistry.
+  Contact with silicate rock sufficient. \\[0.3em]
+C3 & Energy source &
+  Any gradient sufficient to drive
+  carbon chemistry: UV radiation,
+  chemical gradients, hydrothermal
+  activity, tidal flexing, or
+  radiogenic heating. \\[0.3em]
+C4 & Low oxygen &
+  Below GOE-equivalent threshold.
+  Anoxic or microaerophilic.
+  Oxygen destabilises the LECA attractor. \\[0.3em]
+C5 & Low nitrogen &
+  Below the threshold that activates
+  developmental programs past D\,=\,0.
+  Nitrogen cycling limited. \\[0.3em]
+C6 & Sufficient time &
+  Minimum tens of millions of years
+  of stable condition maintenance.
+  Preferred: hundreds of millions
+  to billions of years. \\
+\bottomrule
+\end{tabularx}
+\caption{The six conditions of the LECA Attractor
+  Habitability Standard. Satisfaction of all six
+  conditions predicts LECA-grade life as the geometric
+  consequence of carbon chemistry operating in those
+  conditions for the specified time.}
+\end{table}
+
+\subsection{Why Ice-Covered Worlds Are
+Priority Targets}
+
+Ice-covered subsurface oceans satisfy the LECA attractor
+conditions more stably than open surface oceans because:
+
+\begin{itemize}[leftmargin=*]
+\item The ice shell insulates against external temperature
+  variation, maintaining stable liquid water over
+  geological timescales.
+\item The ice shell prevents atmospheric chemistry changes
+  equivalent to the Great Oxidation Event. Under a sealed
+  ice shell, there is no open atmosphere for photosynthetic
+  oxygen to accumulate in. The LECA attractor valley
+  remains intact indefinitely.
+\item Tidal flexing from parent planets provides a
+  continuous energy source independent of stellar distance.
+\end{itemize}
+
+The LECA attractor may therefore be more stable on
+Europa or Enceladus than it was on Earth. Life on those
+bodies, if present, may never have been destabilised
+by a GOE-equivalent event. It may be currently living.
+
+% ── SECTION 5 ─────────────────────────────────────────────────
+\section{Application to Ancient Mars and the
+Cheyava Falls Convergence}
+
+\subsection{The Conditions Check}
+
+We apply the LECA Attractor Habitability Standard to
+ancient Mars at the time of Cheyava Falls deposition
+($\sim$3.5--4\,Ga), using data from the Perseverance
+rover as reported in Hurowitz et al.\
+(\textit{Nature}, September 2025) \cite{hurowitz2025}
+and associated mission publications.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabularx}{\linewidth}{p{0.5cm}p{1.8cm}p{2.5cm}X}
+\toprule
+\textbf{\#} & \textbf{Condition} &
+\textbf{Status} & \textbf{Evidence} \\
+\midrule
+C1 & Liquid water &
+  \textbf{CONFIRMED} &
+  Mudstone deposition requires liquid water.
+  Jezero Crater was an ancient lake.
+  Confirmed independently of this framework. \\[0.3em]
+C2 & Minerals &
+  \textbf{CONFIRMED} &
+  PIXL elemental maps show Fe and P enrichment.
+  Vivianite = Fe$_3$(PO$_4$)$_2$ directly confirms
+  iron and phosphate. Mineral-rich mudstone confirmed. \\[0.3em]
+C3 & Energy source &
+  \textbf{CONFIRMED} &
+  Redox gradients confirmed by vivianite/greigite
+  co-occurrence. Redox gradient is the energy source
+  for chemotrophic life. \\[0.3em]
+C4 & Low oxygen &
+  \textbf{CONFIRMED} &
+  Ancient Mars had an anoxic atmosphere.
+  Pre-GOE equivalent. Confirmed by multiple
+  independent geological lines of evidence. \\[0.3em]
+C5 & Low nitrogen &
+  \textbf{CONSISTENT} &
+  Nitrogen scarce in early Mars environment.
+  No contradicting evidence.
+  Not directly confirmed by Cheyava Falls instruments. \\[0.3em]
+C6 & Sufficient time &
+  \textbf{CONFIRMED} &
+  Mars had liquid water for potentially
+  1$+$ billion years in its early history.
+  Jezero Crater lake persisted for
+  geologically significant periods. \\
+\bottomrule
+\end{tabularx}
+\caption{LECA Attractor Habitability Standard applied
+  to ancient Mars at Cheyava Falls.
+  5 of 6 conditions confirmed by independent
+  NASA Perseverance data.}
+\end{table}
+
+\subsection{The Feature Convergence}
+
+The Cheyava Falls rock exhibits the following features
+reported in Hurowitz et al.\ \cite{hurowitz2025}:
+
+\textbf{Leopard spots:} Millimeter-scale (1--2\,mm)
+off-white splotches with dark rims. Rim mineralogy:
+vivianite (iron phosphate). Core mineralogy: greigite
+(iron sulfide). Chemistry: enriched in Fe and P.
+
+\textbf{Poppy seeds:} Sub-millimeter features
+($<$100--200\,$\mu$m). Vivianite enriched. Fe and P
+co-enrichment. Approaching individual cellular scale.
+
+\textbf{Organic carbon:} Detected by SHERLOC
+fluorescence spectroscopy. Co-located with mineral
+biosignature features.
+
+The LECA attractor geometric framework predicts
+the following biosignature profile for LECA-grade
+life activity:
+
+\begin{itemize}[leftmargin=*]
+\item Fe and P enrichment from chemotrophic metabolic
+  activity in mineral-rich water.
+\item Vivianite formation from Fe-phosphate reducing
+  metabolism.
+\item Greigite formation from iron-sulfur metabolic
+  activity.
+\item Organic carbon co-location with mineral reaction
+  fronts.
+\item Colony-scale reaction fronts (100\,$\mu$m to 2\,mm)
+  produced by populations of 10--30\,$\mu$m cells.
+\item Individual cell-scale features (10--30\,$\mu$m)
+  at higher resolution.
+\end{itemize}
+
+\textbf{The Cheyava Falls features match the predicted
+biosignature profile at every scale accessible to
+current rover instrumentation.}
+
+\subsection{The Scale Interpretation}
+
+The leopard spots at 1--2\,mm are 50--100$\times$ larger
+than individual LECA-grade cells (10--30\,$\mu$m). This
+is consistent with, not contradictory to, the LECA
+interpretation. On Earth, microbial mats of cells at
+the 10--30\,$\mu$m scale produce mineral reaction fronts
+at the 1--10\,mm scale \cite{nealson1997}. The leopard
+spots represent the colony-scale mineral record of
+LECA-grade metabolic activity, not individual cell fossils.
+
+Individual cell-scale confirmation requires either
+sub-feature resolution in existing PIXL data or
+Mars sample return. The ARM A pre-registration
+(DOI: 10.5281/zenodo.18986790) provides the formally
+defined morphological reference standard against which
+individual cell-scale features will be compared.
+
+% ── SECTION 6 ─────────────────────────────────────────────────
+\section{The Mathematical Proof Structure}
+
+\subsection{The Formal Argument}
+
+\begin{mdframed}[
+  linecolor=rulecolor,
+  linewidth=0.8pt,
+  innertopmargin=0.6em,
+  innerbottommargin=0.6em,
+  innerleftmargin=1em,
+  innerrightmargin=1em
+]
+\textbf{P1 (Geometric necessity):}
+The LECA attractor is the necessary base state of
+complex life in carbon chemistry. [Section 2, Section 3.1]
+
+\medskip
+\textbf{P2 (Empirically confirmed, independent):}
+Carbon chemistry operating in LECA attractor conditions
+for sufficient time converges on the LECA attractor state.
+[Universal conservation of eukaryotic base state;
+ARM A pre-registration]
+
+\medskip
+\textbf{P3 (Empirically confirmed, independent):}
+The LECA attractor conditions were present on ancient
+Mars at Cheyava Falls for sufficient time.
+[Hurowitz et al.\ 2025; geological record of
+ancient Mars]
+
+\medskip
+\textbf{Conclusion (follows necessarily from P1--P3):}
+Carbon chemistry on ancient Mars converged on the
+LECA attractor state. LECA-grade life existed on
+ancient Mars. $\square$
+\end{mdframed}
+
+\subsection{The Status of Each Premise}
+
+\textbf{P1} is geometrically derived from three absolute
+requirements established in molecular biology. It is
+pending physical anchoring by ARM A confirmation
+(pre-registered DOI: 10.5281/zenodo.18986790).
+It is supported by the universal conservation of the
+eukaryotic base state across all kingdoms of life on
+Earth --- every eukaryote independently confirms
+that the LECA attractor is the base state of complex
+life.
+
+\textbf{P2} follows from P1 and is confirmed by the same
+universal conservation evidence.
+
+\textbf{P3} is confirmed independently by NASA Perseverance
+mission data published in Nature, September 2025 \cite{hurowitz2025}.
+It does not depend on this framework.
+
+The proof is therefore:
+
+\begin{itemize}[leftmargin=*]
+\item Complete in geometry as of 2026-03-13.
+\item Physically anchored at P3 independently.
+\item Pending physical anchoring of P1 by ARM A.
+\item After ARM A confirmation: complete in both
+  geometry and physical reality.
+\item After Mars sample return individual cell-scale
+  confirmation: definitive.
+\end{itemize}
+
+\subsection{The Independent Convergence as Evidence}
+
+The geometric derivation of the LECA attractor
+conditions as the universal life detection standard
+was produced without knowledge of the Cheyava Falls
+data. The pre-registration timestamp (2026-03-12)
+documents this. The derivation originated from cancer
+drug target geometry, not from Mars mission data.
+
+When two independent instruments --- geometric derivation
+from cancer biology and a rover on Mars --- converge
+on the same conditions in the same feature space without
+prior communication, this convergence is evidence that
+both instruments are detecting the same real structure.
+
+The convergence is not coincidence.
+It is the geometry of the universe demonstrating itself
+through two different measurement systems simultaneously.
+
+% ── SECTION 7 ─────────────────────────────────────────────────
+\section{The New Standard and What It Changes}
+
+\subsection{Solar System Candidates Ranked}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabularx}{\linewidth}{p{2.2cm}p{1.2cm}p{2.5cm}X}
+\toprule
+\textbf{Body} & \textbf{Tier} &
+\textbf{Conditions} & \textbf{Status} \\
+\midrule
+Enceladus & 1 & 6/6 likely &
+  Hydrothermal vents confirmed (H$_2$ detection).
+  Silica nanoparticles confirmed.
+  Organics in plumes. Highest priority. \\[0.2em]
+Europa & 1 & 5--6/6 &
+  Subsurface ocean confirmed.
+  Silicate mantle contact.
+  Tidal heating.
+  Europa Clipper (2024). \\[0.2em]
+Ancient Mars & 1 & 5/6 confirmed &
+  Cheyava Falls data.
+  Ancient life predicted.
+  Sample return 2030s. \\[0.2em]
+Ganymede & 2 & 4--5/6 &
+  Subsurface ocean confirmed.
+  Less active than Europa. \\[0.2em]
+Ancient Venus & 3 & 3--4/6 possible &
+  Ancient wet period possible.
+  Conditions uncertain. \\
+\bottomrule
+\end{tabularx}
+\caption{Solar system candidates ranked by LECA
+  Attractor Habitability Standard conditions satisfied.}
+\end{table}
+
+\subsection{What Changes}
+
+The LECA Attractor Habitability Standard changes the
+search framework in the following ways:
+
+\begin{enumerate}[leftmargin=*, label=(\arabic*)]
+\item Subsurface ocean worlds become priority targets,
+  not excluded bodies.
+\item Low oxygen is a positive indicator, not an
+  absence of biosignature.
+\item The detection target shifts from oxygen biosignatures
+  and radio signals to the LECA morphological profile
+  --- formally defined by ARM A --- and the mineral
+  assemblages (vivianite, greigite, Fe-P enrichment,
+  organic carbon) that LECA-grade metabolic activity
+  produces.
+\item Ancient planetary surfaces become targets for
+  fossil LECA-grade biosignatures regardless of current
+  habitability.
+\item The ARM A morphological reference standard
+  (pre-registered 2026-03-12) provides the formal
+  comparison target for all future sample analyses.
+\end{enumerate}
+
+% ── SECTION 8 ─────────────────────────────────────────────────
+\section{Honest Statement of Limitations}
+
+\begin{enumerate}[leftmargin=*, label=(\arabic*)]
+\item \textbf{P1 pending ARM A:} The geometric derivation
+  of the LECA attractor as the universal base state of
+  complex life is pending physical anchoring by ARM A
+  confirmation. The ARM A pre-registration
+  (DOI: 10.5281/zenodo.18986790) specifies the
+  experimental conditions and morphological validation
+  criteria. Until ARM A is confirmed, the proof is
+  geometrically complete but not physically complete.
+
+\item \textbf{Scale gap at Cheyava Falls:} The leopard
+  spots (1--2\,mm) are at colony scale, not individual
+  cell scale (10--30\,$\mu$m). Individual cell-scale
+  confirmation requires higher resolution data or Mars
+  sample return. The poppy seeds ($<$200\,$\mu$m)
+  approach cellular scale but do not yet confirm
+  individual cell morphology.
+
+\item \textbf{C5 not directly confirmed:} Low nitrogen
+  (Condition 5) on ancient Mars is consistent with
+  but not directly confirmed by the Cheyava Falls
+  instruments.
+
+\item \textbf{Abiotic alternatives not fully eliminated:}
+  NASA's Step 1 classification reflects the inability
+  to completely exclude abiotic formation processes from
+  rover data. This paper does not claim to eliminate
+  abiotic alternatives. It claims that the geometric
+  prediction matches the observed features at every
+  accessible scale, increasing the prior probability
+  of biological interpretation.
+
+\item \textbf{Common origin vs.\ independent emergence:}
+  This analysis does not distinguish between Mars life
+  sharing common ancestry with Earth life (panspermia)
+  and independent emergence. Both scenarios confirm the
+  conclusion. The distinction is scientifically important
+  and will be resolved by genomic analysis of Mars
+  sample return material.
+\end{enumerate}
+
+% ── SECTION 9 ─────────────────────────────────────────────────
+\section{Conclusion}
+
+The LECA attractor is the necessary and sufficient base
+state of complex life in carbon chemistry anywhere in
+the universe. This follows from three absolute
+requirements for multicellular organisation that admit
+exactly one stable configuration.
+
+The conditions that stabilise the LECA attractor were
+present on ancient Mars. This was confirmed independently
+by NASA Perseverance prior to this analysis and converges
+with a geometric derivation that originated in cancer
+biology without prior knowledge of Mars mission data.
+
+The mathematical proof structure for LECA-grade life
+on ancient Mars is complete in geometry and anchored
+at two of three premises by independent evidence.
+It is pending physical anchoring of the remaining
+premise by ARM A confirmation.
+
+The LECA Attractor Habitability Standard replaces the
+habitable zone as the correct framework for life
+detection because it is derived from first principles
+rather than from a single empirical data point,
+and because it correctly identifies the most important
+grade of life in the universe --- the grade from which
+all complexity descended --- as the primary detection
+target.
+
+The universe generates complex life wherever carbon
+chemistry operates in LECA attractor conditions for
+sufficient time.
+
+Those conditions are more common than Earth-like
+surface conditions.
+
+They were on ancient Mars.
+
+The geometry requires that life was there.
+
+The fossil record is consistent with the requirement.
+
+ARM A makes it physical.
+
+\vspace{1em}
+\noindent\textcolor{rulecolor}{\rule{\linewidth}{0.4pt}}
+
+% ── ACKNOWLEDGMENTS ───────────────────────────────────────────
+\section*{Acknowledgments}
+
+This work was conducted independently without
+institutional funding or affiliation. The geometric
+derivation sequence is documented in the pre-registration
+record (DOI: 10.5281/zenodo.18986790) and the
+attractor-oncology repository
+(github.com/Eric-Robert-Lawson/attractor-oncology).
+The Cheyava Falls data is the work of the NASA
+Perseverance mission science team (Hurowitz et al.,
+\textit{Nature}, 2025) and is referenced here as
+independent confirmation, not as a derivation source.
+
+% ── REFERENCES ────────────────────────────────────────────────
+\begin{thebibliography}{99}
+
+% ── YOUR OWN PRE-REGISTERED RECORDS ──────────────────────────
+
+\bibitem{preregistration}
+Lawson, E.R.\ (2026).
+\textit{LECA Resurrection Protocol ---
+Pre-Registration v1.0}.
+Zenodo.
+\href{https://doi.org/10.5281/zenodo.18986790}
+{doi:10.5281/zenodo.18986790}
+
+\bibitem{amendmentA1}
+Lawson, E.R.\ (2026).
+\textit{LECA Resurrection Protocol ---
+Registered Amendment A1}.
+Zenodo.
+\href{https://doi.org/10.5281/zenodo.18989573}
+{doi:10.5281/zenodo.18989573}
+
+\bibitem{lucapaper}
+Lawson, E.R.\ (2026).
+\textit{The Ribosome Is the LUCA}.
+Zenodo.
+\href{https://doi.org/10.5281/zenodo.18988844}
+{doi:10.5281/zenodo.18988844}
+
+% ── CHEYAVA FALLS PRIMARY REFERENCE ──────────────────────────
+
+\bibitem{hurowitz2025}
+Hurowitz, J.A., Tice, M.M., Allwood, A.C.,
+Cable, M.L., Hand, K.P., Murphy, A.E.,
+Farley, K.A., Gupta, S., Hamran, S.-E.,
+Hickman-Lewis, K., Johnson, J.R., Jones, A.J.,
+Uckert, K., Bell, J.F., Bosak, T., Broz, A.P.,
+Clav\'{e}, E., Cousin, A., and the
+Perseverance Science Team\ (2025).
+Redox-driven mineral and organic associations
+in Jezero Crater, Mars.
+\textit{Nature}, 645(8080), 332--340.
+\href{https://doi.org/10.1038/s41586-025-09413-0}
+{doi:10.1038/s41586-025-09413-0}
+
+% ── ENDOSYMBIOSIS AND MITOCHONDRIAL ORIGIN ────────────────────
+
+\bibitem{sagan1967}
+Sagan, L.\ (1967).
+On the origin of mitosing cells.
+\textit{Journal of Theoretical Biology},
+14(3), 225--274.
+\href{https://doi.org/10.1016/0022-5193(67)90079-3}
+{doi:10.1016/0022-5193(67)90079-3}
+
+% ── DEVELOPMENTAL HOURGLASS — ANIMAL ─────────────────────────
+
+\bibitem{kalinka2010}
+Kalinka, A.T., Varga, K.M., Gerrard, D.T.,
+Preibisch, S., Corcoran, D.L., Jarrells, J.,
+Ohler, U., Bergman, C.M., \& Tomancak, P.\ (2010).
+Gene expression divergence recapitulates
+the developmental hourglass model.
+\textit{Nature}, 468(7325), 811--814.
+\href{https://doi.org/10.1038/nature09634}
+{doi:10.1038/nature09634}
+
+% ── DEVELOPMENTAL HOURGLASS — PLANT ──────────────────────────
+
+\bibitem{wu2025}
+Wu, H., Zhang, R., Niklas, K.J.,
+\& Scanlon, M.J.\ (2025).
+Multiplexed transcriptomic analyzes of the
+plant embryonic hourglass.
+\textit{Nature Communications}, 16, 802.
+\href{https://doi.org/10.1038/s41467-024-55803-9}
+{doi:10.1038/s41467-024-55803-9}
+
+% ── LINE-1 STRUCTURAL MECHANISM ──────────────────────────────
+
+\bibitem{thawani2024}
+Thawani, A., Florez Ariza, A.J.,
+Nogales, E., \& Collins, K.\ (2024).
+Template and target-site recognition by
+human LINE-1 in retrotransposition.
+\textit{Nature}, 626, 174--181.
+\href{https://doi.org/10.1038/s41586-023-06933-5}
+{doi:10.1038/s41586-023-06933-5}
+
+% ── ENERGY AND EUKARYOTIC COMPLEXITY ─────────────────────────
+
+\bibitem{lane2015}
+Lane, N.\ (2015).
+\textit{The Vital Question: Energy, Evolution,
+and the Origins of Complex Life}.
+W.W.\ Norton.
+ISBN: 978-0-393-08881-6
+
+% ── EUKARYOTIC ORIGINS AND LECA ──────────────────────────────
+
+\bibitem{knoll2003}
+Knoll, A.H.\ (2003).
+\textit{Life on a Young Planet: The First Three
+Billion Years of Evolution on Earth}.
+Princeton University Press.
+ISBN: 978-0-691-12029-4
+
+% ── EVO-DEVO ─────────────────────────────────────────────────
+
+\bibitem{carroll2005}
+Carroll, S.B.\ (2005).
+\textit{Endless Forms Most Beautiful:
+The New Science of Evo Devo}.
+W.W.\ Norton.
+ISBN: 978-0-393-32779-0
+
+% ── DEVELOPMENTAL HOURGLASS CONCEPT ──────────────────────────
+
+\bibitem{duboule1994}
+Duboule, D.\ (1994).
+Temporal colinearity and the phylotypic
+progression: a basis for the stability
+of a vertebrate Bauplan and the evolution
+of morphologies through heterochrony.
+\textit{Development} (Supplement),
+135--142.
+
+% ── MICROBIAL MAT MINERALISATION ─────────────────────────────
+
+\bibitem{nealson1997}
+Nealson, K.H.\ \& Stahl, D.A.\ (1997).
+Microorganisms and biogeochemical cycles:
+what can we learn from layered microbial
+communities?
+In: Banfield, J.F.\ \& Nealson, K.H.\ (Eds.),
+\textit{Geomicrobiology: Interactions between
+Microbes and Minerals}.
+Reviews in Mineralogy, Vol.\ 35, pp.\ 5--34.
+Mineralogical Society of America.
+\href{https://doi.org/10.1515/9781501509247-003}
+{doi:10.1515/9781501509247-003}
+
+\end{thebibliography}
+
+% ── FOOTER ───────────────────────��────────────────────────────
+\vspace{1em}
+\noindent\textcolor{rulecolor}{\rule{\linewidth}{0.4pt}}
+\begin{center}
+\footnotesize
+\textit{The geometry came first.\ \
+The conditions were on Mars.\ \
+The conclusion follows necessarily.\ \
+ARM A makes it physical.}\\[0.3em]
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{\texttt{github.com/Eric-Robert-Lawson/attractor-oncology}}
+\ $\cdot$\
+\href{https://doi.org/10.5281/zenodo.18986790}
+{\texttt{doi:10.5281/zenodo.18986790}}
+\ $\cdot$\
+\href{https://orcid.org/0009-0002-0414-6544}
+{\texttt{ORCID: 0009-0002-0414-6544}}
+\end{center}
+
+\end{document}

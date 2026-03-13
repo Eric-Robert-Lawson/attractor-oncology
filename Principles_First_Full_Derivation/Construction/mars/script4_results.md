@@ -1,0 +1,253 @@
+# NECROMASS WOOD-LJUNGDAHL — SCRIPT 4 RESULTS
+## Carbon Isotope Fractionation Magnitude Analysis
+## Lafayette vs. Biological and Abiotic Pathway Windows
+### Eric Robert Lawson / OrganismCore
+### 2026-03-13
+
+---
+
+## DOCUMENT IDENTITY
+
+```
+Document ID:  NECROMASS_WL_RESULTS_v1.0
+Date:         2026-03-13
+Author:       Eric Robert Lawson / OrganismCore
+Status:       ACTIVE — SCRIPT 4 RESULTS RECORD
+Script:       necromass_woodljungdahl.py v1.0
+Pre-reg DOI:  10.5281/zenodo.18986790
+```
+
+---
+
+## QUESTION ASKED
+
+The Script 3 serpentinization problem:
+Lafayette organic δ¹³C overlapped the
+serpentinization range 100%. Cannot
+distinguish on raw δ¹³C alone.
+
+Script 4 asks: what is the fractionation
+MAGNITUDE — how far did the organic carbon
+move from the inorganic carbon in the same
+fluid at the same time?
+
+DIC proxy: Lafayette siderite carbonate
+(Bridges & Grady 2000). Forms from same
+fluid as organic matter.
+
+---
+
+## KEY RESULT
+
+```
+Lafayette carbonate (DIC proxy): +10.2‰
+                                  [+7.3 to +13.1‰]
+                                  Bridges & Grady 2000
+
+Lafayette organic carbon:        -31.5‰
+                                  [-36.6 to -27.6‰]
+                                  Steele et al. 2012
+
+Fractionation (organic - DIC):
+  Median:   -41.3‰
+  95% CI:   [-47.1, -35.5‰]
+
+Nakhla fractionation (8.5m):     -35.2‰
+Lafayette fractionation (30m):   -41.7‰
+Depth trend:                     -6.5‰ MORE
+                                  fractionated at depth
+```
+
+---
+
+## PATHWAY WINDOW RESULTS
+
+```
+Pathway                         Window      P(in)   Type
+──────────────────────────────────────────────────────────
+Wood-Ljungdahl (general)     [-36,-15]‰   0.042  biological
+Desulforudis audaxviator     [-18,-15]‰   0.000  biological
+Serpentinization short-chain [-20,-10]‰   0.000  abiotic
+Serpentinization methane     [-45,-30]‰   0.866  abiotic
+Calvin cycle                 [-25,-10]‰   0.000  biological
+```
+
+---
+
+## INTERPRETATION
+
+### What the -41.3‰ Fractionation Means
+
+The Lafayette fractionation is too large for:
+- Standard WL iron-oxidising chemolithotrophs
+- Serpentinization short-chain organics
+- Calvin cycle photosynthesis (irrelevant)
+- Desulforudis audaxviator (measured: -16.7‰)
+
+The Lafayette fractionation is consistent with:
+- Serpentinization METHANE (-30 to -45‰)
+- Methanogenic archaea (-30 to -60‰)
+
+### Three Possible Explanations
+
+```
+1. Methane-derived abiotic carbon.
+   Serpentinization produced methane
+   that became mineral-bound.
+   Cannot be eliminated.
+
+2. Methanogen biological community.
+   If Mars hosted methanogens at depth,
+   fractionation of -41‰ is predicted.
+   This fits. Cannot be eliminated.
+
+3. Iron-oxidising WL community at
+   extreme end of fractionation range.
+   Marginally possible (P=0.042).
+   Less likely than options 1 or 2.
+```
+
+### What Was Eliminated
+
+```
+Serpentinization short-chain organics
+(formate/acetate) ELIMINATED as the
+explanation for Lafayette fractionation.
+Gap = 21‰ beyond maximum predicted.
+P = 0.000. Fully separated.
+
+This was the primary abiotic confound
+from Script 3. It is now gone for
+bulk organic matter explanation.
+```
+
+### What the Fractionation Test Revealed
+
+```
+The biological hypothesis has been
+NARROWED by Script 4.
+
+BEFORE: Any iron-cycling WL organism.
+AFTER:  If biological, most likely
+        METHANOGENS, not iron oxidisers.
+
+OR: The iron oxide signal (Script 1)
+    was produced by iron-cycling organisms
+    whose necromass we are not seeing
+    directly in the Steele 2012 organic
+    carbon data. The -41‰ carbon may
+    be co-associated methane chemistry
+    from a different community.
+
+Both interpretations are scientifically
+important. Both require follow-up.
+```
+
+### Depth Trend in Fractionation
+
+```
+Nakhla (8.5m):   -35.2‰
+Lafayette (30m): -41.7‰
+Difference:       -6.5‰
+
+Fractionation increases (becomes more
+negative) with depth. Consistent with
+a more metabolically active or
+isotopically distinct community
+at greater depth. Fourth independent
+line of evidence pointing in the
+same direction.
+```
+
+---
+
+## CUMULATIVE ASSESSMENT — SCRIPTS 1-4
+
+```
+Script 1: Depth gradient P(r>0)=1.000.
+          13× Fe oxide effect.
+          CONSISTENT. Caveat: temp gradient.
+
+Script 2: Rate test INCONCLUSIVE.
+          Fenton too fast.
+
+Script 3: Morphology AMBIGUOUS.
+          Carbon CONSISTENT but overlapped
+          serpentinization.
+
+Script 4: Fractionation -41.3‰.
+          Short-chain serpentinization
+          ELIMINATED (P=0.000).
+          Consistent with methane-derived
+          OR methanogenic biological carbon.
+          Fractionation increases with depth.
+
+What no single abiotic process explains:
+  - 13× depth gradient (Script 1)
+  PLUS
+  - -41‰ fractionation from DIC (Script 4)
+  PLUS
+  - 6.5‰ fractionation increase with depth
+  PLUS
+  - Carbon co-located with iron oxide
+
+Temperature gradient explains Script 1.
+Serpentinization methane explains Script 4.
+Neither explains all four together.
+```
+
+---
+
+## OPEN QUESTION GENERATED BY SCRIPT 4
+
+```
+Are the Steele 2012 Lafayette organics:
+  (a) Cellular biomass/necromass from
+      iron-cycling WL organisms?
+      → Fractionation should be -15 to -36‰.
+      → Lafayette shows -41.3‰. Too large.
+
+  (b) Methanogen biomass/necromass?
+      → Fractionation should be -30 to -60‰.
+      → Lafayette shows -41.3‰. Fits.
+
+  (c) Methane-derived abiotic carbon?
+      → Fractionation should be -30 to -45‰.
+      → Lafayette shows -41.3‰. Fits.
+
+Molecular identity of the organic carbon
+is the next required data point.
+NanoSIMS cannot distinguish molecular form.
+Requires: compound-specific isotope analysis
+or organic molecular characterisation
+of Lafayette alteration vein material.
+Sephton et al. 2013 (MAPS) may contain
+relevant data. This is Script 5.
+```
+
+---
+
+## DOCUMENT METADATA
+
+```
+Document ID:    NECROMASS_WL_RESULTS_v1.0
+Test:           Wood-Ljungdahl fractionation
+                magnitude vs pathway windows
+Lafayette frac: -41.3‰ median
+                [-47.1, -35.5‰] 95% CI
+P(WL bio):      0.042
+P(serp short):  0.000  ← ELIMINATED
+P(serp meth):   0.866  ← CONSISTENT
+Depth trend:    -6.5‰ more at 30m vs 8.5m
+Interpretation: Short-chain serpentinization
+                eliminated. Methane-derived
+                (abiotic or biogenic) consistent.
+                Biological hypothesis narrowed
+                to methanogenic community
+                if biological.
+Next:           Script 5 — molecular identity
+                of Lafayette organic carbon.
+                Sephton 2013 data search.
+Pre-reg:        10.5281/zenodo.18986790
+Date:           2026-03-13
+```

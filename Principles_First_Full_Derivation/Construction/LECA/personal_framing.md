@@ -8,6 +8,43 @@
 "I am a mathematician, not a biologist. I have a pre-registered protocol and a specific prediction locked before any experiment was run. I need help executing it correctly — I do not know what contamination looks like, I do not know when I am making a mistake in the biology, I cannot tell if my results are biologically rigorous. I need someone who can watch what I am doing and tell me when I am wrong. The geometry is my responsibility. The biological rigour is what I am asking for your help with."
 ```
 
+and
+
+```
+"I want to be upfront about
+what I am doing here.
+
+I am deriving this from
+first principles — attractor
+geometry applied to biological
+systems. I am not a biologist.
+
+I am approaching your domain
+not because I know it, but
+because I derived my way into it
+with precision from within
+my own domain. And I want
+to respect that distinction.
+
+I am actually hesitant to show
+you the full derivation right now —
+not because I lack confidence
+in it — but because I think it
+might slow down just running
+the experiment.
+
+The experiment is simple.
+The prediction is pre-registered.
+The result will be visible in
+72 hours under a microscope.
+
+I would rather let the result
+speak first.
+
+The derivation will make more
+sense after it does."
+```
+
 ---
 ## WHAT THIS DOCUMENT IS
 

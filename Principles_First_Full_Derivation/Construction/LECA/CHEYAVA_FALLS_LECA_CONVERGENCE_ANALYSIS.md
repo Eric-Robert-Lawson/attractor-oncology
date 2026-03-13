@@ -9,6 +9,8 @@
 
 # **DOI: [https://doi.org/10.5281/zenodo.18994082](https://doi.org/10.5281/zenodo.18994082)**
 
+# **IMPORTANT TO ALSO [CHECK OUT THIS DOCUMENT HERE](Alien_Collapse_Or_Emergence.md)**
+
 ---
 
 ## STATUS: ACTIVE — GEOMETRIC ANALYSIS DOCUMENT

@@ -6,7 +6,7 @@
 ## OrganismCore — Eric Robert Lawson
 ## 2026-03-13
 
-# **DOI: [https://doi.org/10.5281/zenodo.19006559](https://doi.org/10.5281/zenodo.19006559)**
+# **DOI (PALEO observations): [https://doi.org/10.5281/zenodo.19006559](https://doi.org/10.5281/zenodo.19006559)**
 
 ---
 

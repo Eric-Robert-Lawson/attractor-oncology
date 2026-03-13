@@ -4,7 +4,7 @@
 
 ---
 
-```
+```verbatim
 "I am a mathematician, not a biologist. I have a pre-registered protocol and a specific prediction locked before any experiment was run. I need help executing it correctly — I do not know what contamination looks like, I do not know when I am making a mistake in the biology, I cannot tell if my results are biologically rigorous. I need someone who can watch what I am doing and tell me when I am wrong. The geometry is my responsibility. The biological rigour is what I am asking for your help with."
 ```
 

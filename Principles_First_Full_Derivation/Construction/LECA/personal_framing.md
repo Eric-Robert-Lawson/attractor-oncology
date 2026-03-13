@@ -4,13 +4,10 @@
 
 ---
 
-```verbatim
 "I am a mathematician, not a biologist. I have a pre-registered protocol and a specific prediction locked before any experiment was run. I need help executing it correctly — I do not know what contamination looks like, I do not know when I am making a mistake in the biology, I cannot tell if my results are biologically rigorous. I need someone who can watch what I am doing and tell me when I am wrong. The geometry is my responsibility. The biological rigour is what I am asking for your help with."
-```
 
 and
 
-```
 "I want to be upfront about
 what I am doing here.
 
@@ -43,15 +40,13 @@ speak first.
 
 The derivation will make more
 sense after it does."
-```
 
 and
 
-```
-Success and failure of pre-registration is not what determines the success here, it is successfully deploying the protocol in a reproducible way and ensuring we understand the results correctly. If they match up with pre-registration the results are literal de-extinction. The other result is that they do not match pre-registration, which in itself is a statement revealing the geometric nature of life itself.
+"Success and failure of pre-registration is not what determines the success here, it is successfully deploying the protocol in a reproducible way and ensuring we understand the results correctly. If they match up with pre-registration the results are literal de-extinction. The other result is that they do not match pre-registration, which in itself is a statement revealing the geometric nature of life itself.
 
-There is actually no failure condition for running this experiment other than not running it properly, which is why I need your help.
-```
+There is actually no failure condition for running this experiment other than not running it properly, which is why I need your help."
+
 ---
 ## WHAT THIS DOCUMENT IS
 

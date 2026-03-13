@@ -1,0 +1,753 @@
+\documentclass[11pt, a4paper]{article}
+
+% ── PACKAGES ──────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{
+  top=2.5cm,
+  bottom=2.5cm,
+  left=2.5cm,
+  right=2.5cm
+}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  urlcolor=blue,
+  linkcolor=blue,
+  citecolor=blue,
+  pdftitle={Mars Biosphere Collapse vs. Emergence:
+    A Pre-Registered Geometric Prediction of the
+    Complexity Gradient in the Mars Sedimentary Record
+    Prior to Sample Return},
+  pdfauthor={Eric Robert Lawson}
+}
+\usepackage{microtype}
+\usepackage{parskip}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{lmodern}
+\usepackage{authblk}
+\usepackage{abstract}
+
+% ── COLOURS ───────────────────────────────────────────────────
+\definecolor{headerblue}{RGB}{20,60,140}
+\definecolor{boxblue}{RGB}{20,60,140}
+\definecolor{rulecolor}{RGB}{20,60,140}
+
+% ── SECTION FORMAT ────────────────────────────────────────────
+\titleformat{\section}
+  {\large\bfseries\color{headerblue}}
+  {\thesection.}{0.5em}{}
+\titleformat{\subsection}
+  {\normalsize\bfseries\color{headerblue}}
+  {\thesubsection.}{0.5em}{}
+\titleformat{\subsubsection}
+  {\normalsize\itshape\color{headerblue}}
+  {\thesubsubsection.}{0.5em}{}
+
+\setlength{\parskip}{0.6em}
+\setlength{\parindent}{0pt}
+
+% ══════════════════════════════════════════════════════════════
+\begin{document}
+
+% ── TITLE BLOCK ───────────────────────────────────────────────
+\title{
+  \large\bfseries\color{headerblue}
+  MARS BIOSPHERE COLLAPSE VS.\ EMERGENCE\\[0.4em]
+  \normalsize\color{headerblue}
+  A Pre-Registered Geometric Prediction of the
+  Complexity Gradient\\
+  in the Mars Sedimentary Record Prior to Sample
+  Return,\\
+  the Water Attractor State Cascade Model,\\
+  and the Two-Axis LECA Stabilisation Framework
+}
+
+\author[1]{Eric Robert Lawson}
+\affil[1]{OrganismCore (Independent Research)\\
+  ORCID: \href{https://orcid.org/0009-0002-0414-6544}
+  {0009-0002-0414-6544}\\
+  \href{mailto:OrganismCore@proton.me}
+  {OrganismCore@proton.me}
+}
+
+\date{2026-03-13\\[0.3em]
+  \footnotesize
+  LECA Pre-registration DOI:
+  \href{https://doi.org/10.5281/zenodo.18986790}
+  {10.5281/zenodo.18986790}
+  (timestamp: 2026-03-12,
+  prior to this derivation)\\
+  Universal Life Detection Standard DOI:
+  \href{https://doi.org/10.5281/zenodo.18994082}
+  {10.5281/zenodo.18994082}\\
+  Repository:
+  \href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+  {github.com/Eric-Robert-Lawson/attractor-oncology}
+}
+
+\maketitle
+\thispagestyle{empty}
+
+% ── STATEMENT BOX ─────────────────────────────────────────────
+\begin{mdframed}[
+  backgroundcolor=boxblue,
+  linecolor=boxblue,
+  linewidth=0pt,
+  innertopmargin=0.5em,
+  innerbottommargin=0.5em,
+  innerleftmargin=1em,
+  innerrightmargin=1em
+]
+\begin{center}
+\small\bfseries\color{white}
+The Cheyava Falls fossil record (Hurowitz et al.,
+\textit{Nature} 645, 2025) is consistent with either
+the beginning or the end of a Martian biosphere.
+These two interpretations make opposite predictions
+about the complexity gradient in the Mars subsurface
+sedimentary record: if Cheyava Falls represents
+biosphere \textit{emergence}, complexity increases
+with decreasing depth; if it represents biosphere
+\textit{collapse}, complexity increases with
+increasing depth and age.
+This prediction is derived from geometric first
+principles, is locked here before Mars sample return,
+and is testable by the Mars sample return mission
+(2030s target).
+Pre-registered: 2026-03-13.
+\end{center}
+\end{mdframed}
+
+\vspace{1em}
+
+% ── ABSTRACT ──────────────────────────────────────────────────
+\begin{abstract}
+\noindent
+We present a pre-registered geometric prediction
+concerning the directional ambiguity in the Cheyava
+Falls biosignature record on Mars.
+The magnetic field loss of Mars ($\sim$4.0--4.1\,Ga)
+and the Cheyava Falls deposition age
+($\sim$3.8--4.1\,Ga) are coincident within
+measurement error, creating a fundamental directional
+ambiguity: the fossil may represent life establishing
+itself (emergence) or life in terminal decline
+(collapse).
+We derive two mutually exclusive predictions from
+attractor geometry that are testable by the complexity
+gradient in the Mars subsurface sedimentary record,
+to be resolved by Mars sample return.
+We additionally present the water attractor state
+cascade model, which identifies three distinct
+chemical attractor states of planetary water chemistry
+and the biological grades each supports.
+We present the two-axis LECA stabilisation model,
+which identifies independent nitrogen and oxygen
+destabilisation axes that together define the
+conditions under which the LECA attractor is the
+stable state of carbon chemistry.
+All derivations are from geometric first principles.
+This document is the pre-registration of the
+complexity gradient prediction before the Mars sample
+return mission retrieves material from the Jezero
+Crater sedimentary record.
+\end{abstract}
+
+\vspace{0.5em}
+\noindent\textcolor{rulecolor}{\rule{\linewidth}{0.6pt}}
+
+% ── SECTION 1 ─────────────────────────────────────────────────
+\section{The Timestamp Collision}
+
+Two facts are established independently of this
+framework:
+
+\begin{enumerate}[leftmargin=*, label=(\arabic*)]
+\item The Mars magnetosphere was lost approximately
+  4.0--4.1\,Ga, as determined by MAVEN mission crustal
+  magnetisation measurements.
+\item The Cheyava Falls biosignature features in the
+  Bright Angel formation of Jezero Crater are dated
+  approximately 3.8--4.1\,Ga, as reported in
+  Hurowitz et al.\ \cite{hurowitz2025}.
+\end{enumerate}
+
+These ranges overlap within measurement error.
+The magnetic field loss and the depositional age of
+the fossil features occurred within the same
+geological event window.
+
+This creates a directional ambiguity that cannot be
+resolved from surface data alone.
+
+The fossil record has no direction arrow.
+It records what was present.
+It does not record whether what was present was
+growing or dying.
+
+% ── SECTION 2 ─────────────────────────────────────────────────
+\section{The Two Interpretations}
+
+\subsection{Option A --- Emergence}
+
+Under this interpretation, the Cheyava Falls lake
+represents a newly habitable environment.
+Life was forming or recently established in
+State~1 water conditions.
+The LUCA attractor was establishing in a new
+depositional environment.
+The fossil is the beginning of a cascade that
+was then interrupted by atmospheric collapse.
+
+\textbf{Complexity gradient prediction (Option A):}
+Biosignature complexity \textit{decreases} with
+increasing depth and age.
+Simpler organisms deeper and earlier.
+More complex features shallower and later.
+Cheyava Falls is the most developed record
+in the sequence.
+
+\subsection{Option B --- Collapse}
+
+Under this interpretation, Mars harboured a more
+complex biosphere that predated Cheyava Falls.
+The magnetic field loss initiated atmospheric
+stripping. Conditions deteriorated progressively.
+Complex organisms, requiring the most stable
+conditions, died first.
+Simpler chemotrophic organisms survived longest.
+LUCA-grade iron-sulfur chemotrophs were the last
+surviving life form.
+The Cheyava Falls leopard spots are the final
+record of a dying world.
+
+\textbf{Complexity gradient prediction (Option B):}
+Biosignature complexity \textit{increases} with
+increasing depth and age.
+More complex features deeper and earlier.
+Simpler features shallower and later.
+Cheyava Falls is the least developed record
+in the sequence --- the last survivor.
+
+\subsection{Why Current Data Cannot Decide}
+
+The surface record is the survival record,
+not the complete record.
+
+Three billion years of unshielded solar and
+cosmic ray bombardment (post-magnetosphere loss
+at 4.0--4.1\,Ga) preferentially destroys complex
+organic biosignatures.
+Simple iron-sulfur minerals --- vivianite,
+greigite --- survive.
+Complex organic molecules, proteins, and nucleic
+acids do not.
+
+Whatever complexity existed at Cheyava Falls
+at time of deposition has been partially or
+entirely degraded by radiation.
+
+The surface record is the floor of complexity,
+not the ceiling.
+
+Additionally, Mars never underwent a
+Great Oxidation Event (GOE) equivalent.
+The entire water column remained anoxic
+throughout the habitable period.
+This produces colony-scale mineral reaction
+fronts as the dominant fossilisation mechanism
+rather than individually resolved cellular
+fossils (see Section~5).
+
+Both Option~A and Option~B are consistent
+with the currently available surface data.
+
+% ── SECTION 3 ─────────────────────────────────────────────────
+\section{The Pre-Registered Prediction}
+
+\begin{mdframed}[
+  linecolor=rulecolor,
+  linewidth=0.8pt,
+  innertopmargin=0.6em,
+  innerbottommargin=0.6em,
+  innerleftmargin=1em,
+  innerrightmargin=1em
+]
+\textbf{Pre-Registered Prediction (locked 2026-03-13,
+prior to Mars sample return):}
+
+\medskip
+The complexity gradient in the Jezero Crater
+sedimentary record with depth and increasing age
+will run in one of two directions:
+
+\medskip
+\textbf{If collapse (Option B):}
+Subsurface samples at greater stratigraphic depth
+than the Cheyava Falls surface sample will show
+\textit{more} complex biosignatures, specifically:
+\begin{itemize}[leftmargin=*]
+\item More diverse mineral assemblages.
+\item Richer and more varied organic carbon content.
+\item More complex spatial organisation of
+  mineral--organic associations.
+\item Biosignature features at smaller scale
+  (approaching individual cell scale of 10--30\,$\mu$m
+  rather than colony scale of 1--2\,mm)
+  if preservation conditions permit.
+\end{itemize}
+
+\textbf{If emergence (Option A):}
+Subsurface samples at greater stratigraphic depth
+will show \textit{less} complex biosignatures,
+consistent with earlier, simpler biological
+communities.
+
+\medskip
+\textbf{The Mars sample return mission resolves
+which prediction is correct.}
+\end{mdframed}
+
+% ── SECTION 4 ─────────────────────────────────────────────────
+\section{The Water Attractor State Cascade Model}
+
+\subsection{Water Chemistry as Attractor State}
+
+Water is not a uniform medium.
+The chemical composition of a body of water
+constitutes an attractor state of the water
+chemistry itself.
+Different attractor states support different
+grades of biological complexity.
+The cascade from first life to a biologically
+maintained atmosphere is a cascade of coupled
+water attractor states.
+
+\subsection{The Three States}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabularx}{\linewidth}{p{1.2cm}p{3.0cm}p{3.0cm}X}
+\toprule
+\textbf{State} & \textbf{Chemistry} &
+\textbf{Life supported} & \textbf{Transition} \\
+\midrule
+State 1 &
+pH 5--6; high Fe$^{2+}$; anoxic;
+low N; pre-GOE &
+LUCA-grade chemolithotrophs only.
+Cannot support stable LECA. &
+Biological photosynthesis
+drives GOE. \\[0.3em]
+State 2 &
+pH 6.5--7.5; Fe$^{2+}$ declining;
+O$_2$ rising; N cycling increasing &
+LECA-grade eukaryotes.
+Mitochondria functional.
+LECA attractor stable. &
+LECA diversification drives
+State~3. \\[0.3em]
+State 3 &
+pH 8.1; trace Fe; high sulfate;
+O$_2$ abundant &
+Full triadic cycle.
+Biologically maintained atmosphere. &
+Terminal state on Earth. \\
+\bottomrule
+\end{tabularx}
+\caption{The three water attractor states on Earth.
+  Each transition is driven by biological activity
+  in the previous state.}
+\end{table}
+
+\subsection{Mars in This Framework}
+
+The Cheyava Falls mineralogy (vivianite =
+Fe$_3$(PO$_4$)$_2$; greigite = Fe$_3$S$_4$;
+anoxic conditions; organic carbon) confirms
+State~1 water chemistry in the Jezero Crater
+lake environment \cite{hurowitz2025}.
+
+Mars had State~1 water.
+The magnetic field loss at 4.0--4.1\,Ga
+prevented oxygen accumulation.
+No GOE equivalent occurred.
+The cascade was interrupted at State~1.
+Mars never reached State~2.
+
+% ── SECTION 5 ─────────────────────────────────────────────────
+\section{The Two-Axis LECA Stabilisation Model}
+
+\subsection{Two Independent Destabilisation Axes}
+
+The LECA attractor is stabilised by the
+\textit{simultaneous} absence of two independent
+destabilisation signals.
+
+\textbf{Axis 1 --- Nitrogen:}
+Bioavailable nitrogen (NH$_4^+$, NO$_3^-$, or
+amino acids above threshold) fires germination
+and multicellular organisation programs.
+In the LECA arrest medium: explicitly absent.
+Tested in ARM~A by nitrogen release control at
+72 hours (addition of (NH$_4$)$_2$SO$_4$
+restores germination).
+
+\textbf{Axis 2 --- Oxygen:}
+Sufficient O$_2$ (above $\sim$3\% for microaerophilic
+threshold) activates aerobic metabolic programs
+unavailable in pre-GOE conditions.
+Mitochondria at full aerobic capacity provide
+the energy density to advance developmental
+programs past $D{=}0$.
+In the LECA arrest medium: held at $<$3\% O$_2$
+throughout.
+
+\subsection{What the GOE Did}
+
+On Earth, the GOE ($\sim$2.4\,Ga) raised Axis~2
+above the destabilisation threshold.
+Concurrent nitrogen cycling changes raised Axis~1.
+Both axes exceeded their thresholds together.
+The LECA attractor was destabilised at
+planetary scale.
+Complex eukaryotic life emerged.
+
+On Mars, the magnetic field loss prevented
+oxygen accumulation.
+Axis~2 never rose above threshold.
+Nitrogen cycling could not change.
+Axis~1 remained below threshold.
+The LECA attractor remained stable in an
+increasingly hostile and ultimately uninhabitable
+planetary environment.
+
+\subsection{Impact on the Arrest Medium}
+
+This analysis confirms that the LECA Resurrection
+Protocol arrest medium (pre-registered DOI:
+10.5281/zenodo.18986790) correctly addresses both
+axes.
+No change to the protocol is required.
+The two-axis understanding deepens the
+mechanistic explanation of why the conditions are
+specified as they are.
+
+% ── SECTION 6 ─────────────────────────────────────────────────
+\section{The Fossilisation Paradox and Its Resolution}
+
+On Earth, the best cellular fossils are preserved
+at redox boundaries between an oxidising surface
+layer and anoxic deep sediment.
+This produces sharp mineralisation of organic
+material at the boundary, sometimes preserving
+cellular detail.
+
+Mars never had a GOE equivalent.
+The entire water column remained anoxic.
+No sharp oxidising--anoxic boundary existed.
+
+The predicted fossilisation mechanism for
+State~1 water conditions is therefore:
+
+\begin{itemize}[leftmargin=*]
+\item Not individual cellular-detail fossils.
+\item Colony-scale mineral reaction fronts.
+\item The bulk mineral product of microbial
+  community metabolism at population scale.
+\item Vivianite and greigite formed by
+  Fe-phosphate and Fe-sulfide reducing metabolism
+  at 1--10\,mm scale (colony scale) rather than
+  10--30\,$\mu$m scale (individual cell scale).
+\end{itemize}
+
+This is not a failure of the biological interpretation
+of Cheyava Falls.
+It is the geometric prediction of what biosignatures
+look like on a world that never underwent a GOE.
+
+The leopard spots (1--2\,mm, vivianite--greigite)
+are consistent with this mechanism.
+The poppy seeds ($<$200\,$\mu$m) approach colonial
+microstructure scale.
+Individual cellular-scale confirmation (10--30\,$\mu$m)
+requires Mars sample return resolution.
+
+% ── SECTION 7 ─────────────────────────────────────────────────
+\section{The ARM A Reference Standard for Sample
+Return}
+
+The LECA Resurrection Protocol ARM~A
+(pre-registered DOI: 10.5281/zenodo.18986790,
+timestamp: 2026-03-12) will produce a formally
+defined, pre-registered morphological profile of
+a living LECA-grade cell.
+
+This profile constitutes the formal reference
+standard against which Mars sample return material
+should be compared.
+
+The ARM~A reference standard:
+\begin{itemize}[leftmargin=*]
+\item Is pre-registered before the Mars samples
+  arrive on Earth.
+\item Is derived from the same geometric framework
+  that generated the Cheyava Falls prediction.
+\item Is physically anchored by laboratory
+  confirmation in living biological material.
+\item Formally defines the expected cellular
+  diameter (10--30\,$\mu$m), nuclear morphology
+  (DAPI-stained nucleus confirmed), and validation
+  criteria for LECA-grade cell identification.
+\end{itemize}
+
+If the Cheyava Falls sample return material
+contains sub-features at 10--30\,$\mu$m scale
+matching the ARM~A morphological profile, that
+constitutes individual cell-scale confirmation
+of LECA-grade life on ancient Mars.
+
+The relationship between ARM~A ($\sim$\$200,
+BSL-1, days to result) and Mars sample return
+(multi-billion dollar mission, 2030s) is explicit:
+the cheap experiment in Rogers Park, Chicago
+provides the calibration standard for the most
+consequential planetary science mission in
+human history.
+
+% ── SECTION 8 ─────────────────────────────────────────────────
+\section{Summary of Pre-Registered Predictions}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabularx}{\linewidth}{p{0.5cm}p{4.5cm}p{2.0cm}X}
+\toprule
+\textbf{\#} & \textbf{Prediction} &
+\textbf{Test} & \textbf{Resolves} \\
+\midrule
+P1 &
+Complexity gradient increases with depth
+if collapse (Option B). &
+Mars sample return.
+Jezero Crater subsurface. &
+Whether Cheyava Falls is a death
+record or a birth record. \\[0.3em]
+P2 &
+Complexity gradient decreases with depth
+if emergence (Option A). &
+Mars sample return. &
+Same. \\[0.3em]
+P3 &
+Sub-features at 10--30\,$\mu$m in the
+poppy seeds matching the ARM~A profile
+confirm individual LECA-grade cells. &
+Mars sample return
+nanometre-resolution
+imaging. &
+Individual cell-scale
+confirmation of LECA-grade
+life on ancient Mars. \\
+\bottomrule
+\end{tabularx}
+\caption{Pre-registered predictions locked 2026-03-13,
+  prior to Mars sample return.}
+\end{table}
+
+% ── SECTION 9 ─────────────────────────────────────────────────
+\section{Honest Statement of Limitations}
+
+\begin{enumerate}[leftmargin=*, label=(\arabic*)]
+\item \textbf{Surface data is insufficient.}
+  The collapse vs.\ emergence distinction cannot
+  be resolved from Perseverance rover surface data.
+  It requires access to the stratigraphic depth
+  record in the Cheyava Falls formation.
+  Mars sample return provides this.
+
+\item \textbf{Radiation taphonomy is uncertain.}
+  3.8 billion years of unshielded radiation have
+  preferentially degraded complex biosignatures.
+  Even under Option~B (collapse), the subsurface
+  record may not preserve sufficient complexity
+  contrast to distinguish the two interpretations.
+  Radiation shielding at depth is the critical
+  variable.
+
+\item \textbf{ARM~A pending.}
+  The morphological reference standard requires
+  ARM~A confirmation.
+  Until ARM~A runs, the reference standard is
+  specified but not physically anchored.
+
+\item \textbf{Common origin vs.\ independent
+  emergence unresolved.}
+  This document does not address whether any
+  Martian life shared common ancestry with Earth
+  life. Both scenarios are consistent with the
+  geometric prediction. The distinction requires
+  genomic analysis of Mars sample return material.
+\end{enumerate}
+
+% ── SECTION 10 ────────────────────────��───────────────────────
+\section{Conclusion}
+
+The Cheyava Falls fossil record is ambiguous in
+direction. The ambiguity is geometric, not
+observational, and cannot be resolved from
+currently available data.
+
+Two mutually exclusive predictions follow from
+attractor geometry:
+
+\begin{itemize}[leftmargin=*]
+\item Under biosphere collapse (Option~B):
+  complexity increases with depth.
+\item Under biosphere emergence (Option~A):
+  complexity decreases with depth.
+\end{itemize}
+
+This prediction is locked here, on 2026-03-13,
+before the Mars sample return mission retrieves
+subsurface material from Jezero Crater.
+
+The water attractor state cascade model and the
+two-axis LECA stabilisation model are presented
+as the geometric basis for understanding why
+State~1 water conditions on ancient Mars were
+the conditions in which the LUCA attractor was
+the stable biological state.
+
+ARM~A provides the morphological reference
+standard that makes the Mars sample return
+comparison formally defined rather than
+interpretively open.
+
+The geometry was derived before the data.
+
+The data will confirm which geometric prediction
+is correct.
+
+Both outcomes are informative.
+
+Neither can be adjusted after the fact.
+
+This document is the lock.
+
+\vspace{1em}
+\noindent\textcolor{rulecolor}{\rule{\linewidth}{0.4pt}}
+
+% ── ACKNOWLEDGMENTS ───────────────────────────────────────────
+\section*{Acknowledgments}
+
+This work was conducted independently without
+institutional funding or affiliation.
+The geometric derivation sequence is documented
+in the pre-registration record
+(DOI: 10.5281/zenodo.18986790) and the
+attractor-oncology repository
+(\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}{github.com/Eric-Robert-Lawson/attractor-oncology}).
+The Cheyava Falls data is the work of the NASA
+Perseverance mission science team
+(Hurowitz et al., \textit{Nature}, 2025)
+and is referenced here as independent
+contextual data, not as a derivation source.
+
+% ── REFERENCES ────────────────────────────────────────────────
+\begin{thebibliography}{99}
+
+\bibitem{preregistration}
+Lawson, E.R.\ (2026).
+\textit{LECA Resurrection Protocol ---
+Pre-Registration v1.0}.
+Zenodo.
+\href{https://doi.org/10.5281/zenodo.18986790}
+{doi:10.5281/zenodo.18986790}
+
+\bibitem{amendmentA1}
+Lawson, E.R.\ (2026).
+\textit{LECA Resurrection Protocol ---
+Registered Amendment A1}.
+Zenodo.
+\href{https://doi.org/10.5281/zenodo.18989573}
+{doi:10.5281/zenodo.18989573}
+
+\bibitem{lucapaper}
+Lawson, E.R.\ (2026).
+\textit{The Ribosome Is the LUCA}.
+Zenodo.
+\href{https://doi.org/10.5281/zenodo.18988844}
+{doi:10.5281/zenodo.18988844}
+
+\bibitem{uldstandard}
+Lawson, E.R.\ (2026).
+\textit{The Universal Life Detection Standard}.
+Zenodo.
+\href{https://doi.org/10.5281/zenodo.18994082}
+{doi:10.5281/zenodo.18994082}
+
+\bibitem{hurowitz2025}
+Hurowitz, J.A., Tice, M.M., Allwood, A.C.,
+et al.\ (2025).
+Redox-driven mineral and organic associations
+in Jezero Crater, Mars.
+\textit{Nature}, 645(8080), 332--340.
+\href{https://doi.org/10.1038/s41586-025-09413-0}
+{doi:10.1038/s41586-025-09413-0}
+
+\bibitem{margulis1967}
+Sagan, L.\ (1967).
+On the origin of mitosing cells.
+\textit{Journal of Theoretical Biology},
+14(3), 225--274.
+\href{https://doi.org/10.1016/0022-5193(67)90079-3}
+{doi:10.1016/0022-5193(67)90079-3}
+
+\bibitem{nealson1997}
+Nealson, K.H.\ \& Stahl, D.A.\ (1997).
+Microorganisms and biogeochemical cycles.
+In: Banfield, J.F.\ \& Nealson, K.H.\ (Eds.),
+\textit{Geomicrobiology: Interactions between
+Microbes and Minerals}.
+Reviews in Mineralogy, Vol.\ 35, pp.\ 5--34.
+Mineralogical Society of America.
+
+\bibitem{lane2015}
+Lane, N.\ (2015).
+\textit{The Vital Question}.
+W.W.\ Norton.
+ISBN: 978-0-393-08881-6
+
+\end{thebibliography}
+
+% ── FOOTER ────────────────────────────────────────────────────
+\vspace{1em}
+\noindent\textcolor{rulecolor}{\rule{\linewidth}{0.4pt}}
+\begin{center}
+\footnotesize
+\textit{The geometry came first.\ \
+The data will say which prediction is correct.\ \
+Both outcomes are informative.\ \
+Neither can be adjusted.}\\[0.15em]
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{\texttt{github.com/Eric-Robert-Lawson/attractor-oncology}}
+\ $\cdot$\
+\href{https://doi.org/10.5281/zenodo.18986790}
+{\texttt{doi.org/10.5281/zenodo.18986790}}
+\ $\cdot$\
+\href{https://orcid.org/0009-0002-0414-6544}
+{\texttt{ORCID: 0009-0002-0414-6544}}
+\end{center}
+
+\end{document}

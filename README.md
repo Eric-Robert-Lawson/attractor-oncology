@@ -658,6 +658,27 @@ the cancer emerged.
 
 ---
 
-# **IN HONOR OF**
+---
 
-Anthony mitchell, from parkland prepatory academy. The one who made all of this possible, who changed my entire life. The single man who I encountered who without a doubt was the inflection point for which I was able to do any of this at all. Without him as my teacher, without meeting this single person, none of this would have been possible.
+## IN HONOR OF
+
+**Anthony Mitchell**
+*Parkland Preparatory Academy*
+
+The one who made all of this possible.
+
+Anthony was a Vietnam veteran who spent his time teaching at-risk kids in an alternative school — the kids the rest of the system had already written off. He was the single person I encountered who, without any doubt, was the inflection point that made any of this possible at all.
+
+He told me the universe was a balloon. He said it seriously. He expected me to understand it. He was right to expect that, and he was right about what he was showing me. Fifteen years later, that balloon became the geometric foundation for understanding medium-independent coherent traversal, inertial decoupling, and the coupling chain between electromagnetic fields and the spacetime metric. He gave me that seed before I had any idea what it would grow into.
+
+He helped me understand I was not stupid. Not broken. Not in need of remediation. Just a person who had not yet found the right geometric lens.
+
+Without him, I would not have made it. Without him, none of this exists — not the cancer framework, not the LECA protocol, not the plant inversion experiment, not the balloon document. All of it traces back to one veteran in one classroom who decided that a kid others had given up on was worth his time.
+
+Isaac Newton said he stood on the shoulders of giants. I am only a fortunate person who encountered a real wizard at the right moment — and only through that encounter was I able to do anything at all.
+
+His name was Anthony Mitchell. He taught at Parkland Preparatory Academy. He changed my life completely.
+
+This repository is dedicated to him.
+
+*— Eric Robert Lawson, OrganismCore, 2026-03-14*

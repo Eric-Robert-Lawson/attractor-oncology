@@ -934,6 +934,596 @@ OPERATIONAL RULE:
 
 ---
 
+## THE DIMENSION TEST
+## Stated as Three Questions
+
+```
+For each new property that appeared
+after a confirmed step function,
+apply these three questions in order.
+
+All three must be answered YES
+for the property to count as
+evidence of a new dimension.
+
+If any question is answered NO:
+the property is evidence of a new basin
+in existing dimensional space —
+not a new dimension.
+
+
+QUESTION 1:
+THE COMBINATION TEST
+
+  Could this new property have been
+  produced by combining, sequencing,
+  deepening, or extending anything
+  that existed in the prior state space?
+
+  Take the full inventory of the
+  prior state:
+  every attractor basin,
+  every behavioral capacity,
+  every cognitive operation,
+  every environmental relationship.
+
+  Combine them in any order.
+  Run them in any sequence.
+  Deepen them to any degree.
+  Extend them in any direction
+  that was already available.
+
+  Does any combination produce
+  the new property?
+
+  YES → NOT a new dimension.
+    The new property was reachable
+    from the prior space.
+    The step crossed into a new
+    BASIN — a new stable configuration.
+    But the dimensional space
+    did not expand.
+    Stop here.
+    Record as: "new basin, existing
+    dimensional space."
+
+  NO → Proceed to Question 2.
+
+
+QUESTION 2:
+THE VOCABULARY TEST
+
+  Can the new property be DESCRIBED
+  using only the concepts available
+  in the prior state space?
+
+  Not just named differently.
+  Fully described — all its properties
+  accounted for — using only what
+  existed before.
+
+  YES → NOT a new dimension.
+    The concept already existed
+    in the prior dimensional space.
+    The prior vocabulary was sufficient
+    to describe it.
+    The step crossed into a region
+    the prior vocabulary could already
+    point to.
+    Stop here.
+    Record as: "new basin, existing
+    dimensional space."
+
+  NO → Proceed to Question 3.
+
+  NOTE ON THE VOCABULARY TEST:
+  This is the most important question
+  and the one most often skipped.
+
+  If you cannot describe the new
+  property without inventing a new
+  concept — without reaching for
+  a word or idea that did not exist
+  before the transition — that is
+  the signal.
+
+  The new concept IS the new dimension.
+  The dimension is the direction
+  that the new concept names.
+
+  Example of PASSING the vocabulary test
+  (prior vocabulary insufficient):
+    After the Acheulean transition:
+    "a form that does not yet exist
+    but is being navigated toward."
+    Try to say this in Oldowan vocabulary.
+    You cannot. Oldowan has no concept
+    of a non-present target.
+    The vocabulary had to expand.
+    The dimension expanded.
+
+  Example of FAILING the vocabulary test
+  (prior vocabulary sufficient):
+    After a new tool type appears:
+    "a sharper cutting edge."
+    This is fully describable in
+    prior vocabulary: edge, sharp, cut.
+    The concept existed.
+    New basin. Not new dimension.
+
+
+QUESTION 3:
+THE INDEPENDENCE TEST
+
+  Is the new direction ORTHOGONAL to
+  all prior directions?
+
+  Orthogonal means:
+  You cannot reach the new
+  configuration by moving along
+  any combination of existing axes —
+  not further along axis 1,
+  not the intersection of axis 2
+  and axis 3,
+  not any vector in the existing
+  dimensional space.
+
+  The test in practice:
+  Can you have the prior state space
+  at maximum depth and still not
+  have access to this property?
+
+  NO — the prior state at maximum
+  depth does contain this property →
+  NOT a new dimension.
+  The property was already in the
+  existing dimensional space,
+  just not occupied.
+  New basin.
+
+  YES — the prior state at maximum
+  depth STILL does not contain
+  this property →
+  CONFIRMED NEW DIMENSION.
+  The property requires a direction
+  that the prior space did not have.
+  The space expanded.
+```
+
+---
+
+## THE RESULT OF THE DIMENSION TEST
+
+```
+After applying all three questions:
+
+IF ALL THREE ANSWERED YES:
+  CONFIRMED NEW DIMENSION.
+  The step function crossed into
+  a genuinely larger state space.
+  The dimensional delta is +1
+  for this property.
+  (Each independently confirmed
+  new dimension contributes +1.)
+
+IF ANY QUESTION ANSWERED NO:
+  NOT A NEW DIMENSION.
+  The step function crossed into
+  a new basin within existing
+  dimensional space.
+  The dimensional delta is 0
+  for this property.
+  The step was real.
+  The transition was real.
+  The new basin is real.
+  But the space did not expand.
+  Record it as a basin transition,
+  not a dimensional transition.
+
+IMPORTANT:
+  A step function with dimensional
+  delta = 0 is NOT a failed result.
+  It is a precise result.
+  It means: the system crossed a
+  genuine threshold into a new
+  stable configuration,
+  but within the dimensional space
+  it was already in.
+  This is valuable information.
+  It is not the same as a dimensional
+  expansion and must not be conflated
+  with one.
+```
+
+---
+
+## THE CRITICAL DISTINCTION
+## Stated as Simply as Possible
+
+```
+NEW BASIN:
+  The system found a room it had
+  never been in before.
+  The room was always in the building.
+  The building did not grow.
+
+NEW DIMENSION:
+  The building grew.
+  A room now exists that could not
+  have existed in the prior building
+  because the building did not have
+  the direction to contain it.
+
+Both are real changes.
+Both produce step-function signatures.
+Both are irreversible.
+Both have cost signatures.
+Both matter.
+
+They are not the same change.
+
+The step-function protocol detects both.
+The dimension test distinguishes them.
+
+Without the dimension test:
+every new room looks like a
+building extension.
+The building appears to grow
+without limit.
+The count means nothing.
+
+With the dimension test:
+new rooms are counted as rooms.
+Building extensions are counted
+as extensions.
+The count means something.
+```
+
+---
+
+## WORKED EXAMPLES
+## From the Homo Paleontological Record
+
+```
+EXAMPLE 1:
+Acheulean prospective cognition
+(~1.76 million years ago)
+
+New property: holding a target form
+in working memory that does not yet
+exist and executing toward it.
+
+Question 1 (Combination test):
+  Can reactive flaking + more practice
+  produce prospective target modeling?
+  NO.
+  Reactive and prospective are
+  not the same axis at different depths.
+  You cannot extend "react to what
+  happened" and arrive at
+  "hold a non-present target and
+  correct toward it."
+  These are orthogonal operations.
+
+Question 2 (Vocabulary test):
+  Can you describe "a form that will
+  exist but doesn't yet" using only
+  Oldowan concepts?
+  NO.
+  Oldowan vocabulary: rock, strike,
+  flake, edge, cut, now.
+  None of these concepts contains
+  "non-present target."
+  The vocabulary had to expand.
+
+Question 3 (Independence test):
+  Can Oldowan cognition at maximum
+  depth produce prospective modeling?
+  NO.
+  Oldowan is documented for 900,000
+  years before the Acheulean.
+  It never produced the Acheulean
+  form from within itself.
+  Maximum depth of the prior space
+  did not contain this direction.
+
+RESULT: CONFIRMED NEW DIMENSION.
+Dimensional delta: +1
+
+
+EXAMPLE 2:
+A new handaxe style within the
+Acheulean tradition
+
+New property: a more refined flaking
+technique that produces a thinner,
+more symmetrical biface.
+
+Question 1 (Combination test):
+  Can Acheulean technique + more practice
+  + observation of better knappers
+  produce this refinement?
+  YES.
+  This is a deeper occupation of the
+  Acheulean basin.
+  The same prospective modeling,
+  applied with more skill.
+
+RESULT: NOT A NEW DIMENSION.
+New basin within existing Acheulean
+dimensional space.
+Dimensional delta: 0.
+(The refinement is real and important.
+It is not a dimensional expansion.)
+
+
+EXAMPLE 3:
+Cumulative cultural transmission
+(~50,000 years ago — Upper Paleolithic)
+
+New property: each generation inherits
+the prior generation's symbolic output
+as its floor, not just as an option.
+The ratchet. Self-acceleration.
+
+Question 1 (Combination test):
+  Can symbolic behavior + more frequent
+  symbolic behavior + more population
+  produce cumulative inheritance?
+  NO.
+  "More frequent occasional behavior"
+  does not produce "mandatory inherited
+  floor."
+  Frequency and accumulation are
+  not the same axis.
+  The MSA had frequent symbolic behavior
+  for 80,000 years and did not produce
+  the ratchet.
+
+Question 2 (Vocabulary test):
+  Can you describe "mandatory inherited
+  cultural floor" using MSA concepts?
+  NO.
+  MSA vocabulary: symbol, mark,
+  identity, group, ochre, bead.
+  None of these contains "ratchet" —
+  the concept that prior generation
+  output is the FLOOR of the next.
+  The ratchet required a new concept.
+
+Question 3 (Independence test):
+  Can MSA symbolic behavior at maximum
+  depth produce cumulative inheritance?
+  NO.
+  The MSA is documented for 80,000
+  years without cumulative acceleration.
+  Maximum depth of the prior space
+  did not contain this direction.
+
+RESULT: CONFIRMED NEW DIMENSION.
+Dimensional delta: +1
+
+
+EXAMPLE 4:
+Writing (~3,200 BCE)
+
+New property: cognitive state
+(a law, a debt, a story, an identity)
+persists in a substrate independent
+of any biological memory and can be
+accessed by strangers across any
+temporal distance.
+
+Question 1 (Combination test):
+  Can oral culture + more people
+  + better memory produce this?
+  NO.
+  Oral culture requires a living
+  transmitter in every generation.
+  Remove the generation: the knowledge
+  disappears.
+  Writing removes that requirement
+  entirely.
+  This is not a deeper oral culture.
+  It is a different KIND of thing:
+  cognitive state decoupled from
+  biological substrate.
+
+Question 2 (Vocabulary test):
+  Can you describe "a law that persists
+  3,000 years after its author dies"
+  using only oral culture concepts?
+  NO.
+  Oral vocabulary: story, elder,
+  memory, tradition, transmission.
+  All of these require a living
+  transmitter.
+  Writing requires a new concept:
+  substrate-independent persistence.
+
+Question 3 (Independence test):
+  Can oral culture at maximum depth
+  produce substrate-independent
+  persistence?
+  NO.
+  The deepest oral cultures still
+  require living transmission.
+  Homer was transmitted orally
+  for centuries before being written.
+  When the oral tradition broke,
+  the text survived.
+  The text is in a different direction
+  from the oral tradition.
+
+RESULT: CONFIRMED NEW DIMENSION.
+Dimensional delta: +1
+
+
+EXAMPLE 5:
+Internet as faster writing
+(candidate new dimension vs.
+deeper basin in the writing dimension)
+
+New property: any node in the network
+can both read and write the shared
+external memory simultaneously,
+in real time, from anywhere.
+
+Question 1 (Combination test):
+  Can writing + printing + telegraph
+  + telephone produce this?
+  HARD CASE.
+  Each of these deepened the
+  external memory axis.
+  The internet may be further
+  depth on the same axis.
+  OR the bidirectionality at every
+  node may be a new direction.
+  The question: is "every node is
+  both reader and writer" a new
+  direction, or is it writing
+  at greater speed and scale?
+
+Question 2 (Vocabulary test):
+  Can you describe the internet's
+  many-to-many structure using
+  only broadcast media concepts?
+  PARTIAL.
+  Broadcast vocabulary: transmit,
+  receive, publish, distribute.
+  These contain direction: one → many.
+  The internet contains: many → many.
+  Bidirectionality at scale is not
+  fully contained in broadcast concepts.
+  But it is close enough that this
+  question does not cleanly resolve.
+
+Question 3 (Independence test):
+  Can writing + print + broadcast
+  at maximum depth produce
+  many-to-many real-time global
+  bidirectional access?
+  UNCERTAIN.
+  The telegraph had bidirectionality.
+  The telephone had bidirectionality.
+  The internet scaled it.
+  Scaling may not be a new direction.
+
+RESULT: UNCERTAIN.
+  The internet may be a very deep
+  extension of the writing dimension.
+  Or the many-to-many structure at
+  global scale may be a new direction.
+  The dimension test does not
+  cleanly resolve this case with
+  current evidence.
+  Record as: UNRESOLVED.
+  Not counted as confirmed new dimension.
+  Not dismissed.
+  Requires further examination.
+
+  NOTE: This is the correct output
+  for hard cases.
+  The dimension test produces
+  CONFIRMED, NOT CONFIRMED, or UNRESOLVED.
+  UNRESOLVED is a valid result.
+  It is more honest than forcing
+  a count in either direction.
+```
+
+---
+
+## THE COMPLETE CORRECTED STEP 5
+
+```
+This replaces the existing STEP 5
+in Step_Function_Signature.md:
+
+STEP 5 — APPLY THE DIMENSION TEST.
+
+  A confirmed step function tells you
+  a threshold was crossed.
+  It does NOT tell you whether the
+  state space expanded (new dimension)
+  or whether the system crossed into
+  a new basin within existing space.
+  The Dimension Test determines which.
+
+  For each new property that appeared
+  after the step function, ask:
+
+  QUESTION 1 — THE COMBINATION TEST:
+    Could this property have been
+    produced by combining, sequencing,
+    deepening, or extending anything
+    in the prior state space?
+    YES → New basin. Not new dimension.
+    NO → Proceed to Question 2.
+
+  QUESTION 2 — THE VOCABULARY TEST:
+    Can this property be fully described
+    using only concepts available before
+    the transition?
+    YES → New basin. Not new dimension.
+    NO → Proceed to Question 3.
+
+  QUESTION 3 — THE INDEPENDENCE TEST:
+    Could the prior state space at
+    maximum depth have contained
+    this property?
+    YES → New basin. Not new dimension.
+    NO → Confirmed new dimension.
+         Dimensional delta: +1 for
+         this property.
+
+  POSSIBLE OUTCOMES:
+    All three NO → CONFIRMED NEW DIMENSION
+    Any YES     → NEW BASIN, EXISTING SPACE
+    Unresolvable → UNRESOLVED
+                   Do not count.
+                   Do not dismiss.
+                   Flag for further
+                   examination.
+
+  RECORD:
+    For each property: which outcome.
+    Sum only CONFIRMED NEW DIMENSION
+    outcomes for the dimensional delta.
+    Record NEW BASIN outcomes separately —
+    they are real transitions and
+    matter for the attractor history,
+    but they do not expand the count.
+
+  THE ERROR TO AVOID:
+    Listing new properties and
+    counting each as a dimension.
+    This always produces inflation.
+    A new property is evidence that
+    something changed.
+    It is NOT evidence that the
+    dimensional space expanded.
+    The Dimension Test is the gate
+    between "something changed"
+    and "the space grew."
+    Do not skip the gate.
+```
+
+---
+
+## THE ONE-LINE VERSION
+## For Permanent Reference
+
+```
+A new dimension is confirmed when
+you cannot get there from here
+by moving along any existing axis.
+
+Everything else is elaboration
+of that single test.
+```
+
+---
+
 ## PART VI: THE COMPLETE PROTOCOL
 ## Stated as an Operational Checklist
 

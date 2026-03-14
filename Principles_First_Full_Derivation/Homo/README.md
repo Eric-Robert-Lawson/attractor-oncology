@@ -17,3 +17,4 @@
 - Historical_Audit/The_Convergence_Of_Witnesses.md
 - The_Propagation_Event.md
 - Religion/Religion_As_Geometric_Convergence.md
+- Religion/THE_TRIADIC_PILLARS_OF_RELIGION.md

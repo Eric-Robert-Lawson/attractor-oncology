@@ -1618,12 +1618,29 @@ CHECKLIST:
   always have a cost signature.
   Find it.
 
-□ 7. ESTIMATE THE DIMENSIONAL DELTA
-  How many irreducibly new properties
-  appeared that cannot be derived
-  from combinations of prior properties?
-  Each = evidence of Δ ≥ 1 in dimension.
-  Record the minimum dimensional delta.
+□ 7. APPLY THE DIMENSION TEST
+  For each new property that appeared
+  after the confirmed step:
+  apply the three questions
+  (see THE DIMENSION TEST section,
+  between Part V and Part VI).
+
+  QUESTION 1 — COMBINATION TEST:
+    Reachable by combining prior state? → New basin only.
+  QUESTION 2 — VOCABULARY TEST:
+    Describable in prior concepts?      → New basin only.
+  QUESTION 3 — INDEPENDENCE TEST:
+    Contained in prior space at depth?  → New basin only.
+
+  All three NO → confirmed new dimension. Count +1.
+  Any YES      → new basin, existing space. Count 0.
+  Unresolvable → flag as UNRESOLVED. Do not count.
+
+  Sum only confirmed new dimensions
+  for the dimensional delta.
+  Record new basins separately —
+  they are real transitions,
+  they are not dimensional expansions.
 
 □ 8. FALSIFICATION CHECK
   What would falsify the dimensional

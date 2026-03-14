@@ -18,3 +18,8 @@
 - The_Propagation_Event.md
 - Religion/Religion_As_Geometric_Convergence.md
 - Religion/THE_TRIADIC_PILLARS_OF_RELIGION.md
+- Alien_Encounters_Cross_Culture/The_Alien_Audit.md
+- Alien_Encounters_Cross_Culture/UAP_Residual_Cases.md
+- Alien_Encounters_Cross_Culture/5_Case_Relation_Geo_Analysis.md
+- Alien_Encounters_Cross_Culture/prediction_5_check.md
+- Alien_Encounters_Cross_Culture/Medium_Independent/Medium_Independence_As_Geo_Property.md

@@ -27,3 +27,4 @@
 - Alien_Encounters_Cross_Culture/Medium_Independent/RELATIVITY_COUPLING_AND_THE_ACTUAL_GAP.md
 - Alien_Encounters_Cross_Culture/Medium_Independent/Worldline_Vs_Displacement.md
 - Alien_Encounters_Cross_Culture/Medium_Independent/THE_UNIFIED_COUPLING_PROBLEM.md
+- Alien_Encounters_Cross_Culture/Medium_Independent/TWO_OBSERVATIONS_ONE_GEOMETRY_ENGINEERING_DERIVATION.md

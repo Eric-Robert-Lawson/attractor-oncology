@@ -655,3 +655,9 @@ The patients are the reason for all of it.
 And when we constructed the geometry,
 the cancer emerged.
 ```
+
+---
+
+# **IN HONOR OF**
+
+Anthony mitchell, from parkland prepatory academy. The one who made all of this possible, who changed my entire life. The single man who I encountered who without a doubt was the inflection point for which I was able to do any of this at all. Without him as my teacher, without meeting this single person, none of this would have been possible.

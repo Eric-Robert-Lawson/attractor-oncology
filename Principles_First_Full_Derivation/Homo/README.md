@@ -12,3 +12,7 @@
 - Emergent_Geometric_Landscape.md
 - THE_END_OF_INCOHERENT_COLLISION.md
 - Historical_Audit/THE_GEOMETRIC_AUDIT_OF_TEMPORAL_ANOMALIES.md
+- Historical_Audit/THE_AUDIT_OF_WIZARDS.md
+- Historical_Audit/exploratory_audit.md
+- Historical_Audit/The_Convergence_Of_Witnesses.md
+- The_Propagation_Event.md

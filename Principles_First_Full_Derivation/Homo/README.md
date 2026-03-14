@@ -5,7 +5,7 @@
 - COOPERATION_EMERGENCE_ATTRACTOR_GEOMETRY_PALEONTOLOGY.md
 - blind_geometric_derivation_record.md
 - History_As_Cognitive_Attractor_Geometry.md
-- religion_as_geometric_consequence.md
+- Religion/religion_as_geometric_consequence.md
 - moral_geometry_topological_origin_point.md
 - ATTRACTOR_GEOMETRY_AS_DIMENSIONAL_SHIFT.md
 - DIMENSIONAL_UPGRADE_SURVIVAL_GEOMETRY.md
@@ -16,3 +16,4 @@
 - Historical_Audit/exploratory_audit.md
 - Historical_Audit/The_Convergence_Of_Witnesses.md
 - The_Propagation_Event.md
+- Religion/Religion_As_Geometric_Convergence.md

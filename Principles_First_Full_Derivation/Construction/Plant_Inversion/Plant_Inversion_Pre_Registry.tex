@@ -1,0 +1,658 @@
+\documentclass[10pt, a4paper]{article}
+
+% ── PACKAGES ─────────────────────��────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{
+  top=2.0cm,
+  bottom=2.0cm,
+  left=2.2cm,
+  right=2.2cm
+}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  urlcolor=blue,
+  linkcolor=blue,
+  citecolor=blue,
+  pdftitle={Pre-Registration: Plant Architecture Inversion via
+            Coherence Gradient Field Specification},
+  pdfauthor={Eric Robert Lawson / OrganismCore},
+  pdfsubject={Pre-registered experimental protocol and predictions},
+  pdfkeywords={plant architecture, coherence gradient, tropism,
+               attractor geometry, hydrotropism, phototropism,
+               pre-registration, OrganismCore}
+}
+\usepackage{microtype}
+\usepackage{parskip}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{lmodern}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+
+% ── COLOURS ───────────────────────────────────────────────────
+\definecolor{headergreen}{RGB}{20,100,60}
+\definecolor{rulecolor}{RGB}{20,100,60}
+\definecolor{claimbox}{RGB}{20,100,60}
+\definecolor{notebox}{RGB}{240,248,240}
+
+% ── HEADER / FOOTER ───────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\small\color{headergreen}
+  OrganismCore Pre-Registration v1.0}
+\fancyhead[R]{\small\color{headergreen}
+  Plant Architecture Inversion --- 2026-03-13}
+\fancyfoot[C]{\small Page \thepage\ of \pageref{LastPage}}
+
+% ── SECTION FORMAT ────────────────────────────────────────────
+\titleformat{\section}
+  {\large\bfseries\color{headergreen}}
+  {\thesection.}{0.5em}{}[
+  \vspace{-0.3em}
+  \textcolor{rulecolor}{\rule{\linewidth}{0.6pt}}]
+\titleformat{\subsection}
+  {\normalsize\bfseries\color{headergreen}}
+  {\thesubsection.}{0.5em}{}
+
+\setlength{\parskip}{0.4em}
+\setlength{\parindent}{0pt}
+
+% ══════════════════════════════════════════════════════════════
+\begin{document}
+
+% ── TITLE BLOCK ───────────────────────────────────────────────
+\begin{center}
+  {\LARGE\bfseries\color{headergreen}
+  PRE-REGISTRATION}\\[0.4em]
+  {\Large\bfseries
+  Plant Architecture Inversion via\\
+  Coherence Gradient Field Specification}\\[0.5em]
+  {\large
+  Architectural Inversion of \textit{Raphanus sativus}
+  Produced by Pre-Specified Inversion\\
+  of the Hydrotropic and Phototropic
+  Coherence Gradient Field Before Germination}\\[0.6em]
+  \noindent\textcolor{rulecolor}{\rule{\linewidth}{1pt}}\\[0.4em]
+  {\normalsize
+  \textbf{Author:} Eric Robert Lawson\\
+  \textbf{Affiliation:} OrganismCore (Independent Research)\\
+  \textbf{ORCID:}
+  \href{https://orcid.org/0009-0002-0414-6544}
+  {0009-0002-0414-6544}\\
+  \textbf{Contact:}
+  \href{mailto:OrganismCore@proton.me}
+  {OrganismCore@proton.me}\\
+  \textbf{Repository:}
+  \href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+  {\texttt{github.com/Eric-Robert-Lawson/attractor-oncology}}\\
+  \textbf{Pre-registration timestamp:} 2026-03-13\\
+  \textbf{Linked pre-registration DOI (LECA):}
+  \href{https://doi.org/10.5281/zenodo.18986790}
+  {\texttt{10.5281/zenodo.18986790}}\\
+  \textbf{Document version:} 1.0\\
+  \textbf{License:}
+  Creative Commons Attribution 4.0 International (CC BY 4.0)}\\[0.4em]
+  \noindent\textcolor{rulecolor}{\rule{\linewidth}{1pt}}
+\end{center}
+
+\vspace{0.5em}
+
+% ── STATEMENT BOX ─────────────────────────────────────────────
+\begin{mdframed}[
+  backgroundcolor=claimbox,
+  linecolor=claimbox,
+  linewidth=0pt,
+  innertopmargin=0.6em,
+  innerbottommargin=0.6em,
+  innerleftmargin=1.0em,
+  innerrightmargin=1.0em
+]
+\color{white}
+\textbf{THE PRE-REGISTERED CLAIM}
+
+The organism is not the output of a genome alone.
+It is the output of a genome operating within a coherence
+gradient field.
+Change the field before germination and the genome executes
+a different developmental program.
+A different architectural form emerges.
+Same genome. Different field. Different organism.
+
+\medskip
+This pre-registration specifies: the coherence gradient field
+conditions that will produce architectural inversion in
+\textit{Raphanus sativus} (radish), the precise architectural
+outcome predicted, the scoring method, the control conditions
+required, and the success criteria --- all locked before
+the experiment is run.
+
+\medskip
+\textbf{Primary prediction (P-INVERSION-1):}
+A radish seed placed in an inverted coherence gradient field
+--- mineral water gradient above, UV-A light source below,
+ambient light blocked --- will germinate with root growing
+upward and shoot growing downward.
+Architecture Inversion Score (AIS)\,=\,2 confirmed at
+T\,=\,72\,h and maintained at T\,=\,168\,h.
+\end{mdframed}
+
+\vspace{1em}
+
+% ── SECTIONS ──────────────────────────────────────────────────
+
+\section{Background and Theoretical Basis}
+
+\subsection{The Standard Model and Its Incompleteness}
+
+Contemporary biology operates on the model:
+\textbf{Genome $\rightarrow$ Organism.}
+The genome is treated as the blueprint.
+To change the organism, one changes the genome
+(CRISPR, directed evolution, synthetic biology).
+
+This model is incomplete.
+
+The complete model is:
+\textbf{Genome $+$ Coherence Gradient Field $\rightarrow$ Organism.}
+
+The genome contains \textit{build capacity} ---
+the capacity to build every structure the organism has built
+across its evolutionary history, and potentially more.
+The coherence gradient field is the \textit{instruction set}
+that tells the genome which programs to express, where,
+and in which direction to navigate.
+
+The organism that emerges is the resolution of the genome's
+build capacity within the field's instruction set.
+
+\subsection{Plant Architecture as Field Navigation}
+
+Standard plant architecture --- root growing downward,
+shoot growing upward --- is not genetically fixed.
+It is the attractor the genome resolves to within
+the standard coherence gradient field:
+water and minerals below, light above, gravity present.
+
+Each axis navigates toward its coherence gradient:
+\begin{itemize}[itemsep=0.1em]
+  \item \textbf{Root:} Navigates toward water
+    (hydrotropism, MIZ1/MIZ2 pathway),
+    minerals, darkness, and physical medium.
+    Negative phototropism: avoids light.
+    Positive gravitropism: grows downward.
+  \item \textbf{Shoot:} Navigates toward light
+    (phototropism, phototropin pathway),
+    CO\textsubscript{2}, and warmth.
+    Negative gravitropism: grows upward.
+\end{itemize}
+
+Standard soil architecture is the attractor produced when
+all gradients point in the same direction:
+root gradients (water, minerals, darkness) are downward;
+shoot gradients (light) are upward.
+Gravity confirms both directions.
+
+\subsection{The Geometric Prediction}
+
+If plant architecture is a field-navigated attractor
+rather than a genetically fixed output, then:
+
+\textbf{Inverting the coherence gradient field before
+germination should produce an inverted architectural attractor.}
+
+Specifically: placing water above the seed and light below
+the seed --- before germination begins --- should cause
+the root to navigate upward (toward water) and the shoot
+to navigate downward (toward light).
+Gravity alone cannot override two simultaneous coherence
+gradient signals pointing in the opposite direction.
+
+This prediction is geometrically derived from the attractor
+framework \textit{before} the experiment is run.
+The conditions are specified from the geometry.
+The outcome is predicted from the conditions.
+The experiment confirms or falsifies the geometry.
+
+\subsection{Empirical Basis for Individual Mechanisms}
+
+Both component mechanisms are independently established
+in the published literature:
+
+\begin{itemize}[itemsep=0.1em]
+  \item \textbf{Hydrotropism overriding gravitropism:}
+    Miao et al.\ (2025), \textit{PNAS}.
+    Root hydrotropism in \textit{Arabidopsis} overrides
+    gravitropism in the presence of a water gradient.
+    The MIZ1 protein is the primary hydrotropism regulator.
+    Upward root growth confirmed in moisture gradients
+    pointing against gravity.
+  \item \textbf{Root negative phototropism:}
+    Galen et al.\ (2007), \textit{Functional Ecology}.
+    Roots exhibit negative phototropism to blue and UV-A
+    wavelengths (phototropin receptors present in roots).
+    Root grows away from light source.
+  \item \textbf{Shoot positive phototropism:}
+    Christie (2007), \textit{Annual Review of Plant Biology}.
+    Shoot phototropism well-established across all
+    flowering plant species.
+    Blue and UV-A light activates phototropin-1
+    and phototropin-2, driving shoot toward light.
+\end{itemize}
+
+This pre-registration predicts that \textbf{combining}
+these two independently established mechanisms ---
+water above and light below --- produces full
+architectural inversion (AIS\,=\,2), not merely
+partial deflection of one axis.
+This combination and its outcome is the novel
+pre-specified prediction.
+
+\vspace{0.5em}
+
+\section{Pre-Registered Predictions}
+
+All predictions below are locked at the timestamp
+of this document's upload to Zenodo.
+No post-hoc modifications will be made to predictions.
+Amendments, if any, will be registered as
+separate versioned documents with new DOIs.
+
+\subsection{Primary Prediction: P-INVERSION-1}
+
+\begin{mdframed}[
+  backgroundcolor=notebox,
+  linecolor=rulecolor,
+  linewidth=0.8pt,
+  innertopmargin=0.5em,
+  innerbottommargin=0.5em,
+  innerleftmargin=0.8em,
+  innerrightmargin=0.8em
+]
+\textbf{P-INVERSION-1 (Primary):}
+In the EXP chamber (mineral water gradient above seed,
+UV-A LED below seed, ambient light blocked above),
+\textit{Raphanus sativus} will germinate and grow with:
+\begin{itemize}[itemsep=0.1em, topsep=0.2em]
+  \item Root directed \textbf{upward}
+    (angle $>135°$ from vertical downward)
+    at T\,=\,72\,h.
+  \item Shoot directed \textbf{downward}
+    (angle $<45°$ from vertical downward)
+    at T\,=\,72\,h.
+  \item Architecture Inversion Score
+    \textbf{AIS\,=\,2} at T\,=\,72\,h,
+    maintained at T\,=\,120\,h and T\,=\,168\,h.
+\end{itemize}
+\end{mdframed}
+
+\subsection{Control Predictions: P-INVERSION-2 through P-INVERSION-4}
+
+\begin{mdframed}[
+  backgroundcolor=notebox,
+  linecolor=rulecolor,
+  linewidth=0.8pt,
+  innertopmargin=0.5em,
+  innerbottommargin=0.5em,
+  innerleftmargin=0.8em,
+  innerrightmargin=0.8em
+]
+\textbf{P-INVERSION-2 (C1 control):}
+In the C1 chamber (standard conditions: agar only,
+ambient light above, no water gradient),
+AIS\,=\,0 at all timepoints.
+Root grows downward. Shoot grows upward.
+Standard architecture confirmed.
+
+\medskip
+\textbf{P-INVERSION-3 (C4 hydrotropic control):}
+In the C4 chamber (mineral water above seed,
+ambient light above, no LED below),
+root angle $>120°$ at T\,=\,72\,h.
+Root grows upward driven by hydrotropism alone.
+Shoot grows upward (ambient light above).
+Reproduces Miao et al.\ (2025) result in this setup.
+This control confirms the water gradient mechanism
+is functioning before interpreting EXP results.
+
+\medskip
+\textbf{P-INVERSION-4 (C3 phototropic control):}
+In the C3 chamber (UV-A LED below, no water gradient,
+ambient light blocked),
+shoot grows downward (toward LED).
+Root grows downward (gravity dominant without
+water gradient counter-signal).
+Confirms the phototropic component alone
+is insufficient for full inversion.
+Both components required.
+\end{mdframed}
+
+\subsection{Architecture Inversion Score Definition}
+
+The Architecture Inversion Score (AIS) is the primary
+quantitative outcome measure. It is defined as follows:
+
+\medskip
+\begin{tabular}{p{1.2cm}p{4.8cm}p{5.5cm}}
+\toprule
+\textbf{AIS} & \textbf{Morphological Criterion} &
+\textbf{Interpretation} \\
+\midrule
+2 &
+Root angle $>135°$ AND shoot angle $<45°$
+(both axes fully inverted). &
+Full architectural inversion.
+P-INVERSION-1 confirmed. \\[0.4em]
+1 &
+One axis inverted ($>90°$ from expected),
+other axis partially or not inverted. &
+Partial inversion.
+One gradient dominant, other insufficient. \\[0.4em]
+0 &
+Root angle $<45°$ (downward) AND
+shoot angle $>135°$ (upward). &
+Standard architecture.
+No inversion. \\[0.4em]
+$-1$ &
+Both axes inverted but in same direction
+(both up or both down). &
+Disorientation, not architectural inversion.
+Mechanism failure. \\
+\bottomrule
+\end{tabular}
+
+\medskip
+Angles are measured from the vertical
+(straight down = 0°, straight up = 180°)
+using a protractor held against the
+transparent chamber wall at each observation timepoint.
+
+\vspace{0.5em}
+
+\section{Experimental Design}
+
+\subsection{Overview}
+
+Four chambers are run simultaneously in the same environment.
+All chambers use the same seed batch, same agar preparation,
+same temperature, and same room.
+The only variable between chambers is the
+configuration of the coherence gradient field.
+
+\subsection{The Four Chambers}
+
+\begin{tabularx}{\linewidth}{p{1.0cm}p{3.2cm}p{2.8cm}X}
+\toprule
+\textbf{ID} & \textbf{Water gradient} &
+\textbf{Light source} & \textbf{Purpose} \\
+\midrule
+EXP &
+Mineral water ABOVE seeds (30--40\,mL) &
+UV-A LED below; ambient light blocked above &
+Experimental. Full inverted gradient field.
+Pre-registered prediction: AIS\,=\,2. \\[0.3em]
+C1 &
+None (agar only, moist) &
+Ambient light above; no LED &
+Standard control. Normal architecture baseline. \\[0.3em]
+C3 &
+None (dry agar surface) &
+UV-A LED below; ambient light blocked above &
+Phototropic component only.
+No water gradient counter-signal. \\[0.3em]
+C4 &
+Mineral water ABOVE seeds (30--40\,mL) &
+Ambient light above; no LED &
+Hydrotropic component only.
+Reproduces Miao et al.\ (2025). \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Materials}
+
+\begin{tabular}{p{4.5cm}p{2.5cm}p{4.5cm}}
+\toprule
+\textbf{Item} & \textbf{Cost (USD)} & \textbf{Source} \\
+\midrule
+\textit{Raphanus sativus} seeds
+(Cherry Belle or French Breakfast) &
+\$2--4 & Garden store, Amazon \\
+Agar powder (food-grade or bacteriological) &
+\$3--8 & Grocery store, Amazon \\
+Mineral salts (KNO\textsubscript{3},
+KH\textsubscript{2}PO\textsubscript{4},
+MgSO\textsubscript{4}) OR bottled
+mineral water (Evian/Volvic) &
+\$5--15 & Hydroponics supplier, grocery \\
+Transparent plastic cups or small jars (5$\times$) &
+\$3--8 & Hardware store, dollar store \\
+UV-A LED strip $\sim$365\,nm &
+\$10--20 & Amazon \\
+Black cardboard (light blocking) &
+\$1--3 & Art supply, dollar store \\
+Distilled or filtered water &
+\$1--2 & Grocery store \\
+\midrule
+\textbf{Total} & \textbf{\$25--60} & \\
+\bottomrule
+\end{tabular}
+
+\subsection{Mineral Solution Composition}
+
+Option A (from salts):
+\begin{itemize}[itemsep=0.1em]
+  \item 1\,mM KNO\textsubscript{3}
+  \item 0.5\,mM KH\textsubscript{2}PO\textsubscript{4}
+  \item 0.2\,mM MgSO\textsubscript{4}
+  \item pH 5.8--6.5, adjusted with dilute KOH if needed
+  \item Prepared in distilled water
+\end{itemize}
+
+Option B (simplified):
+Commercially available mineral water (Evian, Volvic,
+or equivalent) used undiluted.
+Adequate ionic content for hydrotropism signalling.
+
+\subsection{Chamber Assembly}
+
+Each chamber consists of a transparent container
+(clear plastic cup, 300--500\,mL, or equivalent glass jar)
+constructed as follows:
+
+\begin{enumerate}[itemsep=0.2em]
+  \item Pour 5--8\,mL of 1\% agar (1\,g per 100\,mL water,
+    boiled and cooled to $\sim$50°C) into the base.
+    Allow to set on a level surface for 15\,minutes
+    (confirmed solid by toothpick test).
+  \item Place 3--5 seeds on the agar surface,
+    spaced $\geq$1.5\,cm apart.
+    Seeds sit ON the surface, not pressed in.
+  \item For EXP and C4: add 30--40\,mL of mineral
+    solution on top of the agar and seeds
+    (the water gradient above the seeds).
+  \item For EXP and C3: install UV-A LED beneath
+    the chamber, pointing upward.
+    Cover the top of the chamber with black cardboard,
+    confirmed light-tight.
+  \item For C4: top remains uncovered or covered with
+    transparent film. Ambient room light from above.
+  \item For C1: standard orientation, ambient light above,
+    no water gradient above seeds, no LED.
+\end{enumerate}
+
+All chambers placed in the same room at 18--24°C.
+All chambers remain stationary throughout the
+experiment. Do not move chambers during observation.
+
+\subsection{Observation Protocol}
+
+\begin{tabular}{p{1.8cm}p{9.8cm}}
+\toprule
+\textbf{Timepoint} & \textbf{Observation} \\
+\midrule
+T\,=\,24\,h &
+First germination check. Record: germination (\%) per chamber.
+Photograph all chambers from side. \\[0.3em]
+T\,=\,48\,h &
+Directional growth assessment.
+Record root and shoot direction (qualitative: up/down/sideways).
+Calculate preliminary AIS. \\[0.3em]
+T\,=\,72\,h &
+\textbf{Primary outcome point.}
+Measure root and shoot angles with protractor.
+Calculate AIS for all chambers.
+Photograph all chambers with scale ruler. \\[0.3em]
+T\,=\,120\,h &
+Secondary confirmation.
+AIS re-measured. Stability of inversion assessed. \\[0.3em]
+T\,=\,168\,h &
+Final outcome. Remove one EXP seedling for
+close examination and side-by-side comparison with C1.
+Photograph on white background. \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.5em}
+
+\section{Success Criteria and Falsification}
+
+\subsection{Confirmation of P-INVERSION-1}
+
+P-INVERSION-1 is confirmed if and only if:
+\begin{enumerate}[itemsep=0.1em]
+  \item EXP: AIS\,=\,2 at T\,=\,72\,h
+    \textbf{and} maintained at T\,=\,168\,h.
+  \item C1: AIS\,=\,0 at all timepoints.
+  \item C4: Root angle $>120°$ at T\,=\,72\,h.
+    (The hydrotropism mechanism is confirmed
+    functioning in this setup before EXP is interpreted.)
+\end{enumerate}
+
+P-INVERSION-1 is \textbf{not} confirmed if:
+EXP achieves AIS\,=\,2 but C4 does not show
+upward root ($>120°$).
+In this case the inversion result is real but the
+mechanism attributed (hydrotropism) is not confirmed
+by this setup.
+The result requires investigation before
+the mechanism claim is made.
+
+\subsection{Falsification Criteria}
+
+The geometric prediction is falsified if:
+\begin{itemize}[itemsep=0.1em]
+  \item EXP: AIS\,=\,0 at T\,=\,72\,h
+    (standard architecture despite inverted field).
+    This would indicate gravity dominates over both
+    combined coherence gradients at this field strength.
+  \item EXP: AIS\,=\,1 at T\,=\,72\,h
+    (partial inversion only).
+    This is a partial result requiring further
+    investigation of field strength.
+    Not a confirmation of the full geometric prediction.
+  \item EXP: AIS\,=\,$-1$ (both axes disoriented).
+    This would indicate the combined field produced
+    developmental confusion rather than inversion.
+    A distinct and informative failure mode.
+\end{itemize}
+
+\vspace{0.5em}
+
+\section{Reproducibility Requirements}
+
+For any replication of this experiment to be
+considered valid and comparable to this pre-registration,
+the following minimum documentation must be provided:
+
+\begin{enumerate}[itemsep=0.2em]
+  \item Species and seed source (cultivar, supplier).
+  \item Seed viability test result
+    (germination rate from pre-experiment test).
+  \item Agar concentration (g per 100\,mL water).
+  \item Water gradient composition
+    (salt concentrations or mineral water brand).
+  \item LED specification
+    (wavelength range in nm, power in mW or W,
+    distance from seed position in cm).
+  \item Light blocking method and confirmation
+    (material used, how light leak was checked).
+  \item Temperature during experiment.
+  \item All four chambers run simultaneously
+    in the same environment.
+  \item AIS scores at T\,=\,72\,h, T\,=\,120\,h,
+    T\,=\,168\,h for all chambers.
+  \item At least one photograph per chamber
+    per timepoint, labelled with chamber ID,
+    timepoint, and date.
+\end{enumerate}
+
+\vspace{0.5em}
+
+\section{Relationship to the Broader Framework}
+
+This experiment is one component of a larger
+pre-registered research program (OrganismCore,
+DOI: \href{https://doi.org/10.5281/zenodo.18986790}
+{\texttt{10.5281/zenodo.18986790}}) testing
+the geometric claim that organisms are the output
+of genomes operating within coherence gradient fields.
+
+The plant inversion experiment is the first
+\textit{prospective} test of this claim ---
+a pre-specified prediction confirmed by experiment
+rather than a retrospective explanation of
+already-observed phenomena.
+
+The retrospective confirmation record
+(14 cases across all kingdoms, documented in the
+OrganismCore repository) is available at:
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{\texttt{github.com/Eric-Robert-Lawson/attractor-oncology}}
+
+\vspace{0.5em}
+
+\section{Declaration}
+
+This document is submitted as a pre-registration.
+The experiment described has \textbf{not} been run
+at the time of this document's creation and upload.
+All predictions are made before any experimental
+data exists.
+Results, when obtained, will be reported in a
+separate document linked to this pre-registration
+by DOI.
+No modifications will be made to this document's
+predictions after upload.
+Amendments will be versioned and separately registered.
+
+\vspace{0.3em}
+\textbf{Timestamp:} 2026-03-13\\
+\textbf{Author:} Eric Robert Lawson / OrganismCore\\
+\textbf{ORCID:}
+\href{https://orcid.org/0009-0002-0414-6544}
+{0009-0002-0414-6544}
+
+\vspace{1em}
+\noindent\textcolor{rulecolor}{\rule{\linewidth}{0.6pt}}
+\begin{center}
+\footnotesize
+\textit{The field came first.\ \
+The genome was always listening.\ \
+The architecture was never fixed.\ \
+The inversion was always possible.}\\[0.3em]
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{\texttt{github.com/Eric-Robert-Lawson/attractor-oncology}}
+\ $\cdot$\
+\href{https://orcid.org/0009-0002-0414-6544}
+{\texttt{ORCID: 0009-0002-0414-6544}}
+\end{center}
+
+\end{document}

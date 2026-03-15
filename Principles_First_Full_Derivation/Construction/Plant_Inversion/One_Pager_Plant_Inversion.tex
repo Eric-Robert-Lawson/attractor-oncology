@@ -1,0 +1,290 @@
+\documentclass[9.5pt, a4paper]{article}
+
+% ── PACKAGES ──────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{
+  top=0.9cm,
+  bottom=0.9cm,
+  left=1.4cm,
+  right=1.4cm
+}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  urlcolor=blue,
+  linkcolor=blue,
+  pdftitle={Plant Architecture Inversion --- One Page Summary},
+  pdfauthor={Eric Robert Lawson / OrganismCore}
+}
+\usepackage{microtype}
+\usepackage{parskip}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{multicol}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{lmodern}
+
+% ── COLOURS ───────────────────────────────────────────────────
+\definecolor{headergreen}{RGB}{20,100,60}
+\definecolor{statementbox}{RGB}{20,100,60}
+\definecolor{rulecolor}{RGB}{20,100,60}
+
+% ── SECTION FORMAT ────────────────────────────────────────────
+\titleformat{\section}
+  {\small\bfseries\color{headergreen}}
+  {}{0em}{}[\vspace{-0.25em}
+  \textcolor{rulecolor}{\rule{\linewidth}{0.4pt}}]
+\titlespacing{\section}{0pt}{0.35em}{0.15em}
+
+\setlength{\parskip}{0.15em}
+\setlength{\parindent}{0pt}
+\setlength{\columnsep}{0.9em}
+\pagestyle{empty}
+
+% ══════════════════════════════════════════════════════════════
+\begin{document}
+
+% ── HEADER ──────────────────��─────────────────────────────────
+\begin{center}
+  {\large\bfseries\color{headergreen}
+  THE PLANT ARCHITECTURE INVERSION EXPERIMENT}\\[0.1em]
+  {\small\color{headergreen}
+  Coherence Gradient Field Specification Produces
+  Pre-Specified Architectural Inversion in \textit{Raphanus sativus}}\\[0.1em]
+  {\footnotesize
+  Eric Robert Lawson\ $\cdot$\
+  OrganismCore (Independent Research)\ $\cdot$\
+  ORCID:
+  \href{https://orcid.org/0009-0002-0414-6544}
+  {0009-0002-0414-6544}\ $\cdot$\
+  \href{mailto:OrganismCore@proton.me}
+  {OrganismCore@proton.me}\ $\cdot$\
+  2026-03-13}
+\end{center}
+
+\vspace{0.1em}
+
+% ── THE CLAIM ─────────────────────────────────────────────────
+\begin{mdframed}[
+  backgroundcolor=statementbox,
+  linecolor=statementbox,
+  linewidth=0pt,
+  innertopmargin=0.3em,
+  innerbottommargin=0.3em,
+  innerleftmargin=0.7em,
+  innerrightmargin=0.7em
+]
+\begin{center}
+\footnotesize\bfseries\color{white}
+The organism is not the output of a genome.
+It is the output of a genome operating within a coherence
+gradient field.
+Change the field --- the genome executes a different program.
+A different organism emerges. Same genome. Different field.
+Different organism.
+Placing a radish seed in an \textbf{inverted coherence gradient
+field} --- water gradient above, UV light below ---
+produces a \textbf{pre-specified architectural inversion}:
+root growing upward, shoot growing downward.
+Conditions derived geometrically from the attractor.
+\textbf{Prediction locked before the experiment.}
+Confirmed by a \textbf{\$80--120} experiment
+in any space with a bench, a light, and 7 days.
+Pre-registered 2026-03-13.
+\end{center}
+\end{mdframed}
+
+\vspace{0.2em}
+
+% ── TWO COLUMNS ───────────────────────────────────────────────
+\begin{multicols}{2}
+
+% ── LEFT COLUMN ───────────────────────────────────────────────
+
+\section{The Theorem}
+
+{\small
+A plant's architecture is the output of a genome
+navigating a coherence gradient field.
+The field has two dominant axes:
+
+\smallskip
+\begin{tabular}{p{0.55cm}p{5.5cm}}
+\textbf{Root} & Navigates toward water, minerals,
+darkness, physical medium contact. \\[0.2em]
+\textbf{Shoot} & Navigates toward light,
+CO\textsubscript{2}, warmth. \\
+\end{tabular}
+
+\smallskip
+Standard soil architecture (root down, shoot up) is
+not genetically fixed. It is the attractor the genome
+resolves to in the standard gradient field.
+\textbf{Invert the gradient field before germination:
+the genome resolves to the inverted attractor.}
+Architecture inversion from field specification alone.
+No genetic modification. No mutation. One generation.
+
+\medskip
+\textbf{The standard model:} Genome $\rightarrow$ Organism.\\
+\textbf{The complete model:}
+Genome $+$ Coherence Field $\rightarrow$ Organism.
+}
+
+{\footnotesize
+Pre-registration DOI:\
+\href{https://doi.org/10.5281/zenodo.19040399}
+{\texttt{10.5281/zenodo.19040399}}
+}
+
+\section{The Pre-Registered Prediction}
+
+{\small
+In the EXP chamber (inverted gradient field):
+
+\smallskip
+\begin{tabular}{p{0.55cm}p{5.6cm}}
+\textbf{Root} & Grows \textbf{upward} toward the
+mineral water gradient above the seed.
+Hydrotropism overrides gravitropism. \\[0.2em]
+\textbf{Shoot} & Grows \textbf{downward} toward
+the UV-A LED source below the seed.
+Phototropism inverted by field geometry. \\[0.2em]
+\textbf{AIS} & Architecture Inversion Score $= 2$
+(both axes inverted) confirmed at T$=$72\,h and
+maintained at T$=$120\,h and T$=$168\,h. \\
+\end{tabular}
+
+\smallskip
+AIS is measured by protractor against the
+transparent chamber wall.
+AIS\,=\,2: root $>$135°, shoot $<$45° from vertical.
+AIS\,=\,0: standard architecture (root down, shoot up).
+
+\smallskip
+\textbf{Control confirmation:}
+C4 (water gradient only, ambient light above):
+root grows upward --- reproduces PNAS 2025 hydrotropism
+result.
+C1 (standard soil): AIS\,=\,0 throughout.
+EXP (inverted field): AIS\,=\,2 at 72\,h.
+}
+
+\columnbreak
+
+% ── RIGHT COLUMN ──────────────────────────────────────────────
+
+\section{The Four Chambers}
+
+{\small
+\begin{tabular}{p{0.8cm}p{2.3cm}p{2.3cm}}
+\toprule
+\textbf{ID} & \textbf{Setup} & \textbf{Expected} \\
+\midrule
+EXP &
+Mineral water above seed. UV-A LED below. Black cover above. &
+AIS\,=\,2. Full inversion. Root up, shoot down. \\[0.3em]
+C1 &
+Moist agar. Ambient light above. Standard orientation. &
+AIS\,=\,0. Normal architecture. Control baseline. \\[0.3em]
+C3 &
+Dry agar. UV-A LED below. No water gradient. &
+Root down (gravity wins). Shoot down (toward LED). \\[0.3em]
+C4 &
+Mineral water above. Ambient light above. No LED. &
+Root up (hydrotropism). Shoot up (phototropism).
+Reproduces PNAS 2025. \\
+\bottomrule
+\end{tabular}
+
+\smallskip
+{\footnotesize
+C3 isolates the phototropic component alone.
+C4 isolates the hydrotropic component alone.
+EXP combines both inverted gradients.
+AIS\,=\,2 in EXP requires \textit{both} components.}
+}
+
+\section{What EXP\,=\,AIS\,2 Establishes}
+
+{\small
+\textbf{1. Field authorship of architecture.}
+The same genome, in an inverted gradient field,
+builds an inverted organism.
+Architecture is a field output, not a fixed genetic output.
+This has never been demonstrated from a pre-specified
+prediction with locked conditions.
+
+\textbf{2. Attractor geometry is real and navigable.}
+The plant did not mutate. It navigated to the
+attractor specified by the coherence field.
+The field is the instruction set.
+The genome is the build capacity.
+The organism is the resolution.
+
+\textbf{3. Implications for agriculture and medicine.}
+If architecture is field-authored:
+organisms can be redesigned without genome editing.
+Specify the field. The genome executes.
+The organism that emerges is the pre-specified attractor.
+No CRISPR. No off-target effects. One generation.
+}
+
+\section{Materials and Timeline}
+
+{\small
+\begin{tabular}{p{3.5cm}p{1.1cm}p{1.4cm}}
+\toprule
+\textbf{Item} & \textbf{Cost} & \textbf{Source} \\
+\midrule
+Radish seeds & \$2--4 & Garden store \\
+Agar powder (100g) & \$3--8 & Grocery store \\
+Mineral salts (KNO\textsubscript{3}, etc.) & \$10--15 & Hydroponics \\
+Transparent chambers (5$\times$) & \$5--10 & Hardware \\
+UV-A LED strip (\textasciitilde{}365\,nm) & \$8--15 & Amazon \\
+Distilled water & \$1--2 & Grocery store \\
+\midrule
+\textbf{Total} & \textbf{\$29--54} & \\
+\midrule
+\multicolumn{3}{p{5.8cm}}{\footnotesize
+Timeline: 2--3 days preparation.
+Primary result at T\,=\,72\,h.
+Confirmed at T\,=\,168\,h (Day 7).
+No BSL rating. No credentials.
+No specialist equipment.
+Transparent chambers observable by eye
+throughout the experiment.}\\
+\bottomrule
+\end{tabular}
+}
+
+\end{multicols}
+
+\vspace{0.05em}
+\noindent\textcolor{rulecolor}
+{\rule{\linewidth}{0.4pt}}
+
+% ── FOOTER ────────────────────────────────────────────────────
+\begin{center}
+\footnotesize
+\textit{The field came first.\ \
+The genome was always listening.\ \
+The architecture was never fixed.\ \
+The inversion was always possible.}\\[0.15em]
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{\texttt{github.com/Eric-Robert-Lawson/attractor-oncology}}
+\ $\cdot$\
+\href{https://doi.org/10.5281/zenodo.19040399}
+{\texttt{doi.org/10.5281/zenodo.19040399}}
+\ $\cdot$\
+\href{https://orcid.org/0009-0002-0414-6544}
+{\texttt{ORCID: 0009-0002-0414-6544}}
+\end{center}
+
+\end{document}

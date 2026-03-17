@@ -1,0 +1,6 @@
+# Chronology
+
+- Popper_Kuhn_Godel_Attractor_Geometry.md
+- Popper_Kuhn_Lakatos_Godel_And_Attractor_Geometry.md
+- Andy_Was_So_Close.md
+- Post_Modernism_Is_Geometrically_Incompatible_In_Current_Form.md

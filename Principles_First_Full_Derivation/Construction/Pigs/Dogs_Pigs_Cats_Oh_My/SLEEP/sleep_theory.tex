@@ -1,0 +1,1315 @@
+\documentclass[10pt, a4paper]{article}
+
+% ── PACKAGES ──────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{top=2.5cm,bottom=2.5cm,
+          left=2.5cm,right=2.5cm}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,urlcolor=blue,
+  linkcolor=blue,citecolor=blue,
+  pdftitle={Sleep as Attractor Basin
+    Navigation Cost: A Unified Geometric
+    Theory of Sleep Function, Topology,
+    and Deep-Time Survival},
+  pdfauthor={Eric Robert Lawson /
+    OrganismCore}
+}
+\usepackage{microtype,parskip,booktabs}
+\usepackage{array,tabularx,longtable}
+\usepackage{xcolor,mdframed,enumitem}
+\usepackage{titlesec,lmodern,fancyhdr}
+\usepackage{lastpage,amsmath,amssymb}
+\usepackage{abstract}
+
+% ── COLOURS ────���──────────────────────────────────────────────
+\definecolor{headergreen}{RGB}{20,100,60}
+\definecolor{rulecolor}{RGB}{20,100,60}
+\definecolor{claimbox}{RGB}{20,100,60}
+\definecolor{shadelight}{RGB}{248,252,248}
+
+% ── HEADER / FOOTER ───────────────────────────────────────────
+\pagestyle{fancy}\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\small\color{headergreen}
+  Lawson / OrganismCore}
+\fancyhead[R]{\small\color{headergreen}
+  Sleep as Attractor Basin Navigation
+  Cost --- 2026-03-18}
+\fancyfoot[C]{\small
+  Page \thepage\ of \pageref{LastPage}}
+
+% ── SECTION FORMAT ────────────────────────────────────────────
+\titleformat{\section}
+  {\large\bfseries\color{headergreen}}
+  {\thesection.}{0.5em}{}[
+  \vspace{-0.3em}\textcolor{rulecolor}
+  {\rule{\linewidth}{0.6pt}}]
+\titleformat{\subsection}
+  {\normalsize\bfseries\color{headergreen}}
+  {\thesubsection.}{0.5em}{}
+\titleformat{\subsubsection}
+  {\small\bfseries}
+  {\thesubsubsection.}{0.5em}{}
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+
+% ══════════════════════════════════════════════════════════════
+\begin{document}
+
+% ── TITLE BLOCK ───────────────────────────────────────────────
+\begin{center}
+  {\LARGE\bfseries\color{headergreen}
+  Sleep as Attractor Basin Navigation
+  Cost:\\[0.3em]
+  A Unified Geometric Theory of Sleep
+  Function, Topology,\\[0.3em]
+  and Deep-Time Survival}\\[0.8em]
+  {\normalsize
+  \textbf{Eric Robert Lawson}\\
+  OrganismCore (Independent Research)\\
+  \href{mailto:OrganismCore@proton.me}
+  {OrganismCore@proton.me}\\
+  ORCID:
+  \href{https://orcid.org/0009-0002-0414-6544}
+  {0009-0002-0414-6544}\\[0.4em]
+  \textit{Manuscript deposited as
+  reasoning artifact series,
+  OrganismCore, 2026-03-18.}\\
+  \textit{Repository:}
+  \href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+  {\texttt{github.com/Eric-Robert-Lawson/
+  attractor-oncology}}\\
+  \textit{Theory paper:}
+  \href{https://doi.org/10.5281/zenodo.19094935}
+  {\texttt{doi:10.5281/zenodo.19094935}}
+  }
+\end{center}
+
+\vspace{0.5em}
+\noindent\textcolor{rulecolor}
+{\rule{\linewidth}{1pt}}
+\vspace{0.5em}
+
+% ── ABSTRACT ──────────────────────────────────────────────────
+\begin{mdframed}[backgroundcolor=shadelight,
+  linecolor=headergreen,linewidth=0.8pt,
+  innertopmargin=0.7em,innerbottommargin=0.7em,
+  innerleftmargin=0.9em,innerrightmargin=0.9em]
+\textbf{Abstract}
+
+\smallskip
+We present a unified geometric theory
+of sleep derived from the attractor
+landscape framework
+$S + N + G \rightarrow R$, where $S$
+is the structural substrate (genome and
+somatic integrity), $N$ is the coherence
+gradient field (circadian clock, social
+environment, and light), and $G$ is the
+global attractor landscape, physically
+implemented as the organism's epigenetic
+state. The framework makes three
+inseparable predictions about rest:
+(1) \textit{Quantity} --- the total cost
+of occupying a position in the attractor
+landscape must be discharged per cycle,
+and duration of discharge tracks total
+cost; (2) \textit{Topology} --- the
+architecture of the discharge process is
+itself a geometric prediction of the
+landscape position, not an independent
+biological variable; and (3)
+\textit{Substrate} --- the cost of basin
+navigation is fundamentally oxidative,
+with reactive oxygen species (ROS)
+accumulation as the proximate death
+mechanism in sleep deprivation (Vaccaro
+et al., 2020), and the glymphatic system
+as the topological mechanism of discharge
+within consolidated bilateral sleep.
+
+From these three predictions we derive:
+eight sleep topologies (T1 through T8);
+two deep-time survival strategies (Lock
+and Navigator); an unstable zone; a
+complete three-channel sonar instrument
+(duration, topology, behavioural
+flexibility); and the dimensional
+invariant --- the oldest surviving
+lineages sleep the least and the minimum
+of the sleep spectrum is the maximum of
+the survival spectrum.
+
+We further identify that (a) the four
+dominant sleep function theories in the
+current literature (synaptic homeostasis,
+energy conservation, glymphatic
+clearance, memory consolidation) are
+correct descriptions of mechanisms
+within a single topology class (T3)
+and are subsumed by the framework as
+special cases; (b) the derivation chain
+from cancer biology (FOXA1/EZH2 ratio;
+Lawson, 2024) closes on itself through
+BMAL1 --- loss of the master circadian
+clock gene makes the cellular repair
+basin epigenetically inaccessible,
+producing a cancer attractor at the
+cellular level geometrically identical
+to the organism-level failure it
+initiated; (c) social information is
+a primary $N$ field co-equal to light,
+with dominance rank negatively
+correlating with sleep quality
+proportional to the social navigational
+demand of the dominant position; and
+(d) artificial light at night (ALAN)
+is a global primary $N$ field disruption
+operating simultaneously across
+thousands of species.
+
+Eleven a-priori predictions
+(P-INVARIANT-1 through P-INVARIANT-11)
+and five closure predictions
+(P-CLOSURE-1 through P-CLOSURE-5)
+are stated. None are derivable from
+any existing sleep function theory.
+All were stated before literature
+confirmation was sought.
+\end{mdframed}
+
+\vspace{0.6em}
+
+% ══════════════════════════════════════════════════════════════
+\section{Introduction: The Problem With
+Four Theories}
+\label{sec:intro}
+% ══════════════════════════════════════════════════════════════
+
+Sleep is universal across animal life
+and has persisted across 600 million
+years of evolution despite imposing an
+obvious and severe fitness cost: a
+sleeping organism cannot feed, reproduce,
+or detect predators. The persistence
+of sleep therefore implies a benefit
+sufficiently large to outweigh this
+cost continuously across deep time.
+
+The current literature offers four
+competing frameworks for what that
+benefit is:
+
+\begin{enumerate}[itemsep=0.3em]
+  \item \textbf{Synaptic Homeostasis
+    (SHY):} Sleep downscales synaptic
+    potentiation accumulated during
+    waking, preventing synaptic
+    saturation and restoring the
+    brain's capacity for new learning
+    \cite{tononi2006sleep}.
+
+  \item \textbf{Energy conservation:}
+    Sleep reduces metabolic demand
+    and allows cellular energy reserve
+    replenishment \cite{siegel2005clues}.
+
+  \item \textbf{Glymphatic clearance:}
+    Sleep drives cerebrospinal fluid
+    pulsation through perivascular
+    channels, clearing neurotoxic
+    metabolites including amyloid-beta
+    \cite{xie2013sleep}.
+
+  \item \textbf{Memory consolidation:}
+    Sleep reactivates and stabilises
+    memory traces formed during waking
+    \cite{stickgold2005sleep}.
+\end{enumerate}
+
+The 2023--2024 consensus is explicit:
+no single theory explains all aspects
+of sleep \cite{frank2024sleep}. The
+frameworks are treated as complementary
+and overlapping. This theoretical
+pluralism is the symptom of a missing
+geometric structure.
+
+\textbf{The problem:} None of these
+four frameworks generates the following
+observations:
+
+\begin{itemize}[itemsep=0.2em]
+  \item The oldest surviving lineages
+    on Earth sleep the least.
+  \item Organisms that sleep almost
+    nothing (horseshoe crabs, sponges,
+    nautilus) have survived every mass
+    extinction for hundreds of millions
+    of years.
+  \item Organisms that sleep the most
+    (bats, koalas, cats) are not the
+    most cognitively complex.
+  \item The dolphin has dissolved the
+    barrier between waking and sleep
+    and permanently occupies an
+    intermediate state.
+  \item The octopus has independently
+    evolved a two-phase sleep
+    architecture in a brain with
+    no cerebral cortex.
+  \item A crocodilian sleeps 2--6 hours
+    of true bilateral EEG sleep and
+    12--16 hours of distributed rest,
+    not because it is cognitively
+    simple but because its ectothermic
+    metabolic architecture determines
+    the only topologically feasible
+    discharge architecture for
+    its navigational demand.
+\end{itemize}
+
+These observations are not anomalies.
+They are the geometric signal. The
+theory that explains them must be
+geometric, not mechanistic.
+
+We propose such a theory.
+
+% ══════════════════════════════════════════════════════════════
+\section{The Attractor Geometry
+Framework}
+\label{sec:framework}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{The Fundamental Equation}
+
+\[
+S + N + G \;\rightarrow\; R
+\]
+
+\begin{itemize}[itemsep=0.2em]
+  \item $S$ = structural substrate
+    (genome, epigenetically accessible
+    gene programmes, somatic tissue
+    integrity, stem cell reserve)
+  \item $N$ = coherence gradient field
+    (light, social information, and
+    circadian clock genes as the
+    molecular implementation of $N$
+    at the cellular level)
+  \item $G$ = global attractor landscape,
+    physically implemented as the
+    organism's epigenetic state:
+    histone modification patterns,
+    DNA methylation, and chromatin
+    accessibility across the genome
+  \item $R$ = resulting state or
+    phenotype
+\end{itemize}
+
+An organism's position in $G$ determines
+four properties simultaneously:
+(1) the total cost of occupying that
+position; (2) the survival trajectory;
+(3) the topology of the discharge process;
+and (4) the biochemical substrate of
+the cost.
+
+\subsection{Sleep as Basin-Navigation
+Cost Discharge}
+
+We define sleep as the generic process
+by which the accumulated cost of
+basin occupation in $G$ is discharged.
+The cost has three axes:
+
+\begin{description}[itemsep=0.3em]
+  \item[Axis~1 --- Between-basin
+    switching cost.] The organism
+    navigates between multiple
+    accessible basins in $G$.
+    Each transition requires bilateral
+    synaptic reconfiguration and
+    generates ROS in proportion to
+    the neural firing intensity of
+    the transition.
+
+  \item[Axis~2 --- Within-basin
+    metabolic cost.] A single
+    high-cost basin consumes all
+    available metabolic resources.
+    Sleep is required for metabolic
+    recovery and oxidative debt
+    clearance rather than synaptic
+    reconfiguration.
+
+  \item[Axis~3 --- Within-basin
+    computational intensity.] Extreme
+    neural computation within a single
+    specialised basin generates high
+    ROS from neural firing intensity.
+    Discharge is required for both
+    synaptic and oxidative cost.
+\end{description}
+
+\subsection{The Oxidative Substrate}
+
+The cost of navigation is fundamentally
+oxidative. This is confirmed by the
+finding that sleep deprivation kills
+via reactive oxygen species accumulation
+specifically in the intestinal epithelium
+of \textit{Drosophila}, and that
+antioxidant supplementation prevents
+death under total sleep deprivation even
+without additional sleep
+\cite{vaccaro2020sleep}. The gut is the
+tissue most directly responsible for
+substrate acquisition driving the
+navigation, and its epithelium bears
+the highest peripheral oxidative cost.
+
+Sleep discharges two costs simultaneously:
+the synaptic cost (via slow-wave
+downscaling, the Synaptic Homeostasis
+mechanism \cite{tononi2006sleep}) and
+the oxidative cost (via glymphatic
+pulsation during NREM slow-wave sleep,
+driven by interstitial space expansion
+and AQP4-mediated CSF flow through
+perivascular channels \cite{xie2013sleep}).
+The glymphatic system is the physical
+mechanism of oxidative cost discharge
+within the consolidated bilateral sleep
+topology.
+
+\subsection{G is the Epigenetic State}
+
+The attractor landscape $G$ is not
+an abstract theoretical object. Its
+physical substrate is the epigenetic
+state of the organism's cells.
+
+Basin depths in $G$ correspond to the
+depth of epigenetic entrenchment of
+the corresponding state. Barrier heights
+correspond to the chromatin
+reconfiguration energy required to
+transition between states. Sleep
+maintains $G$ daily through
+sleep-dependent histone deacetylation
+(restoring chromatin accessibility
+patterns to their functional state)
+and DNA methylation maintenance
+\cite{lappalainen2023sleep}.
+
+Chronic sleep deprivation degrades $G$
+irreversibly: progressive histone
+modification dysregulation, DNA
+methylation drift, pleiotrophin depletion
+leading to neuronal death (removing
+basins permanently), and
+NF-$\kappa$B-driven inflammatory
+landscape remodelling \cite{acs2023sleep}.
+The irreversible components of chronic
+sleep deprivation damage are $G$
+degradation past the restoration
+threshold.
+
+% ══════════════════════════════════════════════════════════════
+\section{The Eight Sleep Topologies}
+\label{sec:topologies}
+% ══════════════════════════════════════════════════════════════
+
+The framework predicts that different
+landscape positions produce different
+sleep architectures. Each topology is
+the only feasible discharge architecture
+for its corresponding landscape position
+given the full constraint set.
+
+\subsection{T1: Metabolic Quiescence}
+
+Deepest Lock organisms with minimal
+neural architecture. Zero navigational
+demand. Zero synaptic reconfiguration
+cost. Minimal ROS generation. No sleep
+in any neurological sense; circadian
+biochemical rhythms only.
+
+\textit{Confirmed:} Sponge ($\sim$600\,Myr),
+horseshoe crab ($\sim$450\,Myr), most
+jellyfish (500--700\,Myr).
+
+\subsection{T2: Distributed Bilateral
+Rest}
+
+Ectothermic Navigators. Navigator-level
+navigational cost but ROS generation
+rate an order of magnitude lower than
+endothermy. Energy budget for full
+bilateral wakefulness limited per day.
+
+True bilateral EEG sleep for 2--6h
+discharging synaptic cost. Extended
+distributed bilateral rest for 12--16h
+clearing the low-rate oxidative debt
+continuously. Total Navigator-equivalent
+discharge. Why bilateral and not
+unihemispheric: the switching cost is
+between ecological basins, bilaterally
+symmetric, requiring no hemispheric
+asymmetry in discharge.
+
+\textit{Confirmed:} Crocodilian
+(bilateral EEG throughout rest periods,
+Kelly \& Lesku, 2015, 2019). One-eye-open
+vigilance is behavioural (brainstem
+alerting), not unihemispheric in the
+EEG sense.
+
+\subsection{T3: Consolidated Bilateral
+Deep Sleep}
+
+Endothermic organisms. High ROS
+generation rate during waking requires
+concentrated high-efficiency glymphatic
+clearance during sustained NREM.
+Bilateral synaptic reconfiguration
+discharged during same concentrated
+window.
+
+\textit{Confirmed:} All endothermic
+organisms. Duration within T3 is a
+valid direct proxy for total cost
+because metabolic architecture is
+held constant.
+
+\subsection{T4: Permanent Basin~Omega ---
+Dissolved Barrier}
+
+Open-ocean Navigators where full
+bilateral sleep is lethal. The cost
+of entering the sleep basin's exit
+barrier exceeds the accumulated cost
+of remaining partially awake
+indefinitely. Barrier between waking
+and sleep is dissolved. Hemispheric
+alternation in continuous rotation.
+
+\textit{Confirmed:} Dolphin, porpoise,
+some seals. Frigatebirds during
+multi-day oceanic flight.
+
+\subsection{T5: Fragmented Shallow Sleep
+--- External Suppression}
+
+Deep single basin under chronic external
+pressure interrupting sleep before
+discharge completes. Sleep basin is
+behaviourally shallow, not geometrically
+shallow. Debt accumulates and is
+discharged as rebound when pressure is
+removed. Rebound is the definitive
+diagnostic.
+
+\textit{Confirmed:} Giraffe.
+
+\subsection{T6: Transition-Cost Sleep ---
+Developmental Basin Crossing}
+
+Sleep required not to discharge ongoing
+occupation cost but to pay the cost of
+a developmental basin transition.
+Duration proportional to transition
+magnitude, not to ongoing navigational
+demand. Cannot be postponed without
+developmental failure.
+
+\textit{Confirmed:} \textit{C.~elegans}
+lethargus at each larval transition
+\cite{allada2008invertebrate}. Broadly,
+all animals with discrete developmental
+basin transitions.
+
+\subsection{T7: Immune-Basin Sleep ---
+Defensive Basin Occupation}
+
+Pathogen invasion creates a new
+high-cost basin: the immune response.
+Sleep is the discharge process for
+immune-basin occupation cost. Cytokines
+are the $N$ field signal specifying
+immune basin entry. Duration proportional
+to immune response intensity.
+
+\textit{Confirmed:}
+\textit{C.~elegans} sickness quiescence
+\cite{hill2014cellular}. Human and
+mammalian fever sleep. Confirmed across
+all major animal phyla.
+
+\subsection{T8: Suspended State with
+Blocked Discharge}
+
+Hibernation/torpor. Both navigational
+activity and sleep architecture are
+suspended by temperature constraints.
+Homeostatic pressure continues to
+build in the complete absence of
+navigational activity. Periodic arousals
+driven by homeostatic pressure reaching
+threshold --- metabolically expensive
+warming purely to enable intense
+slow-wave sleep discharge. Post-emergence
+rebound qualitatively different from T5:
+maximum debt with zero navigational
+cause.
+
+\textit{Confirmed:} Ground squirrel,
+bear, bat, hedgehog. Post-emergence
+rebound sleep proportional to
+hibernation duration.
+
+\subsection{The Eight-Topology Prediction}
+
+The eight topologies are not a closed
+taxonomy. They are the geometrically
+derivable solutions given the known
+constraint set. Any new topology
+discovered empirically will be derivable
+from the same principles: the interaction
+of navigational cost structure, ROS
+generation rate, metabolic architecture,
+environmental lethality constraints on
+full sleep, developmental transition
+requirements, and immune-basin
+occupation. The framework is not a
+list. It is a geometry.
+
+% ══════════════════════════════════════════════════════════════
+\section{The Two Survival Strategies
+and the Unstable Zone}
+\label{sec:strategies}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{The Lock Strategy}
+
+Single basin. Extremely deep. Very high
+exit barrier. Minimal metabolism. Minimal
+ROS generation. Sleep duration approaching
+zero in simplest forms. Topology T1 or T2.
+Survival horizon: 300--600\,Myr+.
+
+Convergent across seven independent
+phyla: Porifera, Cnidaria, Mollusca,
+Chelicerata, Chondrichthyes,
+Sarcopterygii, Lepidosauria.
+
+Survival mechanism: basin so deep it
+is perturbation-invariant. The Permian--
+Triassic event eliminated 96\% of
+marine species. The horseshoe crab
+(T1, near-zero sleep, 450\,Myr) survived.
+
+\subsection{The Navigator Strategy}
+
+Multiple basins. Shallow barriers.
+High switching capacity. Ecological
+generalism. Moderate to high sleep
+equivalent. Topology T2, T3, or T4
+depending on metabolic architecture and
+environmental constraints. Survival
+horizon: 100--300\,Myr.
+
+Convergent across six+ independent
+lineages across T2, T3, and T4.
+The critical confirmation: octopus
+(Cephalopoda, $\sim$300\,Myr) has
+independently evolved a two-phase
+sleep (quiet plus active REM-like)
+in a brain with no cerebral cortex
+\cite{medeiros2021sleeping}. The same
+topology from completely different
+neural architecture. Topology is
+determined by navigational demand,
+not by neural architecture.
+
+\subsection{The Unstable Zone}
+
+Shallow single basin. High barriers
+to alternatives. Not deep enough for
+perturbation-invariance. Not flexible
+enough to reach alternatives when
+niche disappears. Extinction concentrated
+here. Examples: \textit{T.~rex},
+mammoth, dodo.
+
+\subsection{The Dimensional Invariant}
+
+\begin{quote}
+\itshape
+The oldest surviving lineages sleep the
+least. The minimum of the sleep spectrum
+is the maximum of the survival spectrum.
+This is not a coincidence. This is the
+geometry.
+\end{quote}
+
+The survival--sleep duration relationship
+is U-shaped with a flat minimum. The
+minimum of sleep duration corresponds to
+the maximum survival horizon (Lock
+strategy). The moderate range is the
+Navigator survival zone. The high-duration
+range is uncertain --- survival depends
+on niche stability or Basin~$\Omega$
+depth.
+
+% ══════════════════════════════════════════════════════════════
+\section{The N Field: Clock, Social
+Information, and Light}
+\label{sec:nfield}
+% ══════════════════════════════════════════════════════════════
+
+The coherence gradient field $N$
+has three confirmed physical
+implementations:
+
+\subsection{The Circadian Molecular Clock}
+
+BMAL1/CLOCK/PER/CRY forms the molecular
+$N$ field that specifies when cells and
+organisms transition between active and
+rest/repair basins. BMAL1/CLOCK acts
+as a histone acetyltransferase --- it
+directly opens chromatin at repair
+gene loci, implementing the transition
+into the repair basin at the molecular
+level.
+
+BMAL1 loss at the cellular level is
+the molecular equivalent of an organism
+that cannot enter its sleep basin.
+BMAL1 acts as a tumour suppressor
+\cite{papagiannakopoulos2023bmal1}:
+its loss makes the repair/differentiation
+basin epigenetically inaccessible and
+stabilises the cancer attractor.
+
+\textbf{This closes the derivation
+chain.} The framework began with a
+cancer cell locked in the cancer
+attractor (FOXA1/EZH2 ratio, Lawson
+2024). It ends by identifying that
+BMAL1 loss is the molecular mechanism
+by which the repair basin becomes
+inaccessible --- the same geometric
+failure. Cancer is cellular sleep
+deprivation. The chain is circular.
+
+\subsection{Social Information as
+Primary Zeitgeber}
+
+Social cues are confirmed co-primary
+zeitgebers, entraining the circadian
+clock independently of light
+\cite{social2023zeitgeber}. The social
+$N$ field synchronises group sleep
+basins into a coupled collective
+attractor.
+
+Wild chacma baboons: dominant
+individuals experience less and
+lower-quality sleep than subordinates
+\cite{current_biology2025baboon}.
+Dominant baboons sleep closer to more
+group members, experience more social
+$N$ field signals during the night,
+and cannot fully enter the sleep basin
+without losing the social landscape
+position that dominance requires.
+Dominance is a landscape position
+whose navigational cost does not
+cease at night.
+
+\subsection{Light and Artificial Light
+at Night}
+
+Light is the primary physical zeitgeber.
+ALAN is expanding at 2.2\% per year
+globally \cite{royalsoc2023alan},
+disrupting the primary $N$ field
+for all phototactic and circadian-
+entrained species simultaneously.
+600+ studies document consequences
+across birds, insects, marine organisms,
+mammals, and plants.
+
+ALAN is not a minor ecological
+inconvenience. It is a global
+disruption of the primary $N$ field
+that specifies sleep basin entry for
+all life. The consequences are geometric:
+organisms whose $N$ field is corrupted
+lose reliable access to the basins
+the field was specifying.
+
+% ═══════════════════════════════════════��══════════════════════
+\section{Subsuming the Four Existing
+Theories}
+\label{sec:subsuming}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Why All Four Are Correct
+and Incomplete}
+
+The four dominant theories are correct
+descriptions of mechanisms within T3
+(consolidated bilateral deep sleep in
+endothermic organisms). This topology
+covers the majority of the published
+comparative sleep literature because
+most studied organisms are endothermic
+vertebrates.
+
+\begin{description}[itemsep=0.3em]
+  \item[SHY] describes the synaptic
+    component of Axis~1 and Axis~3
+    cost discharge within T3.
+
+  \item[Energy conservation] describes
+    the consequence of reduced
+    navigational activity during
+    Axis~2 cost recovery within T3.
+
+  \item[Glymphatic clearance] describes
+    the physical mechanism by which
+    the oxidative cost substrate is
+    cleared during T3 via NREM-driven
+    CSF pulsation.
+
+  \item[Memory consolidation] describes
+    a downstream consequence of
+    selective synaptic downscaling
+    within T3.
+\end{description}
+
+None generates the dimensional invariant.
+None predicts that the oldest surviving
+lineages sleep the least. None predicts
+convergent topologies across independent
+phylogenies. None predicts that sleep
+topology is a geometric property of
+landscape position. The dimensional
+invariant contains all four as
+projections of a single geometric
+structure.
+
+\subsection{What the Framework Adds}
+
+The framework generates eleven a-priori
+predictions (P-INVARIANT-1 through
+P-INVARIANT-11, stated in the Dimensional
+Invariant v3.0 reasoning artifact,
+2026-03-18) and five closure predictions
+(P-CLOSURE-1 through P-CLOSURE-5,
+stated in the Derivation Chain Closure
+reasoning artifact, 2026-03-18), none
+of which are derivable from any of the
+four existing theories, including:
+
+\begin{itemize}[itemsep=0.2em]
+  \item Sleep duration will negatively
+    correlate with lineage age across
+    all phyla, topology-calibrated.
+
+  \item Topology~2 will be found
+    specifically and exclusively in
+    ectothermic Navigators.
+
+  \item T6 quiescence duration will
+    scale with basin transition
+    magnitude, not ongoing navigational
+    demand.
+
+  \item T8 post-emergence rebound will
+    be predicted by hibernation duration
+    alone.
+
+  \item BMAL1 restoration in cancer
+    cells will partially restore
+    differentiation basin chromatin
+    accessibility.
+
+  \item ALAN exposure will produce
+    measurable $G$ degradation
+    proportional to duration and
+    intensity.
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════════
+\section{Convergence Across Independent
+Phyla}
+\label{sec:convergence}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{The Lock Converges Across
+Seven Independent Phyla}
+
+Seven independent phyla have arrived
+at the same geometric strategy ---
+deep single basin, minimal metabolism,
+minimal sleep --- across evolutionary
+timescales of 200--600\,Myr. The
+convergence is not taxonomic. It is
+geometric: the Lock strategy is the
+deepest available position in $G$ for
+organisms whose ecological niche is
+stable and non-navigational.
+
+The transition from T1 to T2 within
+the Lock as neural complexity increases
+is itself a geometric prediction: added
+neural architecture adds synaptic cost
+to discharge and ROS from neural firing,
+but the basin remains deep enough to
+keep total cost minimal. Topology shifts
+but duration remains in the Lock range.
+
+\subsection{The Navigator Converges
+Across Multiple Topologies}
+
+The Navigator strategy has independently
+converged across T2, T3, and T4 in at
+least seven lineages. The strategy is
+the same --- ecological generalism as
+Basin~$\Omega$ of ecological flexibility
+--- expressed through the only topologically
+feasible discharge architecture given
+each lineage's full constraint set.
+
+The octopus confirmation is the
+strongest single convergence in the
+dataset: 500\,Myr of separate evolution,
+completely different neural architecture
+(no cerebral cortex, distributed
+ganglionic organisation), confirmed
+Navigator ecological strategy, and
+independently evolved two-phase sleep
+(quiet plus active REM-like)
+\cite{medeiros2021sleeping}.
+Topology is determined by navigational
+demand. Biology is not.
+
+\subsection{The Unstable Zone Does Not
+Converge}
+
+No convergent feature exists in the
+unstable zone except instability.
+This non-convergence confirms the
+framework: there is no deep basin
+in the unstable zone to converge on.
+Extinction is the non-convergent
+attractor.
+
+% ══════════════════════════════════════════════════════════════
+\section{The Three-Channel Sonar
+Instrument}
+\label{sec:sonar}
+% ══════════════════════════════════════════════════════════════
+
+The complete sonar instrument for
+landscape position determination has
+three primary channels and two
+supplementary diagnostics:
+
+\textbf{Channel 1 --- Duration:}
+Measures total discharge cost. Valid
+proxy within a single topology class.
+Ambiguous across topology classes.
+
+\textbf{Channel 2 --- Topology:}
+Identifies which of the eight discharge
+architectures the organism uses. Removes
+topology-class ambiguity from duration.
+A crocodilian (T2, 2--6h true sleep)
+and an elephant (T3, 2h true sleep)
+have similar true sleep durations but
+completely different cost structures.
+Topology disambiguates.
+
+\textbf{Channel 3 --- Behavioural
+flexibility:}
+Discriminates Navigator from Unstable
+Zone when both occupy T3. Discriminates
+T5 (flexibility impaired under pressure)
+from basin restructuring (flexibility
+maintained within new basin).
+
+\textbf{Supplementary 1 --- Rebound
+response:}
+T5 diagnostic. T8 diagnostic (distinct
+from T5: debt-to-activity ratio is
+infinite in T8). Not required once
+topology is identified but required
+when topology data are unavailable.
+
+\textbf{Supplementary 2 --- ROS rate:}
+Predicted to discriminate ectothermic
+T2 from endothermic T3 at equivalent
+navigational cost levels. Testable via
+metabolic rate measurement during
+active period.
+
+The migratory white-crowned sparrow
+provides the critical validation of
+the sonar instrument: minimal sleep
+during migration with no rebound is
+basin restructuring (lower actual
+demand in the migratory attractor),
+not T5 debt suppression. The performance
+diagnostic --- maintained within-basin
+performance, not impaired --- confirms
+this. Duration alone would misclassify
+the sparrow as approaching Lock range.
+The full three-channel sonar correctly
+identifies basin restructuring.
+
+% ══════════════════════════════════════════════════════════════
+\section{Discussion: The Scale
+Invariance of the Framework}
+\label{sec:discussion}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{From Bacterium to Biosphere}
+
+The framework operates identically
+across eleven orders of magnitude of
+biological scale:
+
+\begin{description}[itemsep=0.3em]
+  \item[Single-celled organisms]
+    Bacterial persister cells
+    demonstrate Lock/Navigator portfolio
+    strategy at sub-organismal population
+    level. Specialist bacteria show
+    Lock-equivalent metabolic quiescence.
+    Generalist bacteria show moderate
+    distributed rest. The dimensional
+    invariant is detectable below the
+    level of the nervous system.
+
+  \item[Developmental organisms]
+    T6 topology: \textit{C.~elegans}
+    lethargus is mandatory sleep at
+    developmental basin transitions.
+    Adolescent synaptic pruning is
+    T6 operating as a prolonged landscape
+    construction process --- SWA
+    declining across adolescence is
+    the geometric signature of a
+    landscape approaching completion.
+
+  \item[Individual organisms]
+    The five primary sleep functions
+    (discharge of Axes~1, 2, and 3 costs,
+    somatic $G$ maintenance via growth
+    hormone-driven stem cell renewal,
+    and $G$ restoration via epigenetic
+    maintenance) are all expressed
+    within the same sleep window.
+
+  \item[Social groups]
+    Social information is a primary
+    $N$ field. Group sleep is a coupled
+    attractor. Dominance rank imposes
+    navigational cost that does not
+    cease at night. The baboon hierarchy
+    is a landscape whose navigational
+    demands are expressed in sleep
+    quality.
+
+  \item[Species across deep time]
+    The dimensional invariant.
+    The oldest surviving lineages
+    sleep the least. Seven Lock phyla.
+    Seven Navigator lineages across
+    three topologies. The unstable zone
+    does not converge. The geometry
+    is consistent across 600\,Myr.
+
+  \item[The biosphere]
+    ALAN is a global primary $N$ field
+    disruption affecting all species
+    simultaneously. It is remodelling
+    the $N$ field component of the
+    $S + N + G \rightarrow R$ equation
+    for thousands of species at once,
+    with measurable eco-evolutionary
+    consequences already underway.
+\end{description}
+
+\subsection{What Remains Open}
+
+The framework does not yet predict
+the topological consequences of a basin
+that deepens in real time at
+inter-generational scale (the human
+Basin~B*). It does not specify the
+threshold at which $G$ degradation
+becomes irreversible for any given
+organism. It does not model the
+dynamics of the ALAN eco-evolutionary
+feedback --- whether species will
+adapt their $S$ substrate to function
+with a corrupted $N$ field before the
+disruption causes population collapse.
+
+These are the honest limits of the
+current derivation.
+
+\subsection{The Framework is Not
+Reductive}
+
+The existing four sleep function
+theories are not wrong. They are not
+superseded. They are confirmed as
+correct descriptions of mechanisms
+within their scope (T3, endothermic
+organisms). The framework does not
+replace them. It provides the geometric
+structure that explains why they are
+all correct, why none of them alone
+is sufficient, and what they are
+all projections of.
+
+The same relationship holds at every
+scale. The molecular biology of BMAL1
+is not superseded by the geometric
+framework. It is the physical
+implementation of the $N$ field at the
+cellular level. The glymphatic anatomy
+is not superseded. It is the physical
+implementation of T3 oxidative
+discharge. The Waddington epigenetic
+landscape is not superseded. It is $G$.
+
+The geometry is the structure.
+The mechanisms are the geometry
+made physical.
+
+% ══════════════════════════════════════════════════════════════
+\section{Conclusion}
+\label{sec:conclusion}
+% ══════════════════════════════════════════════════════════════
+
+We have presented a unified geometric
+theory of sleep derived from the
+attractor landscape framework
+$S + N + G \rightarrow R$, in which:
+
+\begin{itemize}[itemsep=0.2em]
+  \item $G$ is physically the
+    epigenetic state
+  \item $N$ is physically the circadian
+    clock, social information, and
+    light --- each a co-equal zeitgeber
+  \item $S$ is the structural substrate
+    maintained by sleep-dependent growth
+    hormone release
+  \item Sleep is the process that
+    simultaneously maintains all three
+    components within a single
+    consolidated window
+\end{itemize}
+
+The framework makes the dimensional
+invariant: across all life, at all
+scales, across all of deep time, the
+oldest surviving lineages sleep the
+least. The minimum of the sleep spectrum
+is the maximum of the survival spectrum.
+
+The framework identifies eight sleep
+topologies as geometric predictions
+of landscape position, not empirical
+categories.
+
+The framework closes the derivation
+chain: BMAL1 loss produces a cancer
+attractor by making the repair basin
+epigenetically inaccessible. Cancer
+is cellular sleep deprivation. The
+geometry is the same object described
+from the molecular to the
+civilisational scale.
+
+Sleep is not a behaviour. Sleep is
+the daily maintenance of the landscape
+that makes all behaviour possible.
+Survival is the depth of that
+landscape.
+
+\noindent\textcolor{rulecolor}
+{\rule{\linewidth}{0.6pt}}
+
+% ── REFERENCES ────────────────────────────────────────────────
+\section*{Key References}
+\label{sec:refs}
+
+{\small
+\begin{description}[itemsep=0.3em,
+  labelwidth=0pt,leftmargin=1em,
+  labelsep=0.5em]
+
+  \item[\textit{Framework}]
+    Lawson, E.R. (2024). The attractor
+    geometry framework ($S + N + G
+    \rightarrow R$) and the domestication
+    syndrome as field-specified NCC
+    migration arrest.
+    \textit{Zenodo}.
+    \href{https://doi.org/10.5281/zenodo.19094935}
+    {\texttt{doi:10.5281/zenodo.19094935}}
+
+  \item[\textit{Dimensional Invariant
+    v1.0--v3.0}]
+    Lawson, E.R. (2026). The Dimensional
+    Invariant: Sleep Duration, Sleep
+    Topology, Oxidative Cost, Attractor
+    Basin Depth, and Long-Term Survival.
+    \textit{Zenodo}.
+    \href{https://doi.org/10.5281/zenodo.19101495}
+    {\texttt{doi:10.5281/zenodo.19101495}}
+
+  \item[\textit{Cancer (Step 1)}]
+    Lawson, E.R. (2024). FOXA1/EZH2
+    ratio as attractor position marker.
+    \textit{Zenodo}.
+    \href{https://doi.org/10.5281/zenodo.18883922}
+    {\texttt{doi:10.5281/zenodo.18883922}}
+
+  \item[\textit{SHY}]
+    Tononi, G., \& Cirelli, C. (2006).
+    Sleep function and synaptic
+    homeostasis.
+    \textit{Sleep Medicine Reviews},
+    10(1), 49--62.
+
+  \item[\textit{Glymphatic}]
+    Xie, L., et al. (2013). Sleep drives
+    metabolite clearance from the adult
+    brain.
+    \textit{Science}, 342(6156),
+    373--377.
+
+  \item[\textit{ROS death mechanism}]
+    Vaccaro, A., et al. (2020). Sleep
+    loss can cause death through
+    accumulation of reactive oxygen
+    species in the gut.
+    \textit{Cell}, 181(6), 1307--1328.
+
+  \item[\textit{Crocodilian sleep}]
+    Kelly, M.L., \& Lesku, J.A. (2015).
+    Bilateral slow-wave sleep in
+    juvenile crocodilians.
+    \textit{Journal of Experimental
+    Biology}, 218, 3175--3180.
+
+  \item[\textit{Octopus sleep}]
+    Medeiros, S.L.S., et al. (2021).
+    Cyclic alternation of quiet and
+    active sleep states in the
+    octopus.
+    \textit{iScience}, 24(4), 102223.
+
+  \item[\textit{C. elegans lethargus}]
+    Allada, R., \& Siegel, J.M. (2008).
+    Unearthing the phylogenetic roots
+    of sleep.
+    \textit{Current Biology}, 18(15),
+    R670--R679.
+
+  \item[\textit{BMAL1 tumour suppressor}]
+    Papagiannakopoulos, T., et al.
+    (2023). Circadian clock gene BMAL1
+    acts as tumour suppressor.
+    \textit{Molecular Neurobiology}.
+    \href{https://doi.org/10.1007/s12035-023-03895-7}
+    {doi:10.1007/s12035-023-03895-7}
+
+  \item[\textit{Baboon dominance sleep}]
+    Carter, A., et al. (2025).
+    Dominant baboons experience more
+    interrupted and less rest at night.
+    \textit{Current Biology}.
+    \href{https://www.cell.com/current-biology/fulltext/S0960-9822(25)01336-3}
+    {doi:10.1016/j.cub.2025}
+
+  \item[\textit{ALAN global disruption}]
+    Gaston, K.J., et al. (2023).
+    Artificial light at night: a global
+    disruptor of the night-time
+    environment.
+    \textit{Philosophical Transactions
+    of the Royal Society B}, 378,
+    20220352.
+
+  \item[\textit{Comparative sleep}]
+    Melnattur, K., et al. (2023).
+    Comparative biology of sleep in
+    diverse animals.
+    \textit{Journal of Experimental
+    Biology}, 226(14), jeb245677.
+
+  \item[\textit{Social zeitgeber}]
+    Roenneberg, T., \& Merrow, M.
+    (2016). The circadian clock and
+    human health.
+    \textit{Current Biology}, 26(10),
+    R432--R443.
+
+  \item[\textit{Glymphatic topology}]
+    Nedergaard, M., et al. (2024).
+    Glymphatic system review.
+    \textit{Nature Reviews Neuroscience}.
+
+\end{description}
+}
+
+% ── DOCUMENT METADATA ─────────────────────────────────────────
+\vspace{0.5em}
+\noindent\textcolor{rulecolor}
+{\rule{\linewidth}{0.8pt}}
+
+{\footnotesize
+\textbf{Manuscript ID:}
+ATTRACTOR\_GEOMETRY\_SLEEP\_THEORY\_
+PAPER\_v1.0\\
+\textbf{Date:} 2026-03-18\\
+\textbf{Author:} Eric Robert Lawson /
+OrganismCore\\
+\textbf{Status:} Theory paper.
+Self-contained. Cites and supersedes
+the reasoning artifact series as
+the primary theoretical statement.\\
+\textbf{ORCID:}
+\href{https://orcid.org/0009-0002-0414-6544}
+{0009-0002-0414-6544}\\
+\textbf{Contact:}
+\href{mailto:OrganismCore@proton.me}
+{OrganismCore@proton.me}\\
+\textbf{Repository:}
+\href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+{\texttt{github.com/Eric-Robert-Lawson/
+attractor-oncology}}\\
+\textbf{License:} CC BY 4.0
+}
+
+\end{document}

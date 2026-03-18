@@ -1,6 +1,6 @@
 \documentclass[10pt, a4paper]{article}
 
-% ── PACKAGES ─────────────────────��────────────────────────────
+% ── PACKAGES ──────────────────────────────────────────────────
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{geometry}
@@ -16,12 +16,13 @@
   urlcolor=blue,
   linkcolor=blue,
   citecolor=blue,
-  pdftitle={Pre-Registration: Plant Architecture Inversion via
+  pdftitle={Pre-Registration v2.0: Plant Architecture Inversion via
             Coherence Gradient Field Specification},
   pdfauthor={Eric Robert Lawson / OrganismCore},
   pdfsubject={Pre-registered experimental protocol and predictions},
   pdfkeywords={plant architecture, coherence gradient, tropism,
                attractor geometry, hydrotropism, phototropism,
+               skotomorphogenesis, reticulated foam, cone membrane,
                pre-registration, OrganismCore}
 }
 \usepackage{microtype}
@@ -42,15 +43,16 @@
 \definecolor{rulecolor}{RGB}{20,100,60}
 \definecolor{claimbox}{RGB}{20,100,60}
 \definecolor{notebox}{RGB}{240,248,240}
+\definecolor{warningbox}{RGB}{255,248,220}
 
 % ── HEADER / FOOTER ───────────────────────────────────────────
 \pagestyle{fancy}
 \fancyhf{}
 \renewcommand{\headrulewidth}{0.4pt}
 \fancyhead[L]{\small\color{headergreen}
-  OrganismCore Pre-Registration v1.0}
+  OrganismCore Pre-Registration v2.0}
 \fancyhead[R]{\small\color{headergreen}
-  Plant Architecture Inversion --- 2026-03-13}
+  Plant Architecture Inversion --- 2026-03-18}
 \fancyfoot[C]{\small Page \thepage\ of \pageref{LastPage}}
 
 % ── SECTION FORMAT ────────────────────────────────────────────
@@ -72,7 +74,7 @@
 % ── TITLE BLOCK ───────────────────────────────────────────────
 \begin{center}
   {\LARGE\bfseries\color{headergreen}
-  PRE-REGISTRATION}\\[0.4em]
+  PRE-REGISTRATION --- VERSION 2.0}\\[0.4em]
   {\Large\bfseries
   Plant Architecture Inversion via\\
   Coherence Gradient Field Specification}\\[0.5em]
@@ -80,7 +82,9 @@
   Architectural Inversion of \textit{Raphanus sativus}
   Produced by Pre-Specified Inversion\\
   of the Hydrotropic and Phototropic
-  Coherence Gradient Field Before Germination}\\[0.6em]
+  Coherence Gradient Field Before Germination\\
+  Five-Scenario Two-Chamber Cone Membrane System ---
+  Operative Protocol v2.3}\\[0.6em]
   \noindent\textcolor{rulecolor}{\rule{\linewidth}{1pt}}\\[0.4em]
   {\normalsize
   \textbf{Author:} Eric Robert Lawson\\
@@ -94,15 +98,48 @@
   \textbf{Repository:}
   \href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
   {\texttt{github.com/Eric-Robert-Lawson/attractor-oncology}}\\
-  \textbf{Pre-registration timestamp:} 2026-03-13\\
+  \textbf{Pre-registration timestamp:} 2026-03-18\\
   \textbf{Linked pre-registration DOI (LECA):}
   \href{https://doi.org/10.5281/zenodo.18986790}
   {\texttt{10.5281/zenodo.18986790}}\\
-  \textbf{Document version:} 1.0\\
+  \textbf{Supersedes:} v1.0
+  (DOI: \href{https://doi.org/10.5281/zenodo.19040399}
+  {\texttt{10.5281/zenodo.19040399}},
+  timestamp: 2026-03-13)\\
+  \textbf{Document version:} 2.0\\
   \textbf{License:}
   Creative Commons Attribution 4.0 International (CC BY 4.0)}\\[0.4em]
   \noindent\textcolor{rulecolor}{\rule{\linewidth}{1pt}}
 \end{center}
+
+\vspace{0.3em}
+
+% ── VERSION NOTE ──────────────────────────────────────────────
+\begin{mdframed}[
+  backgroundcolor=warningbox,
+  linecolor=rulecolor,
+  linewidth=0.8pt,
+  innertopmargin=0.5em,
+  innerbottommargin=0.5em,
+  innerleftmargin=0.8em,
+  innerrightmargin=0.8em
+]
+\textbf{Amendment note v2.0 (2026-03-18):}
+This document supersedes Pre-Registration v1.0
+(2026-03-13, DOI: \texttt{10.5281/zenodo.19040399}).
+The primary prediction P-INVERSION-1 is unchanged.
+The experimental apparatus has been substantially upgraded
+from the agar-cup system to a two-chamber opaque PVC pipe
+system with a cone membrane signal separator, three
+substrate types, and one free UV condition.
+The number of experimental scenarios has been expanded
+from four to five. Scenario 3 in this document is the
+direct equivalent of the EXP chamber in v1.0.
+All predictions were updated and re-locked at the
+timestamp above before any experimental data exists.
+No experimental data has been collected under either
+the v1.0 or v2.0 protocol at the time of this upload.
+\end{mdframed}
 
 \vspace{0.5em}
 
@@ -131,18 +168,20 @@ Same genome. Different field. Different organism.
 This pre-registration specifies: the coherence gradient field
 conditions that will produce architectural inversion in
 \textit{Raphanus sativus} (radish), the precise architectural
-outcome predicted, the scoring method, the control conditions
-required, and the success criteria --- all locked before
-the experiment is run.
+outcome predicted for each of five experimental scenarios,
+the scoring method, the control conditions required, the
+success criteria, and the reproducibility requirements ---
+all locked before the experiment is run.
 
 \medskip
 \textbf{Primary prediction (P-INVERSION-1):}
-A radish seed placed in an inverted coherence gradient field
---- mineral water gradient above, UV-A light source below,
-ambient light blocked --- will germinate with root growing
-upward and shoot growing downward.
+A radish seed placed in Scenario 3 --- hydroponic foam
+above, UV-A LED embedded in reticulated foam below, complete
+external light deprivation --- will germinate with root
+growing upward and shoot growing downward.
 Architecture Inversion Score (AIS)\,=\,2 confirmed at
 T\,=\,72\,h and maintained at T\,=\,168\,h.
+Scenario 1 must record AIS\,=\,0 in the same run.
 \end{mdframed}
 
 \vspace{1em}
@@ -168,8 +207,8 @@ The genome contains \textit{build capacity} ---
 the capacity to build every structure the organism has built
 across its evolutionary history, and potentially more.
 The coherence gradient field is the \textit{instruction set}
-that tells the genome which programs to express, where,
-and in which direction to navigate.
+that specifies which programs to express, where, and toward
+which attractor the developmental program navigates.
 
 The organism that emerges is the resolution of the genome's
 build capacity within the field's instruction set.
@@ -184,22 +223,52 @@ water and minerals below, light above, gravity present.
 
 Each axis navigates toward its coherence gradient:
 \begin{itemize}[itemsep=0.1em]
-  \item \textbf{Root:} Navigates toward water
-    (hydrotropism, MIZ1/MIZ2 pathway),
-    minerals, darkness, and physical medium.
-    Negative phototropism: avoids light.
-    Positive gravitropism: grows downward.
+  \item \textbf{Root:} Navigates toward water and minerals
+    (positive hydrotropism, MIZ1/MIZ2 pathway),
+    darkness (negative phototropism via phot1/phot2),
+    and gravity (positive gravitropism).
   \item \textbf{Shoot:} Navigates toward light
-    (phototropism, phototropin pathway),
-    CO\textsubscript{2}, and warmth.
-    Negative gravitropism: grows upward.
+    (positive phototropism via phot1/phot2),
+    CO\textsubscript{2}, and warmth
+    (negative gravitropism).
 \end{itemize}
 
-Standard soil architecture is the attractor produced when
-all gradients point in the same direction:
-root gradients (water, minerals, darkness) are downward;
-shoot gradients (light) are upward.
+Standard architecture is the attractor produced when all
+gradients are coherent: root signals (water, minerals,
+darkness) point downward; shoot signals (light) point upward.
 Gravity confirms both directions.
+
+\subsection{The Signal Deprivation Principle}
+
+The central engineering condition of this experiment
+(Scenarios 2--5) is \textbf{complete external light
+deprivation.} The UV-A LED embedded within the foam
+substrate is the \textit{only} photonic signal in the
+coherence field of each chamber.
+
+When a germinating seedling develops in complete darkness
+it enters \textbf{skotomorphogenesis} --- the developmental
+program for light-seeking under total light deprivation.
+In this state:
+\begin{itemize}[itemsep=0.1em]
+  \item Hypocotyl elongation is maximal.
+  \item All photoreceptors are primed at maximum sensitivity.
+  \item There is zero ambient photonic noise.
+\end{itemize}
+
+Under these conditions the absolute efficiency of UV-A as
+a phototropic driver is irrelevant. The embedded UV-A
+source is not competing against anything.
+The signal-to-noise ratio is effectively infinite.
+UV-A activates phototropins (phot1, phot2).
+In a completely dark chamber with a single directional
+UV-A source, a skotomorphogenic seedling responds to the
+only photonic input in its entire coherence field.
+
+Scenario 1 is the explicit exception: UV-A is freely
+available in the S1 air space with zero penetration cost.
+This is the true normal control --- normal conditions,
+normal architecture confirmed.
 
 \subsection{The Geometric Prediction}
 
@@ -209,12 +278,12 @@ rather than a genetically fixed output, then:
 \textbf{Inverting the coherence gradient field before
 germination should produce an inverted architectural attractor.}
 
-Specifically: placing water above the seed and light below
-the seed --- before germination begins --- should cause
-the root to navigate upward (toward water) and the shoot
-to navigate downward (toward light).
-Gravity alone cannot override two simultaneous coherence
-gradient signals pointing in the opposite direction.
+Placing hydroponic substrate above the seed and UV-A
+embedded substrate below the seed --- before germination
+begins --- should cause the root to navigate upward
+(toward water, suppressing gravitropism via MIZ1-mediated
+amyloplast degradation) and the shoot to navigate downward
+(toward the only photonic signal in the field).
 
 This prediction is geometrically derived from the attractor
 framework \textit{before} the experiment is run.
@@ -224,37 +293,90 @@ The experiment confirms or falsifies the geometry.
 
 \subsection{Empirical Basis for Individual Mechanisms}
 
-Both component mechanisms are independently established
-in the published literature:
+All component mechanisms are independently established
+in the published literature.
+No mechanism claimed here is novel in isolation.
+The novel claim is their combination in a pre-specified
+five-scenario structured experiment producing simultaneous
+full architectural inversion from a locked prediction.
 
-\begin{itemize}[itemsep=0.1em]
-  \item \textbf{Hydrotropism overriding gravitropism:}
-    Miao et al.\ (2025), \textit{PNAS}.
-    Root hydrotropism in \textit{Arabidopsis} overrides
-    gravitropism in the presence of a water gradient.
-    The MIZ1 protein is the primary hydrotropism regulator.
-    Upward root growth confirmed in moisture gradients
-    pointing against gravity.
-  \item \textbf{Root negative phototropism:}
-    Galen et al.\ (2007), \textit{Functional Ecology}.
-    Roots exhibit negative phototropism to blue and UV-A
-    wavelengths (phototropin receptors present in roots).
-    Root grows away from light source.
-  \item \textbf{Shoot positive phototropism:}
-    Christie (2007), \textit{Annual Review of Plant Biology}.
-    Shoot phototropism well-established across all
-    flowering plant species.
-    Blue and UV-A light activates phototropin-1
-    and phototropin-2, driving shoot toward light.
+\begin{itemize}[itemsep=0.2em]
+  \item \textbf{Hydrotropism overriding gravitropism, radish:}
+    Takahashi et al.\ (2003), \textit{Plant Physiology} 132:
+    805--810.
+    Radish (\textit{Raphanus sativus}) roots grow upward toward
+    water. Mechanism: MIZ1-mediated amyloplast degradation
+    suppresses gravity sensing. Confirmed in both radish
+    and \textit{Arabidopsis}.
+
+  \item \textbf{MIZ1 suppresses gravitropism under drought:}
+    Zhang et al.\ (2025), \textit{PNAS} 122(20): e2427315122.
+    Under drought, roots ignore gravity and grow toward water
+    (including upward). MIZ1 suppresses PIN auxin transporter
+    activity that drives gravitropism.
+    Confirmed in laboratory, clinostat, and field conditions.
+    Direct relevance: in Scenario 3, the root faces a
+    drought-like condition --- all water is above, none below.
+    MIZ1-mediated suppression of gravity sensing is
+    the predicted operative mechanism.
+
+  \item \textbf{Root negative phototropism to UV-A/blue:}
+    Silva-Navas et al.\ (2016), \textit{PNAS} 113(11):
+    3119--3124.
+    Roots actively avoid blue and UV-A wavelengths.
+    Mechanism: asymmetric auxin redistribution via phot1/phot2.
+    In Scenario 3, this drives root away from UV-A below,
+    adding a second mechanism pointing root upward.
+
+  \item \textbf{Hydrotropism overrides root negative
+    phototropism:}
+    When water and light are in competition, the hydrotropic
+    signal dominates when the water gradient is sufficient
+    (Kaneyasu et al., 2007).
+    In Scenario 3, root negative phototropism (away from
+    UV-A below) and positive hydrotropism (toward water
+    above) both point upward. No conflict. Both mechanisms
+    are cooperative.
+
+  \item \textbf{Shoot positive phototropism toward buried light:}
+    Christie (2007), \textit{Annual Review of Plant Biology}
+    58: 21--45.
+    Shoot phototropism is always positive regardless of
+    light direction. When light is below, the hypocotyl
+    bends downward. Mediated by phot1/phot2.
+    In Scenario 3, the only photonic signal is UV-A
+    embedded in Type B foam below. The shoot bends toward it.
+
+  \item \textbf{Root positive phototropism unmasked in
+    microgravity:}
+    Kiss et al.\ (2012), \textit{American Journal of Botany}
+    and NASA TROPI ISS experiments.
+    In microgravity, Arabidopsis roots show positive
+    phototropism toward blue light --- a capacity completely
+    masked by gravitropism on Earth.
+    Direct framework relevance: the genome contains programs
+    that are suppressed by the standard coherence gradient
+    field and become expressed when a component of that
+    field is removed or overridden.
+
+  \item \textbf{Photosynthesis from geothermal light
+    (buried source):}
+    Beatty et al.\ (2005), \textit{PNAS} 102(26):
+    9306--9310.
+    Green sulfur bacteria at 2,500\,m depth perform
+    photosynthesis using geothermal light from below.
+    Confirmed analogue: photonic navigation toward
+    a buried non-solar source is a real biological
+    phenomenon across kingdoms.
+
+  \item \textbf{Radiotropism toward embedded radiation:}
+    Dadachova et al.\ (2007), \textit{PLoS ONE}.
+    Melanized fungi at Chernobyl grow toward ionizing
+    radiation and use it as an energy source.
+    Confirmed analogue: organisms navigate toward and
+    harvest embedded non-standard energy sources
+    under field deprivation of standard sources.
 \end{itemize}
-
-This pre-registration predicts that \textbf{combining}
-these two independently established mechanisms ---
-water above and light below --- produces full
-architectural inversion (AIS\,=\,2), not merely
-partial deflection of one axis.
-This combination and its outcome is the novel
-pre-specified prediction.
 
 \vspace{0.5em}
 
@@ -263,8 +385,47 @@ pre-specified prediction.
 All predictions below are locked at the timestamp
 of this document's upload to Zenodo.
 No post-hoc modifications will be made to predictions.
-Amendments, if any, will be registered as
-separate versioned documents with new DOIs.
+Amendments, if any, will be registered as separate
+versioned documents with new DOIs.
+
+\subsection{Architecture Inversion Score Definition}
+
+The Architecture Inversion Score (AIS) is the primary
+quantitative outcome measure, defined as follows.
+Angles are measured from the vertical
+(straight down = 0\textdegree, straight up = 180\textdegree)
+using a protractor held against the transparent section
+of the chamber wall at each observation timepoint.
+
+\medskip
+\begin{tabular}{p{1.2cm}p{4.8cm}p{5.5cm}}
+\toprule
+\textbf{AIS} & \textbf{Morphological Criterion} &
+\textbf{Interpretation} \\
+\midrule
+2 &
+Root angle $>135$\textdegree{} AND shoot angle
+$<45$\textdegree{} from vertical downward
+(both axes fully inverted). &
+Full architectural inversion.
+P-INVERSION-1 confirmed. \\[0.4em]
+1 &
+One axis inverted ($>90$\textdegree{} from expected),
+other axis partially or not inverted. &
+Partial inversion.
+One gradient dominant, other insufficient. \\[0.4em]
+0 &
+Root angle $<45$\textdegree{} (downward) AND
+shoot angle $>135$\textdegree{} (upward). &
+Standard architecture.
+No inversion. \\[0.4em]
+$-1$ &
+Both axes in same unexpected direction
+(both up or both down). &
+Disorientation.
+Mechanism failure or contamination. \\
+\bottomrule
+\end{tabular}
 
 \subsection{Primary Prediction: P-INVERSION-1}
 
@@ -278,23 +439,29 @@ separate versioned documents with new DOIs.
   innerrightmargin=0.8em
 ]
 \textbf{P-INVERSION-1 (Primary):}
-In the EXP chamber (mineral water gradient above seed,
-UV-A LED below seed, ambient light blocked above),
-\textit{Raphanus sativus} will germinate and grow with:
+In \textbf{Scenario 3} (S1: Type A hydroponic foam above;
+S2: Type B UV-only foam below; cone apex down; complete
+external light deprivation), \textit{Raphanus sativus}
+will germinate and grow with:
 \begin{itemize}[itemsep=0.1em, topsep=0.2em]
   \item Root directed \textbf{upward}
-    (angle $>135°$ from vertical downward)
+    (angle $>135$\textdegree{} from vertical downward)
     at T\,=\,72\,h.
+  \item Measurable root penetration depth into S1
+    Type A hydroponic foam recorded at T\,=\,72\,h.
   \item Shoot directed \textbf{downward}
-    (angle $<45°$ from vertical downward)
+    (angle $<45$\textdegree{} from vertical downward)
     at T\,=\,72\,h.
+  \item Measurable shoot penetration depth into S2
+    Type B UV foam recorded at T\,=\,72\,h.
   \item Architecture Inversion Score
     \textbf{AIS\,=\,2} at T\,=\,72\,h,
     maintained at T\,=\,120\,h and T\,=\,168\,h.
 \end{itemize}
 \end{mdframed}
 
-\subsection{Control Predictions: P-INVERSION-2 through P-INVERSION-4}
+\subsection{Scenario Predictions: P-INVERSION-2
+through P-INVERSION-5}
 
 \begin{mdframed}[
   backgroundcolor=notebox,
@@ -305,147 +472,226 @@ UV-A LED below seed, ambient light blocked above),
   innerleftmargin=0.8em,
   innerrightmargin=0.8em
 ]
-\textbf{P-INVERSION-2 (C1 control):}
-In the C1 chamber (standard conditions: agar only,
-ambient light above, no water gradient),
-AIS\,=\,0 at all timepoints.
-Root grows downward. Shoot grows upward.
+\textbf{P-INVERSION-2 (Scenario 1 --- True Normal Control):}
+S1: UV-A LED free in air space (zero penetration cost).
+S2: Type A hydroponic foam. Cone apex up.
+\textit{Expected:} AIS\,=\,0 at all timepoints.
+Root grows downward into S2 Type A foam.
+Shoot grows upward into free UV-lit air without
+penetrating any foam barrier.
 Standard architecture confirmed.
+This scenario is the validity gate for every run ---
+if AIS\,$\ne$\,0 in Scenario 1, the run is invalid
+regardless of any other result.
 
 \medskip
-\textbf{P-INVERSION-3 (C4 hydrotropic control):}
-In the C4 chamber (mineral water above seed,
-ambient light above, no LED below),
-root angle $>120°$ at T\,=\,72\,h.
-Root grows upward driven by hydrotropism alone.
-Shoot grows upward (ambient light above).
-Reproduces Miao et al.\ (2025) result in this setup.
-This control confirms the water gradient mechanism
-is functioning before interpreting EXP results.
+\textbf{P-INVERSION-3 (Scenario 2 --- UV separated above,
+hydroponic below):}
+S1: Type B UV-only foam (UV-A embedded, no hydroponic).
+S2: Type A hydroponic foam. Cone apex up.
+\textit{Expected:} Root grows downward into S2 Type A.
+Shoot grows upward and penetrates S1 Type B foam to
+reach embedded UV-A. Normal architecture maintained
+but active shoot penetration upward through UV foam required.
+AIS\,=\,0 at T\,=\,72\,h with measurable shoot penetration
+into S1 Type B.
+This scenario isolates the phototropic penetration
+component without hydrotropic competition.
+Provides the inversion pair baseline against Scenario 3.
 
 \medskip
-\textbf{P-INVERSION-4 (C3 phototropic control):}
-In the C3 chamber (UV-A LED below, no water gradient,
-ambient light blocked),
-shoot grows downward (toward LED).
-Root grows downward (gravity dominant without
-water gradient counter-signal).
-Confirms the phototropic component alone
-is insufficient for full inversion.
-Both components required.
+\textbf{P-INVERSION-4 (Scenario 4 --- All signals above,
+void below):}
+S1: Type C foam (hydroponic + UV-A co-located). Void in S2.
+Cone apex up.
+\textit{Expected:} Shoot grows upward penetrating S1 Type C
+to reach all co-located signals simultaneously.
+Root grows downward into void or is indeterminate.
+AIS\,=\,0 or indeterminate.
+Maximum coherent field above, no competing signal below.
+
+\medskip
+\textbf{P-INVERSION-5 (Scenario 5 --- All signals below,
+void above):}
+S2: Type C foam (hydroponic + UV-A co-located). Void in S1.
+Cone apex down.
+\textit{Expected:} Full inversion. Shoot grows downward
+penetrating S2 Type C to reach all co-located signals.
+Root grows upward into void or is indeterminate.
+AIS\,=\,2 at T\,=\,72\,h.
+Maximum coherent field below, no competing signal above.
+This is the strongest possible inversion signal
+(no competing attractor in opposite direction).
+Comparison of Scenario 5 (AIS\,=\,2, no competition)
+vs Scenario 3 (AIS\,=\,2, competing hydroponic above)
+tests the effect of competing signal on inversion
+stability.
 \end{mdframed}
-
-\subsection{Architecture Inversion Score Definition}
-
-The Architecture Inversion Score (AIS) is the primary
-quantitative outcome measure. It is defined as follows:
-
-\medskip
-\begin{tabular}{p{1.2cm}p{4.8cm}p{5.5cm}}
-\toprule
-\textbf{AIS} & \textbf{Morphological Criterion} &
-\textbf{Interpretation} \\
-\midrule
-2 &
-Root angle $>135°$ AND shoot angle $<45°$
-(both axes fully inverted). &
-Full architectural inversion.
-P-INVERSION-1 confirmed. \\[0.4em]
-1 &
-One axis inverted ($>90°$ from expected),
-other axis partially or not inverted. &
-Partial inversion.
-One gradient dominant, other insufficient. \\[0.4em]
-0 &
-Root angle $<45°$ (downward) AND
-shoot angle $>135°$ (upward). &
-Standard architecture.
-No inversion. \\[0.4em]
-$-1$ &
-Both axes inverted but in same direction
-(both up or both down). &
-Disorientation, not architectural inversion.
-Mechanism failure. \\
-\bottomrule
-\end{tabular}
-
-\medskip
-Angles are measured from the vertical
-(straight down = 0°, straight up = 180°)
-using a protractor held against the
-transparent chamber wall at each observation timepoint.
 
 \vspace{0.5em}
 
-\section{Experimental Design}
+\section{Experimental Design --- v2.3 Apparatus}
 
 \subsection{Overview}
 
-Four chambers are run simultaneously in the same environment.
-All chambers use the same seed batch, same agar preparation,
-same temperature, and same room.
-The only variable between chambers is the
-configuration of the coherence gradient field.
+Five scenarios are run simultaneously in the same
+environment from the same seed batch and same
+substrate preparation batch.
+The only variable between scenarios is the configuration
+of the coherence gradient field.
+All 5 scenarios use the same two-chamber cone membrane
+apparatus with the same UV-A LED product.
 
-\subsection{The Four Chambers}
+\subsection{The Two-Chamber Cone Membrane System}
 
-\begin{tabularx}{\linewidth}{p{1.0cm}p{3.2cm}p{2.8cm}X}
+Each experimental unit consists of two opaque PVC pipe
+sections (50\,mm internal diameter, 150\,mm length each)
+joined at a cone membrane signal separator.
+
+\textbf{The cone membrane} is a plastic funnel wrapped in
+metallized Mylar film (aluminized emergency blanket),
+serving two barrier functions:
+\begin{enumerate}[itemsep=0.1em]
+  \item \textbf{Liquid barrier:} prevents hydroponic
+    solution migrating between S1 (top) and S2 (bottom).
+  \item \textbf{UV and light barrier:} prevents UV-A
+    from the substrate in one chamber crossing into the
+    other, and prevents external light entering at the
+    joint.
+\end{enumerate}
+
+A hydroponic net cup seats at the cone apex.
+The germinated seed is placed in the net cup with
+radicle extending through the net cup mesh.
+The cone orientation (apex up or apex down) determines
+which chamber the radicle faces and which chamber the
+emerging hypocotyl faces.
+
+\textbf{Cone orientation rule:}
+The apex always points toward the void or least active
+substrate. The wide opening always faces the most
+active substrate.
+
+\subsection{Substrate Types}
+
+Three substrate types and one free UV condition are
+used across the five scenarios:
+
+\begin{itemize}[itemsep=0.3em]
+  \item \textbf{Free UV condition (Scenario 1 S1 only):}
+    UV-A LED strip mounted free on inner face of S1 end cap,
+    facing downward into S1 air space.
+    No foam substrate in S1. UV-A freely available throughout
+    S1 air space. Zero penetration cost.
+    No water or minerals.
+
+  \item \textbf{Type A --- Hydroponic foam, no UV:}
+    Reticulated polyurethane foam 20\,ppi, saturated with
+    hydroponic mineral solution (1/4 to 1/2 strength).
+    No UV-A LED present at any depth.
+    Signals: water and minerals only.
+
+  \item \textbf{Type B --- UV-only foam, no hydroponic:}
+    Reticulated polyurethane foam 20\,ppi, dry or minimally
+    moist (plain distilled water only, no nutrients), with
+    UV-A LED strip embedded 10--20\,mm depth from the
+    seed-facing surface.
+    Signals: UV-A radiation only.
+    Seedling must physically penetrate foam to reach UV-A.
+
+  \item \textbf{Type C --- Combined foam, hydroponic + UV:}
+    Reticulated polyurethane foam 20\,ppi, saturated with
+    hydroponic mineral solution, with UV-A LED strip embedded
+    10--20\,mm depth from the seed-facing surface.
+    Signals: water, minerals, and UV-A co-located.
+    Seedling must penetrate foam to reach all signals.
+\end{itemize}
+
+\subsection{The Five Scenarios}
+
+\begin{tabularx}{\linewidth}{p{1.1cm}p{3.0cm}p{3.0cm}p{1.1cm}X}
 \toprule
-\textbf{ID} & \textbf{Water gradient} &
-\textbf{Light source} & \textbf{Purpose} \\
+\textbf{ID} & \textbf{S1 (top)} & \textbf{S2 (bottom)} &
+\textbf{Cone} & \textbf{Purpose and prediction} \\
 \midrule
-EXP &
-Mineral water ABOVE seeds (30--40\,mL) &
-UV-A LED below; ambient light blocked above &
-Experimental. Full inverted gradient field.
-Pre-registered prediction: AIS\,=\,2. \\[0.3em]
-C1 &
-None (agar only, moist) &
-Ambient light above; no LED &
-Standard control. Normal architecture baseline. \\[0.3em]
-C3 &
-None (dry agar surface) &
-UV-A LED below; ambient light blocked above &
-Phototropic component only.
-No water gradient counter-signal. \\[0.3em]
-C4 &
-Mineral water ABOVE seeds (30--40\,mL) &
-Ambient light above; no LED &
-Hydrotropic component only.
-Reproduces Miao et al.\ (2025). \\
+S1 &
+Free UV in air &
+Type A hydroponic &
+Apex up &
+True normal control.
+AIS\,=\,0 required.
+Validity gate. \\[0.3em]
+S2 &
+Type B (UV only) &
+Type A hydroponic &
+Apex up &
+UV separated above.
+Normal architecture + shoot penetrates Type B upward.
+AIS\,=\,0.
+Inversion pair baseline. \\[0.3em]
+\textbf{S3} &
+\textbf{Type A hydroponic} &
+\textbf{Type B (UV only)} &
+\textbf{Apex dn} &
+\textbf{PRIMARY CLAIM.}
+Full inverted field.
+AIS\,=\,2 predicted.
+Root up into Type A.
+Shoot down penetrating Type B. \\[0.3em]
+S4 &
+Type C (all signals) &
+Empty void &
+Apex up &
+All signals above. Normal + maximum coherent field.
+AIS\,=\,0. \\[0.3em]
+S5 &
+Empty void &
+Type C (all signals) &
+Apex dn &
+All signals below. Maximum inversion signal.
+AIS\,=\,2 predicted.
+No competing attractor above. \\
 \bottomrule
 \end{tabularx}
 
 \subsection{Materials}
 
-\begin{tabular}{p{4.5cm}p{2.5cm}p{4.5cm}}
+\begin{tabular}{p{4.5cm}p{2.2cm}p{4.5cm}}
 \toprule
 \textbf{Item} & \textbf{Cost (USD)} & \textbf{Source} \\
 \midrule
 \textit{Raphanus sativus} seeds
-(Cherry Belle or French Breakfast) &
+(Cherry Belle) &
 \$2--4 & Garden store, Amazon \\
-Agar powder (food-grade or bacteriological) &
-\$3--8 & Grocery store, Amazon \\
-Mineral salts (KNO\textsubscript{3},
-KH\textsubscript{2}PO\textsubscript{4},
-MgSO\textsubscript{4}) OR bottled
-mineral water (Evian/Volvic) &
-\$5--15 & Hydroponics supplier, grocery \\
-Transparent plastic cups or small jars (5$\times$) &
-\$3--8 & Hardware store, dollar store \\
+Reticulated polyurethane foam 20\,ppi &
+\$5--10 & Aquarium supply, Amazon \\
+Hydroponic mineral solution
+(seedling dilution, 1/4--1/2 strength) &
+\$5--12 & Garden centre, hydro supplier \\
+Opaque PVC pipe 50\,mm ID, 150\,mm lengths $\times$10 &
+\$10--20 & Plumbing / hardware store \\
+PVC end caps $\times$10 &
+\$5--10 & Plumbing / hardware store \\
 UV-A LED strip $\sim$365\,nm &
-\$10--20 & Amazon \\
-Black cardboard (light blocking) &
-\$1--3 & Art supply, dollar store \\
-Distilled or filtered water &
+\$8--15 & Amazon \\
+Metallized Mylar film (emergency blanket) &
+\$1--3 & Camping supply, dollar store \\
+Plastic funnels (50\,mm rim) $\times$5 &
+\$3--6 & Kitchen supply \\
+Hydroponic net cups 16--25\,mm $\times$5 &
+\$1--3 & Hydro supplier, Amazon \\
+Aquarium silicone sealant &
+\$5--8 & Aquarium store, hardware \\
+Distilled water &
 \$1--2 & Grocery store \\
+Red-light torch ($>$650\,nm) &
+\$5--15 & Astronomy / photography \\
 \midrule
-\textbf{Total} & \textbf{\$25--60} & \\
+\textbf{Total} & \textbf{\$51--108} & \\
 \bottomrule
 \end{tabular}
 
-\subsection{Mineral Solution Composition}
+\subsection{Hydroponic Mineral Solution Composition}
 
 Option A (from salts):
 \begin{itemize}[itemsep=0.1em]
@@ -457,66 +703,87 @@ Option A (from salts):
 \end{itemize}
 
 Option B (simplified):
-Commercially available mineral water (Evian, Volvic,
-or equivalent) used undiluted.
+Commercially available balanced hydroponic nutrient
+solution at 1/4 to 1/2 manufacturer's recommended
+seedling dilution, prepared in distilled water.
 Adequate ionic content for hydrotropism signalling.
 
-\subsection{Chamber Assembly}
+\subsection{Seed Germination Protocol}
 
-Each chamber consists of a transparent container
-(clear plastic cup, 300--500\,mL, or equivalent glass jar)
-constructed as follows:
+Seeds are germinated on damp paper towel in a sealed
+ziplock bag in complete darkness at 20--24\textdegree C
+for 48\,hours before placement.
+Target state at placement: radicle 3--8\,mm, intact,
+no kinking.
+All germination and placement steps under red-light only
+($>$650\,nm) to preserve skotomorphogenic state.
+The seedling must not be exposed to white light,
+blue light, or UV at any point from germination
+through placement to T\,=\,0.
+
+\subsection{Light Exclusion Protocol}
+
+Complete external light deprivation for Scenarios 2--5
+is the load-bearing engineering constraint.
 
 \begin{enumerate}[itemsep=0.2em]
-  \item Pour 5--8\,mL of 1\% agar (1\,g per 100\,mL water,
-    boiled and cooled to $\sim$50°C) into the base.
-    Allow to set on a level surface for 15\,minutes
-    (confirmed solid by toothpick test).
-  \item Place 3--5 seeds on the agar surface,
-    spaced $\geq$1.5\,cm apart.
-    Seeds sit ON the surface, not pressed in.
-  \item For EXP and C4: add 30--40\,mL of mineral
-    solution on top of the agar and seeds
-    (the water gradient above the seeds).
-  \item For EXP and C3: install UV-A LED beneath
-    the chamber, pointing upward.
-    Cover the top of the chamber with black cardboard,
-    confirmed light-tight.
-  \item For C4: top remains uncovered or covered with
-    transparent film. Ambient room light from above.
-  \item For C1: standard orientation, ambient light above,
-    no water gradient above seeds, no LED.
+  \item Use opaque black PVC pipe (preferred) OR wrap
+    full exterior of each chamber unit in black opaque
+    tape or black plastic wrap with no gaps.
+  \item All ventilation ports fitted with reticulated
+    foam plug light traps (20--25\,mm depth, 20\,ppi).
+    Test each port: shine torch at outer face of foam
+    plug; confirm no light visible from interior side.
+  \item Cone membrane joint sealed with continuous
+    aquarium silicone bead. Light-seal test after curing:
+    place torch inside assembled chamber; check for light
+    leaks at joint from outside.
+  \item At each observation timepoint: red-light only
+    for all interior inspection. Maximum 2 minutes
+    light exposure per chamber per timepoint.
+    Re-wrap or re-enclose immediately after photography.
+    Record duration of light exposure at each timepoint.
 \end{enumerate}
 
-All chambers placed in the same room at 18--24°C.
-All chambers remain stationary throughout the
-experiment. Do not move chambers during observation.
+Scenario 1 S1 is exempt from external light exclusion
+--- the free UV LED is the design condition of that
+chamber. Scenario 1 S2 should be opaque.
 
 \subsection{Observation Protocol}
 
-\begin{tabular}{p{1.8cm}p{9.8cm}}
+\begin{tabular}{p{1.8cm}p{10.0cm}}
 \toprule
 \textbf{Timepoint} & \textbf{Observation} \\
 \midrule
 T\,=\,24\,h &
-First germination check. Record: germination (\%) per chamber.
-Photograph all chambers from side. \\[0.3em]
+Germination check. Record radicle length and direction
+per scenario. Photograph from side under red-light.
+Confirm UV-A LED active in all powered scenarios.
+Re-seal and re-wrap Scenarios 2--5 immediately. \\[0.3em]
 T\,=\,48\,h &
 Directional growth assessment.
-Record root and shoot direction (qualitative: up/down/sideways).
-Calculate preliminary AIS. \\[0.3em]
+Record root and shoot direction per scenario
+(up/down/horizontal/indeterminate).
+Measure penetration depth into substrate (mm).
+Preliminary AIS. Re-seal and re-wrap. \\[0.3em]
 T\,=\,72\,h &
 \textbf{Primary outcome point.}
 Measure root and shoot angles with protractor.
-Calculate AIS for all chambers.
-Photograph all chambers with scale ruler. \\[0.3em]
+Measure substrate penetration depth (mm).
+Record whether root or shoot tip has reached
+LED embedding depth in Type B or Type C foam.
+Calculate AIS for all scenarios.
+Photograph from side and above with scale ruler.
+Re-seal and re-wrap. \\[0.3em]
 T\,=\,120\,h &
 Secondary confirmation.
-AIS re-measured. Stability of inversion assessed. \\[0.3em]
+AIS re-measured. Stability of inversion assessed.
+Note any gravitropic correction (inversion at T\,=\,72
+but recovered at T\,=\,120). \\[0.3em]
 T\,=\,168\,h &
-Final outcome. Remove one EXP seedling for
-close examination and side-by-side comparison with C1.
-Photograph on white background. \\
+Final outcome. Photograph all scenarios together on
+white background. Side-by-side comparison of Scenario 3
+vs Scenario 1. Record final AIS for all scenarios. \\
 \bottomrule
 \end{tabular}
 
@@ -526,73 +793,140 @@ Photograph on white background. \\
 
 \subsection{Confirmation of P-INVERSION-1}
 
-P-INVERSION-1 is confirmed if and only if:
-\begin{enumerate}[itemsep=0.1em]
-  \item EXP: AIS\,=\,2 at T\,=\,72\,h
+P-INVERSION-1 is confirmed if and only if all of the
+following are met in the same experimental run:
+\begin{enumerate}[itemsep=0.2em]
+  \item Scenario 3: AIS\,=\,2 at T\,=\,72\,h
     \textbf{and} maintained at T\,=\,168\,h.
-  \item C1: AIS\,=\,0 at all timepoints.
-  \item C4: Root angle $>120°$ at T\,=\,72\,h.
-    (The hydrotropism mechanism is confirmed
-    functioning in this setup before EXP is interpreted.)
+  \item Scenario 3: measurable shoot penetration into
+    S2 Type B UV foam recorded at T\,=\,72\,h.
+    Directional growth alone without foam penetration
+    does not confirm active navigation toward the
+    UV-A signal.
+  \item Scenario 1: AIS\,=\,0 at all timepoints.
+    If Scenario 1 records AIS\,$\ne$\,0, the run is
+    invalid regardless of Scenario 3 result.
+  \item Complete light exclusion confirmed and logged
+    for Scenarios 2--5 at every timepoint.
+    Runs with unlogged or compromised light exclusion
+    must be reported as flagged and analysed separately
+    from primary results.
 \end{enumerate}
 
-P-INVERSION-1 is \textbf{not} confirmed if:
-EXP achieves AIS\,=\,2 but C4 does not show
-upward root ($>120°$).
-In this case the inversion result is real but the
-mechanism attributed (hydrotropism) is not confirmed
-by this setup.
-The result requires investigation before
-the mechanism claim is made.
+\textbf{Reproducibility threshold:}
+P-INVERSION-1 requires confirmation across
+\textbf{minimum 3 independent seeds} in
+\textbf{minimum 2 independent experimental runs}
+from separate seed batches before the result is
+considered reportable as confirmed.
+
+\subsection{Qualified Results}
+
+\textbf{Gravitropic correction (AIS\,=\,2 at T\,=\,72,
+AIS\,=\,0 at T\,=\,120):}
+This is a qualified result, not a failure.
+It confirms the coherence field inversion succeeded in
+redirecting architecture during the developmental window
+and that gravitropic correction occurs after window
+closure. Report full angle data at all timepoints.
+This is data about the competition between the coherence
+gradient field and gravitropism over developmental time.
+
+\textbf{AIS\,=\,1 in Scenario 3:}
+Partial inversion. One axis inverted, one insufficient.
+Not a confirmation of P-INVERSION-1.
+Report as qualified result. Investigate whether
+signal strength (LED embedding depth, intensity)
+or foam moisture level requires adjustment.
 
 \subsection{Falsification Criteria}
 
-The geometric prediction is falsified if:
+The geometric prediction is falsified if, across
+minimum 3 seeds in 2 independent runs with confirmed
+light exclusion and confirmed Scenario 1 AIS\,=\,0:
 \begin{itemize}[itemsep=0.1em]
-  \item EXP: AIS\,=\,0 at T\,=\,72\,h
-    (standard architecture despite inverted field).
-    This would indicate gravity dominates over both
-    combined coherence gradients at this field strength.
-  \item EXP: AIS\,=\,1 at T\,=\,72\,h
-    (partial inversion only).
-    This is a partial result requiring further
-    investigation of field strength.
-    Not a confirmation of the full geometric prediction.
-  \item EXP: AIS\,=\,$-1$ (both axes disoriented).
-    This would indicate the combined field produced
-    developmental confusion rather than inversion.
-    A distinct and informative failure mode.
+  \item Scenario 3 AIS\,=\,0 at T\,=\,72\,h in all runs
+    (gravity dominates over both combined coherence
+    gradients at this field strength).
+  \item Scenario 3 AIS\,=\,$-1$ in all runs
+    (developmental confusion rather than inversion).
 \end{itemize}
+
+A single run failure does not falsify the prediction.
+Falsification requires consistent failure across the
+minimum reproducibility threshold with all controls
+confirmed valid.
 
 \vspace{0.5em}
 
 \section{Reproducibility Requirements}
 
-For any replication of this experiment to be
-considered valid and comparable to this pre-registration,
-the following minimum documentation must be provided:
+For any replication of this experiment to be considered
+valid and comparable to this pre-registration, the
+following minimum documentation must be provided:
 
 \begin{enumerate}[itemsep=0.2em]
-  \item Species and seed source (cultivar, supplier).
-  \item Seed viability test result
-    (germination rate from pre-experiment test).
-  \item Agar concentration (g per 100\,mL water).
-  \item Water gradient composition
-    (salt concentrations or mineral water brand).
-  \item LED specification
-    (wavelength range in nm, power in mW or W,
-    distance from seed position in cm).
-  \item Light blocking method and confirmation
-    (material used, how light leak was checked).
-  \item Temperature during experiment.
-  \item All four chambers run simultaneously
+  \item Species, cultivar, and seed source (supplier,
+    batch number, viability test result).
+  \item Substrate specification: foam ppi rating, supplier;
+    nutrient solution product/formulation and dilution
+    ratio; LED product name, stated wavelength (nm),
+    embedding depth (mm from seed-facing surface),
+    moisture condition of Type B foam.
+  \item Chamber specification: pipe material, inner
+    diameter, section length; cone membrane material
+    and construction; net cup dimensions.
+  \item Light exclusion method and test result for each
+    chamber at T\,=\,0 (confirmed light-tight Y/N per
+    chamber).
+  \item Red-light torch wavelength and confirmation that
+    white/blue/UV light was not used during any
+    observation.
+  \item Temperature throughout experiment.
+  \item All 5 scenarios run simultaneously from T\,=\,0
     in the same environment.
-  \item AIS scores at T\,=\,72\,h, T\,=\,120\,h,
-    T\,=\,168\,h for all chambers.
-  \item At least one photograph per chamber
-    per timepoint, labelled with chamber ID,
-    timepoint, and date.
+  \item AIS scores and substrate penetration depths (mm)
+    at T\,=\,72\,h, T\,=\,120\,h, T\,=\,168\,h
+    for all 5 scenarios.
+  \item UV-A LED active status confirmed at each
+    timepoint for all powered scenarios.
+  \item Duration of light exposure per chamber per
+    timepoint recorded.
+  \item Minimum one photograph per scenario per
+    timepoint, labelled with scenario ID, timepoint,
+    and date/time.
+  \item Any interventions or failure events recorded
+    with timestamps and data-compromise flags.
 \end{enumerate}
+
+\vspace{0.5em}
+
+\section{The Comparison Structure}
+
+The five-scenario design is not five independent
+experiments. It is a structured reasoning space over
+two variables --- UV direction and signal separation ---
+that makes the primary result (Scenario 3) unambiguous
+by eliminating alternative explanations.
+
+\begin{itemize}[itemsep=0.2em]
+  \item \textbf{S1 vs S2:} UV free in air (zero
+    penetration cost) vs UV in Type B foam above
+    (high penetration cost). Same hydroponic below.
+    Tests penetration cost alone.
+  \item \textbf{S2 vs S3:} Primary inversion pair.
+    Structurally identical --- same substrate types,
+    same signal strengths, same penetration requirements.
+    Only direction flips. Cone flips with it.
+    If architecture flips, the field is the author.
+  \item \textbf{S3 vs S5:} Inversion with competing
+    hydroponic above vs inversion with nothing above.
+    Tests signal competition in the inversion result.
+  \item \textbf{S4 vs S5:} All signals above vs all
+    signals below. Maximum coherent field.
+    Tests whether full inversion occurs when the signal
+    is unambiguous and uncontested.
+\end{itemize}
 
 \vspace{0.5em}
 
@@ -603,7 +937,8 @@ pre-registered research program (OrganismCore,
 DOI: \href{https://doi.org/10.5281/zenodo.18986790}
 {\texttt{10.5281/zenodo.18986790}}) testing
 the geometric claim that organisms are the output
-of genomes operating within coherence gradient fields.
+of genomes operating within coherence gradient fields,
+and that changing the field changes the organism.
 
 The plant inversion experiment is the first
 \textit{prospective} test of this claim ---
@@ -612,10 +947,24 @@ rather than a retrospective explanation of
 already-observed phenomena.
 
 The retrospective confirmation record
-(14 cases across all kingdoms, documented in the
-OrganismCore repository) is available at:
+(confirmed cases across multiple kingdoms including
+hydrotropism overriding gravitropism in radish,
+root positive phototropism in microgravity,
+photosynthesis from geothermal buried light,
+and radiotropism toward embedded radiation sources,
+documented in the OrganismCore repository) is available at:
 \href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
 {\texttt{github.com/Eric-Robert-Lawson/attractor-oncology}}
+
+The oncological application of the coherence gradient
+field framework --- that cancer represents a breakdown
+in coherence field maintenance within a tissue, with
+cells navigating to the wrong attractor because the
+local field has been disrupted --- depends on establishing
+the principle that the field authors the form at the
+organismal level.
+The plant inversion experiment is the foundational
+proof of that principle.
 
 \vspace{0.5em}
 
@@ -631,10 +980,14 @@ separate document linked to this pre-registration
 by DOI.
 No modifications will be made to this document's
 predictions after upload.
-Amendments will be versioned and separately registered.
+Amendments will be versioned and separately registered
+with new DOIs.
 
 \vspace{0.3em}
-\textbf{Timestamp:} 2026-03-13\\
+\textbf{Timestamp:} 2026-03-18\\
+\textbf{Document version:} 2.0\\
+\textbf{Supersedes:} v1.0 (2026-03-13,
+DOI: \texttt{10.5281/zenodo.19040399})\\
 \textbf{Author:} Eric Robert Lawson / OrganismCore\\
 \textbf{ORCID:}
 \href{https://orcid.org/0009-0002-0414-6544}
@@ -650,6 +1003,9 @@ The architecture was never fixed.\ \
 The inversion was always possible.}\\[0.3em]
 \href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
 {\texttt{github.com/Eric-Robert-Lawson/attractor-oncology}}
+\ $\cdot$\
+\href{https://doi.org/10.5281/zenodo.18986790}
+{\texttt{doi.org/10.5281/zenodo.18986790}}
 \ $\cdot$\
 \href{https://orcid.org/0009-0002-0414-6544}
 {\texttt{ORCID: 0009-0002-0414-6544}}

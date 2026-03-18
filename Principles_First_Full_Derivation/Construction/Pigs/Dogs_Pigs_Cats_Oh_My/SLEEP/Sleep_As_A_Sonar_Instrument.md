@@ -2,6 +2,9 @@
 
 # **DOI: [https://doi.org/10.5281/zenodo.19101495](https://doi.org/10.5281/zenodo.19101495)**
 
+[Theory](https://doi.org/10.5281/zenodo.19102376)
+
+[derivation](https://doi.org/10.5281/zenodo.19102374)
 ---
 
 ## What The Extremes Are

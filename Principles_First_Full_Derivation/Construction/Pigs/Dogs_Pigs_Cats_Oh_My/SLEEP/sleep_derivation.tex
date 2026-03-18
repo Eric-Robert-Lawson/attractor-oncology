@@ -1,0 +1,1248 @@
+\documentclass[10pt, a4paper]{article}
+
+% ── PACKAGES ──────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{top=2.0cm,bottom=2.0cm,
+          left=2.2cm,right=2.2cm}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,urlcolor=blue,
+  linkcolor=blue,citecolor=blue,
+  pdftitle={The Derivation Chain Closure:
+    Sleep, Epigenetics, Cancer, and the
+    Molecular Substrate of the Attractor
+    Landscape},
+  pdfauthor={Eric Robert Lawson /
+    OrganismCore},
+  pdfkeywords={attractor geometry,
+    derivation chain closure,
+    BMAL1, circadian clock, cancer
+    attractor, epigenetic landscape,
+    Waddington, histone acetylation,
+    sleep basin, G substrate,
+    N field, social sleep, T8 topology,
+    artificial light, landscape damage,
+    OrganismCore}
+}
+\usepackage{microtype,parskip,booktabs}
+\usepackage{array,tabularx,longtable}
+\usepackage{xcolor,mdframed,enumitem}
+\usepackage{titlesec,lmodern,fancyhdr}
+\usepackage{lastpage,amsmath,amssymb}
+
+% ── COLOURS ───────────────────────────────────────────────────
+\definecolor{headergreen}{RGB}{20,100,60}
+\definecolor{rulecolor}{RGB}{20,100,60}
+\definecolor{claimbox}{RGB}{20,100,60}
+\definecolor{derivbox}{RGB}{255,252,235}
+\definecolor{closurebox}{RGB}{248,235,255}
+\definecolor{newbox}{RGB}{255,245,230}
+\definecolor{invariantbox}{RGB}{248,240,255}
+\definecolor{warningbox}{RGB}{255,235,235}
+
+% ── HEADER / FOOTER ───────────────────────────────────────────
+\pagestyle{fancy}\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\small\color{headergreen}
+  OrganismCore Reasoning Artifact}
+\fancyhead[R]{\small\color{headergreen}
+  Derivation Chain Closure --- 2026-03-18}
+\fancyfoot[C]{\small
+  Page \thepage\ of \pageref{LastPage}}
+
+% ── SECTION FORMAT ────────────────────────────────────────────
+\titleformat{\section}
+  {\large\bfseries\color{headergreen}}
+  {\thesection.}{0.5em}{}[
+  \vspace{-0.3em}\textcolor{rulecolor}
+  {\rule{\linewidth}{0.6pt}}]
+\titleformat{\subsection}
+  {\normalsize\bfseries\color{headergreen}}
+  {\thesubsection.}{0.5em}{}
+\setlength{\parskip}{0.4em}
+\setlength{\parindent}{0pt}
+
+% ══════════════════════════════════════════════════════════════
+\begin{document}
+
+% ── TITLE BLOCK ───────────────────────────────────────────────
+\begin{center}
+  {\LARGE\bfseries\color{headergreen}
+  REASONING ARTIFACT}\\[0.4em]
+  {\Large\bfseries
+  The Derivation Chain Closure:}\\[0.3em]
+  {\Large\bfseries
+  Sleep, Epigenetics, Cancer, and the
+  Molecular Substrate\\
+  of the Attractor Landscape}\\[0.5em]
+  {\normalsize\itshape
+  The derivation chain began with a
+  cancer cell.\\
+  The sleep geometry ended with the
+  same cancer cell.\\
+  The chain is not linear. It is
+  circular. It closes on itself.\\
+  Closure is itself the strongest
+  possible geometric confirmation.}\\[0.6em]
+  \noindent\textcolor{rulecolor}
+  {\rule{\linewidth}{1pt}}\\[0.4em]
+  {\normalsize
+  \textbf{Author:} Eric Robert Lawson\\
+  \textbf{Affiliation:} OrganismCore
+  (Independent Research)\\
+  \textbf{ORCID:}
+  \href{https://orcid.org/0009-0002-0414-6544}
+  {0009-0002-0414-6544}\\
+  \textbf{Contact:}
+  \href{mailto:OrganismCore@proton.me}
+  {OrganismCore@proton.me}\\
+  \textbf{Repository:}
+  \href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+  {\texttt{github.com/Eric-Robert-Lawson/
+  attractor-oncology}}\\
+  \textbf{Timestamp:} 2026-03-18\\
+  \textbf{Theory paper:}
+  \href{https://doi.org/10.5281/zenodo.19094935}
+  {\texttt{doi:10.5281/zenodo.19094935}}\\
+  \textbf{v1--v3 Dimensional Invariant:}
+  \href{https://doi.org/10.5281/zenodo.19101495}
+  {\texttt{doi:10.5281/zenodo.19101495}}\\
+  \textbf{Document version:} 1.0\\
+  \textbf{License:} CC BY 4.0}\\[0.4em]
+  \noindent\textcolor{rulecolor}
+  {\rule{\linewidth}{1pt}}
+\end{center}
+
+\vspace{0.5em}
+
+% ── DERIVATION NOTICE ─────────────────────────────────────────
+\begin{mdframed}[backgroundcolor=derivbox,
+  linecolor=headergreen,linewidth=0.8pt,
+  innertopmargin=0.6em,innerbottommargin=0.6em,
+  innerleftmargin=0.8em,innerrightmargin=0.8em]
+\textbf{DERIVATION NOTICE}
+
+\smallskip
+This document records four geometric
+findings that emerged from exploratory
+research against the current literature,
+conducted after the deposition of the
+Dimensional Invariant v3.0. Each finding
+was derived from the attractor geometry
+framework before confirming against
+literature. Each changes the formal
+status of the framework in a way that
+requires a standalone priority record.
+
+\smallskip
+The four findings are:
+
+\smallskip
+(1) \textbf{The derivation chain closes
+on itself.} BMAL1 loss produces a cancer
+attractor by making the repair/rest basin
+epigenetically inaccessible. This is
+geometrically identical to the mechanism
+described in Step 1 of the derivation
+chain (FOXA1/EZH2 cancer attractor,
+doi:10.5281/zenodo.18883922). The chain
+is circular. Step 1 and Step 9 are the
+same object.
+
+\smallskip
+(2) \textbf{Epigenetics is the molecular
+substrate of G.} The attractor landscape
+$G$ is not an abstract object. Its
+physical implementation is the epigenetic
+state of the organism's cells: histone
+modification patterns, DNA methylation,
+chromatin accessibility. Sleep is the
+daily maintenance process that restores
+$G$ to its functional state. Chronic
+sleep deprivation degrades $G$
+irreversibly through progressive
+epigenetic damage.
+
+\smallskip
+(3) \textbf{Social information is a
+primary N field.} Social cues are
+confirmed zeitgebers --- entrainment
+signals for the circadian clock
+equivalent to light. The social N field
+specifies basin occupation at the group
+level. Dominant baboons sleep worse than
+subordinates because their social field
+position imposes a continuous vigilance
+cost that prevents full sleep basin entry.
+Artificial light at night is a global
+N field disruption that is fragmenting
+group and individual sleep basins across
+thousands of species simultaneously.
+
+\smallskip
+(4) \textbf{T8: Hibernation topology ---
+suspended state with blocked discharge.}
+Hibernation is geometrically distinct
+from T5 (external suppression). In T8,
+both navigational activity and sleep
+architecture are suspended, but
+homeostatic pressure continues to build.
+Post-emergence rebound is qualitatively
+different from T5 rebound: the debt
+paid after hibernation accumulated with
+no corresponding navigational activity.
+This is a new geometric category.
+\end{mdframed}
+
+\vspace{0.8em}
+
+% ── MASTER CLAIM BOX ──────────────────────────────────────────
+\begin{mdframed}[backgroundcolor=claimbox,
+  linecolor=claimbox,linewidth=0pt,
+  innertopmargin=0.7em,innerbottommargin=0.7em,
+  innerleftmargin=1.0em,innerrightmargin=1.0em]
+\color{white}
+\textbf{THE CLOSURE CLAIM}
+
+\medskip
+The attractor geometry framework
+($S + N + G \rightarrow R$) began with
+a cancer cell that had lost access to
+its identity basin and was locked in the
+cancer attractor. The sleep geometry
+derivation ended by identifying that
+BMAL1 loss locks a cell in the cancer
+attractor by making the repair/rest
+basin epigenetically inaccessible.
+
+\medskip
+The mechanism is the same.
+The geometry is the same.
+The object is the same object.
+
+\medskip
+$G$ is not abstract. $G$ is the
+epigenetic state. $N$ is the coherence
+gradient field, of which the circadian
+clock, the social environment, and
+external light are all implementations.
+$S$ is the structural substrate that
+determines which basins are encodable.
+$R$ is the resulting state: healthy
+cell, cancerous cell, sleeping organism,
+waking organism, extinct lineage,
+living fossil.
+
+\medskip
+\textbf{The derivation chain is
+complete.\\
+The geometry is consistent
+end to end.\\
+The closure is the proof.}
+\end{mdframed}
+
+\vspace{1em}
+
+% ══════════════════════════════════════════════════════════════
+\section{The Derivation Chain Closes}
+\label{sec:closure}
+% ═════════════════════════════════════════════════��════════════
+
+\subsection{What the Chain Was}
+
+The derivation chain began as a linear
+sequence:
+
+\begin{center}
+\small
+\begin{tabular}{p{1.0cm}p{4.5cm}p{6.5cm}}
+\toprule
+\textbf{Step} & \textbf{Scale} &
+\textbf{Claim}\\
+\midrule
+1 & Cell & FOXA1/EZH2 ratio identifies
+whether a cancer cell is locked in the
+cancer attractor or retains access to
+its identity basin.\\[0.3em]
+2 & Organism & Pig domestication
+syndrome is field-specified NCC
+migration arrest. The genome is the
+$S$ substrate. The human selection
+field is the $N$ field.\\[0.3em]
+3 & Organism & Above a genomic fixation
+threshold in dogs, Basin~A becomes
+inaccessible. Landscape is permanently
+remodelled.\\[0.3em]
+4 & Organism & The cat has a symmetric
+dual-basin landscape. Basin~$\Omega$
+is the meta-attractor of navigational
+flexibility itself.\\[0.3em]
+5 & Organism & Sleep duration tracks the
+total cost of basin occupation. Three
+axes: switching, metabolic,
+computational.\\[0.3em]
+6 & Species & Sleep spectrum maps onto
+the three-axis framework across all
+animals. The sonar instrument.\\[0.3em]
+7 & Deep time & The dimensional
+invariant. Oldest surviving lineages
+sleep the least.\\[0.3em]
+8 & Deep time & Sleep topology is a
+geometric prediction of landscape
+position. Five then seven topologies.\\[0.3em]
+9 & Biochemistry & Basin-occupation
+cost is fundamentally oxidative. ROS.
+Glymphatic discharge. Ectotherm vs
+endotherm topology explained.\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Where the Chain Closes}
+
+Step 9 produced the finding that sleep
+discharges oxidative and synaptic cost
+simultaneously. Following this finding
+into the circadian clock literature
+produced the closure:
+
+\textbf{BMAL1}, the master circadian
+clock gene, drives the 24-hour
+oscillation that gates when sleep occurs
+and when the repair basin is occupied.
+BMAL1/CLOCK acts as a histone
+acetyltransferase --- it directly
+modifies chromatin, opening the
+landscape barriers that allow the cell
+to enter its repair/rest basin.
+
+When BMAL1 is lost:
+
+\begin{enumerate}[itemsep=0.2em]
+  \item Histone acetyltransferase
+    activity is lost.
+  \item The repair basin becomes
+    epigenetically inaccessible ---
+    the chromatin state that enables
+    entry is not established.
+  \item The cell remains permanently
+    in the active/proliferative state.
+  \item DNA double-strand break repair
+    (which requires the repair basin)
+    is impaired.
+  \item Genomic instability accumulates.
+  \item The cancer attractor is
+    stabilised and deepened.
+  \item The differentiation basin
+    becomes progressively less
+    accessible.
+\end{enumerate}
+
+This is Step~1 of the derivation chain.
+A cell locked in the cancer attractor
+because the identity/repair basin is
+inaccessible. FOXA1/EZH2 was the
+marker. BMAL1/CLOCK is the mechanism.
+
+\textbf{The chain does not end at
+Step~9. Step~9 connects back to
+Step~1. The geometry is circular.}
+
+\begin{mdframed}[backgroundcolor=closurebox,
+  linecolor=headergreen,linewidth=0.8pt,
+  innertopmargin=0.6em,innerbottommargin=0.6em,
+  innerleftmargin=0.8em,innerrightmargin=0.8em]
+\textbf{THE CLOSURE GEOMETRY}
+
+\smallskip
+At the organism level:\\
+Sleep is the process by which the
+basin-occupation cost of waking
+navigation is discharged.\\
+The circadian clock (BMAL1/CLOCK/PER/CRY)
+is the $N$ field that specifies when
+the organism transitions from the
+waking basin to the sleep/repair basin.
+
+\smallskip
+At the cellular level:\\
+The circadian clock (same genes,
+same proteins) is the $N$ field that
+specifies when each cell transitions
+from its active/proliferative state
+to its repair/maintenance state.\\
+BMAL1 loss at the cellular level
+is the exact cellular equivalent of
+an organism that can no longer enter
+its sleep basin.\\
+The consequences are identical in
+structure: cost accumulates without
+discharge, oxidative damage builds,
+the landscape substrate ($G$) degrades,
+the cancer attractor deepens and
+stabilises.
+
+\smallskip
+\textbf{Cancer is cellular sleep
+deprivation.\\
+Sleep deprivation is organismal
+proto-cancer.\\
+Both are the same geometric
+failure: basin access lost,
+cost undischarged, landscape
+degraded.}
+\end{mdframed}
+
+\subsection{What Confirms the Closure}
+
+The closure is confirmed by five
+independent empirical convergences:
+
+\begin{enumerate}[itemsep=0.3em]
+  \item \textbf{BMAL1 acts as a tumour
+    suppressor} (Springer, 2023;
+    confirmed multiple lineages 2024).
+    Its loss increases cancer
+    aggressiveness, invasion, and
+    proliferation.
+
+  \item \textbf{BMAL1/CLOCK is a histone
+    acetyltransferase} (Nature
+    Communications, 2023). It directly
+    opens chromatin at repair gene
+    loci --- the molecular mechanism
+    of repair basin entry.
+
+  \item \textbf{BMAL1 loss increases
+    DNA methylation at differentiation
+    gene loci}, enforcing an epigenetic
+    block against re-entry to normal
+    differentiation basins (Cell
+    Reports, 2023).
+
+  \item \textbf{Circadian disruption
+    accelerates tumour growth by
+    suppressing immune activity and
+    reshaping the tumour
+    microenvironment} (Nature Cancer,
+    2024). The immune basin (T7 topology)
+    is also disrupted when BMAL1
+    is lost.
+
+  \item \textbf{Sleep deprivation causes
+    NF-$\kappa$B activation and
+    pro-inflammatory cytokine elevation}
+    (confirmed through 2024). NF-$\kappa$B
+    drives the same inflammatory
+    landscape that promotes tumour
+    microenvironment formation. Chronic
+    sleep loss and circadian disruption
+    converge on the same inflammatory
+    attractor through different
+    entry routes.
+\end{enumerate}
+
+% ══════════════════════════════════════════════════════════════
+\section{Epigenetics is the Molecular
+Substrate of G}
+\label{sec:epigenetics}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{The Formal Claim}
+
+The attractor landscape $G$ in the
+framework $S + N + G \rightarrow R$
+has a physical implementation. It is
+not an abstract theoretical object.
+$G$ is instantiated in the cell and
+organism by the \textbf{epigenetic
+state}: the pattern of histone
+modifications, DNA methylation, and
+chromatin accessibility across the
+genome.
+
+\begin{itemize}[itemsep=0.2em]
+  \item \textbf{Basin depths} in $G$
+    correspond to the depth of
+    epigenetic entrenchment of the
+    corresponding cell or organism
+    state. A deeply entrenched state
+    requires more epigenetic remodelling
+    energy to escape. Basin depth is
+    the cost of chromatin reorganisation
+    required to transition away.
+
+  \item \textbf{Barrier heights} in $G$
+    correspond to the amount of
+    chromatin remodelling required to
+    transition between states. High
+    barrier = extensive histone
+    modification and DNA methylation
+    changes required.
+
+  \item \textbf{Accessible basins} in
+    $G$ are states for which the
+    chromatin configuration can be
+    established from the current
+    epigenetic starting point within
+    the available energy budget.
+
+  \item \textbf{Inaccessible basins}
+    are states for which the required
+    chromatin reconfiguration cannot
+    be completed given the current
+    epigenetic state and available
+    energy.
+\end{itemize}
+
+This is Waddington's epigenetic
+landscape operationalised within the
+$S + N + G \rightarrow R$ framework.
+Waddington described the landscape
+metaphorically. The framework identifies
+the three components that generate it
+($S$, $N$, $G$) and the process
+($\rightarrow R$) by which it is
+navigated.
+
+\subsection{What Sleep Does to G}
+
+Sleep maintains $G$ daily.
+
+During waking, neural and somatic
+activity promotes histone acetylation
+--- chromatin opening --- which is the
+molecular signature of a landscape with
+lower barriers between basins.
+This is necessary for navigation:
+accessible basins require accessible
+chromatin.
+
+During sleep (specifically NREM
+slow-wave sleep), histone deacetylation
+occurs --- chromatin closes --- and
+the landscape barriers are
+\textit{restored} to their functional
+state. The basin structure of $G$ is
+re-established. Synaptic downscaling
+selectively reinforces the connections
+that correspond to the organism's
+current basin occupancy while
+eliminating the transient connections
+accumulated during navigation.
+
+\textbf{Sleep is daily $G$ maintenance.}
+The organism spends approximately one
+third of its life restoring the
+landscape substrate that makes
+the other two thirds of navigation
+possible.
+
+\subsection{What Chronic Deprivation Does
+to G}
+
+Chronic sleep deprivation (confirmed
+2023 ACS; Trends in Neurosciences 2022;
+confirmed and extended through 2024)
+produces permanent structural changes:
+
+\begin{enumerate}[itemsep=0.2em]
+  \item \textbf{Pleiotrophin (PTN)
+    depletion.} PTN is a neurotrophic
+    factor required for hippocampal
+    neuron survival. Chronic deprivation
+    depletes PTN leading to neuronal
+    death. Dead neurons are removed
+    basins in $G$ that cannot be
+    restored.
+
+  \item \textbf{Progressive histone
+    modification dysregulation.}
+    Without regular sleep-dependent
+    deacetylation, chromatin
+    accessibility patterns drift
+    from their functional state.
+    The landscape barriers degrade.
+    Basins that should be deep become
+    shallow. Basins that should be
+    inaccessible become reachable.
+    The landscape loses specificity.
+
+  \item \textbf{DNA methylation drift.}
+    Sleep-dependent DNA methylation
+    maintenance (confirmed 2023--2024)
+    is required to sustain the
+    methylation patterns that enforce
+    basin identity. Without maintenance,
+    methylation patterns drift toward
+    less specific states.
+
+  \item \textbf{NF-$\kappa$B-driven
+    inflammatory landscape remodelling.}
+    Chronic activation of NF-$\kappa$B
+    (from undischarged oxidative cost)
+    drives transcriptional changes
+    that deepen the inflammatory
+    attractor. The organism's landscape
+    is progressively remodelled toward
+    the inflammatory basin, making
+    return to baseline increasingly
+    energetically costly.
+\end{enumerate}
+
+\textbf{The geometric consequence:}
+Irreversible sleep deprivation damage
+is not a mystery. It is $G$ degradation
+past the point where $G$ maintenance
+can restore it. Once neurons die,
+basins are permanently removed.
+Once methylation patterns drift past
+a restoration threshold, re-establishing
+them requires energy input that
+exceeds what sleep can deliver.
+
+The cancer connection is immediate:
+BMAL1 loss is one route to $G$
+degradation that eliminates the
+repair basin. Chronic sleep deprivation
+is another route to the same outcome
+via progressive epigenetic drift and
+neuronal loss. They converge on
+the same geometric failure.
+
+% ══════════════════════════════════════════════════════════════
+\section{Social Information as Primary
+N Field}
+\label{sec:social}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{The Formal Claim}
+
+In the framework, $N$ is the coherence
+gradient field that specifies which
+basin the organism should occupy.
+Light was known to be the primary
+zeitgeber --- the primary $N$ field
+signal for the circadian clock. The
+current literature confirms that
+\textbf{social information is an
+equally primary $N$ field signal},
+acting as a zeitgeber for the circadian
+clock independently of light.
+
+Social cues --- the activity patterns,
+vocalisations, and movement of
+conspecifics --- entrain the circadian
+clock and therefore specify sleep
+basin entry timing at the individual
+level. In group-living species, the
+social $N$ field synchronises the
+group's sleep basins into a coupled
+collective attractor.
+
+\subsection{The Baboon Dominance Finding}
+
+Wild chacma baboons (Current Biology,
+2025): more dominant individuals
+experience less and lower-quality sleep
+than subordinates. Dominant baboons
+sleep closer to more group members,
+are more central to the social network,
+and experience more disruption during
+the night.
+
+\textbf{The geometric reading:}
+
+Dominance is a landscape position within
+the social $G$. The dominant individual
+occupies a high-centrality node in
+the social network. The cost of
+occupying that node includes a
+continuous vigilance requirement ---
+Basin~A navigational cost accumulated
+from social monitoring does not cease
+at night. The social $N$ field continues
+to impose navigational demand on
+the dominant individual during the
+period when sleep should be occurring.
+
+This is the T5 topology producing
+condition applied at the social level:
+the sleep basin is not inaccessible.
+It is being continually interrupted by
+social $N$ field signals that the
+dominant individual cannot suppress
+without losing the basin position
+that dominance requires.
+
+\textbf{Geometric prediction from this:}
+Dominance rank will negatively correlate
+with sleep quality across social species
+in proportion to the social navigational
+demand of the dominant position.
+Species where dominance requires
+continuous active monitoring
+(baboons, chimpanzees) will show
+larger effects than species where
+dominance is passive and territorial
+(many solitary species). This is
+testable across primate species with
+known dominance structures.
+
+\subsection{Artificial Light as Global
+N Field Disruption}
+
+Artificial light at night (ALAN) is
+expanding at 2.2\% per year globally
+(Royal Society B, 2023; 600+ studies
+synthesised by US National Park
+Service, 2024). It disrupts circadian
+rhythms across all taxa: birds,
+insects, marine organisms, mammals,
+plants.
+
+\textbf{The geometric reading:}
+
+Light is the primary $N$ field signal
+for the circadian clock across all
+life. The circadian clock is the
+molecular implementation of the
+waking/sleep basin transition. ALAN
+is not a minor ecological inconvenience.
+It is a global disruption of the
+primary $N$ field that specifies
+when organisms enter and exit the
+sleep basin.
+
+The consequences the literature documents
+--- disrupted migration, impaired
+reproduction, altered predator-prey
+dynamics, reduced immune function,
+increased cancer rates, reduced
+ecological diversity near light sources
+--- are all geometric consequences of
+$N$ field disruption. When the field
+that specifies basin occupation is
+corrupted, the organism loses reliable
+access to the basins the field was
+specifying.
+
+\textbf{The scale of the disruption:}
+This is not individual sleep disruption.
+ALAN is simultaneously disrupting the
+$N$ field for millions of species
+across all major ecosystems. The
+eco-evolutionary feedback (ScienceDirect,
+2025) shows species beginning to adapt
+--- which means their $S$ substrate
+is being selected to function with
+a corrupted $N$ field. This is
+landscape-scale $G$ remodelling
+driven by a single perturbation source.
+
+The framework identifies this as
+a Navigator-strategy threat of the
+first order: ALAN is not eliminating
+basins directly. It is corrupting the
+$N$ field that allows organisms to
+navigate between them reliably. A
+Navigator whose $N$ field is corrupted
+cannot execute the Navigator strategy.
+The corrupted $N$ field mimics the
+domestication field in its effect ---
+it imposes basin occupation that the
+organism would not choose under an
+uncorrupted field.
+
+% ══════════════════════════════════════════════════════════════
+\section{T8: The Hibernation Topology}
+\label{sec:t8}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Why Hibernation is Not T5}
+
+T5 (fragmented shallow sleep with
+rebound) occurs when:
+\begin{itemize}[itemsep=0.2em]
+  \item Navigational cost is accumulating
+    normally during waking.
+  \item External pressure (predation,
+    social vigilance) is suppressing
+    sleep basin entry.
+  \item Debt accumulates alongside
+    ongoing cost.
+  \item Rebound on pressure removal
+    pays the accumulated debt.
+\end{itemize}
+
+Hibernation has a different geometric
+structure:
+
+\begin{itemize}[itemsep=0.2em]
+  \item Navigational activity is
+    suspended. The organism is not
+    navigating. Metabolic rate drops
+    to 1--5\% of normal.
+  \item Sleep architecture is also
+    suspended. Body temperature at
+    hibernation levels prevents the
+    slow-wave activity required for
+    T3 discharge.
+  \item \textbf{But homeostatic sleep
+    pressure continues to build.}
+    The adenosine-based sleep pressure
+    signal accumulates regardless of
+    metabolic rate. Debt accumulates
+    without corresponding navigational
+    cost.
+  \item Periodic arousals during
+    hibernation are exclusively for
+    sleep discharge: metabolically
+    expensive warming to euthermic
+    temperatures purely to enable
+    several hours of intense slow-wave
+    sleep, followed by return to torpor.
+  \item Post-emergence rebound is
+    massive and proportional to
+    hibernation duration.
+\end{itemize}
+
+\subsection{T8 Formal Definition}
+
+\begin{mdframed}[backgroundcolor=newbox,
+  linecolor=headergreen,linewidth=0.8pt,
+  innertopmargin=0.6em,innerbottommargin=0.6em,
+  innerleftmargin=0.8em,innerrightmargin=0.8em]
+\textbf{T8: Suspended state with blocked
+discharge}
+
+\textit{Landscape position:} An
+organism that has entered a
+physiologically mandated state of
+whole-organism metabolic suspension
+(torpor, deep hibernation) in which
+both the navigational activity that
+generates cost and the sleep architecture
+that discharges it are simultaneously
+blocked by temperature or metabolic
+constraints. Homeostatic pressure
+continues to build in the absence of
+both processes.
+
+\textit{Discharge:} Impossible during
+torpor. Discharged in bursts during
+periodic arousals (which are themselves
+driven by homeostatic pressure reaching
+threshold). Full discharge after
+emergence from hibernation via extended
+post-emergence rebound sleep.
+
+\textit{Geometric signature:} Post-
+emergence rebound is qualitatively
+different from T5 rebound. T5 rebound
+pays debt accumulated from ongoing
+navigational cost under suppression.
+T8 rebound pays debt accumulated from
+homeostatic pressure building in the
+complete absence of navigational
+activity. The debt-to-activity ratio
+in T8 rebound is infinite: maximum
+debt, zero navigational cause.
+
+\textit{Why this is a distinct topology:}
+T5 and T8 have similar surface
+appearances (minimal sleep, large
+rebound) but completely different
+geometric causes. T5 is suppressed
+discharge of ongoing cost. T8 is
+suspended discharge of automatically
+accumulating homeostatic pressure in
+the absence of cost. The diagnostic
+difference: a T5 organism removed from
+pressure will rebound proportionally
+to its navigational cost during the
+suppressed period. A T8 organism
+emerging from hibernation will rebound
+proportionally to the \textit{duration}
+of suspension, not to any navigational
+cost incurred during suspension
+(because none was incurred).
+
+\textit{Confirmed examples:}
+Ground squirrel, bear, bat, hedgehog.
+All confirmed to show intense slow-wave
+sleep during periodic arousals and
+extended rebound sleep post-emergence.
+
+\textit{Novel prediction:} The duration
+of T8 post-emergence rebound will be
+predicted by hibernation duration alone,
+not by pre-hibernation navigational
+cost profile. A ground squirrel that
+hibernated for 5 months will show
+the same rebound pattern as one with
+identical pre-hibernation activity,
+regardless of whether the pre-hibernation
+period was high or low navigational
+demand. This is testable.
+\end{mdframed}
+
+% ══════════════════════════════════════════════════════════════
+\section{Somatic G Maintenance: Tissue
+Repair and Stem Cells}
+\label{sec:somatic}
+% ══════════════════════════════════════════════════════════════
+
+The framework has consistently described
+sleep as discharging neural cost ---
+synaptic reconfiguration and oxidative
+debt in neural tissue. The current
+literature identifies a fourth function
+of sleep that is geometrically equivalent
+but operating in peripheral tissue:
+\textbf{somatic $G$ maintenance}.
+
+Sleep-dependent growth hormone release
+(primarily during NREM slow-wave sleep)
+drives:
+\begin{itemize}[itemsep=0.2em]
+  \item Stem cell proliferation and
+    differentiation
+  \item Wound healing and tissue repair
+  \item Collagen synthesis and
+    angiogenesis
+  \item Immune cell trafficking and
+    renewal
+\end{itemize}
+
+\textbf{The geometric reading:}
+
+The organism's somatic tissues are not
+passive substrates. They are the
+physical implementation of $S$ --- the
+structural substrate that encodes the
+organism's build capacity. Sleep
+maintains not just the neural $G$
+(via synaptic downscaling and
+glymphatic clearance) but the somatic
+$S$ (via stem cell renewal and tissue
+repair).
+
+The framework's equation
+$S + N + G \rightarrow R$ requires all
+three components to be maintained.
+Sleep maintains $G$ (via epigenetic
+restoration). Sleep also maintains $S$
+(via growth hormone-driven somatic
+repair). The $N$ field (circadian clock)
+gates both processes simultaneously
+within the same sleep window.
+
+\textbf{This means sleep deprivation
+degrades both $G$ and $S$ simultaneously.}
+The organism loses both landscape
+substrate and structural build capacity.
+This is why chronic sleep deprivation
+has such broad multi-system consequences:
+it is failing to maintain two of the
+three components of the fundamental
+equation.
+
+% ══════════════════════════════════════════════════════════════
+\section{The Complete Geometric Picture}
+\label{sec:picture}
+% ══════════════════════════════════════════════════════════════
+
+The full geometric picture that emerges
+from the closure:
+
+\[
+S + N + G \;\rightarrow\; R
+\]
+
+\begin{itemize}[itemsep=0.4em]
+  \item $S$ = structural substrate.
+    Physically implemented as: genome,
+    epigenetically accessible gene
+    programmes, somatic tissue
+    integrity, stem cell reserve.
+    Maintained by: sleep-dependent
+    growth hormone release and stem
+    cell renewal.
+
+  \item $N$ = coherence gradient field.
+    Physically implemented as: light
+    (primary zeitgeber), social
+    information (co-primary zeitgeber),
+    circadian clock genes
+    (BMAL1/CLOCK/PER/CRY) at molecular
+    level. Disrupted by: ALAN
+    (corrupted light field), social
+    fragmentation (corrupted social
+    field), BMAL1 loss (corrupted
+    molecular clock).
+
+  \item $G$ = global attractor landscape.
+    Physically implemented as:
+    epigenetic state (histone
+    modifications, DNA methylation,
+    chromatin accessibility). Maintained
+    by: sleep-dependent histone
+    deacetylation and glymphatic
+    clearance. Degraded by: chronic
+    sleep deprivation, BMAL1 loss,
+    ALAN-driven circadian disruption.
+
+  \item $R$ = resulting state. The
+    observable outcome of the
+    organism's current position in
+    the landscape: healthy navigation,
+    locked cancer attractor,
+    successful deep-time survival,
+    extinction.
+\end{itemize}
+
+\textbf{The cancer cell is an organism
+whose $N$ field (BMAL1) has been lost,
+whose $G$ (epigenetic state) has been
+degraded past the repair threshold,
+and whose $R$ (resulting state) is
+permanent occupation of the cancer
+attractor.}
+
+\textbf{The living fossil is an organism
+whose $G$ is so deep that no $N$ field
+disruption has been able to displace it
+in 450 million years, and whose sleep
+requirement is near-zero because the
+navigational cost of occupying that
+deep basin is near-zero.}
+
+The same equation. The same geometry.
+The same invariant.
+
+% ══════════════════════════════════════════════════════════════
+\section{Predictions}
+\label{sec:predictions}
+% ═════���════════════════════════════════════════════════════════
+
+\subsection{P-CLOSURE-1: Pharmacological
+BMAL1 Restoration Will Partially Restore
+Cancer Cell Differentiation Basin Access}
+
+If BMAL1 loss makes the repair/
+differentiation basin epigenetically
+inaccessible, then pharmacological
+restoration of BMAL1 expression in
+cancer cells will partially restore
+chromatin accessibility at
+differentiation gene loci and increase
+the probability of differentiation
+under appropriate $N$ field signalling.
+The effect will be proportional to
+the degree of epigenetic drift: recent
+BMAL1 loss will show larger restoration
+effects than ancient, deeply entrenched
+epigenetic lock-in.
+
+\subsection{P-CLOSURE-2: Chronic Sleep
+Deprivation Will Produce BMAL1-Loss-
+Equivalent Epigenetic Signatures}
+
+Organisms subject to chronic sleep
+deprivation equivalent in duration to
+what would produce irreversible
+cognitive decline will show epigenetic
+signatures at differentiation and repair
+gene loci that are statistically
+indistinguishable from BMAL1-loss
+signatures. The two routes (molecular
+clock loss vs.\ circadian disruption
+via chronic sleep loss) converge on
+the same epigenetic failure pattern.
+
+\subsection{P-CLOSURE-3: Dominance Rank
+Will Negatively Correlate With Sleep
+Quality Proportional to Social
+Navigational Demand}
+
+Across social species, dominance rank
+will negatively correlate with sleep
+quality in proportion to the navigational
+demand of the dominant position.
+Species with high-vigilance dominance
+(baboons, chimpanzees) will show larger
+effects than species with passive
+territorial dominance. Testable across
+the primate sleep dataset.
+
+\subsection{P-CLOSURE-4: T8 Rebound
+Duration Predicted by Hibernation
+Duration Alone}
+
+Post-hibernation rebound sleep duration
+will be predicted by hibernation duration
+alone, independently of pre-hibernation
+navigational cost profile. Two animals
+of the same species hibernating for
+different durations will show rebound
+sleep proportional to hibernation
+duration, not to pre-hibernation
+activity levels.
+
+\subsection{P-CLOSURE-5: ALAN Exposure
+Will Produce Measurable G Degradation
+in Proportion to Duration and Intensity}
+
+Species with multi-generational ALAN
+exposure will show measurable epigenetic
+drift (G degradation) at circadian clock
+gene loci relative to conspecifics in
+dark environments. The drift will
+correlate with ALAN intensity and
+duration. Reversing ALAN exposure will
+partially restore the epigenetic state
+over multiple generations as the $N$
+field is restored.
+
+% ── DERIVATION CHAIN ──────────────────────────────────────────
+\section{The Complete Derivation Chain}
+\label{sec:chain}
+
+\begin{center}
+\small
+\begin{tabular}{p{1.0cm}p{4.5cm}p{6.5cm}}
+\toprule
+\textbf{Step} & \textbf{Claim} &
+\textbf{Record}\\
+\midrule
+1 & FOXA1/EZH2. Cancer cell locked in
+cancer attractor. &
+\href{https://doi.org/10.5281/zenodo.18883922}
+{\texttt{10.5281/zenodo.18883922}}\\[0.3em]
+2 & Pig NCC migration arrest.
+$N$ field domestication. &
+\href{https://doi.org/10.5281/zenodo.19094935}
+{\texttt{10.5281/zenodo.19094935}}\\[0.3em]
+3 & Canine landscape remodelling.
+Basin~A inaccessible. &
+Repository 2026-03-18\\[0.3em]
+4 & Feline dual-basin.
+Basin~$\Omega$. &
+Repository 2026-03-18\\[0.3em]
+5 & Sleep as cost discharge.
+Three axes. &
+Repository 2026-03-18\\[0.3em]
+6 & Sleep sonar spectrum. &
+Repository 2026-03-18\\[0.3em]
+7--9 & Dimensional Invariant
+v1.0--v3.0. &
+\href{https://doi.org/10.5281/zenodo.19101495}
+{\texttt{10.5281/zenodo.19101495}}\\[0.3em]
+10 & \textbf{CLOSURE.} BMAL1 loss
+= cancer attractor = Step 1.
+$G$ = epigenetic state.
+$N$ = circadian/social/light field.
+Chain is circular. &
+\textbf{This document.}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{mdframed}[backgroundcolor=claimbox,
+  linecolor=claimbox,linewidth=0pt,
+  innertopmargin=0.7em,innerbottommargin=0.7em,
+  innerleftmargin=1.0em,innerrightmargin=1.0em]
+\color{white}
+\textbf{THE CLOSURE STATEMENT}
+
+\medskip
+The derivation chain began with a cancer
+cell that could not differentiate.
+The mechanism was unknown but the
+geometry was clear: the identity basin
+was inaccessible.
+
+\medskip
+Following the geometry through pig,
+dog, cat, sleep cost, the sleep
+spectrum, deep time, topology, and
+the oxidative substrate --- following
+the geometry where it led --- brought
+us back to the same cell.
+
+\medskip
+The cell cannot differentiate because
+BMAL1 is lost. BMAL1 loss collapses
+the $N$ field. The collapsed $N$ field
+fails to specify repair basin entry.
+The repair basin becomes epigenetically
+inaccessible --- $G$ is degraded.
+The cell is locked in the cancer
+attractor because it cannot sleep.
+
+\medskip
+Cancer is cellular sleep deprivation.\\
+Sleep deprivation is organismal
+landscape degradation.\\
+$G$ is the epigenetic state.\\
+$N$ is the clock.\\
+$S$ is the genome.\\
+$R$ is the outcome.\\
+The framework is complete.\\
+The geometry is consistent.\\
+The chain closes.
+\end{mdframed}
+
+% ── DOCUMENT METADATA ─────────────────────────────────────────
+\vspace{0.5em}
+\noindent\textcolor{rulecolor}
+{\rule{\linewidth}{0.8pt}}
+
+{\footnotesize
+\textbf{Document ID:}
+DERIVATION\_CHAIN\_CLOSURE\_REASONING\_
+ARTIFACT\_v1.0\\
+\textbf{Date:} 2026-03-18\\
+\textbf{Author:} Eric Robert Lawson /
+OrganismCore\\
+\textbf{Primary contributions:}
+(1) Derivation chain closure: BMAL1 loss
+= cancer attractor = Step 1 of the chain.
+Cancer is cellular sleep deprivation.
+(2) $G$ = epigenetic state (histone
+modifications, DNA methylation, chromatin
+accessibility). Formally identified.
+(3) Social information as primary $N$
+field. Dominance rank negatively
+correlates with sleep quality proportional
+to social navigational demand.
+(4) T8: hibernation topology ---
+suspended state with blocked discharge.
+Distinct from T5. Rebound diagnostic
+differs.
+(5) Somatic $G$ maintenance: sleep
+maintains $S$ via growth hormone-driven
+stem cell renewal simultaneously with
+$G$ maintenance.
+(6) ALAN as global primary $N$ field
+disruption across all species.
+(7) Five predictions P-CLOSURE-1
+through P-CLOSURE-5.\\
+\textbf{Prior records:}
+v1.0: \texttt{doi:10.5281/zenodo.19094935};
+v2.0--v3.0:
+\texttt{doi:10.5281/zenodo.19101495}\\
+\textbf{ORCID:}
+\href{https://orcid.org/0009-0002-0414-6544}
+{0009-0002-0414-6544}\\
+\textbf{Contact:}
+\href{mailto:OrganismCore@proton.me}
+{OrganismCore@proton.me}\\
+\textbf{License:} CC BY 4.0\\
+\textbf{Version:} 1.0 --- LOCKED.
+}
+
+\end{document}

@@ -1,0 +1,1132 @@
+\documentclass[10pt, a4paper]{article}
+
+% ── PACKAGES ──────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{
+  top=2.0cm,
+  bottom=2.0cm,
+  left=2.2cm,
+  right=2.2cm
+}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  urlcolor=blue,
+  linkcolor=blue,
+  citecolor=blue,
+  pdftitle={Pre-Registration P7: Field-Specified
+            Developmental Arrest of Neural Crest
+            Migration in Sus scrofa ---
+            Cross-Fostering Experiment},
+  pdfauthor={Eric Robert Lawson / OrganismCore},
+  pdfsubject={Pre-registered experimental protocol
+              and predictions},
+  pdfkeywords={domestication syndrome, neural crest,
+               attractor geometry, developmental arrest,
+               Sus scrofa, cross-fostering, HPA axis,
+               adrenal gland, coherence gradient field,
+               pre-registration, OrganismCore}
+}
+\usepackage{microtype}
+\usepackage{parskip}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{lmodern}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{amsmath}
+
+% ── COLOURS ───────────────────────────────────────────────────
+\definecolor{headergreen}{RGB}{20,100,60}
+\definecolor{rulecolor}{RGB}{20,100,60}
+\definecolor{claimbox}{RGB}{20,100,60}
+\definecolor{notebox}{RGB}{240,248,240}
+\definecolor{warningbox}{RGB}{255,248,220}
+\definecolor{predbox}{RGB}{235,248,255}
+\definecolor{scorebox}{RGB}{248,240,255}
+\definecolor{failbox}{RGB}{255,235,235}
+\definecolor{controlbox}{RGB}{240,255,240}
+
+% ── HEADER / FOOTER ───────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\small\color{headergreen}
+  OrganismCore Pre-Registration P7 v1.0}
+\fancyhead[R]{\small\color{headergreen}
+  Cross-Fostering / NCC Arrest --- 2026-03-18}
+\fancyfoot[C]{\small Page \thepage\ of \pageref{LastPage}}
+
+% ── SECTION FORMAT ────────────────────────────────────────────
+\titleformat{\section}
+  {\large\bfseries\color{headergreen}}
+  {\thesection.}{0.5em}{}[
+  \vspace{-0.3em}
+  \textcolor{rulecolor}{\rule{\linewidth}{0.6pt}}]
+\titleformat{\subsection}
+  {\normalsize\bfseries\color{headergreen}}
+  {\thesubsection.}{0.5em}{}
+\titleformat{\subsubsection}
+  {\small\bfseries}
+  {\thesubsubsection.}{0.5em}{}
+
+\setlength{\parskip}{0.4em}
+\setlength{\parindent}{0pt}
+
+% ══════════════════════════════════════════════════════════════
+\begin{document}
+
+% ── TITLE BLOCK ───────────────────────────────────────────────
+\begin{center}
+  {\LARGE\bfseries\color{headergreen}
+  PRE-REGISTRATION P7}\\[0.4em]
+  {\Large\bfseries
+  Field-Specified Developmental Arrest of\\
+  Neural Crest Migration in \textit{Sus scrofa}:}\\[0.3em]
+  {\large\bfseries
+  The Cross-Fostering Experiment}\\[0.4em]
+  {\large
+  Domestication Coherence Gradient Field Applied
+  from Birth\\
+  to F1 Offspring of Wild-Genome \textit{Sus scrofa}\\
+  Predicts Morphological Shift Toward Domestic
+  Phenotype\\
+  Without Genetic Modification}\\[0.6em]
+  \noindent\textcolor{rulecolor}
+  {\rule{\linewidth}{1pt}}\\[0.4em]
+  {\normalsize
+  \textbf{Author:} Eric Robert Lawson\\
+  \textbf{Affiliation:} OrganismCore
+  (Independent Research)\\
+  \textbf{ORCID:}
+  \href{https://orcid.org/0009-0002-0414-6544}
+  {0009-0002-0414-6544}\\
+  \textbf{Contact:}
+  \href{mailto:OrganismCore@proton.me}
+  {OrganismCore@proton.me}\\
+  \textbf{Repository:}
+  \href{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+  {\texttt{github.com/Eric-Robert-Lawson/
+  attractor-oncology}}\\
+  \textbf{Pre-registration timestamp:} 2026-03-18\\
+  \textbf{Linked theory paper DOI (Zenodo):}
+  [to be inserted upon Zenodo confirmation]\\
+  \textbf{Document version:} 1.0\\
+  \textbf{License:}
+  Creative Commons Attribution 4.0
+  International (CC BY 4.0)}\\[0.4em]
+  \noindent\textcolor{rulecolor}
+  {\rule{\linewidth}{1pt}}
+\end{center}
+
+\vspace{0.5em}
+
+% ── CLAIM BOX ─────────────────────────────────────────────────
+\begin{mdframed}[
+  backgroundcolor=claimbox,
+  linecolor=claimbox,
+  linewidth=0pt,
+  innertopmargin=0.7em,
+  innerbottommargin=0.7em,
+  innerleftmargin=1.0em,
+  innerrightmargin=1.0em
+]
+\color{white}
+\textbf{THE PRE-REGISTERED CLAIM}
+
+The domestication syndrome is not produced by
+genetic modification of the organism.
+It is produced by the domestication coherence
+gradient field ($N_{\text{domestic}}$) arresting
+neural crest cell migration at the
+juvenile-proximate developmental stage.
+The genome does not change. The field changes.
+The developmental trajectory is arrested.
+The phenotype reflects that arrest.
+
+\medskip
+This pre-registration specifies: the experimental
+design that tests this claim, the predicted
+outcome, the scoring method, the control
+conditions, and the success criteria ---
+all locked before the experiment is run.
+
+\medskip
+\textbf{Primary prediction (P7):}
+F1 offspring of wild-caught \textit{Sus scrofa}
+(confirmed wild genome, never domesticated lineage)
+raised from birth under full $N_{\text{domestic}}$
+via domestic foster sow will show, at 12 months,
+significantly smaller adrenal glands and reduced
+HPA axis reactivity compared to genotype-matched
+F1 controls raised under $N_{\text{wild}}$.
+Adrenal Mass Ratio (AMR) $\leq 0.80$ relative to
+wild-raised controls.
+Cortisol Reactivity Ratio (CRR) $\leq 0.75$
+relative to wild-raised controls.
+Both criteria confirmed at 12 months.
+\end{mdframed}
+
+\vspace{1em}
+
+% ══════════════════════════════════════════════════════════════
+\section{Background and Theoretical Basis}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{The Standard Model and Its Failure}
+
+The standard explanation for the domestication
+syndrome --- the convergent suite of morphological
+and behavioural traits (floppy ears, depigmentation,
+shortened snout, smaller adrenal glands, docility,
+juvenile behaviour retention) appearing in every
+domesticated species --- invokes genetic change:
+selective breeding shifts allele frequencies toward
+domestic-type variants, which alter developmental
+programs, which produce the domestic phenotype.
+
+This explanation is incomplete for reasons that are
+quantitative and structural, not merely theoretical:
+
+\begin{enumerate}[itemsep=0.2em]
+  \item Marcstr\"{o}m \& Essen-M\"{o}ller (1968)
+  documented domestication syndrome traits in the
+  first captive generation of wild boar
+  \textit{without selective breeding}, at
+  frequencies inconsistent with recessive allele
+  expression in a wild founding population.
+
+  \item The Belyaev silver fox experiment (1979)
+  demonstrated that selecting only for
+  HPA axis suppressibility (tameness) produces
+  the full morphological syndrome including floppy
+  ears, piebald coat, and shorter snout ---
+  without selecting for any morphological trait.
+
+  \item Feralization (domestic $\rightarrow$ wild)
+  occurs in months to one generation.
+  Re-domestication (wild $\rightarrow$ domestic)
+  requires many generations of sustained selection.
+  This asymmetry is not predicted by genetic models.
+
+  \item All syndrome traits map to a single
+  developmental perturbation: mild reduction in
+  neural crest cell (NCC) migration (Wilkins,
+  Wrangham \& Fitch, 2014). The genetic model
+  cannot explain why every independent
+  domestication event produces reduction in the
+  same developmental program.
+\end{enumerate}
+
+\subsection{The Attractor Geometry Explanation}
+
+The attractor geometry framework proposes:
+
+\[
+  S \;+\; N \;+\; G \;\rightarrow\; R
+\]
+
+The genome ($S$) encodes build capacity for both
+wild-type and domestic-type phenotypes.
+The coherence gradient field ($N$) specifies
+which developmental attractor basin the genome
+resolves to within the landscape geometry ($G$).
+The phenotype ($R$) is the output of that resolution.
+
+The domestication coherence gradient field
+($N_{\text{domestic}}$) acts on the maternal HPA
+axis, suppressing cortisol, altering the intrauterine
+coherence gradient environment, and arresting
+neural crest migration at the
+juvenile-proximate developmental stage.
+The domestic phenotype is the signature of that
+arrest. The genome does not change. The field
+changes. The developmental trajectory is arrested.
+
+\textbf{This pre-registration tests the primary
+prediction of this mechanism:} that applying
+$N_{\text{domestic}}$ from birth to F1 offspring
+of a fully wild genome will shift morphology toward
+the domestic phenotype --- specifically in the
+most field-responsive tissue (adrenal gland,
+neural crest-derived, HPA axis endpoint) ---
+without any genetic modification.
+
+% ══════════════════════════════════════════════════════════════
+\section{Experimental Design}
+\label{sec:design}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Overview}
+
+A cross-fostering experiment in which F1 offspring
+of wild-caught \textit{Sus scrofa} are placed at
+birth with domestic foster sows under full
+$N_{\text{domestic}}$ conditions, and compared at
+3, 6, and 12 months to genotype-matched F1 controls
+raised under $N_{\text{wild}}$ conditions.
+
+All animals are genotyped at birth to confirm wild
+genome identity and to match genotypes across
+conditions. The experiment tests whether the
+coherence gradient field applied from birth ---
+not genotype --- determines the degree of neural
+crest developmental arrest.
+
+\subsection{Animal Subjects}
+
+\textbf{Source animals:}
+Wild-caught \textit{Sus scrofa} (European wild boar
+or feral \textit{Sus scrofa} with confirmed
+multi-generational wild ancestry, minimum 3
+generations without domestic management).
+Source population must be confirmed by microsatellite
+or SNP genotyping to have no recent admixture with
+domestic breeds (admixture $< 5\%$, confirmed by
+STRUCTURE or ADMIXTURE analysis).
+
+\textbf{F1 generation:}
+Offspring of wild-caught sows, sired by
+wild-caught boars. Born and immediately assigned
+to experimental conditions (see Section~2.3).
+Minimum $n = 8$ per condition per litter cohort.
+Target total: $n \geq 20$ per condition across
+$\geq 3$ independent litter cohorts.
+
+\textbf{Domestic foster sows:}
+Commercial breed domestic sows (Large White or
+Landrace) with confirmed domestic breed registration.
+Foster sows must have successfully raised at least
+one previous litter and be confirmed healthy and
+lactating at time of fostering.
+
+\subsection{Experimental Conditions}
+
+\subsubsection{Condition A: $N_{\text{domestic}}$
+from Birth (Treatment)}
+
+F1 wild-genome piglets placed with domestic foster
+sow within 6 hours of birth, before any wild maternal
+imprinting.
+
+Field components of $N_{\text{domestic}}$:
+\begin{itemize}[itemsep=0.1em]
+  \item Ad libitum commercial pig feed from weaning
+    (21 days)
+  \item Indoor housing: temperature-regulated
+    (18--22\,\textdegree C), predator-free
+  \item Domestic conspecific social environment
+    (foster sow + domestic litter-mates)
+  \item Human contact: handler interaction minimum
+    30 minutes twice daily from day 1
+  \item No aversive stimuli. No predation exposure.
+  \item Standard veterinary care throughout
+\end{itemize}
+
+\subsubsection{Condition B: $N_{\text{wild}}$
+from Birth (Control)}
+
+F1 wild-genome piglets remain with wild-caught
+biological mother in outdoor or semi-wild enclosure.
+
+Field components of $N_{\text{wild}}$:
+\begin{itemize}[itemsep=0.1em]
+  \item Natural foraging supplemented to minimum
+    nutritional standard (welfare requirement)
+    but not ad libitum
+  \item Outdoor housing with shelter available:
+    ambient temperature, no climate control
+  \item Wild conspecific social environment
+    (biological mother + wild litter-mates)
+  \item Minimal human contact (necessary
+    husbandry only)
+  \item Environmental complexity including substrate
+    rooting, varied terrain
+\end{itemize}
+
+\subsubsection{Condition C: Domestic-Genome Control}
+
+Domestic breed piglets (Large White or Landrace)
+raised under identical $N_{\text{domestic}}$
+conditions as Condition A. Provides the
+domestic-genome domestic-field reference.
+Confirms that measurements in Condition A that
+approach Condition C values represent genuine
+field-specified arrest rather than measurement
+artefact. Target $n \geq 10$.
+
+\subsection{Genotyping Protocol}
+
+All animals genotyped within 48 hours of birth.
+Minimum panel: 15 microsatellite loci standard
+for Sus scrofa population genetics, plus
+genome-wide SNP panel (GeneSeek Genomic
+Profiler Porcine or equivalent) to confirm:
+\begin{enumerate}[itemsep=0.1em]
+  \item Wild ancestry ($< 5\%$ domestic admixture)
+    for Condition A and B animals
+  \item Genotype matching across conditions
+    (Conditions A and B animals selected to have
+    equivalent allele frequency distributions
+    at all measured loci)
+  \item No genetic outliers included in primary
+    analysis
+\end{enumerate}
+
+Genotyping laboratory must be blinded to
+experimental condition assignment.
+
+% ══════════════════════════════════════════════════════════════
+\section{Primary Outcome Measures}
+\label{sec:outcomes}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Primary Endpoints}
+
+The primary endpoints are neural crest-derived
+tissue measurements, selected because they are
+the most direct downstream indicators of NCC
+migration completion and the most rapidly
+responsive to field change:
+
+\subsubsection{Adrenal Gland Mass (Primary)}
+
+\textbf{Measurement:} Total bilateral adrenal
+gland mass at necropsy (12 months), normalised
+to body weight.
+\[
+  \text{AMR} = \frac{\bar{A}_{\text{Cond.A}}}
+                    {\bar{A}_{\text{Cond.B}}}
+\]
+where $\bar{A}$ is mean normalised bilateral
+adrenal mass within condition.
+
+\textbf{Rationale:} The adrenal medulla is
+NCC-derived (chromaffin cells originate from
+NCC). Adrenal medulla mass reflects the degree
+of NCC migration completion to the adrenal
+anlage during embryogenesis. This is the tissue
+identified by Hemmer (1990) as the earliest and
+most consistent indicator of domestication-state
+change in captive wild animals.
+
+\textbf{Protocol:}
+Animals humanely euthanised at 12 months.
+Both adrenal glands dissected, trimmed of
+periadrenal fat, weighed to nearest 0.001\,g.
+Medulla and cortex dissected and weighed
+separately post-fixation (4\% PFA, 48h).
+Medulla mass recorded as primary measurement.
+Body weight recorded at euthanasia.
+Normalised adrenal medulla mass =
+medulla mass / body weight $\times$ 1000
+(mg/kg).
+
+\subsubsection{HPA Axis Reactivity (Primary)}
+
+\textbf{Measurement:} Serum cortisol response
+to standardised stressor at 3, 6, and 12 months.
+
+\textbf{Cortisol Reactivity Ratio:}
+\[
+  \text{CRR} = \frac{\Delta[\text{cortisol}]
+  _{\text{Cond.A}}}
+  {\Delta[\text{cortisol}]_{\text{Cond.B}}}
+\]
+where $\Delta[\text{cortisol}]$ is peak cortisol
+minus baseline cortisol at T$+$30 minutes
+post-stressor.
+
+\textbf{Stressor protocol (standardised):}
+Animal moved to unfamiliar pen (3m$\times$3m,
+novel environment, no conspecifics visible).
+Blood draw at T$=$0 (baseline, before stressor),
+T$=$30 min (peak stress response),
+T$=$60 min (recovery).
+Serum cortisol by validated ELISA
+(Enzo Life Sciences porcine cortisol kit
+or equivalent with intra-assay CV $< 10\%$).
+
+Same stressor protocol applied identically
+to all conditions at identical ages.
+Handlers blinded to condition assignment
+during blood draws.
+
+\subsection{Secondary Endpoints}
+
+Secondary endpoints are measured at 3, 6,
+and 12 months and reported as exploratory.
+They are not included in the primary
+success/failure criteria but are reported
+as confirmatory evidence of the mechanism.
+
+\subsubsection{Coat Pigmentation Pattern}
+
+\textbf{Measurement:} Percentage of total
+body surface area showing depigmentation
+(white or pale patches) at 6 and 12 months.
+Photographed under standardised lighting
+(dorsal, lateral left, lateral right views).
+Image analysis by blinded scorer using
+ImageJ colour thresholding.
+\[
+  \text{Pigmentation Score} =
+  \frac{\text{White patch area (cm}^2\text{)}}
+  {\text{Total body surface area (cm}^2\text{)}}
+  \times 100
+\]
+
+\subsubsection{Ear Cartilage Position}
+
+\textbf{Measurement:} Ear position angle from
+vertical plane at 6 and 12 months.
+Photographed from anterior aspect, standardised
+restraint. Angle measured from ear base to ear
+tip relative to vertical (0\textdegree{} =
+fully erect; 90\textdegree{} = fully lateral).
+Mean of left and right ear.
+
+\subsubsection{Snout Morphology Index}
+
+\textbf{Measurement:} Snout length (nasal tip
+to orbital midpoint) divided by snout width
+(widest point at base of snout) at 6 and 12
+months. Measured from standardised lateral
+and dorsal photographs using ImageJ.
+Higher ratio = more elongated (wild-type).
+Lower ratio = more abbreviated (domestic-type).
+
+\subsubsection{Hair Coarseness Score}
+
+\textbf{Measurement:} Tactile scoring by
+blinded handler (1--5 scale: 1 = fine domestic
+coat, 5 = coarse wild-type bristle) at dorsal
+mid-back location. Minimum 3 independent
+scorers. Mean score recorded. Inter-rater
+reliability confirmed (Cronbach's $\alpha
+> 0.80$ required before scoring begins).
+
+\subsubsection{Body Composition}
+
+\textbf{Measurement:} Ultrasound backfat depth
+at P2 position (6.5\,cm lateral to dorsal
+midline at last rib) at 6 and 12 months.
+B-mode ultrasound. Higher backfat = more
+domestic metabolic program.
+
+% ══════════════════════════════════════════════════════════════
+\section{The Two Models and Their Diverging
+Predictions}
+\label{sec:models}
+% ══════════════════════════════════════════════════════════════
+
+This experiment is designed to distinguish
+two models that make identical predictions for
+behaviour but diverging predictions for morphology:
+
+\begin{center}
+\small
+\begin{tabular}{p{4.5cm}p{4.5cm}p{4.5cm}}
+\toprule
+\textbf{Outcome} &
+\textbf{Genetic model} &
+\textbf{Field-arrest model} \\
+\midrule
+Adrenal mass in Cond.\ A vs.\ Cond.\ B
+(identical genomes) &
+No difference &
+\textbf{Smaller in Cond.\ A}
+(AMR $\leq 0.80$) \\[0.4em]
+HPA reactivity in Cond.\ A vs.\ Cond.\ B &
+No difference &
+\textbf{Reduced in Cond.\ A}
+(CRR $\leq 0.75$) \\[0.4em]
+Coat depigmentation in Cond.\ A vs.\ Cond.\ B &
+No difference &
+\textbf{Higher in Cond.\ A} \\[0.4em]
+Ear position in Cond.\ A vs.\ Cond.\ B &
+No difference &
+\textbf{Greater droop in Cond.\ A} \\[0.4em]
+Behaviour (tameness) in Cond.\ A
+vs.\ Cond.\ B &
+\textbf{More tame in Cond.\ A}
+(learning/imprinting) &
+\textbf{More tame in Cond.\ A}
+(basin occupation) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.3em}
+\textbf{The models agree on behaviour.}
+Behaviour change with domestic field application
+from birth is explained by learning and imprinting
+under the genetic model and by basin occupation
+under the field-arrest model.
+
+\textbf{The models diverge on morphology.}
+The genetic model predicts no morphological
+difference between genotype-matched animals in
+different fields. The field-arrest model predicts
+specific morphological shifts in NCC-derived
+tissues in the direction of the applied field.
+
+The primary endpoints (adrenal mass, HPA
+reactivity) are the measurements that distinguish
+the models. Behaviour is not the distinguishing
+test. Morphology is.
+
+% ══════════════════════════════════════════════════════════════
+\section{Success Criteria}
+\label{sec:success}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Primary Success Criterion}
+
+\begin{mdframed}[
+  backgroundcolor=notebox,
+  linecolor=headergreen,
+  linewidth=1pt,
+  innertopmargin=0.5em,
+  innerbottommargin=0.5em,
+  innerleftmargin=0.8em,
+  innerrightmargin=0.8em
+]
+\textbf{P7-SUCCESS requires ALL of the following
+at the 12-month timepoint:}
+
+\medskip
+\textbf{Criterion 1 (Adrenal):}
+Mean normalised adrenal medulla mass in
+Condition A $\leq$ 80\% of mean normalised
+adrenal medulla mass in Condition B.
+(AMR $\leq 0.80$, $p < 0.05$, two-tailed
+Mann-Whitney U or independent samples
+$t$-test depending on normality.)
+
+\medskip
+\textbf{Criterion 2 (HPA):}
+Mean cortisol stress response ($\Delta$cortisol,
+T$+$30 minus baseline) in Condition A $\leq$
+75\% of mean cortisol stress response in
+Condition B.
+(CRR $\leq 0.75$, $p < 0.05$.)
+
+\medskip
+\textbf{Criterion 3 (Genotype confirmation):}
+No significant difference in allele frequency
+distribution between Condition A and Condition B
+animals at any locus in the genotyping panel.
+(Confirmed by STRUCTURE analysis prior to
+primary endpoint analysis.)
+\end{mdframed}
+
+\subsection{Partial Confirmation Criteria}
+
+If Criterion 1 is met but not Criterion 2,
+or vice versa, the result is recorded as
+\textbf{partial confirmation} with the
+following interpretation:
+
+\textbf{Criterion 1 met, Criterion 2 not met:}
+Structural NCC arrest occurs (adrenal
+morphology shifted) but the HPA axis
+set point requires longer field exposure
+or earlier (intrauterine) field application
+to shift. This directs to P8 (maternal field
+window experiment) as the necessary
+follow-on test.
+
+\textbf{Criterion 2 met, Criterion 1 not met:}
+HPA axis reactivity shifted (functional
+endpoint) without structural adrenal change.
+Suggests functional reprogramming precedes
+structural morphology change. Consistent
+with the developmental plasticity sequence
+prediction: functional endpoints respond
+faster than structural ones.
+Both partial outcomes are informative.
+Neither is a falsification of the mechanism.
+
+% ══════════════════════════════════════════════════════════════
+\section{Control Conditions and
+Confound Management}
+\label{sec:controls}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{The Critical Controls}
+
+\begin{mdframed}[
+  backgroundcolor=controlbox,
+  linecolor=headergreen,
+  linewidth=0.8pt,
+  innertopmargin=0.5em,
+  innerbottommargin=0.5em,
+  innerleftmargin=0.8em,
+  innerrightmargin=0.8em
+]
+\textbf{C1 --- Genotype matching (primary confound
+control):}
+The genetic model predicts no morphological
+difference between genotype-matched animals in
+different fields. Genotype matching is therefore
+not merely good experimental practice --- it is
+the specific instrument that rules out the
+genetic model if the primary prediction confirms.
+Genotype confirmation must precede any primary
+endpoint analysis. If genotype matching fails,
+the experiment must be repeated with a larger
+cohort before any conclusion is drawn.
+
+\medskip
+\textbf{C2 --- Domestic-genome reference (Cond.\ C):}
+Provides the domestic-field domestic-genome
+reference point. If Condition A approaches
+Condition C values, this confirms that the
+field is producing the same morphological
+outcome regardless of genome origin.
+If Condition A does not approach Condition C
+values, the field effect exists but is
+incomplete for postnatal-only field application
+--- which directs to P8.
+
+\medskip
+\textbf{C3 --- Litter cohort replication:}
+Minimum 3 independent litter cohorts required
+before primary analysis is performed.
+Litter of origin is included as a random effect
+in all mixed-effects models. This controls for
+maternal effects within wild-type litters that
+are not attributable to field assignment.
+
+\medskip
+\textbf{C4 --- Handler blinding:}
+All morphological measurements, blood draws,
+and sample processing must be performed by
+handlers blinded to condition assignment.
+Genotyping laboratory must be blinded.
+Image analysis must be blinded.
+Blinding is documented and confirmed
+before any analysis.
+
+\medskip
+\textbf{C5 --- Nutrition equivalence:}
+Condition A and B animals must receive
+nutritionally equivalent diets from the
+point of weaning (21 days). Differences
+in ad libitum provision are a field component
+(resource security is part of $N_{\text{domestic}}$)
+but differences in total nutritional intake
+could confound body composition endpoints.
+Total caloric intake must be monitored and
+reported. Body weight at each timepoint is
+a covariate in all models.
+\end{mdframed}
+
+\subsection{Pre-specified Confound Interpretations}
+
+\textbf{Confound: Litter size differences.}
+Wild litters are typically larger (6--12 piglets)
+than domestic litters selected for fostering
+(4--8 piglets from domestic sow). Per-piglet
+nutritional access may differ. Control: weigh
+animals at every timepoint; include body weight
+as covariate.
+
+\textbf{Confound: Foster rejection.}
+Domestic sow may reject wild-genome piglets
+due to odour differences. Protocol: introduce
+piglets within 6 hours of birth during foster
+sow's own parturition or within 48 hours of
+a litter she has accepted. Document all
+rejection events. Replace foster sow if
+rejection persists $> 24$ hours. Rejection
+rate reported in results.
+
+\textbf{Confound: Epigenetic carryover from
+wild mother.}
+The F1 animals' epigenome was established in
+utero under $N_{\text{wild}}$ (wild mother).
+This is not a confound --- it is the experimental
+condition. The prediction is that postnatal
+$N_{\text{domestic}}$ will shift morphology
+despite the intrauterine wild field. If the
+effect is absent, it directs to P8 (intrauterine
+field required). If the effect is present, it
+demonstrates that postnatal field is sufficient
+for at least partial arrest. The intrauterine
+starting condition is identical across Condition
+A and B animals and is not a confound for the
+between-condition comparison.
+
+% ══════════════════════════════════════════════════════════════
+\section{Failure Diagnosis}
+\label{sec:failure}
+% ══════════════════════════════════════════════════════════════
+
+\begin{mdframed}[
+  backgroundcolor=failbox,
+  linecolor=red!50!black,
+  linewidth=0.8pt,
+  innertopmargin=0.5em,
+  innerbottommargin=0.5em,
+  innerleftmargin=0.8em,
+  innerrightmargin=0.8em
+]
+\textbf{If P7 fails (no morphological difference
+between Condition A and Condition B with
+confirmed genotype matching), the following
+diagnoses are pre-specified:}
+
+\medskip
+\textbf{Diagnosis F1 (Critical window missed):}
+The NCC migration critical window is prenatal,
+not postnatal. Postnatal field application
+cannot arrest an already-completed developmental
+program.
+\textit{Direction:} Proceed immediately to P8
+(maternal field from conception experiment).
+P7 failure under this diagnosis does not
+falsify the field-arrest model. It specifies
+the critical window more precisely.
+
+\medskip
+\textbf{Diagnosis F2 (Field specification
+incomplete):}
+The domestic field as applied (indoor housing,
+ad libitum food, human contact) is not the
+complete field specification required to produce
+the arrest. A missing field component (e.g.,
+specific microbiome, specific tactile stimulation,
+specific olfactory environment from domestic
+conspecifics from conception) is required.
+\textit{Direction:} Compare field component
+specification between Condition A and known
+domestication events. Identify the missing
+component. Redesign with complete field.
+
+\medskip
+\textbf{Diagnosis F3 (Genetic floor effect):}
+The wild-genome animals have a deeper Basin A
+than the field-arrest model's current
+specification predicts. The field applied is
+sufficient to arrest a less deep Basin A
+(as in heritage domestic breeds) but not
+sufficient to arrest the wild-caught
+\textit{Sus scrofa} Basin A within one
+postnatal generation.
+\textit{Direction:} Repeat with heritage
+breed wild-type animals (Mangalitsa, Ossabaw
+Island) which have shallower Basin A due to
+prior partial domestication selection. A
+gradient of effect across wild-genome depth
+is a prediction of the model (see P10).
+
+\medskip
+\textbf{Diagnosis F4 (Genuine falsification):}
+If F1, F2, and F3 are all ruled out by
+appropriate follow-on experiments, and no
+morphological shift occurs under any condition
+of field specification, the field-arrest model
+is falsified for the domestication syndrome.
+The genetic model is the correct explanation.
+This outcome would be published in full.
+\end{mdframed}
+
+% ══════════════════════════════════════════════════════════════
+\section{Scoring Schedule and Timeline}
+\label{sec:timeline}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\small
+\begin{tabular}{p{2.2cm}p{9.5cm}}
+\toprule
+\textbf{Timepoint} & \textbf{Measurements} \\
+\midrule
+Birth (T$=$0) &
+Genotyping (blood). Body weight.
+Foster assignment documented.
+Photograph (dorsal, lateral bilateral). \\[0.3em]
+3 months &
+Body weight. Hair coarseness score (blinded).
+Ear position angle (photograph).
+Cortisol stress response (blood draw protocol).
+Coat pigmentation photograph. \\[0.3em]
+6 months &
+Body weight. Hair coarseness score.
+Ear position angle. Snout morphology index.
+Cortisol stress response.
+Coat pigmentation. Backfat ultrasound (P2). \\[0.3em]
+12 months &
+Body weight. All secondary endpoints repeated.
+Cortisol stress response (primary endpoint).
+\textbf{Necropsy:} bilateral adrenal glands
+dissected, weighed, fixed (4\% PFA).
+Adrenal medulla/cortex separated and weighed
+post-fixation (primary endpoint).
+Histology: H\&E on adrenal sections.
+IHC: chromogranin A (medulla marker),
+SF-1 (cortex marker). \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.5em}
+\textbf{Minimum timeline from litter birth
+to primary endpoint:} 12 months.
+
+\textbf{Minimum cohort timeline including
+3-cohort replication:} 18--24 months
+(cohorts staggered, not sequential).
+
+\textbf{Estimated cost per cohort:}
+Animal acquisition and housing (12 months):
+\$8,000--\$15,000 per condition.
+Genotyping panel: \$2,000--\$4,000.
+ELISA consumables: \$1,500--\$3,000.
+Histology and IHC: \$3,000--\$6,000.
+Total per cohort: \$25,000--\$45,000 (3 conditions).
+Total for 3-cohort replication:
+\$75,000--\$135,000.
+
+% ══════════════════════════════════════════════════════════════
+\section{Statistical Analysis Plan}
+\label{sec:stats}
+% ════════��═════════════════════════════════════════════════════
+
+All analyses are pre-specified. No unplanned
+analyses will be reported as confirmatory.
+Exploratory analyses will be clearly labelled.
+
+\textbf{Primary analysis (adrenal mass, HPA
+reactivity):}
+Linear mixed-effects model with condition
+(A, B, C) as fixed effect, litter cohort as
+random effect, body weight at 12 months
+as covariate. Primary comparison:
+Condition A vs.\ Condition B.
+
+\textbf{Normality:}
+Shapiro-Wilk test on residuals.
+If non-normal: Mann-Whitney U test for
+primary comparison; Kruskal-Wallis for
+three-condition comparison.
+
+\textbf{Effect size:}
+Cohen's $d$ (parametric) or rank-biserial
+correlation $r$ (non-parametric) reported
+for all primary comparisons.
+
+\textbf{Primary significance threshold:}
+$\alpha = 0.05$, two-tailed.
+Bonferroni correction applied for multiple
+primary endpoints (AMR and CRR):
+adjusted $\alpha = 0.025$ per endpoint.
+
+\textbf{Secondary endpoints:}
+All secondary endpoints analysed identically
+but reported as exploratory. No success/failure
+determination made from secondary endpoints
+alone.
+
+\textbf{Longitudinal analysis:}
+Repeated measures for 3-month, 6-month,
+and 12-month cortisol data. Mixed-effects
+model with time as a within-subject factor.
+Interaction term (condition $\times$ time)
+reported to assess whether field effect
+increases over the measurement period.
+
+\textbf{Pre-analysis lock:}
+This statistical analysis plan is locked at
+pre-registration. Any deviation from it
+in the final publication must be declared
+in the methods section with justification.
+
+% ══════════════════════════════════════════════════════════════
+\section{Ethical Compliance}
+\label{sec:ethics}
+% ══════════════════════════════════════════════════════════════
+
+This experiment involves vertebrate animals.
+The following ethical requirements apply:
+
+\begin{itemize}[itemsep=0.15em]
+  \item Institutional Animal Care and Use
+    Committee (IACUC) or equivalent national
+    ethics body approval required before
+    any animal work begins.
+  \item All animals must meet or exceed the
+    minimum welfare standards of the applicable
+    national legislation throughout the experiment.
+  \item Condition B animals (wild-type field)
+    must receive supplemental nutrition sufficient
+    to maintain body weight within 10\% of
+    Condition A animals. The field distinction
+    is in security, not starvation.
+  \item Euthanasia at 12 months by trained
+    personnel using approved methods (captive
+    bolt or barbiturate overdose per institutional
+    protocol).
+  \item Foster rejection events require immediate
+    supplemental feeding within 2 hours and
+    veterinary assessment. Rejected piglets must
+    not be left without nutrition for $>$ 4 hours.
+  \item Wild-caught source animals must be legally
+    obtained with appropriate wildlife licences
+    for the jurisdiction of collection.
+\end{itemize}
+
+No genetic modification is performed on any
+animal in this experiment. The experiment
+uses only naturally occurring genomes and
+environmental field manipulation.
+
+% ══════════════════════════════════════════════════════════════
+\section{Linked Pre-Registrations
+and Experimental Series}
+\label{sec:linked}
+% ══════════════════════════════════════════════════════════════
+
+This pre-registration is P7 in the OrganismCore
+experimental series. Linked records:
+
+\begin{center}
+\small
+\begin{tabular}{p{1.5cm}p{5.5cm}p{5.0cm}}
+\toprule
+\textbf{ID} & \textbf{Title} & \textbf{DOI / Status} \\
+\midrule
+P-INVERSION-1 &
+Plant Architecture Inversion via Coherence
+Gradient Field Specification &
+\href{https://doi.org/10.5281/zenodo.19040399}
+{\texttt{10.5281/zenodo.19040399}} \\[0.3em]
+LECA-A &
+LECA Resurrection Fungal Arm &
+\href{https://doi.org/10.5281/zenodo.18986790}
+{\texttt{10.5281/zenodo.18986790}} \\[0.3em]
+P7 &
+Cross-Fostering / NCC Arrest
+(this document) &
+[Zenodo DOI pending] \\[0.3em]
+P8 &
+Maternal Field Window Dependence &
+[Zenodo DOI pending] \\[0.3em]
+P9 &
+H3K27me3 at NCC Loci: ChIP-seq
+Pre-Registration &
+[Zenodo DOI pending] \\[0.3em]
+P10 &
+Breed Domestication Depth vs.\
+Feralization Rate &
+[Zenodo DOI pending] \\[0.3em]
+P11 &
+Tazemetostat in Pregnant Sow:
+F1 Morphology Shift &
+[Zenodo DOI pending] \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.3em}
+The theory paper from which P7 was derived:
+
+Lawson, E.R. (2026).
+\textit{Domestication as Field-Specified
+Developmental Arrest: A Unified Causal Mechanism
+for the Domestication Syndrome Derived from
+Attractor Geometry.}
+OrganismCore / Zenodo.
+[DOI pending]
+
+% ══════════════════════════════════════════════════════════════
+\section{Reporting Standard}
+\label{sec:reporting}
+% ══════════════════════════════════════════════════════════════
+
+Results of this experiment will be reported
+against this pre-registration regardless of
+outcome. Specifically:
+
+\begin{enumerate}[itemsep=0.2em]
+  \item If P7 succeeds (both criteria met):
+    The report will state that the primary
+    prediction was confirmed, that the
+    genetic model's null prediction was
+    rejected, and that the field-arrest
+    mechanism is supported. P8 and P9
+    will proceed as follow-on experiments.
+
+  \item If P7 partially confirms
+    (one criterion met):
+    The report will state which criterion
+    was met, apply the pre-specified
+    partial interpretation, and proceed
+    to the directed follow-on experiment.
+
+  \item If P7 fails (neither criterion met):
+    The report will apply the failure
+    diagnosis protocol (Section~7),
+    state which diagnosis applies,
+    and proceed to the directed follow-on
+    experiment. The failure will be
+    published in full.
+    A failure in which F1, F2, and F3
+    are subsequently also ruled out
+    constitutes a falsification of the
+    field-arrest model, which will be
+    published as such.
+\end{enumerate}
+
+Selective reporting --- publishing only
+the confirming result if multiple outcome
+measures were taken --- is explicitly
+prohibited. All pre-specified endpoints
+reported in all publications arising from
+this pre-registration.
+
+% ═══════════════════════════════════════���══════════════════════
+% DOCUMENT METADATA
+% ══════════════════════════════════════════════════════════════
+\vspace{1em}
+\noindent\textcolor{rulecolor}{\rule{\linewidth}{0.8pt}}
+\vspace{0.3em}
+
+{\footnotesize
+\textbf{Document ID:}
+P7\_CROSS\_FOSTERING\_NCC\_ARREST\_
+PRE\_REGISTRATION\_v1.0\\
+\textbf{Date:} 2026-03-18\\
+\textbf{Author:} Eric Robert Lawson /
+OrganismCore\\
+\textbf{Derivation record:}
+\href{https://github.com/Eric-Robert-Lawson/
+attractor-oncology}
+{\texttt{github.com/Eric-Robert-Lawson/
+attractor-oncology}}\\
+\textbf{Theory paper:}
+\texttt{Domestication\_As\_Developmental\_
+Arrest.tex} (same repository)\\
+\textbf{Zenodo DOI:} [to be inserted upon
+Zenodo confirmation]\\
+\textbf{Document version:} 1.0\\
+\textbf{License:} CC BY 4.0\\
+\textbf{ORCID:}
+\href{https://orcid.org/0009-0002-0414-6544}
+{0009-0002-0414-6544}\\
+\textbf{Contact:}
+\href{mailto:OrganismCore@proton.me}
+{OrganismCore@proton.me}
+}
+
+\end{document}

@@ -10,6 +10,8 @@
 ## OrganismCore — Eric Robert Lawson
 ## 2026-03-18
 
+# **DOI: [https://doi.org/10.5281/zenodo.19094935](https://doi.org/10.5281/zenodo.19094935)**
+
 ---
 
 ## STATUS: ACTIVE — REASONING ARTIFACT v1.0

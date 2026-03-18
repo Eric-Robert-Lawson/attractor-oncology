@@ -1,0 +1,1284 @@
+\documentclass[10pt, a4paper]{article}
+
+% ── PACKAGES ──────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{
+  top=2.0cm,
+  bottom=2.0cm,
+  left=2.2cm,
+  right=2.2cm
+}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  urlcolor=blue,
+  linkcolor=blue,
+  citecolor=blue,
+  pdftitle={Pre-Registration P9: H3K27me3 Enrichment
+            at Neural Crest Migration Loci in Domestic
+            Sus scrofa vs. Wild Boar Embryos ---
+            ChIP-seq Pre-Registration},
+  pdfauthor={Eric Robert Lawson / OrganismCore},
+  pdfsubject={Pre-registered experimental protocol
+              and predictions},
+  pdfkeywords={H3K27me3, EZH2, neural crest,
+               domestication syndrome, ChIP-seq,
+               Sus scrofa, wild boar, attractor geometry,
+               developmental arrest, epigenetics,
+               pre-registration, OrganismCore}
+}
+\usepackage{microtype}
+\usepackage{parskip}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{lmodern}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{amsmath}
+\usepackage{multirow}
+
+% ── COLOURS ───────────────────────────────────────────────────
+\definecolor{headergreen}{RGB}{20,100,60}
+\definecolor{rulecolor}{RGB}{20,100,60}
+\definecolor{claimbox}{RGB}{20,100,60}
+\definecolor{notebox}{RGB}{240,248,240}
+\definecolor{warningbox}{RGB}{255,248,220}
+\definecolor{predbox}{RGB}{235,248,255}
+\definecolor{scorebox}{RGB}{248,240,255}
+\definecolor{failbox}{RGB}{255,235,235}
+\definecolor{controlbox}{RGB}{240,255,240}
+\definecolor{locusbox}{RGB}{245,240,255}
+\definecolor{mechanismbox}{RGB}{248,240,255}
+
+% ── HEADER / FOOTER ───────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\small\color{headergreen}
+  OrganismCore Pre-Registration P9 v1.0}
+\fancyhead[R]{\small\color{headergreen}
+  H3K27me3 / NCC Loci ChIP-seq --- 2026-03-18}
+\fancyfoot[C]{\small Page \thepage\ of \pageref{LastPage}}
+
+% ── SECTION FORMAT ────────────────────────────────────────────
+\titleformat{\section}
+  {\large\bfseries\color{headergreen}}
+  {\thesection.}{0.5em}{}[
+  \vspace{-0.3em}
+  \textcolor{rulecolor}{\rule{\linewidth}{0.6pt}}]
+\titleformat{\subsection}
+  {\normalsize\bfseries\color{headergreen}}
+  {\thesubsection.}{0.5em}{}
+\titleformat{\subsubsection}
+  {\small\bfseries}
+  {\thesubsubsection.}{0.5em}{}
+
+\setlength{\parskip}{0.4em}
+\setlength{\parindent}{0pt}
+
+% ══════════════════════════════════════════════════════════════
+\begin{document}
+
+% ── TITLE BLOCK ───────────────────────────────────────────────
+\begin{center}
+  {\LARGE\bfseries\color{headergreen}
+  PRE-REGISTRATION P9}\\[0.4em]
+  {\Large\bfseries
+  H3K27me3 Enrichment at Neural Crest Migration
+  Loci\\
+  in Domestic \textit{Sus scrofa} vs.\
+  Wild Boar Embryos:}\\[0.3em]
+  {\large\bfseries
+  The ChIP-seq Experiment}\\[0.4em]
+  {\large
+  EZH2-Mediated Epigenetic Silencing of the
+  Neural Crest Migration Program\\
+  as the Molecular Mechanism of
+  Field-Specified Developmental Arrest\\
+  Predicted and Locked Before Any
+  Sequencing Data Exists}\\[0.6em]
+  \noindent\textcolor{rulecolor}
+  {\rule{\linewidth}{1pt}}\\[0.4em]
+  {\normalsize
+  \textbf{Author:} Eric Robert Lawson\\
+  \textbf{Affiliation:} OrganismCore
+  (Independent Research)\\
+  \textbf{ORCID:}
+  \href{https://orcid.org/0009-0002-0414-6544}
+  {0009-0002-0414-6544}\\
+  \textbf{Contact:}
+  \href{mailto:OrganismCore@proton.me}
+  {OrganismCore@proton.me}\\
+  \textbf{Repository:}
+  \href{https://github.com/Eric-Robert-Lawson/
+  attractor-oncology}
+  {\texttt{github.com/Eric-Robert-Lawson/
+  attractor-oncology}}\\
+  \textbf{Pre-registration timestamp:}
+  2026-03-18\\
+  \textbf{Linked theory paper DOI (Zenodo):}
+  [to be inserted upon Zenodo confirmation]\\
+  \textbf{Linked P7 pre-registration DOI:}
+  [to be inserted upon Zenodo confirmation]\\
+  \textbf{Document version:} 1.0\\
+  \textbf{License:}
+  Creative Commons Attribution 4.0
+  International (CC BY 4.0)}\\[0.4em]
+  \noindent\textcolor{rulecolor}
+  {\rule{\linewidth}{1pt}}
+\end{center}
+
+\vspace{0.5em}
+
+% ── CLAIM BOX ────��────────────────────────────────────────────
+\begin{mdframed}[
+  backgroundcolor=claimbox,
+  linecolor=claimbox,
+  linewidth=0pt,
+  innertopmargin=0.7em,
+  innerbottommargin=0.7em,
+  innerleftmargin=1.0em,
+  innerrightmargin=1.0em
+]
+\color{white}
+\textbf{THE PRE-REGISTERED CLAIM}
+
+The molecular mechanism maintaining the
+domestication developmental arrest is
+EZH2-mediated H3K27me3 deposition at neural
+crest migration driver loci during embryogenesis.
+This is the same mechanism that maintains
+cancer attractor arrest via EZH2-mediated
+silencing of the luminal identity program in
+triple-negative breast cancer.
+
+\medskip
+This pre-registration specifies: the loci to
+be measured, the developmental stage at which
+the measurement must be taken, the comparison
+to be performed, the predicted direction of
+enrichment, the scoring criteria, the control
+conditions, and the success criteria ---
+all locked before any ChIP-seq data is generated.
+
+\medskip
+\textbf{Primary prediction (P9):}
+Domestic pig embryos at gestational day E14--E18
+will show significantly elevated H3K27me3
+enrichment at the following neural crest
+migration driver loci relative to
+wild boar embryos at the same developmental
+stage with equivalent total H3K27me3 signal:
+\textit{BMP4}, \textit{BMP7}, \textit{WNT1},
+\textit{WNT3A}, \textit{CXCL12}, \textit{CXCR4},
+\textit{EDNRB}, \textit{SOX10}, \textit{SNAI2}.
+Minimum 4 of 9 target loci reach enrichment
+ratio $\geq 1.5$ (domestic/wild boar)
+at $q < 0.05$ (FDR-corrected).
+\end{mdframed}
+
+\vspace{1em}
+
+% ══════════════════════════════════════════════════════════════
+\section{Background and Theoretical Basis}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{The Open Causal Question}
+
+Wilkins, Wrangham and Fitch (2014) identified
+that all domestication syndrome traits map to
+a single developmental perturbation: mild
+reduction in neural crest cell (NCC) migration
+during embryogenesis. They attributed this
+reduction to genetic change --- alleles affecting
+NCC behaviour co-selected alongside tameness
+alleles.
+
+The field-arrest model (Lawson, 2026 ---
+see linked theory paper) proposes that the
+causal origin is not genetic but epigenetic:
+the domestication coherence gradient field
+($N_{\text{domestic}}$) suppresses the maternal
+HPA axis, which alters the intrauterine coherence
+gradient environment, which establishes
+H3K27me3 enrichment at NCC migration driver
+loci via EZH2 activity, which arrests NCC
+migration at the juvenile-proximate developmental
+stage.
+
+\textbf{The molecular mechanism proposed is
+EZH2-mediated H3K27me3 silencing of the NCC
+migration program.} This is the same molecular
+mechanism that maintains cancer attractor arrest
+in triple-negative breast cancer (TNBC), where
+EZH2 deposits H3K27me3 at \textit{FOXA1},
+\textit{GATA3}, and \textit{ESR1} promoters,
+silencing the luminal identity program and
+maintaining the cancer attractor basin.
+
+If P9 confirms, the molecular mechanism of
+domestication and the molecular mechanism of
+cancer are the same mechanism operating at
+different scales:
+
+\begin{center}
+\small
+\begin{tabular}{p{3.2cm}p{5.0cm}p{5.0cm}}
+\toprule
+& \textbf{Cancer (TNBC)} &
+  \textbf{Domestication (\textit{Sus scrofa})} \\
+\midrule
+\textbf{Scale} &
+  Single cell &
+  Whole organism \\[0.2em]
+\textbf{Silenced program} &
+  Luminal identity
+  (\textit{FOXA1}, \textit{GATA3},
+  \textit{ESR1}) &
+  NCC migration program
+  (\textit{BMP4/7}, \textit{WNT1/3A},
+  \textit{CXCL12/CXCR4}, \textit{EDNRB},
+  \textit{SOX10}, \textit{SNAI2}) \\[0.2em]
+\textbf{Silencing mechanism} &
+  EZH2 $\rightarrow$ H3K27me3 &
+  EZH2 $\rightarrow$ H3K27me3
+  (predicted) \\[0.2em]
+\textbf{Reversal agent} &
+  Tazemetostat &
+  Tazemetostat (predicted --- P11) \\[0.2em]
+\textbf{Arrest phenotype} &
+  Cancer &
+  Domestic pig \\[0.2em]
+\textbf{Resumed phenotype} &
+  Luminal differentiation &
+  Wild boar morphology \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Why the NCC Migration Stage
+E14--E18 Is the Critical Window}
+
+Neural crest cell migration in \textit{Sus scrofa}
+follows the standard vertebrate timeline:
+NCC specification at the dorsal neural tube begins
+at approximately E8--E10; delamination and active
+migration at E10--E14; differentiation into
+target tissues at E14--E20. The E14--E18 window
+represents the period of maximum active migration,
+when the gradient guidance environment (BMP, Wnt,
+CXCL12/CXCR4) is most critical for migration
+trajectory and therefore most sensitive to
+epigenetic modification of the guidance genes.
+
+H3K27me3 enrichment at migration driver loci at
+E14--E18 would silence the gradient guidance
+signals during their peak activity window,
+producing partial migration arrest at the
+juvenile-proximate stage without complete
+ablation (which would produce lethal NCC deficiency
+rather than viable domestic phenotype).
+
+The E14--E18 window is therefore the predicted
+critical measurement window. Earlier (E8--E12)
+would capture specification but not guidance
+arrest. Later (E20+) would capture
+post-differentiation states rather than
+the migration arrest itself.
+
+\subsection{Why This Matters Beyond Domestication}
+
+If H3K27me3 at NCC migration loci in domestic
+embryos is confirmed, this establishes:
+
+\begin{enumerate}[itemsep=0.2em]
+  \item The molecular mechanism of domestication
+    is epigenetic, not genetic. The genome was
+    never modified. The epigenome was.
+
+  \item The same enzyme (EZH2) that maintains
+    cancer attractor arrest at the single-cell
+    scale maintains domestication developmental
+    arrest at the organismal scale. Scale-invariant
+    epigenetic arrest mechanism confirmed.
+
+  \item Tazemetostat --- currently in clinical use
+    for EZH2-mutant cancers --- is the predicted
+    reversal agent for domestication arrest (P11).
+    P9 confirmation creates the biological
+    justification for P11.
+
+  \item The field (N) $\rightarrow$ epigenome
+    $\rightarrow$ developmental trajectory
+    causal chain is confirmed at the molecular
+    level. The attractor geometry framework
+    ($S + N + G \rightarrow R$) is grounded in
+    a specific, testable molecular mechanism.
+\end{enumerate}
+
+% ══════════════════════════════════════════════════════════════
+\section{The Pre-Registered Locus Set}
+\label{sec:loci}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Primary Target Loci}
+
+The following loci are pre-registered as the
+primary measurement targets. They were selected
+before literature consultation on \textit{Sus scrofa}
+ChIP-seq data, based solely on their established
+roles in vertebrate NCC migration guidance.
+
+\begin{mdframed}[
+  backgroundcolor=locusbox,
+  linecolor=headergreen,
+  linewidth=0.8pt,
+  innertopmargin=0.5em,
+  innerbottommargin=0.5em,
+  innerleftmargin=0.8em,
+  innerrightmargin=0.8em
+]
+\small
+\begin{longtable}{p{2.0cm}p{4.5cm}p{6.0cm}}
+\toprule
+\textbf{Gene} &
+\textbf{NCC Function} &
+\textbf{Rationale for Inclusion} \\
+\midrule
+\textit{BMP4} &
+NCC migration guidance gradient ---
+dorsoventral axis &
+BMP4 establishes the dorsoventral coherence
+gradient that directs NCC migration away from
+the neural tube. Silencing disrupts the
+primary spatial guidance signal. \\[0.3em]
+\textit{BMP7} &
+NCC migration guidance gradient ---
+complementary to BMP4 &
+BMP7 acts as a complementary gradient signal
+to BMP4 in the NCC migration environment.
+Co-enrichment at both BMP4 and BMP7 would
+indicate disruption of the complete BMP
+guidance axis. \\[0.3em]
+\textit{WNT1} &
+NCC specification and
+delamination trigger &
+WNT1 is required for NCC specification and
+initiates the delamination program. H3K27me3
+enrichment here would arrest the program
+before migration begins. \\[0.3em]
+\textit{WNT3A} &
+NCC specification amplification
+and dorsal migration support &
+WNT3A amplifies WNT1 signalling in
+post-delamination NCC. Enrichment
+here reduces migration competence. \\[0.3em]
+\textit{CXCL12} &
+Chemokine gradient --- directional
+migration guidance &
+CXCL12 (SDF-1) establishes the chemotactic
+gradient that directs NCC to target tissues.
+The CXCL12/CXCR4 axis is the primary
+directional guidance mechanism.
+Silencing of CXCL12 in source tissue
+eliminates the gradient. \\[0.3em]
+\textit{CXCR4} &
+Chemokine receptor on migrating NCC ---
+gradient sensor &
+CXCR4 on NCC cells detects the CXCL12
+gradient. H3K27me3 enrichment at CXCR4
+reduces NCC responsiveness to the
+directional signal. \\[0.3em]
+\textit{EDNRB} &
+Endothelin receptor B ---
+melanocyte and enteric NCC migration &
+EDNRB is specifically required for
+melanocyte precursor and enteric nervous
+system NCC migration. Enrichment here
+specifically explains pigmentation
+(depigmentation syndrome trait) and
+connects directly to Marcstr\"{o}m's
+white patch observation. \\[0.3em]
+\textit{SOX10} &
+NCC identity maintenance transcription
+factor &
+SOX10 maintains multipotency and migration
+competence of NCC during migration.
+H3K27me3 at SOX10 would cause NCC to
+exit the migration-competent state
+prematurely. \\[0.3em]
+\textit{SNAI2} &
+Epithelial-to-mesenchymal transition
+(EMT) factor for NCC delamination &
+SNAI2 (Slug) drives the EMT that allows
+NCC to delaminate from the neural tube
+and begin migration. H3K27me3 enrichment
+here arrests delamination. \\
+\bottomrule
+\end{longtable}
+\end{mdframed}
+
+\subsection{Secondary Target Loci}
+
+The following loci are pre-registered as
+secondary targets. Enrichment here would
+extend the prediction beyond NCC migration
+to broader developmental programs.
+They are not included in the primary
+success criterion but are reported as
+exploratory:
+
+\begin{center}
+\small
+\begin{tabular}{p{2.2cm}p{10.5cm}}
+\toprule
+\textbf{Gene} & \textbf{Rationale} \\
+\midrule
+\textit{TWIST1} &
+NCC EMT regulator, craniofacial development.
+H3K27me3 here would explain snout shortening. \\[0.2em]
+\textit{FOXD3} &
+NCC multipotency maintenance.
+Early NCC identity factor. \\[0.2em]
+\textit{PAX3} &
+NCC specification at the neural plate border.
+Upstream of SOX10. \\[0.2em]
+\textit{TFAP2A} &
+NCC specification and survival during
+migration. \\[0.2em]
+\textit{DLX2} &
+Craniofacial NCC differentiation.
+H3K27me3 here would explain skull shape
+changes. \\[0.2em]
+\textit{PHOX2B} &
+Autonomic nervous system NCC derivation.
+Adrenal chromaffin cell specification. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Negative Control Loci}
+
+The following loci are pre-registered as
+negative controls. H3K27me3 enrichment is
+\textit{not} predicted at these loci.
+If enrichment is found at negative control
+loci at comparable levels to positive
+target loci, this indicates a global
+increase in H3K27me3 rather than
+locus-specific enrichment, which would
+require re-analysis with stricter
+normalisation.
+
+\begin{center}
+\small
+\begin{tabular}{p{2.2cm}p{10.5cm}}
+\toprule
+\textbf{Gene} & \textbf{Rationale for Selection as Negative Control} \\
+\midrule
+\textit{GAPDH} &
+Housekeeping gene. Should not be
+H3K27me3 enriched in any active cell type. \\[0.2em]
+\textit{ACTB} &
+Housekeeping gene. Standard negative
+control for histone modification ChIP. \\[0.2em]
+\textit{MYF5} &
+Skeletal muscle specification factor.
+Not expressed in NCC or relevant to
+NCC development. Should not be enriched. \\[0.2em]
+\textit{HBB} &
+Haemoglobin beta. Erythroid lineage
+marker. Not expressed in embryonic
+NCC tissue. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{Experimental Design}
+\label{sec:design}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Overview}
+
+H3K27me3 ChIP-seq on embryonic neural tube
+and adjacent embryonic tissue (NCC migration
+zone) from domestic \textit{Sus scrofa}
+(commercial breed) and wild boar
+(\textit{Sus scrofa} wild-caught, confirmed
+no domestic admixture) at gestational day
+E14--E18. Comparison: H3K27me3 enrichment
+at pre-registered NCC migration driver loci,
+domestic vs.\ wild, same developmental stage,
+same tissue type.
+
+No genetic modification. No
+experimental intervention on the animals.
+Pure comparison of epigenetic state at
+equivalent developmental stage in
+domestic vs.\ wild genome-matched tissue.
+
+\subsection{Animal Subjects}
+
+\textbf{Domestic embryos:}
+Commercial breed pregnant sows
+(Large White or Landrace, confirmed
+breed registration). Embryos collected
+at confirmed E14, E16, and E18
+(timed from confirmed mating).
+Minimum $n = 3$ litters per timepoint.
+Minimum $n = 3$ embryos per litter
+(one per litter used for ChIP;
+remaining for RNA-seq validation ---
+see Section~4.4).
+
+\textbf{Wild boar embryos:}
+Wild-caught pregnant \textit{Sus scrofa}
+sows, confirmed by SNP panel to have
+$< 5\%$ domestic admixture (same standard
+as P7). Gestational age confirmed by
+crown-rump length measurement against
+established \textit{Sus scrofa} growth
+curves. Embryos collected at equivalent
+E14, E16, and E18. Minimum $n = 3$
+litters per timepoint.
+
+\textbf{Tissue collection:}
+Embryos collected immediately post-euthanasia
+of dam (licensed, IACUC-approved procedure).
+Dissection within 30 minutes of collection.
+Neural tube region (dorsal cranial neural tube
++ dorsal trunk neural tube, E14--E18 stage)
+dissected on ice, snap-frozen in liquid
+nitrogen within 60 minutes of collection.
+Parallel tissue for RNA-seq fixed in RNAlater.
+
+\subsection{ChIP-seq Protocol}
+
+\subsubsection{Chromatin Preparation}
+
+Tissue (neural tube + adjacent NCC migration
+zone, approximately 50--100\,mg per sample)
+cross-linked with 1\% formaldehyde, 10 minutes
+at room temperature. Quenched with glycine.
+Nuclei isolated by Dounce homogenisation
+and differential centrifugation.
+Chromatin sheared to 200--500\,bp by sonication
+(Bioruptor Pico or equivalent: 30 cycles,
+30\,s on/30\,s off at 4\textdegree C).
+Shear size confirmed by Bioanalyzer before
+proceeding.
+
+\subsubsection{Immunoprecipitation}
+
+Anti-H3K27me3 antibody:
+Cell Signaling Technology \#9733
+(rabbit monoclonal C36B11 --- the validated
+antibody used across the domestication
+syndrome field's epigenetic studies and
+in all referenced cancer ChIP-seq work)
+or Abcam ab192985 (rabbit monoclonal).
+Both antibodies must be tested in parallel
+if sufficient material allows.
+
+Negative IP control: rabbit IgG isotype
+control (same species and format as primary
+antibody, same concentration).
+
+Positive IP control: H3K27me3 at
+\textit{CDKN2A} (p16/INK4a locus) ---
+a validated PRC2/EZH2 target enriched by
+H3K27me3 in multiple species and cell types.
+Must confirm $>$ 10-fold enrichment over IgG
+at \textit{CDKN2A} before any sample
+is considered valid.
+
+ChIP input: 5\% of chromatin retained
+as input control per sample.
+Library preparation: NEBNext Ultra II
+ChIP-seq Library Prep Kit or equivalent.
+Sequencing: Illumina paired-end 150\,bp,
+minimum 30 million reads per sample.
+
+\subsubsection{Sequencing Quality and
+Alignment}
+
+Quality control: FastQC on all raw reads
+before alignment. Samples with $<$ 25 million
+mappable reads or $>$ 30\% duplication rate
+excluded and resequenced.
+
+Alignment: BWA-MEM2 to the \textit{Sus scrofa}
+reference genome (Sscrofa11.1, Ensembl release
+109 or equivalent current release).
+Duplicate removal: Picard MarkDuplicates.
+Blacklist regions excluded using
+ENCODE \textit{Sus scrofa} blacklist
+(or ENCODE porcine blacklist if available;
+otherwise mammalian consensus blacklist
+lifted over to Sscrofa11.1).
+
+\subsubsection{Peak Calling and
+Differential Analysis}
+
+Peak calling: MACS2 (--broad flag for
+H3K27me3 broad domain marks,
+$q$-value threshold 0.05).
+Input subtracted per sample.
+
+Differential enrichment at pre-registered
+loci: DESeq2 on read counts in
+$\pm$5\,kb windows centred on the
+transcription start site (TSS) of each
+target gene, plus any MACS2-called
+peaks within 50\,kb of TSS.
+
+Comparison: domestic (all timepoints) vs.\
+wild boar (all timepoints), with gestational
+day as covariate. Primary comparison:
+E16 (mid-window) domestic vs.\ E16 wild boar.
+
+FDR correction: Benjamini-Hochberg across
+all pre-registered loci in a single
+correction set. $q < 0.05$ threshold.
+Enrichment ratio threshold: $\geq 1.5$
+(domestic/wild boar) at the TSS$\pm$5\,kb
+window.
+
+\subsection{RNA-seq Validation}
+
+For each embryo where ChIP material is
+collected, parallel RNA-seq is performed
+on adjacent neural tube tissue from the
+same dissection.
+
+\textbf{Rationale:} H3K27me3 enrichment at
+a locus should correspond to reduced
+transcription of that gene. RNA-seq confirms
+that the predicted H3K27me3 enrichment
+produces the predicted transcriptional
+silencing. If H3K27me3 is elevated at
+a locus but transcription is unchanged,
+the enrichment is not functionally relevant.
+
+\textbf{Protocol:}
+Total RNA extraction: RNeasy Micro Kit
+(Qiagen) or equivalent.
+RNA quality: RIN $\geq$ 7.0 required
+(Bioanalyzer).
+Library: NEBNext Ultra II RNA-seq with
+poly-A selection.
+Sequencing: Illumina paired-end 150\,bp,
+minimum 20 million reads per sample.
+Alignment: STAR to Sscrofa11.1.
+Differential expression: DESeq2.
+
+\textbf{Predicted direction:}
+Genes with elevated H3K27me3 in domestic
+embryos (from ChIP-seq primary analysis)
+should show \textit{reduced} expression
+in domestic embryo neural tube relative
+to wild boar at equivalent stage.
+Confirmed H3K27me3 enrichment + reduced
+expression = dual confirmation of silencing.
+
+% ══════════════════════════════════════════════════════════════
+\section{The Two Models and Their
+Diverging Predictions}
+\label{sec:models}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\small
+\begin{tabular}{p{4.5cm}p{4.5cm}p{4.5cm}}
+\toprule
+\textbf{Outcome} &
+\textbf{Genetic model} &
+\textbf{Field-arrest model} \\
+\midrule
+H3K27me3 at NCC loci in
+domestic vs.\ wild embryos
+(same developmental stage) &
+No difference predicted.
+Genetic differences affect
+allele-encoded programs,
+not H3K27me3 patterns at
+equivalent developmental stages. &
+\textbf{Elevated in domestic embryos}
+at $\geq$ 4/9 pre-registered loci.
+Enrichment ratio $\geq 1.5$ at
+$q < 0.05$. \\[0.4em]
+EZH2 protein level in domestic
+vs.\ wild embryo NCC zone &
+No specific prediction. &
+\textbf{Elevated in domestic embryos}
+at E14--E18 in the NCC migration zone.
+(Exploratory; not in primary success
+criterion.) \\[0.4em]
+Expression of NCC migration
+drivers in domestic vs.\ wild
+(RNA-seq) &
+No difference predicted at
+equivalent developmental stages. &
+\textbf{Reduced in domestic embryos}
+at loci with elevated H3K27me3. \\[0.4em]
+H3K27me3 at negative control loci &
+No enrichment predicted. &
+No enrichment predicted.
+(Same prediction --- used only
+to detect global artefacts.) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.3em}
+\textbf{The distinguishing comparison is:}
+H3K27me3 enrichment at NCC migration driver
+loci in domestic vs.\ wild embryos at the
+same developmental stage with equivalent
+global H3K27me3 signal. This comparison
+is not confounded by developmental stage
+differences (same stage), by tissue
+differences (same dissection protocol),
+or by global chromatin accessibility
+differences (input-subtracted ChIP,
+housekeeping gene negative controls).
+
+% ═════════════════════════════════════���════════════════════════
+\section{Success Criteria}
+\label{sec:success}
+% ══════════════════════════════════════════════════════════════
+
+\subsection{Primary Success Criterion}
+
+\begin{mdframed}[
+  backgroundcolor=notebox,
+  linecolor=headergreen,
+  linewidth=1pt,
+  innertopmargin=0.5em,
+  innerbottommargin=0.5em,
+  innerleftmargin=0.8em,
+  innerrightmargin=0.8em
+]
+\textbf{P9-SUCCESS requires ALL of the
+following:}
+
+\medskip
+\textbf{Criterion 1 (ChIP quality):}
+$>$ 10-fold H3K27me3 enrichment over IgG
+at the \textit{CDKN2A} positive control
+locus confirmed in $\geq$ 80\% of samples
+before any target locus analysis proceeds.
+
+\medskip
+\textbf{Criterion 2 (NCC locus enrichment):}
+$\geq$ 4 of the 9 pre-registered primary
+target loci show H3K27me3 enrichment ratio
+(domestic/wild boar) $\geq 1.5$ at
+$q < 0.05$ (BH-FDR corrected across all
+9 loci) at the E16 primary timepoint.
+
+\medskip
+\textbf{Criterion 3 (Direction specificity):}
+Mean H3K27me3 enrichment at negative
+control loci (GAPDH, ACTB, MYF5, HBB)
+does not differ significantly between
+domestic and wild boar samples
+($p > 0.05$, confirming the enrichment
+at target loci is locus-specific, not
+a global H3K27me3 increase).
+
+\medskip
+\textbf{Criterion 4 (RNA-seq concordance):}
+$\geq$ 3 of the loci meeting Criterion 2
+also show significantly reduced mRNA
+expression in domestic embryo neural
+tube relative to wild boar at the same
+stage ($q < 0.05$, DESeq2),
+confirming that H3K27me3 enrichment
+corresponds to functional silencing.
+\end{mdframed}
+
+\subsection{Graded Confirmation Levels}
+
+\begin{center}
+\small
+\begin{tabular}{p{3.5cm}p{9.5cm}}
+\toprule
+\textbf{Outcome} & \textbf{Interpretation} \\
+\midrule
+All 4 criteria met &
+\textbf{Full confirmation.} EZH2/H3K27me3
+silencing of the NCC migration program is
+the molecular mechanism of domestication
+developmental arrest. Proceed immediately
+to P11 (tazemetostat experiment).
+Publish P9 result and update theory paper
+with molecular mechanism confirmed. \\[0.4em]
+Criteria 1--3 met,
+Criterion 4 not met &
+\textbf{Structural confirmation, functional
+confirmation absent.} H3K27me3 enrichment is
+present at NCC loci but not reducing
+transcription. Possible explanation: the
+enrichment affects enhancer elements not
+captured by TSS$\pm$5\,kb window. Extend
+to enhancer-focused analysis (H3K27ac
+ChIP-seq to map active enhancers in wild
+boar; confirm their suppression in domestic).
+Still considered partial confirmation. \\[0.4em]
+Criterion 2 met (3/9 loci only,
+below threshold) &
+\textbf{Trend toward confirmation, below
+pre-specified threshold.} Increase sample
+size to $n \geq 5$ litters per timepoint
+and repeat. If 3/9 becomes 4/9 at larger
+$n$: full analysis. If remains $< 4/9$:
+failure diagnosis. \\[0.4em]
+Criterion 1 met,
+Criterion 2 not met &
+\textbf{True negative.} ChIP quality
+confirmed (positive control passed).
+H3K27me3 enrichment at NCC loci is absent.
+EZH2/H3K27me3 is not the mechanism.
+Failure diagnosis applied. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ══════════════════════════════════════════════════════════════
+\section{Control Conditions and
+Confound Management}
+\label{sec:controls}
+% ════════════════════════════════════════��═════════════════════
+
+\subsection{Critical Controls}
+
+\begin{mdframed}[
+  backgroundcolor=controlbox,
+  linecolor=headergreen,
+  linewidth=0.8pt,
+  innertopmargin=0.5em,
+  innerbottommargin=0.5em,
+  innerleftmargin=0.8em,
+  innerrightmargin=0.8em
+]
+\textbf{C1 --- Developmental stage matching
+(primary confound):}
+H3K27me3 patterns change substantially
+across developmental stages. Domestic and
+wild boar embryos must be confirmed at
+equivalent developmental stage by
+\textit{independent} criteria beyond gestational
+day: crown-rump length measurement against
+published \textit{Sus scrofa} staging tables,
+and somite count where available.
+Any sample pair with $>$ 1 day estimated
+developmental age difference is excluded
+from primary analysis and reported separately.
+
+\medskip
+\textbf{C2 --- Tissue dissection equivalence:}
+The NCC migration zone is a small, specific
+region of the embryo. Contamination by
+non-NCC tissue (e.g., epidermis, notochord,
+somites) will dilute the signal.
+Dissection must be performed by the same
+trained dissector for all samples.
+Dissection protocol must be validated on
+pilot samples by H\&E histology of adjacent
+sections to confirm correct tissue composition.
+
+\medskip
+\textbf{C3 --- Antibody specificity:}
+Two independent anti-H3K27me3 antibodies
+must be used in parallel (CST \#9733 and
+Abcam ab192985). Loci called as enriched
+must show enrichment with both antibodies.
+Any locus enriched with only one antibody
+is reported as exploratory only.
+
+\medskip
+\textbf{C4 --- Input normalisation:}
+5\% input control retained per sample.
+All enrichment ratios computed after
+input subtraction. Samples with input
+library quality $<$ 15 million mappable
+reads excluded.
+
+\medskip
+\textbf{C5 --- Domestic admixture exclusion:}
+Wild boar samples must be confirmed at
+$< 5\%$ domestic admixture by SNP panel
+(same standard as P7). Any wild boar sample
+with $\geq 5\%$ admixture excluded.
+This controls for the possibility that
+wild boar samples with partial domestic
+ancestry show partial H3K27me3 enrichment
+that contaminates the wild boar baseline.
+
+\medskip
+\textbf{C6 --- Cross-laboratory replication:}
+Primary analysis performed at one
+sequencing facility. Results submitted
+for replication at a second independent
+facility on a minimum of 3 embryo pairs
+(1 domestic, 1 wild boar, matched stage)
+before primary success criterion is declared.
+\end{mdframed}
+
+\subsection{Pre-specified Confound
+Interpretations}
+
+\textbf{Confound: Breed-specific H3K27me3
+differences unrelated to NCC.}
+If all analysed loci (including negative
+controls) show elevated H3K27me3 in domestic
+vs.\ wild, this is a global methylation
+difference, not a locus-specific NCC arrest
+signal. The negative control criterion
+(Criterion 3) specifically detects this.
+If Criterion 3 fails, the dataset is invalid
+for the primary claim and requires
+reanalysis with global H3K27me3
+normalisation (spike-in normalisation
+with Drosophila chromatin).
+
+\textbf{Confound: Different NCC developmental
+timing between domestic and wild embryos.}
+If domestic pigs have an accelerated or
+delayed NCC migration timeline relative
+to wild boar (independent of the arrest),
+then E16 domestic and E16 wild boar
+may not be at equivalent NCC migration
+stages. This is detected by RNA-seq:
+the expression signature of NCC migration
+stage markers (\textit{SOX10}, \textit{SNAI2},
+\textit{FOXD3} expression in the neural tube)
+must be confirmed equivalent between
+domestic and wild boar samples included
+in the primary comparison.
+
+% ══════════════════════════════════════════════════════════════
+\section{Failure Diagnosis}
+\label{sec:failure}
+% ══════════════════════════════════════════════════════════════
+
+\begin{mdframed}[
+  backgroundcolor=failbox,
+  linecolor=red!50!black,
+  linewidth=0.8pt,
+  innertopmargin=0.5em,
+  innerbottommargin=0.5em,
+  innerleftmargin=0.8em,
+  innerrightmargin=0.8em
+]
+\textbf{If P9 fails (Criterion 1 passes,
+Criterion 2 does not), the following
+diagnoses are pre-specified:}
+
+\medskip
+\textbf{Diagnosis F1 (Wrong histone mark):}
+The arrest is maintained by a different
+Polycomb mechanism. H3K27me3 is the
+canonical PRC2 mark but PRC1 (H2AK119ub)
+or DNA methylation (5mCpG) could
+alternatively silence the NCC migration
+program.
+\textit{Direction:} Perform H2AK119ub
+ChIP-seq and WGBS on the same tissue pairs.
+If H2AK119ub is enriched at NCC loci in
+domestic vs.\ wild boar, the mechanism is
+PRC1 rather than PRC2. The field-arrest
+model is confirmed; the specific enzyme
+is PRC1 rather than EZH2.
+
+\medskip
+\textbf{Diagnosis F2 (Wrong tissue:
+arrest occurs earlier):}
+The epigenetic arrest is established at
+a pre-neural-crest stage (E8--E10,
+specification stage) rather than during
+active migration (E14--E18). H3K27me3
+at migration guidance loci is secondary
+to the primary arrest elsewhere.
+\textit{Direction:} Perform the same
+ChIP-seq protocol on E10--E12 embryos
+(specification stage) to test for
+earlier enrichment.
+
+\medskip
+\textbf{Diagnosis F3 (Wrong loci):}
+The H3K27me3 arrest targets a different
+set of NCC-related genes not in the
+pre-registered panel.
+\textit{Direction:} Perform genome-wide
+differential H3K27me3 analysis (not
+restricted to pre-registered loci).
+Identify which, if any, NCC-related loci
+show enrichment. Report as exploratory.
+
+\medskip
+\textbf{Diagnosis F4 (Mechanism is not
+epigenetic):}
+The NCC migration reduction in domestic
+animals is genetic (allele-encoded),
+not epigenetic. The field does not
+establish H3K27me3. The genome specifies
+reduced NCC migration capacity directly.
+\textit{Direction:} Perform whole-genome
+sequencing of domestic vs.\ wild boar
+embryos. Identify coding variants in
+the pre-registered NCC loci. If
+functional variants in NCC migration
+genes are present and track with
+domestication, the genetic model is
+supported over the field-arrest model
+for this specific mechanism.
+This outcome would be published as
+a partial falsification of the
+epigenetic arm of the field-arrest model
+while leaving the basin-geometry
+framework intact.
+\end{mdframed}
+
+% ══════════════════════════════════════════════════════════════
+\section{Pathway to P11}
+\label{sec:p11}
+% ══════════════════════════════════════════════════════════════
+
+P9 is the molecular prerequisite for P11
+(tazemetostat in pregnant domestic sow,
+shifting F1 morphology toward wild-type).
+The logical dependency is:
+
+\vspace{0.3em}
+\begin{center}
+\small
+\begin{tabular}{p{4.5cm}p{0.5cm}p{8.0cm}}
+\textbf{P9 confirms H3K27me3 at NCC loci
+in domestic embryos} &
+$\Rightarrow$ &
+\textbf{EZH2 is the arrest maintenance
+enzyme.}
+Tazemetostat (EZH2 inhibitor) is the
+predicted reversal agent.
+P11 is justified and ready to proceed. \\[0.5em]
+\textbf{P9 fails (Diagnosis F1:
+PRC1/H2AK119ub instead)} &
+$\Rightarrow$ &
+\textbf{Tazemetostat is the wrong drug.}
+PRC1 inhibitor (e.g., PTC-596 targeting
+BMI1) is the predicted reversal agent.
+P11 is redesigned with PRC1 inhibitor. \\[0.5em]
+\textbf{P9 fails (Diagnosis F4:
+genetic mechanism)} &
+$\Rightarrow$ &
+\textbf{P11 is not justified.}
+No pharmacological reversal of the
+arrest is predicted. The field-arrest
+epigenetic model is falsified for
+this specific mechanism.
+\end{tabular}
+\end{center}
+
+\vspace{0.3em}
+P9 is therefore not only a test of the
+field-arrest mechanism. It is the gateway
+experiment that determines the molecular
+target for P11 and, by extension, provides
+the biological justification for the
+cross-scale connection between domestication
+biology and EZH2 inhibitor cancer therapy.
+
+% ══════════════════════════════════════════════════════════════
+\section{Cost and Timeline}
+\label{sec:cost}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\small
+\begin{tabular}{p{7.0cm}p{5.0cm}}
+\toprule
+\textbf{Item} & \textbf{Estimated Cost (USD)} \\
+\midrule
+Wild boar embryo collection
+(licensed, $n = 9$ litters, 3 per timepoint) &
+\$8,000--\$18,000 \\[0.2em]
+Domestic pig embryo collection
+($n = 9$ litters, abattoir or farm) &
+\$3,000--\$6,000 \\[0.2em]
+Chromatin preparation and ChIP
+(2 antibodies $\times$ 2 groups
+$\times$ 3 timepoints $\times$ 3 replicates) &
+\$12,000--\$20,000 \\[0.2em]
+ChIP-seq library prep and sequencing
+(36 samples $\times$ 30M reads) &
+\$18,000--\$28,000 \\[0.2em]
+RNA-seq library prep and sequencing
+(36 samples $\times$ 20M reads) &
+\$10,000--\$16,000 \\[0.2em]
+Bioinformatic analysis
+(alignment, peak calling, DESeq2) &
+\$4,000--\$8,000 \\[0.2em]
+SNP genotyping for admixture confirmation &
+\$2,000--\$4,000 \\[0.2em]
+Cross-laboratory replication
+(3 embryo pairs) &
+\$8,000--\$12,000 \\[0.2em]
+Histological validation of tissue dissection &
+\$2,000--\$4,000 \\[0.2em]
+\midrule
+\textbf{Total estimated cost} &
+\textbf{\$67,000--\$116,000} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.3em}
+\textbf{Timeline from ethical approval
+to primary data:}
+3--6 months (embryo collection is the
+rate-limiting step; sequencing and
+analysis: 6--8 weeks after collection).
+
+\textbf{Minimum timeline to replication:}
+8--10 months.
+
+% ══════════════════════════════════════════════════════════════
+\section{Reporting Standard}
+\label{sec:reporting}
+% ══════════════════════════════════════════════════════════════
+
+Results of this experiment will be reported
+against this pre-registration regardless of
+outcome. The following standards apply:
+
+\begin{enumerate}[itemsep=0.2em]
+  \item All 9 pre-registered primary target
+    loci are reported. No selective reporting
+    of only confirming loci.
+
+  \item All 4 negative control loci are
+    reported. If any negative control locus
+    shows enrichment at threshold, this is
+    reported prominently, not buried.
+
+  \item The analysis is performed exactly as
+    specified in Section~3.3. Any deviation
+    must be declared in the methods with
+    justification.
+
+  \item The cross-laboratory replication
+    result must be reported in the same
+    publication as the primary result, not
+    deferred to a separate publication.
+
+  \item If P9 fails, the failure diagnosis
+    and the follow-on direction are published
+    in the primary report. A failure report
+    is a result. It will be published.
+
+  \item Sequencing data deposited in GEO
+    (Gene Expression Omnibus) before
+    submission to journal, with accession
+    number included in the methods.
+\end{enumerate}
+
+% ══════════════════════════════════════════════════════════════
+\section{Linked Pre-Registrations
+and Experimental Series}
+\label{sec:linked}
+% ══════════════════════════════════════════════════════════════
+
+\begin{center}
+\small
+\begin{tabular}{p{1.5cm}p{5.5cm}p{5.0cm}}
+\toprule
+\textbf{ID} & \textbf{Title} & \textbf{DOI / Status} \\
+\midrule
+P-INVERSION-1 &
+Plant Architecture Inversion via
+Coherence Gradient Field &
+\href{https://doi.org/10.5281/zenodo.19040399}
+{\texttt{10.5281/zenodo.19040399}} \\[0.3em]
+LECA-A &
+LECA Resurrection Fungal Arm &
+\href{https://doi.org/10.5281/zenodo.18986790}
+{\texttt{10.5281/zenodo.18986790}} \\[0.3em]
+P7 &
+Cross-Fostering / NCC Arrest &
+[Zenodo DOI pending] \\[0.3em]
+P8 &
+Maternal Field Window Dependence &
+[Zenodo DOI pending] \\[0.3em]
+P9 &
+H3K27me3 at NCC Loci ChIP-seq
+(this document) &
+[Zenodo DOI pending] \\[0.3em]
+P10 &
+Breed Depth vs.\ Feralization Rate &
+[Zenodo DOI pending] \\[0.3em]
+P11 &
+Tazemetostat in Pregnant Sow:
+F1 Morphology Shift &
+[Zenodo DOI pending ---
+requires P9 confirmation first] \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.3em}
+\textbf{Theory paper from which P9 was derived:}
+
+Lawson, E.R. (2026).
+\textit{Domestication as Field-Specified
+Developmental Arrest: A Unified Causal
+Mechanism for the Domestication Syndrome
+Derived from Attractor Geometry.}
+OrganismCore / Zenodo. [DOI pending]
+
+% ── DOCUMENT METADATA ────────────────────────────────────────
+\vspace{1em}
+\noindent\textcolor{rulecolor}
+{\rule{\linewidth}{0.8pt}}
+\vspace{0.3em}
+
+{\footnotesize
+\textbf{Document ID:}
+P9\_H3K27ME3\_NCC\_CHIPSEQ\_PRE\_
+REGISTRATION\_v1.0\\
+\textbf{Date:} 2026-03-18\\
+\textbf{Author:} Eric Robert Lawson /
+OrganismCore\\
+\textbf{Derivation record:}
+\href{https://github.com/Eric-Robert-Lawson/
+attractor-oncology}
+{\texttt{github.com/Eric-Robert-Lawson/
+attractor-oncology}}\\
+\textbf{Theory paper:}
+\texttt{Domestication\_As\_Developmental\_
+Arrest.tex} (same repository)\\
+\textbf{Zenodo DOI:} [to be inserted upon
+Zenodo confirmation]\\
+\textbf{Document version:} 1.0 ---
+LOCKED AT PRE-REGISTRATION.
+No modifications after Zenodo deposit.\\
+\textbf{License:} CC BY 4.0\\
+\textbf{ORCID:}
+\href{https://orcid.org/0009-0002-0414-6544}
+{0009-0002-0414-6544}\\
+\textbf{Contact:}
+\href{mailto:OrganismCore@proton.me}
+{OrganismCore@proton.me}
+}
+
+\end{document}

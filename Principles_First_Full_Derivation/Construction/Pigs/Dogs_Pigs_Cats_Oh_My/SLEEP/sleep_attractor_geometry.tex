@@ -26,6 +26,8 @@
               theoretical derivation},
   pdfkeywords={attractor geometry,
                sleep duration,
+               sleep topology,
+               payment architecture,
                deep-time survival,
                living fossils,
                mass extinction,
@@ -68,13 +70,14 @@
 \definecolor{unstablebox}{RGB}{255,240,235}
 \definecolor{invariantbox}{RGB}{248,240,255}
 \definecolor{derivbox}{RGB}{255,252,235}
+\definecolor{topologybox}{RGB}{245,240,255}
 
 % ── HEADER / FOOTER ───────────────────────────────────────────
 \pagestyle{fancy}
 \fancyhf{}
 \renewcommand{\headrulewidth}{0.4pt}
 \fancyhead[L]{\small\color{headergreen}
-  OrganismCore Reasoning Artifact v1.0}
+  OrganismCore Reasoning Artifact v2.0}
 \fancyhead[R]{\small\color{headergreen}
   Dimensional Invariant: Sleep \&
   Survival --- 2026-03-18}
@@ -108,14 +111,16 @@
   {\Large\bfseries
   The Dimensional Invariant:}\\[0.3em]
   {\Large\bfseries
-  Sleep Duration, Attractor Basin Depth,
-  and Long-Term Survival\\
+  Sleep Duration, Sleep Topology, Attractor
+  Basin Depth, and Long-Term Survival\\
   Across the Entire History of Life}\\[0.5em]
   {\normalsize\itshape
   The oldest surviving lineages sleep
   the least.\\
   The minimum of the sleep spectrum is
   the maximum of the survival spectrum.\\
+  The topology of sleep payment is itself
+  a geometric prediction of the landscape.\\
   This is not a coincidence. This is the
   geometry.}\\[0.6em]
   \noindent\textcolor{rulecolor}
@@ -139,7 +144,7 @@
   \textbf{Theory paper:}
   \href{https://doi.org/10.5281/zenodo.19094935}
   {\texttt{doi:10.5281/zenodo.19094935}}\\
-  \textbf{Document version:} 1.0\\
+  \textbf{Document version:} 2.0\\
   \textbf{License:}
   Creative Commons Attribution 4.0
   International (CC BY 4.0)}\\[0.4em]
@@ -149,7 +154,7 @@
 
 \vspace{0.5em}
 
-% ── DERIVATION NOTICE BOX ─────────────────────────────────────
+% ── DERIVATION NOTICE ─────────────────────────────────────────
 \begin{mdframed}[
   backgroundcolor=derivbox,
   linecolor=headergreen,
@@ -175,17 +180,34 @@ palaeontological or comparative survival
 literature was consulted.
 
 \smallskip
+This version (v2.0) extends v1.0 by making
+explicit a geometric claim that was implicit
+in the original derivation but not fully
+stated: the \textbf{topology of the sleep
+payment process} --- the architecture by which
+an organism discharges its basin-occupation
+cost --- is itself a geometric prediction of
+the framework, not a measurement artefact or
+calibration problem. Different landscape
+positions do not only produce different sleep
+durations. They produce different sleep
+\textit{topologies}. This is a stronger and
+more complete claim. The crocodilian data
+(Kelly \& Lesku, 2015, 2019) makes the
+topological dimension empirically explicit
+and is recorded here as confirmation of a
+predicted geometric property, not as an
+anomaly requiring special treatment.
+
+\smallskip
 All claims were confirmed against literature
 after derivation. The derivation record is
 the priority-establishing document.
-The confirmations establish empirical support.
-The distinction between the two is preserved
-explicitly in Section~\ref{sec:confirmations}.
 \end{mdframed}
 
 \vspace{0.8em}
 
-% ── CLAIM BOX ─────────────────────────────────────────────────
+% ── MASTER CLAIM BOX ──────────────────────────────────────────
 \begin{mdframed}[
   backgroundcolor=claimbox,
   linecolor=claimbox,
@@ -200,38 +222,38 @@ explicitly in Section~\ref{sec:confirmations}.
 
 \medskip
 Across all life, at all scales, across all
-of deep time: sleep duration (or metabolic
-rest-state duration in pre-neural organisms)
-is a measurement of the total cost of an
-organism's attractor basin position. Basin
-depth --- the resistance of the organism's
-attractor to perturbation --- is the primary
-predictor of long-term survival.
+of deep time: the total cost of an organism's
+attractor basin position must be discharged
+through rest. The framework makes two
+inseparable predictions:
 
 \medskip
-The relationship between sleep and survival
-is U-shaped with a flat minimum:
+\textbf{Prediction 1 --- Quantity:}
+The total cost discharged per cycle
+(sleep duration or rest-state equivalent)
+tracks the navigational demand of the
+organism's landscape position.
+Basin depth predicts survival horizon.
+The oldest surviving lineages carry the
+lowest navigational cost. They discharge
+the least.
 
 \medskip
-\textbf{Minimum sleep $\rightarrow$ maximum
-basin depth $\rightarrow$ maximum survival
-horizon} (Lock strategy: 300--600\,Myr+).
-
-\medskip
-\textbf{Moderate sleep $\rightarrow$ moderate
-basin depth with multiple accessible basins
-$\rightarrow$ long survival horizon}
-(Navigator strategy: 100--300\,Myr).
-
-\medskip
-\textbf{High sleep $\rightarrow$ deep
-specialised basin or deep Basin $\Omega$
-$\rightarrow$ survival conditional on niche
-stability} (uncertain horizon).
+\textbf{Prediction 2 --- Topology:}
+The architecture by which cost is
+discharged --- the sleep topology --- is
+itself a geometric property of the
+landscape position, not an independent
+biological variable. Different landscape
+positions do not merely require different
+amounts of sleep. They require different
+\textit{kinds} of sleep. The topology is
+predicted by the geometry.
 
 \medskip
 \textbf{The oldest surviving lineages sleep
-the least. This is the geometry.}
+the least. How they sleep is the geometry
+of where they are.}
 \end{mdframed}
 
 \vspace{1em}
@@ -243,85 +265,527 @@ the least. This is the geometry.}
 
 \subsection{The Attractor Geometry Framework}
 
-The attractor geometry framework:
 \[
 S + N + G \;\rightarrow\; R
 \]
-where:
+
 \begin{itemize}[itemsep=0.2em]
   \item $S$ = structural substrate (genome
     and encoded build capacity)
   \item $N$ = coherence gradient field
     (external or internal field specifying
     basin occupation)
-  \item $G$ = developmental and evolutionary
-    geometry (global attractor landscape ---
-    basin depths, barrier heights, accessible
-    states)
+  \item $G$ = global attractor landscape
+    (basin depths, barrier heights,
+    accessible states, topology of
+    transitions)
   \item $R$ = resulting phenotype or state
 \end{itemize}
 
-Previous documents in this series established:
+The framework predicts that an organism's
+position in $G$ determines three things
+simultaneously:
 
 \begin{enumerate}[itemsep=0.2em]
-  \item Sleep duration tracks the total
-    synaptic and metabolic cost of an
-    organism's landscape position,
-    decomposable into three axes: Axis~1
-    (between-basin switching cost), Axis~2
-    (within-basin metabolic cost), and
-    Axis~3 (within-basin computational
-    intensity).
-
-  \item The meta-attractor Basin~$\Omega$ ---
-    the stable state of being an organism
-    that navigates between two basins
-    simultaneously --- has its own depth and
-    its own metabolic maintenance cost.
-
-  \item Deep basins are survival hacks:
-    evolution converges on them because they
-    are the attractor of the evolutionary
-    process itself in stable environments.
+  \item The total navigational cost of
+    occupying that position --- what must
+    be discharged.
+  \item The survival trajectory --- how
+    resistant the basin is to perturbation.
+  \item The topology of the discharge
+    process --- what architecture of rest
+    is geometrically required to pay the
+    cost from that position.
 \end{enumerate}
 
-This document extends the framework to its
-full temporal scope:
+These three are not independent. They are
+three projections of a single geometric
+object: the organism's position in the
+landscape $G$.
+
+\subsection{The Core Claim: Cost, Topology,
+and Survival as a Single Geometric Object}
+
+The metabolic cost of occupying a position
+in an attractor landscape is a function of
+the navigational demand imposed by that
+position. Navigational demand is determined
+by: (1) the number of accessible basins;
+(2) the height of barriers between basins;
+(3) the frequency of required transitions;
+(4) the depth of Basin~$\Omega$ if one
+exists; and (5) the within-basin metabolic
+or computational intensity of the occupied
+basin.
+
+Rest is the generic process by which this
+accumulated cost is discharged.
+\textbf{The architecture of that rest
+process --- its topology --- is not a
+separate biological variable. It is a
+further projection of the same landscape
+geometry.}
+
+An organism in a single deep basin with
+zero navigational demand has no synaptic
+reconfiguration cost to discharge. Its
+rest approaches the minimum and its
+topology approaches the simplest possible:
+metabolic quiescence or biochemical
+circadian rhythm only.
+
+An organism in a symmetric dual-basin
+landscape discharging high between-basin
+switching cost requires consolidated
+bilateral deep sleep to perform the full
+synaptic reconfiguration that context
+switching demands. The topology must be
+bilateral because the cost is bilateral
+--- both hemispheres participated in the
+navigation and both must be reset.
+
+An organism whose ecological landscape
+position is ecologically generalist but
+whose metabolic architecture is ectothermic
+faces a topological constraint: the
+metabolic cost of full bilateral wakefulness
+exceeds its energetic budget for most of
+the day. The geometric solution is a
+distributed intermediate rest state ---
+bilateral in EEG signature (because the
+navigational cost is moderate and not
+requiring hemispheric asymmetry) but
+extended across time rather than
+concentrated into a single deep-sleep
+window. This is not an anomaly. It is the
+landscape geometry expressing itself
+through the only metabolically feasible
+topology available to an ectothermic
+Navigator.
+
+The dolphin faces a different but
+structurally equivalent constraint: the
+cost of full bilateral sleep in an open
+ocean environment is mortality. The
+landscape geometry resolves this by
+dissolving the barrier between waking and
+sleep entirely --- the two basins merge
+into a permanent intermediate state,
+Basin~$\Omega$ of the waking/sleep
+landscape itself, maintained via
+unihemispheric EEG alternation.
+
+These are not special cases requiring
+individual explanation. They are the
+framework's topological predictions
+working correctly.
 
 \begin{quote}
 \itshape
-The attractor geometry of an organism's basin
-position predicts not just its current sleep
-requirement but its survival trajectory across
-deep time. Sleep duration is a temporal sonar.
+Sleep topology is the geometry of where
+you are. Duration is how much the geometry
+costs. Survival is how deep the geometry
+goes.
 \end{quote}
 
-\subsection{The Core Claim}
+% ══════════════════════════════════════════════════════════════
+\section{The Sleep Cost Axes}
+\label{sec:axes}
+% ══════════════════════════════════════════════════════════════
 
-The metabolic cost of occupying a position in
-an attractor landscape is a function of the
-navigational demand imposed by that position.
-Navigational demand is determined by: (1) the
-number of accessible basins from the current
-position; (2) the height of the barriers
-between those basins; (3) the frequency with
-which the system must assess and execute basin
-transitions; and (4) the depth of Basin~$\Omega$
-if one exists.
+The total cost discharged through sleep is
+decomposable into three axes. Each axis
+corresponds to a distinct geometric feature
+of the landscape position.
 
-Rest is the metabolic process by which the
-synaptic cost of navigation is paid. Sleep
-duration is a measurement of the navigational
-demand of the organism's landscape position.
+\begin{enumerate}[itemsep=0.5em]
 
-\textbf{The dimensional invariant:} Basin depth
-is the same geometric property at every scale
---- molecular, cellular, developmental,
-organism, evolutionary. Sleep tracks the cost
-of occupying a position in the landscape.
-Deep-time survival is a direct function of
-basin depth. Therefore sleep duration is a
-proxy for survival trajectory.
+  \item \textbf{Axis~1 --- Between-basin
+    switching cost.}
+    The organism navigates between multiple
+    accessible basins under its own
+    motivational field. Each transition
+    requires bilateral synaptic
+    reconfiguration. Cost accumulates
+    continuously during waking.
+    \textit{Geometric signature:} High
+    behavioural flexibility. Multiple
+    accessible basins with low to moderate
+    barriers. High sleep, typically
+    consolidated bilateral deep sleep.
+    \textit{Examples:} Felidae (domestic
+    cat navigating wild/domestic dual
+    basin), Basin~$\Omega$ organisms.
+
+  \item \textbf{Axis~2 --- Within-basin
+    metabolic cost.}
+    A single highly expensive basin
+    consumes all available metabolic
+    resources during waking. Sleep is
+    required not for synaptic
+    reconfiguration but for metabolic
+    resource conservation and recovery.
+    \textit{Geometric signature:} Low
+    behavioural flexibility. Single basin.
+    Complete basin commitment. High sleep
+    from resource depletion, not
+    navigational cost.
+    \textit{Example:} Koala.
+
+  \item \textbf{Axis~3 --- Within-basin
+    computational intensity.}
+    Extreme neural computation within a
+    single highly specialised sensorimotor
+    basin during waking. Synaptic
+    reconfiguration cost from processing
+    intensity, not switching.
+    \textit{Geometric signature:} Low
+    behavioural flexibility. High
+    performance within a single
+    specialised basin. High sleep from
+    computational cost, not navigational
+    switching.
+    \textit{Example:} Brown bat
+    (echolocation-guided aerial
+    interception at millisecond
+    resolution for 4 hours requires
+    20 hours of synaptic reset).
+
+\end{enumerate}
+
+The Lock organism operates on none of
+these axes. Zero navigational demand.
+Zero within-basin metabolic surplus
+cost. Zero within-basin computational
+intensity. The sleep minimum is the
+signature of zero cost at every axis
+simultaneously.
+
+% ═══════════���══════════════════════════════════════════════════
+\section{The Sleep Topologies}
+\label{sec:topologies}
+% ══════════════════════════════════════════════════════════════
+
+The framework predicts that different
+landscape positions produce not just
+different sleep durations but different
+sleep architectures --- different
+topologies of the discharge process.
+These topologies are geometric predictions.
+
+\begin{mdframed}[
+  backgroundcolor=topologybox,
+  linecolor=headergreen,
+  linewidth=0.8pt,
+  innertopmargin=0.6em,
+  innerbottommargin=0.6em,
+  innerleftmargin=0.8em,
+  innerrightmargin=0.8em
+]
+\textbf{TOPOLOGY 1: Metabolic quiescence
+/ biochemical rhythm only}
+
+\smallskip
+\textit{Landscape position:} Deepest
+single basin. No nervous system or
+minimal neural architecture. Zero
+navigational demand. Programme
+executes without reconfiguration.
+
+\smallskip
+\textit{Discharge process:} No sleep in
+any neurological sense. Circadian
+biochemical rhythms regulate metabolic
+processes only. No synaptic cost to
+discharge because no synapses that
+reconfigure.
+
+\smallskip
+\textit{Duration:} Undefined or
+approaching zero.
+
+\smallskip
+\textit{Examples:} Sponge, jellyfish
+(most species), horseshoe crab.
+
+\smallskip
+\textit{Geometric prediction:} This
+topology is the signature of the deepest
+possible basin. Any organism showing this
+topology is at or near the maximum
+perturbation-invariance extreme of the
+Lock strategy.
+\end{mdframed}
+
+\vspace{0.6em}
+
+\begin{mdframed}[
+  backgroundcolor=topologybox,
+  linecolor=headergreen,
+  linewidth=0.8pt,
+  innertopmargin=0.6em,
+  innerbottommargin=0.6em,
+  innerleftmargin=0.8em,
+  innerrightmargin=0.8em
+]
+\textbf{TOPOLOGY 2: Distributed bilateral
+rest --- the ectotherm Navigator solution}
+
+\smallskip
+\textit{Landscape position:} Moderate
+Navigator. Multiple accessible basins with
+moderate barriers. Moderate navigational
+cost. But ectothermic metabolic
+architecture means the energy budget for
+full bilateral wakefulness is limited to
+a short window per day.
+
+\smallskip
+\textit{Discharge process:} True bilateral
+deep sleep (EEG-confirmed) for 2--6 hours.
+Extended distributed bilateral rest state
+(reduced neural activity, bilateral EEG,
+one eye open behavioural vigilance
+maintained through brainstem-level
+alerting, not cortical hemispheric
+asymmetry) for 12--16 hours. Total
+Navigator-equivalent discharge delivered
+across the full inactive period rather
+than concentrated into a single window.
+
+\smallskip
+\textit{Why bilateral and not
+unihemispheric?} Because the navigational
+cost is moderate and does not require
+hemispheric asymmetry in its discharge.
+The switching cost is between ecological
+basins, not between waking hemispheres.
+Both hemispheres carry the cost equally
+and both discharge it simultaneously
+across the extended rest period.
+
+\smallskip
+\textit{Duration:} 2--6h true sleep plus
+12--16h Basin~C rest.
+Total equivalent: Navigator range.
+
+\smallskip
+\textit{Example:} Crocodilian. Confirmed
+bilateral EEG during rest periods (Kelly
+\& Lesku, 2015, 2019). One-eye-open
+vigilance is behavioural, not
+unihemispheric in the neurological sense.
+This is the critical distinction.
+
+\smallskip
+\textit{Geometric prediction:} This
+topology will be found specifically in
+ectothermic Navigators --- organisms with
+ecological generalism whose metabolic
+architecture precludes concentrated
+bilateral deep sleep windows. It will not
+be found in Lock organisms (too little
+cost to distribute) or in endothermic
+Navigators (sufficient metabolic budget
+for concentrated sleep). The crocodilian
+is the confirmed case. Others predicted:
+large ectothermic generalist reptiles,
+some large ectothermic fish.
+\end{mdframed}
+
+\vspace{0.6em}
+
+\begin{mdframed}[
+  backgroundcolor=topologybox,
+  linecolor=headergreen,
+  linewidth=0.8pt,
+  innertopmargin=0.6em,
+  innerbottommargin=0.6em,
+  innerleftmargin=0.8em,
+  innerrightmargin=0.8em
+]
+\textbf{TOPOLOGY 3: Consolidated bilateral
+deep sleep}
+
+\smallskip
+\textit{Landscape position:} Moderate to
+high navigational cost. Endothermic
+metabolic architecture with sufficient
+budget for full bilateral wakefulness
+followed by concentrated sleep window.
+Single or dual basin landscape.
+
+\smallskip
+\textit{Discharge process:} Concentrated
+bilateral deep sleep (NREM and REM)
+within a single extended window. Full
+hemispheric offline state. Full synaptic
+downscaling.
+
+\smallskip
+\textit{Duration:} 7--22 hours depending
+on axis and intensity.
+
+\smallskip
+\textit{Examples:} Rodent, human, koala,
+brown bat, lion. The standard mammalian
+and avian sleep architecture. Most of the
+published comparative sleep literature
+describes organisms in this topology.
+
+\smallskip
+\textit{Geometric prediction:} This
+topology is the signature of endothermic
+organisms. Within this topology, duration
+discriminates between Axis 1 (switching
+cost), Axis 2 (metabolic cost), Axis 3
+(computational cost), and the Lock minimum
+(zero cost). Duration is a valid direct
+proxy for total cost within this topology
+only.
+\end{mdframed}
+
+\vspace{0.6em}
+
+\begin{mdframed}[
+  backgroundcolor=topologybox,
+  linecolor=headergreen,
+  linewidth=0.8pt,
+  innertopmargin=0.6em,
+  innerbottommargin=0.6em,
+  innerleftmargin=0.8em,
+  innerrightmargin=0.8em
+]
+\textbf{TOPOLOGY 4: Permanent
+Basin~$\Omega$ --- dissolved barrier}
+
+\smallskip
+\textit{Landscape position:} High
+navigational cost in an environment where
+full bilateral sleep is lethal. The cost
+of the sleep basin's exit barrier has been
+inverted --- entering full bilateral sleep
+has higher mortality cost than the
+accumulated synaptic cost of remaining
+partially awake indefinitely.
+
+\smallskip
+\textit{Discharge process:} The barrier
+between waking and sleep is dissolved.
+One hemisphere sleeps while the other
+remains active, in continuous alternation.
+The organism permanently occupies
+Basin~$\Omega$ of the waking/sleep
+landscape. Discharge is continuous and
+partial rather than periodic and complete.
+
+\smallskip
+\textit{Why unihemispheric and not
+bilateral?} Because the discharge must
+maintain motor and sensory function on
+the non-sleeping side at all times. This
+is a constraint imposed by the landscape
+(open ocean mandatory ventilation plus
+multi-directional predation threat), not
+by the navigational cost itself. The
+navigational cost could in principle be
+discharged bilaterally if the environment
+permitted it. It cannot. Unihemispheric
+is the only geometrically feasible
+topology for this landscape position.
+
+\smallskip
+\textit{Duration:} Approximately 8 hours
+total but never bilateral. Continuous
+rotation.
+
+\smallskip
+\textit{Examples:} Dolphin, porpoise,
+some seals. Some migratory birds during
+flight.
+
+\smallskip
+\textit{Geometric prediction:} This
+topology will be found exclusively in
+organisms whose landscape position
+combines high navigational cost with a
+lethal cost attached to full bilateral
+sleep. It requires both conditions
+simultaneously. Neither alone produces
+the topology.
+\end{mdframed}
+
+\vspace{0.6em}
+
+\begin{mdframed}[
+  backgroundcolor=topologybox,
+  linecolor=headergreen,
+  linewidth=0.8pt,
+  innertopmargin=0.6em,
+  innerbottommargin=0.6em,
+  innerleftmargin=0.8em,
+  innerrightmargin=0.8em
+]
+\textbf{TOPOLOGY 5: Fragmented shallow
+sleep --- the shallow basin signature}
+
+\smallskip
+\textit{Landscape position:} Deep single
+basin but with high external pressure
+(predation, ecological constraint) making
+the sleep basin difficult to occupy for
+more than short bursts. The sleep basin
+is not shallow due to low cost --- it is
+shallow because the waking basin is
+maintained under high external pressure
+that continually pulls the system back
+before deep sleep can complete.
+
+\smallskip
+\textit{Discharge process:} Brief
+fragmented bilateral sleep bouts.
+Incomplete discharge per bout. Discharge
+accumulated across many short sessions.
+
+\smallskip
+\textit{Duration:} 30 minutes to 2 hours
+total, distributed across the day.
+
+\smallskip
+\textit{Examples:} Giraffe. Migratory
+birds during peak migration (Basin~A so
+deep that sleep is deferred entirely until
+migration terminates, then discharged as
+sleep rebound).
+
+\smallskip
+\textit{Geometric prediction:} Sleep
+rebound is the diagnostic signature of
+this topology. An organism in Topology~5
+that is temporarily relieved of the
+external pressure will show immediate
+and disproportionate sleep increase ---
+paying accumulated deferred debt. This
+distinguishes it from a Lock organism
+(which will not show sleep rebound under
+safety conditions because it has no
+accumulated debt) and from an endothermic
+Navigator (which discharges continuously
+and has no large debt to rebound from).
+\end{mdframed}
+
+\vspace{0.8em}
+
+The five topologies are not a taxonomy of
+sleep types. They are the geometric
+predictions of the framework applied to
+the waking/sleep sub-landscape within $G$.
+Each topology is the only architecturally
+feasible solution for its corresponding
+landscape position. The framework does not
+say organisms ``choose'' a sleep topology.
+It says the landscape position geometrically
+determines which topology is accessible.
 
 % ══════════════════════════════════════════════════════════════
 \section{The Two Survival Strategies}
@@ -329,10 +793,8 @@ proxy for survival trajectory.
 % ══════════════════════════════════════════════════════════════
 
 The deep-time survival data reveals two
-geometrically opposite strategies that both
-produce long-term lineage persistence. They
-are not compromises. They are opposite poles
-of the same dimensional axis.
+geometrically opposite strategies that
+both produce long-term lineage persistence.
 
 \subsection{Strategy~1: The Lock}
 
@@ -346,35 +808,42 @@ of the same dimensional axis.
   innerrightmargin=0.8em
 ]
 \small
-\begin{tabular}{p{3.5cm}p{9.0cm}}
+\begin{tabular}{p{3.2cm}p{9.3cm}}
 \textbf{Basin structure} &
 Single basin. Extremely deep.
-Very high exit barrier. \\[0.2em]
+Very high exit barrier.\\[0.2em]
 \textbf{Morphology} &
 Extreme conservatism. Body plan
 unchanged across hundreds of millions
-of years. \\[0.2em]
+of years.\\[0.2em]
 \textbf{Metabolism} &
 Slow. Efficient. Minimal resource
-requirement. \\[0.2em]
+requirement.\\[0.2em]
 \textbf{Behaviour} &
 Low flexibility. Narrow repertoire.
-Highly programmatic. \\[0.2em]
-\textbf{Sleep} &
+Highly programmatic.\\[0.2em]
+\textbf{Sleep quantity} &
 Minimal. Approaching zero in simplest
 forms. 2--5 hours in complex Lock
-organisms. \\[0.2em]
+organisms.\\[0.2em]
+\textbf{Sleep topology} &
+Topology~1 (quiescence/biochemical
+rhythm) in simplest forms.
+Topology~5 (fragmented, predation
+pressure) in complex Lock organisms
+with environmental threat.
+Never Topology~4 (no open-ocean
+lethal constraint).
+Never Topology~2 (insufficient
+navigational cost to distribute).\\[0.2em]
 \textbf{Survival horizon} &
-Maximum. 300--600\,Myr in the most
-extreme cases. \\[0.2em]
+Maximum. 300--600\,Myr+.\\[0.2em]
 \textbf{Survival mechanism} &
 Basin so deep it is perturbation-invariant.
-Extinction events are not energetically
-sufficient to displace the organism from
-its basin. \\[0.2em]
+Extinction events cannot displace the
+organism.\\[0.2em]
 \textbf{Convergence} &
-Multiple independent phyla arrive at
-this strategy. \\
+Multiple independent phyla.\\
 \end{tabular}
 \end{mdframed}
 
@@ -390,37 +859,51 @@ this strategy. \\
   innerrightmargin=0.8em
 ]
 \small
-\begin{tabular}{p{3.5cm}p{9.0cm}}
+\begin{tabular}{p{3.2cm}p{9.3cm}}
 \textbf{Basin structure} &
 Multiple basins. Shallow barriers.
-High switching capacity. \\[0.2em]
+High switching capacity.\\[0.2em]
 \textbf{Morphology} &
 Ecological generalism. Body plan
-adapted for flexibility rather than
-extreme specialisation. \\[0.2em]
+adapted for flexibility.\\[0.2em]
 \textbf{Metabolism} &
-Flexible. Moderate. Can upregulate
-and downregulate with resource
-availability. \\[0.2em]
+Flexible. Moderate. Endothermic
+or ectothermic --- but the
+metabolic architecture determines
+which sleep topology is available
+to discharge the Navigator cost.\\[0.2em]
 \textbf{Behaviour} &
 High flexibility. Broad repertoire.
-Contextual switching. \\[0.2em]
-\textbf{Sleep} &
-Moderate. 8--14 hours in most
-Navigator organisms. \\[0.2em]
+Contextual switching.\\[0.2em]
+\textbf{Sleep quantity} &
+Moderate equivalent. The total
+Navigator-range discharge cost
+is constant across Navigators
+but is delivered through different
+topologies depending on metabolic
+architecture.\\[0.2em]
+\textbf{Sleep topology} &
+Endothermic Navigator:
+Topology~3 (consolidated bilateral
+deep sleep, 8--14h).
+Ectothermic Navigator:
+Topology~2 (distributed bilateral
+rest, 2--6h true sleep $+$ 12--16h
+Basin~C rest, total equivalent
+Navigator range).
+Open-ocean Navigator with lethal
+bilateral constraint:
+Topology~4 (permanent Basin~$\Omega$,
+unihemispheric alternation).\\[0.2em]
 \textbf{Survival horizon} &
-Long. 100--300\,Myr for the most
-persistent Navigator lineages. \\[0.2em]
+Long. 100--300\,Myr.\\[0.2em]
 \textbf{Survival mechanism} &
-When the current basin disappears, the
-organism navigates to an alternative
-basin in real time without requiring
-evolutionary adaptation time. Generalism
-is itself a deep basin --- Basin~$\Omega$
-of ecological flexibility. \\[0.2em]
+Navigates to alternative basin in
+real time when current basin disappears.
+Generalism is itself Basin~$\Omega$ of
+ecological flexibility.\\[0.2em]
 \textbf{Convergence} &
-Multiple independent phyla arrive at
-this strategy. \\
+Multiple independent lineages.\\
 \end{tabular}
 \end{mdframed}
 
@@ -436,130 +919,173 @@ this strategy. \\
   innerrightmargin=0.8em
 ]
 \small
-\begin{tabular}{p{3.5cm}p{9.0cm}}
+\begin{tabular}{p{3.2cm}p{9.3cm}}
 \textbf{Basin structure} &
 Shallow single basin. High barriers
-to alternative basins. \\[0.2em]
+to alternative basins.\\[0.2em]
 \textbf{Morphology} &
-Narrow specialist. Extreme adaptation
-to a specific niche. Not deep enough
+Narrow specialist. Not deep enough
 to be perturbation-invariant. Not
 flexible enough to reach alternative
-basins when the niche disappears. \\[0.2em]
-\textbf{Sleep} &
-Variable --- often high (Axis~2 or
-Axis~3 cost) but with no survival
-advantage from it. \\[0.2em]
+basins when niche disappears.\\[0.2em]
+\textbf{Sleep quantity} &
+Variable. Often high (Axis~2 or 3)
+but with no survival advantage.\\[0.2em]
+\textbf{Sleep topology} &
+Typically Topology~3 (consolidated
+bilateral) but the duration reflects
+niche-maintenance cost, not
+navigational capacity. The topology
+does not discriminate Unstable Zone
+organisms from Navigator organisms
+in duration alone --- the
+discriminator is behavioural
+flexibility and dietary breadth,
+not sleep architecture.\\[0.2em]
 \textbf{Survival horizon} &
-Short. Millions of years, not hundreds
-of millions. Mass extinction concentrates
-its casualties here. \\[0.2em]
+Short. Millions of years.\\[0.2em]
 \textbf{Examples} &
-\textit{T. rex}, mammoth, sabre-tooth
-cat, passenger pigeon, most species
-that have ever existed. \\
+\textit{T.~rex}, mammoth, sabre-tooth
+cat, passenger pigeon, dodo.\\
 \end{tabular}
 \end{mdframed}
 
 \subsection{Why The Lock Outlasts The Navigator}
 
 The Lock survives longer than the Navigator
-for a precise geometric reason. The Navigator's
-survival depends on the existence of accessible
-alternative basins at the time of environmental
-disruption. If the disruption is catastrophic
-enough to eliminate all accessible basins
-simultaneously --- as the Permian--Triassic
-event did, killing 96\% of all marine species
---- the Navigator fails. There is nowhere to
-navigate to.
+for a precise geometric reason. The Navigator
+requires accessible alternative basins at
+the moment of disruption. Catastrophic
+perturbations that eliminate all accessible
+basins simultaneously defeat the Navigator.
+The Lock cannot be displaced because its
+basin depth exceeds the perturbation energy
+of any event the biosphere has yet produced.
 
-The Lock does not navigate. The Lock cannot
-be displaced from its basin because the basin
-is too deep. The Permian--Triassic event
-restructured the entire biosphere and the
-horseshoe crab was still there on the other
-side, doing exactly what it was doing before.
+The Permian--Triassic event killed 96\% of
+all marine species. The horseshoe crab was
+still there on the other side.
 
 \begin{quote}
 \itshape
-Basin depth is the ultimate survival parameter.
-Navigation is a survival strategy for moderate
-perturbations. For catastrophic perturbations,
-only the deepest basins survive. The minimum of
-the sleep spectrum is the maximum of the
-survival spectrum.
+Basin depth is the ultimate survival
+parameter. Navigation is a survival
+strategy for moderate perturbations.
+For catastrophic perturbations, only the
+deepest basins survive.
+The minimum of the sleep spectrum is
+the maximum of the survival spectrum.
+The topology of that minimum is the
+geometry of a basin so deep it needs
+no maintenance.
 \end{quote}
 
 % ══════════════════════════════════════════════════════════════
 \section{The Empirical Record}
 \label{sec:empirical}
-% ═══════════════════════════════════════════════════════��══════
+% ══════════════════════════════════════════════════════════════
 
 \subsection{Lock Strategy: Confirmed Examples}
 
 \begin{center}
 \small
-\begin{longtable}{p{2.4cm}p{1.5cm}p{3.5cm}p{5.0cm}}
+\begin{longtable}{p{2.2cm}p{1.4cm}p{3.2cm}p{3.0cm}p{2.8cm}}
 \toprule
 \textbf{Lineage} &
-\textbf{Age (Myr)} &
-\textbf{Sleep} &
-\textbf{Basin geometry} \\
+\textbf{Age} &
+\textbf{Sleep quantity} &
+\textbf{Sleep topology} &
+\textbf{Basin geometry}\\
 \midrule
 Sponge
 (Porifera) &
-$\sim$600 &
-Undefined. No nervous system. Circadian
-biochemical rhythms only. &
-Deepest possible. Sessile filter feeder.
-Single programme. Perturbation-invariant. \\[0.3em]
+$\sim$600\,Myr &
+Undefined. No nervous
+system. &
+Topology~1.
+Circadian
+biochemical only. &
+Deepest possible.
+Sessile. Single
+programme.\\[0.4em]
 Jellyfish
 (Cnidaria) &
-500--700 &
-Undefined for most. Rest states in
-\textit{Cassiopeia} ($\sim$8h). &
-No brain. Radial symmetry. Passive
-drift and sting. Unchanged 500+\,Myr. \\[0.3em]
+500--700\,Myr &
+Undefined for most.
+\textit{Cassiopeia}
+rest $\sim$8h. &
+Topology~1 for
+most. Topology~5
+fragment in
+\textit{Cassiopeia}. &
+No brain. Radial
+symmetry. Passive
+drift and sting.\\[0.4em]
 Nautilus
 (Mollusca) &
-$\sim$500 &
-No REM. Quiescent periods. Possibly
-several hours distributed. &
-Neutral buoyancy. Passive ambush.
-Shell unchanged 500\,Myr. \\[0.3em]
+$\sim$500\,Myr &
+No REM. Quiescent
+periods distributed. &
+Topology~1 to
+Topology~2 border.
+Bilateral rest.
+No hemispheric
+architecture. &
+Neutral buoyancy.
+Passive ambush.
+Shell unchanged.\\[0.4em]
 Horseshoe crab
 (Chelicerata) &
-$\sim$450 &
-Tidal/circadian rest state. No
-bilateral sleep. Minimal neural
-complexity. &
-Deepest terrestrial Lock. Comes to
-shore. Breeds. Returns. 450\,Myr
-unchanged. \\[0.3em]
+$\sim$450\,Myr &
+Tidal/circadian
+rest only. &
+Topology~1.
+No bilateral
+sleep. &
+Deepest terrestrial
+Lock. 450\,Myr
+unchanged.\\[0.4em]
 Shark
 (Chondrichthyes) &
-$\sim$400 &
-No true bilateral sleep. Short rest
-periods. $\sim$2--4h total distributed. &
-Cartilage not bone. Generalist enough
-to border Lock/Navigator depending
-on species. \\[0.3em]
+$\sim$400\,Myr &
+No true bilateral
+sleep. Rest periods
+$\sim$2--4h
+distributed. &
+Topology~2 border.
+Distributed rest.
+No REM confirmed. &
+Cartilage. Generalist
+enough to border
+Lock/Navigator
+by species.\\[0.4em]
 Coelacanth
 (Sarcopterygii) &
-$\sim$400 &
-Unknown. Presumed minimal. Deep cold
-water reduces all activity. &
-Deep cold water. Minimal metabolism.
-Unchanged 400\,Myr. \\[0.3em]
+$\sim$400\,Myr &
+Unknown. Presumed
+minimal. &
+Topology~1 to~2.
+Deep cold water
+suppresses all
+activity. &
+Minimal metabolism.
+Unchanged 400\,Myr.\\[0.4em]
 Tuatara
 (Lepidosauria) &
-$\sim$200 &
-Estimated 12h+ rest. Slowest reptile
-metabolism. Much of ``sleep'' is
-torpor-like low-temperature dormancy. &
-Slowest reptile metabolism. Functions
-at 5\textdegree C. Lives 100+ years. \\
+$\sim$200\,Myr &
+12h+ rest. Most
+is torpor-like
+low-temp dormancy. &
+Topology~2.
+Distributed
+ectotherm rest.
+Not true bilateral
+deep sleep. &
+Slowest reptile
+metabolism.
+Functions at
+5\textdegree C.
+Lives 100+ years.\\
 \bottomrule
 \end{longtable}
 \end{center}
@@ -568,42 +1094,93 @@ at 5\textdegree C. Lives 100+ years. \\
 
 \begin{center}
 \small
-\begin{longtable}{p{2.4cm}p{1.5cm}p{3.5cm}p{5.0cm}}
+\begin{longtable}{p{2.2cm}p{1.4cm}p{3.2cm}p{3.0cm}p{2.8cm}}
 \toprule
 \textbf{Lineage} &
-\textbf{Age (Myr)} &
-\textbf{Sleep} &
-\textbf{Basin geometry} \\
+\textbf{Age} &
+\textbf{Sleep quantity} &
+\textbf{Sleep topology} &
+\textbf{Basin geometry}\\
 \midrule
 Cockroach
 (Blattodea) &
-$\sim$300 &
-$\sim$12h rest cycle. Circadian rest
-controlled. Moderate. &
-Eats anything. Lives anywhere. Survives
-radiation. Extreme dietary generalist. \\[0.3em]
+$\sim$300\,Myr &
+$\sim$12h rest
+cycle. &
+Topology~2.
+Distributed
+bilateral rest.
+Ectotherm. &
+Eats anything.
+Lives anywhere.
+300\,Myr survival.\\[0.4em]
 Crocodilian
 (Archosauria) &
-$\sim$200 &
-2--12h intermittent. Unihemispheric
-capable. Variable with temperature
-and season. &
-Generalist predator. Survived K--Pg.
-Fresh/salt water. Any prey available. \\[0.3em]
-Rodent lineage
+$\sim$200\,Myr &
+2--6h true bilateral
+EEG sleep. 12--16h
+Basin~C distributed
+bilateral rest.
+Total equivalent:
+Navigator range. &
+\textbf{Topology~2.}
+Bilateral EEG
+throughout (Kelly
+\& Lesku, 2015,
+2019). One-eye-open
+vigilance is
+\textit{behavioural},
+not unihemispheric
+in the neurological
+sense. The predicted
+topology for an
+ectothermic Navigator. &
+Generalist predator.
+Survived K--Pg.
+Fresh/salt water.
+Any prey. 200\,Myr.\\[0.4em]
+Dolphin
+(Cetacea) &
+$\sim$50\,Myr &
+$\sim$8h total.
+Never bilateral. &
+\textbf{Topology~4.}
+Permanent
+Basin~$\Omega$.
+Unihemispheric
+alternation.
+Waking/sleep
+barrier dissolved. &
+Open ocean.
+High cognitive
+complexity. Must
+surface to breathe.
+Bilateral sleep
+lethal.\\[0.4em]
+Rodent
 (Muridae) &
-$\sim$65 &
-$\sim$13h. Standard mammalian Navigator
-moderate. &
-Extreme generalist. All biomes.
-All diets. Colonised every continent. \\[0.3em]
-Corvidae
-(Crow, raven) &
-$\sim$30 &
-$\sim$8--10h. Standard avian sleep.
-Some unihemispheric during roosting. &
-Problem solving. Tool use. Multi-step
-planning. Social complexity. \\
+$\sim$65\,Myr &
+$\sim$13h. &
+Topology~3.
+Consolidated
+bilateral deep
+sleep. Standard
+endothermic
+Navigator. &
+Extreme generalist.
+All biomes and
+diets.\\[0.4em]
+Corvidae &
+$\sim$30\,Myr &
+$\sim$8--10h. &
+Topology~3.
+Standard avian
+bilateral. Some
+Topology~4 during
+roosting. &
+Problem solving.
+Tool use. Social
+complexity.\\
 \bottomrule
 \end{longtable}
 \end{center}
@@ -612,42 +1189,59 @@ planning. Social complexity. \\
 
 \begin{center}
 \small
-\begin{tabular}{p{2.8cm}p{1.5cm}p{3.5cm}p{4.5cm}}
+\begin{tabular}{p{2.4cm}p{1.4cm}p{3.0cm}p{3.0cm}p{2.8cm}}
 \toprule
 \textbf{Lineage} &
-\textbf{Age (Myr)} &
-\textbf{Sleep (estimated)} &
-\textbf{Why extinct} \\
+\textbf{Age} &
+\textbf{Sleep quantity} &
+\textbf{Sleep topology} &
+\textbf{Why extinct}\\
 \midrule
-\textit{T. rex}
-(Tyrannosauridae) &
-2--3 &
-Unknown. Presumed moderate large
-predator sleep. &
-Narrow apex predator. No alternative
-basin when K--Pg hit. \\[0.3em]
+\textit{T.~rex}
+(Tyranno\-sauridae) &
+2--3\,Myr &
+Unknown. Moderate
+large predator
+presumed. &
+Topology~3
+presumed. &
+Narrow apex
+predator. No
+alternative basin
+at K--Pg.\\[0.3em]
 Mammoth
 (Proboscidea) &
-0.5--5 &
-Likely $\sim$2h given similar
-size and ecology to elephant. &
-Grassland specialist. Habitat
-contracted. Could not adapt diet. \\[0.3em]
+0.5--5\,Myr &
+Likely $\sim$2h
+(cf. elephant). &
+Topology~5
+(size + predation
+pressure). &
+Grassland specialist.
+Habitat contracted.
+Could not adapt.\\[0.3em]
 Sabre-tooth cat
-(Machairodontinae) &
-0.5--11 &
-Likely high felid-range given
-Basin~$\Omega$ felid ancestry. &
-Specialist predator of megafauna.
-Megafauna gone. Basin collapsed. \\[0.3em]
+(Machairo\-dontinae) &
+0.5--11\,Myr &
+High felid-range
+likely. &
+Topology~3.
+Basin~$\Omega$
+felid ancestry. &
+Specialist predator.
+Megafauna gone.
+Basin collapsed.\\[0.3em]
 Dodo
 (Raphidae) &
-0.003 &
-Standard avian range $\sim$8--10h
-presumed. &
-Island specialist. No predator
-experience. Single shallow basin.
-First perturbation $=$ extinction. \\
+0.003\,Myr &
+Standard avian
+$\sim$8--10h. &
+Topology~3. &
+Island specialist.
+Single shallow
+basin. First
+perturbation
+$=$ extinction.\\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -655,116 +1249,139 @@ First perturbation $=$ extinction. \\
 % ══════════════════════════════════════════════════════════════
 \section{The Sleep Spectrum as Temporal Sonar}
 \label{sec:sonar}
-% ══════════════════════════════════════════════════════════════
+% ═════════════════════════════════════════════��════════════════
 
-\subsection{The Sonar Reading}
+\subsection{The Full Sonar Instrument}
+
+The sleep sonar has two channels, not one.
+Duration alone is insufficient. Duration
+and topology together triangulate the
+organism's position in the landscape with
+full geometric precision.
 
 \begin{center}
 \small
-\begin{tabular}{p{2.2cm}p{2.5cm}p{4.5cm}p{3.5cm}}
+\begin{tabular}{p{2.0cm}p{2.0cm}p{2.5cm}p{4.5cm}p{2.0cm}}
 \toprule
-\textbf{Sleep (h/day)} &
+\textbf{Duration} &
+\textbf{Topology} &
 \textbf{Survival horizon} &
-\textbf{Basin geometry} &
-\textbf{Examples} \\
+\textbf{Landscape position} &
+\textbf{Examples}\\
 \midrule
-$\sim$0
-(undefined) &
-Maximum\\600\,Myr+ &
-Deepest single basin.
-No nervous system.
-No navigational demand.
-Programme runs without
-maintenance. &
-Sponge, jellyfish,
-nautilus \\[0.4em]
-0--4 &
-Very long\\300--500\,Myr &
-Deep single basin.
-Low navigational demand.
-Minimal reset needed. &
+$\sim$0 &
+T1 &
+600\,Myr+ &
+Deepest Lock. No
+nervous system. Zero
+cost, zero discharge. &
+Sponge, jellyfish\\[0.3em]
+0--4h &
+T1--T2 &
+300--500\,Myr &
+Deep Lock. Minimal
+neural architecture.
+Programme runs
+without maintenance. &
 Horseshoe crab,
-shark, coelacanth \\[0.4em]
-4--8 &
-Long\\100--300\,Myr &
-Moderate Lock or
-moderate Navigator.
-Low-moderate demand. &
+shark, coelacanth\\[0.3em]
+2--6h true
+$+$ T2 rest &
+T2 &
+100--300\,Myr &
+Ectothermic Navigator.
+Navigator cost
+distributed across
+extended bilateral
+rest. Total equivalent:
+Navigator range. &
 Crocodilian,
-cockroach, turtle \\[0.4em]
-8--14 &
-Moderate\\10--100\,Myr &
-Navigator or coupled
-social field. Standard
-synaptic maintenance. &
+cockroach,
+tuatara\\[0.3em]
+8--14h
+concentrated &
+T3 &
+10--100\,Myr &
+Endothermic Navigator
+or coupled social
+field. Standard
+bilateral discharge. &
 Rodent, corvid,
-dog, pig, human \\[0.4em]
-14--22 &
-Uncertain ---
-niche-dependent &
-Axis~2, 3, or
-Basin~$\Omega$.
-High cost from
-specialisation or
-meta-attractor
-navigation. &
+dog, human\\[0.3em]
+8h, never
+bilateral &
+T4 &
+50--200\,Myr &
+Open-ocean Navigator.
+Lethal bilateral
+constraint. Basin~$\Omega$
+of waking/sleep
+landscape. &
+Dolphin\\[0.3em]
+0.5--2h
+fragmented &
+T5 &
+Variable --- external
+pressure dependent &
+Single deep basin
+under strong external
+pressure. Sleep
+basin shallow by
+external force,
+not low cost.
+Sleep rebound
+diagnostic. &
+Giraffe\\[0.3em]
+14--22h &
+T3 &
+Niche-dependent &
+Axis 2 (metabolic),
+Axis 3 (computational),
+or deep Basin~$\Omega$
+(Felidae). &
 Koala, bat,
-lion, Felidae \\
+lion, cat\\
 \bottomrule
 \end{tabular}
 \end{center}
 
-\subsection{The U-Shaped Survival--Sleep
+\subsection{The U-Shaped Survival--Duration
 Relationship}
 
-The survival--sleep relationship is not linear.
-It is U-shaped with a flat minimum. The minimum
-of the sleep spectrum corresponds to the maximum
-of the survival spectrum (Lock strategy). The
-moderate range is the Navigator survival zone.
-The high-sleep range is the uncertain zone ---
-survival depends on niche stability or
+The survival--sleep duration relationship is
+U-shaped with a flat minimum. The minimum
+of the sleep duration spectrum corresponds
+to the maximum of the survival spectrum
+(Lock strategy). The moderate range is the
+Navigator survival zone. The high-duration
+range is the uncertain zone --- survival
+depends on niche stability or
 Basin~$\Omega$ depth.
 
-The critical insight is that high sleep does
-not predict low survival. It predicts
-\textit{conditional} survival. The koala may
-survive hundreds of millions of years if
-eucalyptus persists. But if eucalyptus
-disappears, the koala has no alternative basin.
-The Lock organism has no such dependence because
-its basin is encoded absolutely in its genome.
+\textbf{Critical note on duration alone:}
+Duration without topology is ambiguous.
+A crocodilian sleeping 2--6 hours of true
+bilateral sleep appears to be in the Lock
+range. It is not. It is an ectothermic
+Navigator using Topology~2 to distribute
+Navigator-range cost. The topology
+disambiguates.
 
-\subsection{The Three Sleep Axes Revisited}
+Similarly, a giraffe sleeping 30 minutes
+appears to be a deep Lock. It may be.
+But the diagnostic is sleep rebound under
+safe conditions. If the giraffe increases
+sleep substantially when predation threat
+is removed, it is a Topology~5 organism
+with accumulated debt, not a Lock. If it
+does not increase sleep under safety,
+the basin depth is geometric and the
+Lock classification holds.
 
-\begin{enumerate}[itemsep=0.3em]
-  \item \textbf{Axis~1 (Between-basin switching
-    cost):} The organism navigates between
-    multiple accessible basins under its own
-    motivational field. High behavioural
-    flexibility. High sleep. Examples: Felidae,
-    Basin~$\Omega$ organisms.
-
-  \item \textbf{Axis~2 (Within-basin metabolic
-    cost):} A single highly expensive basin
-    consumes all available metabolic resources.
-    Sleep conserves energy for basin maintenance.
-    Low behavioural flexibility. High sleep.
-    Example: koala.
-
-  \item \textbf{Axis~3 (Within-basin
-    computational intensity):} Extreme neural
-    computation within a single specialised
-    basin during waking. Synaptic reconfiguration
-    cost from intensity, not switching. Low
-    flexibility. High sleep. Example: brown bat.
-\end{enumerate}
-
-The Lock organism operates on none of these
-axes. It has minimal within-basin cost and no
-between-basin switching. The sleep minimum is
-the signature of zero navigational demand at
-any axis.
+\textbf{Duration $+$ Topology $+$ Rebound
+response: these three together uniquely
+specify the organism's landscape position.
+None of the three alone is sufficient.}
 
 % ══════════════════════════════════════════════════════════════
 \section{Convergence Across Independent Phyla}
@@ -773,141 +1390,157 @@ any axis.
 
 \subsection{The Lock Converges Independently}
 
-The Lock strategy has been found independently
-in at least seven major animal phyla:
-
 \begin{center}
 \small
-\begin{tabular}{p{4.0cm}p{3.5cm}p{5.0cm}}
+\begin{tabular}{p{3.5cm}p{3.0cm}p{2.0cm}p{3.5cm}}
 \toprule
 \textbf{Phylum / Class} &
 \textbf{Example} &
-\textbf{Age} \\
+\textbf{Age} &
+\textbf{Sleep topology}\\
 \midrule
-Porifera & Sponge & $\sim$600\,Myr \\
-Cnidaria & Jellyfish & 500--700\,Myr \\
-Mollusca & Nautilus & $\sim$500\,Myr \\
-Chelicerata & Horseshoe crab & $\sim$450\,Myr \\
-Chondrichthyes & Shark & $\sim$400\,Myr \\
-Sarcopterygii & Coelacanth & $\sim$400\,Myr \\
-Lepidosauria & Tuatara & $\sim$200\,Myr \\
+Porifera & Sponge & $\sim$600\,Myr & T1\\
+Cnidaria & Jellyfish & 500--700\,Myr & T1\\
+Mollusca & Nautilus & $\sim$500\,Myr & T1--T2 border\\
+Chelicerata & Horseshoe crab & $\sim$450\,Myr & T1\\
+Chondrichthyes & Shark & $\sim$400\,Myr & T2 border\\
+Sarcopterygii & Coelacanth & $\sim$400\,Myr & T1--T2\\
+Lepidosauria & Tuatara & $\sim$200\,Myr & T2\\
 \bottomrule
 \end{tabular}
 \end{center}
 
 Seven independent phyla. Seven independent
-arrivals at the same geometric strategy. The
-Lock strategy is itself a deep basin in
-evolutionary strategy space --- a deep basin
-of deep basins.
+arrivals at the same geometric strategy.
+The Lock topology is Topology~1 at the
+extreme and transitions toward Topology~2
+as neural complexity increases while
+remaining in a single deep basin. This
+transition within the Lock is itself a
+geometric prediction: as Lock organisms
+develop more complex nervous systems, they
+acquire more synaptic cost to discharge,
+but the basin remains deep enough to keep
+total cost minimal. Topology shifts from
+T1 to T2 but duration remains in the
+Lock range.
 
-\subsection{The Navigator Converges Independently}
-
-The Navigator strategy has been found
-independently in at least six major lineages:
+\subsection{The Navigator Converges Independently,
+Across Multiple Topologies}
 
 \begin{center}
 \small
-\begin{tabular}{p{4.0cm}p{3.5cm}p{5.0cm}}
+\begin{tabular}{p{3.2cm}p{2.5cm}p{2.0cm}p{4.3cm}}
 \toprule
 \textbf{Lineage} &
 \textbf{Example} &
-\textbf{Age} \\
+\textbf{Age} &
+\textbf{Sleep topology}\\
 \midrule
-Blattodea & Cockroach & $\sim$300\,Myr \\
-Archosauria & Crocodilian & $\sim$200\,Myr \\
-Cephalopoda & Octopus & $\sim$300\,Myr \\
-Rodentia & Rat & $\sim$65\,Myr \\
-Aves & Corvid & $\sim$30\,Myr \\
-Primates & Human & $\sim$6\,Myr \\
+Blattodea & Cockroach & $\sim$300\,Myr &
+T2 (ectotherm)\\
+Archosauria & Crocodilian & $\sim$200\,Myr &
+T2 (ectotherm, confirmed bilateral EEG)\\
+Cephalopoda & Octopus & $\sim$300\,Myr &
+T2--T3 border (distinct active/quiet
+sleep phases confirmed)\\
+Cetacea & Dolphin & $\sim$50\,Myr &
+T4 (open ocean lethal bilateral constraint)\\
+Rodentia & Rat & $\sim$65\,Myr &
+T3 (endotherm)\\
+Aves & Corvid & $\sim$30\,Myr &
+T3, T4 during roosting\\
+Primates & Human & $\sim$6\,Myr &
+T3 (endotherm, inter-generational
+Basin~B* coupling)\\
 \bottomrule
 \end{tabular}
 \end{center}
 
-Six independent lineages. Six independent
-arrivals at the same geometric strategy.
-Ecological generalism is itself a deep basin
---- Basin~$\Omega$ of ecological flexibility.
+The critical geometric observation: the
+Navigator strategy has converged
+independently across at least three
+distinct sleep topologies (T2, T3, T4).
+The strategy is the same --- ecological
+generalism as Basin~$\Omega$ of ecological
+flexibility. The topology varies with the
+metabolic and environmental constraints
+of the specific lineage. This is exactly
+what the framework predicts: the topology
+is determined by the sub-constraints of
+the landscape position, not by the
+strategy classification.
+
+The Navigator strategy is the deep basin.
+The topology is the solution the landscape
+provides for paying the cost of occupying
+that basin given the full constraint set.
 
 \subsection{The Unstable Zone Does Not Converge}
 
 Mass extinction casualties do not converge.
-Each extinction event eliminates different taxa
-via different mechanisms. The unstable zone has
-no deep basin by definition. The only convergent
-feature of the unstable zone is its instability.
-
-This is confirmed by the palaeontological record:
-the survivors of every mass extinction event are
-disproportionately drawn from Lock and Navigator
-organisms. The K--Pg event killed large specialist
-predators and specialist megaherbivores while
-sparing crocodilians (Navigator) and turtles
-(partial Lock). The Permian--Triassic event
-killed 96\% of marine species while sparing the
-horseshoe crab (Lock).
+Each extinction event eliminates different
+taxa via different mechanisms. The unstable
+zone has no deep basin by definition. The
+only convergent feature of the unstable
+zone is its instability. Topology does not
+discriminate here: Unstable Zone organisms
+occupy Topology~3 (same as endothermic
+Navigators) but lack the dietary breadth
+and behavioural flexibility that makes
+the Navigator strategy viable. Duration
+and topology together still fail to
+distinguish Unstable Zone from Navigator
+without the behavioural flexibility
+measurement --- which is why the full
+three-channel sonar (duration $+$ topology
+$+$ flexibility) is the complete instrument.
 
 % ══════════════════════════════════════════════════════════════
 \section{The Human Position}
 \label{sec:human}
 % ══════════════════════════════════════════════════════════════
 
-\subsection{Geometric Classification}
+The human is an endothermic Navigator
+with Topology~3 sleep (consolidated
+bilateral deep sleep, 7--9 hours) and
+an unprecedented inter-generational
+Basin~B* --- a co-constructed social
+attractor that persists beyond the
+individual lifetime via cultural
+transmission.
 
-The human is a Navigator with unprecedented
-Basin~$\Omega$ characteristics:
+The human sleep topology (T3) is standard
+endothermic Navigator. The sleep duration
+(7--9 hours) is standard Navigator range.
+Nothing in the human's sleep signature
+is anomalous with respect to the
+framework.
 
-\begin{itemize}[itemsep=0.2em]
-  \item Ecologically generalist: every biome
-  \item Dietarily generalist: complete omnivory
-  \item High behavioural flexibility: tool use,
-    cultural transmission, technology
-  \item Sleep: 7--9 hours --- Navigator range
-  \item Social complexity: co-constructed
-    inter-generational field via language,
-    culture, and institution --- a Basin~B*
-    of unprecedented depth
-\end{itemize}
+What is anomalous is the Basin~B* depth
+increasing across generations through
+cultural accumulation. This creates a
+new geometric feature not present in any
+other known organism: a basin whose depth
+is a function of time and investment
+rather than purely of evolutionary
+selection. The framework does not yet
+predict the topological consequences
+of a basin that deepens in real time
+at inter-generational scale. This is
+the honest limit of the current derivation.
 
-The human sleep signature places it firmly in
-the Navigator category. Its survival trajectory
-by the framework should be long but not maximum
---- Navigator range of 100--300\,Myr if the
-strategy is maintained.
-
-\subsection{The Unprecedented Feature}
-
-The human has constructed an inter-generational
-Basin~B* --- a co-constructed social attractor
-that persists beyond the individual lifetime via
-cultural transmission. No other species has this.
-The dog's Basin~B* couples with a human over one
-lifetime. The human's cultural Basin~B* couples
-across generations indefinitely, with depth
-increasing over time through active investment in
-its own maintenance (cultural accumulation,
-institutional memory, scientific knowledge).
-
-\subsection{The Risk}
-
-The framework predicts that a species that
-destroys its own landscape diversity is
-eliminating the conditions that made its own
-strategy viable. A Navigator survives by finding
-alternative basins when the current one
-disappears. If the Navigator is simultaneously
-the agent eliminating the alternative basins
---- for itself and for all other species --- then
-the Navigator strategy fails even for the
-Navigator.
-
-This is a geometric statement, not a moral one.
-The framework does not predict the long-term
-trajectory of a species that is actively
-deepening its own basin in real time while
-simultaneously remodelling the landscape that
-other species' basins depend on. This is the
-honest limit of the current derivation.
+The risk: the same cultural Basin~B*
+is remodelling the ecological landscape
+faster than any prior organism. A
+Navigator survives by finding alternative
+basins when the current one disappears.
+If the Navigator is simultaneously the
+agent collapsing the alternative basins
+for all other species, the Navigator
+strategy fails even for the Navigator.
+This is a geometric statement, not a
+moral one.
 
 % ══════════════════════════════════════════════════════════════
 \section{Literature Confirmations}
@@ -916,87 +1549,80 @@ honest limit of the current derivation.
 
 \subsection{Oldest Surviving Lineages Sleep
 the Least}
-\textit{Derived before literature:} Minimum
-sleep corresponds to maximum survival horizon.
+\textit{Derived before literature:}
+Minimum cost $=$ minimum discharge $=$
+maximum basin depth $=$ maximum survival.
 
-\textit{Confirmed:} Horseshoe crab (450\,Myr,
-minimal defined sleep --- tidal rest state only).
-Nautilus (500\,Myr, no true sleep). Jellyfish
-(500--700\,Myr, undefined sleep, no bilateral
-nervous system). Shark (400\,Myr, distributed
-rest periods only). All Lock organisms confirmed
-as minimal sleepers.
+\textit{Confirmed:} Horseshoe crab,
+nautilus, jellyfish, shark. All Lock
+organisms confirmed as minimal discharge.
+All show Topology~1 or Topology~2.
+Source: Comparative sleep literature;
+living fossil biology.
 
-\textit{Source:} Comparative sleep literature;
-living fossil biology; horseshoe crab ecology
-(Shuster et al., 2003).
+\subsection{Crocodilian Sleep is Bilateral
+EEG, Not Unihemispheric}
+\textit{Derived before literature:}
+Ectothermic Navigator topology prediction
+--- distributed bilateral rest, not
+unihemispheric.
+
+\textit{Confirmed:} Kelly \& Lesku (2015)
+EEG study of juvenile \textit{Crocodylus
+niloticus}: bilateral EEG throughout rest
+periods. One-eye-open vigilance is
+behavioural, maintained via brainstem
+alerting, not cortical hemispheric
+asymmetry. This is the predicted T2
+topology for an ectothermic Navigator.
+Source: Kelly, M.L. \& Lesku, J.A. (2015),
+\textit{J. Exp. Biol.}, 218, 3175--3180;
+Kelly \& Lesku (2019), \textit{Biol. Rev.}
 
 \subsection{Mass Extinction Survivors Are
 Disproportionately Lock or Navigator}
-\textit{Derived:} The unstable zone is where
-mass extinction concentrates its casualties.
+\textit{Derived:} Unstable zone is where
+extinction concentrates casualties.
 
-\textit{Confirmed:} K--Pg survivors include
-crocodilians (Navigator), turtles (partial
-Lock), birds (Navigator), and small mammals
-(Navigator). K--Pg casualties concentrated
-in large specialist predators and specialist
-megaherbivores. Permian--Triassic survivors
-include horseshoe crab (Lock), nautilus (Lock).
+\textit{Confirmed:} K--Pg survivors:
+crocodilians (Navigator, T2), turtles
+(partial Lock, T2), birds (Navigator, T3
+and T4), small mammals (Navigator, T3).
+Permian--Triassic survivors: horseshoe
+crab (Lock, T1), nautilus (Lock, T1).
+Source: Jablonski (1986);
+Barnosky et al. (2011).
 
-\textit{Source:} Jablonski (1986); Barnosky
-et al. (2011); K--Pg extinction survivor
-literature.
-
-\subsection{Both Strategies Are Convergent
+\subsection{Both Strategies Convergent
 Across Independent Phyla}
-\textit{Derived:} Lock and Navigator are deep
-basins in evolutionary strategy space,
-therefore convergent.
+\textit{Derived:} Lock and Navigator are
+deep basins in evolutionary strategy
+space, therefore convergent.
 
-\textit{Confirmed:} Lock morphology confirmed
-independently in Porifera, Cnidaria, Mollusca,
-Chelicerata, Chondrichthyes, Sarcopterygii,
-Lepidosauria. Navigator ecology confirmed
-independently in Blattodea, Archosauria,
-Rodentia, Aves, Cephalopoda, Primates.
-
-\textit{Source:} Conway Morris (2003,
-\textit{Life's Solution}); living fossil
-convergence literature; mass extinction
-survival trait literature.
+\textit{Confirmed:} Convergence confirmed
+in phyla listed in Section~\ref{sec:convergence}.
+Source: Conway Morris (2003,
+\textit{Life's Solution}).
 
 \subsection{Slow Metabolism Correlates With
 Deep-Time Survival}
-\textit{Derived:} The Lock strategy requires
+\textit{Derived:} Lock strategy requires
 minimal metabolic expenditure.
 
-\textit{Confirmed:} Tuatara (slowest reptile
-metabolism, 200\,Myr). Coelacanth (deep cold
-water, minimal metabolism, 400\,Myr). Horseshoe
-crab (ectothermic, months without food,
-450\,Myr). Slow metabolism is confirmed as a
-convergent trait of Lock organisms across
-independent lineages.
-
-\textit{Source:} Comparative metabolism
-literature; tuatara biology (Cree, 2014).
+\textit{Confirmed:} Tuatara, coelacanth,
+horseshoe crab. All show Lock topology
+(T1--T2) and slow metabolism as convergent
+traits.
+Source: Comparative metabolism literature;
+Cree (2014) tuatara biology.
 
 \subsection{Generalist Diet and Ecological
 Flexibility Predict Extinction Survival}
-\textit{Derived:} The Navigator's survival
-mechanism is dietary/ecological generalism.
+\textit{Derived:} Navigator mechanism is
+generalism as Basin~$\Omega$.
 
-\textit{Confirmed:} Capellini et al.\ (2008)
-showed diet breadth is a significant predictor
-of mammalian sleep duration. Barnosky et al.\
-(2011) confirmed generalist diet as a predictor
-of survival through mass extinction events.
-Crocodilian K--Pg survival attributed
-specifically to dietary generalism.
-
-\textit{Source:} Capellini et al.\ (2008,
-\textit{Proc Royal Soc B}); Barnosky et al.\
+\textit{Confirmed:} Capellini et al. (2008,
+\textit{Proc Royal Soc B}); Barnosky et al.
 (2011).
 
 % ══════════════════════════════════════════════════════════════
@@ -1004,118 +1630,133 @@ specifically to dietary generalism.
 \label{sec:predictions}
 % ══════════════════════════════════════════════════════════════
 
-All predictions stated before any experimental
-or palaeontological data gathered to test them.
-Locked in this document. 2026-03-18.
+All predictions stated before data
+gathered to test them. Locked here.
+2026-03-18.
 
 \subsection{P-INVARIANT-1: Sleep Duration
 Negatively Correlates With Lineage Age
-Across All Animal Phyla}
+Across All Phyla, Controlling For Topology}
 
-A cross-phyla analysis of sleep duration (or
-rest-state duration where bilateral sleep is
-undefined) against lineage age (millions of
-years since divergence of the crown group)
-will show a negative correlation that survives
-correction for body mass and metabolic rate.
+A cross-phyla analysis of sleep duration
+(or rest-state equivalent, topology-
+calibrated) against lineage age will show
+a negative correlation surviving correction
+for body mass, metabolic rate, and
+topology class. The oldest lineages will
+have the lowest topology-calibrated
+discharge requirement. Detectable across
+Porifera, Cnidaria, Mollusca, Arthropoda,
+and Vertebrata simultaneously.
 
-The oldest lineages will have the lowest sleep
-requirements. The youngest lineages will have
-the highest sleep requirements. This correlation
-will be detectable across Porifera, Cnidaria,
-Mollusca, Arthropoda, and Vertebrata
-simultaneously.
-
-\textit{Discriminating value:} This prediction
-is not generated by any existing sleep function
-theory (energy conservation, memory
-consolidation, immune function, or synaptic
-homeostasis alone). It requires the dimensional
-invariant framework to generate it.
+\textit{Discriminating value:} This
+prediction is not generated by any
+existing sleep function theory. It
+requires both the dimensional invariant
+and the topology-calibration framework.
 
 \subsection{P-INVARIANT-2: Mass Extinction
-Survivor Species Will Show Lower Mean Sleep
-Duration Than Mass Extinction Casualty Sister
-Taxa}
+Survivor Lineages Sleep Less (Lock) or Show
+Higher Dietary Breadth (Navigator) Than
+Casualty Sister Taxa}
 
-For each major mass extinction event, comparing
-the sleep duration of survivor lineages to the
-estimated sleep duration of closely related
-casualty lineages will show that Lock survivors
-sleep significantly less than casualties, and
-Navigator survivors show significantly higher
-dietary breadth than casualties.
-
-Testable using the fossil record for body plan
-conservatism proxy (Lock), dietary reconstruction
-from isotope and dental analysis (Navigator), and
-phylogenetic comparison.
+For each major mass extinction event,
+Lock survivors sleep less than casualties.
+Navigator survivors show higher dietary
+breadth than casualties and occupy T2,
+T3, or T4 (not T5 under chronic
+ecological pressure). Testable via fossil
+record body plan conservatism proxy,
+dietary isotope and dental analysis,
+and phylogenetic comparison.
 
 \subsection{P-INVARIANT-3: The Unstable Zone
-Boundary Is Predictable From Sleep Duration and
-Dietary Breadth Alone}
+Boundary Is Predictable From Duration,
+Topology, and Dietary Breadth}
 
-A two-dimensional plot of sleep duration (y-axis)
-against dietary breadth (x-axis) will show a
-survival boundary:
+A three-dimensional boundary in the space
+of (sleep duration, sleep topology,
+dietary breadth) separates Lock, Navigator,
+and Unstable Zone organisms. The two-
+dimensional boundary (duration $\times$
+dietary breadth) of v1.0 is confirmed
+but the addition of topology as the third
+axis removes the ambiguity between
+ectothermic Navigators (T2, appearing
+Lock-range in duration alone) and true
+Lock organisms.
 
-\begin{itemize}[itemsep=0.2em]
-  \item Low sleep + any dietary breadth = Lock
-    strategy = high survival probability
-  \item High sleep + high dietary breadth =
-    Navigator strategy = high survival probability
-  \item High sleep + low dietary breadth =
-    Unstable zone = low survival probability
-  \item Low sleep + low dietary breadth = Lock
-    strategy = maximum survival probability
-\end{itemize}
+\subsection{P-INVARIANT-4: Topology~2 Will
+Be Found Specifically and Exclusively in
+Ectothermic Navigators}
 
-The boundary between survival and extinction risk
-is predictable from these two measurements alone.
+Topology~2 (distributed bilateral rest
+with no EEG hemispheric asymmetry) will
+be found in organisms satisfying both:
+(a) ecological generalism (Navigator
+strategy), and (b) ectothermic metabolic
+architecture. It will not be found in Lock
+organisms (insufficient navigational cost
+to distribute) or in endothermic Navigators
+(sufficient metabolic budget for
+concentrated sleep). The crocodilian is
+the confirmed case. Predicted additionally:
+large ectothermic generalist reptiles (e.g.,
+monitor lizards, large iguana species),
+and large ectothermic generalist fish.
 
-\subsection{P-INVARIANT-4: Extreme Specialists
-Show No Sleep--Flexibility Correlation}
+\subsection{P-INVARIANT-5: Sleep Rebound
+Uniquely Identifies Topology~5 And
+Distinguishes It From Lock}
 
-Extreme ecological specialists with high sleep
-requirements (Axis~2 or 3 cost) will show no
-correlation between sleep duration and cognitive
-flexibility or learning rate --- unlike moderate-
-sleep Navigator organisms, where sleep duration
-tracks flexibility. The koala's high sleep pays
-for detoxification. The lion's high sleep pays
-for Basin~$\Omega$ navigation. Same sleep
-duration. Different function. Distinguishable by
-flexibility measurement.
+Organisms showing minimal sleep
+(30 minutes to 2 hours) will divide
+into two classes under safe-condition
+testing:
+\textit{Class A (Lock):} No significant
+sleep increase when predation pressure
+is removed. No rebound. Basin is
+geometrically deep. Minimal sleep is the
+geometric minimum, not a deferred debt.
+\textit{Class B (Topology~5):} Significant
+sleep increase when pressure is removed.
+Rebound present. Sleep was suppressed by
+external pressure, not absent by geometric
+necessity.
+The giraffe is the predicted Class~B
+case. Migratory birds post-migration are
+the confirmed Class~B case.
 
-\subsection{P-INVARIANT-5: Lock Organisms Are
-Undomesticable}
+\subsection{P-INVARIANT-6: Lock Organisms
+Are Undomesticable}
 
-Lock organisms --- those in the deepest single
-basins with minimal sleep requirements --- will
-show the greatest resistance to domestication of
-any animal group. No Lock organism has ever been
-domesticated. This is predicted by the dimensional
-invariant: the same basin depth that allows
-survival of mass extinctions renders the basin
-immovable by any domestication field that does
-not also destroy the organism.
+The same basin depth that produces
+perturbation-invariance in the face of
+mass extinctions renders the basin
+immovable by any domestication field
+that does not also destroy the organism.
+No Lock organism (T1 or T2 topology,
+minimal duration, Lock-range dietary
+breadth) has been domesticated. This
+will remain true.
 
-\subsection{P-INVARIANT-6: The Dimensional
-Invariant Is Detectable in Single-Celled
-Organisms via Metabolic Rest State Duration}
+\subsection{P-INVARIANT-7: The Dimensional
+Invariant Extends Below Nervous System
+to Metabolic Rest State Duration in
+Single-Celled Organisms}
 
-Single-celled organisms show metabolic rest
-states whose duration tracks their niche breadth
-in the same direction as the invariant predicts
-for multicellular organisms. Specialist bacteria
-(obligate extremophiles) will show longer
-continuous activity periods with minimal rest
-relative to generalist bacteria (\textit{E.~coli},
-\textit{B.~subtilis}). This extends the
-dimensional invariant below the level of nervous
-system entirely, confirming it as a geometric
-property of basin topology, not of neural
-architecture.
+Single-celled organisms show metabolic
+rest states whose duration tracks niche
+breadth in the same direction the
+invariant predicts. Specialist bacteria
+(narrow niche, deep metabolic basin)
+show longer continuous activity with
+minimal rest. Generalist bacteria show
+moderate distributed rest. This extends
+the invariant below the level of neural
+architecture entirely --- confirming
+it as a property of basin topology,
+not of sleep as a neurological phenomenon.
 
 % ══════════════════════════════════════════════════════════════
 \section{The Dimensional Invariant:
@@ -1136,68 +1777,68 @@ Complete Formal Statement}
 COMPLETE STATEMENT}
 
 \medskip
-Across all life, at all scales, across all
-of deep time:
+Across all life, at all scales, across
+all of deep time, the framework
+$S + N + G \rightarrow R$ makes two
+inseparable predictions about rest:
 
 \medskip
-Sleep duration (or metabolic rest-state
-duration in pre-neural organisms) is a
-measurement of the total cost of an
-organism's current landscape position,
-decomposable into:
+\textbf{1. Quantity:} The total cost of
+basin occupation (decomposed into Axis~1
+between-basin switching cost, Axis~2
+within-basin metabolic cost, and Axis~3
+within-basin computational intensity)
+must be discharged per cycle. Duration
+of discharge tracks total cost. Basin
+depth --- resistance to perturbation ---
+is the primary predictor of survival.
+The oldest surviving lineages have the
+lowest basin-occupation cost. They
+discharge the least.
 
 \medskip
-Axis~1: Between-basin switching cost\\
-Axis~2: Within-basin metabolic cost\\
-Axis~3: Within-basin computational
-intensity
+\textbf{2. Topology:} The architecture
+of the discharge process --- the sleep
+topology --- is a further geometric
+prediction of the same framework. The
+landscape position determines not only
+how much must be discharged but what
+architecture of discharge is geometrically
+feasible given the full constraint set
+(metabolic architecture, environmental
+lethality of full sleep, navigational
+demand structure).
 
 \medskip
-Basin depth --- the resistance of the
-organism's attractor basin to perturbation
---- is the primary predictor of long-term
-survival.
+Five topologies are predicted:
+T1 (quiescence/biochemical rhythm) for
+the deepest Lock organisms;
+T2 (distributed bilateral rest) for
+ectothermic Navigators;
+T3 (consolidated bilateral deep sleep)
+for endothermic organisms at all cost
+levels;
+T4 (permanent Basin~$\Omega$,
+unihemispheric) for organisms where
+full bilateral sleep is lethal;
+T5 (fragmented shallow sleep with rebound)
+for organisms under chronic external
+suppression of sleep.
 
 \medskip
-The relationship between sleep and survival
-is U-shaped with a flat minimum:
+The invariant holds because basin depth
+is the same geometric property at every
+scale. Sleep --- in whatever topology the
+landscape geometry permits --- is the
+payment. Survival is the depth.
 
 \medskip
-\textbf{Minimum sleep $\rightarrow$ maximum
-basin depth $\rightarrow$ maximum survival
-horizon (Lock strategy).}
-
-\textbf{Moderate sleep $\rightarrow$ moderate
-basin depth + multiple accessible basins
-$\rightarrow$ long survival horizon
-(Navigator strategy).}
-
-\textbf{High sleep $\rightarrow$ deep
-specialised basin (Axis~2/3) or deep
-Basin~$\Omega$ $\rightarrow$ survival
-conditional on niche stability or meta-
-attractor depth.}
-
-\medskip
-The invariant holds because:
-\begin{enumerate}[itemsep=0.1em]
-  \item Basin depth is the same geometric
-    property at every scale.
-  \item Sleep tracks the cost of occupying
-    a landscape position.
-  \item Deep-time survival is a direct
-    function of basin depth.
-  \item Therefore sleep duration is a proxy
-    for survival trajectory.
-\end{enumerate}
-
-\medskip
-\textbf{The oldest surviving lineages sleep
-the least.}
-
-\medskip
-This is not a coincidence.\\
-This is the geometry.
+\textbf{The oldest surviving lineages
+sleep the least.}\\
+\textbf{How they sleep is the geometry
+of where they are.}\\
+\textbf{This is not a coincidence.}\\
+\textbf{This is the geometry.}
 \end{mdframed}
 
 % ══════════════════════════════════════════════════════════════
@@ -1205,63 +1846,61 @@ This is the geometry.
 \label{sec:chain}
 % ══════════════════════════════════════════════════════════════
 
-This document completes a derivation chain
-that began with a single cancer biology
-observation and has extended to a universal
-principle about all life across all of deep
-time.
-
 \begin{center}
 \small
-\begin{tabular}{p{1.5cm}p{5.5cm}p{5.5cm}}
+\begin{tabular}{p{1.4cm}p{5.5cm}p{5.5cm}}
 \toprule
 \textbf{Step} &
 \textbf{Claim} &
-\textbf{Record} \\
+\textbf{Record}\\
 \midrule
 1. Cancer &
 FOXA1/EZH2 ratio identifies whether
 a cancer cell is epigenetically arrested
-in the cancer attractor. &
+in the cancer attractor or has lost
+access to the identity basin. &
 \href{https://doi.org/10.5281/zenodo.18883922}
-{\texttt{10.5281/zenodo.18883922}} \\[0.4em]
+{\texttt{10.5281/zenodo.18883922}}\\[0.4em]
 2. Domestication &
 The domestication syndrome is
 field-specified developmental arrest
 of NCC migration. The pig is the
 clean case. &
 \href{https://doi.org/10.5281/zenodo.19094935}
-{\texttt{10.5281/zenodo.19094935}} \\[0.4em]
+{\texttt{10.5281/zenodo.19094935}}\\[0.4em]
 3. Canine &
 Above a genomic fixation threshold,
 the landscape is remodelled. Basin~A
 becomes inaccessible. &
-Repository 2026-03-18 \\[0.4em]
+Repository 2026-03-18\\[0.4em]
 4. Feline &
 The symmetric dual-basin landscape.
 The three-class domestication taxonomy.
 Basin~$\Omega$ as meta-attractor. &
-Repository 2026-03-18 \\[0.4em]
+Repository 2026-03-18\\[0.4em]
 5. Sleep cost &
 Sleep duration tracks the total cost
-of an organism's landscape position.
-Three axes. Universal principle. &
-Repository 2026-03-18 \\[0.4em]
+of basin occupation. Three axes.
+Universal principle. &
+Repository 2026-03-18\\[0.4em]
 6. Sleep sonar &
 The sleep spectrum maps onto the
 three-axis framework across all animals. &
-Repository 2026-03-18 \\[0.4em]
+Repository 2026-03-18\\[0.4em]
 7. This document &
-The dimensional invariant. Sleep predicts
-survival trajectory across deep time.
-The oldest surviving lineages sleep
-the least. &
-This document \\
+The dimensional invariant. Sleep quantity
+and sleep topology are both geometric
+predictions of the landscape. The oldest
+surviving lineages sleep the least.
+The topology of how they sleep is the
+geometry of where they are. &
+This document\\
 \bottomrule
 \end{tabular}
 \end{center}
 
 \bigskip
+
 \begin{mdframed}[
   backgroundcolor=claimbox,
   linecolor=claimbox,
@@ -1275,25 +1914,39 @@ This document \\
 \textbf{THE UNIFIED STATEMENT}
 
 \medskip
-The attractor geometry framework is a single
-geometric principle operating identically at
-every scale at which life organises itself.
+The attractor geometry framework is a
+single geometric principle operating
+identically at every scale at which
+life organises itself.
 
 \medskip
 From a cancer cell deciding whether to
-differentiate or proliferate, to a domestic
-pig deciding whether to feral, to a cat
-choosing which basin to occupy this morning,
-to a horseshoe crab that has been in the same
-basin for 450 million years without deciding
-anything at all:
+differentiate or proliferate,
+to a domestic pig deciding whether to
+feral,
+to a cat choosing which basin to occupy
+this morning,
+to a crocodile distributed across
+16 hours of bilateral rest because its
+metabolic budget cannot afford the
+concentrated sleep that its navigational
+cost demands,
+to a dolphin that has dissolved the
+barrier between waking and sleep and
+now permanently inhabits the intermediate,
+to a horseshoe crab that has been in
+the same basin for 450 million years
+and does not sleep at all because there
+is nothing to reset:
 
 \medskip
 the geometry is the same.\\
 The basin is the same concept.\\
 The cost of navigation is the same cost.\\
 The sleep is the same payment.\\
-The survival is the same outcome.
+The topology of sleep is the shape of
+the landscape.\\
+The survival is the depth.
 
 \medskip
 Scale is the only variable.\\
@@ -1305,42 +1958,41 @@ The geometry is invariant.
 \noindent\textcolor{rulecolor}
 {\rule{\linewidth}{0.6pt}}
 
-\subsection*{Linked Records (Confirmed DOIs
-at Time of Deposit)}
+\subsection*{Linked Records}
 
 \begin{center}
 \small
 \begin{tabular}{p{3.5cm}p{9.0cm}}
 \toprule
-\textbf{Record} & \textbf{DOI / Location} \\
+\textbf{Record} & \textbf{DOI / Location}\\
 \midrule
 Theory paper &
 \href{https://doi.org/10.5281/zenodo.19094935}
-{\texttt{doi:10.5281/zenodo.19094935}} \\[0.2em]
+{\texttt{doi:10.5281/zenodo.19094935}}\\[0.2em]
 P7 pre-registration &
 \href{https://doi.org/10.5281/zenodo.19096128}
-{\texttt{doi:10.5281/zenodo.19096128}} \\[0.2em]
+{\texttt{doi:10.5281/zenodo.19096128}}\\[0.2em]
 P9 pre-registration &
-{[DOI pending --- insert after Zenodo
-confirmation]} \\[0.2em]
+{[DOI pending --- insert after
+confirmation]}\\[0.2em]
 FOXA1/EZH2 cancer &
 \href{https://doi.org/10.5281/zenodo.18883922}
-{\texttt{doi:10.5281/zenodo.18883922}} \\[0.2em]
+{\texttt{doi:10.5281/zenodo.18883922}}\\[0.2em]
 Plant inversion &
 \href{https://doi.org/10.5281/zenodo.19040399}
-{\texttt{doi:10.5281/zenodo.19040399}} \\[0.2em]
+{\texttt{doi:10.5281/zenodo.19040399}}\\[0.2em]
 LECA resurrection &
 \href{https://doi.org/10.5281/zenodo.18986790}
-{\texttt{doi:10.5281/zenodo.18986790}} \\[0.2em]
+{\texttt{doi:10.5281/zenodo.18986790}}\\[0.2em]
 Canine / feline /
 sleep artifacts &
 \texttt{github.com/Eric-Robert-Lawson/
-attractor-oncology} (2026-03-18) \\
+attractor-oncology} (2026-03-18)\\
 \bottomrule
 \end{tabular}
 \end{center}
 
-% ── DOCUMENT METADATA ────────────────────────────────────────
+% ── DOCUMENT METADATA ─────────────────────────────────────────
 \vspace{0.5em}
 \noindent\textcolor{rulecolor}
 {\rule{\linewidth}{0.8pt}}
@@ -1349,23 +2001,32 @@ attractor-oncology} (2026-03-18) \\
 {\footnotesize
 \textbf{Document ID:}
 DIMENSIONAL\_INVARIANT\_SLEEP\_SURVIVAL\_
-REASONING\_ARTIFACT\_v1.0\\
+REASONING\_ARTIFACT\_v2.0\\
 \textbf{Date:} 2026-03-18\\
 \textbf{Author:} Eric Robert Lawson /
 OrganismCore\\
 \textbf{Status:} REASONING ARTIFACT ---
-DERIVATION RECORD. Locked at deposit.
-No modifications after Zenodo timestamp.\\
-\textbf{Primary theoretical contributions:}
+DERIVATION RECORD.
+Version 2.0 extends v1.0 by making
+explicit the topology dimension as a
+geometric prediction of the framework,
+not a measurement correction.
+Primary theoretical contributions:
 (1) The dimensional invariant (oldest
 surviving lineages sleep the least;
-minimum sleep = maximum survival horizon;
+minimum sleep $=$ maximum survival horizon;
 U-shaped survival--sleep relationship
-with flat minimum). (2) The two-strategy
-taxonomy (Lock and Navigator). (3) The
-unstable zone identification and boundary
-conditions. (4) Predictions P-INVARIANT-1
-through P-INVARIANT-6.\\
+with flat minimum).
+(2) The two-strategy taxonomy
+(Lock and Navigator).
+(3) The unstable zone identification.
+(4) The five sleep topologies as geometric
+predictions of the landscape, not
+empirical sleep types.
+(5) The full three-channel sonar
+(duration $+$ topology $+$ flexibility).
+(6) Predictions P-INVARIANT-1 through
+P-INVARIANT-7.\\
 \textbf{Theory paper:}
 \href{https://doi.org/10.5281/zenodo.19094935}
 {\texttt{doi:10.5281/zenodo.19094935}}\\
@@ -1381,7 +2042,7 @@ attractor-oncology}}\\
 \href{mailto:OrganismCore@proton.me}
 {OrganismCore@proton.me}\\
 \textbf{License:} CC BY 4.0\\
-\textbf{Version:} 1.0 --- LOCKED AT
+\textbf{Version:} 2.0 --- LOCKED AT
 PRE-REGISTRATION.
 }
 

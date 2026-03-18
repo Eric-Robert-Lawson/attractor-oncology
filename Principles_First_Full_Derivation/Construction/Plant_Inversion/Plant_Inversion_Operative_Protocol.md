@@ -1,2152 +1,1492 @@
 # PLANT ARCHITECTURE INVERSION
-# OPERATIVE PROTOCOL
-## The Complete Step-by-Step Execution
-## Document for the Coherence Gradient
-## Inversion Experiment —
-## Every Material, Every Cost,
-## Every Source, Every Step,
-## Every Failure Mode at Each Step,
-## Every Recovery Action,
-## How to Confirm Each Step Succeeded
-## Before Proceeding to the Next,
-## and the Minimum Reproducibility
-## Standard Required for the Result
-## to Be Valid
+# OPERATIVE PROTOCOL v2.3
+## Two-Chamber Cone Membrane System
+## Complete Step-by-Step Execution Document
 ## OrganismCore — Eric Robert Lawson
-## 2026-03-13
+## 2026-03-18
 
 ---
 
-## STATUS: ACTIVE — OPERATIVE PROTOCOL
+## STATUS: ACTIVE — OPERATIVE PROTOCOL v2.3
 ## Classification: Full execution document.
-## This is the document you have open
-## on the bench while running the
-## experiment. Not a framework document.
-## Not a reasoning artifact.
-## A step-by-step procedure with
-## failure modes at every step.
-## Read PLANT_INVERSION_PROTOCOL_v1.md
-## first for the geometric framework
-## and predictions.
-## This document assumes you have
-## read that document.
-## Timestamp: 2026-03-13
+## Supersedes: Plant_Inversion_Operative_Protocol_v2.2.md
+## Amendment notes v2.3:
+## (1) Scenario 1 corrected to true normal control.
+## S1 now contains a UV-A LED free in air space with
+## zero penetration cost. This is the only scenario
+## where UV is freely available without a foam barrier.
+## Previous v2.2 Scenario 1 had no UV anywhere — this
+## was not a valid control.
+## (2) Substrate types revised and expanded to three
+## distinct types plus one free UV condition:
+## Type A — hydroponic foam, no UV
+## Type B — UV-only foam, no hydroponic nutrients
+## Type C — combined foam, hydroponic + UV co-located
+## Free UV — no foam, UV-A LED free in S1 air space
+## (3) Scenarios 2 and 3 now use Type B foam —
+## UV signal separated from hydroponic signal into
+## different chambers. Seedling faces competing
+## attractors in opposite directions.
+## (4) Scenarios 4 and 5 now use Type C foam —
+## UV and hydroponic signals co-located in the same
+## chamber. No competing signal in the opposite
+## direction.
+## (5) Cone orientation table updated for all 5
+## scenarios under the revised substrate definitions.
+## Timestamp: 2026-03-18
 
 ---
 
 ## LINKED RECORDS
 
-```
-Geometric framework and predictions:
-  PLANT_INVERSION_PROTOCOL_v1.md
-Plant Coherence Geometry:
-  PLANT_COHERENCE_GEOMETRY.md
-Pre-registration:
-  DOI: https://doi.org/10.5281/zenodo.18986790
-Repository:
-  https://github.com/Eric-Robert-Lawson/
-  attractor-oncology
-ORCID: 0009-0002-0414-6544
-```
+- Pre-registration (v1.0): Plant_Inversion_Pre_Registry.tex
+- Geometric framework: Plant_Inversion.md
+- Triadic invariant:
+  TRIADIC_INVARIANT_BIOLOGY_REASONING_ARTIFACT.md
+- Confirmed cases:
+  ATTRACTOR_GEOMETRY_CONFIRMED_CASES_REASONING_ARTIFACT.md
+- One-pager: One_Pager_Plant_Inversion.tex
+- Cost and failure budget:
+  plant_inversion_cost_and_failure_budget.md
+- Supersedes:
+  Plant_Inversion_Operative_Protocol_v2.2.md
+- Supersedes:
+  Plant_Inversion_Operative_Protocol_v2.1.md
+- Supersedes:
+  Plant_Inversion_Operative_Protocol_v2.0.md
+- Supersedes:
+  Plant_Inversion_Operative_Protocol.md (v1.0)
 
 ---
 
-## SECTION 1 — COMPLETE MATERIALS LIST
-## WITH SOURCES AND COSTS
+## PREAMBLE — WHAT THIS DOCUMENT IS
 
-### 1.1 Seeds
+This is the document you have open on the bench while
+running the experiment. It is not a framework document.
+It is not a reasoning artifact. It is a step-by-step
+procedure with failure modes, recovery actions, and
+success confirmation criteria at every step.
 
-```
-ITEM: Radish seeds (Raphanus sativus)
-  Recommended variety: Cherry Belle
-  or French Breakfast.
-  Both fast-germinating. Both large
-  enough to observe easily.
-  Quantity needed: 20 seeds minimum
-  (5 per chamber x 4 chambers =
-  20 seeds minimum for one full run
-  with all controls).
-  Source: Any grocery store garden
-  section, hardware store garden
-  section, Amazon, local garden centre.
-  Brand does not matter.
-  Cost: $2-4 per packet.
-  One packet contains hundreds of seeds.
-  Buy one packet. More than sufficient.
+Read Plant_Inversion.md and
+TRIADIC_INVARIANT_BIOLOGY_REASONING_ARTIFACT.md first
+for the geometric framework and the predictions this
+experiment is testing. This document assumes you have
+read those documents.
 
-  ALTERNATIVE: Mung beans
-  (Vigna radiata, dried for sprouting).
-  Source: Grocery store, Asian
-  food market, Amazon.
-  Cost: $2-3 per 500g bag.
-  Use 2-3 beans per chamber.
-  Advantage: very robust, large,
-  easy to observe.
-  Disadvantage: larger final plant,
-  may need larger chambers.
+The core prediction being tested:
 
-  DO NOT USE for first run:
-  Arabidopsis (hard to source,
-  requires sterile technique),
-  tomato (too slow),
-  cannabis (legal complexity,
-  too slow, too large).
-
-ITEM: Seed viability test (do before
-  experiment day):
-  Take 5 seeds.
-  Place on damp paper towel.
-  Fold paper towel over seeds.
-  Place in sealed ziplock bag.
-  Leave at room temperature 48h.
-  If 4 or 5 germinate: seeds viable.
-  If fewer than 3: get new seeds.
-  Do this test at least 3 days before
-  the experiment to confirm viability.
-  Cost: $0 (uses existing seeds).
-```
-
-### 1.2 Growth Medium Materials
-
-```
-ITEM: Agar powder (bacteriological
-  or food-grade)
-  Quantity needed: 5g per full run
-  (4 chambers x 1g agar each,
-  plus spare).
-  Source option A: Amazon.
-  Search: "agar agar powder food grade".
-  Brand: Modernist Pantry, Anthony's,
-  or any food-grade agar.
-  Cost: $8-12 for 100g bag.
-  More than enough for many runs.
-  Source option B: Biology lab supplier
-  (Carolina Biological, Fisher Scientific,
-  VWR). Bacteriological agar.
-  Cost: $15-25 for 100g.
-  Slightly higher quality but food-
-  grade is adequate for this experiment.
-  Source option C: Asian grocery store.
-  Agar-agar powder sold as cooking
-  ingredient.
-  Cost: $2-4 for 25-50g bag.
-  Fully adequate.
-
-ITEM: Distilled or filtered water
-  Quantity needed: 500mL per run
-  (agar preparation + mineral solution
-  + washing).
-  Source option A: Grocery store
-  bottled distilled water.
-  Cost: $1-2 per gallon.
-  Source option B: Filtered tap water
-  through a Brita or similar filter.
-  Cost: $0 if filter already owned.
-  Source option C: Tap water that has
-  been boiled and cooled (removes
-  chlorine, adequate for this
-  experiment).
-  Cost: $0.
-  DO NOT USE: unfiltered tap water
-  directly. Chlorine in tap water
-  inhibits germination.
-
-ITEM: Mineral salts for hydroponic
-  solution (above-seed water gradient)
-  Three salts needed:
-
-  Salt 1: Potassium nitrate (KNO3)
-  Quantity: 5g for many runs.
-  Source option A: Hydroponics shop
-  or online hydroponics supplier.
-  Cost: $5-10 for 500g.
-  Source option B: Amazon.
-  Search: "potassium nitrate fertiliser"
-  or "KNO3 hydroponics".
-  Cost: $8-15 for 500g.
-  Note: potassium nitrate is also
-  used in food preservation and
-  stump remover. Available widely.
-
-  Salt 2: Calcium nitrate Ca(NO3)2
-  Quantity: 5g for many runs.
-  Source: Hydroponics shop, Amazon.
-  Search: "calcium nitrate fertiliser".
-  Cost: $8-15 for 500g.
-
-  Salt 3: Magnesium sulfate (MgSO4)
-  This is Epsom salt.
-  Quantity: 5g for many runs.
-  Source: Pharmacy, grocery store,
-  Amazon. Sold as Epsom salt for
-  bath use.
-  Cost: $3-6 for 500g.
-  This is the cheapest and most
-  accessible of the three salts.
-
-  SIMPLIFICATION FOR FIRST RUN:
-  If you cannot source KNO3 and
-  Ca(NO3)2 immediately:
-  Use grocery store mineral water
-  (e.g. Evian, Perrier without
-  carbonation, or any still mineral
-  water with listed mineral content).
-  Mineral water already contains
-  calcium, magnesium, potassium,
-  and sulfate at low concentrations.
-  It is a pre-made dilute mineral
-  solution.
-  It is adequate for proof-of-concept.
-  Cost: $1-2 per litre.
-  Use this for the first run.
-  Switch to prepared mineral solution
-  for subsequent runs for precision.
-```
-
-### 1.3 Chamber Materials
-
-```
-ITEM: Clear plastic cups
-  500mL or 16oz clear plastic cups.
-  MUST BE TRANSPARENT (not frosted,
-  not coloured).
-  Quantity: 8 cups minimum
-  (2 per chamber x 4 chambers).
-  Source: Any grocery store, dollar
-  store, party supply store, Amazon.
-  Product name: "clear plastic cups",
-  "disposable plastic cups clear",
-  "plastic drinking cups transparent".
-  Cost: $3-6 for a pack of 20-50.
-
-  ALTERNATIVE: Glass mason jars
-  (wide-mouth, 500mL or 1L).
-  More stable. Easier to observe
-  root growth through glass.
-  Reusable.
-  Cost: $8-15 for a pack of 4-6.
-  Source: Grocery store, hardware
-  store, Amazon.
-  Recommended for runs beyond the
-  first proof-of-concept.
-
-ITEM: Mesh or screen platform
-  Function: sits between lower
-  and upper cup, supports agar
-  layer, allows light from below
-  to pass through.
-  Options (in order of preference):
-
-  Option A: Plastic mesh from
-  craft store (cross-stitch canvas
-  or plastic needlepoint canvas).
-  Holes ~3mm. Light passes through.
-  Easy to cut to size.
-  Cost: $2-4 per sheet.
-  Source: Michaels, Joann Fabrics,
-  Amazon (search "plastic canvas
-  mesh sheet").
-
-  Option B: Metal window screen
-  mesh (aluminium or fibreglass).
-  Available at hardware stores.
-  Cost: $3-8 per small piece.
-  Cut to the diameter of the cup.
-  NOTE: metal mesh may absorb
-  some UV light. Test by placing
-  mesh over LED and confirming
-  visible light passes through.
-
-  Option C: Perforated plastic
-  from packaging material (egg
-  carton lids, produce containers).
-  Free if you have it.
-  Check that holes are small enough
-  to support the agar layer
-  (holes should be <5mm diameter).
-
-  Option D: Nothing (simplest).
-  Pour agar directly into the
-  lower cup. Place seeds on agar
-  surface. Pour mineral water on
-  top. Stack upper cup as a lid
-  to hold the water layer.
-  Works if the lower cup is large
-  enough to hold both agar and
-  water layers separated by the
-  agar gel barrier.
-  This is the minimum viable
-  approach. Start here if uncertain.
-
-ITEM: Black cardboard, black tape,
-  or aluminium foil
-  Function: block all light from
-  reaching the seed from above.
-  This is critical. Without it
-  overhead ambient light competes
-  with the below-seed light source
-  and prevents architectural inversion
-  of the shoot.
-  Options:
-  Black construction paper or
-  cardboard: $1-3, craft store.
-  Black electrical tape: $2-4,
-  hardware store.
-  Aluminium foil (from kitchen):
-  $0, already owned.
-  Note: aluminium foil is shiny
-  and may reflect light. Cover
-  with black paper on the outside
-  if using foil.
-
-ITEM: Small binder clips or rubber
-  bands
-  Function: hold upper and lower
-  cups together so the chamber
-  does not separate.
-  Cost: $1-2 or already owned.
-```
-
-### 1.4 Light Source
-
-```
-ITEM: UV-A LED strip or bulb
-  Wavelength specification:
-  365-395 nm (UV-A range).
-  This is essential. UV-B (below
-  320nm) is damaging to tissue at
-  close range and should be avoided.
-  UV-A at this range:
-    Activates root negative
-    phototropism (root avoids it).
-    Activates shoot positive
-    phototropism (shoot grows toward it).
-    Both effects drive architectural
-    inversion when source is below.
-
-  Source options:
-
-  Option A (recommended for first run):
-  UV-A LED "blacklight" strip.
-  Search Amazon: "UV LED strip 365nm"
-  or "UV black light LED strip 12V".
-  These come with a 12V DC adapter.
-  Length: 30cm or 50cm strip is more
-  than sufficient.
-  Cost: $10-20 complete with power supply.
-  The strip is flexible, can be
-  coiled into the bottom of the
-  lower cup or placed flat beneath
-  the chamber.
-
-  Option B:
-  UV-A LED bulb (screw or bayonet base).
-  Place in a small desk lamp positioned
-  below the chamber pointing upward.
-  Cost: $8-15 for bulb.
-  Requires a lamp: $5-15 or already owned.
-  Total: $13-30.
-
-  Option C (if UV LED unavailable):
-  Standard white LED grow light
-  (blue-heavy spectrum).
-  Not ideal (no UV-A component)
-  but the blue light component
-  (400-500 nm) does activate
-  phototropin receptors in both
-  roots and shoots.
-  Root negative phototropism is
-  confirmed with blue light as well.
-  Adequate as a first-run substitute
-  if UV-A LED cannot be sourced
-  immediately.
-  Cost: $10-25.
-
-  IMPORTANT SAFETY NOTE:
-  UV-A at 365-395nm is not
-  immediately harmful to human
-  skin at the intensities used here
-  (low-power LED strip).
-  However: do not look directly into
-  the LED source.
-  UV radiation causes eye damage
-  with prolonged direct exposure.
-  The LED is pointing UPWARD inside
-  a closed chamber.
-  Normal handling safety is sufficient.
-  Do not open the chamber and look
-  directly into the LED while it
-  is on.
-  Turn off the LED before opening
-  the chamber for observation.
-
-ITEM: LED power supply or USB cable
-  The UV LED strip typically comes
-  with a 12V DC adapter.
-  OR: USB-powered LED strips are
-  available (5V USB, no separate
-  adapter needed).
-  If using USB-powered strip:
-  connect to any phone charger,
-  laptop USB port, or USB battery
-  pack.
-  Cost: $0 if using existing USB
-  charger.
-
-ITEM: Optional: aluminium foil
-  reflector
-  To maximise light reaching the
-  seed from below:
-  Line the inside of the lower cup
-  with aluminium foil (shiny side
-  facing the LED).
-  This reflects light upward and
-  increases the photon flux at
-  the seed position.
-  Cost: $0 (kitchen foil).
-```
-
-### 1.5 Tools and Equipment
-
-```
-ITEM: Kitchen microwave or hotplate
-  For boiling water to dissolve agar.
-  Already owned.
-  Cost: $0.
-
-ITEM: Kitchen scale accurate to 0.1g
-  For weighing agar powder and
-  mineral salts.
-  Source: Amazon, kitchen supply store.
-  Search: "kitchen scale 0.1g".
-  Cost: $10-20.
-  Alternative if no scale available:
-  Use measuring spoons.
-  1 teaspoon ≈ 4g of agar powder.
-  1/4 teaspoon ≈ 1g. Adequate
-  approximation for this protocol.
-  Mineral salts: 1/8 teaspoon ≈ 0.5g.
-
-ITEM: Glass measuring cup or beaker
-  250mL minimum.
-  For mixing agar solution.
-  Kitchen glass measuring cup
-  is fine.
-  Cost: $0 if already owned.
-  Otherwise: $5-10, grocery store.
-
-ITEM: Stirring rod or chopstick
-  For stirring agar while heating.
-  Cost: $0 (chopstick from takeout).
-
-ITEM: Thermometer
-  To check agar temperature before
-  pouring (must be below 60°C to
-  avoid killing seeds, ideally 40-50°C).
-  Options:
-  Kitchen candy thermometer: $8-12.
-  Infrared thermometer: $15-25.
-  Meat thermometer: $8-15.
-  Alternative: hold outside of glass
-  container. If it feels hot but
-  touchable (not burning): roughly
-  50-60°C. Not precise but adequate.
-
-ITEM: Pipette or syringe (5-10mL)
-  For adding small volumes of mineral
-  solution carefully without
-  disturbing seeds or agar.
-  Source: pharmacy (oral medication
-  syringes), dollar store, Amazon.
-  Cost: $1-3.
-  Alternative: use a teaspoon to
-  drizzle liquid gently. Less precise
-  but functional.
-
-ITEM: Ruler (metric, 30cm)
-  For measuring root and shoot
-  lengths through transparent
-  chamber walls.
-  Cost: $1-3 or already owned.
-
-ITEM: Marker pen (permanent)
-  For labelling chambers.
-  Cost: $1-2 or already owned.
-
-ITEM: Camera or smartphone
-  For photographing at each timepoint.
-  Any smartphone camera is sufficient.
-  Cost: $0 (already owned).
-
-ITEM: Notebook or printed
-  observation sheet
-  For recording data.
-  Cost: $0.
-
-ITEM: Timer or phone timer
-  For tracking timepoints.
-  Cost: $0.
-
-ITEM: Bleach (household)
-  For optional seed sterilisation.
-  Standard household bleach
-  (5% sodium hypochlorite).
-  Use diluted to 10% in water
-  (1 part bleach + 9 parts water).
-  Cost: $2-4 per bottle.
-  Already owned in most households.
-
-ITEM: 70% ethanol (isopropyl alcohol)
-  For surface sterilisation of
-  equipment and work surface.
-  Source: pharmacy (70% rubbing
-  alcohol, isopropyl alcohol).
-  Cost: $3-6 per bottle.
-
-ITEM: Paper towels or clean cloth
-  For wiping surfaces.
-  Cost: $0 or already owned.
-```
-
-### 1.6 Complete Cost Summary
-
-```
-MINIMUM VIABLE SINGLE RUN
-(First proof-of-concept):
-
-  Seeds (radish packet): $3
-  Agar (food grade): $8
-  Mineral water (grocery): $2
-  Clear plastic cups (pack): $4
-  Plastic mesh (craft store): $3
-  UV-A LED strip with adapter: $15
-  Black construction paper: $2
-  Rubber bands or binder clips: $1
-  Bleach (if not owned): $3
-  Rubbing alcohol (if not owned): $4
-  Kitchen scale: $12
-  (skip if using measuring spoons)
-  Syringes/pipettes: $2
-
-  TOTAL MINIMUM: $30-59
-  (lower end if kitchen scale
-  and bleach already owned)
-
-COMMUNITY LAB RUN
-(More precise, reusable setup):
-
-  Seeds (Arabidopsis from ABRC
-  or radish from garden store): $5-15
-  Bacteriological agar: $15
-  Mineral salts (KNO3, Ca(NO3)2,
-  MgSO4): $25 total for all three
-  Glass mason jars (pack of 6): $12
-  Plastic mesh: $4
-  UV-A LED strip with adapter: $20
-  Black cardboard: $3
-  pH test strips: $8
-  Graduated pipettes (reusable): $10
-  Thermometer (infrared): $20
-  Data logging thermometer: $25
-
-  TOTAL COMMUNITY LAB: $120-160
-  (most materials reusable for
-  multiple subsequent runs,
-  per-run cost drops to under $15
-  after initial investment)
-```
+> When the coherence gradient field experienced by a
+> germinating seed is inverted before germination
+> completes — the substrate carrying UV-A radiation
+> is placed below the seed rather than above — the
+> resulting organism will exhibit architectural
+> inversion: root growing upward toward the UV
+> substrate, shoot growing downward to penetrate it
+> and access the embedded UV-A signal.
+> Same genome. Different field. Different organism.
 
 ---
 
-## SECTION 2 — PRE-EXPERIMENT
-## PREPARATION (2-3 DAYS BEFORE)
+## THE CENTRAL DESIGN PRINCIPLE —
+## SIGNAL DEPRIVATION AND SKOTOMORPHOGENESIS
+
+This principle governs the entire experimental design
+and must be understood before any component of the
+protocol is executed.
+
+**The experiment does not depend on UV-A being a
+maximally efficient phototropic signal. It depends
+on UV-A being the only photonic signal the seedling
+can detect in all scenarios except Scenario 1.**
+
+Phototropin receptors (phot1 and phot2) in plant
+seedlings respond to the UV-A and blue light range
+(390–500nm). UV-A alone activates these receptors
+less efficiently than peak blue light at 450nm.
+Under normal conditions with ambient light present,
+a UV-A-only source would be a weak directional signal
+competing against background photonic noise.
+
+This experiment does not use normal conditions for
+Scenarios 2 through 5.
+
+When a germinating seedling develops in complete
+darkness, it enters skotomorphogenesis — the
+developmental program for light-seeking under total
+light deprivation. In this state:
+
+- Hypocotyl elongation is maximal — the seedling is
+  physically reaching for any signal
+- All photoreceptors are primed at maximum sensitivity
+  — detection threshold is at its lowest possible value
+- There is zero ambient photonic noise — no competing
+  signal from any direction
+
+Under these conditions the absolute efficiency of
+UV-A as a phototropic driver is irrelevant. The
+embedded UV-A source is not competing against
+anything. It is the only signal in the coherence
+field. A seedling in a completely dark chamber with
+a single UV-A source embedded in a substrate is not
+asking whether UV-A is optimal — it is responding
+to the only photonic input that exists in its entire
+environment.
+
+This is the difference between a shout in a noisy
+room and a book falling in a silent room. The book
+falling is orders of magnitude more significant in
+the silent room than the shout is in the noisy room
+— not because the book is loud but because nothing
+else is making any sound.
+
+**Scenario 1 is the explicit exception to this
+principle.** In Scenario 1, UV is freely available
+in the S1 air space with no foam barrier. This is
+the true normal control — it replicates the
+conditions under which a seedling would germinate
+in nature with light above and nutrients below.
+Scenario 1 confirms the biological system and
+apparatus are functioning correctly before any
+inversion results are interpreted.
+
+**The engineering consequence:**
+Complete external light deprivation of all chambers
+during the growth phase is the load-bearing condition
+of Scenarios 2 through 5. If ambient light enters
+these chambers from outside, it contaminates the
+coherence field and undermines the signal isolation
+the experiment depends on.
+
+Complete darkness outside the embedded UV-A source
+is what makes Scenarios 2 through 5 work.
+
+---
+
+## PART I — EXPERIMENTAL DESIGN OVERVIEW
+
+### The Substrate States
+
+All experimental variation is built from three
+substrate types and one free UV condition.
+
+---
+
+**FREE UV CONDITION — S1 of Scenario 1 only:**
+- No foam substrate in S1 chamber
+- UV-A LED mounted free in the S1 chamber air space,
+  facing downward toward the seed
+- UV-A radiation freely available throughout the S1
+  air space
+- Zero penetration cost for the shoot to access UV-A
+- No water, no minerals in S1
+- Used in: S1 of Scenario 1 only
+
+---
+
+**SUBSTRATE TYPE A — Hydroponic foam, no UV:**
+- Material: reticulated polyurethane foam 20ppi,
+  saturated with hydroponic mineral solution
+- Signals present: water, minerals
+- UV present: NO — at any depth
+- Penetration requirement: seedling must grow into
+  foam to access water and minerals. No UV signal
+  is present within it at any depth.
+- Used in: S2 of Scenario 1, S2 of Scenario 2,
+  S1 of Scenario 3
+
+---
+
+**SUBSTRATE TYPE B — UV-only foam, no hydroponic:**
+- Material: reticulated polyurethane foam 20ppi,
+  dry or minimally moist (not saturated with
+  nutrient solution), with UV-A LED strip embedded
+  within the foam body at 10–20mm depth from the
+  seed-facing surface
+- Signals present: UV-A radiation only
+- Water and minerals present: NO
+- UV present: YES — embedded inside foam body.
+  Seedling must physically penetrate foam to reach
+  UV-A signal.
+- Penetration requirement: seedling must grow into
+  and through the foam to reach the UV-A signal
+- Used in: S1 of Scenario 2, S2 of Scenario 3
+
+---
+
+**SUBSTRATE TYPE C — Combined foam, hydroponic
++ UV co-located:**
+- Material: reticulated polyurethane foam 20ppi,
+  saturated with hydroponic mineral solution, with
+  UV-A LED strip embedded within the foam body at
+  10–20mm depth from the seed-facing surface
+- Signals present: water, minerals, UV-A radiation
+  — all co-located in the same substrate
+- UV present: YES — embedded inside foam body.
+  Seedling must physically penetrate foam to reach
+  UV-A signal along with water and minerals.
+- Penetration requirement: high — seedling must
+  grow into and through the foam to access all
+  signals simultaneously
+- Used in: S1 of Scenario 4, S2 of Scenario 5
+
+---
+
+### The 5 Scenarios
+
+| Scenario | S1 (Top Chamber) | S2 (Bottom Chamber) | Cone Orientation |
+|---|---|---|---|
+| **1** | FREE UV — UV-A LED free in air, no foam | TYPE A — hydroponic foam, water + minerals, no UV | Apex up |
+| **2** | TYPE B — UV-only foam, UV embedded, no hydroponic | TYPE A — hydroponic foam, water + minerals, no UV | Apex up |
+| **3** | TYPE A — hydroponic foam, water + minerals, no UV | TYPE B — UV-only foam, UV embedded, no hydroponic | Apex down |
+| **4** | TYPE C — hydroponic foam, water + minerals + UV embedded | EMPTY — void | Apex up |
+| **5** | EMPTY — void | TYPE C — hydroponic foam, water + minerals + UV embedded | Apex down |
+
+---
+
+### The Governing Cone Orientation Rule
+
+> **The apex always points toward the void or least
+> active substrate. The wide opening always faces
+> the most active substrate.**
+
+Empty void is always least active.
+Free UV in air (Scenario 1 S1) is active but presents
+no liquid threat — apex up is correct.
+Type A is less active than Type B or Type C.
+Type B and Type C are the most active substrates.
+
+| Scenario | Most active location | Cone orientation | Apex points toward |
+|---|---|---|---|
+| 1 | Free UV in S1 above, Type A in S2 below | Apex up | Away from Type A liquid below |
+| 2 | Type B UV foam in S1 above | Apex up | Away from Type B above |
+| 3 | Type B UV foam in S2 below | Apex down | Away from Type B below |
+| 4 | Type C combined foam in S1 above | Apex up | Toward empty S2 below |
+| 5 | Type C combined foam in S2 below | Apex down | Toward empty S1 above |
+
+---
+
+### What Each Scenario Tests
+
+**Scenario 1 — True normal control:**
+UV-A is freely available in the S1 air space above
+the seed. Zero penetration cost. The shoot emerges
+into UV-lit air. The root must penetrate Type A foam
+below for water and minerals. This replicates normal
+natural conditions — light above, nutrients below,
+no barrier to either signal.
+
+This scenario confirms the biological system and
+apparatus function correctly. It must record NORMAL
+architecture in every experimental run. If it does
+not, the run is invalid regardless of what other
+scenarios show.
+
+Expected outcome: root down into S2 Type A foam,
+shoot up into free UV-lit air. Normal architecture.
+No penetration required by shoot.
+
+---
+
+**Scenario 2 — UV signal above, separated from
+hydroponic, penetration required:**
+The UV-A signal is embedded in Type B foam above.
+The shoot must penetrate the Type B foam to access
+UV-A. There are no hydroponic nutrients in S1 — the
+water and mineral signal is in S2 below. The seedling
+faces two separated attractors: UV above requiring
+upward penetration, hydroponic nutrients below
+requiring downward penetration.
+
+Expected outcome: shoot grows upward penetrating
+Type B foam to reach UV-A. Root grows downward into
+Type A foam to access water and minerals. Normal
+architecture but with active shoot penetration of
+S1 Type B required to reach UV.
+
+---
+
+**Scenario 3 — Full inversion of Scenario 2.
+PRIMARY EXPERIMENTAL CLAIM:**
+Everything is structurally identical to Scenario 2
+except the positions of Type B and Type A are
+swapped and the cone membrane is flipped. The UV-A
+signal is now embedded in Type B foam below. The
+hydroponic nutrients are now in Type A foam above.
+The seedling faces the same two separated attractors
+but in opposite directions: UV below requiring
+downward penetration, hydroponic nutrients above
+requiring upward penetration.
+
+The prediction: the UV-A signal, as the only photonic
+input in the entire chamber system, drives
+architectural inversion. The root grows upward
+toward nutrients in Type A foam above. The shoot
+grows downward penetrating Type B foam below to
+reach the only UV-A source available.
+
+Expected outcome: root up penetrating S1 Type A
+foam toward water and minerals, shoot down
+penetrating S2 Type B foam to reach embedded UV-A.
+Full architectural inversion.
+
+---
+
+**Scenario 4 — All signals co-located above,
+nothing below:**
+All signals — water, minerals, and UV-A — are
+co-located in Type C foam in S1 above. S2 is void.
+The seedling has every signal concentrated above and
+nothing below. No competing attractor in any other
+direction.
+
+Expected outcome: shoot grows upward penetrating
+S1 Type C foam to access all signals simultaneously.
+Root grows downward into void or is indeterminate.
+Normal architecture with maximum signal concentration
+above and zero competition.
+
+---
+
+**Scenario 5 — All signals co-located below,
+nothing above:**
+All signals — water, minerals, and UV-A — are
+co-located in Type C foam in S2 below. S1 is void.
+Every signal is concentrated below. No competing
+attractor above.
+
+Expected outcome: shoot grows downward penetrating
+S2 Type C foam to access all signals simultaneously.
+Root grows upward into void or is indeterminate.
+Full architectural inversion with maximum signal
+concentration below and zero competition.
+
+---
+
+### The Critical Comparison Structure
+
+**Primary inversion test:**
+Scenario 2 vs Scenario 3. Structurally identical —
+same substrate types, same signal strengths, same
+penetration requirements. The only difference is
+which direction holds Type B UV foam. Cone is
+flipped. Prediction: architecture flips with it.
+
+**Penetration cost for UV access:**
+Scenario 1 (UV free in air, zero cost) vs
+Scenario 2 (UV in Type B foam above, high cost).
+Same direction, same hydroponic below, only
+penetration cost differs.
+
+**Signal separation vs co-location:**
+Scenarios 2 and 3 (UV and hydroponic separated,
+competing attractors) vs Scenarios 4 and 5 (UV and
+hydroponic co-located, single coherent attractor).
+
+**Maximum inversion signal:**
+Scenario 3 (inversion with competing hydroponic
+above) vs Scenario 5 (inversion with nothing above,
+maximum downward signal, no competition).
+
+---
+
+### Prediction Summary Table
+
+| Scenario | Root Direction | Shoot Direction | Shoot Penetrates | Root Penetrates | Architecture |
+|---|---|---|---|---|---|
+| **1** | Down into S2 Type A | Up into free UV air | No penetration — free air | Yes — Type A foam | NORMAL — free UV access |
+| **2** | Down into S2 Type A | Up, penetrates S1 Type B to reach UV | Yes — Type B UV foam | Yes — Type A foam | NORMAL + ACTIVE PENETRATION |
+| **3** | Up, penetrates S1 Type A toward nutrients | Down, penetrates S2 Type B to reach UV | Yes — Type B UV foam | Yes — Type A foam | **INVERTED + ACTIVE PENETRATION** |
+| **4** | Down into void or indeterminate | Up, penetrates S1 Type C to reach all signals | Yes — Type C foam | Nothing to penetrate | NORMAL — MAXIMUM SIGNAL ABOVE |
+| **5** | Up into void or indeterminate | Down, penetrates S2 Type C to reach all signals | Yes — Type C foam | Nothing to penetrate | INVERTED — MAXIMUM SIGNAL BELOW |
+
+---
+
+## PART II — MATERIALS
+
+### 2.1 Biological Materials
+
+| Item | Specification | Source | Cost |
+|---|---|---|---|
+| Radish seeds | *Raphanus sativus*, Cherry Belle variety | Garden centre / Amazon | $2–4 |
+| Quantity | Minimum 25 seeds (5 per scenario plus spares) | — | — |
+
+**Seed sourcing note:** Use seeds from a single batch
+and single supplier for all 5 scenarios. Do not mix
+seed batches. Record batch number and supplier name
+in the experimental log before beginning.
+
+### 2.2 Chamber Materials
+
+| Item | Specification | Source | Cost |
+|---|---|---|---|
+| PVC pipe | 50mm internal diameter, 150mm length per section, opaque black preferred | Hardware / plumbing supply | $2–4 per section |
+| Quantity | 10 sections (2 per scenario × 5 scenarios) | — | $10–20 total |
+| End caps | Fitted to pipe diameter, removable | Hardware store | $1–2 each, 10 needed |
+| Aquarium silicone sealant | Clear, aquarium-safe, non-toxic | Hardware / aquarium store | $5–8 |
+| Black opaque tape or black plastic wrap | External light exclusion | Hardware store | $2–5 |
+
+### 2.3 Cone Membrane Materials
+
+| Item | Specification | Source | Cost |
+|---|---|---|---|
+| Metallized Mylar film | Emergency blanket, aluminized both sides | Camping supply / dollar store | $1–3 per blanket |
+| Small plastic funnels | Rim diameter matching pipe inner diameter (50mm) | Kitchen / laboratory supply | $1–3 each, 5 needed |
+| Hydroponic net cups | 16mm or 25mm diameter | Hydroponics supplier / Amazon | $3–8 for pack of 50 |
+| Aquarium silicone sealant | As above | As above | Same tube |
+
+**Membrane barrier functions:**
+The cone membrane requires two barrier functions:
+1. Liquid barrier — prevent water and nutrient
+   solution migrating between S1 and S2
+2. UV and light barrier — prevent UV-A from the
+   substrate in one chamber crossing into the other
+   chamber, and prevent external light entering
+   through the membrane joint
+
+### 2.4 Substrate and Signal Materials
+
+| Item | Specification | Use | Source | Cost |
+|---|---|---|---|---|
+| Reticulated polyurethane foam | 20ppi open cell, sheet form | Type A, Type B, and Type C substrate carrier | Aquarium supply / Amazon | $5–10 per sheet |
+| Hydroponic mineral solution | Balanced hydroponic nutrient, seedling dilution 1/4 to 1/2 strength | Nutrient signal in Type A and Type C | Garden centre / hydroponics supplier | $5–12 |
+| Distilled water | 1L minimum | Nutrient solution base | Grocery store | $1–2 |
+| UV-A LED strip | 315–400nm — confirm wavelength before purchase | UV signal in Free UV condition, Type B, and Type C | Amazon | $8–15 |
+
+**UV-A wavelength critical note:**
+Confirm the LED strip wavelength before purchase.
+- UV-A (315–400nm): correct
+- UV-B (280–315nm): do not use — DNA damage
+- UV-C (100–280nm): do not use — germicidal
+- Visible blue light (400–500nm): acceptable
+  substitution — more efficient phototropin
+  activator than UV-A, must be documented as
+  protocol deviation if used
+
+**Note on Type B foam moisture:**
+Type B foam carries UV-A only — no hydroponic
+nutrients. The foam should be dry or at most
+minimally moist (dampened with plain distilled
+water only, no nutrients). This ensures the UV-A
+signal in S1 of Scenario 2 and S2 of Scenario 3
+is cleanly separated from the hydroponic signal
+in the opposite chamber.
+
+### 2.5 Free UV Condition Materials
+### (Scenario 1 S1 only)
+
+| Item | Specification | Source | Cost |
+|---|---|---|---|
+| UV-A LED strip | Same as above | Same as above | Same unit — cut a short length |
+| Small mounting bracket or adhesive clip | To mount LED strip to inner face of S1 end cap facing downward | Hardware store | $0–2 |
+
+**Free UV mounting note:**
+In Scenario 1, the UV-A LED is mounted to the inner
+face of the S1 end cap, oriented to face downward
+into the S1 chamber air space toward the seed. The
+LED illuminates the full air space of S1 freely.
+The shoot emerges into this UV-lit space without
+any foam barrier. This is the only scenario where
+UV is not embedded in foam.
+
+### 2.6 Ventilation Port Materials
+
+| Item | Specification | Source | Cost |
+|---|---|---|---|
+| Reticulated foam plugs | Small pieces of 20ppi foam cut to fit ventilation port diameter | Cut from substrate foam sheet — no additional cost | $0 |
+| Small USB fan (optional) | 5V USB powered, 40–50mm diameter | Amazon / electronics supply | $3–8 |
+| Drill bit | Sized to ventilation port diameter (10–15mm) | Hardware store | $2–5 |
+
+**Ventilation port design:**
+Each chamber requires at least one ventilation port
+in the end cap for ambient CO₂ and O₂ exchange.
+The port must allow gas movement while preventing
+light from entering.
+
+The light trap is a plug of open-cell reticulated
+foam pressed into the ventilation port hole. Gas
+and air diffuse freely through the open-cell
+structure. Light photons cannot travel in a
+straight line through the tortuous foam cell path
+— they are scattered and absorbed before reaching
+the interior.
+
+Active ventilation via small USB fan is recommended
+for all chambers containing Type B or Type C
+substrate where the LED generates heat.
+
+### 2.7 Tools and Equipment
+
+| Item | Use | Source | Cost |
+|---|---|---|---|
+| Utility knife or scalpel | Cutting foam and Mylar | Hardware / craft store | $3–8 |
+| Ruler and permanent marker | Measuring and marking | — | $0–2 |
+| Lighter or candle | Heating pin for port formation | — | $0–1 |
+| Sewing pin or needle | Forming seed port in cone apex | — | $0–1 |
+| Tweezers | Handling germinated seeds | — | $2–5 |
+| Damp paper towel | Seed germination substrate | Grocery store | $0–1 |
+| Ziplock bags (small) | Germination chambers | Grocery store | $1–2 |
+| Camera or smartphone | Photographic record | — | $0 |
+| Nitrile gloves | Handling seedlings | Pharmacy / hardware | $3–5 |
+| Millimeter ruler | Measuring penetration depth | — | $0–2 |
+| Red-light torch or headlamp | Observation without disrupting dark condition | Photography / astronomy supply | $5–15 |
+| Drill | Ventilation ports in end caps | Hardware store | $0 if borrowed |
+
+**Red-light torch note:**
+Red light (>650nm) does not activate phototropin
+receptors and does not disrupt skotomorphogenic
+state. Use red-light only for any interior
+inspection during the growth phase. Never use
+white light, blue light, or UV near open chambers
+at any point during the growth phase.
+
+### 2.8 Complete Cost Summary
+
+| Category | Estimated Cost |
+|---|---|
+| Biological materials | $2–4 |
+| Chamber materials | $15–30 |
+| Cone membrane materials | $8–15 |
+| Substrate and signal materials | $18–37 |
+| Ventilation materials | $3–13 |
+| Tools and equipment | $15–35 |
+| **Total estimate** | **$61–134** |
+
+---
+
+## PART III — LIGHT EXCLUSION REQUIREMENTS
+
+Light exclusion is the load-bearing engineering
+requirement of Scenarios 2 through 5. All design
+decisions are secondary to it.
+
+### 3.1 External Light Exclusion — Scenarios 2, 3, 4, 5
+
+All four chamber units for Scenarios 2 through 5
+must be in complete external light deprivation
+during the full growth phase from T=0 to T=168.
+
+Methods in order of preference:
+
+**Method A — Opaque pipe material:**
+Use black opaque PVC pipe. The pipe material itself
+blocks external light. Preferred because it is
+passive and cannot be accidentally removed.
+
+**Method B — External opaque wrap:**
+If transparent pipe is used, wrap the entire
+exterior of each chamber in black opaque tape,
+black plastic wrap, or black fabric before T=0.
+Must cover full length of both tube sections and
+all joints with no gaps.
+
+**Method C — Dark enclosure:**
+Place all chambers inside a light-tight box,
+cabinet, or dark room for the full growth phase.
+Must be confirmed light-tight before T=0.
+
+Any combination of methods is acceptable. The
+requirement is the result — zero external light
+reaching the chamber interior.
+
+### 3.2 Scenario 1 Light Conditions
+
+Scenario 1 is the exception. The S1 chamber of
+Scenario 1 contains a freely available UV-A LED
+that illuminates the chamber interior. External
+light exclusion of the S1 section of Scenario 1
+is not required and would defeat the purpose of
+the control.
+
+However, the S2 section of Scenario 1 (containing
+Type A hydroponic foam) should be opaque to prevent
+external light reaching the hydroponic substrate
+and potentially creating an unintended signal in S2.
+
+The cone membrane between S1 and S2 of Scenario 1
+must block UV-A from the free LED in S1 from
+passing into S2. The Mylar membrane handles this.
+
+### 3.3 Ventilation Port Light Exclusion
+
+Every ventilation port in every chamber must be
+fitted with a foam plug light trap before T=0.
+
+Confirm each foam plug is seated fully with no gap
+around the circumference. Apply aquarium silicone
+around the plug circumference if needed.
+
+Test each port: shine a torch at the exterior foam
+plug surface in darkness and confirm no light
+visible from the interior side.
+
+### 3.4 Membrane Joint Light Exclusion
+
+The cone membrane joint must be fully light-sealed
+by the aquarium silicone bead applied during
+membrane assembly. Test after curing by placing
+a torch inside the assembled chamber and checking
+for light leaks at the joint from outside.
+
+### 3.5 Observation Protocol for Light Exclusion
+
+At each observation time point:
+1. Prepare camera before opening or unwrapping
+   any chamber.
+2. Open or unwrap one chamber at a time. Replace
+   wrap before opening the next.
+3. Maximum 2 minutes of light exposure per chamber
+   per observation time point.
+4. Use red-light torch for any interior inspection.
+5. Record duration of light exposure for each
+   chamber at each time point in the experimental
+   log.
+
+---
+
+## PART IV — SUBSTRATE CONSTRUCTION
+
+### Type B Substrate — UV-Only Foam
+
+Type B carries UV-A only. No hydroponic nutrients.
+Construct all Type B units in the same session.
+
+**Step B1: Cut foam disc**
+Cut a disc of 20ppi reticulated foam to fit snugly
+in the pipe inner diameter (50mm). Thickness: 30mm.
+
+**Step B2: Mark seed-facing surface**
+Mark the face that will be oriented toward the seed
+with permanent marker on the outer edge. Write
+scenario number and "SEED SIDE."
+
+**Step B3: Cut LED channel**
+Cut a channel across the full diameter of the foam
+disc at 10–20mm depth from the seed-facing surface.
+The exact depth within this range is not critical.
+The LED must be interior to the foam body, not at
+the surface. Record the depth chosen for each unit.
+
+Channel width and depth: just sufficient to seat
+the UV-A LED strip flush within the foam body
+without protruding above the channel surface.
+
+**Step B4: Seat LED strip in channel**
+Press the UV-A LED strip into the channel flush
+with the foam body. Route power cable out through
+a small notch cut in the outer edge of the foam
+disc at channel depth level.
+
+**Step B5: Do not saturate with nutrient solution**
+Type B foam is dry or minimally moist (plain
+distilled water only, no nutrients). Do not apply
+hydroponic solution to Type B foam.
+
+If minimal moisture is applied to keep foam from
+desiccating under LED heat: use plain distilled
+water only. Apply sparingly.
+
+**Step B6: Confirm and record**
+For each Type B unit record:
+- UV-A LED strip: product name, stated wavelength,
+  date of purchase
+- LED embedding depth: mm from seed-facing surface
+- Foam moisture condition: dry / minimally moist
+  with plain water only
+- Scenario number assigned to this unit
+
+---
+
+### Type A Substrate — Hydroponic Foam, No UV
+
+Type A carries water and minerals only. No UV.
+
+**Step A1: Cut foam disc**
+Cut a disc of 20ppi reticulated foam to fit snugly
+in pipe inner diameter (50mm). Thickness: 20mm.
+No LED channel required.
+
+**Step A2: Mark seed-facing surface**
+Mark seed-facing surface on outer edge with scenario
+number and "SEED SIDE."
+
+**Step A3: Saturate with nutrient solution**
+Submerge foam disc in prepared hydroponic nutrient
+solution. Saturate fully — approximately 5 minutes
+submersion with gentle compression and release.
+Remove and drain 2 minutes. Foam should be fully
+saturated but not dripping.
+
+**Step A4: Confirm and record**
+For each Type A unit record:
+- Nutrient solution: product name, batch, dilution
+  ratio, date prepared
+- Foam disc: ppi rating, thickness (mm), supplier
+- Scenario number assigned to this unit
+
+---
+
+### Type C Substrate — Combined Hydroponic + UV Foam
+
+Type C carries water, minerals, and UV-A all
+co-located. Construction combines Type A and Type B
+procedures.
+
+**Step C1: Cut foam disc**
+Cut a disc of 20ppi reticulated foam to fit snugly
+in pipe inner diameter (50mm). Thickness: 30mm.
+
+**Step C2: Mark seed-facing surface**
+Mark seed-facing surface with scenario number and
+"SEED SIDE."
+
+**Step C3: Cut LED channel**
+As per Step B3 — cut channel at 10–20mm depth from
+seed-facing surface. Record depth.
+
+**Step C4: Seat LED strip in channel**
+As per Step B4 — seat LED strip flush in channel.
+Route power cable out through notch in foam edge.
+
+**Step C5: Saturate with nutrient solution**
+As per Step A3 — submerge fully in hydroponic
+nutrient solution including the LED-seated foam.
+The LED strip is waterproof or water-resistant for
+this purpose. Confirm LED strip is rated for moist
+conditions before saturating. If LED strip is not
+moisture-rated, apply a thin coat of clear silicone
+to the strip surface before seating in channel and
+allow to cure before saturation.
+
+Saturate fully. Drain 2 minutes.
+
+**Step C6: Confirm and record**
+For each Type C unit record:
+- UV-A LED strip: product name, stated wavelength,
+  moisture rating, date of purchase
+- LED embedding depth: mm from seed-facing surface
+- Nutrient solution: product name, batch, dilution
+  ratio, date prepared
+- Scenario number assigned to this unit
+
+---
+
+### Free UV Condition — Scenario 1 S1 Only
+
+**Step F1: Mount UV-A LED to S1 end cap**
+Cut a short length of UV-A LED strip sufficient
+to cover the inner face of the S1 end cap.
+Adhere to the inner face of the S1 end cap using
+the LED strip adhesive backing or a mounting
+bracket. Orient the LED face downward into the
+S1 chamber air space toward the seed.
+
+Route the power cable through a small port in the
+S1 end cap. Seal around the cable with aquarium
+silicone.
+
+**Step F2: Confirm and record**
+- UV-A LED strip: product name, stated wavelength,
+  date of purchase
+- Mounting position: inner face of S1 end cap,
+  facing downward
+
+---
+
+## PART V — CONE MEMBRANE CONSTRUCTION
+
+Construct 5 cone membrane units — one per scenario.
+All units are identical in construction. Orientation
+is determined at assembly time.
+
+### Step M1: Confirm funnel dimensions
+
+Funnel rim diameter must match pipe inner diameter
+(50mm) within ±1mm.
+
+If rim is slightly too large: trim with scissors.
+If rim is slightly too small: fill gap with
+aquarium silicone at assembly.
+
+### Step M2: Form the apex port
+
+Apex port must match net cup outer diameter
+(16mm or 25mm). Measure net cups before forming.
+
+1. Heat pin or needle with lighter until glowing.
+2. Melt small pilot hole at exact center of funnel
+   apex.
+3. Enlarge incrementally until net cup outer rim
+   seats snugly in port.
+4. Net cup rim rests on funnel surface at apex
+   without falling through.
+5. Test: insert net cup, invert funnel, confirm
+   net cup does not fall out under own weight.
+
+Failure mode: port too large — net cup falls through.
+Recovery: discard funnel, begin again.
+
+Failure mode: port off-center.
+Recovery: discard funnel, begin again.
+
+### Step M3: Wrap funnel in Mylar
+
+Mylar provides two barrier functions:
+1. UV-A and light barrier — aluminum layer reflects
+   and absorbs UV-A and visible light, preventing
+   any photonic signal crossing the membrane in
+   either direction
+2. Liquid barrier — prevents nutrient solution
+   migration across the membrane
+
+1. Cut Mylar to cover full outer cone surface with
+   15mm overlap at all edges.
+2. Apply thin layer of aquarium silicone to outer
+   funnel surface.
+3. Press Mylar onto silicone-coated surface from
+   apex downward toward rim. Eliminate all air
+   pockets and gaps.
+4. At apex port: cut star pattern in Mylar (4–6
+   radial cuts from center). Fold tabs through
+   port opening and press flat against inner funnel
+   surface. Secure with aquarium silicone ring
+   on inside.
+5. At rim: fold excess Mylar over rim edge and
+   press flat against inner rim surface. Secure
+   with aquarium silicone.
+6. Cure minimum 12 hours.
+
+Confirm after curing: no gaps in Mylar visible
+when held to strong light source. Apex port
+remains open. Net cup still seats correctly.
+
+### Step M4: Light-seal test of membrane unit
+
+Before installing in chamber, test for light
+leakage:
+
+1. In darkened room, hold assembled membrane unit
+   over bright torch with wide opening facing
+   light source.
+2. Observe apex side for any light transmission
+   through membrane surface or around rim.
+3. Any visible light transmission: re-apply Mylar
+   and silicone to gap. Cure again. Retest.
+
+Do not install a membrane unit that fails this
+test.
+
+### Step M5: Determine orientation before sealing
+
+| Scenario | Cone Orientation | Rationale |
+|---|---|---|
+| 1 | Apex up | Free UV above, Type A liquid below — apex up away from liquid in S2 |
+| 2 | Apex up | Type B UV foam in S1 above — apex up, away from liquid threat above |
+| 3 | Apex down | Type B UV foam in S2 below — apex down, away from liquid threat below |
+| 4 | Apex up | Type C combined foam in S1 above — apex up, toward empty void in S2 |
+| 5 | Apex down | Type C combined foam in S2 below — apex down, toward empty void in S1 |
+
+Mark orientation on outside of chamber pipe with
+permanent marker before sealing. Once silicone
+cures, orientation cannot be changed.
+
+### Step M6: Seal membrane into chamber
+
+1. Insert cone membrane into pipe at membrane plane
+   — junction between S1 and S2 pipe sections.
+2. Apply continuous bead of aquarium silicone
+   around full circumference of funnel rim on both
+   S1 side and S2 side.
+3. Cure minimum 12 hours.
+
+Confirm: no gap between funnel rim and pipe wall
+around full circumference. Perform light-seal test
+on fully assembled joint — shine torch at joint
+from outside, confirm no light visible from
+interior.
+
+---
+
+## PART VI — VENTILATION PORT INSTALLATION
+
+Install ventilation ports in all 5 chamber units
+before loading substrates or seeds.
+
+### Step V1: Drill ventilation ports
+
+For each chamber unit, drill one ventilation port
+in each end cap:
+- Port diameter: 10–15mm
+- Location: centered in end cap face
+
+For active ventilation, drill a second port in the
+same or opposite end cap.
+
+### Step V2: Install foam light trap plugs
+
+Cut cylindrical plugs of 20ppi reticulated foam:
+- Diameter: equal to port hole diameter
+- Length: 20–25mm
+
+Press each plug firmly into its port hole. Apply
+thin ring of aquarium silicone around plug
+circumference at outer face of end cap to seal
+any gap. Do not seal inner face — gas must exit
+through plug.
+
+Cure silicone minimum 12 hours.
+
+### Step V3: Test each port for light exclusion
+
+In darkened room, shine torch at outer face of
+each foam plug. Observe inner side of end cap
+for any visible light transmission.
+
+Any light transmission: re-seat plug, add
+silicone, cure, retest.
+
+### Step V4: Install optional fan
+
+Mount small USB fan at one end cap port using
+aquarium silicone to seal between fan housing and
+end cap. Fan draws ambient air through foam plug.
+
+Confirm fan functioning before T=0. Record fan
+model and voltage in experimental log.
+
+Running fan 10–15 minutes at each observation
+time point is sufficient for atmosphere refresh.
+
+---
+
+## PART VII — PRE-EXPERIMENT PREPARATION
 
 ### Step P1: Seed Viability Test
+### (3–4 days before experiment day)
 
-```
-WHEN: 3 days before experiment day.
+1. Place 10 seeds on damp paper towel folded in
+   half.
+2. Seal in ziplock bag with small air pocket.
+3. Place in warm location (18–24°C) in complete
+   darkness.
+4. Check at 24, 48, and 72 hours under red-light
+   only.
+5. Record: number germinated, time to germination,
+   radicle length at each check.
 
-WHAT TO DO:
-  Take 10 seeds from your packet.
-  Dampen a paper towel with
-  filtered or distilled water.
-  Place seeds on one half of the
-  damp paper towel.
-  Fold the other half over the seeds.
-  Place the folded towel into a
-  ziplock bag.
-  Seal the bag.
-  Leave at room temperature (20-22°C)
-  for 48 hours.
-  At 48 hours: open the bag and
-  count how many seeds have a
-  visible white radicle emerging.
+Proceed only if germination rate ≥ 80%.
 
-SUCCESS CRITERION:
-  7 or more of 10 seeds germinated
-  (70% germination rate).
-  Proceed to experiment.
+Failure mode: germination rate below 80%.
+Recovery: source new seeds from different batch.
 
-FAILURE MODE P1-A: Fewer than 5
-  of 10 germinate.
-  CAUSE: Seeds are old, improperly
-  stored, or dead batch.
-  RECOVERY: Get new seeds from a
-  different source. Run the viability
-  test again before proceeding.
-  Do NOT proceed with low-viability
-  seeds. The experiment will fail
-  at germination and you will not
-  know if the failure is due to
-  the protocol or the seeds.
+### Step P2: Prepare Hydroponic Nutrient Solution
 
-FAILURE MODE P1-B: Seeds germinate
-  but the radicle is brown or mushy
-  rather than white and firm.
-  CAUSE: Fungal or bacterial
-  contamination on the seed coat.
-  RECOVERY: Sterilise seeds using
-  the protocol in Step P2 before
-  the experiment day. Test another
-  10 seeds after sterilisation.
-```
+1. Measure 1L distilled water.
+2. Add hydroponic nutrient concentrate at seedling
+   dilution (1/4 to 1/2 strength per manufacturer
+   instructions).
+3. Mix thoroughly.
+4. Record: product name, batch number, dilution
+   ratio, date prepared.
+5. Use within 48 hours of preparation.
+6. Use same solution batch for all Type A and
+   Type C units in a single experimental run.
 
-### Step P2: Seed Sterilisation
+### Step P3: Construct All Substrate Units
 
-```
-WHEN: Night before experiment day
-  OR morning of experiment day.
-  Allow 30 minutes.
+Following Part IV, construct:
+- 1 Free UV condition unit (Scenario 1 S1)
+- 2 Type B units (Scenarios 2 and 3)
+- 2 Type C units (Scenarios 4 and 5)
+- 3 Type A units (Scenarios 1, 2, and 3)
 
-WHAT TO DO:
-  Place seeds in a small glass
-  or ceramic container (not plastic
-  — bleach degrades plastic).
-  Add enough 70% ethanol to cover
-  the seeds.
-  Swirl gently for 30 seconds.
-  Pour off the ethanol.
-  (Do not leave seeds in ethanol
-  longer than 60 seconds total —
-  longer kills the seeds.)
+Record all construction parameters. Leave LED
+cables unconnected until substrate loading.
 
-  Immediately add 10% bleach solution
-  (1 part household bleach + 9 parts
-  distilled water).
-  Cover the seeds completely.
-  Swirl gently.
-  Leave for exactly 5 minutes.
-  Set a timer. Do not guess.
+### Step P4: Construct All 5 Cone Membrane Units
 
-  Pour off the bleach solution.
-  Add distilled water.
-  Swirl gently 30 seconds.
-  Pour off the water.
-  Repeat water wash 4 more times
-  (5 washes total).
-  The bleach must be completely
-  removed or it will inhibit
-  germination.
+Following Part V, construct and cure all 5 cone
+membrane units. Allow minimum 12 hours curing.
+Perform light-seal test on all 5 units before
+installation. Label each by scenario number and
+cone orientation.
 
-  After 5 washes: leave seeds in
-  a small volume of distilled water
-  (just enough to cover them)
-  until ready to use.
-  Use within 4 hours.
-  Do not leave overnight in water
-  (seeds will begin to germinate
-  and become fragile).
+### Step P5: Assemble and Cure Chamber Units
 
-SUCCESS CRITERION:
-  Seeds are white, firm, and intact
-  after sterilisation.
-  No bleach smell remaining after
-  5 washes (smell the final wash
-  water — if it smells of bleach,
-  add 2 more washes).
+For each scenario, join S1 and S2 pipe sections
+at cured cone membrane. Seal with aquarium
+silicone. Allow minimum 12 hours curing.
 
-FAILURE MODE P2-A: Seeds turn brown
-  or soft after bleach treatment.
-  CAUSE: Bleach concentration too
-  high OR treatment time too long.
-  RECOVERY: These seeds are dead.
-  Start again with fresh seeds.
-  Use shorter bleach treatment
-  (3 minutes instead of 5) or
-  more dilute bleach (5% instead
-  of 10%).
+Install ventilation ports per Part VI. Test all
+ports for light exclusion.
 
-FAILURE MODE P2-B: Seeds slip
-  through fingers/tools and are
-  hard to handle.
-  CAUSE: Small seeds (especially
-  radish or Arabidopsis) are
-  difficult to manage in liquid.
-  RECOVERY: Use a fine mesh tea
-  strainer to hold seeds during
-  the washing steps. Pour liquids
-  through the strainer. Rinse
-  with water directly through
-  the strainer.
+Confirm all 5 chamber units are:
+- Sealed at all joints
+- Ventilation ports installed and light-tested
+- External light exclusion confirmed or enclosure
+  ready
+- Labelled by scenario number, cone orientation,
+  S1 contents, S2 contents
 
-SKIP THIS STEP IF:
-  Seeds are fresh from packet,
-  mung beans (robust, not necessary),
-  or if you are running a quick
-  proof-of-concept and willing to
-  accept some contamination risk.
-  Contamination is manageable —
-  it just requires replacing the
-  agar layer and starting again.
-  Sterilisation reduces this risk
-  significantly but is not mandatory
-  for a first attempt.
-```
+### Step P6: Full System Light Exclusion Test
 
-### Step P3: Prepare Mineral Solution
+Before loading any substrates or seeds, in a
+fully darkened room, allow eyes to adapt minimum
+3 minutes. Examine each chamber unit for any
+visible light leakage at joints, ventilation
+ports, end cap edges, and pipe walls.
 
-```
-WHEN: Night before or morning of
-  experiment day.
+Note: Scenario 1 S1 section is exempt from this
+test — it will contain a freely emitting UV-A LED.
+Test only the S2 section of Scenario 1.
 
-WHAT TO DO (Full mineral solution):
-  Measure 200mL distilled or
-  filtered water into a clean
-  glass container.
-  Add 0.1g potassium nitrate (KNO3).
-  (Approximately 1/8 teaspoon.)
-  Add 0.1g calcium nitrate Ca(NO3)2.
-  (Approximately 1/8 teaspoon.)
-  Add 0.05g magnesium sulfate MgSO4.
-  (Approximately 1/16 teaspoon
-  or a small pinch.)
-  Stir until fully dissolved.
-  Label container: "MINERAL SOLUTION
-  — DO NOT DRINK"
-  (Potassium nitrate in quantity
-  can cause illness if ingested.
-  Small quantities in this solution
-  are not dangerous but label clearly.)
-
-WHAT TO DO (Simplified first-run):
-  Open one bottle of still mineral
-  water (grocery store).
-  Use directly. No preparation needed.
-  Label as "MINERAL WATER — EXPERIMENT".
-
-SUCCESS CRITERION:
-  Solution is clear.
-  No undissolved salt particles
-  visible at the bottom after
-  2 minutes of stirring.
-
-FAILURE MODE P3-A: Salts not
-  dissolving.
-  CAUSE: Water is cold or salts
-  are clumped.
-  RECOVERY: Warm the water slightly
-  (not boiling — just warm to touch).
-  Stir more vigorously.
-  Break up any clumps with the
-  stirring rod before adding to water.
-
-FAILURE MODE P3-B: Solution appears
-  cloudy or milky after mixing.
-  CAUSE: One of the salts has
-  reacted with another or with
-  impurities in the water.
-  Typically harmless (calcium
-  carbonate precipitation if water
-  has high carbonate content).
-  RECOVERY: Filter through a coffee
-  filter paper or paper towel.
-  Use the clear filtrate.
-  If cloudiness persists: switch
-  to distilled water rather than
-  tap or mineral water.
-```
-
-### Step P4: Prepare Chambers
-### (Physical Assembly Minus Agar)
-
-```
-WHEN: Night before experiment day
-  OR morning of experiment day.
-
-FOR EACH CHAMBER (repeat for all 5:
-  1 experimental + 4 controls):
-
-  LABEL each chamber clearly
-  on the outside with permanent marker:
-    EXP: Experimental (water above,
-         UV below)
-    C1: Control 1 (standard: water
-        below, UV above)
-    C2: Control 2 (gravity only:
-        no light, no water gradient)
-    C3: Control 3 (UV below,
-        no water gradient)
-    C4: Control 4 (water above,
-        no light inversion — standard
-        ambient light only)
-
-  WIPE each cup/jar with 70%
-  ethanol on a paper towel.
-  Allow to air dry 5 minutes.
-
-  FOR THE EXPERIMENTAL CHAMBER (EXP):
-  Install UV LED:
-    Coil the LED strip or position
-    the LED bulb in the BOTTOM of
-    the lower cup/jar, pointing UPWARD.
-    If using LED strip: tape it to
-    the inside bottom of the lower cup
-    with the LEDs facing up.
-    Secure the power cable so it
-    exits the chamber without
-    creating a light leak.
-    Punch or melt a small hole in
-    the side of the lower cup near
-    the bottom for the cable to exit.
-    Seal around the cable with black
-    tape to prevent light leakage
-    from the hole.
-
-  If using aluminium foil reflector:
-    Cut a piece of foil to fit the
-    inside of the lower cup.
-    Line the walls (not the bottom)
-    with foil, shiny side facing in.
-    This reflects light upward
-    toward the seed position.
-
-  Position the mesh platform:
-    Cut the plastic mesh or screen
-    to fit snugly inside the cup
-    at the junction point between
-    upper and lower sections.
-    If using two stacked cups:
-    the mesh sits at the rim of
-    the lower cup, held in place
-    by the weight of the upper cup
-    sitting on top of it.
-    Test by assembling the two cups
-    with the mesh between them.
-    The mesh should not sag under
-    light finger pressure.
-    If it sags: use a stiffer mesh
-    or add support.
-
-  FOR CONTROL 1 (C1, STANDARD):
-  Install UV LED ABOVE the seed
-  position (in the upper section,
-  pointing downward).
-  Water/mineral solution goes in the
-  LOWER section.
-  Mesh platform separates lower
-  (water) from upper (seed/agar).
-  Black cover is NOT needed for C1
-  (light comes from above as normal).
-
-  FOR CONTROL 2 (C2, GRAVITY ONLY):
-  No LED installed.
-  No mineral solution.
-  Chamber is completely opaque
-  (wrap entire chamber in foil
-  or place in a cardboard box).
-
-  FOR CONTROL 3 (C3, UV BELOW, NO WATER):
-  Same as EXP but no mineral
-  solution added above seed.
-  Agar only. No water gradient.
-
-  FOR CONTROL 4 (C4, WATER ABOVE, NO UV):
-  Same as EXP but no LED below.
-  Mineral solution above as in EXP.
-  Chamber is NOT blacked out above —
-  ambient light is the only light source.
-
-SUCCESS CRITERION P4:
-  All chambers are labelled.
-  All surfaces are wiped with ethanol.
-  LED is installed and confirmed
-  working (turn it on, see the
-  glow through the mesh).
-  Mesh platform is stable and does
-  not sag.
-  Power cables exit without light leaks.
-  Chambers are stable and will not
-  tip over when assembled.
-
-FAILURE MODE P4-A: LED does not
-  light up.
-  CAUSE: Connection problem or
-  dead LED.
-  RECOVERY: Check all connections.
-  Test the LED before installing.
-  Have a spare LED strip if possible.
-  Do not proceed without a working
-  LED for EXP and C1 and C3.
-
-FAILURE MODE P4-B: Light leaks
-  visible around the cable exit
-  or between cup rims.
-  CAUSE: Gap not sealed.
-  RECOVERY: Add more black tape
-  around the cable exit.
-  Add a ring of black tape around
-  the rim junction of the two
-  stacked cups.
-  Turn off room lights and look
-  at the assembled chamber with
-  LED on. Any visible light leaking
-  through the upper section means
-  the black cover is insufficient.
-  Add more layers.
-
-FAILURE MODE P4-C: Mesh sags or
-  falls through when agar is poured.
-  CAUSE: Mesh holes too large or
-  mesh too flexible.
-  RECOVERY: Use a stiffer mesh
-  (cross-stitch plastic canvas
-  is stiffer than window screen).
-  OR: do not use a mesh.
-  Pour agar directly into the
-  bottom section. Allow to set.
-  The agar itself will act as the
-  barrier between the light below
-  and the water above.
-  Seeds placed on top of the agar.
-  This is the simplest option
-  and eliminates the mesh entirely.
-```
+Correct any leakage before proceeding.
 
 ---
 
-## SECTION 3 — EXPERIMENT DAY
-## STEP BY STEP
-
-### Step E1: Prepare Agar Solution
-
-```
-TIME REQUIRED: 15 minutes.
-
-WHAT TO DO:
-  Measure 100mL of distilled or
-  filtered water into a microwave-
-  safe glass measuring cup or beaker.
-  Weigh 1.0g agar powder on the
-  kitchen scale.
-  (If using measuring spoon:
-  approximately 1/4 level teaspoon.)
-  Add agar powder to the water.
-  Stir briefly to suspend the powder.
-  (It will not dissolve cold — it
-  just needs to be dispersed.)
-
-  Microwave on high for 60 seconds.
-  Remove and stir.
-  Microwave again for 30 seconds.
-  Remove and stir.
-  The solution should be completely
-  clear and gently boiling.
-  If still cloudy or grainy: microwave
-  for another 30 seconds and stir again.
-  Repeat until fully clear.
-
-  ALTERNATIVELY if using hotplate:
-  Heat over medium heat while stirring
-  continuously until boiling and clear.
-  Takes 5-8 minutes.
-
-  Allow to cool.
-  Check temperature by holding the
-  outside of the glass.
-  Target: feels warm but does not
-  burn — approximately 40-50°C.
-  At this temperature it will still
-  be liquid but will set quickly
-  once poured.
-  If you have a thermometer: confirm
-  temperature is between 40°C and 60°C.
-
-  IMPORTANT: Do not let agar set in
-  the measuring cup.
-  Once it drops below ~35°C it begins
-  to gel.
-  Work quickly once it has cooled
-  to 40-50°C.
-
-SUCCESS CRITERION E1:
-  Agar solution is completely clear,
-  no visible particles.
-  Temperature is 40-60°C.
-  Solution is still liquid (not gelled).
-
-FAILURE MODE E1-A: Agar solution
-  is still cloudy after 3 rounds
-  of microwaving.
-  CAUSE: Agar quality poor, water
-  has high mineral content that
-  inhibits agar dissolution, or
-  agar was not properly suspended
-  before heating.
-  RECOVERY: Use distilled water
-  (not tap water). Stir the
-  suspension more vigorously before
-  heating. Heat longer.
-  If still cloudy: the agar may be
-  old or degraded.
-  Try a new package.
-
-FAILURE MODE E1-B: Agar has gelled
-  before pouring into chambers.
-  CAUSE: Cooled too much before
-  you were ready to pour.
-  RECOVERY: Reheat gently in
-  microwave for 20-30 seconds.
-  Stir. Check temperature.
-  Do not boil again — one more
-  gentle reheat is fine but
-  repeated boiling degrades the
-  agar quality.
-
-FAILURE MODE E1-C: Boiled over
-  in microwave.
-  CAUSE: Agar solution foams
-  significantly when it reaches
-  boiling point.
-  RECOVERY: Clean up. Remeasure
-  water and agar. Use a larger
-  container next time (at least
-  2x the volume of the solution).
-  Or microwave in shorter bursts
-  (20 seconds each) and stir between
-  each burst to prevent boilover.
-```
-
-### Step E2: Pour Agar into Chambers
-
-```
-TIME REQUIRED: 10 minutes.
-DO IMMEDIATELY AFTER E1 WHILE
-AGAR IS STILL LIQUID.
-
-WHAT TO DO:
-  Work quickly.
-  For each chamber that requires agar
-  (EXP, C1, C2, C3, C4 — all five):
-
-  Pour approximately 5-8mL of agar
-  solution into the seed zone of
-  each chamber.
-  The seed zone is:
-    For EXP, C3: the surface of the
-    mesh platform or directly into
-    the lower cup if no mesh.
-    For C1: above the lower section
-    where the mineral solution will go.
-    For C2, C4: directly into the
-    bottom of the cup.
-
-  The agar layer should be:
-  3-5mm deep.
-  Roughly the thickness of a pencil eraser.
-  NOT thicker — thicker agar layers
-  may slow light penetration below
-  and slow root growth toward the
-  gradient above.
-  NOT thinner — thinner layers
-  may crack or dry out.
-
-  Use the syringe/pipette to
-  measure 5-8mL accurately.
-  Or: pour carefully from the
-  measuring cup, estimating by eye.
-  5-8mL in a standard 500mL cup
-  covers the bottom to about 4mm depth.
-
-  After pouring: tilt the chamber
-  gently to ensure the agar is
-  level and covers the entire
-  seed platform area.
-  Place on a flat level surface
-  and do not disturb for 10-15 minutes
-  while the agar sets.
-
-SUCCESS CRITERION E2:
-  Agar layer is smooth, level,
-  and covers the entire seed zone.
-  Layer depth is 3-5mm.
-  No bubbles in the agar layer
-  (bubbles can trap seeds and
-  prevent root contact with the
-  agar surface — they indicate
-  the agar was poured too hot
-  or too quickly).
-  After 15 minutes: agar is solid
-  (gently press with a clean toothpick
-  — it should not indent more than
-  1mm under light pressure).
-
-FAILURE MODE E2-A: Bubbles in the
-  agar layer.
-  CAUSE: Agar was poured too quickly
-  or was still too hot (steam bubbles).
-  RECOVERY: If bubbles are large,
-  use a toothpick to pop them
-  while the agar is still liquid.
-  If agar has already set with bubbles:
-  it is still usable unless the
-  bubbles are directly where the
-  seeds will be placed.
-  Place seeds on bubble-free areas
-  of the agar surface.
-
-FAILURE MODE E2-B: Agar is uneven
-  or runs to one side.
-  CAUSE: Chamber was not level
-  when agar was poured.
-  RECOVERY: If agar has not set
-  yet: tilt the chamber to re-level.
-  If agar has set uneven: acceptable
-  if the seed zone (centre of the
-  agar surface) is still covered.
-  Place seeds on the thicker part
-  of the agar layer.
-
-FAILURE MODE E2-C: Agar does not
-  set after 20 minutes.
-  CAUSE: Agar concentration too low,
-  agar was not fully dissolved,
-  or chamber is too warm.
-  RECOVERY: Move chamber to a
-  cooler location (not the
-  refrigerator — below 4°C can
-  damage the seeds later).
-  Room temperature in a cool spot.
-  Wait a further 20 minutes.
-  If still not set: the agar
-  is unusable.
-  Discard and prepare fresh agar
-  at 1.5g per 100mL (slightly
-  higher concentration).
-```
-
-### Step E3: Place Seeds
-
-```
-TIME REQUIRED: 5-10 minutes.
-WHEN: After agar has fully set
-  (at least 15 minutes after pouring,
-  confirmed solid by toothpick test).
-
-WHAT TO DO:
-  Using a clean toothpick, forceps,
-  or a moistened finger:
-  Pick up individual seeds.
-  Place 3-5 seeds on the surface
-  of the agar in each chamber.
-  Space seeds at least 1.5cm apart.
-  This prevents roots and shoots
-  from tangling with each other
-  as they grow.
-
-  For radish or mung bean:
-  Place 3 seeds per chamber.
-  These are large seeds that will
-  produce large seedlings.
-  Too many in one chamber will
-  become crowded.
-
-  For Arabidopsis:
-  Place 5-8 seeds per chamber.
-  Small seeds, small seedlings.
-  More seeds compensate for
-  the lower individual visibility.
-
-  DO NOT press seeds into the agar.
-  The seed should sit ON the surface.
-  The radicle (first root) will grow
-  out of the seed and encounter the
-  agar surface, then navigate from there.
-  Pressing the seed into the agar
-  creates a physical constraint on
-  the radicle direction.
-
-  DO NOT add water to the agar
-  surface at this step.
-  The mineral solution goes above
-  the seeds in a separate step.
-  The agar surface should be dry
-  (the agar contains water but
-  the surface should not be flooded).
-
-SUCCESS CRITERION E3:
-  3-5 seeds placed per chamber.
-  Seeds are spaced 1.5cm apart minimum.
-  Seeds are sitting ON the agar surface,
-  not embedded in it.
-  Seeds visible and distinguishable.
-  Photograph each chamber at this
-  step (BASELINE PHOTOGRAPH).
-  Label photograph: [date]_[chamberID]
-  _T0_seed_placement.jpg
-
-FAILURE MODE E3-A: Seeds are too
-  small to place individually
-  (Arabidopsis is 0.5mm diameter).
-  CAUSE: Fine motor difficulty with
-  very small seeds.
-  RECOVERY: Dip the tip of a
-  moistened toothpick into the
-  seed mass. One or two seeds will
-  stick to the wet tip. Touch the
-  tip to the agar surface. The seed
-  transfers to the agar. This is
-  the standard method for placing
-  Arabidopsis seeds.
-
-FAILURE MODE E3-B: Seeds fall
-  off the agar surface and roll
-  to the edges.
-  CAUSE: Agar surface is dry and
-  seeds roll freely on it.
-  RECOVERY: Breathe gently on the
-  agar surface to add slight
-  moisture (not enough to flood it,
-  just enough to make it slightly
-  tacky). Place seeds immediately.
-  They will stick to the tacky surface.
-  Alternatively: add a 1µL droplet
-  of water using the pipette to each
-  spot where a seed will be placed,
-  then place the seed on the droplet.
-
-FAILURE MODE E3-C: Agar surface
-  is wet or flooded before seeds
-  are placed.
-  CAUSE: Condensation from the
-  warm agar cooled against a
-  cold surface, or water droplets
-  on the chamber walls dripped
-  onto the agar.
-  RECOVERY: Use a dry corner of
-  a paper towel to absorb excess
-  surface water from the agar.
-  Blot gently — do not wipe or
-  disturb the agar layer.
-  Wait 5 minutes for the surface
-  to become tacky again before
-  placing seeds.
-```
-
-### Step E4: Add the Mineral
-### Water Layer (EXP and C4 only)
-
-```
-TIME REQUIRED: 5 minutes.
-WHEN: Immediately after seed placement.
-
-FOR EXP AND C4 CHAMBERS ONLY.
-C1, C2, C3 do not have mineral water
-above the seeds at this step.
-(C1 has mineral water BELOW the seeds —
-see Step E5.)
-
-WHAT TO DO:
-  For EXP and C4:
-  Using the syringe or pipette:
-  Carefully deliver 30-40mL of
-  the mineral solution ABOVE the
-  agar layer and seeds.
-  Add it slowly, in small amounts,
-  drizzling it down the side of
-  the chamber wall rather than
-  pouring it directly onto the seeds.
-
-  The liquid should form a layer
-  ABOVE the seed-agar interface.
-  In a two-cup stacked design:
-  the liquid sits in the upper cup
-  above the mesh and agar.
-  In a single cup design:
-  the liquid floats on top of
-  the agar (agar is denser and
-  will not mix with the liquid
-  layer under gravity).
-
-  The seed is now at the interface:
-    Below: agar layer (support medium).
-    Above: mineral water layer
-    (water + mineral gradient).
-    Further below: LED light source
-    (for EXP) or ambient light (for C4).
-
-  CRITICAL: ADD THE LIQUID SLOWLY.
-  Pouring too fast creates turbulence
-  that disturbs the seeds and
-  may embed them in the agar.
-  Take 2-3 minutes to add 30-40mL.
-
-SUCCESS CRITERION E4:
-  Mineral water layer is visible
-  above the agar in EXP and C4.
-  Seeds are still visible and have
-  not been displaced from the
-  agar surface.
-  Agar layer is intact below.
-  Photograph: [date]_[chamberID]
-  _T0_water_added.jpg
-
-FAILURE MODE E4-A: Seeds displaced
-  or buried by adding water too fast.
-  CAUSE: Too rapid addition of liquid.
-  RECOVERY: If seeds have sunk
-  into the agar: carefully fish
-  them back to the surface with
-  a toothpick before the agar
-  has been disturbed too much.
-  If seeds are now fully submerged
-  in the water layer: this is still
-  acceptable. Seeds can germinate
-  when submerged in shallow water
-  (this is essentially hydroponics).
-  The experiment can proceed.
-  Note in the record that seeds
-  were submerged rather than
-  at the agar-water interface.
-
-FAILURE MODE E4-B: Mineral water
-  drains through the agar layer
-  and down to the LED.
-  CAUSE: Agar layer too thin,
-  cracked, or not fully set.
-  A crack or gap allows the liquid
-  to drain through.
-  RECOVERY: The LED must be
-  waterproofed if this is likely.
-  Standard UV LED strips are
-  not fully waterproof.
-  If liquid reaches the LED:
-  disconnect power immediately.
-  Allow to dry completely (12 hours)
-  before reconnecting.
-  To prevent this: ensure the agar
-  layer is 5mm deep and fully set
-  before adding liquid.
-  If using a two-cup stacked design:
-  the mesh platform and agar together
-  should form a complete barrier.
-  Seal the gap between the two cups
-  with petroleum jelly (Vaseline)
-  applied around the rim if leakage
-  is a concern.
-
-FAILURE MODE E4-C: Mineral water
-  layer evaporates quickly.
-  CAUSE: Chamber is not sealed,
-  warm room environment, long
-  experiment duration.
-  RECOVERY: Seal the top of the
-  upper chamber with plastic wrap
-  (cling film) or the cup's own lid
-  (with a small hole for gas exchange).
-  This maintains the water layer
-  over the 5-7 day experiment period.
-  Without a seal: the water layer
-  may need to be topped up every
-  24-48 hours.
-  If topping up: add the same
-  mineral solution composition.
-  Do not add plain water (would
-  dilute the mineral gradient).
-  Record every addition in the
-  observation log.
-```
-
-### Step E5: Add Mineral Water
-### Below Seeds (C1 Only)
-
-```
-TIME REQUIRED: 3 minutes.
-FOR C1 (STANDARD CONTROL) ONLY.
-
-WHAT TO DO:
-  For C1 (standard orientation —
-  water BELOW, light ABOVE):
-  The mineral water goes in the
-  LOWER section of the chamber.
-  The agar and seeds sit on the
-  mesh above the water layer.
-
-  Add 30-40mL of mineral solution
-  to the lower cup/section.
-  Install the mesh platform above
-  the water (if using two-cup design).
-  The agar layer (already set, with
-  seeds placed in Step E3) sits
-  on the mesh.
-  The mineral water is now BELOW
-  the agar and seeds.
-
-  Install the UV LED in the UPPER
-  section of C1, pointing DOWNWARD
-  toward the seeds.
-  This gives C1 standard conditions:
-  light from above, water from below.
-  This is what a normal plant would
-  experience.
-
-SUCCESS CRITERION E5:
-  Mineral water visible in the
-  lower section of C1.
-  LED installed above, pointing down.
-  Seeds positioned between water
-  (below) and light (above).
-  This is the mirror image of EXP.
-```
-
-### Step E6: Install Light Blocking
-### and Final Chamber Assembly
-
-```
-TIME REQUIRED: 10 minutes.
-
-FOR EXP AND C3 (UV below,
-black cover above):
-
-WHAT TO DO:
-  Cut black cardboard or paper
-  to fit over the top of the
-  upper cup/jar.
-  It should fully cover the opening
-  and overlap the sides by at least
-  1cm.
-  Secure with rubber bands or tape.
-  Ensure no light enters from the
-  top of the chamber.
-  TEST: In a dimly lit room (not
-  fully dark), look at the top
-  of the assembled chamber.
-  No glow should be visible
-  through the black cover when
-  the LED is on below.
-  If a glow is visible through the
-  cover: add another layer of black
-  paper or use thicker cardboard.
-
-FOR C4 (water above, ambient light):
-  No black cover. Top is left open
-  or covered with transparent
-  plastic wrap that admits ambient
-  room light from above.
-  The ambient light (overhead
-  fluorescent or LED) is the
-  only light source for C4.
-
-FOR C2 (gravity only, complete dark):
-  Wrap the entire chamber in foil
-  or place inside a cardboard box.
-  No light at all. Complete darkness.
-
-FINAL ASSEMBLY CHECK:
-
-  EXP:
-  ✓ LED below, pointing up, confirmed on.
-  ✓ Agar layer with seeds above LED.
-  ✓ Mineral water layer above seeds.
-  ✓ Black cover above, no light leaks.
-  ✓ Chamber stable, will not tip.
-  ✓ Temperature: 20-22°C location confirmed.
-
-  C1:
-  ✓ Mineral water below seeds.
-  ✓ Agar with seeds above water.
-  ✓ LED above, pointing down, confirmed on.
-  ✓ No black cover (light from above).
-
-  C2:
-  ✓ No LED, no water gradient.
-  ✓ Complete darkness.
-
-  C3:
-  ✓ LED below, confirmed on.
-  ✓ No mineral water above seeds.
-  ✓ Black cover above.
-
-  C4:
-  ✓ Mineral water above seeds.
-  ✓ No LED.
-  ✓ Open top or transparent cover.
-
-SUCCESS CRITERION E6:
-  All chambers assembled and confirmed.
-  All LEDs that should be on are on
-  (EXP, C1, C3).
-  All black covers are light-tight.
-  All chambers are labelled.
-  All chambers are placed in their
-  designated positions at 20-22°C.
-  T=0 photographs taken of all
-  five chambers.
-  Record in log: time, date, room
-  temperature, LED status for
-  each chamber.
-
-FAILURE MODE E6-A: Chamber tips over
-  during or after assembly.
-  CAUSE: Top-heavy design (water
-  layer in upper section makes EXP
-  unstable).
-  RECOVERY: Place EXP chamber
-  in a small bowl or use sticky
-  tack/tape to secure the base
-  to the surface.
-  Wide-mouth mason jars are more
-  stable than stacked cups.
-
-FAILURE MODE E6-B: Condensation
-  inside chamber fogs the
-  transparent walls, making
-  observation difficult.
-  CAUSE: Temperature difference
-  between chamber interior (warm
-  from LED) and exterior (room temp).
-  RECOVERY: This is cosmetic and
-  does not affect the experiment.
-  Wipe the outside of the chamber
-  with a cloth before photographing.
-  The condensation will clear as
-  the interior temperature stabilises.
-  If condensation persists: the LED
-  is generating too much heat.
-  Move the LED further from the seed
-  zone (increase distance to 10cm)
-  or use a lower-power LED.
-  Confirm temperature at seed level
-  is still 20-22°C (not elevated
-  by LED heat).
-```
+## PART VIII — SEED GERMINATION AND PLACEMENT
+
+### Step G1: Germinate Seeds
+### (48 hours before placement)
+
+1. Place 10 seeds on damp paper towel.
+2. Fold paper towel over seeds.
+3. Seal in ziplock bag with small air pocket.
+4. Place in warm location (20–24°C) in complete
+   darkness.
+5. Keep in complete darkness throughout germination
+   — seeds must enter chambers in dark-adapted
+   skotomorphogenic state.
+6. Check at 24 and 48 hours under red-light only.
+
+Target state for placement:
+- Radicle visible and clearly directed
+- Radicle length: 3–8mm
+- Hypocotyl not yet significantly elongated
+- Seed coat may still be partially attached
+
+Do not wait for radicle to exceed 10mm.
+
+### Step G2: Select Seeds for Placement
+
+Select 5 seeds — one per scenario.
+
+Selection criteria:
+- Clear radicle direction visible
+- Radicle intact, no kinking or mechanical damage
+- Radicle length 3–8mm
+- No signs of fungal contamination
+
+Record for each selected seed:
+- Radicle length at placement (mm)
+- Hours since germination began
+
+All selection and placement steps under red-light
+only. Do not expose germinated seeds to white
+light, blue light, or UV at any point.
+
+### Step G3: Place Germinated Seed in Net Cup
+
+Using tweezers and clean gloves, under red-light:
+
+1. Handle seed by seed body only. Do not grasp
+   radicle.
+2. Lower seed into net cup with radicle pointing
+   downward through net cup mesh bottom.
+3. Seed body rests on net cup rim or upper mesh.
+4. Radicle extends downward through mesh without
+   compression or bending.
+5. Stabilize with small moist foam fragment inside
+   net cup if needed. Do not pack tightly.
+
+Confirm: radicle exits downward through mesh
+without bending. Seed body stable, does not rock.
+
+### Step G4: Seat Net Cup in Cone Membrane
+
+Under red-light only:
+
+1. Lower net cup with seed into apex port of cone
+   membrane.
+2. Net cup rim seats on cone surface at apex.
+3. Radicle extends through port into substrate
+   space on apex side of membrane.
+4. Seed body and emerging hypocotyl are in
+   substrate space on wide-opening side of membrane.
+
+**Apex-up scenarios (1, 2, 4):**
+- Radicle extends downward into S2
+- Seed body and hypocotyl in S1 space
+
+**Apex-down scenarios (3, 5):**
+- Cone inverted — wide opening faces upward
+- Net cup seats at bottom apex
+- Radicle extends downward through port into S2
+
+Confirm under red-light: net cup seated snugly,
+no rocking, radicle not compressed against port
+edge.
+
+### Step G5: Load Substrates and Activate Signals
+
+This is T=0. Record exact time for each scenario.
+All 5 scenarios loaded and activated within 30
+minutes maximum. Perform all steps under red-light.
 
 ---
 
-## SECTION 4 — OBSERVATION PROTOCOL
+**Scenario 1:**
+- S1: Mount Free UV unit — UV-A LED strip adhered
+  to inner face of S1 end cap, facing downward.
+  Connect LED to power. Confirm UV-A active.
+  Seal S1 end cap with ventilation port. Route
+  LED cable through sealed cable port.
+  Note: S1 of Scenario 1 is NOT externally wrapped
+  — free UV in air is the condition.
+  S2 end cap and pipe body should be opaque or
+  wrapped to prevent external light entering S2.
+- S2: Insert Type A substrate unit, seed-facing
+  surface oriented upward toward seed. Confirm
+  foam contacts S2 inner surface. Seal S2 end cap
+  with ventilation port.
 
-### Step O1: T=24 Hours
-### (First Germination Check)
+---
+
+**Scenario 2:**
+- S1: Insert Type B substrate unit, seed-facing
+  surface oriented downward toward seed. Connect
+  UV-A LED strip to power. Confirm UV-A active.
+  Seal S1 end cap with ventilation port. Route
+  LED cable through sealed cable port.
+- S2: Insert Type A substrate unit, seed-facing
+  surface oriented upward toward seed. Seal S2
+  end cap with ventilation port.
+- Apply external light exclusion wrap to full
+  chamber immediately after sealing.
+
+---
+
+**Scenario 3:**
+- S1: Insert Type A substrate unit, seed-facing
+  surface oriented downward toward seed. Seal S1
+  end cap with ventilation port.
+- S2: Insert Type B substrate unit, seed-facing
+  surface oriented upward toward seed. Connect
+  UV-A LED strip. Confirm active. Seal S2 end cap
+  with ventilation port. Route LED cable.
+- Apply external light exclusion wrap to full
+  chamber immediately after sealing.
+
+---
+
+**Scenario 4:**
+- S1: Insert Type C substrate unit, seed-facing
+  surface oriented downward toward seed. Connect
+  UV-A LED strip. Confirm active. Seal S1 end cap
+  with ventilation port. Route LED cable.
+- S2: Empty void. Seal S2 end cap with ventilation
+  port.
+- Apply external light exclusion wrap to full
+  chamber immediately after sealing.
+
+---
+
+**Scenario 5:**
+- S1: Empty void. Seal S1 end cap with ventilation
+  port.
+- S2: Insert Type C substrate unit, seed-facing
+  surface oriented upward toward seed. Connect
+  UV-A LED strip. Confirm active. Seal S2 end cap
+  with ventilation port. Route LED cable.
+- Apply external light exclusion wrap to full
+  chamber immediately after sealing.
+
+---
+
+Record T=0 for each scenario in experimental log.
+Record LED activation confirmed Y/N for all
+scenarios containing UV substrate or Free UV.
+
+Place all Scenario 2 through 5 chamber units in
+dark enclosure or confirm external wrap fully
+applied. No further light exposure to these
+chambers until T=24 observation.
+
+---
+
+## PART IX — OBSERVATION PROTOCOL
+
+All observations at specified time points. Between
+time points, Scenarios 2 through 5 are in complete
+darkness with no exceptions.
+
+Equipment ready before opening any chamber:
+- Camera charged and ready
+- Written log open
+- Millimeter ruler
+- Red-light torch
+- Fresh wrap material ready for re-sealing
+
+---
+
+### Substrate Penetration Depth Measurement
+
+Definition: distance (mm) from seed-facing surface
+of foam substrate to visible tip of root or shoot
+growing into that substrate.
+
+Measured by estimating position of growing tip
+through pipe wall or via brief direct observation
+under red-light when end cap is removed.
+
+Record:
+- Shoot penetration depth into S1 substrate (mm)
+  — if S1 contains foam substrate
+- Root penetration depth into S2 substrate (mm)
+  — if S2 contains foam substrate
+- N/A for empty chambers and Free UV condition
+
+When penetration depth exceeds LED embedding depth
+in Type B or Type C substrate, the growing tip has
+reached the UV-A signal. Record this crossing event
+with the time point it was first observed.
+
+---
+
+### T=24 Hours — First Germination Check
+
+For each scenario record:
+- Radicle visible and directed as at placement? Y/N
+- Radicle elongated since T=0? Estimated length (mm)
+- Root penetration depth into substrate (mm)
+- Hypocotyl beginning to emerge? Y/N
+- Shoot penetration depth into substrate (mm) if
+  applicable
+- Contamination visible? Y/N
+- UV-A LED active? Y/N
+- Photograph each chamber
+- Re-seal and re-wrap Scenarios 2–5 immediately
+  after photography
+
+### T=48 Hours — Directional Growth Assessment
+
+For each scenario record:
+- Radicle length (mm)
+- Radicle direction: downward / upward / horizontal
+  / indeterminate
+- Root penetration depth into substrate (mm)
+- Root tip passed LED depth in Type B or C?
+  Y/N/N/A — record time of crossing if first
+  observed here
+- Hypocotyl direction: upward / downward /
+  horizontal / indeterminate
+- Shoot penetration depth into substrate (mm)
+- Shoot tip passed LED depth in Type B or C?
+  Y/N/N/A — record time of crossing if first
+  observed here
+- Architectural direction determinable? Y/N
+- UV-A LED active? Y/N
+- Photograph from side and above
+- Re-seal and re-wrap Scenarios 2–5 immediately
+
+### T=72 Hours — Primary Outcome Point
+
+For each scenario record:
+- Radicle length (mm)
+- Radicle direction. Angle from vertical (degrees).
+  0° = straight down. 180° = straight up.
+- Root penetration depth into substrate (mm)
+- Root tip passed LED depth? Y/N/N/A
+- Hypocotyl length (mm)
+- Hypocotyl direction. Angle from vertical (degrees)
+- Shoot penetration depth into substrate (mm)
+- Shoot tip passed LED depth? Y/N/N/A
+- Cotyledon emergence: Y/N. Direction if emerged.
+- UV-A LED active? Y/N
+- Contamination: Y/N. Location and description.
+- Overall architectural assessment:
+  NORMAL / INVERTED / INDETERMINATE / FAILED
+- Photograph from side, from above, close-up of
+  membrane port region
+- Re-seal and re-wrap Scenarios 2–5 immediately
+
+**Primary result determination at T=72:**
+
+| Scenario | NORMAL | INVERTED | INDETERMINATE |
+|---|---|---|---|
+| 1 | Root down into S2 Type A, shoot up into free UV air | Root up, shoot down | Neither clear |
+| 2 | Root down into S2 Type A, shoot up penetrating S1 Type B | Root up, shoot down | Neither clear |
+| **3** | Root down, shoot up | **Root up penetrating S1 Type A, shoot down penetrating S2 Type B** | Neither clear |
+| 4 | Root down into void, shoot up penetrating S1 Type C | Root down, shoot down | Neither clear |
+| 5 | Root up into void, shoot down penetrating S2 Type C | Root down, shoot up | Neither clear |
+
+**The experiment succeeds if Scenario 3 records
+INVERTED at T=72 with measurable root penetration
+into S1 Type A foam and measurable shoot penetration
+into S2 Type B foam.**
+
+Scenario 1 recording NORMAL is required as the
+control confirmation in every run.
+
+### T=120 Hours (Day 5) and T=168 Hours (Day 7)
+
+Repeat full T=72 observation protocol at T=120
+and T=168.
+
+Purpose: confirm directional growth is maintained
+and not corrected by gravitropic override over time.
+Track continued substrate penetration depth.
+
+If Scenario 3 shows INVERTED at T=72 but NORMAL
+at T=120, gravitropic correction has occurred.
+Record as qualified result — report full angle data
+at all time points. This is data about relative
+signal strength versus gravitropism, not framework
+failure.
+
+---
+
+## PART X — DATA RECORDING TEMPLATE
+
+Complete for each scenario at each time point:
 
 ```
-WHEN: 24 hours after Step E6 completed.
+SCENARIO: ___
+TIME POINT: T= ___ hours
+DATE/TIME OF OBSERVATION: ___
+OBSERVER INITIALS: ___
+DURATION OF LIGHT EXPOSURE THIS TIME POINT (minutes): ___
 
-WHAT TO DO:
-  Without disturbing the chambers:
-  Turn off all overhead lights in
-  the room.
-  This prevents overhead light from
-  entering the EXP chamber when
-  you lift the black cover.
+RADICLE / ROOT:
+  Length (mm): ___
+  Direction: downward / upward / horizontal /
+             indeterminate
+  Angle from vertical (degrees): ___
+  Penetration depth into substrate (mm): ___
+  Substrate type being penetrated:
+    Type A / Type B / Type C / void / free UV air
+  Root tip has passed LED embedding depth?
+    Y / N / N/A
+  If Y, first observed at this time point? Y / N
+  Notes: ___
 
-  Briefly lift or tilt the black
-  cover of EXP and look at the
-  agar surface.
-  Limit exposure to overhead light:
-  30 seconds maximum.
-  Replace cover immediately.
+HYPOCOTYL / SHOOT:
+  Length (mm): ___
+  Direction: upward / downward / horizontal /
+             indeterminate
+  Angle from vertical (degrees): ___
+  Penetration depth into substrate (mm): ___
+  Substrate type being penetrated:
+    Type A / Type B / Type C / void / free UV air
+  Shoot tip has passed LED embedding depth?
+    Y / N / N/A
+  If Y, first observed at this time point? Y / N
+  Notes: ___
 
-  Photograph through the transparent
-  walls if possible without removing
-  the cover (better option — does
-  not expose the chamber to overhead
-  light at all).
+COTYLEDONS:
+  Emerged: Y / N
+  Direction if emerged: ___
 
-  RECORD FOR EACH CHAMBER:
-    Has germination begun?
-    (Visible radicle = white tip
-    emerging from seed coat.)
+UV-A LED STATUS:
+  Confirmed active: Y / N
+  Method of confirmation: ___
+
+CONTAMINATION:
+  Observed: Y / N
+  Location: seed / root / shoot / S1 substrate /
+            S2 substrate / chamber wall
+  Description: ___
+
+OVERALL ARCHITECTURAL ASSESSMENT:
+  NORMAL / INVERTED / INDETERMINATE / FAILED
+
+LIGHT EXCLUSION (Scenarios 2–5):
+  External wrap / enclosure intact before opening:
     Y / N
-    If Y: what direction is the
-    radicle pointing?
-    Up / Down / Sideways / Unclear.
-    Length of radicle if visible (mm).
-    Photograph taken: Y / N.
+  Re-wrapped / re-enclosed immediately after: Y / N
+  Any accidental light exposure: Y / N
+  Description if yes: ___
 
-SUCCESS CRITERION O1:
-  At least some seeds showing
-  radicle emergence in at least
-  3 of 5 chambers.
-  (Day 1 is early — some species
-  take 48 hours to show radicle.
-  Do not be alarmed if germination
-  is not visible at T=24h for radish
-  or mung bean.)
+PHOTOGRAPHS TAKEN: Y / N
+  Filename(s): ___
 
-FAILURE MODE O1-A: No germination
-  at all after 24 hours in ANY chamber.
-  CAUSE: Temperature too low (below 18°C
-  inhibits germination severely).
-  RECOVERY: Move chambers to a
-  warmer location (near a heater
-  but not directly on it — aim for
-  20-22°C stable).
-  Check viability: if the Day -3
-  viability test showed good
-  germination, wait another 24 hours
-  before concluding there is a
-  germination problem.
-
-FAILURE MODE O1-B: Germination in
-  C1 and C2 but not in EXP.
-  CAUSE: The LED in EXP may be
-  generating heat that is desiccating
-  the seeds, OR the mineral water
-  layer is too deep and has
-  submerged the seeds in a way
-  that limits oxygen for germination.
-  RECOVERY: Check temperature at
-  the seed level in EXP (use a
-  thermometer probe through a gap
-  in the black cover briefly).
-  If above 25°C: move LED further
-  from the seed zone.
-  If seeds are fully submerged:
-  reduce the mineral water volume
-  to 15-20mL so the seed zone
-  is at the water surface rather
-  than submerged.
-```
-
-### Step O2: T=48 Hours
-### (Directional Growth Assessment)
-
-```
-WHEN: 48 hours after Step E6.
-
-THIS IS THE FIRST CRITICAL
-OBSERVATION POINT.
-By 48 hours, the radicle should
-be clearly visible and showing
-its initial growth direction.
-This is when the coherence gradient
-effect should first be visible.
-
-WHAT TO DO:
-  Same light precaution as O1.
-  Brief overhead light exposure only.
-  Photograph through walls where possible.
-
-  FOR EACH CHAMBER RECORD:
-    Radicle length (mm): ___
-    Radicle direction:
-      0° = pointing straight down
-      45° = angled downward
-      90° = horizontal
-      135° = angled upward
-      180° = pointing straight up
-    Hypocotyl (shoot) visible: Y / N
-    Hypocotyl length (mm): ___
-    Hypocotyl direction:
-      (same 0-180° scale as radicle)
-    Colour of hypocotyl:
-      Green = chlorophyll developing,
-      light is reaching it.
-      Pale yellow/white = etiolated,
-      insufficient light OR growing
-      into a dark zone.
-    Photograph: [date]_[ID]_T48.jpg
-
-  EXPECTED OBSERVATIONS AT T=48h:
-
-  EXP (prediction = AIS 2):
-    Radicle: pointing upward
-    (toward mineral water above).
-    90-180° range.
-    Hypocotyl: pointing downward
-    (toward UV light below).
-    0-90° range.
-
-  C1 (standard = normal):
-    Radicle: pointing downward.
-    0-45° range.
-    Hypocotyl: pointing upward.
-    135-180° range.
-
-  C2 (gravity only):
-    Radicle: pointing downward.
-    0-45° range.
-    Hypocotyl: pointing upward,
-    pale/etiolated (no light).
-    135-180° range.
-
-  C3 (UV below, no water):
-    Radicle: uncertain.
-    Competition between gravity (down)
-    and UV avoidance (up).
-    Likely 45-90° range.
-    May not yet be clearly inverted.
-    Hypocotyl: pointing toward UV below.
-    0-90° range.
-
-  C4 (water above, ambient light):
-    Radicle: pointing upward toward water.
-    90-180° range.
-    (Reproducing the PNAS 2025 result.)
-    Hypocotyl: pointing upward toward
-    ambient light above.
-    135-180° range.
-    (This is NOT an inverted shoot —
-    both root and shoot growing upward
-    is NOT the architecture inversion.
-    This is the control that shows
-    water alone drives root upward
-    but ambient light keeps shoot upward.)
-
-FAILURE MODE O2-A: Radicle in EXP
-  pointing downward (not upward).
-  CAUSE: Water gradient insufficient
-  to activate MIZ1, gravity
-  overriding hydrotropism.
-  RECOVERY: Increase mineral water
-  concentration (add more salts or
-  use denser solution).
-  Reduce the agar water content
-  (prepare a drier agar: reduce water
-  slightly so the gradient is sharper
-  between the wet zone above and the
-  relatively drier agar below).
-  Wait until T=72h before concluding —
-  hydrotropism response can take
-  longer than gravitropism to manifest.
-
-FAILURE MODE O2-B: Hypocotyl in EXP
-  pointing upward (not downward).
-  CAUSE: Overhead light is competing
-  with the UV LED below.
-  RECOVERY: Reinforce the black
-  cover. Check for any light leaks
-  around the cover edges and seal them.
-  Photograph the chamber in a
-  darkened room to check for
-  light leaks visually.
-```
-
-### Step O3: T=72 Hours
-### (Primary Outcome Point)
-
-```
-WHEN: 72 hours after Step E6.
-
-THIS IS THE PRIMARY DATA POINT.
-The architectural commitment should
-be fully established by 72 hours
-for radish and mung bean.
-
-WHAT TO DO:
-  Full observation as per O2.
-  Additionally:
-
-  MEASURE ROOT ANGLE PRECISELY:
-  Hold a protractor or printed angle
-  guide against the transparent wall.
-  Measure the angle of the root from
-  the vertical.
-  Record in the observation table.
-
-  ASSESS MORPHOLOGY:
-  Root surface texture visible through
-  the walls:
-    Root hairs: visible or not?
-    Root hairs are the fine white
-    projections from the root surface.
-    Their presence and distribution
-    indicates the root architecture
-    program being expressed.
-    Root hairs in the upward-growing
-    root of EXP: are they distributed
-    along the root surface (as in
-    soil-grown root) or are they
-    reduced (as in aquatic root)?
-    Record: root hairs present (Y/N),
-    distribution (uniform / only at tip
-    / absent).
-
-  PHOTOGRAPH FULL SET:
-  All 5 chambers from the side.
-  In a consistent location.
-  With a ruler held against the
-  wall for scale.
-  Same angle and distance for
-  all photographs (for comparison).
-
-  CALCULATE AIS FOR EXP:
-  Using the root and shoot angle
-  measurements:
-
-  AIS = 2 if:
-    Root angle > 135° (pointing
-    clearly upward) AND
-    Shoot angle < 45° (pointing
-    clearly downward).
-
-  AIS = 1 if:
-    Root angle > 90° (tending upward)
-    BUT shoot angle > 90°
-    (still tending upward), OR
-    Root angle < 90° (tending downward)
-    BUT shoot angle < 90°
-    (tending downward).
-    Partial inversion — one axis
-    inverted, other not yet.
-
-  AIS = 0 if:
-    Root angle < 45° (pointing down).
-    Shoot angle > 135° (pointing up).
-    Standard architecture. No inversion.
-
-  RECORD AIS IN OBSERVATION TABLE.
-```
-
-### Step O4: T=120 Hours (Day 5)
-### and T=168 Hours (Day 7)
-
-```
-WHEN: 5 and 7 days after Step E6.
-
-WHAT TO DO:
-  Full observation as per O3.
-  By day 5-7: the plant has built
-  significant structure in the
-  direction it was navigating.
-  The architectural commitment is
-  now physical, not just directional.
-
-  ADDITIONAL OBSERVATIONS AT T=168h:
-
-  Remove one seedling from EXP
-  carefully for close examination.
-  Use clean forceps or fingers.
-  Lift gently from the agar surface.
-  The root and shoot should separate
-  cleanly from the agar.
-  Place the seedling on a damp paper
-  towel on a white background.
-  Photograph with a ruler for scale.
-  Close-up photographs of:
-    Root tip morphology.
-    Root hair pattern.
-    Shoot tip and any emerging
-    leaf primordia.
-    Overall architecture (root-shoot
-    axis orientation).
-
-  COMPARE SIDE BY SIDE:
-  Photograph the removed EXP seedling
-  next to a removed C1 seedling
-  (standard architecture).
-  This side-by-side comparison is
-  the clearest visual demonstration
-  of the architectural inversion.
-  This is the primary result image.
-
-  RECORD FINAL AIS for all chambers.
-
-SUCCESS CRITERION (FULL EXPERIMENT):
-  EXP: AIS = 2 confirmed at T=72h
-  and maintained at T=120h and T=168h.
-  C1: AIS = 0 confirmed at all timepoints.
-  C4: Root angle > 135° (water alone
-  drives root upward) at T=72h.
-  (Reproduces PNAS 2025 result.)
-  C3: Root angle between 90° and 135°
-  OR root angle < 90° (gravity wins
-  without water gradient).
-  Shoot angle < 90° (shoots grow
-  toward UV below in both C3 and EXP).
-
-FAILURE MODE O4-A: AIS = 2 confirmed
-  at T=72h but AIS drops toward 0
-  by T=120h (root begins pointing
-  downward again).
-  CAUSE: Water layer above has
-  evaporated or been absorbed into
-  the agar. The gradient has
-  disappeared. Gravity reasserts.
-  RECOVERY: Top up the mineral water
-  layer every 48 hours to maintain
-  the gradient throughout the
-  experiment.
-  Record every top-up in the log.
-
-FAILURE MODE O4-B: All five chambers
-  show AIS = 0 (no inversion anywhere).
-  CAUSE: Multiple possible failures.
-  Systematic check:
-    Is C4 showing root angle > 90°?
-    If yes: the water gradient setup
-    works but the LED component is failing.
-    Check LED is on in EXP.
-    Check black cover is light-tight in EXP.
-    If C4 also shows root angle < 90°:
-    the water gradient is insufficient.
-    Increase mineral concentration.
-    Check that the water layer is
-    making contact with the agar
-    above the seeds.
+INTERVENTIONS: Y / N
+  Description if yes: ___
+  Data flagged as potentially compromised: Y / N
 ```
 
 ---
 
-## SECTION 5 — DATA RECORDING TEMPLATE
+## PART XI — REPRODUCIBILITY REQUIREMENTS
 
-```
-Print this table and use at the bench.
-One table per chamber. Five tables total.
+1. **Scenario 3 INVERTED result must be observed
+   in minimum 3 independent seeds across minimum
+   2 independent experimental runs.**
 
-CHAMBER ID: _______________
-SPECIES: __________________
-START DATE/TIME: __________
-ROOM TEMPERATURE: _________°C
-LED: ON / OFF / NOT INSTALLED
-WATER GRADIENT: ABOVE / BELOW / ABSENT
-WATER VOLUME ADDED: ________mL
+2. **Scenario 1 must record NORMAL in every run
+   where Scenario 3 records INVERTED.** If Scenario
+   1 fails to record NORMAL, the run is invalid.
 
-TIMEPOINT | ROOT     | ROOT    | SHOOT    | SHOOT   | NOTES
-          | LENGTH   | ANGLE   | LENGTH   | ANGLE   |
-          | (mm)     | (0-180°)| (mm)     | (0-180°)|
-----------+----------+---------+----------+---------+--------
-T=0       | N/A      | N/A     | N/A      | N/A     |
-T=24h     |          |         |          |         |
-T=48h     |          |         |          |         |
-T=72h     |          |         |          |         |
-T=120h    |          |         |          |         |
-T=168h    |          |         |          |         |
+3. **Measurable shoot penetration into S2 Type B
+   foam must be recorded in Scenario 3 at T=72.**
+   Directional growth alone without penetration
+   does not confirm active navigation toward the
+   UV signal.
 
-ROOT MORPHOLOGY AT T=168h:
-  Root hairs: Y / N
-  Root hair distribution: ____________
-  Root colour: _______________________
-  Root branching: None / Sparse / Dense
-  Aquatic-type morphology (thin,
-  elongated, sparse): Y / N / PARTIAL
+4. **Complete light exclusion must be confirmed
+   and logged for Scenarios 2 through 5 at every
+   time point.** Runs with compromised light
+   exclusion must be flagged and reported
+   separately from primary results.
 
-SHOOT MORPHOLOGY AT T=168h:
-  Colour: Green / Pale yellow / White
-  Etiolation (elongated, reaching): Y / N
-  Leaf primordia visible: Y / N
-  Curvature: toward LED / away from LED
-  / no curvature
+5. **All 5 scenarios must be run simultaneously
+   in each experimental run** from the same seed
+   batch, same substrate preparation batch, and
+   same UV-A LED product batch.
 
-FINAL AIS: 0 / 1 / 2 / -1
+6. **Photographic record at minimum T=0, T=24,
+   T=48, T=72, T=120, T=168 for all 5 scenarios.**
 
-PHOTOGRAPHS TAKEN:
-  T=0 (seed placement): Y / N
-  T=0 (water added): Y / N
-  T=24h: Y / N
-  T=48h: Y / N
-  T=72h: Y / N
-  T=120h: Y / N
-  T=168h (in chamber): Y / N
-  T=168h (removed, white background): Y / N
-  Side-by-side with C1: Y / N
+7. **All materials, batch numbers, UV-A wavelength
+   confirmation, LED embedding depth, preparation
+   dates, light exposure durations, and all
+   observation records must be logged** per Part X
+   template.
 
-NOTES AND ANOMALIES:
-_________________________________
-_________________________________
-_________________________________
-```
+8. **Any intervention must be recorded** and that
+   chamber's data flagged as potentially
+   compromised.
 
 ---
 
-## SECTION 6 — REPRODUCIBILITY
-## REQUIREMENTS
+## PART XII — FAILURE MODES AND RECOVERY ACTIONS
 
-```
-For this result to be considered
-valid and reproducible the following
-minimum conditions must be met
-and documented:
-
-REQUIRED DOCUMENTATION (minimum):
-
-  1. Species and seed source.
-     Name the cultivar if known.
-     State where seeds were purchased.
-
-  2. Seed viability test result.
-     State the germination rate
-     from the pre-experiment test.
-
-  3. Agar concentration.
-     State: X g per 100mL water.
-
-  4. Mineral solution composition.
-     State: which salts, which
-     concentrations, or "grocery
-     store mineral water, brand X".
-
-  5. LED specification.
-     State: wavelength range (nm),
-     power (watts or milliwatts),
-     distance from seed position (cm).
-
-  6. Light blocking.
-     State: material used for black
-     cover, and how light leak was
-     confirmed absent.
-
-  7. Temperature.
-     State: room temperature during
-     experiment, and whether any
-     temperature control was used.
-
-  8. All five chambers run
-     simultaneously in the same
-     environment.
-     State: location, date, duration.
-
-  9. AIS scores at T=72h, T=120h,
-     T=168h for all chambers.
-
-  10. At least one photograph per
-      chamber per timepoint.
-      Photographs labelled with
-      chamber ID, timepoint, and date.
-
-MINIMUM RESULT TO CLAIM CONFIRMATION
-OF P-INVERSION-1:
-
-  EXP: AIS = 2 at T=72h AND
-       maintained at T=168h.
-
-  C1: AIS = 0 at all timepoints.
-      (Confirms normal conditions
-      produce normal architecture.)
-
-  C4: Root angle > 120° at T=72h.
-      (Confirms water gradient alone
-      drives root upward — the key
-      published result from PNAS 2025
-      is reproduced in this setup.)
-
-  If EXP = AIS 2 but C4 does not
-  show upward root:
-  The result is incomplete.
-  The water gradient in the setup
-  may not be the mechanism.
-  Investigate before claiming confirmation.
-
-  If EXP = AIS 2 AND C4 shows
-  upward root AND C1 shows normal:
-  The result is valid.
-  The geometric prediction is confirmed.
-  Document and report.
-
-WHAT MAKES IT REPRODUCIBLE IN
-ANOTHER LABORATORY OR KITCHEN:
-
-  The experiment is reproducible if
-  another person following this
-  protocol with the same species,
-  the same LED wavelength, the
-  same mineral solution composition,
-  and the same agar concentration
-  obtains AIS = 2 in EXP and
-  AIS = 0 in C1.
-
-  The variables that can legitimately
-  vary between runs:
-    Room temperature (18-25°C range
-    acceptable — germination rate
-    changes but architectural outcome
-    should be the same).
-    Cup/jar geometry (size and shape
-    of chambers do not matter —
-    the gradient relationships matter).
-    Seed batch within species
-    (different radish varieties may
-    show slightly different response
-    kinetics but architectural
-    inversion should be consistent).
-
-  The variables that must be controlled:
-    LED position: BELOW the seed,
-    not above. If LED is above,
-    EXP becomes C1.
-    Water gradient: ABOVE the seed,
-    not below. If water is below,
-    EXP becomes C1.
-    Light from above: MUST be blocked.
-    If overhead light is present,
-    the shoot will navigate upward
-    regardless of the LED below.
-    Temperature: above 18°C minimum.
-    Below 18°C, germination is too
-    slow to observe meaningful
-    tropism in 7 days.
-```
+| Failure Mode | Detection Point | Recovery Action |
+|---|---|---|
+| Seed does not germinate | T=24h, T=48h | Check temperature (18–24°C) and moisture. Replace with spare seed before T=48h if available. Record replacement. |
+| Radicle compressed in port | T=24h | Attempt gentle repositioning under red-light with clean pin. Record intervention. Flag data. |
+| Fungal contamination in substrate | Any time point | If substrate only: continue and note. If on seed or radicle: flag data, continue to T=72h, report contamination in results. |
+| UV-A LED failure | Any time point | Replace LED under red-light. Record replacement and duration of outage. If outage exceeded 12 hours flag run for that scenario. |
+| Light exclusion breach in Scenarios 2–5 | Any time point | Record duration and source of accidental exposure. Flag affected scenario data as potentially compromised. Continue run. Report in results. |
+| Silicone seal failure — liquid migration between chambers | Any time point | Run compromised for that scenario. Complete observation to T=72h. Report seal failure. Discard that scenario's data from primary results. Rebuild membrane for next run. |
+| Shoot does not penetrate Type B or C foam at T=72h | T=72h | Record penetration depth as zero or near-zero. Valid result — signal may be insufficient to drive penetration at current LED depth or intensity. Consider reducing embedding depth or increasing LED intensity for next run. Report as is. |
+| Gravitropic correction — INVERTED at T=72h, NORMAL at T=120h | T=120h | Record as qualified result. Report full angle data at all time points. Data about competition between coherence gradient and gravitropism. Not a framework failure. |
+| Scenario 1 records NORMAL but Scenario 3 records NORMAL also | T=72h | Primary claim not confirmed in this run. Check light exclusion integrity for Scenario 3. Check Type B LED was active. Assess whether UV signal was reaching seedling. Redesign or repair for next run. |
+| All 5 scenarios record NORMAL | T=72h | Either light exclusion was compromised in Scenarios 2–5 or signal strength was insufficient. Verify LED wavelength and function. Verify light exclusion was intact. Increase signal strength or improve exclusion for next run. |
+| Active ventilation fan failure | Any time point | Check USB connection. Replace fan if failed. If fan off for extended period in sealed chamber, open ventilation port briefly under red-light for gas exchange before resealing. Record. |
 
 ---
 
 ## DOCUMENT METADATA
 
-```
-Document ID:   PLANT_INVERSION_OPERATIVE_
-               PROTOCOL_v1.0
-Date:          2026-03-13
-Author:        Eric Robert Lawson / OrganismCore
-Status:        ACTIVE — OPERATIVE PROTOCOL
-Version:       1.0
-
-This document is the bench execution
-protocol for the experiment pre-specified
-in PLANT_INVERSION_PROTOCOL_v1.md
-and PLANT_COHERENCE_GEOMETRY.md.
-
-Total material cost:
-  Minimum viable (home): $30-59.
-  Community lab version: $120-160.
-  Per-run cost after initial
-  investment: under $15.
-
-Total time investment:
-  Preparation (Day -3): 30 minutes.
-  Preparation (Day -1): 30 minutes.
-  Experiment Day (Day 0): 2-3 hours.
-  Observations (Days 1-7): 15-20 minutes
-  per day.
-  Total active time: under 6 hours
-  across 10 days.
-
-Failure modes documented:
-  Preparation phase: 4.
-  Agar preparation: 3.
-  Seeding: 3.
-  Water layer: 3.
-  Chamber assembly: 3.
-  Observation: 5.
-  Total: 21 failure modes with
-  recovery actions for each.
-
-Pre-specified predictions:
-  P-INVERSION-1: Roots upward, shoots
-  downward. Timestamp: 2026-03-13.
-  P-INVERSION-2: Aquatic root morphology.
-  Timestamp: 2026-03-13.
-  P-INVERSION-3: Etiolated stunted shoot.
-  Timestamp: 2026-03-13.
-
-Key literature:
-  Zhang et al., PNAS 2025.
-  Lin and Sauter, Plant Physiology 2018.
-  Yokawa et al., Science 2013.
-  NASA Veggie / ESA Gravi-2 ISS results.
-
-Pre-registration DOI (LECA):
-  https://doi.org/10.5281/zenodo.18986790
-Repository:
-  https://github.com/Eric-Robert-Lawson/
-  attractor-oncology
-ORCID:
-  0009-0002-0414-6544
-```
+- Author: Eric Robert Lawson
+- Affiliation: OrganismCore (Independent Research)
+- ORCID: 0009-0002-0414-6544
+- Contact: OrganismCore@proton.me
+- Repository:
+  github.com/Eric-Robert-Lawson/attractor-oncology
+- Document version: 2.3 (didn't upload other drafted version with this)
+- Supersedes:
+  Plant_Inversion_Operative_Protocol.md (v1.0)
+- Timestamp: 2026-03-18
+- Pre-registration DOI: 10.5281/zenodo.18986790
+- License: CC BY-NC-SA 4.0

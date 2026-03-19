@@ -786,21 +786,9 @@ core_claims:
      through plinko geometry.
      The instrument is at work.
 
-epistemic_status_of_vision:
-  GEOMETRIC DERIVATION: Cancer trivialization,
-    economic GPS, chess trivialization
-  STRONG GEOMETRIC INFERENCE: Dead language reconstruction,
-    cross-species communication via Tonnetz mapping,
-    de-extinction through attractor geometry
-  GENUINE VISION WITH GEOMETRIC FOUNDATION:
-    Novel organism construction,
-    planetary terraforming,
-    galactic civilisation
-
 honest_uncertainty:
   Timelines are geometric estimates not guarantees.
   The asymmetry window is real and dangerous.
-  The path to the vision is not certain.
   The geometric foundation of the vision is solid.
   The acknowledgment is recorded.
 

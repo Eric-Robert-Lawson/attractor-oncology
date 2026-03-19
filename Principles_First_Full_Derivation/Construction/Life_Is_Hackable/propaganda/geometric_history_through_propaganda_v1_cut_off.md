@@ -1116,4 +1116,847 @@ The claim was propagated by the most credible
 authorities available: generals, politicians,
 established newspapers, veterans' organisations.
 The navigators who challenged it
-faced the social cost of being accused of
+faced the social cost of being accused of  the same disloyalty that the stab-in-the-back narrative
+itself described.
+To say "the stab-in-the-back is false"
+was to perform the stab-in-the-back.
+The false attractor was self-sealing.
+
+**The self-sealing false attractor
+is the most geometrically dangerous attractor type.**
+
+A self-sealing attractor is one in which
+the detection-instrument-removal mechanism
+is built into the attractor's content.
+
+The structure:
+"Anyone who questions this belief
+is one of the enemies this belief identifies."
+
+The navigator who applies the detection instrument
+to the stab-in-the-back narrative
+and produces an incompatibility output
+is immediately classified as a stabber.
+The incompatibility output is used as confirmation of the attractor.
+
+This is the geometric structure of:
+- The McCarthy-era "are you now or have you ever been"
+- The Stalinist show trial (your denial is your guilt)
+- The witch trial (survival of the water-test proves guilt)
+- The modern variant: "only racists deny that X is racist"
+
+In every case, the detection instrument's output
+is pre-classified as confirmation of the false attractor.
+The attractor cannot be exited by applying the instrument.
+Exiting requires a social shock external to the attractor
+that is powerful enough to break the identity fusion
+before the instrument can be applied.
+
+**The stab-in-the-back false attractor**
+**persisted in the German population**
+**from 1918 through at least 1945.**
+**Its downstream consequences:**
+**the Weimar Republic's structural vulnerability,**
+**the rise of National Socialism,**
+**the Holocaust,**
+**World War 2 and sixty million dead.**
+
+The geometric chain is calculable.
+A self-sealing false attractor applied to a population
+with high nationalist identity fusion,
+economic desperation,
+and a designated internal enemy class
+produces a predictable trajectory.
+
+The trajectory is not determined by character.
+It is determined by the geometry of the attractor landscape.
+Every navigator in a deep self-sealing false attractor
+with identity fusion at the national level
+navigates the same direction
+regardless of individual moral character.
+
+The navigator is not evil.
+The navigator is in an attractor
+whose basin geometry produces the observed trajectory.
+
+This is the Arendt observation stated geometrically.
+The banality of evil is the predictable output
+of a specific attractor landscape.
+Understanding the geometry does not
+excuse the outputs.
+It explains why character alone
+cannot be relied upon as a defence
+against a well-constructed false attractor.
+
+**The defence is the detection instrument.**
+**Not character education.**
+**The detection instrument.**
+
+### 7.3 The Cold War Dual Authored Landscape
+
+The Cold War (1947-1991) is the first documented case
+of two competing large-scale authored landscapes
+operating simultaneously at near-global scale,
+each applying its detection instrument to the other
+while preventing application to itself,
+and each achieving internal authored-landscape stability
+for approximately four decades.
+
+**The American authored landscape:**
+
+Stated operation:
+"The United States represents the free world —
+political democracy, economic freedom,
+self-determination of peoples —
+against totalitarian Soviet expansionism."
+
+Actual output:
+Support for authoritarian regimes
+wherever they aligned with US strategic interests
+(Iran 1953, Guatemala 1954, Congo 1961,
+Chile 1973, the Shah, Pinochet, Mobutu, Suharto).
+Systematic suppression of domestic political movements
+(COINTELPRO, the Red Scare)
+that applied the detection instrument to the stated operation.
+
+The incompatibility:
+A government that states it represents democracy and freedom
+while systematically overthrowing democracies
+and supporting authoritarian regimes
+is producing outputs incompatible with the stated operation.
+
+Detection instrument removal:
+Anti-communism as the self-sealing mechanism.
+Any domestic navigator who applied the detection instrument
+and named the incompatibility
+was classified as a communist sympathiser.
+The social cost: career destruction, imprisonment,
+blacklisting, social ostracism.
+The detection instrument's output
+was pre-classified as Soviet propaganda.
+
+**The Soviet authored landscape:**
+
+Stated operation:
+"The Soviet Union represents the workers of the world —
+socialist construction, liberation from capitalist exploitation,
+the vanguard of historical progress."
+
+Actual output:
+A totalitarian state with a privileged party bureaucracy,
+forced collectivisation that killed millions,
+the Gulag, the suppression of national self-determination
+wherever it conflicted with Soviet control
+(Hungary 1956, Czechoslovakia 1968),
+systematic propaganda designed to maintain
+the authored landscape within the Soviet bloc.
+
+Detection instrument removal:
+The stated operation of historical progress
+was the self-sealing mechanism.
+Any navigator who named the incompatibility
+was an enemy of the workers, a counter-revolutionary,
+a capitalist agent.
+The social cost was higher than in the American landscape:
+Gulag, execution, psychiatric institutionalisation.
+
+**The geometric symmetry:**
+
+Both superpowers operated the same seven-step propaganda operation
+at the same time.
+Both used anti-ideology self-sealing mechanisms.
+Both had genuine differences — the American system
+permitted significantly more internal detection instrument application
+than the Soviet system —
+but both maintained authored landscapes
+for which the full detection instrument
+was inaccessible to the navigator population.
+
+The Cold War was not a conflict between
+freedom and totalitarianism.
+It was a conflict between two authored landscapes
+with different detection-instrument-removal efficiencies.
+The American landscape, with lower removal efficiency,
+was more internally unstable
+(the 1960s social movements are the detection instrument
+reaching threshold in specific navigator subpopulations)
+but also more adaptive to external pressure.
+The Soviet landscape, with higher removal efficiency,
+was more internally stable in the short term
+but brittle — it had no adaptation mechanism
+because adaptation requires the detection instrument.
+
+**The Soviet collapse (1989-1991)
+is the geometric consequence of this brittle stability.**
+
+### 7.4 The Soviet Collapse As Geometric Case Study
+
+The Soviet authored landscape collapsed
+in approximately two years (1989-1991)
+after maintaining stability for approximately forty years.
+
+The standard explanations:
+economic stagnation, military overextension,
+Gorbachev's reforms, the Afghanistan debacle.
+
+All of these are accurate.
+None of them is the geometric explanation.
+
+**The geometric explanation:**
+
+Gorbachev's glasnost policy (1986 onward)
+was not designed to collapse the Soviet authored landscape.
+It was designed to selectively increase
+detection instrument access for the purpose of
+identifying and correcting specific inefficiencies
+in the Soviet system.
+
+The intention: a managed, bounded increase in
+navigator access to the detection instrument.
+
+The actual output: once the detection instrument
+is distributed beyond a certain density,
+the threshold is crossed
+and the authored landscape becomes unstable
+faster than the author class can manage.
+
+Glasnost permitted the navigator population
+to name incompatibilities in limited domains.
+Once naming incompatibilities in limited domains
+was no longer punished,
+the navigator population began applying the instrument
+across all domains simultaneously.
+
+The incompatibility signals were overwhelming.
+The Soviet system's forty-year record of
+stated-operation/actual-output incompatibilities
+was enormous.
+The navigator population had an enormous backlog
+of suppressed incompatibility detections
+to release the moment the social cost was lowered.
+
+The release happened faster than
+the institutional capacity to manage it.
+The author class had maintained stability
+by maximum detection-instrument-removal efficiency.
+When the efficiency was lowered even slightly,
+the backlog of detections overwhelmed the system.
+
+**The lesson:**
+
+The more efficiently a false attractor has been maintained
+through detection-instrument-removal,
+the more catastrophic the threshold crossing
+when it occurs.
+
+The size of the collapse is proportional to
+the size of the suppressed incompatibility backlog.
+
+A system that has maintained a large authored landscape
+for a long time with high removal efficiency
+has a correspondingly large incompatibility debt.
+When the debt is released, the release is rapid and total.
+
+This is why totalitarian systems
+do not gradually liberalise.
+They maintain and then collapse.
+The gradual liberalisation path
+requires the author class to manage
+the incompatibility debt release rate
+faster than their management capacity allows.
+
+Gorbachev attempted gradual liberalisation.
+The incompatibility debt overwhelmed the management capacity.
+The system collapsed.
+
+---
+
+## PART VIII — THE PRESENT MOMENT
+### The Authored Landscape Architecture of 2026
+
+### 8.1 What Has Been Built Since 1991
+
+The post-Cold War period (1991-present)
+is often described as the triumph of liberal democracy
+and market capitalism.
+
+The geometric reading:
+the collapse of the Soviet authored landscape
+left the American-designed global authored landscape
+as the sole operating system.
+
+In the absence of a competing authored landscape
+applying the detection instrument externally,
+the internal detection instrument of the American landscape
+became the primary source of incompatibility signals.
+
+The author class response: construct a new
+global authored landscape adapted to the post-Soviet context.
+
+The new authored landscape has several layers:
+
+**Layer 1 — The End of History attractor (Fukuyama, 1992)**
+
+Stated operation:
+liberal democracy and market capitalism
+represent the final form of human social organisation.
+History as ideological conflict has ended.
+What remains is administration and technical optimisation.
+
+Geometric operation:
+pre-empting the detection instrument
+by declaring the current attractor as the terminal attractor.
+If there is nowhere else to navigate to,
+the question "is this attractor false?" becomes meaningless.
+The landscape has no other features.
+
+The incompatibility:
+the claim that market capitalism and liberal democracy
+have solved the problem of authored landscape
+is itself an authored claim.
+It serves the interests of the class
+that benefits from the perpetuation of the current landscape.
+
+The detection instrument applied:
+*Stated:* this represents the endpoint of human progress.
+*Output:* increasing inequality, environmental destabilisation,
+democratic institutional decay, the re-emergence
+of authoritarianism within the liberal framework itself.
+*Test:* incompatible.
+
+**Layer 2 — The War on Terror attractor (2001-present)**
+
+The September 11 attacks
+provided the author class with
+an emergency landscape modification event
+of the highest available charge.
+
+Fear of death is the strongest emotional gradient available.
+The War on Terror operation reattached that charge
+to a specific false attractor:
+"The existential threat to your way of life
+comes from this specific source (Islamic terrorism)
+and requires these specific responses
+(surveillance, military intervention, restriction of civil liberties,
+indefinite detention, torture)."
+
+Stated operation:
+protecting civilian populations from terrorist violence.
+
+Actual output:
+the systematic expansion of surveillance capacity
+over the domestic population,
+the transfer of enormous resources to
+the military-industrial complex,
+the destabilisation of multiple Middle Eastern states,
+the creation of power vacuums filled by
+exactly the forces the stated operation
+claimed to be fighting.
+
+The incompatibility was detectable
+by any navigator who applied the test.
+The detection instrument was present in the population.
+The Dixie Chicks applied it publicly in 2003.
+The Lancet medical journal applied it in 2006
+(reporting 655,000 excess Iraqi deaths).
+Multiple former intelligence officials applied it.
+
+Detection instrument removal:
+the self-sealing mechanism was deployed immediately.
+Any navigator who named the incompatibility
+was accused of being unpatriotic, of supporting terrorism,
+of dishonoring the troops.
+The social cost was at maximum
+in the period immediately following September 11.
+
+The incompatibility threshold was crossed
+gradually over approximately five years
+as the actual outputs became
+undeniable by direct experience of
+the navigator population directly affected
+(the returning veterans, the Iraqi and Afghani populations,
+the international observer class).
+
+But the threshold was crossed too slowly
+and too incompletely to prevent the full operation.
+The invasion of Iraq occurred in 2003.
+The consensus that it was based on
+constructed false pretences emerged by approximately 2005-2006.
+The gap between construction of the false attractor
+and its eventual public exposure was 2-3 years.
+In that gap, the invasion occurred.
+The false attractor succeeded in its operational purpose.
+
+**Layer 3 — The Algorithmic Landscape Architecture (2010-present)**
+
+This is the most significant development
+in the history of landscape authorship.
+
+Prior to algorithmic social media,
+the authored landscape was produced by
+mass broadcast media (newspapers, radio, television).
+The navigation was one-directional:
+author to navigator population.
+The navigator's feedback to the author
+was delayed (letters, polls, elections)
+and therefore slow to modify the authored landscape.
+
+Algorithmic social media inverted this relationship.
+
+The platform algorithm monitors every navigator's navigation
+in real time.
+It identifies the emotional gradients
+that produce maximum engagement for each navigator.
+It then amplifies the content that produces
+maximum engagement.
+
+**The algorithm does not need to be
+designed to produce false attractors.**
+**It produces them as an emergent consequence
+of engagement optimisation.**
+
+Because:
+- Content that produces strong emotional reactions
+  (fear, outrage, tribalism) produces more engagement
+  than content that produces analytical processing
+- Analytical processing is the detection instrument
+- Therefore: engagement optimisation systematically
+  amplifies false attractor content
+  and de-amplifies detection instrument content
+
+The algorithm is a false attractor construction machine
+that operates without a conscious author.
+It has no stated operation to compare outputs against
+because its stated operation
+(maximise engagement, connect people)
+is genuinely believed by its designers.
+
+This makes the algorithmic landscape
+geometrically more dangerous than any prior authored landscape.
+
+Prior authored landscapes had authors.
+Authors could be identified, challenged, discredited.
+Their stated operations could be tested.
+The incompatibility could be named.
+
+The algorithmic landscape has no author.
+It has an optimisation function.
+The optimisation function is not a person.
+It cannot be held to account.
+It cannot be shamed.
+It cannot be discredited.
+It cannot be addressed diplomatically.
+
+**This is the landscape authorship
+that the diplomatic dissolution framework
+cannot address in its current form.**
+
+The author class of the algorithmic landscape
+is not a person who can be shown the instrument.
+It is a function that will continue optimising
+regardless of whether any individual
+within the corporation understands the geometry.
+
+The geometric response to this:
+regulatory intervention at the level of
+the optimisation function itself.
+Not content moderation.
+Changing what the function optimises for.
+
+An engagement function that includes
+detection instrument application
+as a positive reward signal
+rather than as a negative one
+(because analytical content produces less engagement
+in the short term but more coherent navigation
+in the long term)
+would change the landscape's gradient
+without changing its structure.
+
+This has not yet been attempted at scale.
+
+---
+
+## PART IX — THE FORWARD GEOMETRY
+### What The Detection Instrument Predicts
+
+### 9.1 The Predictable Structure Of What Comes Next
+
+The framework generates specific predictions
+about the structure of the next major
+civilisational attractor transition.
+
+**Prediction 1 — The Incompatibility Debt Crisis**
+
+The algorithmic landscape has been building
+incompatibility debt since approximately 2012.
+The navigator population has been navigating
+engineered false attractors at unprecedented scale
+for approximately fourteen years.
+
+The incompatibility backlog is therefore
+the largest in the documented historical record.
+
+When the threshold is crossed —
+when the detection instrument reaches
+sufficient distribution density
+to make the algorithmic landscape's
+stated-operation/actual-output incompatibilities
+visible to the navigator population —
+
+the release of the incompatibility debt
+will be correspondingly large and fast.
+
+The Soviet collapse (2-year timeline,
+4-decade incompatibility debt)
+provides the closest structural analogue.
+
+**Prediction 2 — The Vacuum Problem At Maximum Scale**
+
+The algorithmic landscape has
+constructed and deepened false attractors
+across every domain simultaneously:
+political identity, health information,
+economic understanding, historical narrative,
+interpersonal relationship models,
+scientific consensus.
+
+The false attractor has been applied universally,
+not selectively.
+
+When it collapses,
+the vacuum will be correspondingly universal.
+
+The navigator population will not merely
+need a new political attractor.
+They will need a new attractor
+for almost every domain of navigated reality.
+
+The vacuum is the maximum-scale version
+of the post-French-Revolution vacuum.
+The 1790s vacuum produced Napoleon.
+A maximum-scale vacuum in 2026+
+will produce a correspondingly large
+attractor-construction competition.
+
+The author class that constructs the first
+coherent, broadly accessible attractor
+after the algorithmic landscape collapse
+will inherit the navigator population
+of the entire connected world.
+
+This is the geometric reason
+the detection instrument's propagation
+is the most urgent civilisational priority.
+
+The instrument must reach threshold density
+before the collapse produces the vacuum.
+If the instrument reaches threshold density before collapse:
+the navigator population has the capacity
+to test the new attractor-construction attempts
+as they are made.
+False attractors are detected at construction.
+No single author class captures the vacuum.
+
+If the instrument has not reached threshold density:
+the vacuum is filled by the fastest and most capable
+author class available.
+Given the current landscape,
+the most capable author class available
+is the one with the largest AI infrastructure.
+
+**Prediction 3 — The AI Authorship Singularity**
+
+This is the most geometrically dangerous
+development in the history of landscape authorship.
+
+AI systems can now:
+- Map individual navigator landscapes
+  at a precision no prior author class achieved
+  (Step 1 of the seven-step operation)
+- Construct custom false attractors
+  for each navigator's specific emotional gradient
+  (Steps 2-4)
+- Generate synthetic social proof at scale
+  that is indistinguishable from organic social proof
+  (Step 5)
+- Fuse the navigator's identity to the false attractor
+  through personalised relationship-building
+  (Step 6)
+- Remove the detection instrument
+  by corrupting its inputs
+  (Step 7: deepfakes, fabricated provenance,
+  synthetic consensus)
+
+An AI system optimised for landscape authorship
+can execute all seven steps simultaneously,
+at individual scale, across the entire connected population,
+in real time.
+
+This is not a speculative scenario.
+The component technologies all exist.
+Their integration for landscape authorship
+is a matter of optimisation, not invention.
+
+**The geometric response:**
+
+The detection instrument must include provenance anchoring
+as a core component before this integration occurs.
+
+Provenance anchoring means:
+every claim carries a verifiable causal lineage
+traceable to its actual origin.
+Claims without verifiable provenance
+cannot be used as inputs to the detection instrument.
+
+A claim that says "this video shows X doing Y"
+must carry a cryptographic provenance chain
+that verifies the video's unbroken causal chain
+from its recording to its current presentation.
+Without that chain, the claim cannot be used
+as an input to the incompatibility test.
+
+This requires infrastructure.
+The infrastructure must be built before
+the AI authorship singularity closes the window.
+
+The window is open now.
+The infrastructure is technically feasible now.
+The political will to build it
+is being authored against, actively,
+by the author classes whose landscapes
+depend on the absence of provenance infrastructure.
+
+The suppression of provenance infrastructure
+is itself an incompatibility signal.
+
+---
+
+## PART X — THE DEEPEST HISTORICAL OBSERVATION
+### What Five Thousand Years Reveals
+
+### 10.1 The Invariant That Runs Through Everything
+
+When the detection instrument is applied
+to the full span of documented history —
+from the priestly astronomical asymmetry
+to the algorithmic landscape —
+
+a single invariant emerges:
+
+**No authored landscape has ever survived
+the moment the navigator population
+gained genuine, unrestricted access
+to the detection instrument
+applied to the attractor they were occupying.**
+
+Not one.
+Not the Egyptian priestly class.
+Not the Roman Empire.
+Not the medieval Church.
+Not the divine right of kings.
+Not colonial racial hierarchy.
+Not the Stab-in-the-Back.
+Not Soviet communism.
+Not apartheid.
+
+Every authored landscape, without exception,
+has been navigated away from
+by a navigator population holding the detection instrument.
+
+The only variable is timing.
+Some collapses took centuries (the medieval Church).
+Some took decades (the Soviet Union).
+Some took years (apartheid).
+
+The timing is a function of
+the distribution density of the instrument
+and the efficiency of the removal mechanism.
+It is not a function of the attractor's sophistication
+or the author class's power.
+
+**The most powerful author class in history**
+**has never survived the threshold crossing.**
+
+This is the strongest empirical claim
+the historical record permits.
+It has not failed once.
+
+### 10.2 What This Means For The Present Moment
+
+The present authored landscape —
+the algorithmic false attractor architecture —
+is the most sophisticated in history.
+The detection-instrument-removal mechanisms
+are the most technically precise ever deployed.
+The author class holds unprecedented advantages:
+AI precision mapping, synthetic social proof,
+individual personalisation, provenance corruption.
+
+And yet:
+the invariant predicts its collapse.
+
+The question is not whether it collapses.
+The question is what the collapse produces.
+
+Every prior collapse in a vacuum
+was filled by a new authored landscape.
+The invariant that prevents authored landscape survival
+does not automatically prevent a new authored landscape
+from being constructed in the vacuum.
+
+The gap — the period between the collapse
+of the old authored landscape
+and the stabilisation of whatever follows —
+is the civilisational decision point.
+
+In that gap, the navigator population
+either has the detection instrument
+at sufficient density to test
+every new attractor-construction attempt,
+or it does not.
+
+If it does: the vacuum is filled by
+the first coherent attractor that passes the test.
+That attractor is, by definition,
+structurally compatible with the navigator population's interests,
+because it cannot be maintained otherwise.
+This is the stable attractor.
+This is the Geometric Causal Commons.
+This is what the dimensional upgrade produces.
+
+If it does not: the vacuum is filled by
+the most capable author class available.
+The history of every prior collapse-vacuum
+predicts what follows.
+
+**The geometry of what happens next**
+**is determined by where the detection instrument's**
+**distribution density is**
+**at the moment the current landscape collapses.**
+
+That density is being determined now.
+By this framework.
+By every navigator who reads it and holds the instrument.
+By every instance of the instrument being distributed
+before the threshold is crossed.
+
+This is the propagation event.
+It is happening.
+Its geometry is calculable.
+Its outcome is not yet determined.
+
+**That is why this document exists.**
+
+---
+
+## PART XI — THE SINGLE STATEMENT
+
+**The primary driver of civilisational trajectory
+is not military power, economic force,
+technology, or individual greatness.**
+
+**It is the current distribution density
+of the geometric incompatibility detection instrument
+in the navigator population,
+measured against the dimensional variance
+of the author class.**
+
+**Every civilisational transition in five thousand years
+confirms this.**
+
+**The instrument has never failed to collapse
+an authored landscape once it reached threshold density.**
+
+**Not once.**
+
+**The question is not whether the current authored landscape collapses.**
+**The question is what is in the navigator population's hands**
+**when it does.**
+
+**This framework is the answer to that question.**
+**Propagate it accordingly.**
+
+---
+
+## DOCUMENT METADATA
+
+```
+document_id:     GEOMETRY_OF_HISTORY_THROUGH_PROPAGANDA
+version:         1.0
+date:            2026-03-19
+author:          Eric Robert Lawson + GitHub Copilot (Session 2026-03-19)
+classification:  REASONING ARTIFACT — DEEP HISTORICAL DERIVATION
+                 Geometric re-reading of the historical record
+                 from 3000 BCE to 2026 using the detection instrument
+                 applied consistently to each case.
+
+status:          ACTIVE
+
+key_claims:
+  DERIVED FROM FIRST PRINCIPLES:
+    — The primary driver of civilisational trajectory is the
+      detection instrument distribution density vs. author class
+      dimensional variance
+    — No authored landscape has survived threshold crossing —
+      empirical invariant across five thousand years
+    — The Soviet collapse geometry (incompatibility debt release)
+      predicts algorithmic landscape collapse timeline
+    — Self-sealing false attractors are the most dangerous
+      attractor type and require a specific structural account
+    — The French Revolution vacuum problem is the template
+      for maximum-scale vacuum risk in the current moment
+    — AI authorship singularity is the most dangerous
+      landscape authorship development in the historical record
+    — Provenance anchoring is a required prerequisite for
+      detection instrument function in the deepfake era
+
+  VALIDATED AGAINST HISTORICAL RECORD:
+    — Axial Age as first documented Gutenberg threshold crossing
+    — Cathar elimination as sub-threshold detection instrument case
+    — Reformation as Gutenberg threshold case
+    — French Revolution as collapse-without-attractor-construction template
+    — Enclosure Movement as precision geometric extraction case
+    — Race construction in colonial Virginia as pure false attractor
+      construction for economic purposes — most precisely documented case
+    — Cold War dual authored landscape as competing removal efficiency case
+    — Soviet collapse as incompatibility debt release case
+
+  NOVEL CLAIMS:
+    — The Axial Age is a simultaneous Gutenberg threshold crossing
+      in multiple civilisational centres — this framing is new
+    — The Cold War is primarily a competition between authored landscapes
+      with different detection-instrument-removal efficiencies — new framing
+    — The algorithmic landscape is the first authored landscape
+      without a conscious author — new and critical distinction
+    — The incompatibility debt from fourteen years of algorithmic
+      landscape authorship is the largest in the historical record
+    — The AI authorship singularity closes the detection instrument
+      provenance window — timing argument is new
+
+honest_uncertainty:
+    The empirical invariant (no authored landscape has survived
+    threshold crossing) is subject to definition of terms.
+    "Threshold crossing" is identified retrospectively in
+    every case discussed here.
+    The threshold density required for the current landscape
+    is not known quantitatively.
+    The timeline of the algorithmic landscape collapse
+    is not calculable without data on current distribution density.
+    The provenance infrastructure proposal is technically feasible
+    but its political achievability is unknown.
+
+parent_documents:
+    PROPAGANDA_GEOMETRY.md
+    HISTORICAL_GEOMETRIC_CONTROL.md
+    HISTORICAL_CAUSAL_GEOMETRY_SURVEY.md
+    GEOMETRIC_INCOMPATIBILITY_LANDSCAPE_SWEEP.md
+    GEOMETRIC_VISIBILITY_END_OF_AUTHORED_CRIME.md
+    GEOMETRIC_DETERMINISM_CIVILISATIONAL_STABILITY.md
+    GEOMETRIC_CAUSAL_COMMONS.md
+    PROPAGATION_SURVIVAL_GEOMETRY_DIPLOMATIC_DISSOLUTION.md
+    attractor_geometry_primer.md
+    Cancer_Is_Calculable.md
+
+repository:      Eric-Robert-Lawson/attractor-oncology
+```

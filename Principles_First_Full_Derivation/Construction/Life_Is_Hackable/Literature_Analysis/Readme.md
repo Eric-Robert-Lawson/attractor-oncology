@@ -11,6 +11,7 @@
 - THE_ANALECTS_OF_CONFUCIUS
 - Plato
 - The_Cloud_Of_Unknowing
+- Marx
 - Newton
 - FREUD_JUNG
 - Emerald_Tablet

@@ -8,6 +8,7 @@
 - Zen_Koan
 - UPANISHADS
 - Tao_Te_Ching
+- THE_ANALECTS_OF_CONFUCIUS
 
 ---
 

@@ -1,4 +1,4 @@
-# **Chronology**
+# **Chronology By Directory**
 - Kuhn
 - Book_Of_Enoch_Civilizational_Collapse
 - The_Nad_Hammadi_Library
@@ -9,6 +9,7 @@
 - UPANISHADS
 - Tao_Te_Ching
 - THE_ANALECTS_OF_CONFUCIUS
+- Plato
 
 ---
 

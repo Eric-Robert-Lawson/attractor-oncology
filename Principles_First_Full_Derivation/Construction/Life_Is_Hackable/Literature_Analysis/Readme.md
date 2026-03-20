@@ -1,3 +1,14 @@
+# **Chronology**
+- Kuhn
+- Book_Of_Enoch_Civilizational_Collapse
+- The_Nad_Hammadi_Library
+- Sumerian_Literature
+- Bhagavad_Gita
+- Gospel_Of_John
+- Zen_Koan
+
+---
+
 This is what I have for agenda, to geometrically analyze literature I have a list composed.
 
 ---

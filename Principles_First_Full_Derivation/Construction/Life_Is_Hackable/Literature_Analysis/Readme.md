@@ -17,6 +17,7 @@
 - Emerald_Tablet
 - Zohar
 - I_Ching
+- Dante
 - NIETZSCHE
 - Rovelli
 

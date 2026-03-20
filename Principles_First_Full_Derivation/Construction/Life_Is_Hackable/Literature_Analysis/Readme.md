@@ -6,6 +6,7 @@
 - Bhagavad_Gita
 - Gospel_Of_John
 - Zen_Koan
+- UPANISHADS
 
 ---
 

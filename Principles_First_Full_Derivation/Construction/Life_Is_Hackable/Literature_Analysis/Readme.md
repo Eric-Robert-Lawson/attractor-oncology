@@ -20,6 +20,8 @@
 - Dante
 - NIETZSCHE
 - Rovelli
+- Darwin
+- Eckhart_Tolle
 
 ---
 

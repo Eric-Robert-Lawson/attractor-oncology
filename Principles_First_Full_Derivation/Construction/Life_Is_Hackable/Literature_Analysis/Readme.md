@@ -11,6 +11,8 @@
 - THE_ANALECTS_OF_CONFUCIUS
 - Plato
 - The_Cloud_Of_Unknowing
+- Newton
+- FREUD_JUNG
 
 ---
 

@@ -5,6 +5,10 @@
 
 ---
 
+# **REQUIRES VERIFICATION**
+
+---
+
 ## PREAMBLE — THE METHODOLOGY
 
 This is not speculation. This is physics applied to confirmed measurements.

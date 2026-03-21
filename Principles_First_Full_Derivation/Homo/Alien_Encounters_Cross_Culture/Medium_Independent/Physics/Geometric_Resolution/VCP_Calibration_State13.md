@@ -10,6 +10,31 @@
 
 ---
 
+# **IMPORTANT NOTE**
+
+D_K = 0.268 m²/s  [CONSTRAINED — BEST ESTIMATE, NOT CLOSED]
+
+Source: r_bubble = 1.88 m (SCU lobe separation, low-zoom footage,
+        gimbal angle correction pending)
+        τ = 13.2 s (split onset AVI ~4147 from direct observation
+        of low-zoom footage during critical period 2:32–2:36;
+        crosshair occlusion confirmed; SCU PDF does not give
+        this frame — observer estimate, variance unquantified)
+
+What closes this:
+1. Gimbal angle correction for lobe separation → revised r_bubble
+2. High-resolution analysis of raw AVI footage (or sub-frame
+   interpolation) to confirm split onset frame within ±1–2 s
+3. If SCU PDF gives split onset frame explicitly anywhere —
+   verify against observer estimate
+
+Until these are done: D_K is an order-of-magnitude constraint,
+not a precision measurement. The physics that depends on D_K
+(S-equation steady-state, r_bubble derivation from first
+principles) cannot be closed with the current footage resolution.
+
+---
+
 ## DOCUMENT PURPOSE AND ROLE
 
 This document is the **calibration state record** for the

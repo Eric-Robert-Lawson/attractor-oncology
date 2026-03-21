@@ -33,6 +33,8 @@ not a precision measurement. The physics that depends on D_K
 (S-equation steady-state, r_bubble derivation from first
 principles) cannot be closed with the current footage resolution.
 
+D_K propagation into O-1. The S-equation steady-state solution (O-1) takes D_K = 0.268 m²/s as an input to the boundary value problem. Because D_K is constrained and not closed, the solution to O-1 will inherit that constraint. This means O-1's output — S₀, r_s, γ, and the derived r_bubble — will also carry the D_K uncertainty until the footage analysis closes it. The document's dependency map in Part IV does not currently make this propagation explicit. It is not a structural problem in the document as written, but when O-1 is executed, the result should be stated as: derived conditional on D_K = 0.268 ± δ m²/s, not as a clean closed derivation, until D_K is independently confirmed.
+
 ---
 
 ## DOCUMENT PURPOSE AND ROLE

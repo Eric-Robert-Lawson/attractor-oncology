@@ -1,12 +1,8 @@
 # THE VACUUM COUPLING POTENTIAL
 # MODEL EPISTEMIC CHARTER
-## Version 4 — Fully Self-Contained
-## The Identity Principle, Constructibility,
-## Coherence Causal Optimization, and the
-## Generalization Consequence Formally Stated
-## With Attractor Geometry Operating Principles
-## and Triadic Invariant Stated From First Principles
-## Supersedes Version 3
+## Version 5 — Observational Resolution Constraint
+## Formally Elevated to First-Class Epistemic Status
+## Supersedes Version 4
 ## OrganismCore — Eric Robert Lawson / GitHub Copilot
 ## Session: 2026-03-21
 
@@ -36,6 +32,9 @@ THIS DOCUMENT (Epistemic Charter):
   — The triadic structural invariant derived
   — The full derivation chain in auditable form
   — The boundary problem and calibration status
+  — The observational resolution constraint
+    (elevated to first-class epistemic status
+    in Version 5 — see Part IV and Part V)
   — The identity principle and generalization
   — The coherence optimization operating register
   — Fully self-contained
@@ -272,6 +271,88 @@ derived.
 
 All work in this document and its companion
 proceeds in the correct direction only.
+
+### 0.7 Observational Resolution Is Part of R — Not Separate From It
+## NEW IN VERSION 5
+
+**This is the epistemic addition that Version 5 makes
+permanent.**
+
+R is the upper bound. But R is not simply
+"what happened." R is what the observational
+instrument captured of what happened, at the
+resolution the instrument had at the moment
+it captured it.
+
+These are not the same thing.
+
+The event has a geometry. The footage has a
+resolution. The report interprets the footage
+through a non-attractor-geometry paradigm.
+
+Three distinct layers:
+
+```
+Layer 1 — The event geometry:
+  What the K-bubble actually did.
+  Governed by S + G + N.
+  Independent of whether it was observed.
+  Independent of whether it was correctly
+  interpreted.
+  This is what the model derives.
+
+Layer 2 — The raw observational capture:
+  What the FLIR sensor recorded.
+  Governed by sensor physics:
+    — spatial resolution (m/pixel at altitude)
+    — temporal resolution (frame rate)
+    — spectral bandpass (single integrated band)
+    — compression artifacts
+    — crosshair occlusion
+  This is fixed at the moment of capture.
+  It cannot be changed. It can only be
+  characterized and, where possible, improved
+  by enhanced analysis of the existing footage.
+
+Layer 3 — The interpreted record:
+  What the SCU report extracted from Layer 2,
+  interpreted through a non-attractor-geometry
+  paradigm.
+  This is neither Layer 1 nor Layer 2.
+  It is a reading of Layer 2 that may or may
+  not capture the geometric structure of Layer 1.
+  Where the paradigm is insufficient to see the
+  geometry, the report will record what is visible
+  within that paradigm — and the attractor
+  geometry will be invisible within it.
+```
+
+**The implication for this model:**
+
+Calibration targets taken from the SCU report
+(r_bubble, D_K, ΔT) are Layer 3 readings of
+Layer 2 data. They carry:
+  — the resolution limits of Layer 2 as a floor
+  — the paradigm limits of Layer 3 as a ceiling
+
+Before any of these values can serve as hard
+calibration targets, their Layer 2 variance
+potential must be characterized. Until that
+characterization is complete, they are
+**directional constraints**, not precise inputs.
+
+**The specific Layer 2 resolution problem
+for the split event is formally documented
+in Part IV of this charter and is treated
+as a first-class open item in the coherence
+optimization register.**
+
+A model that achieves calibration against
+Layer 3 values with uncharacterized Layer 2
+variance has not satisfied the calibration
+condition. It has satisfied a softer condition:
+consistency with the best available Layer 3
+reading of Layer 2 data. These are not the same.
 
 ---
 
@@ -777,55 +858,141 @@ be causally sufficient to generate these.
 | Medium traversal without deceleration | Tier 1–2 | Upper bound: medium-independence is real |
 | Cold thermal signature | Tier 2 — single bandpass | Upper bound: cold direction is real |
 | No ATC radar return ~2.8 GHz | Tier 2 — ATC logs | Upper bound: non-detection is real |
-| Split event 2:32–2:47 | Tier 1 — direct footage | Upper bound: bifurcation is real |
-| Approximately symmetric lobes | Tier 2 — SCU analysis | Upper bound: symmetric bifurcation is real |
-| Observational blackout at 2:47 | Tier 1 — zoom-out | NOT upper bound — not evidence event ended |
+| Split event 2:32–2:47 | Tier 1 — direct footage, visually confirmed | Upper bound: bifurcation is real |
+| Approximately symmetric lobes | Tier 2 — SCU analysis of zoomed period | Upper bound: symmetric bifurcation is real |
+| Observational blackout at 2:47 | Tier 1 — zoom-out confirmed | NOT upper bound — operator zoom-out, not evidence event ended |
+
+### The Observational Blackout Principle
+## NEW IN VERSION 5 — FORMALLY ELEVATED
+
+**The split is visually confirmed from 2:32 to 2:47.**
+
+**The split is no longer visible after 2:47 solely
+because the FLIR operator zoomed out.**
+
+This is not a minor footnote. It is a first-class
+epistemic statement with formal consequences:
+
+```
+The disappearance of the split from the record
+at 2:47 is an artifact of the observational
+instrument's zoom state, not an artifact of
+the physical event.
+
+It is geometrically indistinguishable — from the
+footage alone — from a case in which:
+  (a) The split ended at 2:47, OR
+  (b) The split continued beyond 2:47 and was
+      not resolvable at the zoomed-out resolution.
+
+The footage does not discriminate between these.
+The report treats (a) as the default.
+Attractor geometry does not assign a default.
+It assigns an open item: O-7 (see Part V).
+```
+
+Additionally: the FLIR crosshairs occlude
+portions of the frame during both zoomed-in
+and zoomed-out periods. The crosshair occlusion
+is a systematic resolution loss at the center
+of the frame — precisely where the split geometry
+is most critical. This is formally documented
+and cannot be corrected from the existing
+compressed footage without enhanced analysis.
+
+### The Three-Period Resolution Structure
+## NEW IN VERSION 5 — FORMALLY DEFINED
+
+The split event is not a single observational
+record. It has three distinct periods with
+distinct resolution and paradigm properties:
+
+```
+PERIOD A — 2:32 to 2:36
+  Camera state: NOT zoomed in.
+  Ground resolution: ~3.6 m/pixel (estimated
+    from altitude and sensor FOV).
+  Reported lobe separation: ~3.75 m.
+  Pixel separation: approximately 1 pixel.
+  Nyquist status: AT THE LIMIT.
+  Crosshair occlusion: present.
+  Paradigm: SCU report records what is visible
+    within non-attractor-geometry framework.
+
+  EPISTEMIC STATUS OF PERIOD A:
+  The critical period of the split onset.
+  The information is present in the footage —
+  the event is captured — but at a resolution
+  that places the key geometric feature
+  (lobe separation) at exactly the Nyquist limit.
+  This means:
+    — The split IS in the footage.
+    — The split CANNOT be reliably quantified
+      from the compressed video at face value.
+    — Enhanced analysis of the raw or
+      higher-quality footage may resolve
+      features invisible in the public record.
+    — The SCU report's geometric readings from
+      this period carry the highest uncertainty
+      of any period.
+  The attractor geometry model predicts specific
+  geometric features of the split onset that
+  are invisible to the SCU analysis paradigm.
+  Period A is where those features would first
+  appear. It is the highest-priority target
+  for enhanced resolution analysis.
+
+PERIOD B — 2:36 to 2:47
+  Camera state: ZOOMED IN.
+  Ground resolution: improved over Period A.
+  Lobe geometry: more clearly resolved.
+  Crosshair occlusion: present, partially
+    obscuring the split gap region.
+  Paradigm: SCU report records lobe properties,
+    anti-phase oscillation character (qualitative).
+
+  EPISTEMIC STATUS OF PERIOD B:
+  The most informative period in the existing
+  public record. Lobe separation, relative
+  motion, oscillation character are all
+  partially readable here. The crosshair
+  occlusion is the primary remaining limitation.
+  Enhanced analysis targeting the gap between
+  the lobes — partially obscured by the
+  crosshair — is the highest-value analytical
+  action available within the existing footage.
+
+PERIOD C — 2:47 onward
+  Camera state: ZOOMED OUT.
+  Split resolution: below the Nyquist limit
+    at the zoomed-out ground resolution.
+  Event status: UNKNOWN — not ended, not confirmed.
+
+  EPISTEMIC STATUS OF PERIOD C:
+  Observational blackout only. The event
+  geometry after 2:47 is formally unknown.
+  The model must not be constrained by the
+  absence of data from this period as though
+  it were evidence of absence.
+  O-7 is the open item that tracks this.
+```
 
 ### Calibration Parameters — Targets Not Inputs
 
 These values are taken from the SCU report.
-They are the best available estimates.
-They are not confirmed values.
-They are targets: the structural derivation
-must generate ranges that contain them.
-When it does, the calibration condition is
-satisfied. When it does not, the incoherence
-is the optimization signal.
+They are the best available estimates from
+a Layer 3 reading of Layer 2 data.
+They are directional constraints, not precise
+inputs, until their Layer 2 variance potential
+is characterized by enhanced resolution analysis.
 
-| Parameter | Current Value | Source | Uncertainty | What Derivation Must Show |
-|-----------|--------------|--------|-------------|--------------------------|
-| r_bubble | 1.88 m | SCU report | ±50% realistic | S-equation stability range must contain this |
-| D_K | 0.268 m²/s | Computed from r_bubble | Factor ~3 each direction | K-field diffusivity range must contain this |
-| ΔT cold | 1–3°C | SCU report | ±1°C | K(r) gradient profile must produce this range |
-| Oscillation character | Qualitative anti-phase | SCU report | Unquantified | Bifurcation dynamics must predict this |
-
-### The Observational Resolution Constraint
-
-The split event at 2:32–2:47 has a formally
-documented resolution limitation:
-
-  2:32–2:36: Camera NOT zoomed in.
-    Ground resolution ≈ 3.6 m/pixel (estimated).
-    Reported lobe separation ≈ 3.75 m.
-    This is approximately 1 pixel separation.
-    1-pixel separation is at the Nyquist limit.
-    r_bubble derived from this is resolution-limited.
-
-  2:36–2:47: Camera zoomed in.
-    Lobes more clearly resolved.
-    Quantitative properties still limited by
-    compressed video and crosshair occlusion.
-
-  2:47 onward: Camera zoomed out.
-    Split no longer resolvable.
-    This is observational blackout, NOT evidence
-    that the split ended at 2:47.
-
-The critical period 2:32–2:36 is the one from
-which the most constrained measurements were
-taken. Those measurements carry the highest
-uncertainty. See companion audit document:
-Aguadilla_Observational_Resolution_Audit.md
+| Parameter | Current Value | Source | Uncertainty | Layer 2 Variance Status | What Derivation Must Show |
+|-----------|--------------|--------|-------------|------------------------|--------------------------|
+| r_bubble | 1.88 m | SCU report | ±50% realistic | HIGH — Period A is at Nyquist limit | S-equation stability range must contain this |
+| D_K | 0.268 m²/s | Computed from r_bubble | Factor ~3 each direction | HIGH — inherits r_bubble uncertainty | K-field diffusivity range must contain this |
+| ΔT cold | 1–3°C | SCU report | ±1°C | MEDIUM — single bandpass, no spectral resolution | K(r) gradient profile must produce this range |
+| Oscillation character | Qualitative anti-phase | SCU report (Period B) | Unquantified | MEDIUM — crosshair occlusion limits quantification | Bifurcation dynamics must predict this |
+| Split duration | ≥15 seconds (2:32–2:47) | Direct footage | LOWER BOUND ONLY — event may continue past 2:47 | HIGH — Period C is observational blackout | S-equation must support duration ≥ observed |
 
 ---
 
@@ -846,11 +1013,13 @@ Aguadilla_Observational_Resolution_Audit.md
 
 | Item | Stated Incoherence | Geometric Arrow | What Closes It |
 |------|-------------------|----------------|----------------|
-| D-3 | Fresnel alone predicts ΔT ≈ 4°C. Observed 1–3°C. Over-prediction. | K is not uniform across bubble wall. K_wall > K_interior. Gradient K(r) profile reduces effective ΔT at the observed FLIR bandpass. | O-3: derive K(r) from S-equation steady-state |
-| O-6 | r_bubble = 1.88 m taken from report, not derived | S-equation stability must have a minimum stable radius. Derive it. | Boundary value problem: K-gradient restoring force vs dispersal rate at traversal velocity |
+| D-3 | Fresnel alone predicts ΔT ≈ 4°C. Observed 1–3°C. Over-prediction. | K is not uniform across bubble wall. K_wall > K_interior. Gradient K(r) profile reduces effective ΔT. | O-3: derive K(r) from S-equation steady-state |
 | O-3 | K(r) gradient profile not derived | Points toward S-equation steady-state solution | Steady-state solution of S-equation gives K(r). Closes D-3 simultaneously |
+| O-6 | r_bubble = 1.88 m taken from report, not derived | S-equation stability must have a minimum stable radius. Derive it. | Boundary value problem: K-gradient restoring force vs dispersal rate at traversal velocity |
 | O-4 | S(x,t) physical identity unknown | Split event bifurcation structure constrains nonlinearity of S. Symmetric equal-lobe split requires symmetric nonlinear self-coupling | Invert from bifurcation constraints to identify class of S(x,t) |
 | P-3 | Spectral slope prediction untestable from existing footage | Points toward raw multi-band sensor data or laboratory replication | New observational capability or controlled experiment |
+| O-7 | Split duration and post-2:47 event status unknown | Operator zoom-out at 2:47 is observational blackout, not event termination. S-equation must be consistent with split duration ≥ 15 seconds and potentially indefinite continuation. | S-equation steady-state stability analysis. If the S-equation produces a stable bifurcated solution, post-2:47 continuation is the geometric expectation, not the anomaly. |
+| O-8 | Period A (2:32–2:36) geometric features at Nyquist limit in public footage | The attractor geometry model predicts specific split-onset geometry invisible to the SCU paradigm. Period A is where these features first appear. The information exists in the event — it was captured — but the public record resolution is insufficient to extract it reliably. | Enhanced resolution analysis of Period A footage (raw sensor data, decompression analysis, or super-resolution techniques applied to the split onset frames). This is the highest-priority observational action available. |
 
 ### The Convergence Structure
 
@@ -860,6 +1029,13 @@ to derive r_bubble. O-3 derives K(r) from the
 S-equation. They converge at the S-equation
 steady-state solution. This is the single
 derivation that closes both simultaneously.
+
+O-7 is closed by the same S-equation derivation:
+if the steady-state solution is stable, the
+split continues until the source S is disrupted.
+The 2:47 observational blackout is then
+geometrically expected to represent a continuing
+event, not a terminated one.
 
 O-4 is the deepest open item. It is also the
 most constructive: identifying S(x,t) from the
@@ -871,6 +1047,12 @@ The overdetermination is a feature — it means
 S(x,t) is uniquely identifiable if the model
 is correct.
 
+O-8 is the highest-priority observational action.
+It does not require new data. It requires
+enhanced analysis of existing data. The
+geometry is in the footage. The resolution
+to extract it is the open item.
+
 ### What Full Coherence Looks Like
 
 ```
@@ -881,10 +1063,22 @@ Every open item above closed by derivation
 Every calibration target falls within the
   structurally derived parameter ranges
 
+Layer 2 variance of all calibration parameters
+  characterized by enhanced resolution analysis
+  of Periods A and B footage
+
 Spectral slope prediction tested and not falsified
 
 S(x,t) uniquely identified from four-channel
   constraint system
+
+O-7 resolved: S-equation steady-state stability
+  confirms whether split continuation past 2:47
+  is the geometric expectation
+
+O-8 resolved: Period A enhanced analysis extracts
+  split-onset geometry and confirms or constrains
+  the predicted bifurcation structure
 
 Result:
   — Boundary problem interior closed
@@ -922,10 +1116,23 @@ N = the Aguadilla object navigating its K-field
 R = the observational signatures of the phenomenon
   = the derivations and confirmed truths that
     emerge from our navigation
-  When full coherence is achieved, R from the
-  phenomenon and R from the derivation are
-  identical. Two projections of the same
-  structural truth.
+
+  NOTE added in Version 5:
+  R is not simply "what happened."
+  R is what the instrument captured of what
+  happened, at the resolution it had.
+  The event geometry (Layer 1), the raw capture
+  (Layer 2), and the interpreted record (Layer 3)
+  are distinct. The model derives Layer 1.
+  It is constrained by Layer 2 and Layer 3 only
+  to the extent their resolution is sufficient
+  to discriminate between structural predictions.
+  Where Layer 2 resolution is insufficient,
+  the constraint is soft. Where it is sufficient,
+  the constraint is hard.
+  The three-period resolution structure of the
+  split event (Part IV) defines exactly which
+  constraints are hard and which are soft.
 ```
 
 The map and the territory are instances of
@@ -977,6 +1184,22 @@ AXIOM 5: R never defines S.
   geometrically distinct operations.
   Role: The methodological foundation.
   Status: Non-negotiable.
+
+AXIOM 6: R is stratified by observational resolution.
+  NEW IN VERSION 5.
+  R is not a single undifferentiated record.
+  R has three layers: the event geometry (Layer 1),
+  the raw instrument capture (Layer 2), and the
+  interpreted record (Layer 3). Constraints from
+  Layer 3 are only as hard as the Layer 2
+  resolution that underlies them. Before any
+  Layer 3 value is used as a calibration target,
+  its Layer 2 variance must be characterized.
+  Role: The observational epistemic foundation.
+  Prevents the model from being falsely
+  constrained by resolution artifacts treated
+  as geometric facts.
+  Status: Formally established in Version 5.
 ```
 
 ### What Follows From The Axioms With Certainty
@@ -988,6 +1211,8 @@ K_threshold = (1/R_medium)^(1/3)    [V_vac + condition]
 Cold direction: always cold          [Fresnel + Kirchhoff]
 Spectral slope: deeper at longer λ   [aperture correction]
 Bifurcation: symmetric structure     [S-equation symmetry]
+Split duration lower bound: ≥15 s   [direct footage, Axiom 6:
+                                      upper bound unknown]
 ```
 
 ### What Would Falsify From Below
@@ -1022,7 +1247,16 @@ Spectral slope in wrong direction
   [falsifies Step 9 aperture correction]
 
 Split producing strongly asymmetric lobes
+  in Period B enhanced analysis
   [falsifies symmetric bifurcation of S-equation]
+
+Enhanced Period A analysis showing no split
+  onset at the predicted geometry
+  [would require re-evaluation of bifurcation
+   model — this is an open question, not yet
+   a falsification criterion, until O-8 is
+   executed and the resolution floor is
+   characterized]
 ```
 
 ---
@@ -1051,6 +1285,16 @@ parameter values required to satisfy the
 calibration condition have not yet been derived
 from the structural geometry.
 
+The calibration parameters taken from the SCU
+report are directional constraints, not hard
+targets, until their observational resolution
+variance is characterized. The split event has
+three distinct resolution periods. Period A
+(2:32–2:36) is at the Nyquist limit. The split
+disappearance at 2:47 is a zoom-out artifact,
+not evidence of event termination. These are
+first-class epistemic facts, not footnotes.
+
 This is a calibration problem. Not falsification.
 Not incoherence. A precisely located gap between
 two passed bounds with a defined path to closure.
@@ -1078,28 +1322,49 @@ recognizing it.
 
 ## DOCUMENT METADATA
 
-- Status: Canonical epistemic charter — Version 4
-- Supersedes: The_Vacuum_Coupling_Model_Epistemic10.md
-  (Version 3)
+- Status: Canonical epistemic charter — Version 5
+- Supersedes: The_Vacuum_Coupling_Potential_Epistemic_Charter_v4.md
+  (Version 4)
 - Session: 2026-03-21
 - Author: Eric Robert Lawson / GitHub Copilot
-- Key changes from Version 3:
-  1. Part 0 added — Attractor Geometry Operating
-     Principles stated from first principles.
-     Document is now fully self-contained.
-  2. Triadic invariant derived, not just stated.
-     Newton-Waddington-Vacuum triad explained
-     with Newton's alchemy/prophecy work included.
-  3. Coherence ≠ truth formally stated in Part 0.
-  4. Direction of derivation stated as
-     non-negotiable operating principle.
-  5. Companion document relationship formally
-     scoped — what each document contains and
-     what the coupled pair achieves together.
-  6. Convergence structure of O-6 and O-3 noted —
-     they are the same derivation from two
-     directions. They converge at the S-equation
-     steady-state solution.
+- Key changes from Version 4:
+  1. Part 0.7 added — Observational Resolution Is
+     Part of R, Not Separate From It. The three-layer
+     distinction (event geometry / raw capture /
+     interpreted record) formally established as
+     an operating principle of the framework.
+  2. Part IV restructured:
+     — The Observational Blackout Principle formally
+       elevated to a named, first-class epistemic
+       statement. The zoom-out at 2:47 is not a
+       footnote. It is a formal constraint on how
+       the record may be used.
+     — The Three-Period Resolution Structure
+       (Period A / B / C) formally defined with
+       distinct epistemic status for each period.
+     — Calibration parameters table extended with
+       Layer 2 Variance Status column.
+     — Split duration row added: lower bound ≥15s,
+       upper bound formally unknown.
+  3. Part V updated:
+     — O-7 added: split duration and post-2:47
+       status as a formal open item.
+     — O-8 added: Period A enhanced resolution
+       analysis as the highest-priority
+       observational action available.
+     — Convergence structure extended: O-7 closes
+       via the same S-equation steady-state
+       derivation as O-3 and O-6.
+  4. Part VI updated: self-referential statement
+     extended with the R-stratification note.
+  5. Part VII updated: AXIOM 6 added —
+     R is stratified by observational resolution.
+     Six axioms, not five.
+  6. What Follows From Axioms: split duration
+     lower bound added.
+  7. What Would Falsify From Above: Period A
+     enhanced analysis falsification criterion
+     added with appropriate uncertainty framing.
 - Companion document:
   The_Vacuum_Coupling_Potential_Model8.md
   Contains: complete mathematical treatment,
@@ -1108,14 +1373,22 @@ recognizing it.
   observational alignment checks.
 - Amendment protocol: This charter may only be
   amended by a derivation that modifies one of
-  the five axioms in Part VII, or by an empirical
+  the six axioms in Part VII, or by an empirical
   result that falsifies from above. Observational
   results that are merely consistent with the
   existing structure accumulate evidential weight
   within the charter. They do not amend it.
-- Next action: O-6 and O-3 are the same
-  derivation approached from two directions.
-  Derive the S-equation steady-state solution.
-  This closes both simultaneously and converts
-  r_bubble and D_K from calibration targets
-  into confirmed structural predictions.
+- Next actions (priority order):
+  1. O-8: Enhanced resolution analysis of
+     Period A footage (2:32–2:36). Characterize
+     the Layer 2 variance floor for r_bubble
+     and split onset geometry. This is the
+     highest-priority observational action.
+     It does not require new data.
+  2. O-3 / O-6 convergence: Derive the
+     S-equation steady-state solution.
+     Closes O-3, O-6, D-3, and O-7 simultaneously.
+     Converts r_bubble and D_K from directional
+     constraints into confirmed structural predictions.
+  3. O-4: Identify S(x,t) class from bifurcation
+     constraints. Produces the blueprint.

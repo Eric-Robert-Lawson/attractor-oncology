@@ -59,7 +59,11 @@
 
 \vspace{0.03em}
 
-% ── CLAIM BOX ─────────────────────────���───────────────────────
+% ── CLAIM BOX ─────────────────────────────────────────────────
+% EDIT 1: Claim box now explicitly states signal separation —
+% Type A above carries water + minerals only (no UV);
+% Type B below carries UV-A only (no water, no minerals).
+% This reflects the v2.3 substrate separation design.
 \begin{mdframed}[
   backgroundcolor=statementbox, linecolor=statementbox,
   linewidth=0pt,
@@ -73,9 +77,12 @@ It is the output of a genome operating within a coherence gradient field.
 Change the field --- the genome executes a different program.
 Same genome. Different field. Different organism.\\
 Placing a radish seed in an \textbf{inverted coherence gradient field}
---- hydroponic foam above, UV-A embedded foam below,
+--- hydroponic foam above (water and minerals only, no UV),
+UV-A embedded foam below (UV-A only, no water or minerals),
 complete external light deprivation ---
 produces \textbf{root growing upward, shoot growing downward.}
+Signals are cleanly separated: each axis navigates toward
+its sole attractor in the opposite direction from the other.
 Derived geometrically. \textbf{Prediction locked before the experiment.}
 Pre-registered:
 \href{https://doi.org/10.5281/zenodo.19081257}{\texttt{doi.org/10.5281/zenodo.19081257}}
@@ -100,9 +107,10 @@ the genome resolves to in the standard gradient field.
 to the inverted attractor.} No genetic modification. One generation.
 
 \smallskip\noindent
-\textbf{Root} navigates toward water and minerals.
+\textbf{Root} navigates toward water and minerals (Type~A foam, above).
 \textbf{Shoot} navigates toward the only photonic signal in the
-field --- UV-A embedded within the substrate below.
+field --- UV-A embedded within the substrate below (Type~B foam).
+The two signals are in opposite chambers with no cross-contamination.
 }
 
 \section{Signal Deprivation Principle}
@@ -124,15 +132,23 @@ Light exclusion is the load-bearing engineering constraint.
 {\small
 \textbf{Root:} Upward. Hydrotropism overrides gravitropism.
 MIZ1-mediated amyloplast degradation suppresses gravity sensing
-(Zhang et al.\ PNAS 2025). Water in S1 Type~A foam above is the
-only hydric signal.
+(Zhang et al.\ PNAS 2025). Water and minerals in S1 Type~A foam
+above is the only hydric signal. Type~A carries no UV.
 
 \textbf{Shoot:} Downward. UV-A embedded in S2 Type~B foam below
-is the only photonic signal. Shoot penetrates foam to reach it.
+is the only photonic signal. Type~B carries no hydroponic nutrients.
+Shoot penetrates foam to reach the UV-A source.
 
+% EDIT 3: AIS definition now explicitly states that angles are
+% measured from the downward gravity vector (0° = straight down),
+% so >135° unambiguously means pointing upward and <45° means
+% pointing downward. Reference direction ambiguity resolved.
 \textbf{AIS\,=\,2} at T$=$72\,h, maintained T$=$168\,h.\\
-{\footnotesize AIS\,=\,2: root $>$135\textdegree, shoot $<$45\textdegree
-from vertical. Scenario 1 must record AIS\,=\,0 in same run.
+{\footnotesize AIS\,=\,2: angles measured from the downward gravity
+vector (0\textdegree\,=\,straight down, 180\textdegree\,=\,straight up).
+Root axis $>$135\textdegree\ from downward vertical (root pointing upward).
+Shoot axis $<$45\textdegree\ from downward vertical (shoot pointing downward).
+Scenario 1 must record AIS\,=\,0 in same run.
 Minimum 3 seeds, 2 independent runs for reportable confirmation.}
 }
 
@@ -162,10 +178,14 @@ Every prior result is post-hoc or partial.
 \section{The Five Scenarios --- v2.3}
 {\footnotesize
 \textbf{Substrate types:}
-\textbf{Free UV} --- LED free in S1 air, zero penetration cost.
-\textbf{Type A} --- 20\,ppi foam + hydroponic (water + minerals, no UV).
-\textbf{Type B} --- 20\,ppi foam + UV-A LED embedded (UV only, no hydroponic).
-\textbf{Type C} --- 20\,ppi foam + hydroponic + UV-A LED embedded (all co-located).
+\textbf{Free UV} --- LED free in S1 air, zero penetration cost, no foam.
+\textbf{Type A} --- 20\,ppi foam, saturated hydroponic solution
+(water + minerals). \textit{No UV at any depth.}
+\textbf{Type B} --- 20\,ppi foam, UV-A LED embedded at 10--20\,mm depth,
+dry or minimally moist with plain water only.
+\textit{No hydroponic nutrients.}
+\textbf{Type C} --- 20\,ppi foam, hydroponic solution + UV-A LED
+embedded (all signals co-located).
 
 \vspace{0.2em}
 \begin{tabular}{p{0.5cm}p{1.85cm}p{1.85cm}p{0.85cm}}
@@ -203,13 +223,21 @@ Specify the field. The genome executes.
 }
 
 \section{Materials and Timeline}
+% EDIT 2: Materials table now distinguishes Type A foam
+% (hydroponic, no UV) from Type B/C foam (UV-A LED embedded).
+% Previously a single undifferentiated foam line item, which
+% would mislead a first-time builder into treating all foam
+% as identical. Nutrient solution listed separately.
+% Total range updated to $61--134 to match operative protocol
+% full cost summary including tools and ventilation materials.
 {\footnotesize
 \begin{tabular}{p{3.3cm}p{0.75cm}p{1.5cm}}
 \toprule
 \textbf{Item} & \textbf{Cost} & \textbf{Source} \\
 \midrule
 Radish seeds & \$2--4 & Garden store \\
-Reticulated foam 20\,ppi & \$5--10 & Aquarium supply \\
+Type~A foam 20\,ppi (hydroponic, no UV) & \$3--6 & Aquarium supply \\
+Type~B/C foam 20\,ppi (UV-A LED embedded) & \$3--6 & Aquarium supply \\
 Hydroponic mineral solution & \$5--12 & Garden / hydro \\
 Opaque PVC pipe + end caps & \$15--25 & Hardware store \\
 UV-A LED strip $\sim$365\,nm & \$8--15 & Amazon \\
@@ -217,12 +245,14 @@ Metallized Mylar + funnels + net cups & \$5--11 & Dollar / kitchen \\
 Aquarium silicone sealant & \$5--8 & Aquarium store \\
 Red-light torch & \$5--15 & Astronomy supply \\
 \midrule
-\textbf{Total} & \textbf{\$50--100} & \\
+\textbf{Total} & \textbf{\$61--134} & \\
 \bottomrule
 \end{tabular}
 
 \vspace{0.1em}
 No BSL rating. No credentials. No specialist equipment.\\
+Type~A and Type~B foam are constructed differently ---
+see operative protocol for substrate construction steps.\\
 Light exclusion is the critical build requirement.\\
 Primary result T\,=\,72\,h. Full confirmation T\,=\,168\,h.
 }

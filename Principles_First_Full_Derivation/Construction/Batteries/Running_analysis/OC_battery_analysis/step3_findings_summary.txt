@@ -1,0 +1,64 @@
+OC BATTERY FRAMEWORK — STEP 3 FINDINGS
+==================================================
+
+CUMULATIVE RESULT:
+  Step 1: R²=0.3355  n=13  [Wrong calculation — RDF pair CN entropy]
+  Step 2: R²=0.8148  n=9  [Corrected — config population entropy, salt only]
+  Step 3: R²=0.3436  n=15  [Extended dataset, corrected calculation]
+  Direction: negative (low SCE → better RT performance)
+  p-value:   0.021653
+
+BAND HYPOTHESIS:
+  Prediction: Low SCE → high RT CE, poor LT performance. High SCE → lower RT CE, good LT performance. Mid SCE → temperature-robust optimum.
+  RT correlation: r=-0.5862  R²=0.3436  p=0.0217
+  LT correlation: r=0.7657  R²=0.5863  p=0.0448
+  Evidence present: YES
+  Joule 2025 connection:
+    Joule 2025 (DOI:10.1016/j.joule.2025.102271) defines Ssc = solvation configurational entropy and shows high Ssc → better low-temperature performance. This is the direct inversion of the RT prediction. SCE and Ssc appear to be the same variable. The band is where they cross.
+
+MASTER GRADIENT TABLE (ordered low→high SCE):
+  Rank  System                      Conc     SCE   dom%  RT CE  LT CE Quality                     
+  -----------------------------------------------------------------------------------------------
+  1     FEME/LiFSI                   4.0  1.1332  45.0%     91      — estimated_from_description  
+  2     LiFSI/DME                    1.0  1.2396  44.0%     97     45 literature_table            
+  3     FEME/LiFSI                   1.8  1.2935  42.0%     82      — estimated_from_description  
+  4     FEME/LiFSI                   1.0  1.3363  45.0%     70      — estimated_from_description  
+  5     BTFMD/LiFSI                  1.0  1.4005  40.0%   99.4     30 estimated_from_description  
+  6     DPE/LiFSI                    4.0  1.4387  35.0%     75      — estimated_from_description  
+  7     LiFSI/THF                    1.0  1.5275  30.0%     96     72 literature_table            
+  8     DPE/LiFSI                    1.8  1.6703  28.0%     65      — estimated_from_description  
+  9     LiFSI/DME                    4.0  1.7034  28.0%   99.2     78 literature_table            
+  10    DPE/LiFSI                    1.0  1.7094  25.0%     55      — estimated_from_description  
+  11    LHCE LiFSI/DME/TTE           4.0  1.7347  25.0%   99.0     55 literature_table            
+  12    LiFSI/DME                    2.0  1.7390  25.0%   98.5     62 literature_table            
+  13    EC/DEC 1:1                   1.0  1.9621  28.0%     35      — estimated_from_CN           
+  14    EC/DEC 1:1                   4.0  2.0115  20.0%     60      — estimated_from_CN           
+  15    EC/DEC 1:1                   1.8  2.0439  24.0%     40      — estimated_from_CN           
+  16    High-Entropy Electrolyte     1.0  2.2820  12.0%     93     88 literature_table            
+
+FRAMEWORK STATUS:
+  Variable identified:   True
+  Calculation correct:   True
+  RT gradient confirmed: True
+  R²(RT):                0.3436
+  N systems:             16
+  Band evidence:         YES
+  Ready for publication: NO
+  Needed for pub: N≥15 systems, explicit config data for ≥10, R²≥0.80 with LOO validation, band confirmed with ≥6 LT data points spanning SCE range.
+
+NEXT STEPS:
+  priority_1:
+    Obtain explicit SSIP/CIP/AGG fractions from the Energy Advances 2025 paper SI. Replace all 'estimated_from_description' entries. This will sharpen R² toward true value.
+
+  priority_2:
+    Identify and add 3-5 more systems that span the intermediate SCE band (SCE 1.4–1.7). The band hypothesis requires data in this zone with both RT and LT performance values. Candidates: LiFSI/2MeTHF, LiFSI/dioxolane, EC/DME blends.
+
+  priority_3:
+    Run statistical robustness checks. Bootstrap the R² confidence interval. Test whether removing any single system changes the conclusion (leave-one-out cross validation). Report: R²_CI and LOO_R²_min.
+
+  priority_4:
+    Prepare the summary figure for the framework document. The master gradient table is the primary empirical evidence. Step 4 builds the publication-ready version of this figure with proper error bars, confidence intervals, and the band overlay.
+
+  priority_5:
+    Contact Rumana Hasan (manarum.hasan@gmail.com) at NJIT — the mana121/SolvationStructure author — to request raw solvation cluster population data from their MD trajectories. This would give exact config fractions for EC/DEC, DPE, FEME systems and upgrade data_quality from 'estimated' to 'explicit_from_author'.
+

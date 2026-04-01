@@ -1,0 +1,116 @@
+============================================================
+OC BATTERY FRAMEWORK — STEP 7 FINDINGS
+OrganismCore — Eric Robert Lawson — 2026-04-01
+============================================================
+
+THREE-REGIME MODEL
+--------------------------------------------------
+  R1  n=8  Gradient-visible (CE<90%, SCE drives CE)
+  R2  n=9  Saturated (CE≥90%, salt/conc drives CE)
+  R3  n=3  Kinetically locked / transport limited
+
+STEP 7A: REGIME_1 CORRELATION
+--------------------------------------------------
+  n:            8
+  r:            0.8416
+  R²:           0.7083
+  p:            0.008788
+  Spearman r:   0.8095
+  Bootstrap CI: [0.2615, 0.9390]
+  LOO min:      0.5628
+  LOO mean:     0.7044
+
+  LOO detail:
+    Excluding FEME/LiFSI 1.8M                    R²=0.5628
+    Excluding FEME/LiFSI 1.0M                    R²=0.7590
+    Excluding DPE/LiFSI 4.0M                     R²=0.7601
+    Excluding DPE/LiFSI 1.0M                     R²=0.7667
+    Excluding DPE/LiFSI 1.8M                     R²=0.7078
+    Excluding EC/DEC 1:1 1.0M                    R²=0.6608
+    Excluding EC/DEC 1:1 4.0M                    R²=0.7844
+    Excluding EC/DEC 1:1 1.8M                    R²=0.6334
+
+STEP 7B: BAND ANALYSIS — R3 EXCLUDED
+--------------------------------------------------
+  All -20°C (Step 6 baseline)  n=11:
+    r(LT):   0.1303  R²=0.0170  p=0.7026
+    Confirmed: NO
+
+  Normal -20°C (R3 excluded)  n=8:
+    r(LT):   0.5092  R²=0.2593  p=0.1975
+    Confirmed: NO
+
+  Normal -20°C + HEE  n=9:
+    r(LT):   0.7322  R²=0.5361  p=0.0249
+    Confirmed: YES
+
+STEP 7C: TWO-VARIABLE MODEL
+--------------------------------------------------
+  n=17  R1=8  R2=9
+  R²(SCE only):    0.3592
+  R²(regime only): 0.7414
+  Two-var (raw CE):
+    CE = 104.68 + -25.85*SCE + 31.16*regime
+    R²=0.8278  F=33.65  p=0.000004
+    ΔR²(SCE|regime)=0.0864
+
+R² PROGRESSION — ALL SEVEN STEPS
+--------------------------------------------------
+  STEP1    R²=0.3355  n=13  [Wrong calc — RDF CN entropy]
+  STEP2    R²=0.8148  n=9  [Correct — config dist, salt only]
+  STEP3    R²=0.3436  n=15  [Confound — mechanism mixed]
+  STEP4    R²=0.6915  n=12  [Class A — estimated data]
+  STEP5    R²=0.4241  n=17  [Class A — explicit data, saturation]
+  STEP6A   R²=0.2736  n=17  [log deficit transform]
+  STEP6C   R²=0.7083  n=8  [A_low_CE subset]
+  STEP7A   R²=0.7083  n=8  [Regime_1 — log deficit (replaces 6C)]
+  STEP7C   R²=0.8278  n=17  [Two-variable model R1+R2]
+
+PUBLICATION READINESS
+--------------------------------------------------
+  Score:   8/11
+  Verdict: NOT YET — targeted gaps to close
+
+  ✓  R²(R1, log deficit) ≥ 0.70                     R²=0.7083
+  ✓  LOO_min(R1) ≥ 0.50                             LOO_min=0.5628
+  ✓  p(R1) < 0.01                                   p=0.008788
+  ✓  Bootstrap CI_lo(R1) ≥ 0.25                     CI_lo=0.2615
+  ✓  Two-var model R² ≥ 0.70                        R²=0.8278
+  ✗  ΔR²(SCE|regime) ≥ 0.15                         ΔR²=0.0864
+  ✓  Band r(LT) > 0.50 (normal -20°C)               r=0.5092
+  ✗  Band p(LT) < 0.05 (normal -20°C)               p=0.1975
+  ✓  N(R1) ≥ 8                                      n=8
+  ✓  Three-regime model confirmed                   YES (Steps 6-7)
+  ✗  Band trend with R1 estimate r > 0.60           r=0.0775 p=0.8315 [+EC/DEC est]
+
+  REMAINING GAPS:
+    → ΔR²(SCE|regime) ≥ 0.15
+    → Band p(LT) < 0.05 (normal -20°C)
+    → Band trend with R1 estimate r > 0.60
+
+PUBLICATION CLAIM
+--------------------------------------------------
+  Within the geometry-limited performance regime (Regime_1: 
+  CE<90%, n=8), solvation configuration entropy explains 
+  R²≥0.70 of the variance in room-temperature Coulombic 
+  efficiency (p<0.01, LOO_min≥0.56, bootstrap CI 
+  [0.26,0.94]). Systems with SCE>1.9 (disordered carbonate 
+  shells) achieve CE 35-60%; systems with SCE 1.3-1.7 
+  (structured ether/fluorinated-ether shells) achieve CE 
+  55-82%. Above the performance threshold (CE>90%), Coulombic 
+  efficiency is determined by salt identity and concentration 
+  (R²=0.034 for Regime_2). This defines the domain of 
+  applicability of the SCE framework. 
+
+PRIORITY DATA GAPS (Step 8 targets)
+--------------------------------------------------
+  1. LT CE for FEME/LiFSI 1M and 1.8M at -20°C
+     → contact Energy Advances 2025 authors
+  2. LT CE for DPE/LiFSI 1M at -20°C
+     → contact mana121 / check SolvationStructure
+  3. These anchor the low-SCE end of the band
+     → 3 measurements would complete band analysis
+
+============================================================
+Read step7_findings_report.json for full data.
+============================================================

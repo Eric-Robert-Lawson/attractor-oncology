@@ -1,0 +1,110 @@
+============================================================
+OC BATTERY FRAMEWORK — STEP 6 FINDINGS
+OrganismCore — Eric Robert Lawson — 2026-04-01
+============================================================
+
+STEP 5 DIAGNOSIS
+--------------------------------------------------
+  Root cause 1: CE saturation (9/17 systems CE>90%)
+                Fix: log(100-CE) transform
+  Root cause 2: Salt identity confound
+                LiPF6/EC/DMC (CE=92%) vs LiPF6/EC/DEC (CE=35%)
+                at same SCE=2.0
+                Fix: partial correlation | salt_type
+  Root cause 3: Mixed LT temperatures (-20°C / -40°C)
+                Fix: stratify by temperature
+
+STEP 6A: CE DEFICIT TRANSFORM
+--------------------------------------------------
+  R²(raw CE):      0.4241  [Step 5 baseline]
+  R²(CE deficit):  0.4241  p=0.004627
+  R²(log deficit): 0.2736  p=0.031201
+  Best metric:     raw_CE  R²=0.4241
+  Bootstrap CI:    [0.0441, 0.7624]
+  LOO min:         0.3138
+
+STEP 6B: PARTIAL CORRELATION — SALT IDENTITY
+--------------------------------------------------
+  LiFSI systems: 13
+  LiPF6 systems: 4
+  r_partial(SCE, log_deficit | salt): 0.2531  R²=0.0641  p=0.326998
+  r_partial(SCE, CE_deficit  | salt): 0.3412  R²=0.1164  p=0.180193
+
+STEP 6C: A_LOW_CE SUBSET (CE < 90%)
+--------------------------------------------------
+  A_low_CE  n=8:
+    R²(raw):      0.6888
+    R²(deficit):  0.6888
+    R²(log):      0.7083  p=0.008788
+    Bootstrap CI: [0.2615, 0.9390]
+    LOO min:      0.5628
+  A_high_CE n=9:
+    R²(log):      0.0343  [near-zero expected — CE saturated]
+
+STEP 6D: BAND — TEMPERATURE STRATIFIED
+--------------------------------------------------
+  -20°C only  n=11:
+    r(SCE, LT CE):   0.1303  R²=0.0170  p=0.7026
+    r(SCE, gap):     -0.1796  p=0.5972
+    r(SCE, LT def):  -0.1303  p=0.7026
+    Band confirmed:  NO
+    Band strong:     NO
+  All LT  n=12:
+    r(SCE, LT CE):   0.4399  R²=0.1935  p=0.1524
+    Band confirmed:  NO
+
+R² PROGRESSION — ALL SIX STEPS
+--------------------------------------------------
+  STEP1    R²=0.3355  n=13  [Wrong calc — RDF CN entropy]
+  STEP2    R²=0.8148  n=9  [Correct — config dist, salt only]
+  STEP3    R²=0.3436  n=15  [Confound — mechanism mixed]
+  STEP4    R²=0.6915  n=12  [Class A — estimated data]
+  STEP5    R²=0.4241  n=17  [Class A — explicit data, saturation]
+  STEP6A   R²=0.2736  n=17  [Class A — log deficit transform]
+  STEP6B   R²=0.0641  n=17  [Class A — partial r | salt_type]
+  STEP6C   R²=0.7083  n=8  [A_low_CE subset — log deficit]
+
+PUBLICATION READINESS
+--------------------------------------------------
+  Score:   5/9
+  Verdict: NOT YET — targeted gaps to close
+
+  ✗  R²(best transform, Class A) ≥ 0.60             R²=0.4241 (log_deficit or partial)
+  ✓  R²(A_low_CE, log deficit) ≥ 0.70               R²=0.7083
+  ✓  LOO_min(A_low_CE) ≥ 0.50                       LOO_min=0.5628
+  ✓  p(best metric) < 0.01                          p=0.004627
+  ✗  Partial r(SCE,CE|salt) confirmed               |r_partial|=0.2531
+  ✗  Band r(LT) > 0.60 at -20°C                     r=0.1303
+  ✗  Band p(LT) < 0.05 at -20°C                     p=0.7026
+  ✓  N(Class A) ≥ 15                                n=17
+  ✓  Two-mechanism model confirmed                  YES (Steps 4-5)
+
+  REMAINING GAPS:
+    → R²(best transform, Class A) ≥ 0.60
+    → Partial r(SCE,CE|salt) confirmed
+    → Band r(LT) > 0.60 at -20°C
+    → Band p(LT) < 0.05 at -20°C
+
+FRAMEWORK STATUS
+--------------------------------------------------
+  Step:                         6
+  Variable identified:          True
+  Calculation validated:        True
+  Mechanism model confirmed:    True
+  Saturation confound resolved: True
+  Salt confound identified:     True
+  LT temperature stratified:    True
+  R²(log deficit, n=17):        0.2736
+  R²(partial | salt, n=17):     0.0641
+  R²(A_low_CE subset):          0.7083
+  LOO_min(A_low_CE):            0.5628
+  r(SCE, LT CE) at -20°C:       0.1303
+  p(LT band, -20°C):            0.702626
+  Band confirmed (-20°C):       NO
+  Pub score:                    5/9
+  Pub verdict:                  NOT YET — targeted gaps to close
+  Ready for manuscript:         NO
+
+============================================================
+Read step6_findings_report.json for full data.
+============================================================

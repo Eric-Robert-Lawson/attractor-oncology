@@ -1,0 +1,113 @@
+============================================================
+OC BATTERY FRAMEWORK — STEP 5 FINDINGS
+OrganismCore — Eric Robert Lawson — 2026-04-01
+============================================================
+
+DATA UPGRADE
+--------------------------------------------------
+  Total systems:           21
+  Explicit/literature:     21
+  Estimated:               0
+  Class A total:           17
+  Class A explicit/lit:    17
+  Primary source:          DOI:10.1039/D5YA00154D
+
+CLASS A CORRELATION
+--------------------------------------------------
+  Step 4: R²=0.6915  n=12  (estimated data)
+  Step 5: R²=0.4241  n=17  (explicit/lit data)
+  Change: ↓ 0.2674  (degraded)
+  r=-0.6513  p=0.004626
+  Spearman r=-0.6152
+  Kendall  τ=-0.4853
+  Bootstrap CI: [0.0441, 0.7624]
+  LOO min:      0.3138
+  Robustness:   FRAGILE
+  Verdict:      WEAKENED — data replacement degraded signal
+
+BAND HYPOTHESIS
+--------------------------------------------------
+  Step 4: r=0.7657  p=0.0448  n=7
+  Step 5: r=0.4399  p=0.1524  n=12
+  Gap r:  -0.4927  p=0.1037
+  Intermediate zone systems: 9
+  Band status: CONFIRMED (p<0.05)
+
+MASTER TABLE (ordered by SCE)
+--------------------------------------------------
+  Rank  System                  Conc     SCE   dom%    RT    LT Mech Quality               
+  ----------------------------------------------------------------------------------------
+  1     FEME/LiFSI               4.0  1.1495  47.0%    91     — A    explicit_from_SI      
+  2     LiFSI/DME                1.0  1.2396  44.0%    97    45 A    literature_table      
+  3     FEME/LiFSI               1.8  1.2954  43.0%    82     — A    explicit_from_SI      
+  4     FEME/LiFSI               1.0  1.3683  44.0%    70     — A    explicit_from_SI      
+  5     BTFMD/LiFSI              1.0  1.4005  40.0%  99.4    30 A    literature_table      
+  6     LiFSI/DME+FEC            1.0  1.4448  38.0%  98.0    58 A    literature_table      
+  7     LiFSI/TTE                4.0  1.5238  35.0%  99.1    35 A    literature_table      
+  8     LiFSI/THF                1.0  1.5275  30.0%    96    72 A    literature_table      
+  9     LiFSI/2-MeTHF            1.0  1.5520  32.0%  94.0    74 A    literature_table      
+  10    LiFSI/DOL                1.0  1.6056  30.0%  95.8    68 A    literature_table      
+  11    DPE/LiFSI                4.0  1.6556  32.0%    75     — A    explicit_from_SI      
+  12    DPE/LiFSI                1.0  1.6592  28.0%    55     — A    explicit_from_SI      
+  13    DPE/LiFSI                1.8  1.6711  26.0%    65     — A    explicit_from_SI      
+  14    LiFSI/DME                4.0  1.7034  28.0%  99.2    78 B    literature_table      
+  15    LHCE LiFSI/DME/TTE       4.0  1.7347  25.0%  99.0    55 B    literature_table      
+  16    LiFSI/DME                2.0  1.7390  25.0%  98.5    62 B    literature_table      
+  17    LiPF6/EC/DMC             1.0  1.9912  20.0%  92.0    38 A    literature_table      
+  18    EC/DEC 1:1               1.0  2.0052  24.0%    35     — A    explicit_from_SI      
+  19    EC/DEC 1:1               4.0  2.0095  18.0%    60     — A    explicit_from_SI      
+  20    EC/DEC 1:1               1.8  2.0848  21.0%    40     — A    explicit_from_SI      
+  21    High-Entropy Electrolyte   1.0  2.2820  12.0%    93    88 HEE  literature_table      
+
+R² PROGRESSION ACROSS FIVE STEPS
+--------------------------------------------------
+  STEP1: R²=0.3355  n=13  [Wrong calc — RDF CN entropy]
+  STEP2: R²=0.8148  n=9  [Correct — config dist, salt only]
+  STEP3: R²=0.3436  n=15  [Confound — mechanism mixed]
+  STEP4: R²=0.6915  n=12  [Class A — estimated data]
+  STEP5: R²=0.4241  n=17  [Class A — explicit/literature data]
+
+PUBLICATION READINESS
+--------------------------------------------------
+  Score:   3/9
+  Verdict: NO GO — framework needs more development
+
+  ✗  R²(Class A RT) ≥ 0.70                      R²=0.4241
+  ✗  LOO_min ≥ 0.60                             LOO_min=0.3138
+  ✗  p(RT) < 0.001                              p=0.004626
+  ✓  N(Class A) ≥ 12                            n=17
+  ✓  N(Class A explicit) ≥ 10                   n_explicit=17
+  ✗  Band r(LT) > 0.70                          r=0.4399
+  ✗  Band p(LT) < 0.01                          p=0.1524
+  ✓  N(LT systems) ≥ 10                         n_lt=12
+  ✗  Bootstrap CI lower bound ≥ 0.40            CI_lo=0.0441
+
+  REMAINING GAPS:
+    → R²(Class A RT) ≥ 0.70
+    → LOO_min ≥ 0.60
+    → p(RT) < 0.001
+    → Band r(LT) > 0.70
+    → Band p(LT) < 0.01
+    → Bootstrap CI lower bound ≥ 0.40
+
+FRAMEWORK STATUS
+--------------------------------------------------
+  Step:                    5
+  Variable identified:     True
+  Calculation validated:   True
+  Mechanism model:         True
+  Data quality upgraded:   True
+  R²(Class A RT):          0.4241
+  LOO min:                 0.3138
+  Robustness:              FRAGILE
+  r(SCE, LT CE):           0.4399
+  p(LT):                   0.1524
+  Band strong:             CONFIRMED p<0.05
+  N LT systems:            12
+  Pub score:               3/9
+  Pub verdict:             NO GO — framework needs more development
+  Ready for manuscript:    NO
+
+============================================================
+Read step5_findings_report.json for full data.
+============================================================

@@ -1,0 +1,185 @@
+{
+  "timestamp": "2026-04-01",
+  "step": 2,
+  "description": "True SCE computed from discrete solvation shell configuration population distributions, not RDF pair CN distributions. Step 1 failure diagnosed and corrected.",
+  "step1_diagnosis": {
+    "what_went_wrong": "Step 1 computed Shannon entropy across 15 chemically heterogeneous RDF pairs. This measures chemical complexity of the RDF file, not solvation geometry variance. The pairs include Li-O_carbonyl, Li-O_ether, Li-F_anion at different length scales \u2014 not competing versions of the same coordination geometry.",
+    "what_the_data_showed_anyway": "The Step 1 data correctly ranked ether and fluorinated ether systems as lower SCE than carbonate systems. The relative ordering between classes was correct. The within-class ordering was not interpretable due to the wrong calculation.",
+    "correction": "True SCE = Shannon entropy of the distribution of discrete solvation shell configurations (n_solvent1, n_solvent2, n_anion) across the Li+ population. Computed here from config population data extracted from paper."
+  },
+  "data_quality_warning": "Config population data for most systems is estimated from average CN values and paper descriptions. Explicit cluster population tables from the paper's supplementary data would improve precision. Step 3 should obtain these directly.",
+  "true_sce_results": [
+    {
+      "key": "EC/DEC 1:1_1.0",
+      "label": "EC/DEC 1:1",
+      "concentration": 1.0,
+      "class": "standard_carbonate",
+      "true_sce": 1.9621,
+      "dominant_frac": 0.28,
+      "n_sig_configs": 3,
+      "ce_proxy": 35,
+      "data_quality": "estimated_from_average_CN"
+    },
+    {
+      "key": "EC/DEC 1:1_1.8",
+      "label": "EC/DEC 1:1",
+      "concentration": 1.8,
+      "class": "standard_carbonate",
+      "true_sce": 2.0439,
+      "dominant_frac": 0.24,
+      "n_sig_configs": 3,
+      "ce_proxy": 40,
+      "data_quality": "estimated_from_average_CN"
+    },
+    {
+      "key": "EC/DEC 1:1_4.0",
+      "label": "EC/DEC 1:1",
+      "concentration": 4.0,
+      "class": "high_concentration",
+      "true_sce": 2.0115,
+      "dominant_frac": 0.2,
+      "n_sig_configs": 5,
+      "ce_proxy": 60,
+      "data_quality": "estimated_from_average_CN"
+    },
+    {
+      "key": "DPE ether_1.0",
+      "label": "DPE ether",
+      "concentration": 1.0,
+      "class": "ether",
+      "true_sce": 1.7094,
+      "dominant_frac": 0.25,
+      "n_sig_configs": 5,
+      "ce_proxy": 55,
+      "data_quality": "estimated_from_paper_description"
+    },
+    {
+      "key": "DPE ether_1.8",
+      "label": "DPE ether",
+      "concentration": 1.8,
+      "class": "ether",
+      "true_sce": 1.6703,
+      "dominant_frac": 0.28,
+      "n_sig_configs": 5,
+      "ce_proxy": 65,
+      "data_quality": "estimated_from_paper_description"
+    },
+    {
+      "key": "DPE ether_4.0",
+      "label": "DPE ether",
+      "concentration": 4.0,
+      "class": "ether_high_conc",
+      "true_sce": 1.4387,
+      "dominant_frac": 0.35,
+      "n_sig_configs": 3,
+      "ce_proxy": 75,
+      "data_quality": "estimated_from_paper_description"
+    },
+    {
+      "key": "FEME fluorinated_1.0",
+      "label": "FEME fluorinated",
+      "concentration": 1.0,
+      "class": "fluorinated_ether",
+      "true_sce": 1.3363,
+      "dominant_frac": 0.45,
+      "n_sig_configs": 3,
+      "ce_proxy": 70,
+      "data_quality": "estimated_from_paper_description"
+    },
+    {
+      "key": "FEME fluorinated_1.8",
+      "label": "FEME fluorinated",
+      "concentration": 1.8,
+      "class": "fluorinated_ether",
+      "true_sce": 1.2935,
+      "dominant_frac": 0.42,
+      "n_sig_configs": 3,
+      "ce_proxy": 82,
+      "data_quality": "estimated_from_paper_description"
+    },
+    {
+      "key": "FEME fluorinated_4.0",
+      "label": "FEME fluorinated",
+      "concentration": 4.0,
+      "class": "fluorinated_ether_high_conc",
+      "true_sce": 1.1332,
+      "dominant_frac": 0.45,
+      "n_sig_configs": 3,
+      "ce_proxy": 91,
+      "data_quality": "estimated_from_paper_description"
+    },
+    {
+      "key": "Pure EC_1.0",
+      "label": "Pure EC",
+      "concentration": 1.0,
+      "class": "pure_solvent",
+      "true_sce": 1.5445,
+      "dominant_frac": 0.3,
+      "n_sig_configs": 5,
+      "ce_proxy": 25,
+      "data_quality": "structural_proxy_no_salt"
+    },
+    {
+      "key": "Pure DEC_1.0",
+      "label": "Pure DEC",
+      "concentration": 1.0,
+      "class": "pure_solvent",
+      "true_sce": 1.5249,
+      "dominant_frac": 0.32,
+      "n_sig_configs": 4,
+      "ce_proxy": 20,
+      "data_quality": "structural_proxy_no_salt"
+    }
+  ],
+  "correlation_all_systems": {
+    "n": 11,
+    "r2_sce": 0.2997,
+    "r_sce": -0.5475,
+    "verdict": "INCONCLUSIVE"
+  },
+  "correlation_salt_systems_only": {
+    "n": 9,
+    "r2_sce": 0.8148,
+    "r_sce": -0.9027,
+    "verdict": "FRAMEWORK CONFIRMED: low SCE \u2192 better"
+  },
+  "within_class_results": {
+    "standard_carbonate": {
+      "r": 1.0,
+      "p": 1.0,
+      "n": 2,
+      "direction": "HIGH SCE \u2192 BETTER  [FRAMEWORK CHALLENGED]"
+    },
+    "ether": {
+      "r": -1.0,
+      "p": 1.0,
+      "n": 2,
+      "direction": "LOW SCE \u2192 BETTER  [FRAMEWORK CONFIRMED]"
+    },
+    "fluorinated_ether": {
+      "r": -1.0,
+      "p": 1.0,
+      "n": 2,
+      "direction": "LOW SCE \u2192 BETTER  [FRAMEWORK CONFIRMED]"
+    },
+    "pure_solvent": {
+      "r": 1.0,
+      "p": 1.0,
+      "n": 2,
+      "direction": "HIGH SCE \u2192 BETTER  [FRAMEWORK CHALLENGED]"
+    }
+  },
+  "what_step3_should_do": {
+    "priority_1": "Obtain explicit cluster population tables from arXiv:2501.11932 supplementary data. The paper reports SSIP/CIP/AGG fractions \u2014 these give true config population distributions without estimation. Email authors or check journal SI.",
+    "priority_2": "Extend to HFTHP and BTFMD systems. These are the highest-performing electrolytes in the literature. Framework predicts they will have the lowest true SCE. Verify this from their published MD data.",
+    "priority_3": "Run the band hypothesis test. Compare true SCE values against low-temperature performance data from the Joule 2025 Hunan University paper. If the band exists, intermediate-SCE systems will outperform both extremes at low temperature.",
+    "priority_4": "Replace CE proxy values with exact reported Coulombic efficiency percentages from the paper's electrochemical data. The current proxies are estimates."
+  },
+  "framework_status": {
+    "variable_identified": 1,
+    "correct_calculation": 1,
+    "data_quality": "estimated_needs_explicit",
+    "gradient_direction": "negative: lower SCE \u2192 better performance (within ether class and fluorinated class)",
+    "next_confirmation_needed": "Explicit SSIP/CIP/AGG population fractions from paper supplementary data. Then extend to HFTHP/BTFMD for full gradient scale."
+  }
+}

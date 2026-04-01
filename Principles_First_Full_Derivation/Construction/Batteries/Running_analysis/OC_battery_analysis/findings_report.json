@@ -1,0 +1,171 @@
+{
+  "timestamp": "2026-04-01",
+  "data_source": "github.com/mana121/SolvationStructure",
+  "arxiv": "2501.11932",
+  "data_structure": {
+    "file_format": "LAMMPS_RDF",
+    "data_types_found": [
+      "multi_pair_rdf",
+      "coordination_numbers",
+      "peak_gr_values"
+    ],
+    "n_electrolyte_systems": 13,
+    "classes_present": [
+      "ether_high_conc",
+      "fluorinated_ether_high_conc",
+      "standard_carbonate",
+      "ether",
+      "fluorinated_ether",
+      "pure_solvent",
+      "high_concentration"
+    ],
+    "n_frames_per_file": "multiple_averaged",
+    "columns": "bin_idx, r, g(r)_pair1, CN_pair1, ..."
+  },
+  "sce_results": [
+    {
+      "key": "EC/DEC 1:1_1.0",
+      "label": "EC/DEC 1:1",
+      "concentration": 1.0,
+      "class": "standard_carbonate",
+      "sce": 2.3503,
+      "total_cn": 23.689,
+      "ce_proxy": 35
+    },
+    {
+      "key": "EC/DEC 1:1_1.8",
+      "label": "EC/DEC 1:1",
+      "concentration": 1.8,
+      "class": "standard_carbonate",
+      "sce": 2.5788,
+      "total_cn": 21.006,
+      "ce_proxy": 40
+    },
+    {
+      "key": "EC/DEC 1:1_4.0",
+      "label": "EC/DEC 1:1",
+      "concentration": 4.0,
+      "class": "high_concentration",
+      "sce": 2.6082,
+      "total_cn": 22.627,
+      "ce_proxy": 60
+    },
+    {
+      "key": "EC/DEC 3:1_1.8",
+      "label": "EC/DEC 3:1",
+      "concentration": 1.8,
+      "class": "standard_carbonate",
+      "sce": 2.4122,
+      "total_cn": 31.536,
+      "ce_proxy": 38
+    },
+    {
+      "key": "Pure EC_1.0",
+      "label": "Pure EC",
+      "concentration": 1.0,
+      "class": "pure_solvent",
+      "sce": 2.0087,
+      "total_cn": 29.472,
+      "ce_proxy": 25
+    },
+    {
+      "key": "Pure DEC_1.0",
+      "label": "Pure DEC",
+      "concentration": 1.0,
+      "class": "pure_solvent",
+      "sce": 1.8737,
+      "total_cn": 19.68,
+      "ce_proxy": 20
+    },
+    {
+      "key": "DPE ether_1.0",
+      "label": "DPE ether",
+      "concentration": 1.0,
+      "class": "ether",
+      "sce": 1.1735,
+      "total_cn": 9.666,
+      "ce_proxy": 55
+    },
+    {
+      "key": "DPE ether_1.8",
+      "label": "DPE ether",
+      "concentration": 1.8,
+      "class": "ether",
+      "sce": 1.2217,
+      "total_cn": 8.392,
+      "ce_proxy": 65
+    },
+    {
+      "key": "DPE ether_4.0",
+      "label": "DPE ether",
+      "concentration": 4.0,
+      "class": "ether_high_conc",
+      "sce": 1.2571,
+      "total_cn": 9.819,
+      "ce_proxy": 75
+    },
+    {
+      "key": "FEME fluorinated_1.0",
+      "label": "FEME fluorinated",
+      "concentration": 1.0,
+      "class": "fluorinated_ether",
+      "sce": 1.5186,
+      "total_cn": 10.953,
+      "ce_proxy": 70
+    },
+    {
+      "key": "FEME fluorinated_1.8",
+      "label": "FEME fluorinated",
+      "concentration": 1.8,
+      "class": "fluorinated_ether",
+      "sce": 1.5258,
+      "total_cn": 13.423,
+      "ce_proxy": 82
+    },
+    {
+      "key": "FEME fluorinated_4.0",
+      "label": "FEME fluorinated",
+      "concentration": 4.0,
+      "class": "fluorinated_ether_high_conc",
+      "sce": 1.5435,
+      "total_cn": 13.437,
+      "ce_proxy": 91
+    },
+    {
+      "key": "EC/DEC 1:1 (mixed)_1.0",
+      "label": "EC/DEC 1:1 (mixed)",
+      "concentration": 1.0,
+      "class": "standard_carbonate",
+      "sce": 2.3503,
+      "total_cn": 23.689,
+      "ce_proxy": 35
+    }
+  ],
+  "correlation_results": {
+    "n_data_points": 13,
+    "r2_SCE": 0.3355,
+    "r2_total_CN": 0.518,
+    "r2_peak_gr": 0.0032,
+    "verdict": "Field variables more predictive \u2014 REVISE GEOMETRY",
+    "SCE_beats_CN": 0,
+    "monotonic_order_match": 0
+  },
+  "what_next_script_should_do": {
+    "priority_1": "Get raw trajectory data or cluster population data for precise SCE calculation. Current approach uses CN distribution as SCE proxy. True SCE requires discrete geometry cluster populations.",
+    "priority_2": "Extend dataset. Current data covers EC/DEC, DPE, FEME. Need HFTHP, BTFMD, LiFSI/DME for the full gradient scale.",
+    "priority_3": "Add literature performance data with error bars. Current CE proxy values are estimates. Collect exact Coulombic efficiency values from papers for each electrolyte system.",
+    "priority_4": "Test band hypothesis. Need low-temperature performance data for the same electrolytes. Check Joule 2025 Hunan University paper for Ssc values at low temperature to compare.",
+    "additional_data_sources": [
+      "arxiv.org/abs/2501.11932 (current source)",
+      "DOI: 10.1016/j.jpowsour.2025.237088 (JPS 2025)",
+      "Nature Energy 2024 HFTHP paper",
+      "ACS Energy Lett 2024 BTFMD paper",
+      "Joule 2025 Hunan University Ssc paper"
+    ]
+  },
+  "framework_status": {
+    "gradient_confirmed": 0,
+    "sce_predictive": 0,
+    "next_threshold": "Need R\u00b2(SCE) > 0.7 across N>10 systems spanning full gradient for publication-level claim."
+  }
+}

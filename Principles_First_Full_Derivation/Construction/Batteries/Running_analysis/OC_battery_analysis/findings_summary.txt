@@ -1,0 +1,39 @@
+OC BATTERY FRAMEWORK — STEP 1 FINDINGS
+==================================================
+
+Data source: github.com/mana121/SolvationStructure
+Systems analysed: 13
+
+SCE VALUES (ordered low to high):
+  DPE ether @ 1.0M: SCE=1.1735  CE=55
+  DPE ether @ 1.8M: SCE=1.2217  CE=65
+  DPE ether @ 4.0M: SCE=1.2571  CE=75
+  FEME fluorinated @ 1.0M: SCE=1.5186  CE=70
+  FEME fluorinated @ 1.8M: SCE=1.5258  CE=82
+  FEME fluorinated @ 4.0M: SCE=1.5435  CE=91
+  Pure DEC @ 1.0M: SCE=1.8737  CE=20
+  Pure EC @ 1.0M: SCE=2.0087  CE=25
+  EC/DEC 1:1 @ 1.0M: SCE=2.3503  CE=35
+  EC/DEC 1:1 (mixed) @ 1.0M: SCE=2.3503  CE=35
+  EC/DEC 3:1 @ 1.8M: SCE=2.4122  CE=38
+  EC/DEC 1:1 @ 1.8M: SCE=2.5788  CE=40
+  EC/DEC 1:1 @ 4.0M: SCE=2.6082  CE=60
+
+CORRELATION RESULTS:
+  R²(SCE):       0.3355
+  R²(total CN):  0.5180
+  R²(peak g(r)): 0.0032
+  SCE beats CN:  False
+  Verdict: Field variables more predictive — REVISE GEOMETRY
+
+NEXT STEPS:
+  priority_1: Get raw trajectory data or cluster population data for precise SCE calculation. Current approach uses CN distribution as SCE proxy. True SCE requires discrete geometry cluster populations.
+
+  priority_2: Extend dataset. Current data covers EC/DEC, DPE, FEME. Need HFTHP, BTFMD, LiFSI/DME for the full gradient scale.
+
+  priority_3: Add literature performance data with error bars. Current CE proxy values are estimates. Collect exact Coulombic efficiency values from papers for each electrolyte system.
+
+  priority_4: Test band hypothesis. Need low-temperature performance data for the same electrolytes. Check Joule 2025 Hunan University paper for Ssc values at low temperature to compare.
+
+  additional_data_sources: ['arxiv.org/abs/2501.11932 (current source)', 'DOI: 10.1016/j.jpowsour.2025.237088 (JPS 2025)', 'Nature Energy 2024 HFTHP paper', 'ACS Energy Lett 2024 BTFMD paper', 'Joule 2025 Hunan University Ssc paper']
+

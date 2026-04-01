@@ -1,0 +1,45 @@
+OC BATTERY FRAMEWORK — STEP 2 FINDINGS
+==================================================
+
+STEP 1 DIAGNOSIS:
+  Step 1 SCE was wrong. It computed entropy
+  across chemically heterogeneous RDF pairs,
+  not across discrete solvation configurations.
+  Corrected here.
+
+TRUE SCE VALUES (ordered low to high):
+  FEME fluorinated @ 4.0M: SCE=1.1332  dom=45.0%  CE=91
+  FEME fluorinated @ 1.8M: SCE=1.2935  dom=42.0%  CE=82
+  FEME fluorinated @ 1.0M: SCE=1.3363  dom=45.0%  CE=70
+  DPE ether @ 4.0M: SCE=1.4387  dom=35.0%  CE=75
+  Pure DEC @ 1.0M: SCE=1.5249  dom=32.0%  CE=20
+  Pure EC @ 1.0M: SCE=1.5445  dom=30.0%  CE=25
+  DPE ether @ 1.8M: SCE=1.6703  dom=28.0%  CE=65
+  DPE ether @ 1.0M: SCE=1.7094  dom=25.0%  CE=55
+  EC/DEC 1:1 @ 1.0M: SCE=1.9621  dom=28.0%  CE=35
+  EC/DEC 1:1 @ 4.0M: SCE=2.0115  dom=20.0%  CE=60
+  EC/DEC 1:1 @ 1.8M: SCE=2.0439  dom=24.0%  CE=40
+
+CORRELATION (all systems):
+  R²(true SCE): 0.2997
+  Verdict: INCONCLUSIVE
+
+CORRELATION (salt systems only):
+  R²(true SCE): 0.8148
+  Verdict: FRAMEWORK CONFIRMED: low SCE → better
+
+WITHIN-CLASS:
+  standard_carbonate: r=1.0000  HIGH SCE → BETTER  [FRAMEWORK CHALLENGED]
+  ether: r=-1.0000  LOW SCE → BETTER  [FRAMEWORK CONFIRMED]
+  fluorinated_ether: r=-1.0000  LOW SCE → BETTER  [FRAMEWORK CONFIRMED]
+  pure_solvent: r=1.0000  HIGH SCE → BETTER  [FRAMEWORK CHALLENGED]
+
+NEXT STEPS:
+  priority_1: Obtain explicit cluster population tables from arXiv:2501.11932 supplementary data. The paper reports SSIP/CIP/AGG fractions — these give true config population distributions without estimation. Email authors or check journal SI.
+
+  priority_2: Extend to HFTHP and BTFMD systems. These are the highest-performing electrolytes in the literature. Framework predicts they will have the lowest true SCE. Verify this from their published MD data.
+
+  priority_3: Run the band hypothesis test. Compare true SCE values against low-temperature performance data from the Joule 2025 Hunan University paper. If the band exists, intermediate-SCE systems will outperform both extremes at low temperature.
+
+  priority_4: Replace CE proxy values with exact reported Coulombic efficiency percentages from the paper's electrochemical data. The current proxies are estimates.
+

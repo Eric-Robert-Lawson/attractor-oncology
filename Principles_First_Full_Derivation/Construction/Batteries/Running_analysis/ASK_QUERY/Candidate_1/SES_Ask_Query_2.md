@@ -6,6 +6,21 @@
 
 ---
 
+```
+Yes please give me the interpolation estimate for 1.2 mol/kg LiFSI in 2-MeTHF:DME at mole fraction 0.60:0.40, using the DME and DEE endpoints as bounds. 
+
+Label it clearly as an estimate. I need:
+1. Estimated SSIP fraction
+2. Estimated CIP fraction  
+3. Estimated AGG fraction
+4. Estimated dominant species percentage
+5. Estimated ionic conductivity at 25°C and -20°C
+
+Please note that 2-MeTHF has a donor number of approximately 17 and DME has donor number 20, so 2-MeTHF is a weaker solvator than DME but stronger than DEE. Weight the interpolation accordingly.
+```
+
+---
+
 ## MU Interpolation Method
 
 MU interpolated between two published anchor endpoints:

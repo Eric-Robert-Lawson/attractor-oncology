@@ -229,8 +229,8 @@ with these electronic parameters.
 ## Candidate 4 — Confirmed Novel
 
 ```
-System: LiFSI 1.0–1.2M in DME:B(OCH3P(=O)(OC)OC
-        (DME + trimethyl phosphate)
+System: LiFSI 1.0–1.2M in DME:TMP
+  SMILES: COCCOC (DME) + COP(=O)(OC)OC (TMP)
 Route:  Li+ coordination modifier from below SCE*
         TMP P=O enters Li+ shell as distinct species
         alongside DME ether oxygen coordination

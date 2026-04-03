@@ -6,6 +6,24 @@
 
 ---
 
+```
+For a lithium electrolyte consisting of LiFSI salt at 1.0 mol/kg in a mixed solvent of FEME (2,2-difluoroethyl methyl ether) and 2-methyltetrahydrofuran (2-MeTHF) at a mole fraction ratio of 0.60:0.40 (FEME:2-MeTHF):
+
+1. What are the predicted or estimated SSIP, CIP, and AGG coordination fractions around Li+ at 25°C?
+
+2. What is the dominant coordination species and its percentage of the total population?
+
+3. How many coordination species have greater than 5% population?
+
+4. What is the predicted ionic conductivity at 25°C and at -20°C?
+
+If exact values are not available, please provide the same interpolation estimate as before using the closest available anchor systems.
+
+Please give numerical fractions not qualitative descriptions.
+```
+
+---
+
 ## MU Interpolation Method
 
 MU used same DME/DEE anchor endpoints as Candidate 1.

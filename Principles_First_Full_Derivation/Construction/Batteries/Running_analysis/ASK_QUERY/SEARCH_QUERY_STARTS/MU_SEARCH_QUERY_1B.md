@@ -1,4 +1,4 @@
-search for similar molecules for solvant for: C1CCOC1, C1COCCO1, C1CCOCC1, CC1CCCO1
+search for similar molecules for cosolvant for: C1CCOC1, C1COCCO1, C1CCOCC1, CC1CCCO1
 
 ---
 

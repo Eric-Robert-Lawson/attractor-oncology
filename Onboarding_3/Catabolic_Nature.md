@@ -1053,7 +1053,7 @@ Key claim:
 
 Companion documents:
   Catabolic_Navigation_The_Methodology.md
-  Catabolic_Navigation_Historical_Lineage.md
+  Catabolic_Navigation_Historical_Lineage.md (replaced with this document)
   IGNORANCE_AS_EPISTEMIC_SUPERPOWER.md
   CAUSAL_GEOMETRY_ONBOARDING.md
 

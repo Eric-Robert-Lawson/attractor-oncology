@@ -1075,12 +1075,6 @@ GEOMETRIC CLOSURE OF MU'S MOLECULAR SPACE:
   boron ester. No fourth class exists
   within MU's indexed space. Closed.
 
-THE DEC MELTING POINT CORRECTION:
-  DEC melting point: -74.3°C not -43°C.
-  80-year propagation of a 1921 error.
-  Found by following the geometry.
-  Not the target. Found anyway.
-
 THE ESP MATCHING PRINCIPLE — Candidate 4:
   TMP ESP Min matches DME ESP Min to 0.007 eV.
   Novel co-solvent selection criterion.

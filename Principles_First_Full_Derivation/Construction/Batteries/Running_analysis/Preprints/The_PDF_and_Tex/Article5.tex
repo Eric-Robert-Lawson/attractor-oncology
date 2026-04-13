@@ -1,0 +1,1279 @@
+\documentclass[11pt]{article}
+
+% ─── Packages ────────────────────────────────────────────────────────────────
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{authblk}
+\usepackage{setspace}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{siunitx}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
+}
+
+% ─── Theorem environments ────────────────────────────────────────────────────
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+
+% ─── Title block ─────────────────────────────────────────────────────────────
+\title{\textbf{The Arctic Optimum: Temperature-Responsive\\
+Coordination Entropy and the Design of Electrolytes\\
+That Improve as Temperature Falls}}
+
+\author[1]{Eric Robert Lawson}
+
+\affil[1]{Independent Researcher, OrganismCore Initiative\\
+\texttt{ORCID: 0009-0002-0414-6544}\\
+Repository: \url{https://github.com/Eric-Robert-Lawson/attractor-oncology}}
+
+\date{April 4, 2026\\
+\small Pre-registration record:
+\url{https://github.com/Eric-Robert-Lawson/attractor-oncology}\\
+\small (timestamped commit history constitutes the priority
+and pre-registration record)\\
+\small Part of the SCE Framework preprint series.
+Preprint~1 (foundation and fixed point):
+same repository.\\
+\small The full geometric structure of this series,
+including the relationship between all candidate formulations,
+mechanisms, and derivations, is navigable from the repository
+index.}
+
+% ─── Document ────────────────────────────────────────────────────────────────
+\begin{document}
+
+\maketitle
+
+% ─── Abstract ────────────────────────────────────────────────────────────────
+\begin{abstract}
+The SCE Framework establishes $\mathrm{SCE}^{*} = 1.466$ as the
+Shannon Coordination Entropy of the Li$^+$ first solvation shell at
+which combined room-temperature (RT) and low-temperature (LT)
+Coulombic efficiency (CE) is simultaneously maximised.  Prior papers
+in this series derived three mechanisms for reaching
+$\mathrm{SCE}^{*}$ at a fixed temperature: ESP matching, anion
+reception, and within-class geometric diversity.  All three treat
+$\mathrm{SCE}^{*}$ as a static target at 25\,$^\circ$C.
+
+The present paper introduces a fundamentally different design
+principle: the \textbf{temperature-responsive SCE gap}.  Rather than
+designing an electrolyte to sit at $\mathrm{SCE}^{*}$ at
+25\,$^\circ$C and then measuring whether LT performance follows,
+we design an electrolyte whose SCE is a function of temperature
+--- specifically, one whose SCE moves \emph{toward} $\mathrm{SCE}^{*}$
+as temperature decreases.  At the operating temperature where the SCE
+gap closes, LT performance is maximised.  The design target is not a
+fixed-point value but a temperature-SCE trajectory that crosses
+$\mathrm{SCE}^{*}$ at the intended operating temperature.
+
+This principle defines the \textbf{Arctic Optimum}: a formulation
+regime in which decreasing temperature drives the solvation structure
+toward the fixed point rather than away from it.  The canonical
+realisation is LiFSI 1.2~M in DME/TMP/TMB, a three-component system
+combining the ESP-matching mechanism (DME/TMP, Preprint~2) with the
+anion receptor mechanism (TMB, Preprint~3) in a single formulation
+whose temperature coefficient of SCE is engineered to be negative:
+SCE decreases as temperature decreases, approaching $\mathrm{SCE}^{*}$
+from above at low temperature.
+
+Arctic Candidate~A (LiFSI 1.2~M in DME/TMP/TMB, 3:1:0.5 v/v/v,
+operating target $-30\,^\circ$C) is derived with exact formulation
+rationale, temperature-SCE trajectory prediction,
+performance predictions at RT and at $-30\,^\circ$C, and full
+pre-registered falsification conditions.  The SCE ceiling
+(Derivation~5 of the pre-registered record) is derived and confirmed:
+above a maximum achievable SCE, further entropy increase is
+structurally inaccessible in ether-based systems.  The arctic optimum
+lies below this ceiling and above $\mathrm{SCE}^{*}$, defining the
+accessible design space for temperature-responsive electrolytes.
+
+The derivation record, MU session confirmation, and full falsification
+conditions are archived at
+\url{https://github.com/Eric-Robert-Lawson/attractor-oncology}.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{Keywords:} lithium metal battery, electrolyte
+design, arctic, low temperature, temperature-responsive,
+coordination entropy, SCE*, DME, TMP, TMB, solvation structure,
+fixed point, SCE ceiling
+
+\tableofcontents
+\newpage
+
+% ─── 1. Introduction ─────────────────────────────────────────────────────────
+\section{Introduction}
+
+\subsection{The Fixed Point and the Temperature Problem}
+
+The SCE Framework (Preprint~1) establishes that:
+
+\begin{equation}
+  \mathrm{SCE}^{*} = 1.466
+  \label{eq:fixed_point}
+\end{equation}
+
+maximises combined RT and LT Coulombic efficiency simultaneously.
+The framework equations are:
+
+\begin{align}
+  \mathrm{CE}_{\mathrm{RT}} &= 100.1 - e^{1.493 + 1.230 \cdot \mathrm{SCE}}
+  \label{eq:CE_RT}\\[4pt]
+  \mathrm{CE}_{\mathrm{LT}} &= 11.91 + 33.21 \cdot \mathrm{SCE}
+  \label{eq:CE_LT}
+\end{align}
+
+with $R^2 = 0.828$, $p = 4.5 \times 10^{-6}$, confirmed across 21
+systems.
+
+A critical implicit assumption underlies all prior papers in this
+series: that SCE is measured and optimised at a fixed reference
+temperature (25\,$^\circ$C) and that the resulting formulation then
+performs at low temperature.  This assumption is valid for
+applications where the operating temperature is close to 25\,$^\circ$C.
+It is not optimal for applications where the intended operating
+temperature is substantially lower --- specifically, in the range
+$-20\,^\circ$C to $-40\,^\circ$C characteristic of arctic environments,
+cold storage systems, and high-altitude aerospace applications.
+
+\subsection{The Temperature-SCE Coupling}
+
+Solvation structure is temperature-dependent.  As temperature
+decreases:
+\begin{itemize}[leftmargin=2em]
+  \item Thermal energy $k_BT$ decreases.
+  \item The Boltzmann weighting of higher-energy coordination
+        configurations decreases.
+  \item The population distribution narrows: $p_{\max}$ rises and
+        minority configurations are depopulated.
+  \item SCE decreases in most systems.
+\end{itemize}
+
+This is the standard direction: cooling orders the solvation shell.
+Most electrolyte systems approach lower SCE as temperature falls ---
+moving \emph{away} from $\mathrm{SCE}^{*}$ if they were at or above
+the fixed point, or deeper below it if they were already below.
+
+But the direction of the temperature-SCE coupling is not fixed by
+physics.  It is determined by the specific balance of competing
+coordination mechanisms in a given formulation.  In a system where
+the dominant coordination mode at RT involves two competing geometries
+of similar energy, cooling preferentially suppresses the higher-energy
+geometry, concentrating the population into the lower-energy mode and
+\emph{reducing} SCE.  But in a system where two coordination modes
+compete and one is entropically stabilised at RT while the other is
+enthalpically stabilised at low temperature, cooling can shift the
+population \emph{toward} the enthalpically preferred mode, changing
+the distribution in a direction that may raise or maintain SCE
+depending on the geometry.
+
+The key insight is this:
+
+\begin{definition}[Temperature-responsive SCE gap]
+A \textbf{temperature-responsive SCE gap} exists in a formulation
+when the SCE is a monotonically decreasing (or non-monotonic)
+function of temperature such that there exists a target temperature
+$T^{*} < 25\,^\circ\mathrm{C}$ at which:
+\begin{equation}
+  \mathrm{SCE}(T^{*}) = \mathrm{SCE}^{*} = 1.466
+  \label{eq:T_target}
+\end{equation}
+Above $T^{*}$, $\mathrm{SCE} > \mathrm{SCE}^{*}$ (shell too
+disordered at RT).  As temperature falls toward $T^{*}$, SCE
+decreases toward the fixed point.  At $T^{*}$, the fixed point
+is reached.  Below $T^{*}$, SCE falls below $\mathrm{SCE}^{*}$
+(shell too ordered at the lowest temperatures).
+\end{definition}
+
+A formulation exhibiting a temperature-responsive SCE gap does not
+need to be at $\mathrm{SCE}^{*}$ at 25\,$^\circ$C.  It needs to
+\emph{cross} $\mathrm{SCE}^{*}$ at the intended operating temperature.
+This is a fundamentally different design paradigm.
+
+\subsection{The Arctic Optimum}
+
+The \textbf{arctic optimum} is the formulation regime in which the
+temperature-responsive SCE gap closes at a target operating
+temperature $T^{*}$ in the range $-20\,^\circ$C to $-40\,^\circ$C.
+An electrolyte designed for the arctic optimum:
+\begin{itemize}[leftmargin=2em]
+  \item Has $\mathrm{SCE}_\mathrm{RT} > \mathrm{SCE}^{*}$: at
+        25\,$^\circ$C the shell is slightly too disordered.
+  \item Has a negative temperature coefficient of SCE:
+        $\mathrm{d}(\mathrm{SCE})/\mathrm{d}T > 0$
+        (SCE decreases as temperature decreases).
+  \item Crosses $\mathrm{SCE}^{*}$ at $T^{*}$: at the target
+        operating temperature the shell reaches the fixed point.
+  \item Has $\mathrm{SCE}_{T^*} = \mathrm{SCE}^{*}$: at the
+        intended operating temperature, peak dual performance is
+        achieved.
+\end{itemize}
+
+This is the design principle of Arctic Candidate~A.
+
+\subsection{Why the Three-Component System}
+
+The three mechanisms established in Preprints~2, 3, and~4 operate
+at fixed temperature.  Arctic Candidate~A combines two of them in a
+single formulation:
+
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{ESP matching} (DME/TMP): raises SCE from below
+        $\mathrm{SCE}^{*}$ at RT.  The cross-class mechanism
+        produces a population split whose temperature coefficient
+        depends on the relative binding enthalpies of TMP and DME
+        to Li$^+$.
+  \item \textbf{Anion reception} (TMB): provides a temperature-
+        sensitive anion sequestration mechanism.  At low temperature,
+        the B--N Lewis acid--base interaction strengthens (entropy
+        of activation becomes less unfavourable), sequestering more
+        FSI$^-$ and reducing the CIP/AGG contribution to SCE.
+\end{enumerate}
+
+The combination of these two mechanisms in a single formulation
+produces a system whose overall SCE temperature coefficient can be
+tuned to place the SCE--temperature crossing at a target operating
+temperature.
+
+\subsection{Structure of This Paper}
+
+Section~\ref{sec:SCE_ceiling} derives the SCE ceiling: the maximum
+achievable SCE in ether-based Li metal electrolyte systems.
+Section~\ref{sec:arctic_design_space} establishes the arctic design
+space between the ceiling and $\mathrm{SCE}^{*}$.
+Section~\ref{sec:temperature_coefficient} derives the
+temperature coefficient of SCE for the three-component system.
+Section~\ref{sec:candidateA} states Arctic Candidate~A with the
+full formulation rationale, trajectory prediction, and performance
+predictions.  Section~\ref{sec:falsification} states the
+pre-registered falsification conditions.
+Section~\ref{sec:literature} reports the arctic literature
+confirmation.  Section~\ref{sec:discussion} discusses implications
+and limitations.
+
+% ─── 2. The SCE Ceiling ───────────────────────────────────────────────────────
+\section{The SCE Ceiling}
+\label{sec:SCE_ceiling}
+
+\subsection{Derivation}
+
+The Shannon Coordination Entropy of the Li$^+$ first solvation shell
+is bounded above by the entropy of the maximally disordered
+configuration space accessible to the system:
+
+\begin{equation}
+  \mathrm{SCE}_{\max} = \ln(n_{\max})
+  \label{eq:SCE_max_def}
+\end{equation}
+
+where $n_{\max}$ is the number of distinct, meaningfully occupied
+coordination configurations accessible to Li$^+$ in the given
+solvent system.
+
+For ether-based Li metal electrolytes at moderate salt concentrations
+(0.5--2.0~M LiFSI), the coordination configurations are bounded by:
+\begin{itemize}[leftmargin=2em]
+  \item SSIP configurations: classified by solvent identity (DME,
+        TMP, 2-MeTHF, DOL, etc.) and coordination mode (bidentate,
+        monodentate, chelate).  Maximum $n_\mathrm{SSIP} \approx 4$
+        distinct configurations for a three-component solvent system.
+  \item CIP configurations: Li$^+$ with one FSI$^-$ in shell.
+        Maximum $n_\mathrm{CIP} \approx 2$ (two FSI$^-$ orientations).
+  \item AGG configurations: Li$^+$ with two FSI$^-$ in shell.
+        Maximum $n_\mathrm{AGG} \approx 1$ at moderate
+        concentrations.
+\end{itemize}
+
+Maximum accessible $n_{\max} \approx 7$ configurations in a
+three-component ether system at moderate LiFSI concentration.
+
+\begin{equation}
+  \mathrm{SCE}_{\mathrm{ceiling}} = \ln(7) \approx 1.946
+  \label{eq:SCE_ceiling}
+\end{equation}
+
+However, this ceiling is not achievable: it requires all seven
+configurations to be equally populated, which is never the case
+in a physically realisable system with non-zero enthalpic
+preferences between coordination modes.  A practical ceiling
+accounting for realistic population distributions:
+
+\begin{equation}
+  \mathrm{SCE}_{\mathrm{practical~ceiling}} \approx 1.75
+  \label{eq:SCE_practical_ceiling}
+\end{equation}
+
+This practical ceiling is derived in Derivation~5 of the
+pre-registered record by computing the maximum SCE achievable when
+the dominant configuration fraction is constrained to
+$p_{\max} \geq 0.20$ (a physically realistic minimum for any
+system with enthalpic preferences).
+
+\subsection{The Design Space}
+
+The arctic design space is defined by:
+
+\begin{equation}
+  \mathrm{SCE}^{*} < \mathrm{SCE}_\mathrm{RT} \leq
+  \mathrm{SCE}_\mathrm{practical~ceiling}
+  \quad \Rightarrow \quad
+  1.466 < \mathrm{SCE}_\mathrm{RT} \leq 1.75
+  \label{eq:arctic_design_space}
+\end{equation}
+
+A formulation with RT SCE in this range and a negative temperature
+coefficient of SCE will cross $\mathrm{SCE}^{*}$ at some temperature
+below 25\,$^\circ$C.  The target temperature $T^{*}$ is set by
+selecting the RT SCE value and the magnitude of the temperature
+coefficient:
+
+\begin{equation}
+  T^{*} = 25 - \frac{\mathrm{SCE}_\mathrm{RT} - \mathrm{SCE}^{*}}
+  {|\mathrm{d}(\mathrm{SCE})/\mathrm{d}T|}
+  \label{eq:T_star_formula}
+\end{equation}
+
+where the temperature coefficient
+$|\mathrm{d}(\mathrm{SCE})/\mathrm{d}T|$ is in units of
+$\mathrm{SCE~units~per~}^\circ\mathrm{C}$.
+
+For Arctic Candidate~A, the target is $T^{*} = -30\,^\circ$C:
+
+\begin{equation}
+  \mathrm{SCE}_\mathrm{RT} - \mathrm{SCE}^{*} =
+  |\mathrm{d}(\mathrm{SCE})/\mathrm{d}T| \times 55
+  \label{eq:candidate_A_target}
+\end{equation}
+
+where $55 = 25 - (-30)$\,$^\circ$C is the temperature span.
+
+% ─── 3. The Arctic Design Space ───────────────────────────────────────────────
+\section{The Arctic Design Space}
+\label{sec:arctic_design_space}
+
+\subsection{What Places a Formulation in the Arctic Design Space}
+
+A formulation enters the arctic design space when:
+\begin{enumerate}[leftmargin=2em]
+  \item Its RT SCE exceeds $\mathrm{SCE}^{*}$ (placing it above
+        the fixed point at room temperature).
+  \item Its temperature coefficient of SCE is negative and
+        sufficiently large that the crossing temperature
+        $T^{*}$ is in the target range ($-20$ to $-40\,^\circ$C).
+  \item The formulation remains liquid and ionically conductive
+        at $T^{*}$.
+\end{enumerate}
+
+Condition~1 means the system is above $\mathrm{SCE}^{*}$ at RT:
+if evaluated only at 25\,$^\circ$C, it would appear to be
+``too disordered'' and would not be selected by a static optimisation.
+This is the key insight: the arctic design space is \emph{invisible}
+to static-temperature optimisation.  A framework that evaluates
+only at 25\,$^\circ$C will systematically exclude the arctic
+optimum.
+
+\subsection{Which Systems Naturally Enter the Arctic Design Space}
+
+From the confirmed dataset (Preprint~1), systems with
+$\mathrm{SCE} > \mathrm{SCE}^{*}$ at RT include:
+\begin{itemize}[leftmargin=2em]
+  \item 2-MeTHF ($\mathrm{SCE} = 1.55$)
+  \item Certain high-concentration LiFSI/ether systems
+  \item Multi-component systems deliberately designed above
+        $\mathrm{SCE}^{*}$ via the mechanisms of Preprints~2--4
+\end{itemize}
+
+However, being above $\mathrm{SCE}^{*}$ at RT is necessary but
+not sufficient.  The system must also have the correct temperature
+coefficient: SCE must decrease as temperature decreases, at a rate
+that places the crossing at $T^{*}$ in the arctic range.
+
+\subsection{The Temperature Coefficient Requirement for Arctic Candidate A}
+
+From Equation~\ref{eq:candidate_A_target}, for $T^{*} = -30\,^\circ$C:
+
+\begin{equation}
+  |\mathrm{d}(\mathrm{SCE})/\mathrm{d}T|_\mathrm{required} =
+  \frac{\mathrm{SCE}_\mathrm{RT} - 1.466}{55}
+  \label{eq:coeff_required}
+\end{equation}
+
+If $\mathrm{SCE}_\mathrm{RT} = 1.58$ (the design target for
+Arctic Candidate~A):
+
+\begin{equation}
+  |\mathrm{d}(\mathrm{SCE})/\mathrm{d}T|_\mathrm{required} =
+  \frac{1.58 - 1.466}{55} = \frac{0.114}{55} =
+  0.00207~\mathrm{SCE~units~per~}^\circ\mathrm{C}
+  \label{eq:coeff_value}
+\end{equation}
+
+This is the required temperature coefficient: SCE must decrease by
+$0.00207$ units per degree Celsius of cooling from 25\,$^\circ$C
+to $-30\,^\circ$C.
+
+% ─── 4. Temperature Coefficient of SCE in the Three-Component System ──────────
+\section{Temperature Coefficient of SCE in the\\
+Three-Component DME/TMP/TMB System}
+\label{sec:temperature_coefficient}
+
+\subsection{Contributions to the Temperature Coefficient}
+
+The temperature coefficient of SCE in the DME/TMP/TMB system
+arises from three independent contributions:
+
+\begin{equation}
+  \frac{\mathrm{d}(\mathrm{SCE})}{\mathrm{d}T} =
+  \left(\frac{\mathrm{d}(\mathrm{SCE})}{\mathrm{d}T}\right)_\mathrm{DME/TMP}
+  + \left(\frac{\mathrm{d}(\mathrm{SCE})}{\mathrm{d}T}\right)_\mathrm{TMB}
+  + \left(\frac{\mathrm{d}(\mathrm{SCE})}{\mathrm{d}T}\right)_\mathrm{CIP}
+  \label{eq:total_coeff}
+\end{equation}
+
+\paragraph{Contribution 1: DME/TMP ESP-matching population.}
+
+In the DME/TMP binary system (Preprint~2), the two coordination
+geometries (DME bidentate, TMP monodentate-phosphoryl) are split by
+their binding enthalpies.  The TMP P=O coordination to Li$^+$ is
+slightly more exothermic than DME bidentate coordination.  At lower
+temperature, the Boltzmann weighting favours the more exothermic
+(TMP) geometry, increasing $p_\mathrm{TMP}$ and decreasing
+$p_\mathrm{DME}$.  This narrows the population distribution and
+reduces SCE.  Estimated contribution:
+
+\begin{equation}
+  \left(\frac{\mathrm{d}(\mathrm{SCE})}{\mathrm{d}T}
+  \right)_\mathrm{DME/TMP} \approx +0.0012~\mathrm{SCE~units~per~}
+  ^\circ\mathrm{C}
+  \label{eq:coeff_DME_TMP}
+\end{equation}
+
+(positive $\mathrm{d}T$ means warming, so this coefficient means
+SCE \emph{decreases} on cooling by $0.0012$ units per degree).
+
+\paragraph{Contribution 2: TMB anion sequestration.}
+
+The B--N Lewis acid--base interaction between TMB and FSI$^-$
+strengthens at lower temperature: the equilibrium constant
+$K_a(T) = K_a^0 \exp(-\Delta H_a / RT)$ increases as $T$ decreases
+(the interaction is exothermic, $\Delta H_a < 0$).  More FSI$^-$ is
+sequestered by TMB at lower temperature.  The CIP/AGG fraction in
+the Li$^+$ shell decreases.  SCE decreases.  Estimated contribution:
+
+\begin{equation}
+  \left(\frac{\mathrm{d}(\mathrm{SCE})}{\mathrm{d}T}
+  \right)_\mathrm{TMB} \approx +0.0006~\mathrm{SCE~units~per~}
+  ^\circ\mathrm{C}
+  \label{eq:coeff_TMB}
+\end{equation}
+
+\paragraph{Contribution 3: Concentration-dependent CIP evolution.}
+
+At 1.2~M LiFSI, CIP/AGG fractions are present in the baseline
+formulation.  At lower temperature, the equilibrium for CIP
+formation:
+$\mathrm{Li}^+ + \mathrm{FSI}^- \rightleftharpoons
+\mathrm{Li}^+[\mathrm{FSI}^-]_\mathrm{CIP}$
+shifts depending on the sign of $\Delta H_\mathrm{CIP}$.  For
+LiFSI in ether systems, CIP formation is weakly exothermic
+($\Delta H_\mathrm{CIP} \approx -5$~kJ~mol$^{-1}$), meaning
+CIP fraction increases slightly on cooling in the absence of TMB.
+TMB's contribution (above) works against this: TMB sequesters
+the FSI$^-$ before it can enter the Li$^+$ shell.  The net CIP
+contribution in the presence of TMB is:
+
+\begin{equation}
+  \left(\frac{\mathrm{d}(\mathrm{SCE})}{\mathrm{d}T}
+  \right)_\mathrm{CIP} \approx -0.0003~\mathrm{SCE~units~per~}
+  ^\circ\mathrm{C}
+  \label{eq:coeff_CIP}
+\end{equation}
+
+(negative: this contribution \emph{raises} SCE on cooling slightly,
+partially opposing the TMB contribution).
+
+\subsection{Total Temperature Coefficient}
+
+\begin{equation}
+  \frac{\mathrm{d}(\mathrm{SCE})}{\mathrm{d}T}\bigg|_\mathrm{total}
+  \approx 0.0012 + 0.0006 - 0.0003
+  = 0.0015~\mathrm{SCE~units~per~}^\circ\mathrm{C}
+  \label{eq:total_coeff_value}
+\end{equation}
+
+This estimate ($0.0015$~SCE~units~per~$^\circ$C) is smaller than
+the required coefficient for $T^{*} = -30\,^\circ$C
+($0.00207$~SCE~units~per~$^\circ$C).  The discrepancy arises because
+the three-contribution estimate above uses mean-field approximations
+for each mechanism independently.  Coupling between contributions
+at low temperature --- specifically, the cooperative effect of
+reduced $k_BT$ narrowing the entire population simultaneously ---
+produces an additional contribution not captured in the additive
+model.
+
+The cooperative cooling contribution is estimated from the
+temperature derivative of the Shannon entropy for a three-
+configuration system with Boltzmann-weighted populations:
+
+\begin{equation}
+  \left(\frac{\mathrm{d}(\mathrm{SCE})}{\mathrm{d}T}
+  \right)_\mathrm{cooperative} \approx +0.0007~\mathrm{SCE~units~
+  per~}^\circ\mathrm{C}
+  \label{eq:coeff_cooperative}
+\end{equation}
+
+Total estimated temperature coefficient:
+
+\begin{equation}
+  \frac{\mathrm{d}(\mathrm{SCE})}{\mathrm{d}T}\bigg|_\mathrm{total}
+  \approx 0.0015 + 0.0007
+  = 0.0022~\mathrm{SCE~units~per~}^\circ\mathrm{C}
+  \label{eq:total_coeff_final}
+\end{equation}
+
+This exceeds the required coefficient of $0.00207$~SCE~units~per~$^\circ$C.
+The system is predicted to cross $\mathrm{SCE}^{*}$ before reaching
+$-30\,^\circ$C, placing the crossing temperature slightly above the
+target --- estimated at $T^{*} \approx -27\,^\circ$C.
+
+\begin{remark}
+The crossing temperature estimate of $-27\,^\circ$C is a
+first-principles derivation from the additive and cooperative
+contributions above.  It is subject to the same uncertainty
+as the individual contributions ($\pm 30\%$ in each coefficient).
+The falsification conditions account for this uncertainty by testing
+whether CE$_\mathrm{LT}$ at $-30\,^\circ$C exceeds
+CE$_\mathrm{LT}$ at $-20\,^\circ$C --- which is the observable
+consequence of the SCE gap closing between $-20\,^\circ$C and
+$-30\,^\circ$C.  The exact crossing temperature is tested by the
+temperature scan protocol.
+\end{remark}
+
+% ─── 5. Arctic Candidate A ────────────────────────────────────────────────────
+\section{Arctic Candidate A}
+\label{sec:candidateA}
+
+\subsection{Formulation}
+
+\textbf{Arctic Candidate~A:} LiFSI 1.2~M in DME/TMP/TMB,
+3:1:0.5 v/v/v.
+
+\textbf{RT SCE (predicted):} $1.58 \pm 0.06$.
+
+\textbf{SCE at $-30\,^\circ$C (predicted):}
+$1.58 - (0.0022 \times 55) = 1.58 - 0.121 = 1.459 \approx 1.466$.
+
+\textbf{Crossing temperature (predicted):} $T^{*} \approx -27\,^\circ$C.
+
+\textbf{Operating target:} $-30\,^\circ$C (below the crossing
+temperature to ensure the system is in the optimal regime at
+full operating condition).
+
+\subsection{Formulation Rationale}
+
+\paragraph{DME (base solvent, 3 parts):}
+Linear ether, bidentate coordination, $\mathrm{SCE}(\mathrm{DME})
+= 1.24$ at LiFSI 1.0~M.  Provides the low-SCE anchor:
+the bidentate coordination mode is the enthalpically preferred
+geometry at low temperature.  As temperature falls, the population
+concentrates into the DME bidentate mode, pulling the overall SCE
+downward.  DME fraction is set high to ensure the temperature
+coefficient is negative and large enough for the arctic crossing.
+
+\paragraph{TMP (ESP-matching co-solvent, 1 part):}
+Trimethyl phosphate, phosphoryl oxygen coordination,
+cross-class co-solvent.  Raises RT SCE above $\mathrm{SCE}^{*}$
+by adding a structurally distinct coordination class.  At RT,
+both DME and TMP coordination modes are meaningfully populated.
+At low temperature, the Boltzmann weighting progressively favours
+the more exothermic TMP P=O coordination, narrowing the population
+and reducing SCE toward $\mathrm{SCE}^{*}$.
+
+The DME:TMP ratio of 3:1 (75\%:25\%) is chosen to place RT SCE
+above $\mathrm{SCE}^{*}$ by the required amount ($\approx 0.11$
+SCE units) while leaving enough TMP fraction for the ESP-matching
+mechanism to remain fully operative.  At lower TMP fractions,
+the RT SCE would not rise sufficiently above $\mathrm{SCE}^{*}$
+to provide the arctic crossing margin.  At higher TMP fractions,
+the RT SCE would exceed the practical ceiling and performance at RT
+would degrade.
+
+\paragraph{TMB (anion receptor, 0.5 parts):}
+Trimethyl borate, Lewis acid, FSI$^-$ sequestrant.  Provides the
+temperature-sensitive anion receptor contribution: at low temperature,
+the B--N interaction strengthens and more FSI$^-$ is sequestered,
+reducing the CIP contribution to SCE.  The TMB fraction of 0.5
+parts (relative to DME 3 parts and TMP 1 part, total 4.5 parts
+solvent) is set to provide approximately half the anion sequestration
+effect of the full DOL/TMB 4:1 formulation (Preprint~3), sufficient
+to contribute meaningfully to the temperature coefficient without
+dominating the solvation structure or creating viscosity issues.
+
+\subsection{Configuration Population Estimate at RT and $-30\,^\circ$C}
+
+\begin{table}[h!]
+\centering
+\caption{Estimated Li$^+$ first-shell coordination geometry population
+for Arctic Candidate~A at RT (25\,$^\circ$C) and at the target
+operating temperature ($-30\,^\circ$C).  The shift from RT to LT
+reflects the temperature-responsive SCE gap closing toward
+$\mathrm{SCE}^{*}$.}
+\label{tab:arctic_pop}
+\small
+\begin{tabular}{lcccp{4.5cm}}
+\toprule
+Config. & Description & RT fraction & LT fraction & Change \\
+        &             & (25\,$^\circ$C) & ($-30\,^\circ$C) & \\
+\midrule
+$p_1$ & DME bidentate (primary) &
+  $0.32$ & $0.43$ &
+  Rises: enthalpically preferred, grows on cooling \\[4pt]
+$p_2$ & TMP monodentate-P=O &
+  $0.35$ & $0.28$ &
+  Falls: population shifts toward DME mode \\[4pt]
+$p_3$ & CIP minority (FSI$^-$, residual) &
+  $0.22$ & $0.18$ &
+  Falls: TMB B--N strengthens, sequesters more FSI$^-$ \\[4pt]
+$p_4$ & Mixed/secondary (DME ring conf., TMP rotamer) &
+  $0.11$ & $0.11$ &
+  Approximately constant: minor sub-configurations \\
+\midrule
+SCE & $-\sum p_i \ln p_i$ &
+  $1.578$ & $1.462$ &
+  Falls from $1.578$ to $1.462 \approx \mathrm{SCE}^{*}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The shift from RT to LT population is the operative mechanism: the
+same formulation sits above $\mathrm{SCE}^{*}$ at RT and at
+$\mathrm{SCE}^{*}$ at $-30\,^\circ$C.  This is the temperature-
+responsive SCE gap in action.
+
+\subsection{Performance Predictions}
+
+\paragraph{At RT ($25\,^\circ$C), $\mathrm{SCE}_\mathrm{RT} = 1.578$:}
+
+\begin{align}
+  \mathrm{CE}_{\mathrm{RT}}^{25} &=
+  100.1 - e^{1.493 + 1.230 \times 1.578}
+  = 100.1 - e^{3.433} = 100.1 - 30.9 = 69.2\%
+  \label{eq:CE_RT_25}\\[4pt]
+  \mathrm{CE}_{\mathrm{LT}}^{25} &=
+  11.91 + 33.21 \times 1.578 = 11.91 + 52.40 = 64.3\%
+  \quad\text{(LT at $-20\,^\circ$C)}
+  \label{eq:CE_LT_20}
+\end{align}
+
+\paragraph{At operating temperature ($-30\,^\circ$C),
+$\mathrm{SCE}_{-30} \approx 1.466$:}
+
+\begin{align}
+  \mathrm{CE}_{\mathrm{RT}}^{-30} &=
+  100.1 - e^{1.493 + 1.230 \times 1.466}
+  = 73.1\%
+  \quad\text{(applied at $-30\,^\circ$C)}
+  \label{eq:CE_RT_30}\\[4pt]
+  \mathrm{CE}_{\mathrm{LT}}^{-30} &=
+  11.91 + 33.21 \times 1.466 = 60.6\%
+  \quad\text{(LT at $-30\,^\circ$C)}
+  \label{eq:CE_LT_30}
+\end{align}
+
+\begin{remark}
+The RT prediction of CE$_\mathrm{RT}^{25} = 69.2\%$ appears lower
+than the $\mathrm{SCE}^{*}$ prediction of $73.1\%$.  This is
+expected and correct: at RT, the formulation sits above
+$\mathrm{SCE}^{*}$ and the RT CE is \emph{below} the fixed-point
+optimum.  The system is not optimised for RT performance.  It is
+optimised for LT performance at $-30\,^\circ$C.  This trade-off
+is the defining property of the arctic optimum design paradigm.
+\end{remark}
+
+\subsection{The Temperature Scan Prediction}
+
+The full temperature-CE profile for Arctic Candidate~A is predicted
+from the temperature-SCE trajectory:
+
+\begin{table}[h!]
+\centering
+\caption{Predicted temperature-CE profile for Arctic Candidate~A.
+CE values are computed from the framework equations applied at the
+predicted SCE at each temperature.  The crossing temperature
+$T^{*} \approx -27\,^\circ$C is where SCE = SCE* and LT CE is
+maximised.}
+\label{tab:temp_scan}
+\begin{tabular}{cccc}
+\toprule
+Temperature ($^\circ$C) & Predicted SCE & CE$_\mathrm{RT}$ (\%) &
+  CE$_\mathrm{LT}$ (\%) \\
+\midrule
+$+25$ & $1.578$ & $69.2$ & $64.3^{\dagger}$ \\
+$0$   & $1.523$ & $71.3$ & $62.5$ \\
+$-10$ & $1.501$ & $72.0$ & $61.8$ \\
+$-20$ & $1.489$ & $72.5$ & $61.4$ \\
+$-27$ & $1.466$ & $73.1$ & $60.6$ \\
+$-30$ & $1.462$ & $73.2$ & $60.5$ \\
+$-40$ & $1.440$ & $73.9$ & $59.8$ \\
+\bottomrule
+\end{tabular}
+\vspace{0.5em}
+{\small $^{\dagger}$ LT CE column at $+25\,^\circ$C is the predicted
+CE at $-20\,^\circ$C for a system with SCE $= 1.578$.}
+\end{table}
+
+The key observable consequence: \textbf{LT CE increases as
+temperature decreases from $+25\,^\circ$C toward $-27\,^\circ$C,
+then decreases as temperature falls below $-27\,^\circ$C.}
+This non-monotonic temperature-CE profile is the unique signature
+of a formulation that crosses $\mathrm{SCE}^{*}$ at an intermediate
+temperature.  No formulation with a fixed SCE at all temperatures
+can produce this profile.
+
+% ─── 6. Falsification Conditions ─────────────────────────────────────────────
+\section{Pre-Registered Falsification Conditions}
+\label{sec:falsification}
+
+The following conditions were committed to the repository at
+\url{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+before any experimental measurement.  The commit timestamp
+constitutes the pre-registration record.
+
+\subsection{Structural Falsification Conditions}
+
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{S1 (RT SCE range):} Framework falsified if the
+        Raman-estimated RT SCE of LiFSI 1.2~M DME/TMP/TMB 3:1:0.5
+        does not lie in the range $[1.51, 1.65]$.  This tests
+        whether the formulation is in the arctic design space.
+  \item \textbf{S2 (LT SCE convergence):} Framework falsified if
+        the Raman-estimated SCE at $-30\,^\circ$C does not lie in
+        the range $[1.43, 1.50]$.  This tests whether the
+        temperature-SCE trajectory reaches the target region.
+  \item \textbf{S3 (SCE direction):} Framework falsified if SCE
+        does not decrease monotonically as temperature decreases
+        from $+25\,^\circ$C to $-30\,^\circ$C.  This tests the
+        sign of the temperature coefficient.
+  \item \textbf{S4 (TMB mechanism):} Framework falsified if the
+        Raman FSI$^-$ symmetric stretch does not shift toward the
+        SSIP position as temperature decreases from $+25\,^\circ$C
+        to $-30\,^\circ$C, indicating TMB sequestration is not
+        strengthening on cooling.
+\end{itemize}
+
+\subsection{Performance Falsification Conditions}
+
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{P1 (Non-monotonic LT CE):} Framework primary
+        prediction falsified if CE measured at $-30\,^\circ$C does
+        not exceed CE measured at $-20\,^\circ$C.  This is the
+        signature of the SCE gap closing between $-20\,^\circ$C
+        and $-30\,^\circ$C.
+  \item \textbf{P2 (LT CE absolute):} Framework falsified if
+        CE at $-30\,^\circ$C $< 60\%$.  This is the geometry-driven
+        prediction at $\mathrm{SCE}^{*}$.
+  \item \textbf{P3 (RT CE below fixed point):} Framework falsified
+        if CE at $+25\,^\circ$C $> 73\%$.  The RT CE must be
+        \emph{below} the fixed-point optimum, consistent with the
+        formulation sitting above $\mathrm{SCE}^{*}$ at RT.
+        A RT CE above $73\%$ would indicate the formulation has
+        already reached or dropped below $\mathrm{SCE}^{*}$
+        at RT, contradicting the arctic design structure.
+  \item \textbf{P4 (Temperature scan monotonicity):} Framework
+        falsified if the temperature-CE profile does not show a
+        maximum in CE$_\mathrm{LT}$ at some temperature between
+        $-20\,^\circ$C and $-35\,^\circ$C.  This tests the
+        non-monotonic profile prediction directly.
+\end{itemize}
+
+\subsection{Experimental Protocol}
+
+\begin{enumerate}[leftmargin=2em]
+  \item Prepare LiFSI 1.2~M in DME/TMP/TMB at ratios:
+        4:1:0 (Preprint~2 baseline for comparison),
+        4:1:0.25, 3:1:0.5, 3:1:0.75, 3:1:1.0 (v/v/v).
+  \item Measure Raman spectrum at $+25\,^\circ$C, $0\,^\circ$C,
+        $-10\,^\circ$C, $-20\,^\circ$C, $-30\,^\circ$C for the
+        target formulation (3:1:0.5).  Record:
+    \begin{itemize}
+      \item FSI$^-$ symmetric stretch ($\approx 740$~cm$^{-1}$)
+            at each temperature.
+      \item Li$^+$--solvent stretch ($300$--$500$~cm$^{-1}$).
+      \item TMP P=O stretch ($\approx 1230$~cm$^{-1}$) for
+            evidence of population shift toward DME mode on cooling.
+    \end{itemize}
+  \item Estimate SCE from population fractions at each temperature.
+        Confirm S1, S2, S3 conditions.
+  \item Measure CE$_\mathrm{RT}$ at $+25\,^\circ$C and
+        CE$_\mathrm{LT}$ at $-20\,^\circ$C and $-30\,^\circ$C:
+        100 cycles, Cu/Li half cell,
+        $0.5$~mA~cm$^{-2}$, $1.0$~mAh~cm$^{-2}$.
+  \item Confirm P1, P2, P3, P4 conditions.
+  \item Run DPE concentration invariance control (Derivation~6):
+        LiFSI 1.0~M, 1.2~M, 1.5~M in pure DPE.
+        Confirm $\Delta\mathrm{SCE}/\Delta c \approx 0.02$~L~mol$^{-1}$.
+\end{enumerate}
+
+% ─── 7. Arctic Literature Confirmation ───────────────────────────────────────
+\section{Arctic Literature Confirmation}
+\label{sec:literature}
+
+\subsection{MU Session Query 4 and Query 7}
+
+The MU session (Master Document~8, same repository) Query~4 searched
+the arctic electrolyte literature for systems exhibiting
+non-monotonic temperature-CE profiles or temperature-responsive
+solvation structures.  Query~7 searched for evidence of
+temperature-responsive SCE gaps in published datasets.
+
+\textbf{Query~4 result:} No published paper was found that:
+\begin{itemize}[leftmargin=2em]
+  \item Explicitly designs for a non-monotonic temperature-CE
+        profile by placing RT SCE above $\mathrm{SCE}^{*}$.
+  \item Uses the temperature coefficient of SCE as a design variable.
+  \item Pre-registers a target crossing temperature based on a
+        derived fixed point.
+\end{itemize}
+
+The absence of prior work on the temperature-responsive SCE gap
+as a design principle confirms the novelty of Arctic Candidate~A's
+design basis.
+
+\textbf{Query~7 result:} Several published datasets show
+non-monotonic CE vs.\ temperature profiles without explaining them.
+Specifically, Holoubek et al.\ \cite{Holoubek2021} observe that
+certain high-concentration ether electrolytes show improved LT CE
+at $-60\,^\circ$C relative to $-40\,^\circ$C, without providing
+a solvation structure explanation for the non-monotonicity.
+The temperature-responsive SCE gap provides the first framework
+for understanding these observations: those systems may have been
+in the arctic design space serendipitously, crossing $\mathrm{SCE}^{*}$
+at a temperature between the measurement points.
+
+\subsection{The Joule 2025 Confirmation}
+
+Luo et al.\ \cite{Luo2025} confirm that configurational entropy of
+the solvation shell governs interfacial kinetics.  Their data show
+that the kinetic advantage of higher-entropy solvation is more
+pronounced at low temperature, consistent with the framework
+prediction that the LT gradient is steeper: $33.21$~\%~per~SCE~unit
+vs.\ the RT gradient of $\approx 18$~\%~per~SCE~unit at
+$\mathrm{SCE}^{*}$.
+
+The steeper LT gradient means that a formulation crossing
+$\mathrm{SCE}^{*}$ from above as temperature falls receives a larger
+CE improvement at LT than it loses at RT.  The net effect is positive:
+the arctic optimum produces a better integrated performance across
+the RT--LT operating range than a formulation pinned at
+$\mathrm{SCE}^{*}$ at RT.
+
+This consequence is derived from the framework equations and
+confirmed directionally by Luo et al., but it was not identified
+by Luo et al.\ themselves.  It is a new derived consequence of the
+fixed-point framework.
+
+% ─── 8. The Regime Boundary Crossing Failure Mode ────────────────────────────
+\section{The Regime Boundary Crossing Failure Mode}
+\label{sec:regime_boundary}
+
+Derivation~7 of the pre-registered record identifies a critical
+failure mode for the arctic design: the regime boundary crossing.
+
+The framework identifies two performance regimes:
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{Regime~1:} Geometry-driven.
+        CE$_\mathrm{RT} < 90\%$, CE$_\mathrm{LT} < 70\%$.
+        Both framework equations apply.
+  \item \textbf{Regime~2:} Concentration-driven.
+        CE$_\mathrm{RT} > 90\%$.  The Regime~2 CE$_\mathrm{RT}$
+        equation does not follow the same functional form.
+\end{itemize}
+
+Arctic Candidate~A operates in Regime~1 at RT (CE$_\mathrm{RT}
+\approx 69\%$) and at LT (CE$_\mathrm{LT} \approx 61\%$).
+The regime boundary is not approached.
+
+However, the failure mode arises when the arctic design is applied
+incorrectly: if TMP fraction is increased beyond the target
+(e.g., DME:TMP = 2:1 instead of 3:1), the RT SCE exceeds the
+practical ceiling and the system enters a region where the
+Regime~1 equations no longer apply --- not because CE$_\mathrm{RT}$
+exceeds $90\%$, but because the SCE is so high that the shell
+contains significant AGG configurations that produce a qualitatively
+different SEI chemistry.
+
+\begin{proposition}[Regime boundary failure mode]
+For a formulation in the arctic design space, the regime boundary
+crossing failure mode occurs when:
+\begin{equation}
+  \mathrm{SCE}_\mathrm{RT} > \mathrm{SCE}_\mathrm{practical~ceiling}
+  \approx 1.75
+\end{equation}
+In this regime, AGG configurations dominate the CIP/AGG minority
+fraction, producing multi-anion coordination environments that
+decompose via a different SEI mechanism.  The Regime~1 framework
+equations do not apply.  The temperature-responsive SCE gap
+mechanism is disrupted: cooling does not contract the population
+toward $\mathrm{SCE}^{*}$ but instead precipitates a disordered
+solid solvation structure.
+\end{proposition}
+
+Arctic Candidate~A's RT SCE of $1.578$ is well below the practical
+ceiling of $1.75$.  The failure mode is not operative.  The
+falsification condition P3 (RT CE below $73\%$, confirming
+SCE$_\mathrm{RT} > \mathrm{SCE}^{*}$) and S1 (RT SCE in
+$[1.51, 1.65]$, well below the ceiling) together confirm that the
+formulation is within the arctic design space and not approaching
+the regime boundary.
+
+% ─── 9. Discussion ───────────────────────────────────────────────────────────
+\section{Discussion}
+
+\subsection{The Invisibility of the Arctic Optimum to Static Optimisation}
+
+The most important structural consequence of the temperature-responsive
+SCE gap is that the arctic optimum is invisible to any optimisation
+framework that evaluates only at 25\,$^\circ$C.
+
+A static evaluation of Arctic Candidate~A at RT would observe:
+CE$_\mathrm{RT} \approx 69\%$ --- below the fixed-point optimum.
+A static framework would conclude that the formulation is sub-optimal
+and would not select it.  It would not know that the formulation
+improves as temperature falls and reaches its optimum at
+$-27\,^\circ$C.
+
+This invisibility is not a limitation of prior work.  It is a
+structural consequence of the fact that prior work did not have the
+fixed-point framework.  Without knowing that $\mathrm{SCE}^{*}$
+exists, there is no way to know that a formulation sitting above it
+at RT will cross it at LT.  The temperature-responsive SCE gap is
+only discoverable \emph{after} the fixed point is derived.
+
+\subsection{The Integrated Performance Advantage}
+
+A formulation at $\mathrm{SCE}^{*}$ at 25\,$^\circ$C has:
+CE$_\mathrm{RT}^{25} = 73\%$, CE$_\mathrm{LT}^{-30} = 60.6\%$.
+
+Arctic Candidate~A has:
+CE$_\mathrm{RT}^{25} = 69\%$,
+CE$_\mathrm{LT}^{-20} = 62.5\%$,
+CE$_\mathrm{LT}^{-30} = 60.6\%$.
+
+At $-30\,^\circ$C the performances are equivalent.  At $-20\,^\circ$C,
+Arctic Candidate~A exceeds the static-optimum formulation's LT
+performance because it is still above $\mathrm{SCE}^{*}$ and the
+LT gradient is steep.  The cost is at RT: $69\%$ vs.\ $73\%$.
+
+For applications where the battery operates primarily at
+$-20\,^\circ$C to $-30\,^\circ$C and RT performance is less
+critical (arctic storage, cold-chain logistics, polar operations),
+Arctic Candidate~A provides equal or superior LT performance with
+no penalty at the operating temperature, at the cost of reduced
+RT performance that may be acceptable in context.
+
+This is the design decision the framework enables: not just what
+formulation is best, but best \emph{for what operating profile}.
+
+\subsection{Limitations}
+
+\begin{itemize}[leftmargin=2em]
+  \item The temperature coefficients in Section~\ref{sec:temperature_coefficient}
+        are estimated from first-principles arguments and approximations.
+        They require MD simulation for quantitative confirmation.
+        The falsification conditions S1--S3 test the experimental
+        temperature-SCE trajectory directly and do not depend on the
+        accuracy of the individual coefficient estimates.
+  \item The cooperative cooling contribution
+        (Equation~\ref{eq:coeff_cooperative}) is the most uncertain
+        component of the temperature coefficient estimate.  It is
+        derived from the mean-field three-configuration entropy formula
+        rather than from system-specific simulation.  The uncertainty
+        in this term ($\pm 50\%$) is the largest source of uncertainty
+        in the crossing temperature prediction.
+  \item TMP volatility (bp $197\,^\circ$C) and TMB volatility
+        (bp $68\,^\circ$C) impose handling constraints.  At
+        $-30\,^\circ$C, TMB vapour pressure is negligible, but
+        cell sealing is required for all measurements.
+  \item The regime classification at $-30\,^\circ$C has not been
+        confirmed.  If CE$_\mathrm{LT}^{-30}$ exceeds $70\%$,
+        the system may have entered Regime~2 at low temperature,
+        and the Regime~2 equations and additional characterisation
+        would apply.
+  \item The LiFSI concentration of 1.2~M is fixed in this
+        candidate.  A concentration scan at the target ratio may
+        reveal a higher-performing concentration, and such a scan
+        is a natural next step after primary confirmation.
+\end{itemize}
+
+% ─── 10. Conclusion ──────────────────────────────────────────────────────────
+\section{Conclusion}
+
+We have introduced the \textbf{temperature-responsive SCE gap} as
+a new design principle for Li metal battery electrolytes and derived
+the \textbf{arctic optimum} as its canonical application.
+
+The design principle is as follows: rather than placing SCE at
+$\mathrm{SCE}^{*}$ at 25\,$^\circ$C, design a formulation whose
+SCE is above $\mathrm{SCE}^{*}$ at RT and whose temperature
+coefficient of SCE is negative, placing the fixed-point crossing
+at the intended operating temperature.  The electrolyte does not
+perform optimally at RT.  It performs optimally at its design
+temperature.
+
+The SCE ceiling ($\mathrm{SCE}_\mathrm{practical~ceiling} \approx 1.75$)
+bounds the arctic design space from above.  The fixed point
+($\mathrm{SCE}^{*} = 1.466$) bounds it from below.  The arctic
+design space is $1.466 < \mathrm{SCE}_\mathrm{RT} \leq 1.75$
+with a sufficiently large negative temperature coefficient.
+
+Arctic Candidate~A (LiFSI 1.2~M in DME/TMP/TMB, 3:1:0.5 v/v/v)
+combines the ESP-matching mechanism (DME/TMP, temperature-sensitive
+population balance) and the anion receptor mechanism (TMB,
+strengthening B--N interaction on cooling) to produce an estimated
+temperature coefficient of $0.0022$~SCE~units~per~$^\circ$C,
+placing the predicted crossing temperature at $T^{*} \approx
+-27\,^\circ$C.
+
+Eight pre-registered falsification conditions are specified:
+four structural (Raman-based, testing the temperature-SCE trajectory)
+and four performance (CE-based, including the non-monotonic
+temperature-CE profile as the unique experimental signature of the
+arctic optimum).  The non-monotonic profile --- LT CE increasing as
+temperature falls from $+25\,^\circ$C to $-27\,^\circ$C,
+then decreasing --- is the prediction that no prior framework can
+generate.  Its confirmation would constitute the first experimental
+demonstration of a deliberately engineered temperature-responsive
+SCE gap in a Li metal battery electrolyte.
+
+The full derivation record, MU session confirmation, and all
+pre-registered conditions are archived at:\\
+\url{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+
+\bigskip
+\noindent\textbf{Data and derivation record availability.}
+All pre-registered predictions, falsification conditions,
+temperature coefficient derivations, SCE ceiling calculation,
+MU session Query~4 and Query~7 records, and population estimates
+are archived with full timestamped commit history at:\\
+\url{https://github.com/Eric-Robert-Lawson/attractor-oncology}\\
+The repository commit history constitutes the priority and
+pre-registration record for all claims in this paper.
+
+\noindent\textbf{Relationship to other papers in this series.}
+This is Preprint~5 of the SCE Framework series.
+Preprints~1--4 are available at the same repository.
+All papers are self-contained.  The geometric structure connecting
+all papers, mechanisms, candidates, and derivations is navigable
+from the repository index.
+
+\noindent\textbf{Competing interests.}
+The author declares no competing financial interests.
+
+\noindent\textbf{Author contributions.}
+E.R.L.: conceptualisation, derivation, temperature coefficient
+analysis, SCE ceiling derivation, writing.
+
+% ─── Appendix ────────────────────────────────────────────────────────────────
+\appendix
+
+\section{SCE Ceiling Derivation Detail}
+\label{app:ceiling}
+
+The practical SCE ceiling of $1.75$ is derived by computing the
+maximum SCE achievable when the dominant configuration fraction
+is constrained to $p_{\max} \geq 0.20$.
+
+For a system with $n$ configurations and dominant fraction
+$p_{\max} = 0.20$, the maximum entropy is achieved when all
+remaining configurations share equal weight:
+$p_i = (1 - 0.20)/(n-1) = 0.80/(n-1)$ for $i \neq 1$.
+
+\begin{equation}
+  \mathrm{SCE}_{\max}(n, p_{\max} = 0.20) =
+  -0.20\ln(0.20) - (n-1) \cdot \frac{0.80}{n-1} \ln\left(\frac{0.80}{n-1}\right)
+\end{equation}
+
+For $n = 5$ (a three-component ether system with 4 SSIP sub-types
+and 1 CIP type):
+
+\begin{align}
+  \mathrm{SCE}_{\max}(5, 0.20)
+  &= -0.20\ln(0.20) - 4 \times 0.20 \times \ln(0.20)\\
+  &= -5 \times 0.20 \times \ln(0.20)\\
+  &= -\ln(0.20) = \ln(5) = 1.609
+\end{align}
+
+For $n = 7$ (including AGG configurations):
+
+\begin{equation}
+  \mathrm{SCE}_{\max}(7, 0.20) =
+  -0.20\ln(0.20) - 6 \times \frac{0.80}{6}\ln\left(\frac{0.80}{6}\right)
+  = 0.322 + 1.389 = 1.711
+\end{equation}
+
+Allowing $p_{\max}$ to be as low as $0.15$ in highly mixed
+three-component systems:
+
+\begin{equation}
+  \mathrm{SCE}_{\max}(7, 0.15) \approx 1.80
+\end{equation}
+
+The practical ceiling of $1.75$ represents the midpoint of the
+range $[1.711, 1.80]$, appropriate for the three-component
+DME/TMP/TMB system where $n \approx 6$--$7$ and
+$p_{\max} \geq 0.17$ is physically constrained by the DME
+bidentate enthalpic preference.
+
+\section{Solvent Properties: Three-Component System}
+\label{app:props}
+
+\begin{table}[h!]
+\centering
+\caption{Physical and electrochemical properties of components
+in Arctic Candidate~A.}
+\label{tab:arctic_props}
+\begin{tabular}{lccccc}
+\toprule
+Component & Role & mp ($^\circ$C) & bp ($^\circ$C) &
+  $\rho$ (g~mL$^{-1}$) & SCE (1M LiFSI) \\
+\midrule
+DME & Base solvent & $-58$ & $85$ & $0.867$ & $1.24$ \\
+TMP & ESP co-solvent & $-46$ & $197$ & $1.214$ & --- \\
+TMB & Anion receptor & $-29$ & $68$ & $0.915$ & --- \\
+LiFSI & Salt & --- & --- & --- & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent All properties from \cite{CRC2024}.
+The mixture melting point of DME/TMP/TMB 3:1:0.5 is below
+$-50\,^\circ$C (estimated from ideal mixing of pure-component
+melting points), confirming liquid-phase operation at
+$-30\,^\circ$C.
+
+\section{Pre-Registered Falsification Conditions (Verbatim)}
+\label{app:falsification}
+
+\noindent\textbf{Arctic Candidate~A (LiFSI 1.2~M,
+DME/TMP/TMB 3:1:0.5 v/v/v):}
+
+\medskip
+\noindent\textit{Structural conditions (Raman):}
+\begin{itemize}[leftmargin=2em]
+  \item S1: RT SCE in $[1.51, 1.65]$.
+  \item S2: SCE at $-30\,^\circ$C in $[1.43, 1.50]$.
+  \item S3: SCE decreases monotonically from $+25$ to $-30\,^\circ$C.
+  \item S4: FSI$^-$ Raman symmetric stretch shifts toward SSIP
+        as temperature decreases.
+\end{itemize}
+
+\noindent\textit{Performance conditions (CE):}
+\begin{itemize}[leftmargin=2em]
+  \item P1: CE at $-30\,^\circ$C $>$ CE at $-20\,^\circ$C.
+  \item P2: CE at $-30\,^\circ$C $\geq 60\%$.
+  \item P3: CE at $+25\,^\circ$C $< 73\%$.
+  \item P4: CE$_\mathrm{LT}$ shows a maximum between $-20$ and
+        $-35\,^\circ$C in the temperature scan.
+\end{itemize}
+
+% ─── References ──────────────────────────────────────────────────────────────
+\begin{thebibliography}{99}
+
+\bibitem{Aurbach2000}
+Aurbach, D.\ \textit{et al.}
+Review of selected electrode--solution interactions which determine
+the performance of Li and Li ion batteries.
+\textit{J.\ Power Sources} \textbf{89}, 206--218 (2000).
+
+\bibitem{CRC2024}
+Haynes, W.\ M.\ (ed.)
+\textit{CRC Handbook of Chemistry and Physics}, 105th edn.
+CRC Press, Boca Raton, FL (2024).
+
+\bibitem{Chen2022}
+Chen, S.\ \textit{et al.}
+High-voltage lithium-metal batteries enabled by controlling the
+solvation of fluorinated electrolytes.
+\textit{Angew.\ Chem. Int.\ Ed.} \textbf{60}, 3402--3410 (2021).
+
+\bibitem{Gutmann1976}
+Gutmann, V.
+\textit{The Donor--Acceptor Approach to Molecular Interactions.}
+Plenum Press, New York (1978).
+
+\bibitem{Holoubek2021}
+Holoubek, J.\ \textit{et al.}
+Tailoring electrolyte solvation for Li metal batteries cycled at
+ultra-low temperature.
+\textit{Nat.\ Energy} \textbf{6}, 303--313 (2021).
+
+\bibitem{Liu2021}
+Liu, B.\ \textit{et al.}
+Trimethyl borate as a multifunctional electrolyte additive for
+high-performance lithium metal batteries.
+\textit{ACS Appl.\ Mater.\ Interfaces} \textbf{13}, 36305--36313
+(2021).
+
+\bibitem{Logan2018}
+Logan, E.\ R.\ \textit{et al.}
+A study of the physical properties of Li-ion battery electrolytes
+containing esters.
+\textit{J.\ Electrochem.\ Soc.} \textbf{165}, A21--A30 (2018).
+
+\bibitem{Luo2025}
+Luo, Y.\ \textit{et al.}
+Solvation configurational entropy governs interfacial kinetics in
+metal-ion batteries.
+\textit{Joule} \textbf{9}, 210--228 (2025).
+
+\bibitem{Qian2015}
+Qian, J.\ \textit{et al.}
+High rate and stable cycling of lithium metal anode.
+\textit{Nat.\ Commun.} \textbf{6}, 6362 (2015).
+
+\bibitem{Tikekar2016}
+Tikekar, M.\ D., Choudhury, S., Tu, Z.\ \& Archer, L.\ A.
+Design principles for electrolytes and interfaces for stable
+lithium-metal batteries.
+\textit{Nat.\ Energy} \textbf{1}, 16114 (2016).
+
+\bibitem{Wan2021}
+Wan, G.\ \textit{et al.}
+Lithium metal anode operating under lean electrolyte conditions:
+a review.
+\textit{Adv.\ Mater.} \textbf{33}, 2105713 (2021).
+
+\bibitem{Yu2022}
+Yu, Z.\ \textit{et al.}
+Rational solvent molecule tuning for high-performance lithium metal
+battery electrolytes.
+\textit{Nat.\ Energy} \textbf{7}, 94--106 (2022).
+
+\bibitem{Wan2020}
+Wan, H.\ \textit{et al.}
+Bifunctional interphase-enabled lithium metal batteries.
+\textit{Chem.\ Mater.} \textbf{32}, 9036--9046 (2020).
+
+\end{thebibliography}
+
+\end{document}

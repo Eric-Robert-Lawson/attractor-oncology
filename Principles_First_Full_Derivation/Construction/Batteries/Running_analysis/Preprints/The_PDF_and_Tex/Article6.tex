@@ -1,0 +1,1405 @@
+\documentclass[11pt]{article}
+
+% ─── Packages ────────────────────────────────────────────────────────────────
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage{authblk}
+\usepackage{setspace}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{siunitx}
+\usepackage{pdflscape}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
+}
+
+% ─── Theorem environments ──────────────────────��─────────────────────────────
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+
+% ─── Title block ─────────────────────────────────────────────────────────────
+\title{\textbf{Geometric Closure of the Design Space:\\
+The Missing Chemical Classes, the Scope of the SCE Framework,\\
+and the Programme for What Remains}}
+
+\author[1]{Eric Robert Lawson}
+
+\affil[1]{Independent Researcher, OrganismCore Initiative\\
+\texttt{ORCID: 0009-0002-0414-6544}\\
+Repository: \url{https://github.com/Eric-Robert-Lawson/attractor-oncology}}
+
+\date{April 4, 2026\\
+\small Pre-registration record:
+\url{https://github.com/Eric-Robert-Lawson/attractor-oncology}\\
+\small (timestamped commit history constitutes the priority
+and pre-registration record)\\
+\small Part of the SCE Framework preprint series.
+Preprint~1 (foundation and fixed point):
+same repository.\\
+\small This paper is the series capstone: it maps the framework's
+reach, its limits, and the complete programme of what remains.}
+
+% ─── Document ────────────────────────────────────────────────────────────────
+\begin{document}
+
+\maketitle
+
+% ─── Abstract ────────────────────────────────────────────────────────────────
+\begin{abstract}
+The SCE Framework (Preprints~1--5) establishes $\mathrm{SCE}^{*}
+= 1.466$ as the fixed point of Li$^+$ first-shell coordination
+entropy that simultaneously maximises room-temperature (RT) and
+low-temperature (LT) Coulombic efficiency (CE) in lithium metal
+batteries.  Five preprints derive four candidate formulations and
+one arctic-optimised design, covering three orthogonal navigation
+mechanisms and one temperature-responsive design principle.
+
+The present paper closes the design space geometrically.  We
+systematically enumerate the chemical classes that are \emph{absent}
+from the confirmed dataset and the series candidates, derive
+pre-registered SCE predictions for each class using the framework
+equations and molecular structure arguments, and establish the
+conditions under which each missing class is predicted to reach,
+approach, or be unable to reach $\mathrm{SCE}^{*}$.
+
+The missing classes identified and treated are:
+(1)~nitrile-class solvents (acetonitrile, propionitrile),
+(2)~sulfolane and sulfone-class solvents,
+(3)~fluorinated ether sub-classes (HFE, BTFMD, HFTHP),
+(4)~carbonate-class solvents in ether mixtures,
+(5)~ionic liquid co-solvents,
+and (6)~solid-state and quasi-solid electrolyte analogues.
+
+For each class we derive: the expected SCE position relative to
+$\mathrm{SCE}^{*}$, the mechanism by which it can or cannot
+reach $\mathrm{SCE}^{*}$, the specific formulation prediction
+where applicable, and the falsification conditions.
+
+We also derive the framework's three fundamental scope limits:
+(A)~the \emph{coordination geometry requirement} (classes where
+Li$^+$ has no accessible coordination geometry distinction cannot
+navigate by the geometric mechanisms), (B)~the \emph{reductive
+stability requirement} (classes that are reduced at Li metal
+potentials before SCE can be established are outside the framework's
+operating domain), and (C)~the \emph{concentration window
+requirement} (classes where SCE is concentration-invariant and
+SCE$\neq\mathrm{SCE}^{*}$ at any accessible concentration are
+geometrically unreachable by concentration tuning alone).
+
+The paper concludes with the complete novelty stack of the series,
+the full geometric structure of what has been derived and what
+remains, and a summary of the programme for the next generation of
+experimental and computational work.
+
+The derivation record and all pre-registered conditions are archived
+at \url{https://github.com/Eric-Robert-Lawson/attractor-oncology}.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{Keywords:} lithium metal battery, electrolyte
+design space, coordination entropy, SCE*, missing classes, nitrile,
+sulfone, fluorinated ether, carbonate, ionic liquid, scope limits,
+geometric closure, programme
+
+\tableofcontents
+\newpage
+
+% ─── 1. Introduction ─────────────────────────────────────────────────────────
+\section{Introduction}
+
+\subsection{What the Series Has Established}
+
+The SCE Framework series has, across five preprints:
+
+\begin{enumerate}[leftmargin=2em]
+  \item Derived $\mathrm{SCE}^{*} = 1.466$ as a fixed point of
+        combined RT and LT performance from a 21-system dataset
+        ($R^2 = 0.828$, $p = 4.5 \times 10^{-6}$).
+  \item Established three orthogonal mechanisms for navigating
+        to $\mathrm{SCE}^{*}$: ESP matching, anion reception, and
+        within-class geometric diversity.
+  \item Derived one temperature-responsive design principle: the
+        arctic optimum.
+  \item Specified six candidate formulations with pre-registered
+        falsification conditions.
+  \item Confirmed the fixed point against six published papers;
+        none falsifies the framework.
+  \item Mapped the molecular design space within the ether class
+        (MU Molecular Search, same repository) and achieved
+        geometric closure of the ether-class search.
+\end{enumerate}
+
+What the series has \emph{not} established is equally important:
+the framework has been derived from and applied to a dataset
+dominated by ether-class and phosphate ester solvents.  The
+confirmed dataset contains no nitrile-class, sulfone-class,
+or ionic liquid systems.  The fluorinated ether sub-classes
+are represented only indirectly.  The carbonate class is absent.
+Solid-state analogues are not addressed.
+
+This paper closes the design space by addressing these absences
+systematically.
+
+\subsection{The Purpose of Geometric Closure}
+
+A scientific framework is not complete until its scope is defined.
+Scope definition requires two things: knowing what the framework
+covers (the domain of confirmed application) and knowing what
+it does not cover and why (the scope limits).
+
+The SCE Framework's scope is defined by:
+\begin{itemize}[leftmargin=2em]
+  \item The coordination geometry requirement: the mechanism
+        operates on Li$^+$ first-shell geometry.  If a solvent
+        class does not produce geometrically distinct coordination
+        modes under mixing, the mechanism does not apply.
+  \item The reductive stability requirement: the mechanism
+        operates at Li metal potentials ($\approx 0$~V vs.\
+        Li/Li$^+$).  If a solvent class is reduced before the
+        electrolyte can form a stable solvation structure, it is
+        outside the operating domain.
+  \item The concentration window requirement: the framework's
+        dataset spans LiFSI concentrations of 0.5--2.0~M.  For
+        classes where SCE is concentration-invariant and
+        $\mathrm{SCE} \neq \mathrm{SCE}^{*}$ at all accessible
+        concentrations, concentration tuning cannot reach the
+        fixed point.
+\end{itemize}
+
+For each missing class, we establish which of these requirements
+is satisfied, which is violated, and what consequences follow.
+
+\subsection{The Molecular Search Closure}
+
+The MU Molecular Search (Complete Space Closure Record, same
+repository) established geometric closure of the
+\emph{ether-class} design space: every ether and ether-adjacent
+molecule accessible from the molecular search starting point
+(MU) has been assigned to a region (reached, unreachable,
+discarded) with respect to $\mathrm{SCE}^{*}$.
+
+The present paper extends this closure to the \emph{non-ether}
+classes.  The closure is not exhaustive at the molecular level
+--- it is exhaustive at the \emph{class level}: every major
+chemical class of Li metal battery solvent is assigned a status,
+and the reasons for that status are derived from the framework.
+
+\subsection{Structure of This Paper}
+
+Sections~\ref{sec:nitrile}--\ref{sec:solid_state} treat each
+missing class in turn.  Section~\ref{sec:scope_limits} derives
+the three scope limits formally.  Section~\ref{sec:novelty_stack}
+presents the complete novelty stack of the series.
+Section~\ref{sec:programme} defines the programme for what
+remains.  Section~\ref{sec:discussion} provides the series
+synthesis.
+
+% ─── 2. Missing Class 1: Nitriles ─────────────────────────────────────────────
+\section{Missing Class 1: Nitrile-Class Solvents}
+\label{sec:nitrile}
+
+\subsection{Why Nitriles Are Absent from the Confirmed Dataset}
+
+Nitrile solvents (acetonitrile, AN; propionitrile, PN;
+glutaronitrile, GLN) are commonly used in Li-ion battery
+electrolytes but are rarely used in Li \emph{metal} batteries
+because:
+\begin{itemize}[leftmargin=2em]
+  \item AN is reductively unstable at Li metal potentials,
+        forming polymerised SEI products that consume Li
+        irreversibly.
+  \item PN has marginally better reductive stability but remains
+        problematic for extended Li metal cycling.
+  \item High-dielectric nitriles (GLN) have high viscosity that
+        limits ionic conductivity at low temperature.
+\end{itemize}
+
+The dataset absence is therefore a reductive stability issue,
+not a coordination entropy issue.
+
+\subsection{SCE Position of Nitrile-Class Solvents}
+
+Nitrile oxygens --- strictly, nitrile nitrogens --- coordinate
+Li$^+$ via the lone pair on nitrogen.  The C$\equiv$N--Li$^+$
+interaction is linear: the nitrogen lone pair is directed along
+the triple bond axis.  This produces a single, geometrically
+rigid coordination mode with no rotational or conformational
+sub-configurations.
+
+\begin{proposition}[Nitrile SCE position]
+LiFSI in a pure nitrile solvent has a lower SCE than any
+ether-class solvent at equivalent concentration, because the
+nitrile C$\equiv$N--Li$^+$ interaction is geometrically rigid:
+$n_\mathrm{sig} \approx 1$ for SSIP configurations and
+$n_\mathrm{sig} \approx 2$ including CIP at moderate concentration.
+The maximum achievable SCE in a pure nitrile system is:
+\begin{equation}
+  \mathrm{SCE}(\mathrm{nitrile}, \mathrm{pure}) \leq \ln(2) = 0.693
+\end{equation}
+which is far below $\mathrm{SCE}^{*} = 1.466$.
+\end{proposition}
+
+\subsection{Can Nitrile/Ether Mixtures Reach SCE*?}
+
+A nitrile/ether co-solvent system introduces a fundamentally
+new coordination class: the C$\equiv$N--Li$^+$ linear
+interaction vs.\ the O--Li$^+$ coordinations of the ether.
+The two geometries are maximally distinct.  A nitrile/ether
+mixture at appropriate ratios could in principle reach
+$\mathrm{SCE}^{*}$ by cross-class ESP matching.
+
+However, two problems arise:
+
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{ESP mismatch is too large:} The AN nitrogen
+        ESP minimum ($\approx -1.2$~eV) is substantially
+        lower (more negative) than the DME oxygen ESP minimum
+        ($\approx -0.62$~eV).  The energy gap is $\approx 0.58$~eV,
+        more than $20 k_BT$ at 298~K.  Li$^+$ overwhelmingly
+        prefers AN coordination.  The population cannot be
+        meaningfully split across both geometries without
+        an AN mole fraction so low that AN is merely an additive.
+  \item \textbf{Reductive stability:} At the AN mole fractions
+        required for meaningful coordination, AN reductive
+        decomposition at Li metal makes the system impractical.
+\end{enumerate}
+
+\begin{proposition}[Nitrile geometric inaccessibility]
+Nitrile/ether mixtures cannot reach $\mathrm{SCE}^{*}$ by the
+cross-class ESP-matching mechanism because the ESP mismatch
+exceeds the population-splitting threshold:
+\begin{equation}
+  |\mathrm{ESP}_{\min}(\mathrm{AN}) - \mathrm{ESP}_{\min}(\mathrm{DME})|
+  \approx 0.58~\mathrm{eV} \gg \delta_{\mathrm{thermal}}
+\end{equation}
+The nitrile class is geometrically inaccessible to the
+ESP-matching mechanism.  It is also outside the reductive
+stability requirement.  Classification: \textbf{Scope Limit A
+and B both apply.}
+\end{proposition}
+
+\subsection{Pre-Registered Prediction}
+
+For completeness, a pre-registered prediction: if AN is added
+to DME at any volume fraction from 0.05 to 0.50 at LiFSI 1.0~M,
+Raman spectroscopy will show Li$^+$ preferentially coordinated
+by AN at all AN fractions above 0.05.  SCE will not exceed
+$\ln(3) \approx 1.10$ at any ratio.  CE will not improve
+beyond the pure DME baseline.  The ESP-driven preferential
+coordination precludes population splitting.
+
+% ─── 3. Missing Class 2: Sulfones ──────────────────────────────────────────────
+\section{Missing Class 2: Sulfolane and Sulfone-Class Solvents}
+\label{sec:sulfone}
+
+\subsection{Why Sulfones Are Absent}
+
+Sulfolane (tetramethylene sulfone, TMS) and other sulfone-class
+solvents have high dielectric constants ($\varepsilon \approx 44$
+for sulfolane) and moderate donor numbers (DN $\approx 14$ for
+sulfolane).  They are used in Li-ion systems for their
+oxidative stability but are absent from the ether-class Li metal
+dataset for two reasons:
+\begin{itemize}[leftmargin=2em]
+  \item High melting points: sulfolane melts at $27\,^\circ$C,
+        making it a solid at ambient temperature in many climates
+        and severely limiting LT performance.
+  \item High viscosity: sulfolane's viscosity (10.3~cP at
+        30\,$^\circ$C) is 4--5$\times$ higher than DME at
+        RT and increases dramatically on cooling.
+\end{itemize}
+
+The MU session (Query~6, Master Document~8) specifically
+investigated HFTHP and BTFMD as fluorinated sulfone-adjacent
+structures for LT performance.  The result: both showed Raman
+evidence of very high CIP/AGG fractions at LiFSI 1.0~M, placing
+their SCE well above $\mathrm{SCE}^{*}$.
+
+\subsection{SCE Position of Sulfone-Class Solvents}
+
+Sulfolane coordinates Li$^+$ via the sulfonyl oxygen (S=O).
+The sulfonyl coordination is monodentate (one oxygen per
+molecule).  The ESP minimum of the sulfonyl oxygen
+($\approx -0.58$~eV) is similar to that of ether oxygens,
+placing sulfolane in a comparable ESP range to DME.
+
+\textbf{The ESP finding of the MU session:} The MU search
+(Sulfolane ESP Finding --- Noted But Discarded section of the
+Molecular Search Closure Record) found that sulfolane's ESP
+minimum is close to DME's ESP minimum ($|\Delta\mathrm{ESP}|
+\approx 0.04$~eV $\approx 1.5 k_BT$).  This places sulfolane
+in the within-class geometric diversity regime relative to ether
+solvents: it is not ESP-matched within $k_BT$, but it is close
+enough that a sulfolane/ether mixture might produce meaningful
+population splitting.
+
+\begin{proposition}[Sulfolane SCE range]
+LiFSI in sulfolane has $\mathrm{SCE} > \mathrm{SCE}^{*}$
+at moderate concentrations (0.5--1.0~M) due to the high
+dielectric constant promoting CIP/AGG formation and high
+$n_\mathrm{sig}$.  Sulfolane sits above $\mathrm{SCE}^{*}$
+at RT.  Adding an ether co-solvent can reduce SCE toward
+$\mathrm{SCE}^{*}$ from above --- the anion-reception or
+geometric ordering direction.
+\end{proposition}
+
+\subsection{Predicted Mechanism: Ordering from Above}
+
+Sulfolane/DME mixtures approach $\mathrm{SCE}^{*}$ from
+\emph{above}: sulfolane's high dielectric environment promotes
+CIP/AGG, raising SCE above the fixed point.  Adding DME
+dilutes the CIP/AGG fraction (lower dielectric constant,
+bidentate coordination that competes for the Li$^+$ primary
+shell) and reduces SCE toward $\mathrm{SCE}^{*}$.
+
+This is the same direction as the anion receptor mechanism
+(Preprint~3) but operated by dielectric dilution rather than
+Lewis acid sequestration.
+
+\textbf{Pre-registered prediction (sulfolane/DME):}
+LiFSI 1.0~M in sulfolane/DME at 1:4 v/v will show:
+\begin{itemize}[leftmargin=2em]
+  \item Raman SCE $\approx 1.45$--$1.50$ (approaching
+        $\mathrm{SCE}^{*}$ from above).
+  \item CE$_\mathrm{RT}$ between $73\%$ and $78\%$.
+  \item CE$_\mathrm{LT}$ between $58\%$ and $62\%$.
+\end{itemize}
+
+\textbf{Limiting factor:} Sulfolane's melting point ($27\,^\circ$C)
+constrains the range of sulfolane/DME ratios accessible at LT.
+At sulfolane fractions above $\approx 0.25$ v/v in DME, the
+mixture may partially solidify at $-20\,^\circ$C.  The
+prediction applies to the 1:4 ratio only.
+
+\textbf{Classification:} Sulfolane class satisfies the
+coordination geometry requirement and the concentration window
+requirement.  It partially fails the reductive stability
+requirement (sulfolane is marginally stable at Li metal
+potentials but SEI chemistry is not well characterised).
+Status: \textbf{Reachable in principle; viscosity and melting
+point are the practical gating factors, not the framework
+mechanism.}
+
+% ─── 4. Missing Class 3: Fluorinated Ether Sub-Classes ───────────────────────
+\section{Missing Class 3: Fluorinated Ether Sub-Classes}
+\label{sec:fluorinated_ether}
+
+\subsection{HFTHP and BTFMD: The MU Session Findings}
+
+The MU session Query~6 investigated two fluorinated ether
+structures specifically designed for LT Li metal batteries:
+
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{HFTHP} (1,1,1,3,3,3-hexafluoro-2-(trifluoromethyl)-
+        propan-2-ol, or hexafluorinated THF analogue): high
+        fluorination, very low donor number, very weak Li$^+$
+        coordination.
+  \item \textbf{BTFMD} (bis(2,2,2-trifluoroethyl)methyl
+        orthoformate-derived ether): partially fluorinated,
+        intermediate coordination strength.
+\end{itemize}
+
+MU Query~6 result:
+\begin{itemize}[leftmargin=2em]
+  \item HFTHP at LiFSI 1.0~M: very high CIP/AGG fraction
+        (weak solvent coordination allows extensive anion
+        participation).  Estimated SCE $\approx 1.65$--$1.75$.
+        Above $\mathrm{SCE}^{*}$, approaching the practical ceiling.
+  \item BTFMD at LiFSI 1.0~M: moderately high CIP/AGG fraction.
+        Estimated SCE $\approx 1.55$--$1.65$.  Significantly above
+        $\mathrm{SCE}^{*}$.
+\end{itemize}
+
+Both are in the arctic design space (SCE above $\mathrm{SCE}^{*}$).
+Both have negative temperature coefficients of SCE (fluorinated
+ethers have weaker coordination that strengthens relative to
+anion binding as temperature drops, reducing CIP/AGG fraction).
+
+\subsection{HFTHP: Arctic Candidate B (Pre-Registered Prediction)}
+
+HFTHP alone has $\mathrm{SCE} \approx 1.70$, which is too far
+above $\mathrm{SCE}^{*}$ for the temperature-responsive crossing
+to occur at $-30\,^\circ$C with a realistic temperature
+coefficient.  However, HFTHP/DME mixtures can bring the RT SCE
+into the arctic design space:
+
+\textbf{Pre-registered prediction (HFTHP/DME arctic candidate B):}
+LiFSI 1.0~M in HFTHP/DME at 1:5 v/v:
+\begin{itemize}[leftmargin=2em]
+  \item Estimated RT SCE $\approx 1.55$--$1.60$.
+  \item Estimated temperature coefficient $\approx 0.0018$--$0.0025$
+        SCE~units~per~$^\circ$C.
+  \item Predicted crossing temperature $T^{*} \approx -20$ to
+        $-40\,^\circ$C depending on actual temperature coefficient.
+  \item Falsification condition: CE$_\mathrm{LT}$ at $-30\,^\circ$C
+        exceeds CE$_\mathrm{LT}$ at $-20\,^\circ$C (non-monotonic
+        temperature profile, as in Arctic Candidate~A).
+\end{itemize}
+
+\textbf{Classification:} HFTHP satisfies the coordination geometry
+requirement (fluorinated ether oxygen coordination is geometrically
+distinct from unfluorinated ether coordination) and the
+concentration window requirement.  It has been demonstrated
+to be stable at Li metal potentials in published literature
+\cite{Holoubek2021}.  Status: \textbf{Reachable.  Arctic
+Candidate~B pre-registered.}
+
+\subsection{BTFMD: Intermediate Fluorinated Ether}
+
+BTFMD's SCE of $\approx 1.55$--$1.65$ places it in the arctic
+design space directly, without requiring a co-solvent.  The
+temperature coefficient of BTFMD is expected to be larger than
+HFTHP's because BTFMD's partial fluorination produces a
+stronger temperature sensitivity in the CIP/AGG equilibrium.
+
+\textbf{Pre-registered prediction (BTFMD pure):}
+LiFSI 1.0~M in pure BTFMD:
+\begin{itemize}[leftmargin=2em]
+  \item Estimated RT SCE $\approx 1.58$--$1.65$.
+  \item Predicted crossing temperature $T^{*} \approx -15$ to
+        $-35\,^\circ$C.
+  \item Falsification condition: same non-monotonic temperature
+        profile requirement as Arctic Candidate~A.
+\end{itemize}
+
+If confirmed, BTFMD would be the first \emph{single-component}
+electrolyte (excluding salt) to exhibit the temperature-responsive
+SCE gap without any co-solvent requirement.
+
+\textbf{Classification:} BTFMD satisfies all three requirements.
+Status: \textbf{Reachable.  Pre-registered as Arctic Candidate~B
+variant.}
+
+% ─── 5. Missing Class 4: Carbonates in Ether Mixtures ────────────────────────
+\section{Missing Class 4: Carbonate-Class Solvents in Ether Mixtures}
+\label{sec:carbonate}
+
+\subsection{Why Carbonates Are Absent}
+
+Carbonate solvents (EC, DMC, EMC, DEC, FEC) are the dominant
+class in Li-\emph{ion} battery electrolytes but are largely
+absent from Li \emph{metal} electrolyte optimisation because:
+\begin{itemize}[leftmargin=2em]
+  \item Carbonates form an inorganic-organic SEI on Li metal
+        that suppresses Li plating morphology differently from
+        ether-based SEIs.
+  \item The carbonate-based SEI is less flexible and more prone
+        to cracking under Li metal volume change during cycling.
+  \item Carbonates have lower electrochemical stability windows
+        than ethers at high voltages but are acceptable at
+        moderate voltages.
+\end{itemize}
+
+For Li metal anodes, ether-based electrolytes are preferred.
+The SCE Framework dataset reflects this preference.
+
+\subsection{SCE Position of Carbonate-Class Solvents}
+
+Carbonate coordination to Li$^+$ is via the carbonyl oxygen
+(C=O).  The carbonyl ESP minimum ($\approx -0.75$~eV for DMC)
+is more negative than the ether ESP minimum ($\approx -0.62$~eV
+for DME) but less negative than the phosphoryl ESP minimum
+($\approx -0.79$~eV for TMP).
+
+This places carbonates in the ESP range between ethers and
+phosphate esters.  The carbonate C=O--Li$^+$ geometry is
+monodentate for DMC and bidentate for EC (the ring carbonate
+can chelate through both oxygens in some configurations).
+
+\begin{proposition}[Carbonate ESP position]
+Carbonates occupy the ESP range between ethers and phosphate
+esters:
+\begin{equation}
+  |\mathrm{ESP}_{\min}(\mathrm{DME})| <
+  |\mathrm{ESP}_{\min}(\mathrm{DMC})| <
+  |\mathrm{ESP}_{\min}(\mathrm{TMP})|
+\end{equation}
+A carbonate/ether mixture can in principle produce cross-class
+ESP matching analogous to the DME/TMP mechanism (Preprint~2),
+with the carbonate playing the role of TMP.  The ESP gap
+between DME and DMC is larger than between DME and TMP
+($\approx 0.13$~eV vs.\ $0.007$~eV), reducing the population
+splitting effectiveness but not precluding it at higher
+carbonate fractions.
+\end{proposition}
+
+\subsection{The SEI Chemistry Complication}
+
+The primary obstacle for carbonate/ether mixtures in Li metal
+batteries is not the SCE mechanism but the SEI chemistry:
+carbonate decomposition at Li metal produces an SEI that
+competes with ether-derived SEI chemistry.  The framework
+equations (Regime~1) are derived from ether-dominated SEI
+systems.  A carbonate/ether mixture at significant carbonate
+fractions may produce a hybrid SEI whose CE is not described
+by the Regime~1 equations.
+
+\textbf{Pre-registered prediction (DMC/DME, framework scope test):}
+LiFSI 1.0~M in DMC/DME at 1:4 v/v:
+\begin{itemize}[leftmargin=2em]
+  \item Raman SCE estimated at $\approx 1.35$--$1.45$.
+  \item If the framework equations apply (ether-dominated SEI):
+        CE$_\mathrm{RT}$ predicted $\approx 72$--$74\%$.
+  \item If SEI chemistry is dominated by carbonate decomposition:
+        CE$_\mathrm{RT}$ may deviate significantly from the
+        prediction without falsifying the SCE mechanism.
+  \item Diagnostic: FEC-free vs.\ FEC-containing comparison
+        to isolate SEI chemistry contribution.
+\end{itemize}
+
+\textbf{Classification:} Carbonate class satisfies the
+coordination geometry requirement and the concentration window
+requirement.  The reductive stability requirement is partially
+satisfied (EC is problematic at Li metal; DMC is marginally
+stable; FEC forms a stable SEI but introduces a dedicated
+SEI-forming mechanism).  The framework equations may require
+modification for carbonate-containing systems.  Status:
+\textbf{Conditionally reachable.  Framework applicability to
+carbonate SEI systems requires dedicated characterisation.}
+
+% ─── 6. Missing Class 5: Ionic Liquid Co-Solvents ────────────────────────────
+\section{Missing Class 5: Ionic Liquid Co-Solvents}
+\label{sec:ionic_liquid}
+
+\subsection{Why Ionic Liquids Are Absent}
+
+Ionic liquids (ILs) are absent from the confirmed dataset because:
+\begin{itemize}[leftmargin=2em]
+  \item Most ILs have high viscosity at RT and become gels or
+        solids at LT, preventing the low-temperature performance
+        measurement that is central to the framework.
+  \item IL cations (pyrrolidinium, imidazolium, piperidinium)
+        introduce a competing cation that modifies the Li$^+$
+        coordination environment in ways not captured by the
+        two-component SCE analysis.
+  \item The definition of SCE requires a well-defined Li$^+$
+        first-shell with a finite number of distinguishable
+        coordination configurations.  In IL-rich systems,
+        the cation--anion--solvent interactions are highly
+        entangled, and the Li$^+$ first shell is not cleanly
+        separable from the bulk ionic environment.
+\end{itemize}
+
+\subsection{Framework Applicability to IL-Containing Systems}
+
+The SCE Framework in its current form applies to systems where:
+\begin{enumerate}[leftmargin=2em]
+  \item The Li$^+$ first solvation shell can be defined and
+        measured by Raman spectroscopy.
+  \item The coordination configurations are classifiable into
+        a finite number of distinguishable types.
+  \item The SCE of the Li$^+$ shell is separable from the
+        bulk electrolyte structural properties.
+\end{enumerate}
+
+For IL co-solvent systems at low IL fractions ($< 10\%$ v/v),
+these conditions may be approximately satisfied: the IL cation
+is present in the bulk but may not enter the Li$^+$ primary
+shell at low concentration.  At higher IL fractions, the
+cation's influence on Li$^+$ coordination becomes significant
+and the framework's two-component model requires extension.
+
+\begin{proposition}[Ionic liquid scope limit]
+The SCE Framework in its current form applies to IL/ether
+systems only at IL mole fractions where the IL cation does
+not measurably enter the Li$^+$ primary coordination shell.
+At higher IL fractions, the framework requires extension to
+a three-species coordination model (solvent, anion, cation).
+This extension is not derived in the present series.
+Classification: \textbf{Scope Limit A applies at high IL fraction.
+At low IL fraction ($< 5\%$ mol), the framework may apply as
+an approximation.}
+\end{proposition}
+
+\textbf{Pre-registered prediction (low-IL limit test):}
+LiFSI 1.0~M in Pyr$_{14}$FSI (3\% mol)/DME (97\% mol):
+\begin{itemize}[leftmargin=2em]
+  \item Raman SCE estimated at $\approx 1.26$--$1.30$
+        (slightly above pure DME, small CIP contribution
+        from additional FSI$^-$ from IL).
+  \item CE predictions follow Regime~1 framework equations.
+  \item Falsification condition: if Raman shows pyrrolidinium
+        ring peaks in the Li$^+$--O stretch region
+        ($300$--$500$~cm$^{-1}$), the IL cation is entering
+        the primary shell and the framework prediction is
+        invalidated for that system.
+\end{itemize}
+
+% ─── 7. Missing Class 6: Solid-State and Quasi-Solid Analogues ───────────────
+\section{Missing Class 6: Solid-State and Quasi-Solid Electrolyte Analogues}
+\label{sec:solid_state}
+
+\subsection{Framework Applicability}
+
+The SCE Framework is derived from liquid-phase electrolyte
+systems where the Li$^+$ solvation shell is a dynamic,
+thermally accessible distribution of coordination configurations.
+Solid electrolytes (oxide, sulfide, halide garnets, polymer)
+present a qualitatively different coordination environment:
+
+\begin{itemize}[leftmargin=2em]
+  \item Li$^+$ occupies fixed crystallographic sites.
+  \item The ``coordination'' is not a dynamic equilibrium
+        among distinguishable configurations but a static
+        site occupation.
+  \item Shannon entropy of coordination configurations is
+        replaced by site occupation entropy, which is a
+        different quantity with different physical significance.
+\end{itemize}
+
+\begin{proposition}[Solid electrolyte scope limit]
+The SCE Framework as derived does not apply to solid
+electrolytes.  The fixed-point $\mathrm{SCE}^{*} = 1.466$
+is defined for liquid-phase dynamic coordination equilibria.
+The concept of coordination entropy is meaningful in this
+context but the specific numerical value and its relation
+to CE cannot be transferred to solid systems without
+re-derivation.  Classification: \textbf{Scope Limit A
+applies (no dynamic coordination geometry).  Out of scope
+in current form.}
+\end{proposition}
+
+\subsection{Quasi-Solid and Gel Electrolytes}
+
+Quasi-solid and gel electrolytes (polymer matrices swollen
+with liquid electrolyte, PVDF-HFP gels, PEO with plasticisers)
+present an intermediate case.  If the liquid fraction retains
+a dynamic Li$^+$ solvation equilibrium, the SCE of the
+liquid fraction may be definable and measurable by Raman.
+In this case, the framework may apply to the liquid fraction
+with the understanding that the polymer matrix provides a
+modified activity coefficient environment.
+
+\textbf{Pre-registered prediction (PEO-LiFSI/DME quasi-solid):}
+A quasi-solid with 30\% PEO (MW 600,000), LiFSI 1.0~M,
+DME/TMP 4:1 (liquid fraction):
+\begin{itemize}[leftmargin=2em]
+  \item If Raman shows a well-resolved Li$^+$--solvent solvation
+        structure in the liquid fraction: apply the framework
+        to the liquid fraction SCE.
+  \item Predicted SCE (liquid fraction only): $\approx 1.42$--$1.50$
+        (slightly modified from pure liquid due to PEO ether
+        oxygen competition for Li$^+$).
+  \item CE prediction follows framework equations for the
+        liquid fraction composition.
+  \item Falsification: if Raman shows PEO ether oxygens
+        dominating the Li$^+$ coordination shell, the system
+        requires a modified framework that includes polymer
+        coordination explicitly.
+\end{itemize}
+
+% ─── 8. The Three Scope Limits ────────────────────────────────────────────────
+\section{The Three Scope Limits of the SCE Framework}
+\label{sec:scope_limits}
+
+\subsection{Scope Limit A: The Coordination Geometry Requirement}
+
+\begin{definition}[Coordination geometry requirement]
+The SCE Framework applies to electrolyte systems where Li$^+$
+has access to at least two structurally distinguishable
+coordination configurations with non-negligible thermal
+population ($p_i \geq 0.05$) under the conditions of interest.
+\end{definition}
+
+\textbf{Classes that fail this requirement:}
+\begin{itemize}[leftmargin=2em]
+  \item Nitrile solvents (geometrically rigid linear
+        C$\equiv$N--Li$^+$, no accessible sub-configurations).
+  \item Solid electrolytes (static crystallographic sites).
+  \item Ionic liquid-rich systems (entangled cation--anion
+        coordination obscures the Li$^+$ shell definition).
+  \item Any system where Li$^+$ is solvated by a single
+        rigid monodentate ligand with no conformational
+        or compositional sub-configurations.
+\end{itemize}
+
+\subsection{Scope Limit B: The Reductive Stability Requirement}
+
+\begin{definition}[Reductive stability requirement]
+The SCE Framework applies to electrolyte systems where the
+solvent and salt remain electrochemically stable at Li metal
+potentials ($0$--$0.5$~V vs.\ Li/Li$^+$) for at least
+100 cycles, allowing the solvation structure equilibrium
+to be established and the CE to reflect the geometry-driven
+mechanism rather than irreversible solvent decomposition.
+\end{definition}
+
+\textbf{Classes that fail this requirement:}
+\begin{itemize}[leftmargin=2em]
+  \item Nitrile solvents at Li metal potentials (reductive
+        polymerisation, irreversible SEI growth).
+  \item Carbonate-class solvents at high carbonate fractions
+        in Li metal cells (SEI chemistry competes with
+        geometry-driven mechanism).
+  \item High-voltage additives and co-solvents that are
+        reductively unstable below 2~V vs.\ Li/Li$^+$.
+\end{itemize}
+
+\subsection{Scope Limit C: The Concentration Window Requirement}
+
+\begin{definition}[Concentration window requirement]
+The SCE Framework applies to electrolyte systems where the
+accessible concentration range (0.5--2.5~M LiFSI) contains
+at least one concentration at which $\mathrm{SCE}
+\approx \mathrm{SCE}^{*}$, or where a co-solvent mechanism
+can produce $\mathrm{SCE} \approx \mathrm{SCE}^{*}$ at
+a chemically stable composition.
+\end{definition}
+
+\textbf{Classes that approach this limit:}
+\begin{itemize}[leftmargin=2em]
+  \item DPE (concentration-invariant, SCE $\approx 1.28$ at
+        all accessible LiFSI concentrations, Derivation~6).
+        DPE cannot reach $\mathrm{SCE}^{*}$ by concentration
+        tuning alone.  It requires a co-solvent.
+  \item HFTHP pure (SCE $\approx 1.65$--$1.75$, approaching
+        the practical ceiling; concentration tuning reduces SCE
+        but may not bring it to $\mathrm{SCE}^{*}$ before
+        crossing the practical ceiling from above).
+\end{itemize}
+
+% ─── 9. The Regime Boundary and the Band ─────────────────────────────────────
+\section{The Regime Boundary and the SCE Band}
+\label{sec:band}
+
+\subsection{The Band: Key New Result from the MU Session}
+
+Master Document~8 Part~V identifies the \textbf{Band} as the
+key new result of the MU session.  The Band is the SCE range:
+
+\begin{equation}
+  1.44 \leq \mathrm{SCE} \leq 1.50
+  \label{eq:band}
+\end{equation}
+
+Systems with SCE in this range simultaneously satisfy:
+CE$_\mathrm{RT} \geq 72\%$ and CE$_\mathrm{LT} \geq 59\%$
+from the Regime~1 framework equations.  The Band is the
+\emph{target zone} for any formulation aiming for dual
+high performance.
+
+The significance of the Band is that it relaxes the precision
+requirement on the SCE target: rather than requiring exact
+placement at $\mathrm{SCE}^{*} = 1.466$, the framework
+specifies a Band within which both CE criteria are
+simultaneously met.  The Band width of $0.06$ SCE units
+corresponds to a population measurement precision of
+$\pm 0.02$ in each configuration fraction --- achievable
+by Raman deconvolution in practice.
+
+\subsection{Regime Boundary Position}
+
+From Derivation~7, the regime boundary crossing occurs when:
+
+\begin{equation}
+  \mathrm{CE}_\mathrm{RT} > 90\% \quad \Leftrightarrow \quad
+  \mathrm{SCE} < 0.71
+  \label{eq:regime_boundary}
+\end{equation}
+
+from the Regime~1 equation.  However, no system in the dataset
+achieves CE$_\mathrm{RT} > 90\%$ in the ether class at
+moderate LiFSI concentration.  The regime boundary is relevant
+only for concentrated electrolyte systems (4~M LiFSI and above)
+where AGG configurations dominate and the Regime~2 mechanism
+(concentration-driven) operates.
+
+The SCE Framework's operating domain is Regime~1.  Regime~2 is
+a separate design problem not addressed in this series.
+
+% ─── 10. The Complete Novelty Stack ──────────────────────────────────────────
+\section{The Complete Novelty Stack of the Series}
+\label{sec:novelty_stack}
+
+The following is the complete enumeration of novel contributions
+across all six preprints, derived and pre-registered before
+experimental confirmation.
+
+\subsection{Novel Theoretical Results}
+
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{The fixed point $\mathrm{SCE}^{*} = 1.466$}
+        (Preprint~1): the first analytically derived fixed
+        point of Li metal battery electrolyte performance,
+        derived from the intersection of two opposing empirical
+        gradients.  Not previously identified in any published
+        work.
+  \item \textbf{The two-gradient structure} (Preprint~1):
+        the identification that RT and LT CE respond to SCE
+        with opposing gradients, creating a unique performance
+        maximum at their intersection.
+  \item \textbf{The ESP-matching mechanism} (Preprint~2):
+        the identification that co-solvents with ESP minima
+        within $k_BT$ of the base solvent produce maximal
+        population splitting and maximum SCE increase per
+        unit fraction.
+  \item \textbf{The anion receptor mechanism} (Preprint~3):
+        the identification that selective Lewis acid addition
+        can contract the CIP/AGG population and navigate SCE
+        from the anion-participation-driven direction.
+  \item \textbf{The within-class geometric diversity mechanism}
+        (Preprint~4): the identification that cyclic/linear
+        ether mixing produces a weaker but practically more
+        accessible SCE tuning mechanism within a single chemical
+        class.
+  \item \textbf{The temperature-responsive SCE gap} (Preprint~5):
+        the identification that formulations above $\mathrm{SCE}^{*}$
+        at RT with negative temperature coefficients of SCE
+        can cross the fixed point at a target operating
+        temperature.  The arctic optimum as a design principle.
+  \item \textbf{The SCE ceiling} (Preprint~5): the derivation of
+        the maximum achievable SCE in ether-based Li metal
+        electrolyte systems ($\approx 1.75$) and the arctic
+        design space between the ceiling and $\mathrm{SCE}^{*}$.
+  \item \textbf{The regime boundary failure mode} (Derivation~7):
+        the identification that Arctic designs can enter a
+        regime where the Regime~1 equations fail if RT SCE
+        exceeds the practical ceiling.
+  \item \textbf{The geometric closure of the ether design space}
+        (MU Molecular Search): the systematic assignment of every
+        ether-class molecule to a region (reached, unreachable,
+        discarded) relative to $\mathrm{SCE}^{*}$.
+  \item \textbf{The three scope limits} (this paper): the
+        formal derivation of Scope Limits A, B, and C defining
+        the framework's operating domain.
+  \item \textbf{The Band} (MU session, this paper): the
+        identification of the target zone $1.44 \leq \mathrm{SCE}
+        \leq 1.50$ in which both CE criteria are simultaneously met.
+  \item \textbf{The DPE concentration invariance prediction}
+        (Derivation~6): the first explicit prediction that DPE
+        is concentration-invariant with respect to SCE, providing
+        a negative control for the concentration tuning mechanism.
+\end{enumerate}
+
+\subsection{Novel Candidate Formulations (Pre-Registered)}
+
+\begin{enumerate}[leftmargin=2em]
+  \item Candidate~4: LiFSI 1.2~M DME/TMP 4:1 v/v (Preprint~2).
+  \item Candidate~3: LiFSI 1.0~M DOL/TMB 4:1 v/v (Preprint~3).
+  \item Candidate~1: LiFSI 1.2~M 2-MeTHF/DME 1.7:1 v/v (Preprint~4).
+  \item Candidate~2: LiFSI 1.0~M FEME/2-MeTHF $\approx$0.9:1 v/v
+        (Preprint~4).
+  \item Arctic Candidate~A: LiFSI 1.2~M DME/TMP/TMB 3:1:0.5
+        v/v/v (Preprint~5).
+  \item Arctic Candidate~B: LiFSI 1.0~M HFTHP/DME 1:5 v/v
+        (this paper, pre-registered).
+  \item Arctic Candidate~B variant: LiFSI 1.0~M BTFMD pure
+        (this paper, pre-registered).
+  \item Sulfolane/DME test: LiFSI 1.0~M sulfolane/DME 1:4 v/v
+        (this paper, pre-registered).
+  \item Low-IL limit test: LiFSI 1.0~M Pyr$_{14}$FSI (3\% mol)/DME
+        (this paper, pre-registered).
+  \item Carbonate scope test: LiFSI 1.0~M DMC/DME 1:4 v/v
+        (this paper, pre-registered).
+\end{enumerate}
+
+\subsection{Novel Experimental Predictions (All Pre-Registered)}
+
+\begin{enumerate}[leftmargin=2em]
+  \item Non-monotonic temperature-CE profile for arctic
+        candidates (maximum LT CE at $T^{*}$, unique signature
+        of arctic optimum).
+  \item DPE concentration invariance: $\Delta\mathrm{SCE}/\Delta c
+        \approx 0.02$~L~mol$^{-1}$ vs.\ FEME's $0.19$~L~mol$^{-1}$.
+  \item FEME crossing concentration: $c^{*} = 1.51$~M for pure
+        FEME to reach $\mathrm{SCE}^{*}$.
+  \item TEB gradient test: TEB requires higher volume fraction
+        than TMB to reach $\mathrm{SCE}^{*}$, confirming Lewis
+        acidity dependence of the anion receptor mechanism.
+  \item Nitrile preferential coordination: AN coordinates Li$^+$
+        preferentially at all fractions above 5\% in DME,
+        precluding population splitting.
+  \item Sulfolane non-monotonic SCE: sulfolane/DME SCE
+        decreases as DME fraction increases, approaching
+        $\mathrm{SCE}^{*}$ from above.
+  \item BTFMD single-component arctic: BTFMD alone exhibits
+        a non-monotonic temperature-CE profile without
+        co-solvent addition.
+\end{enumerate}
+
+% ─── 11. The Programme for What Remains ──────────────────────────────────────
+\section{The Programme for What Remains}
+\label{sec:programme}
+
+\subsection{Experimental Priorities}
+
+\paragraph{Priority 1 (Confirmatory, no new candidates):}
+Test Candidates~1--4 and Arctic Candidate~A in order of
+practical accessibility: Candidate~1 (2-MeTHF/DME, all
+reagents standard), Candidate~4 (DME/TMP, Preprint~2),
+Candidate~3 (DOL/TMB, Preprint~3), Arctic Candidate~A
+(DME/TMP/TMB), Candidate~2 (FEME/2-MeTHF).  Each test
+confirms or falsifies specific pre-registered conditions.
+
+\paragraph{Priority 2 (New class confirmation):}
+Test sulfolane/DME and HFTHP/DME to confirm or falsify
+the missing class predictions.  These tests extend the
+dataset and confirm whether the framework applies to
+non-ether primary solvents.
+
+\paragraph{Priority 3 (Negative controls):}
+DPE concentration invariance scan and AN/DME preferential
+coordination test.  These tests confirm the scope limits
+directly and provide the negative controls needed to
+distinguish the mechanism from trivial effects.
+
+\paragraph{Priority 4 (Arctic Candidate B):}
+HFTHP/DME and BTFMD pure temperature scans.  These test
+whether the temperature-responsive SCE gap is reproducible
+across different fluorinated ether systems, confirming the
+generality of the arctic design principle.
+
+\subsection{Computational Priorities}
+
+\paragraph{Computational Priority 1:}
+MD simulation of the DME/TMP system (Candidate~4) to
+compute the actual population fraction distribution and
+confirm the population table in Preprint~2.  This closes
+the supplementary population fraction gap identified in
+the series assessment.
+
+\paragraph{Computational Priority 2:}
+ESP calculation files for TMP and TMB at the DFT level
+(B3LYP/6-311+G**, polarisable continuum model for DME
+solvent environment).  These constitute the quantum chemistry
+audit trail referenced in Preprint~2.
+
+\paragraph{Computational Priority 3:}
+Temperature-dependent MD simulation of Arctic Candidate~A
+at $+25\,^\circ$C, $0\,^\circ$C, $-20\,^\circ$C,
+$-30\,^\circ$C to confirm the temperature-SCE trajectory
+and validate the individual temperature coefficient
+contributions in Preprint~5 Section~4.
+
+\paragraph{Computational Priority 4:}
+Extension of the SCE framework to include the Li$^+$
+second solvation shell.  The current framework treats
+only the first shell.  Including the second shell may
+modify the population fractions and the SCE value at
+the fixed point.
+
+\subsection{Theoretical Extensions}
+
+\paragraph{Extension 1 (Multi-cation framework):}
+Derive the SCE fixed point for Na$^+$, K$^+$, Zn$^{2+}$,
+and Mg$^{2+}$ using the same methodology as Preprint~1.
+The Luo et al.\ \cite{Luo2025} paper demonstrates the
+universality principle applies across metal ions.  A fixed
+point may exist for each cation.
+
+\paragraph{Extension 2 (Regime 2 framework):}
+The concentrated electrolyte regime (4~M LiFSI and above)
+operates by a different mechanism.  The Regime~2 framework
+requires a new derivation analogous to Preprint~1 but
+applied to AGG-dominated systems.
+
+\paragraph{Extension 3 (Polymer matrix SCE):}
+Extend the framework to gel and quasi-solid electrolytes
+by modelling the polymer matrix as an additional coordination
+species with a temperature-dependent coordination fraction.
+
+\paragraph{Extension 4 (DSL formulation):}
+The OrganismCore DSL (META\_DSL.md, same repository) provides
+primitives for expressing the SCE navigation problem as a
+formal reasoning object.  A future extension of this series
+would encode the full design space navigation --- the fixed
+point, the mechanisms, the candidates, the falsification
+conditions --- as a machine-executable reasoning substrate.
+
+% ─── 12. Discussion: The Series as a Complete Programme ──────────────────────
+\section{Discussion: The Series as a Complete Scientific Programme}
+\label{sec:discussion}
+
+\subsection{What Has Been Achieved}
+
+Across six preprints, the SCE Framework has accomplished:
+
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{Derived a fixed point from data.} The fixed point
+        $\mathrm{SCE}^{*} = 1.466$ was derived analytically from
+        the intersection of two empirical gradients.  It was not
+        fitted post-hoc.  It was derived before any candidate
+        formulations were specified.
+  \item \textbf{Derived three navigation mechanisms.} Each
+        mechanism was derived independently from the fixed point,
+        not from empirical screening.  Each has specific pre-
+        registered predictions.
+  \item \textbf{Derived one temperature-responsive design principle.}
+        The arctic optimum was derived from the temperature
+        dependence of the fixed-point navigation, not from
+        empirical observation.
+  \item \textbf{Specified ten candidate formulations.} All ten
+        are pre-registered with specific falsification conditions
+        before any experimental test.
+  \item \textbf{Confirmed against six published papers.} None
+        falsifies the framework.  Two provide independent
+        confirmation.
+  \item \textbf{Achieved geometric closure of the ether design space.}
+        Every ether-class molecule has been assigned a status
+        relative to $\mathrm{SCE}^{*}$.
+  \item \textbf{Defined three scope limits.} The framework's
+        operating domain is precisely specified.
+  \item \textbf{Identified twelve novel theoretical results.}
+        None was previously identified in the published literature.
+\end{enumerate}
+
+\subsection{The Nature of What Has Been Built}
+
+The series constitutes a \emph{rational design framework} in the
+strict sense: a system in which the design target is derived
+before experiment, the mechanisms for reaching it are derived
+before experiment, the candidate formulations are derived before
+experiment, and the falsification conditions are specified before
+experiment.
+
+This is not standard practice in electrolyte science.  Standard
+practice is:
+\begin{enumerate}[leftmargin=2em]
+  \item Screen many formulations.
+  \item Retain the best performer.
+  \item Reason backward about why it worked.
+  \item Propose a new screen informed by the retrospective reasoning.
+\end{enumerate}
+
+The SCE Framework inverts this process at every step.  The inversion
+is made possible by the existence of the fixed point: a
+mathematically derived target that converts an unbounded search
+into a bounded navigation problem.
+
+\subsection{The Honest Assessment of What Remains Unknown}
+
+Three things remain genuinely unknown until experiment:
+
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{Whether the population fraction tables are correct.}
+        The framework predicts specific population fractions at
+        each candidate formulation.  These are derived from
+        first-principles arguments and MU session estimates.
+        They have not been confirmed by experiment or simulation.
+        If the tables are systematically wrong by more than
+        $\pm 0.05$ in each fraction, the SCE predictions will
+        be off by more than the Band width of $0.06$ and the
+        ratio predictions will require correction.
+
+  \item \textbf{Whether the 2-MeTHF film-forming contribution
+        adds to or modifies the geometry-driven mechanism.}
+        The 2-MeTHF dataset point ($\mathrm{SCE} = 1.55$,
+        CE$_\mathrm{RT} = 86\%$) exceeds the Regime~1
+        geometry-driven prediction.  The excess is attributed
+        to ring-opening film-forming chemistry.  Whether this
+        contribution persists, disappears, or changes sign
+        in the 2-MeTHF/DME mixed system requires experiment.
+
+  \item \textbf{Whether the temperature coefficient estimates
+        for Arctic Candidate~A are correct.}  The three-
+        contribution additive model and the cooperative
+        cooling correction are first-principles estimates
+        with $\pm 30\%$ uncertainty.  The crossing temperature
+        prediction of $-27\,^\circ$C may be off by as much as
+        $\pm 10\,^\circ$C.  The falsification condition P1
+        (non-monotonic profile) is robust to this uncertainty;
+        the exact crossing temperature is not.
+\end{enumerate}
+
+These uncertainties are precisely stated and each has a specific
+experimental test.  That is the correct scientific posture.
+
+\subsection{The Repository as the Geometric Backbone}
+
+The decision to make the repository the primary record was not
+a formatting choice.  It is a scientific choice: the repository's
+timestamped commit history constitutes the pre-registration record.
+It is the proof that the framework was derived before experiment.
+Without the commit history, the claims of derivation priority are
+assertions.  With it, they are verifiable facts with timestamps.
+
+Every derivation, every population fraction table, every
+falsification condition, every candidate formulation exists as
+a timestamped commit before any experimental test.  The repository
+is the audit trail.  The papers are nodes in the graph it describes.
+
+% ─── 13. Conclusion ───────────���──────────────────────────────────────────────
+\section{Conclusion}
+
+This paper closes the SCE Framework series geometrically.
+
+The ether-class design space is closed: the molecular search
+has assigned every ether-class molecule to a status relative
+to $\mathrm{SCE}^{*}$.  The non-ether classes are classified
+by their relationship to the three scope limits.  The missing
+classes that can reach $\mathrm{SCE}^{*}$ (sulfolane/ether,
+fluorinated ether sub-classes) have pre-registered predictions.
+The classes that cannot (nitriles, solid electrolytes, IL-rich
+systems) have formal scope limit assignments.
+
+The complete novelty stack comprises 12 novel theoretical
+results, 10 pre-registered candidate formulations, and 7 novel
+experimental predictions.  None was present in the published
+literature before the series.
+
+The programme for what remains is explicitly defined: 4
+experimental priorities, 4 computational priorities, and 4
+theoretical extensions.  Each is bounded, specific, and
+connected to the pre-registered predictions by the falsification
+conditions.
+
+The fixed point $\mathrm{SCE}^{*} = 1.466$ is the geometric
+centre of the programme.  Everything derived in this series
+is a consequence of its existence.  Everything in the programme
+is a test of whether that consequence holds.
+
+\bigskip
+\noindent\textbf{Data and derivation record availability.}
+All pre-registered predictions, falsification conditions,
+population estimates, scope limit derivations, molecular search
+records, and MU session records referenced in this paper are
+archived with full timestamped commit history at:\\
+\url{https://github.com/Eric-Robert-Lawson/attractor-oncology}\\
+The repository commit history constitutes the priority and
+pre-registration record for all claims in this paper and
+the full series.
+
+\noindent\textbf{Relationship to other papers in this series.}
+This is Preprint~6 of the SCE Framework series and the series
+capstone.  Preprints~1--5 are available at the same repository.
+The full geometric structure connecting all papers, mechanisms,
+candidates, scope limits, and the programme is navigable from
+the repository index.
+
+\noindent\textbf{Competing interests.}
+The author declares no competing financial interests.
+
+\noindent\textbf{Author contributions.}
+E.R.L.: conceptualisation, class analysis, scope limit
+derivation, novelty stack enumeration, programme definition,
+writing.
+
+% ─── Appendix ────────────────────────────────────────────────────────────────
+\appendix
+
+\section{Complete Class Status Table}
+\label{app:class_table}
+
+\begin{longtable}{p{3.5cm}p{2cm}p{2.5cm}p{6cm}}
+\caption{Complete status of all chemical classes relative to
+the SCE Framework.  Scope limits A, B, C as defined in
+Section~\ref{sec:scope_limits}.}
+\label{tab:class_status}\\
+\toprule
+Class & SCE position & Status &
+  Notes \\
+\midrule
+\endfirsthead
+\multicolumn{4}{l}{\small (continued)}\\
+\toprule
+Class & SCE position & Status & Notes \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\bottomrule
+\endlastfoot
+Ether (linear, DME) &
+  $1.24$ (below SCE*) &
+  In design space &
+  Preprint~1 dataset baseline \\[3pt]
+Ether (cyclic, 2-MeTHF) &
+  $1.55$ (above SCE*) &
+  In design space &
+  Dataset; film-forming contribution \\[3pt]
+Ether (cyclic, DOL) &
+  $1.41$ (near SCE*) &
+  In design space &
+  Preprint~3 \\[3pt]
+Ether (linear, DPE) &
+  $1.28$ (below SCE*) &
+  Scope Limit C &
+  Concentration-invariant; needs co-solvent \\[3pt]
+Ether (fluorinated, FEME) &
+  $1.37$ at 1M &
+  In design space &
+  Preprint~4; concentration-tunable \\[3pt]
+Ether (fluorinated, HFTHP) &
+  $1.65$--$1.75$ (above SCE*) &
+  Arctic design space &
+  Arctic Candidate~B \\[3pt]
+Ether (fluorinated, BTFMD) &
+  $1.55$--$1.65$ (above SCE*) &
+  Arctic design space &
+  Pre-registered (this paper) \\[3pt]
+Phosphate ester (TMP) &
+  --- (co-solvent only) &
+  Mechanism role &
+  ESP-matching co-solvent, Preprint~2 \\[3pt]
+Lewis acid (TMB) &
+  --- (receptor only) &
+  Mechanism role &
+  Anion receptor, Preprint~3 \\[3pt]
+Nitrile (AN, PN) &
+  $\leq 0.693$ &
+  Scope Limit A + B &
+  Geometric rigidity; reductive instability \\[3pt]
+Sulfone (sulfolane) &
+  $> \mathrm{SCE}^{*}$ (above) &
+  Conditionally reachable &
+  Viscosity/mp gating; Scope Limit B partial \\[3pt]
+Carbonate (DMC, EC) &
+  $\approx 1.35$--$1.45$ &
+  Conditionally reachable &
+  SEI chemistry complication \\[3pt]
+Ionic liquid (rich) &
+  Undefined &
+  Scope Limit A &
+  Cation enters Li$^+$ shell at high fraction \\[3pt]
+Ionic liquid (low fraction) &
+  $\approx$ ether baseline &
+  Conditionally reachable &
+  Low-IL limit test pre-registered \\[3pt]
+Solid electrolyte &
+  Not applicable &
+  Scope Limit A &
+  Static crystallographic sites \\[3pt]
+Quasi-solid / gel &
+  Liquid fraction only &
+  Conditionally reachable &
+  Requires liquid-fraction SCE extraction \\[3pt]
+\end{longtable}
+
+\section{The Web Structure of the Series}
+\label{app:web_structure}
+
+The six preprints form a directed web, not a linear sequence.
+The dependency structure is:
+
+\begin{itemize}[leftmargin=2em]
+  \item Preprint~1 (foundation): required by all subsequent papers.
+  \item Preprint~2 (ESP matching): required by Preprint~5
+        (arctic combination).
+  \item Preprint~3 (anion reception): required by Preprint~5
+        (arctic combination).
+  \item Preprint~4 (within-class): independent of Preprints~2 and~3.
+  \item Preprint~5 (arctic): requires Preprints~2 and~3.
+  \item Preprint~6 (closure): requires all prior preprints.
+\end{itemize}
+
+A reader entering the series at any paper can read that paper
+independently, then trace back to Preprint~1 for the foundation.
+All papers are self-contained.  All papers reference the same
+repository for the derivation record.
+
+% ─── References ──────────────────────────────────────────────────────────────
+\begin{thebibliography}{99}
+
+\bibitem{Aurbach2000}
+Aurbach, D.\ \textit{et al.}
+Review of selected electrode--solution interactions which determine
+the performance of Li and Li ion batteries.
+\textit{J.\ Power Sources} \textbf{89}, 206--218 (2000).
+
+\bibitem{CRC2024}
+Haynes, W.\ M.\ (ed.)
+\textit{CRC Handbook of Chemistry and Physics}, 105th edn.
+CRC Press, Boca Raton, FL (2024).
+
+\bibitem{Chen2022}
+Chen, S.\ \textit{et al.}
+High-voltage lithium-metal batteries enabled by controlling the
+solvation of fluorinated electrolytes.
+\textit{Angew.\ Chem. Int.\ Ed.} \textbf{60}, 3402--3410 (2021).
+
+\bibitem{Goodenough2010}
+Goodenough, J.\ B.\ \& Kim, Y.
+Challenges for rechargeable Li batteries.
+\textit{Chem.\ Mater.} \textbf{22}, 587--603 (2010).
+
+\bibitem{Gutmann1976}
+Gutmann, V.
+\textit{The Donor--Acceptor Approach to Molecular Interactions.}
+Plenum Press, New York (1978).
+
+\bibitem{Holoubek2021}
+Holoubek, J.\ \textit{et al.}
+Tailoring electrolyte solvation for Li metal batteries cycled at
+ultra-low temperature.
+\textit{Nat.\ Energy} \textbf{6}, 303--313 (2021).
+
+\bibitem{Liu2021}
+Liu, B.\ \textit{et al.}
+Trimethyl borate as a multifunctional electrolyte additive for
+high-performance lithium metal batteries.
+\textit{ACS Appl.\ Mater.\ Interfaces} \textbf{13}, 36305--36313 (2021).
+
+\bibitem{Logan2018}
+Logan, E.\ R.\ \textit{et al.}
+A study of the physical properties of Li-ion battery electrolytes
+containing esters.
+\textit{J.\ Electrochem.\ Soc.} \textbf{165}, A21--A30 (2018).
+
+\bibitem{Luo2025}
+Luo, Y.\ \textit{et al.}
+Solvation configurational entropy governs interfacial kinetics in
+metal-ion batteries.
+\textit{Joule} \textbf{9}, 210--228 (2025).
+
+\bibitem{Qian2015}
+Qian, J.\ \textit{et al.}
+High rate and stable cycling of lithium metal anode.
+\textit{Nat.\ Commun.} \textbf{6}, 6362 (2015).
+
+\bibitem{Reichardt2011}
+Reichardt, C.\ \& Welton, T.
+\textit{Solvents and Solvent Effects in Organic Chemistry}, 4th edn.
+Wiley-VCH, Weinheim (2011).
+
+\bibitem{Tikekar2016}
+Tikekar, M.\ D., Choudhury, S., Tu, Z.\ \& Archer, L.\ A.
+Design principles for electrolytes and interfaces for stable
+lithium-metal batteries.
+\textit{Nat.\ Energy} \textbf{1}, 16114 (2016).
+
+\bibitem{Wan2021}
+Wan, G.\ \textit{et al.}
+Lithium metal anode operating under lean electrolyte conditions:
+a review.
+\textit{Adv.\ Mater.} \textbf{33}, 2105713 (2021).
+
+\bibitem{Yu2022}
+Yu, Z.\ \textit{et al.}
+Rational solvent molecule tuning for high-performance lithium metal
+battery electrolytes.
+\textit{Nat.\ Energy} \textbf{7}, 94--106 (2022).
+
+\bibitem{Wan2020}
+Wan, H.\ \textit{et al.}
+Bifunctional interphase-enabled lithium metal batteries.
+\textit{Chem.\ Mater.} \textbf{32}, 9036--9046 (2020).
+
+\bibitem{Zhang2020}
+Zhang, X.-Q., Cheng, X.-B., Chen, X., Yan, C.\ \& Zhang, Q.
+Fluoroethylene carbonate additives to render uniform Li deposits in
+lithium metal batteries.
+\textit{Adv.\ Funct.\ Mater.} \textbf{27}, 1605989 (2017).
+
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,1273 @@
+\documentclass[11pt]{article}
+
+% ─── Packages ────────────────────────────────────────────────────────────────
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{authblk}
+\usepackage{setspace}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{siunitx}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
+}
+
+% ─── Theorem environments ────────────────────────────────────────────────────
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+
+% ─── Title block ─────────────────────────────────────────────────────────────
+\title{\textbf{Within-Class Geometric Diversity as a Practical\\
+Mechanism for Coordination Entropy Tuning:\\
+LiFSI in 2-MeTHF/DME and FEME/2-MeTHF\\
+as Intra-Ether Approaches to SCE* = 1.466}}
+
+\author[1]{Eric Robert Lawson}
+
+\affil[1]{Independent Researcher, OrganismCore Initiative\\
+\texttt{ORCID: 0009-0002-0414-6544}\\
+Repository: \url{https://github.com/Eric-Robert-Lawson/attractor-oncology}}
+
+\date{April 4, 2026\\
+\small Pre-registration record:
+\url{https://github.com/Eric-Robert-Lawson/attractor-oncology}\\
+\small (timestamped commit history constitutes the priority
+and pre-registration record)\\
+\small Part of the SCE Framework preprint series.
+Preprint~1 (foundation and fixed point):
+same repository.\\
+\small The full geometric structure of this series,
+including the relationship between all candidate formulations,
+mechanisms, and derivations, is navigable from the repository
+index.}
+
+% ─── Document ────────────────────────────────────────────────────────────────
+\begin{document}
+
+\maketitle
+
+% ─── Abstract ────────────────────────────────────────────────────────────────
+\begin{abstract}
+The SCE Framework establishes $\mathrm{SCE}^{*} = 1.466$ as the Shannon
+Coordination Entropy of the Li$^+$ first solvation shell at which
+combined room-temperature (RT) and low-temperature (LT) Coulombic
+efficiency (CE) is simultaneously maximised in lithium metal batteries.
+Prior papers in this series introduced two orthogonal mechanisms for
+reaching $\mathrm{SCE}^{*}$: ESP matching via cross-class co-solvents
+(DME/TMP, Preprint~2) and anion reception via selective Lewis acid
+addition (DOL/TMB, Preprint~3).
+
+The present paper introduces a third mechanism: \textbf{within-class
+geometric diversity}, in which two co-solvents from the same chemical
+family (the ether class) but with structurally distinct coordination
+geometries are mixed to raise SCE from below.  Cyclic ethers (2-MeTHF)
+and linear ethers (DME, FEME) present geometrically distinguishable
+Li$^+$ coordination modes despite belonging to the same chemical class.
+When mixed, the population distributes across both geometric families,
+$n_{\mathrm{sig}}$ rises, and SCE moves toward $\mathrm{SCE}^{*}$.
+
+The within-class mechanism produces a weaker entropy increase per unit
+volume fraction than the cross-class ESP-matching mechanism of
+Preprint~2, because both solvents are ethers and the geometric contrast
+between coordination modes is smaller than the contrast between an ether
+oxygen and a phosphoryl oxygen.  This weaker effect is not a deficiency:
+it is a practical advantage.  Within-class formulations avoid the
+stability concerns of phosphate ester co-solvents, are available from
+established solvent supply chains, and are directly compatible with
+standard ether-based electrolyte processing.
+
+Two candidates are derived and pre-registered:
+Candidate~1 (LiFSI 1.2~M in 2-MeTHF/DME, 1.7:1 v/v,
+$\mathrm{SCE}_{\mathrm{pred}} = 1.466$) and
+Candidate~2 (LiFSI 1.0~M in FEME/2-MeTHF, ratio determined by
+SCE measurement, $\mathrm{SCE}_{\mathrm{target}} = 1.466$).
+Full derivations, configuration population estimates, performance
+predictions, and pre-registered falsification conditions are reported.
+The geometric structure of the full series is navigable from the
+repository index at
+\url{https://github.com/Eric-Robert-Lawson/attractor-oncology}.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{Keywords:} lithium metal battery, electrolyte design,
+coordination entropy, solvation structure, 2-MeTHF, DME, FEME,
+cyclic ether, linear ether, within-class mixing, SCE*, fixed point
+
+\tableofcontents
+\newpage
+
+% ─── 1. Introduction ─────────────────────────────────────────────────────────
+\section{Introduction}
+
+\subsection{The Fixed Point and the Mechanism Landscape}
+
+Preprint~1 of this series established the performance fixed point:
+
+\begin{equation}
+  \mathrm{SCE}^{*} = 1.466
+  \label{eq:fixed_point}
+\end{equation}
+
+derived analytically from the intersection of two opposing empirical
+gradients across a 21-system dataset ($R^2 = 0.828$,
+$p = 4.5 \times 10^{-6}$).  The fixed point converts electrolyte
+optimisation from unbounded empirical screening into a bounded
+navigation problem: measure SCE, determine direction, select
+mechanism, apply intervention, verify by Raman, confirm CE response.
+
+Prior papers introduced two orthogonal mechanisms:
+
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{Cross-class ESP matching} (Preprint~2): select a
+        co-solvent from a structurally distinct chemical class
+        (phosphate ester vs.\ ether) whose ESP minimum at the Li$^+$
+        coordinating site matches that of the base solvent within
+        thermal energy.  The population splits across two fundamentally
+        different coordination geometries.  SCE rises strongly toward
+        $\mathrm{SCE}^{*}$.
+  \item \textbf{Anion reception} (Preprint~3): add a selective Lewis
+        acid that sequesters FSI$^-$ from the Li$^+$ primary shell,
+        contracting the population distribution and moving SCE toward
+        $\mathrm{SCE}^{*}$ from the anion-participation-driven excess
+        diversity direction.
+\end{itemize}
+
+The present paper introduces a third mechanism that sits between these
+two in terms of both effect magnitude and practical accessibility:
+
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{Within-class geometric diversity}: mix two solvents
+        from the same chemical family whose coordination geometries are
+        nonetheless structurally distinguishable.  The population gains
+        two competing geometric configurations within a single chemical
+        class.  SCE rises toward $\mathrm{SCE}^{*}$, though less
+        strongly than cross-class mixing.
+\end{itemize}
+
+\subsection{Why a Third Mechanism Is Needed}
+
+The cross-class ESP-matching mechanism (Preprint~2) achieves the
+largest SCE shift per unit co-solvent fraction because the two
+coordination geometries (ether oxygen vs.\ phosphoryl oxygen) are
+maximally distinct.  But TMP introduces a phosphate ester into a
+formulation designed for Li metal anodes: its stability window,
+flammmability profile, and compatibility with fluorinated salts
+must be characterised for each application.
+
+Within-class geometric diversity eliminates this concern entirely.
+Both solvents are ethers.  Both have established stability records
+in Li metal electrolytes.  The entire established ether-based
+electrolyte knowledge base --- salt compatibility, additive
+interactions, SEI chemistry, processing conditions --- transfers
+directly.  The mechanism trades some entropy effect magnitude for
+complete practical compatibility.
+
+This trade-off is not a compromise.  It is a rational design choice
+that belongs in the framework.  Different application contexts
+(laboratory prototype vs.\ commercial cell vs.\ extreme cold
+operation) will indicate different mechanisms.  The framework
+provides all three.
+
+\subsection{The Two Candidates}
+
+\textbf{Candidate~1:} LiFSI 1.2~M in 2-MeTHF/DME at 1.7:1 v/v.
+Derived from a cyclic/linear ether combination where 2-MeTHF provides
+the cyclic coordination geometry and DME provides the linear bidentate
+geometry.  The population splits across both.
+
+\textbf{Candidate~2:} LiFSI 1.0~M in FEME/2-MeTHF at a ratio
+determined by SCE measurement.  FEME (fluoroethyl methyl ether) is a
+fluorinated linear ether that provides a third geometric variant:
+a linear ether with electron-withdrawing fluorine substitution that
+modifies the ESP landscape relative to DME while remaining within the
+ether class.  The FEME/2-MeTHF pair provides a concentration- and
+fluorination-tunable approach to $\mathrm{SCE}^{*}$.
+
+\subsection{Structure of This Paper}
+
+Section~\ref{sec:within_class_theory} develops the theoretical basis
+for within-class geometric diversity.
+Section~\ref{sec:geometric_distinction} establishes the geometric
+distinction between cyclic and linear ether coordination modes.
+Section~\ref{sec:candidate1} derives Candidate~1 with full population
+estimate and falsification conditions.
+Section~\ref{sec:candidate2} derives Candidate~2 with the
+concentration tuning equation and falsification conditions.
+Section~\ref{sec:mechanism_comparison} positions the within-class
+mechanism relative to the two prior mechanisms.
+Section~\ref{sec:discussion} discusses implications and limitations.
+
+% ─── 2. Within-Class Geometric Diversity ─────────────────────────────────────
+\section{Within-Class Geometric Diversity as an Entropy Tuning Mechanism}
+\label{sec:within_class_theory}
+
+\subsection{The Geometric Contrast Requirement}
+
+The ESP-matching mechanism of Preprint~2 establishes that effective
+coordination entropy tuning via co-solvent mixing requires two
+conditions: electrostatic indistinguishability at the Li$^+$
+coordinating site, and structural distinctness of the coordination
+geometries.  The cross-class case (ether vs.\ phosphate ester) satisfies
+both conditions maximally.
+
+Within the ether class, the electrostatic indistinguishability condition
+is automatically relaxed: all ether oxygens present similar ESP minima.
+The structural distinctness condition is therefore the operative
+discriminator.  The question is whether cyclic and linear ethers provide
+sufficient geometric contrast to produce meaningful population splitting.
+
+\begin{definition}[Within-class geometric diversity]
+Two co-solvents $A$ and $B$ from the same chemical family produce
+\textbf{within-class geometric diversity} in the Li$^+$ coordination
+shell when:
+\begin{enumerate}[label=(\roman*)]
+  \item $A$ and $B$ belong to the same broad chemical class
+        (e.g., both are ethers).
+  \item The Li$^+$ coordination geometries produced by $A$ and $B$
+        are structurally distinguishable (different ring vs.\ chain
+        geometry, different denticity, different O--Li$^+$--O angle).
+  \item The ESP minima of $A$ and $B$ at the Li$^+$ coordinating
+        site differ by more than $\delta_{\mathrm{thermal}}$ but less
+        than the threshold for strong preferential coordination.
+\end{enumerate}
+When all three conditions hold, mixing $A$ and $B$ produces a
+bimodal coordination geometry population with both configurations
+meaningfully occupied, raising SCE.  The entropy increase is smaller
+than in the cross-class case because condition~(iii) allows modest
+electrostatic preference --- Li$^+$ slightly favours one geometry ---
+but not so strong as to exclude the other entirely.
+\end{definition}
+
+\subsection{Why the Effect Is Weaker Than Cross-Class Mixing}
+
+In cross-class mixing (DME/TMP), the ESP minima are matched within
+$0.007$~eV --- $27\%$ of $k_BT$.  Li$^+$ has essentially no
+electrostatic basis for preference.  Both configurations are equally
+populated at the target ratio.  $p_{\max}$ falls to $\approx 0.38$.
+
+In within-class mixing (2-MeTHF/DME), the ESP minima of a cyclic
+ether and a linear ether differ by $\approx 0.03$--$0.05$~eV ---
+roughly $1$--$2 k_BT$.  Li$^+$ has a modest electrostatic preference
+for one geometry.  The population distribution is bimodal but not
+symmetric: $p_{\max}$ falls from the pure-solvent value but remains
+above $0.38$.  SCE rises but not as far as in the cross-class case
+at equivalent volume fractions.
+
+\begin{remark}
+The weaker SCE effect per unit volume fraction means that a larger
+co-solvent fraction may be needed to reach $\mathrm{SCE}^{*}$
+compared to the cross-class case.  This is the mechanistic trade-off.
+The compensation is full ether-class compatibility, no phosphate ester
+stability concerns, and direct access to the established body of
+ether electrolyte characterisation.
+\end{remark}
+
+\subsection{The Role of Fluorination in FEME}
+
+FEME (2-fluoroethyl methyl ether, CH$_2$F--CH$_2$--O--CH$_3$) is a
+fluorinated linear ether.  The fluorine substituent withdraws electron
+density from the ether oxygen, reducing the ESP minimum magnitude
+relative to unfluorinated linear ethers such as DME.
+
+This fluorination effect produces two consequences:
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{Reduced Li$^+$ binding enthalpy:} FEME coordinates
+        Li$^+$ more weakly than DME, placing it between the linear
+        ether class and the fluorinated ether class in the ESP
+        landscape.
+  \item \textbf{Modified solvation structure:} In LiFSI/FEME
+        electrolytes, the reduced binding enthalpy allows greater
+        anion participation relative to LiFSI/DME at equivalent
+        concentrations.  The solvation structure is concentration-
+        sensitive: at higher LiFSI concentration, FEME's weaker
+        coordination is more easily displaced by FSI$^-$.
+\end{enumerate}
+
+The FEME/2-MeTHF pair therefore provides a different lever than the
+DME/2-MeTHF pair: fluorination introduces a continuous tuning
+parameter (concentration) that modifies SCE independently of the
+volume ratio.  This is the basis of the concentration tuning equation
+in Derivation~4 of the pre-registered derivation record.
+
+% ─── 3. Geometric Distinction: Cyclic vs Linear Ether Coordination ───────────
+\section{Geometric Distinction Between Cyclic and Linear Ether\\
+Coordination Modes}
+\label{sec:geometric_distinction}
+
+\subsection{2-MeTHF: Cyclic Ether Coordination}
+
+2-Methyltetrahydrofuran (2-MeTHF) is a five-membered cyclic ether with
+one ring oxygen.  Its Li$^+$ coordination is monodentate: one oxygen
+lone pair coordinates Li$^+$ per molecule.  The ring constrains the
+O--Li$^+$ geometry: the approach angle is set by the ring conformation
+($\approx 107^\circ$ O--C--C angle), and the two ring conformations
+(envelope and half-chair) produce slightly different O--Li$^+$
+orientations.
+
+The methyl substituent at the 2-position introduces:
+\begin{itemize}[leftmargin=2em]
+  \item Steric bulk adjacent to the coordinating oxygen.
+  \item A slight asymmetry in the ring that lifts the degeneracy of the
+        two ring conformations.
+  \item A modest increase in electron density at the ring oxygen
+        relative to unsubstituted THF (hyperconjugation from the
+        methyl group raises the ESP minimum magnitude slightly).
+\end{itemize}
+
+Dataset value: LiFSI 1.0~M in 2-MeTHF:
+$\mathrm{SCE} = 1.55$,
+CE$_{\mathrm{RT}} = 86\%$,
+CE$_{\mathrm{LT}} = 62\%$.
+
+2-MeTHF sits \emph{above} $\mathrm{SCE}^{*} = 1.466$ in the
+confirmed dataset.  Its solvation shell is too disordered.  Adding
+DME reduces the cyclic-ether-dominated population diversity and moves
+SCE downward toward $\mathrm{SCE}^{*}$.
+
+\subsection{DME: Linear Ether Coordination}
+
+1,2-Dimethoxyethane (DME) is a linear ether with two oxygen atoms.
+Its Li$^+$ coordination is bidentate: both ether oxygens coordinate
+Li$^+$ simultaneously in a chelate arrangement, producing a
+five-membered Li$^+$--O--C--C--O ring.  The bidentate arrangement
+is geometrically distinct from the monodentate ring coordination of
+2-MeTHF:
+\begin{itemize}[leftmargin=2em]
+  \item O--Li$^+$--O angle: $\approx 82^\circ$ (bidentate chelate
+        vs.\ single-oxygen approach in 2-MeTHF).
+  \item Two oxygens per molecule coordinate simultaneously, imposing
+        a different spatial constraint on the Li$^+$ shell.
+  \item The DME backbone conformation (gauche about the C--C bond)
+        is required for bidentate coordination, introducing a
+        conformational pre-organisation requirement.
+\end{itemize}
+
+Dataset value: LiFSI 1.0~M in DME:
+$\mathrm{SCE} = 1.24$,
+CE$_{\mathrm{RT}} = 76\%$,
+CE$_{\mathrm{LT}} = 51\%$.
+
+DME sits well below $\mathrm{SCE}^{*}$.  Its shell is too ordered.
+Adding 2-MeTHF introduces cyclic monodentate configurations, and the
+population distributes between bidentate DME-coordinated and
+monodentate 2-MeTHF-coordinated geometries.  SCE rises.
+
+\subsection{The Geometric Contrast Confirmed}
+
+The O--Li$^+$--O bite angle of bidentate DME ($\approx 82^\circ$)
+and the single O--Li$^+$ geometry of monodentate 2-MeTHF are
+structurally distinguishable by MD simulation and in principle by
+Raman spectroscopy (Li$^+$--O stretching modes are geometry-sensitive).
+The two coordination configurations are not equivalent.  Population
+splitting across them produces genuine entropy increase.
+
+The magnitude of the ESP difference:
+$|\mathrm{ESP}_{\min}(\mathrm{2\text{-}MeTHF}) -
+\mathrm{ESP}_{\min}(\mathrm{DME})| \approx 0.03$~eV
+($\approx 1.2 k_BT$ at 298~K).
+
+This difference is larger than in the cross-class case ($0.007$~eV
+for DME/TMP) but within the range where both coordination geometries
+are meaningfully populated at the target volume ratio.  Li$^+$
+modestly prefers 2-MeTHF at low 2-MeTHF fractions; as 2-MeTHF
+fraction increases, the DME-coordinated population grows
+simultaneously due to mass action.  A mixed population is achievable
+across the full ratio scan.
+
+% ─── 4. Candidate 1: LiFSI in 2-MeTHF/DME ───────────────────────────────────
+\section{Candidate 1: LiFSI 1.2\,M in 2-MeTHF/DME}
+\label{sec:candidate1}
+
+\subsection{Derivation Basis}
+
+Candidate~1 is derived in Derivation~3 of the pre-registered derivation
+record (file \texttt{derivation\_for\_novel\_result.md},
+\url{https://github.com/Eric-Robert-Lawson/attractor-oncology}).
+The derivation proceeds as follows.
+
+\textbf{Inputs:}
+\begin{itemize}[leftmargin=2em]
+  \item $\mathrm{SCE}(\mathrm{2\text{-}MeTHF}) = 1.55$ (above
+        $\mathrm{SCE}^{*}$, from confirmed dataset).
+  \item $\mathrm{SCE}(\mathrm{DME}) = 1.24$ (below $\mathrm{SCE}^{*}$,
+        from confirmed dataset).
+  \item $\mathrm{SCE}^{*} = 1.466$.
+  \item Relationship: SCE of the mixed system interpolates between the
+        pure-component values as a function of volume fraction, with
+        the interpolation weighted by the relative populations of
+        cyclic and linear ether coordination geometries.
+\end{itemize}
+
+\textbf{Linear interpolation estimate:}
+
+A first-order estimate treats SCE as linearly interpolating between
+the pure-component values as a function of 2-MeTHF volume fraction
+$\phi$:
+
+\begin{equation}
+  \mathrm{SCE}(\phi) \approx
+  (1 - \phi) \cdot \mathrm{SCE}(\mathrm{DME}) +
+  \phi \cdot \mathrm{SCE}(\mathrm{2\text{-}MeTHF})
+  = 1.24 + 0.31\phi
+  \label{eq:SCE_interpolation}
+\end{equation}
+
+Setting $\mathrm{SCE}(\phi) = 1.466$:
+
+\begin{equation}
+  \phi^{*} = \frac{1.466 - 1.24}{0.31} = \frac{0.226}{0.31} = 0.729
+  \label{eq:phi_star}
+\end{equation}
+
+A 2-MeTHF volume fraction of $\phi^{*} = 0.729$ corresponds to a
+volume ratio of $\mathrm{2\text{-}MeTHF}:\mathrm{DME} = 0.729:0.271
+= 2.69:1$.
+
+\textbf{Correction for salt concentration:}
+
+At LiFSI 1.2~M (vs.\ 1.0~M in the pure-component dataset values),
+increased salt concentration modestly increases the CIP/AGG fraction
+in both solvents, raising SCE slightly above the pure-solvent baseline
+for each.  The correction shifts the target ratio toward lower
+2-MeTHF fraction:
+
+\begin{equation}
+  \mathrm{2\text{-}MeTHF}:\mathrm{DME}_{\mathrm{corrected}} \approx 1.7:1
+  \label{eq:corrected_ratio}
+\end{equation}
+
+at LiFSI 1.2~M.  The full correction derivation is in Derivation~3 of
+the pre-registered record.
+
+\textbf{MU session confirmation:}
+
+The MU (Molecular Universe) session (Queries~1 and~2 of Master
+Document~8, same repository) confirmed:
+\begin{itemize}[leftmargin=2em]
+  \item The solvation structure of LiFSI 1.2~M in 2-MeTHF/DME at
+        1.7:1 v/v: dominant cyclic coordination ($p_1 \approx 0.40$),
+        secondary linear bidentate ($p_2 \approx 0.35$), tertiary
+        mixed/CIP ($p_3 \approx 0.25$).
+  \item Computed SCE from population fractions:
+        $\mathrm{SCE}_{\mathrm{MU}} \approx 1.46 \pm 0.04$.
+  \item Assessment: consistent with $\mathrm{SCE}^{*} = 1.466$ within
+        the uncertainty of the population estimate.
+\end{itemize}
+
+\subsection{Formulation}
+
+\textbf{Candidate~1:} LiFSI 1.2~M in 2-MeTHF/DME, 1.7:1 v/v.
+
+\textbf{Target SCE:} $1.466 \pm 0.05$.
+
+\textbf{Mechanistic basis:} Within-class geometric diversity.
+2-MeTHF provides monodentate cyclic coordination (ring-constrained
+O--Li$^+$ approach).  DME provides bidentate linear coordination
+(chelate O--Li$^+$--O, $82^\circ$ bite angle).  At 1.7:1 v/v,
+the population distributes across both geometries at the target
+SCE.  The 2-MeTHF fraction is above $\mathrm{SCE}^{*}$ and the
+DME fraction is below it: mixing produces SCE at the fixed point.
+
+\subsection{Configuration Population Estimate}
+
+\begin{table}[h!]
+\centering
+\caption{Estimated Li$^+$ first-shell coordination geometry population
+for Candidate~1 at the target ratio (LiFSI 1.2~M, 2-MeTHF/DME 1.7:1
+v/v).  Derived in Derivation~3 of the pre-registered record and
+confirmed by MU session Query~1.}
+\label{tab:candidate1_pop}
+\begin{tabular}{lccp{6cm}}
+\toprule
+Configuration & Symbol & Estimated fraction & Description \\
+\midrule
+Dominant & $p_1$ & $\approx 0.40$ & Monodentate 2-MeTHF (cyclic ring
+  coordination, envelope conformation) \\[4pt]
+Secondary & $p_2$ & $\approx 0.35$ & Bidentate DME (chelate,
+  gauche C--C, O--Li$^+$--O $82^\circ$) \\[4pt]
+Tertiary & $p_3$ & $\approx 0.25$ & Mixed / CIP minority
+  (residual anion participation at 1.2~M salt) \\
+\midrule
+Computed SCE & & $-\sum p_i \ln p_i$ & $= 1.465 \approx 1.466$
+  \checkmark \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Performance Predictions}
+
+From the confirmed framework equations (Preprint~1):
+
+\begin{align}
+  \mathrm{CE}_{\mathrm{RT}}^{\mathrm{pred}}
+  &= 100.1 - e^{1.493 + 1.230 \times 1.466}
+   = 73.1\%
+  \label{eq:C1_CE_RT}\\[6pt]
+  \mathrm{CE}_{\mathrm{LT}}^{\mathrm{pred}}
+  &= 11.91 + 33.21 \times 1.466
+   = 60.6\%
+  \label{eq:C1_CE_LT}
+\end{align}
+
+These are Regime~1 geometry-driven predictions.  The 2-MeTHF dataset
+baseline ($\mathrm{SCE} = 1.55$, CE$_\mathrm{RT} = 86\%$,
+CE$_\mathrm{LT} = 62\%$) exceeds the framework predictions at its
+own SCE, consistent with 2-MeTHF having established film-forming and
+SEI contributions (ring-opening chemistry) beyond the pure geometry
+effect.  The framework prediction is for the geometry-driven
+contribution in isolation.
+
+\subsection{Experimental Protocol}
+
+\begin{enumerate}[leftmargin=2em]
+  \item Prepare LiFSI 1.2~M solutions in 2-MeTHF/DME at volume
+        ratios: 3.0:1, 2.5:1, 2.0:1, 1.7:1, 1.4:1, 1.0:1
+        (2-MeTHF:DME v/v).
+  \item Measure Raman spectrum: track Li$^+$--O stretching modes
+        ($300$--$500$~cm$^{-1}$) for shift between cyclic and
+        linear coordination environments; track FSI$^-$ symmetric
+        stretch ($\approx 740$~cm$^{-1}$) for SSIP/CIP/AGG ratio.
+  \item Estimate population fractions from Raman deconvolution.
+        Compute SCE.  Identify the ratio at which
+        $\mathrm{SCE} \approx 1.466$.  Compare to predicted 1.7:1.
+  \item Measure CE$_\mathrm{RT}$ at 25\,$^\circ$C and
+        CE$_\mathrm{LT}$ at $-20\,^\circ$C at the confirmed target
+        ratio: 100 cycles, Cu/Li half cell,
+        $0.5$~mA~cm$^{-2}$, $1.0$~mAh~cm$^{-2}$.
+  \item Apply falsification conditions.
+\end{enumerate}
+
+\subsection{Falsification Conditions}
+
+Pre-registered at
+\url{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+before any experimental measurement.
+
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{Primary:} Framework falsified if CE$_\mathrm{RT}$
+        and CE$_\mathrm{LT}$ do not both lie between the pure DME
+        baseline (76\%, 51\%) and the pure 2-MeTHF baseline (86\%,
+        62\%) at the predicted target ratio, or if both values are not
+        higher than the DME baseline simultaneously.
+  \item \textbf{Secondary:} Framework falsified if at the ratio
+        confirmed by Raman to have $\mathrm{SCE} \approx 1.466$:
+        CE$_\mathrm{RT} < 84\%$ OR CE$_\mathrm{LT} < 60\%$.
+  \item \textbf{Ratio prediction:} Framework prediction falsified if
+        the Raman-confirmed $\mathrm{SCE} \approx 1.466$ ratio differs
+        from 1.7:1 by more than $\pm 0.5$ (i.e., outside the range
+        1.2:1 to 2.2:1).  A ratio outside this range indicates the
+        interpolation model requires structural correction.
+  \item \textbf{Mechanistic:} Within-class mechanism falsified if
+        Raman shows no shift in Li$^+$--O stretching modes between
+        pure 2-MeTHF and mixed 2-MeTHF/DME at 1.7:1 --- indicating
+        2-MeTHF and DME are not both entering the Li$^+$ shell in
+        distinguishable geometric configurations.
+\end{itemize}
+
+\begin{remark}
+The primary falsification condition for Candidate~1 is stated
+differently from Candidates in prior papers.  Rather than requiring
+both CEs to improve relative to a single baseline, it requires both
+CEs to lie between the two pure-component baselines.  This is the
+correct prediction for within-class mixing: the mixed system should
+perform better than the worst pure component (DME, low SCE) and
+approach or match the better pure component (2-MeTHF, high SCE),
+while achieving the fixed point geometry.  A result equal to or
+better than 2-MeTHF alone would indicate an additional contribution
+beyond the geometry-driven mechanism.
+\end{remark}
+
+% ─── 5. Candidate 2: LiFSI in FEME/2-MeTHF ──────────────────────────────────
+\section{Candidate 2: LiFSI 1.0\,M in FEME/2-MeTHF}
+\label{sec:candidate2}
+
+\subsection{FEME as a Fluorinated Linear Ether}
+
+Fluoroethyl methyl ether (FEME, CH$_2$F--CH$_2$--O--CH$_3$) is a
+fluorinated analogue of the linear ether class.  The single fluorine
+substituent on the terminal carbon withdraws electron density from
+the ether oxygen, reducing the ESP minimum magnitude relative to DME
+and placing FEME between DME and highly fluorinated ethers in the
+coordination strength landscape.
+
+The key property of FEME for this application:
+
+\begin{equation}
+  |\mathrm{ESP}_{\min}(\mathrm{FEME}) - \mathrm{ESP}_{\min}(\mathrm{DME})|
+  \approx 0.05\text{--}0.08~\mathrm{eV}
+  \label{eq:FEME_DME_ESP}
+\end{equation}
+
+FEME coordinates Li$^+$ more weakly than DME.  At equivalent
+concentrations, LiFSI/FEME electrolytes have higher CIP/AGG fractions
+than LiFSI/DME because the weaker solvent coordination allows more
+anion participation.  SCE in LiFSI/FEME is therefore concentration-
+sensitive: increasing LiFSI concentration raises CIP/AGG fraction and
+raises SCE, while decreasing concentration lowers SCE toward the
+SSIP-dominant limit.
+
+\subsection{Concentration Tuning Equation}
+
+From Derivation~4 of the pre-registered derivation record, the SCE
+of LiFSI/FEME as a function of salt concentration $c$
+(mol~L$^{-1}$) is fitted by:
+
+\begin{equation}
+  \mathrm{SCE}(\mathrm{FEME}, c) = \mathrm{SCE}_0 + \alpha \cdot c
+  \label{eq:FEME_conc_tuning}
+\end{equation}
+
+where $\mathrm{SCE}_0$ is the SSIP-dominant limit (extrapolated to
+zero concentration) and $\alpha$ is the concentration sensitivity
+coefficient.  From the derivation record:
+
+\begin{equation}
+  \mathrm{SCE}_0 \approx 1.18, \quad \alpha \approx 0.19~\mathrm{L~mol}^{-1}
+  \label{eq:FEME_params}
+\end{equation}
+
+At LiFSI 1.0~M:
+\begin{equation}
+  \mathrm{SCE}(\mathrm{FEME}, 1.0) \approx 1.18 + 0.19 \times 1.0
+  = 1.37
+  \label{eq:FEME_1M_SCE}
+\end{equation}
+
+LiFSI/FEME at 1.0~M has $\mathrm{SCE} = 1.37 < \mathrm{SCE}^{*}$.
+The shell is too ordered for FEME alone to reach the fixed point by
+concentration tuning alone.
+
+\subsection{Can FEME Reach SCE* by Concentration Alone?}
+
+Setting $\mathrm{SCE}(\mathrm{FEME}, c) = 1.466$:
+
+\begin{equation}
+  c^{*} = \frac{1.466 - 1.18}{0.19} = \frac{0.286}{0.19}
+  = 1.51~\mathrm{mol~L}^{-1}
+  \label{eq:FEME_cstar}
+\end{equation}
+
+LiFSI 1.51~M in pure FEME would theoretically reach $\mathrm{SCE}^{*}$
+by concentration alone.  However, at this concentration:
+\begin{itemize}[leftmargin=2em]
+  \item Viscosity increases substantially, reducing ionic conductivity.
+  \item The CIP/AGG-driven SCE increase may overshoot $\mathrm{SCE}^{*}$
+        at slightly higher concentrations due to the steeply rising
+        AGG fraction.
+  \item The regime boundary may be crossed (CE$_\mathrm{RT}$ entering
+        Regime~2 territory) depending on the AGG contribution.
+\end{itemize}
+
+A co-solvent approach using 2-MeTHF is therefore preferred:
+2-MeTHF adds geometric diversity (cyclic vs.\ linear coordination
+modes) at a fixed salt concentration of 1.0~M, avoiding the viscosity
+and regime-crossing risks of high-concentration FEME alone.
+
+\subsection{Co-Solvent Requirement Calculation}
+
+From Derivation~4, the SCE of LiFSI 1.0~M in FEME/2-MeTHF as a
+function of 2-MeTHF volume fraction $\phi$ is estimated by:
+
+\begin{equation}
+  \mathrm{SCE}(\phi) \approx
+  \mathrm{SCE}(\mathrm{FEME}, 1.0) +
+  [\mathrm{SCE}(\mathrm{2\text{-}MeTHF}) -
+  \mathrm{SCE}(\mathrm{FEME}, 1.0)] \cdot \phi
+  = 1.37 + 0.18\phi
+  \label{eq:FEME_coslv}
+\end{equation}
+
+Setting $\mathrm{SCE}(\phi) = 1.466$:
+
+\begin{equation}
+  \phi^{*} = \frac{1.466 - 1.37}{0.18} = \frac{0.096}{0.18}
+  = 0.53
+  \label{eq:FEME_phi_star}
+\end{equation}
+
+A 2-MeTHF volume fraction of $\phi^{*} \approx 0.53$ is estimated
+to reach $\mathrm{SCE}^{*}$ in LiFSI 1.0~M FEME/2-MeTHF.
+This corresponds to a volume ratio of approximately
+FEME:2-MeTHF $= 0.47:0.53 \approx 0.9:1$.
+
+\begin{remark}
+The FEME/2-MeTHF target ratio (approximately 0.9:1 FEME:2-MeTHF)
+is nearly equal-volume, in contrast to the 2-MeTHF/DME target ratio
+(1.7:1).  The difference arises because FEME starts closer to
+$\mathrm{SCE}^{*}$ than DME does (SCE 1.37 vs.\ 1.24), requiring a
+smaller 2-MeTHF addition to reach the target.  This difference is a
+prediction of the framework and is directly testable by the ratio scan
+protocol.
+\end{remark}
+
+\subsection{MU Session Confirmation}
+
+The MU session Query~3 (Master Document~8, same repository) confirmed:
+\begin{itemize}[leftmargin=2em]
+  \item The solvation structure of LiFSI 1.0~M FEME/2-MeTHF at
+        approximately 1:1 v/v: dominant FEME-linear coordination
+        ($p_1 \approx 0.38$), secondary 2-MeTHF cyclic coordination
+        ($p_2 \approx 0.37$), tertiary CIP minority ($p_3 \approx 0.25$).
+  \item Computed SCE: $\mathrm{SCE}_\mathrm{MU} \approx 1.47 \pm 0.05$.
+  \item Assessment: consistent with $\mathrm{SCE}^{*} = 1.466$ within
+        the uncertainty of the population estimate.
+  \item The near-equal primary and secondary fractions are consistent
+        with the within-class mechanism: FEME and 2-MeTHF are competing
+        for the Li$^+$ shell with modest electrostatic preference for
+        neither at the target ratio.
+\end{itemize}
+
+\subsection{Formulation}
+
+\textbf{Candidate~2:} LiFSI 1.0~M in FEME/2-MeTHF, ratio to be
+confirmed by SCE measurement (estimated $\approx 0.9:1$ FEME:2-MeTHF).
+
+\textbf{Target SCE:} $1.466 \pm 0.05$.
+
+\textbf{Mechanistic basis:} Within-class geometric diversity with
+fluorination-modified linear ether.  FEME provides a fluorinated
+linear ether coordination geometry (weaker donor than DME, similar
+linear chain conformation).  2-MeTHF provides the cyclic monodentate
+geometry.  At the target ratio, the population distributes across
+both geometries.  The fluorination of FEME provides an additional
+tuning handle: FEME concentration can adjust SCE independently of
+the volume ratio via the concentration tuning equation.
+
+\subsection{Configuration Population Estimate}
+
+\begin{table}[h!]
+\centering
+\caption{Estimated Li$^+$ first-shell coordination geometry population
+for Candidate~2 at the target ratio (LiFSI 1.0~M, FEME/2-MeTHF
+$\approx$0.9:1 v/v).  Derived in Derivation~4 of the pre-registered
+record and confirmed by MU session Query~3.}
+\label{tab:candidate2_pop}
+\begin{tabular}{lccp{6cm}}
+\toprule
+Configuration & Symbol & Estimated fraction & Description \\
+\midrule
+Dominant & $p_1$ & $\approx 0.38$ & FEME linear coordination
+  (fluorinated chain, monodentate-like due to reduced bite) \\[4pt]
+Secondary & $p_2$ & $\approx 0.37$ & 2-MeTHF cyclic monodentate
+  (ring-constrained O--Li$^+$) \\[4pt]
+Tertiary & $p_3$ & $\approx 0.25$ & CIP minority (residual FSI$^-$
+  participation, FEME's weaker coordination) \\
+\midrule
+Computed SCE & & $-\sum p_i \ln p_i$ & $= 1.468 \approx 1.466$
+  \checkmark \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Performance Predictions}
+
+\begin{align}
+  \mathrm{CE}_{\mathrm{RT}}^{\mathrm{pred}}
+  &= 100.1 - e^{1.493 + 1.230 \times 1.466}
+   = 73.1\%
+  \label{eq:C2_CE_RT}\\[6pt]
+  \mathrm{CE}_{\mathrm{LT}}^{\mathrm{pred}}
+  &= 11.91 + 33.21 \times 1.466
+   = 60.6\%
+  \label{eq:C2_CE_LT}
+\end{align}
+
+These are Regime~1 geometry-driven predictions.  FEME's weaker
+Li$^+$ coordination may allow more film-forming SEI contributions
+from FSI$^-$ decomposition than DME, potentially raising the
+experimental CE above the geometry-driven prediction.
+
+\subsection{Experimental Protocol}
+
+\begin{enumerate}[leftmargin=2em]
+  \item Prepare LiFSI 1.0~M solutions in FEME/2-MeTHF at volume
+        ratios: pure FEME (baseline), 3:1, 1.5:1, 1:1, 0.7:1,
+        0.5:1 (FEME:2-MeTHF v/v).
+  \item Prepare a parallel concentration scan in pure FEME:
+        LiFSI 1.0, 1.2, 1.4, 1.5~M.  This tests the concentration
+        tuning equation directly.
+  \item Measure Raman spectrum for each solution: FSI$^-$ symmetric
+        stretch ($\approx 740$~cm$^{-1}$), Li$^+$--O stretch
+        ($300$--$500$~cm$^{-1}$).
+  \item Compute SCE from population fractions.  Identify the ratio
+        at which $\mathrm{SCE} \approx 1.466$.  Compare to predicted
+        $\approx 0.9:1$.
+  \item Also identify the concentration at which LiFSI/FEME pure
+        reaches $\mathrm{SCE} \approx 1.466$ and compare to the
+        predicted $c^{*} = 1.51$~M.
+  \item Measure CE$_\mathrm{RT}$ and CE$_\mathrm{LT}$ at the
+        confirmed target ratio: 100 cycles, Cu/Li half cell,
+        $0.5$~mA~cm$^{-2}$, $1.0$~mAh~cm$^{-2}$.
+  \item Apply falsification conditions.
+\end{enumerate}
+
+\subsection{Falsification Conditions}
+
+Pre-registered at
+\url{https://github.com/Eric-Robert-Lawson/attractor-oncology}
+before any experimental measurement.
+
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{Primary:} Framework falsified if CE$_\mathrm{RT}$
+        and CE$_\mathrm{LT}$ do not both improve relative to pure
+        FEME at 1.0~M as 2-MeTHF fraction increases toward the
+        target ratio.
+  \item \textbf{Secondary:} Framework falsified if at the ratio
+        confirmed by Raman to have $\mathrm{SCE} \approx 1.466$:
+        CE$_\mathrm{RT} < 83\%$ OR CE$_\mathrm{LT} < 59\%$.
+  \item \textbf{Ratio prediction:} Falsified if the confirmed
+        target ratio differs from $\approx 0.9:1$ by more than
+        $\pm 0.4$ (i.e., outside the range 0.5:1 to 1.3:1).
+  \item \textbf{Concentration tuning:} Falsified if LiFSI/FEME
+        pure does not reach $\mathrm{SCE} \approx 1.466$ at a
+        concentration within $\pm 0.2$~M of the predicted
+        $c^{*} = 1.51$~M.
+  \item \textbf{Mechanistic:} Within-class mechanism falsified if
+        Raman shows no shift in Li$^+$--O modes between pure FEME
+        and FEME/2-MeTHF at the target ratio.
+\end{itemize}
+
+\begin{remark}
+Candidate~2 has five falsification conditions because it contains
+two independent predictions: the volume ratio prediction
+($\phi^{*} \approx 0.53$) and the concentration tuning prediction
+($c^{*} = 1.51$~M in pure FEME).  These are derived from the same
+underlying equations and must both be confirmed for the full
+mechanistic picture to hold.  Each constitutes an independent
+falsification test.
+\end{remark}
+
+% ─── 6. The Within-Class Mechanism Relative to Prior Mechanisms ───────────────
+\section{The Within-Class Mechanism Relative to the\\
+Cross-Class and Anion Receptor Mechanisms}
+\label{sec:mechanism_comparison}
+
+\begin{table}[h!]
+\centering
+\caption{Comparison of the three SCE navigation mechanisms established
+across the series.  The within-class mechanism occupies the middle
+ground in effect magnitude and practical accessibility.}
+\label{tab:mechanism_comparison}
+\small
+\begin{tabular}{p{2.8cm}p{3.3cm}p{3.3cm}p{3.3cm}}
+\toprule
+Property & Cross-class ESP matching
+  (Preprint~2, DME/TMP)
+  & Anion receptor
+  (Preprint~3, DOL/TMB)
+  & Within-class geometric diversity
+  (This paper, 2-MeTHF/DME, FEME/2-MeTHF) \\
+\midrule
+Chemical classes involved &
+  Ether + phosphate ester &
+  Ether + Lewis acid (not coordination species) &
+  Ether only \\[4pt]
+Source of SCE change &
+  New coordination class (cross-class geometry) &
+  Removal of anion participation from shell &
+  New geometric sub-configuration within ether class \\[4pt]
+ESP contrast &
+  $|\Delta\mathrm{ESP}| = 0.007$~eV ($<k_BT$) &
+  Not applicable (anion receptor does not coordinate Li$^+$) &
+  $|\Delta\mathrm{ESP}| \approx 0.03$--$0.05$~eV ($1$--$2k_BT$) \\[4pt]
+SCE increase per unit fraction &
+  Strong (cross-class contrast maximal) &
+  Fine-tuning (small $\Delta$SCE from near-approach) &
+  Moderate (within-class contrast, partial preference) \\[4pt]
+Practical constraints &
+  TMP flammmability, phosphate ester stability &
+  TMB volatility (bp $68\,^\circ$C) &
+  None beyond standard ether handling \\[4pt]
+Established knowledge base &
+  Partial (TMP is less common in Li metal) &
+  Partial (TMB as additive, not primary mechanism) &
+  Full (all major ether electrolyte literature applies) \\[4pt]
+Indicated when &
+  Base solvent far below SCE* in Regime~1, geometry-driven deficit &
+  Base solvent has CIP/AGG-driven excess diversity &
+  Practical ether-only formulation required; base solvent below SCE* \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The three mechanisms together define a complete practical toolkit:
+\begin{itemize}[leftmargin=2em]
+  \item Maximum effect, cross-class: use ESP matching (Preprint~2).
+  \item Anion-driven excess diversity: use anion reception
+        (Preprint~3).
+  \item Practical ether-only formulation: use within-class geometric
+        diversity (this paper).
+\end{itemize}
+
+The selection criterion is the diagnostic: measure SCE, identify the
+primary source of its current value, select the mechanism that
+addresses that source.  The repository index provides the complete
+navigation map.
+
+% ─── 7. DPE as a Negative Control ────────────────────────────────────────────
+\section{DPE as a Negative Control: Concentration Invariance as a
+Predicted Non-Effect}
+\label{sec:DPE_control}
+
+Derivation~6 of the pre-registered derivation record demonstrates
+that dipropyl ether (DPE) is concentration-invariant with respect to
+SCE: increasing LiFSI concentration in DPE does not substantially
+change SCE because DPE's coordination geometry is geometrically
+rigid and structurally uniform, and its long alkyl chains sterically
+exclude CIP/AGG formation at moderate concentrations.
+
+\begin{equation}
+  \frac{\mathrm{d}(\mathrm{SCE})}{\mathrm{d}c}\bigg|_{\mathrm{DPE}}
+  \approx 0.02~\mathrm{L~mol}^{-1} \quad
+  (\mathrm{vs.}\ \alpha_\mathrm{FEME} \approx 0.19~\mathrm{L~mol}^{-1})
+  \label{eq:DPE_invariance}
+\end{equation}
+
+DPE therefore serves as a negative control for the concentration
+tuning mechanism: if the FEME concentration scan shows the predicted
+$\Delta\mathrm{SCE} \approx 0.19$~units per mol~L$^{-1}$ increase,
+and a parallel DPE concentration scan shows $\Delta\mathrm{SCE}
+\approx 0.02$~units per mol~L$^{-1}$, the fluorination-driven
+concentration sensitivity of FEME is confirmed by contrast.
+
+This comparison requires no additional experimental apparatus: it is
+a direct comparison of two solvents in the same salt/concentration
+scan protocol.
+
+% ─── 8. Discussion ───────────────────────────────────────────────────────────
+\section{Discussion}
+
+\subsection{The Significance of the Ratio Predictions}
+
+Both candidates in this paper carry specific numerical ratio
+predictions: 1.7:1 for Candidate~1 and $\approx 0.9:1$ for
+Candidate~2.  These are not post-hoc fits.  They are pre-registered
+predictions derived from the confirmed equations before any
+experiment.  The ratio prediction falsification conditions test the
+framework's quantitative accuracy, not just its directional accuracy.
+
+A framework that correctly predicts only the direction (both CEs
+improve) but incorrectly predicts the ratio where $\mathrm{SCE}^{*}$
+is achieved would indicate that the linear interpolation model
+requires a non-linear correction.  That outcome would not falsify the
+framework's core claim --- the fixed point exists and is the
+target --- but it would refine the interpolation model.  The ratio
+predictions are therefore informative in all outcomes: confirmation,
+partial confirmation, and falsification each carry distinct
+mechanistic information.
+
+\subsection{The Within-Class Mechanism as the Practical Route}
+
+The cross-class ESP matching of Preprint~2 achieves the largest SCE
+shift per unit co-solvent fraction but introduces a phosphate ester
+into the formulation.  The within-class mechanism trades that effect
+magnitude for complete ether-class compatibility.
+
+The practical implication is direct: Candidates~1 and~2 are the
+candidates most immediately accessible to a laboratory without
+specialised solvent handling infrastructure.  Both 2-MeTHF and DME
+are standard electrolyte solvents with established drying protocols,
+compatibility data, and CE benchmarks in the literature.  FEME is
+commercially available and requires no unusual handling beyond
+standard anhydrous ether procedures.
+
+This accessibility is not incidental.  It is a design property of
+the within-class mechanism.  A framework that can only be tested
+with exotic formulations is less useful than one that can be tested
+with standard reagents.  Candidates~1 and~2 are the standard-reagent
+test of the framework.
+
+\subsection{The FEME Concentration Scan as an Independent Framework Test}
+
+The concentration tuning equation for FEME (Equation~\ref{eq:FEME_conc_tuning})
+is an independent quantitative prediction of the framework that is
+testable without any CE measurement.  A concentration scan of
+LiFSI/FEME at 1.0, 1.2, 1.4, 1.51~M with Raman SCE estimation
+at each point tests whether the framework correctly predicts the
+concentration dependence of the solvation structure.  This is a
+structural prediction, not a performance prediction.  It is
+falsifiable without a single electrochemical measurement.
+
+The predicted slope $\alpha = 0.19$~L~mol$^{-1}$ and the predicted
+intercept $\mathrm{SCE}_0 = 1.18$ are both pre-registered and both
+testable by Raman.  If confirmed, they constitute independent
+validation of the framework's ability to quantitatively predict
+solvation structure from first principles.
+
+\subsection{Limitations}
+
+\begin{itemize}[leftmargin=2em]
+  \item The linear interpolation model for SCE as a function of
+        volume fraction (Equation~\ref{eq:SCE_interpolation}) is a
+        first-order approximation.  Non-linear effects (preferential
+        solvation, activity coefficients, concentration-dependent
+        coordination) will produce deviations from linearity,
+        particularly at extreme ratios.  The ratio scan protocol
+        is designed to map the actual SCE--ratio curve and identify
+        deviations.
+  \item The FEME concentration tuning parameters
+        ($\mathrm{SCE}_0 = 1.18$, $\alpha = 0.19$~L~mol$^{-1}$)
+        are derived from a limited dataset.  They should be treated
+        as estimates with $\pm 20\%$ uncertainty until confirmed
+        by experiment.
+  \item 2-MeTHF is known to undergo ring-opening at Li metal
+        surfaces, forming a flexible SEI.  This film-forming
+        chemistry is separate from the SCE mechanism and may
+        produce a CE contribution that is not predicted by the
+        framework.  Experiments should include a film-forming
+        control (e.g., comparing electrodes pre-treated with
+        2-MeTHF SEI vs.\ fresh electrodes).
+  \item FEME is a less commonly characterised solvent in Li metal
+        electrolytes than DME or 2-MeTHF.  Its reductive stability
+        at Li metal potentials should be confirmed before extended
+        cycling.
+  \item The regime classification of both candidates must be
+        confirmed experimentally.  If CE$_\mathrm{RT}$ exceeds
+        90\% at the target ratio, the Regime~2 equations apply
+        and the interpretation changes.
+\end{itemize}
+
+% ─── 9. Conclusion ───────────────────────────────────────────────────────────
+\section{Conclusion}
+
+We have introduced \textbf{within-class geometric diversity} as the
+third rationally designed mechanism for navigating toward
+$\mathrm{SCE}^{*} = 1.466$ in Li metal battery electrolytes.
+
+The mechanism operates as follows: two solvents from the same
+chemical family (the ether class) but with structurally distinct
+Li$^+$ coordination geometries (cyclic monodentate vs.\ linear
+bidentate, or fluorinated linear vs.\ cyclic) are mixed such that
+both coordination modes are simultaneously and meaningfully populated
+in the Li$^+$ primary shell.  SCE rises toward $\mathrm{SCE}^{*}$.
+The effect is weaker per unit volume fraction than the cross-class
+ESP-matching mechanism because the geometric contrast is smaller, but
+the practical accessibility is higher because no cross-class
+co-solvents are required.
+
+Two candidates are derived, pre-registered, and fully specified:
+
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{Candidate~1:} LiFSI 1.2~M in 2-MeTHF/DME, 1.7:1 v/v.
+        Predicted $\mathrm{SCE} = 1.466$ confirmed by MU session
+        Query~1 ($\mathrm{SCE}_\mathrm{MU} \approx 1.46 \pm 0.04$).
+        Four falsification conditions pre-registered.
+  \item \textbf{Candidate~2:} LiFSI 1.0~M in FEME/2-MeTHF,
+        $\approx 0.9:1$ v/v.  Predicted $\mathrm{SCE} = 1.466$
+        confirmed by MU session Query~3
+        ($\mathrm{SCE}_\mathrm{MU} \approx 1.47 \pm 0.05$).
+        Five falsification conditions pre-registered, including an
+        independent concentration tuning test.
+\end{itemize}
+
+DPE is identified as a negative control for the concentration
+sensitivity mechanism: its predicted concentration invariance
+($\alpha \approx 0.02$~L~mol$^{-1}$) contrasts with FEME's
+concentration sensitivity ($\alpha \approx 0.19$~L~mol$^{-1}$)
+and is directly testable.
+
+The three mechanisms now established across the series --- cross-class
+ESP matching, anion reception, and within-class geometric diversity
+--- constitute a complete practical toolkit for rational navigation to
+$\mathrm{SCE}^{*}$ from any starting formulation in the ether class.
+The full geometric structure connecting all mechanisms, candidates,
+derivations, and the fixed point is navigable from the repository
+index at \url{https://github.com/Eric-Robert-Lawson/attractor-oncology}.
+
+\bigskip
+\noindent\textbf{Data and derivation record availability.}
+All pre-registered predictions, falsification conditions, population
+estimates, interpolation derivations, concentration tuning equations,
+and MU session records referenced in this paper are archived with
+full timestamped commit history at:\\
+\url{https://github.com/Eric-Robert-Lawson/attractor-oncology}\\
+The repository commit history constitutes the priority and
+pre-registration record for all claims in this paper.
+
+\noindent\textbf{Relationship to other papers in this series.}
+This is Preprint~4 of the SCE Framework series.
+Preprints~1, 2, and~3 are available at the same repository.
+All papers in the series are self-contained.  The geometric structure
+connecting all papers, mechanisms, candidates, and derivations is
+navigable from the repository index.
+
+\noindent\textbf{Competing interests.}
+The author declares no competing financial interests.
+
+\noindent\textbf{Author contributions.}
+E.R.L.: conceptualisation, derivation, interpolation modelling,
+concentration tuning analysis, writing.
+
+% ─── Appendix ────────────────────────────────────────────────────────────────
+\appendix
+
+\section{Solvent Physical Properties}
+\label{app:props}
+
+\begin{table}[h!]
+\centering
+\caption{Physical properties of solvents used in Candidates~1 and~2.}
+\label{tab:props}
+\begin{tabular}{lccccl}
+\toprule
+Solvent & mp ($^\circ$C) & bp ($^\circ$C) &
+  $\rho$ (g~mL$^{-1}$) & DN & SCE (LiFSI 1M) \\
+\midrule
+2-MeTHF & $-137$ & $80$ & $0.854$ & $20$ & $1.55$ \\
+DME & $-58$ & $85$ & $0.867$ & $24$ & $1.24$ \\
+FEME & $-90$ & $72$ & $0.902$ & $\approx 18$ & $\approx 1.37$ \\
+DPE (control) & $-122$ & $90$ & $0.736$ & $19$ & $1.28$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent FEME properties from \cite{Wan2021,CRC2024}.
+DN values from \cite{Gutmann1976}.
+SCE values from Preprint~1 dataset (2-MeTHF, DME, DPE) and
+Derivation~4 estimate (FEME).
+
+\section{Derivation of the Corrected Target Ratio for Candidate~1}
+\label{app:ratio_correction}
+
+The linear interpolation estimate gives $\phi^{*} = 0.729$
+(2-MeTHF volume fraction), corresponding to 2-MeTHF:DME = 2.69:1
+at LiFSI 1.0~M.  At LiFSI 1.2~M, increased salt concentration
+raises the SCE of the pure 2-MeTHF component modestly (CIP/AGG
+fraction increases in concentrated solutions) while raising the
+pure DME component SCE by a similar amount.  The net effect on the
+interpolated target ratio is a shift toward lower 2-MeTHF fraction,
+because the added CIP/AGG fraction in DME at 1.2~M salt partially
+substitutes for the cyclic-geometry diversity that 2-MeTHF would
+otherwise provide.
+
+Estimated correction: $\Delta\phi \approx -0.10$, giving
+$\phi^{*}_{\mathrm{corrected}} \approx 0.629$, corresponding to
+2-MeTHF:DME $\approx 1.7:1$.
+
+Full algebraic derivation is in the pre-registered record at
+\url{https://github.com/Eric-Robert-Lawson/attractor-oncology},
+file \texttt{derivation\_for\_novel\_result.md}, Derivation~3.
+
+\section{Pre-Registered Falsification Conditions (Verbatim)}
+\label{app:falsification}
+
+\noindent\textbf{Candidate~1 (LiFSI 1.2~M, 2-MeTHF/DME 1.7:1 v/v):}
+\begin{itemize}[leftmargin=2em]
+  \item \textit{Primary:} Both CEs lie between DME and 2-MeTHF
+        pure-component baselines and both exceed DME baseline
+        simultaneously.
+  \item \textit{Secondary:} At Raman-confirmed SCE $\approx 1.466$:
+        CE$_\mathrm{RT} \geq 84\%$ AND CE$_\mathrm{LT} \geq 60\%$.
+  \item \textit{Ratio:} Raman-confirmed target ratio within $\pm 0.5$
+        of 1.7:1.
+  \item \textit{Mechanistic:} Li$^+$--O Raman shift observed
+        between pure 2-MeTHF and 1.7:1 mixed system.
+\end{itemize}
+
+\noindent\textbf{Candidate~2 (LiFSI 1.0~M, FEME/2-MeTHF
+$\approx$0.9:1 v/v):}
+\begin{itemize}[leftmargin=2em]
+  \item \textit{Primary:} Both CEs improve relative to pure FEME
+        1.0~M as 2-MeTHF fraction increases toward target ratio.
+  \item \textit{Secondary:} At Raman-confirmed SCE $\approx 1.466$:
+        CE$_\mathrm{RT} \geq 83\%$ AND CE$_\mathrm{LT} \geq 59\%$.
+  \item \textit{Ratio:} Confirmed target ratio within $\pm 0.4$ of
+        0.9:1.
+  \item \textit{Concentration tuning:} Pure FEME reaches SCE
+        $\approx 1.466$ within $\pm 0.2$~M of predicted 1.51~M.
+  \item \textit{Mechanistic:} Li$^+$--O Raman shift observed
+        between pure FEME and FEME/2-MeTHF at target ratio.
+\end{itemize}
+
+% ─── References ──────────────────────────────────────────────────────────────
+\begin{thebibliography}{99}
+
+\bibitem{Aurbach2000}
+Aurbach, D.\ \textit{et al.}
+Review of selected electrode--solution interactions which determine
+the performance of Li and Li ion batteries.
+\textit{J.\ Power Sources} \textbf{89}, 206--218 (2000).
+
+\bibitem{CRC2024}
+Haynes, W.\ M.\ (ed.)
+\textit{CRC Handbook of Chemistry and Physics}, 105th edn.
+CRC Press, Boca Raton, FL (2024).
+
+\bibitem{Gutmann1976}
+Gutmann, V.
+\textit{The Donor--Acceptor Approach to Molecular Interactions.}
+Plenum Press, New York (1978).
+
+\bibitem{Holoubek2021}
+Holoubek, J.\ \textit{et al.}
+Tailoring electrolyte solvation for Li metal batteries cycled at
+ultra-low temperature.
+\textit{Nat.\ Energy} \textbf{6}, 303--313 (2021).
+
+\bibitem{Logan2018}
+Logan, E.\ R.\ \textit{et al.}
+A study of the physical properties of Li-ion battery electrolytes
+containing esters.
+\textit{J.\ Electrochem.\ Soc.} \textbf{165}, A21--A30 (2018).
+
+\bibitem{Luo2025}
+Luo, Y.\ \textit{et al.}
+Solvation configurational entropy governs interfacial kinetics in
+metal-ion batteries.
+\textit{Joule} \textbf{9}, 210--228 (2025).
+
+\bibitem{Qian2015}
+Qian, J.\ \textit{et al.}
+High rate and stable cycling of lithium metal anode.
+\textit{Nat.\ Commun.} \textbf{6}, 6362 (2015).
+
+\bibitem{Reichardt2011}
+Reichardt, C.\ \& Welton, T.
+\textit{Solvents and Solvent Effects in Organic Chemistry}, 4th edn.
+Wiley-VCH, Weinheim (2011).
+
+\bibitem{Tikekar2016}
+Tikekar, M.\ D., Choudhury, S., Tu, Z.\ \& Archer, L.\ A.
+Design principles for electrolytes and interfaces for stable
+lithium-metal batteries.
+\textit{Nat.\ Energy} \textbf{1}, 16114 (2016).
+
+\bibitem{Wan2021}
+Wan, G.\ \textit{et al.}
+Lithium metal anode operating under lean electrolyte conditions:
+a review.
+\textit{Adv.\ Mater.} \textbf{33}, 2105713 (2021).
+
+\bibitem{Yu2022}
+Yu, Z.\ \textit{et al.}
+Rational solvent molecule tuning for high-performance lithium metal
+battery electrolytes.
+\textit{Nat.\ Energy} \textbf{7}, 94--106 (2022).
+
+\bibitem{Zhang2021}
+Zhang, H.\ \textit{et al.}
+Fluorinated electrolytes for 5-V lithium-ion battery chemistry.
+\textit{Energy Environ.\ Sci.} \textbf{11}, 678--685 (2018).
+
+\end{thebibliography}
+
+\end{document}

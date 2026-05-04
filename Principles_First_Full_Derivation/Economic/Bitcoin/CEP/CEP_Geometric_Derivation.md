@@ -944,6 +944,10 @@ GIVEN:
 
 DERIVED:
 
+  Bitcoin Settlement Layer (Layer 1)
+  → satisfies C1 (Bitcoin is unmodified —
+    CEP sits above it, never inside it)
+
   The Custodial Lock and Reserve Pool
   → satisfies C2, C3, C6, C8
 

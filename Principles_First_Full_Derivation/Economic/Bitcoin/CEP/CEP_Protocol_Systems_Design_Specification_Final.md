@@ -1,6 +1,8 @@
 # Custodial Exchange Protocol (CEP)
 ## Full Structural Specification
 ## Version 2.0 — Architecturally Corrected and Complete
+## **Understand that the following is to specify a systems architectural design of novel contributions that CEP has to offer.**
+## **Explicitly underdefining modular components that are either already solved or to be solved for.**
 ### OrganismCore — Eric Robert Lawson
 
 ---

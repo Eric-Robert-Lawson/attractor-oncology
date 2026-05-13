@@ -74,7 +74,7 @@ SHOE ODOR TREATMENT FORMULATION
 
 INGREDIENTS (per 1500mL batch):
   Distilled water ............ 1500mL
-  SAP powder ................ 8g
+  SAP powder ................ 16g
   Bentonite clay ............ 28g
   Borax powder .............. 18g
   Sodium bicarbonate ........ 10g (odor neutralization)

@@ -70,7 +70,7 @@ INGREDIENTS — 1L BASE BATCH
 (scales to 5 × 200mL packets)
 
   Distilled water .............. 1000mL
-  SAP powder ................... 5.3g
+  SAP powder ................... 10.6g
   Bentonite clay ............... 18.7g
   Borax powder ................. 12.0g
   Sodium bicarbonate ........... 6.7g
@@ -436,7 +436,7 @@ NORMAL APPEARANCE AT 12 MONTHS:
 INGREDIENT COSTS (retail, not bulk):
 
   Distilled water (1L) ............. $0.89
-  SAP powder (5.3g) ................ $0.21
+  SAP powder (10.6g) ................ $0.42
     (SAP retail: ~$40/kg = $0.04/g)
   Bentonite clay (18.7g) ........... $0.19
     (Bentonite retail: ~$10/kg = $0.01/g)
@@ -447,14 +447,14 @@ INGREDIENT COSTS (retail, not bulk):
   Ziplock baggies (5 units) ........ $0.15
     ($0.03/unit at moderate volume)
 
-TOTAL INGREDIENT + PACKAGING COST: ~$1.62
+TOTAL INGREDIENT + PACKAGING COST: ~$1.83
 
-COST PER PACKET: ~$0.32
+COST PER PACKET: ~$0.36
 
 RETAIL PRICE PER PACKET: $10.00
 
-GROSS MARGIN PER PACKET: $9.68 (96.8%)
-GROSS MARGIN PER BATCH: $48.40
+GROSS MARGIN PER PACKET: $9.64 (~96.8%)
+GROSS MARGIN PER BATCH: $48.20
 
 NOTE: These are retail ingredient costs.
 At production volume, all input costs

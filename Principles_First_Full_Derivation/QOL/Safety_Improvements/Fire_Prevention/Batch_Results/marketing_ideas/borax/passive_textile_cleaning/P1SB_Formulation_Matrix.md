@@ -4,6 +4,8 @@
 
 ---
 
+# **IMPORTANT you must double sap amounts for each formula to overcome the effects of adding borax and baking soda to make a gel instead of liquid!**
+
 # 0. PURPOSE OF THIS DOCUMENT
 
 This document derives:

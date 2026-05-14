@@ -48,6 +48,8 @@ is documented here.
 
 ## PART I: THE BATCH — EXACT CONDITIONS
 
+# **ACTUAL FORMULA FOR JELLY BELOW!**
+
 ### 1.1 — What Was Made
 
 ```
@@ -55,7 +57,7 @@ BATCH PARAMETERS:
 
   Water volume: 750mL distilled
   Target SAP (standard ratio): 4.0g
-  Actual SAP used: ~8.0g
+  Actual SAP used: ~12.0g
     (4.0g initial dry blend +
     ~4.0g added mid-blend,
     poured direct from bag —

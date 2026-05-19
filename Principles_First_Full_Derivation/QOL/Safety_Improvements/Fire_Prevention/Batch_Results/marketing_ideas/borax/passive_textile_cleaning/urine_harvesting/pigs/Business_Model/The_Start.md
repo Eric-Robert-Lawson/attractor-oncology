@@ -1,4 +1,3 @@
-```markdown
 # OrganismCore Waste Processing Facility Business Plan v2.0
 ## Used Equipment, Direct Waste Collector Acquisition, Variable Throughput Model
 ## Cost Minimization & Operational Flexibility Strategy
@@ -2716,5 +2715,3 @@ Build off this plan with confidence.
 *Scale it.*
 
 *Preserve it.*
-
-```

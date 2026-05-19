@@ -303,33 +303,34 @@ Internal barrier:
 
 GEOMETRIC DIAGRAM (Side cross-section):
 
-    [DEPLOYED STATE]
-    
-    ┌──────────────────────┐
-    │     FUNNEL ENTRY     │ ← 5cm wide
-    │    (open top)        │   funnel
-    │      ╱╲              │   opening
-    │     ╱  ╲             │
-    │    ╱    ╲            │ 4cm deep
-    │   ╱      ╲           │
-    │  ╱______2cm╲         │
-    │ (hole exit) │
-    │             │ ← Internal
-    │             │   barrier
-    │             ▼
-    │ ┌──────────────────┐ │
-    │ │                  │ │
-    │ │ MAIN CHAMBER     │ │ 7cm tall
-    │ │ (400mL)          │ │
-    │ │                  │ │
-    │ │ OVERSATURATED    │ │
-    │ │ SLURRY + SAP     │ │
-    │ │ MIXTURE          │ │
-    │ │                  │ │
-    │ │                  │ │
-    │ └──────────────────┘ │
-    │                      │
-    └──────────────────────┘
+[DEPLOYED STATE]
+
+┌──────────────────────┐
+│      WIDE OPENING    │ ← 5cm diameter
+│    (open top)        │   FUNNEL ENTRY
+│    ╲              ╱  │   (wide opening) (many going around)
+│     ╲            ╱   │
+│      ╲          ╱    │ 4cm deep
+│       ╲        ╱     │
+│        ╲______╱      │
+│            │ 2cm     │ ← Narrow hole
+│            │ hole    │   at bottom of
+│            │         │   funnel
+│            │         │
+│            ▼         │
+│ ┌──────────────────┐ │
+│ │                  │ │
+│ │ MAIN CHAMBER     │ │ 7cm tall
+│ │ (400mL)          │ │
+│ │                  │ │
+│ │ OVERSATURATED    │ │
+│ │ SLURRY + SAP     │ │
+│ │ MIXTURE          │ │
+│ │                  │ │
+│ │                  │ │
+│ └──────────────────┘ │
+│                      │
+└──────────────────────┘
 
 [TOP VIEW - Funnel opening]:
 

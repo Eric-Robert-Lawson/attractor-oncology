@@ -308,7 +308,7 @@ GEOMETRIC DIAGRAM (Side cross-section):
 ┌──────────────────────┐
 │      WIDE OPENING    │ ← 5cm diameter
 │    (open top)        │   FUNNEL ENTRY
-│    ╲              ╱  │   (wide opening) (many going around)
+│    ╲              ╱  │   (wide opening) (many 1.5mm holes going around to ensure odor disperal for attraction)
 │     ╲            ╱   │
 │      ╲          ╱    │ 4cm deep
 │       ╲        ╱     │

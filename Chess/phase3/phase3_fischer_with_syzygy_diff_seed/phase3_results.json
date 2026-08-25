@@ -1,0 +1,102 @@
+{
+  "phase": 3,
+  "date": "2026-08-23",
+  "endgame_classes_resolved": [
+    "KRBKRNvK"
+  ],
+  "endgame_positions": 5000,
+  "middlegame_positions": 8243,
+  "cross_class_features": [
+    {
+      "feature": "mobility_stm",
+      "n_sources": 2,
+      "mean_rank": 1.5,
+      "mean_importance": 0.1430577610346963
+    },
+    {
+      "feature": "mobility_other",
+      "n_sources": 1,
+      "mean_rank": 1.0,
+      "mean_importance": 0.15347045696505093
+    },
+    {
+      "feature": "halfmove_clock",
+      "n_sources": 1,
+      "mean_rank": 3.0,
+      "mean_importance": 0.08248396680129036
+    },
+    {
+      "feature": "bk_rank",
+      "n_sources": 1,
+      "mean_rank": 2.0,
+      "mean_importance": 0.08230527548507538
+    },
+    {
+      "feature": "wk_rank",
+      "n_sources": 1,
+      "mean_rank": 3.0,
+      "mean_importance": 0.07939213869263728
+    },
+    {
+      "feature": "wk_file",
+      "n_sources": 1,
+      "mean_rank": 4.0,
+      "mean_importance": 0.07911439627790748
+    },
+    {
+      "feature": "fullmove_number",
+      "n_sources": 1,
+      "mean_rank": 4.0,
+      "mean_importance": 0.0777027323630623
+    },
+    {
+      "feature": "bk_file",
+      "n_sources": 1,
+      "mean_rank": 5.0,
+      "mean_importance": 0.07701246756115608
+    },
+    {
+      "feature": "wk_center_dist",
+      "n_sources": 1,
+      "mean_rank": 6.0,
+      "mean_importance": 0.07174234426168875
+    },
+    {
+      "feature": "bk_center_dist",
+      "n_sources": 1,
+      "mean_rank": 7.0,
+      "mean_importance": 0.0705733023516439
+    },
+    {
+      "feature": "king_distance",
+      "n_sources": 1,
+      "mean_rank": 8.0,
+      "mean_importance": 0.06435156949928146
+    },
+    {
+      "feature": "b_center_control",
+      "n_sources": 1,
+      "mean_rank": 5.0,
+      "mean_importance": 0.046882234857628775
+    },
+    {
+      "feature": "wk_pawn_shield",
+      "n_sources": 1,
+      "mean_rank": 6.0,
+      "mean_importance": 0.04433144712702093
+    },
+    {
+      "feature": "bk_pawn_shield",
+      "n_sources": 1,
+      "mean_rank": 7.0,
+      "mean_importance": 0.04152992882942438
+    },
+    {
+      "feature": "w_center_control",
+      "n_sources": 1,
+      "mean_rank": 8.0,
+      "mean_importance": 0.04100797707768676
+    }
+  ],
+  "navigation_accuracy": 0.9666666666666667
+}

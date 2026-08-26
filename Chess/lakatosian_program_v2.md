@@ -1,567 +1,170 @@
 # Lakatosian First-Principles Topological Chess Engine
-## Artifact #2 — Full Module Interface Specification (Python-First, Language-Portable)
+## Artifact #2 — Corrected Understanding (Preserved Program Logic)
 
-## 1) Purpose
-This artifact defines the implementation-facing interface contract for a modular topological chess engine that:
-- derives action from first principles (turn, piece class, board topology),
-- composes higher piece classes from lower validated classes,
-- and invokes combinatorial search only when topological derivation is underdetermined.
+## 1) Correction Statement
+Previous framing that emphasized discrete feature extraction and fixed category assignment is not aligned with the intended Lakatosian first-principles program.
 
-It is designed for:
-1. **immediate Python implementation**, and
-2. **future migration** to faster runtimes/languages while preserving semantics.
-
----
-
-## 2) Architectural Commitments (Preserved)
-1. **Primary mechanism:** topological navigation through classed state spaces.
-2. **Secondary mechanism:** bounded search only on competing topological pathways.
-3. **Knowledge growth:** low-piece ground truth (tablebase-validated) composes into higher-piece classes.
-4. **State identity:** `(turn, piece_class, board_topology_category)` governs reasoning.
-5. **Trading/capture decisions:** treated as transitions across piece classes in topology space.
+The correct architecture is:
+- **not** heuristic bucketing,
+- **not** static category scoring,
+- **not** combinatorial state storage with lookup-driven policy,
+- but a **generative topological class system** where each class object encodes:
+  1. intrinsic topology of its piece configuration space,
+  2. morphisms to/from neighboring piece-count classes,
+  3. derivation operators for board-structure navigation,
+  4. ambiguity conditions under which bounded combinatorial search is invoked.
 
 ---
 
-## 3) Global Data Contracts
+## 2) Core Distinction (Essential)
+A class file is **not** “evaluate position with metrics.”  
+A class file is a **topological data object + derivation engine** that supports two navigation modes:
 
-## 3.1 Core Types
+1. **Intra-class navigation**  
+   (move within same piece-count topology over board structure)
 
-```python name=types_core.py
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Dict, List, Optional, Tuple, Set, Any
+2. **Inter-class navigation**  
+   (move across piece-count topologies via reductions/trades/captures)
 
-Color = str  # "white" | "black"
-Square = int  # 0..63 (portable representation)
-PieceType = str  # "K","Q","R","B","N","P"
-MoveUCI = str  # e.g., "e2e4", "a7a8q"
-
-class PhaseTag(str, Enum):
-    OPENING = "opening"
-    MIDDLEGAME = "middlegame"
-    ENDGAME = "endgame"
-
-class OutcomeClass(str, Enum):
-    WIN = "win"
-    DRAW = "draw"
-    LOSS = "loss"
-    UNKNOWN = "unknown"
-
-class CertaintyClass(str, Enum):
-    FORCED = "forced"             # single topological pathway
-    CONSTRAINED = "constrained"   # few pathways, topology dominant
-    AMBIGUOUS = "ambiguous"       # needs bounded search
-    OPAQUE = "opaque"             # fallback behavior needed
-
-@dataclass(frozen=True)
-class PieceCountVector:
-    # canonical material signature; include both sides
-    # example keys: "wK","wQ","wR","wB","wN","wP","bK","bQ"...
-    counts: Dict[str, int]
-
-@dataclass(frozen=True)
-class PieceClassId:
-    # canonical class token, e.g. "KRvK", "KBNvK", "KQRPvKQRP"
-    token: str
-    piece_count_vector: PieceCountVector
-
-@dataclass
-class PositionState:
-    fen: str
-    side_to_move: Color
-    piece_class_id: PieceClassId
-    phase_tag: PhaseTag
-    # optional cached board object from chess library
-    board_obj: Any = None
-
-@dataclass
-class TopologyFeature:
-    name: str
-    value: float
-    meta: Dict[str, Any] = field(default_factory=dict)
-
-@dataclass
-class TopologyCategory:
-    # class-specific category label derived from features
-    label: str
-    certainty: CertaintyClass
-    features: List[TopologyFeature]
-    rationale: List[str]  # human-readable derivation trace
-```
-
-## 3.2 Policy / Recommendation Types
-
-```python name=types_policy.py
-from dataclasses import dataclass, field
-from typing import List, Dict, Any, Optional
-from types_core import MoveUCI, OutcomeClass, CertaintyClass
-
-@dataclass
-class MoveCandidate:
-    move: MoveUCI
-    topo_score: float
-    risk_score: float
-    transition_score: float
-    rationale: List[str]
-
-@dataclass
-class TransitionOption:
-    move: MoveUCI
-    from_class: str
-    to_class: str
-    predicted_outcome_shift: OutcomeClass
-    confidence: float
-    rationale: List[str]
-
-@dataclass
-class SearchEnvelope:
-    enabled: bool
-    reason: str
-    depth_cap: int
-    node_cap: int
-    time_ms_cap: int
-    candidate_moves: List[MoveUCI]
-    # constraints that prune search manifold
-    manifold_constraints: Dict[str, Any] = field(default_factory=dict)
-
-@dataclass
-class DecisionPacket:
-    chosen_move: MoveUCI
-    certainty: CertaintyClass
-    principal_mode: str  # topological mode label
-    alternatives: List[MoveCandidate]
-    used_search: bool
-    search_envelope: Optional[SearchEnvelope]
-    explanation: List[str]
-```
+These are the two primary principle vectors.
 
 ---
 
-## 4) Module Interfaces (Primary Contracts)
+## 3) What a Piece Class Object Actually Is
+A piece class object (e.g., `KRvK`, `KRvKp`, `KRvKpp`) must encode:
 
-## 4.1 `PieceClassModule` Interface
-Each piece-class module (e.g., KRvK, KBNvK, KQRPvKQRP) must implement this contract.
+1. **State manifold definition**  
+   The legal board-structure topology induced by that piece multiset.
 
-```python name=interfaces_piece_class.py
-from abc import ABC, abstractmethod
-from typing import List, Dict, Any
-from types_core import PositionState, TopologyCategory, OutcomeClass
-from types_policy import MoveCandidate, TransitionOption
+2. **Topological invariants**  
+   Structural truths that remain meaningful under legal transformations in class.
 
-class PieceClassModule(ABC):
-    """
-    Contract for topological reasoning within a fixed piece class.
-    """
+3. **Generators (legal transformation operators)**  
+   Move-induced topology transformations available from any state in manifold.
 
-    MODULE_ID: str                  # e.g., "KRvK"
-    VERSION: str                    # semantic version
-    DEPENDENCIES: List[str]         # lower class module IDs
-    VALIDATION_STATUS: str          # "unvalidated" | "partial" | "tablebase-validated"
-    COVERAGE_NOTES: str             # scope boundaries
-    
-    @abstractmethod
-    def supports(self, state: PositionState) -> bool:
-        """Return True if this module applies to state.piece_class_id."""
-        raise NotImplementedError
+4. **Internal navigation principles**  
+   Directional rules for moving toward favorable regions in the class manifold.
 
-    @abstractmethod
-    def extract_topology_features(self, state: PositionState) -> List:
-        """
-        Compute class-relevant topological features (control, confinement, opposition,
-        mobility restrictions, tempo motifs, etc.).
-        """
-        raise NotImplementedError
+5. **Boundary maps**  
+   What transitions move this class to adjacent classes (capture/reduction/addition).
 
-    @abstractmethod
-    def categorize_topology(self, state: PositionState, features: List) -> TopologyCategory:
-        """
-        Map features -> category label + certainty + rationale.
-        """
-        raise NotImplementedError
+6. **Interdependency links to lesser classes**  
+   How lower classes constrain or inform interpretation of this class manifold.
 
-    @abstractmethod
-    def derive_topological_objectives(self, state: PositionState, category: TopologyCategory) -> List[str]:
-        """
-        Return ordered objectives (e.g., 'cut king', 'improve opposition', 'force corner').
-        """
-        raise NotImplementedError
-
-    @abstractmethod
-    def admissible_move_manifold(self, state: PositionState, category: TopologyCategory) -> List[str]:
-        """
-        Return a reduced move set consistent with class topology.
-        """
-        raise NotImplementedError
-
-    @abstractmethod
-    def rank_moves_topologically(self, state: PositionState, moves: List[str], category: TopologyCategory) -> List[MoveCandidate]:
-        """
-        Score candidate moves using topological criteria (not generic eval first).
-        """
-        raise NotImplementedError
-
-    @abstractmethod
-    def evaluate_transitions(self, state: PositionState, ranked_moves: List[MoveCandidate]) -> List[TransitionOption]:
-        """
-        Evaluate captures/trades as class transitions in topology space.
-        """
-        raise NotImplementedError
-
-    @abstractmethod
-    def expected_outcome_class(self, state: PositionState, category: TopologyCategory) -> OutcomeClass:
-        """
-        Predict W/D/L class for optimal navigation under this module's scope.
-        """
-        raise NotImplementedError
-```
+7. **Ambiguity surface definition**  
+   Regions where principle derivation does not uniquely determine navigation, triggering constrained search.
 
 ---
 
-## 4.2 `CompositionModule` Interface
-Build higher class principles from lower class modules.
+## 4) Ground Truth Role (Precise)
+Ground truth (3/4/5 and beyond where available) is not used as a giant path database for runtime retrieval.  
+It is used to **derive and validate class-level principles**:
 
-```python name=interfaces_composition.py
-from abc import ABC, abstractmethod
-from typing import List, Dict, Any
-from types_core import PositionState, TopologyCategory
+- discover invariant structures,
+- validate transition morphisms,
+- verify boundary behavior between classes,
+- test whether derived principles preserve perfect-play outcome relations.
 
-class CompositionModule(ABC):
-    MODULE_ID: str
-    TARGET_CLASS: str              # e.g., "KBNvK"
-    SUBSTRATE_CLASSES: List[str]   # e.g., ["KBvK", "KNvK"]
-
-    @abstractmethod
-    def can_compose(self, state: PositionState) -> bool:
-        raise NotImplementedError
-
-    @abstractmethod
-    def compose_principles(self, state: PositionState, substrate_reports: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Merge inherited lower-class principles and perturb by added-piece topology.
-        """
-        raise NotImplementedError
-
-    @abstractmethod
-    def generate_composed_category(self, state: PositionState, composition_report: Dict[str, Any]) -> TopologyCategory:
-        raise NotImplementedError
-```
+Then runtime uses these derived principles generatively on current board structure.
 
 ---
 
-## 4.3 `TransitionPolicy` Interface
-Decide when moving across classes (captures/trades/simplifications) is desirable.
+## 5) Interdependency Principle (Lesser -> Higher)
+Higher classes are not independent models.
 
-```python name=interfaces_transition_policy.py
-from abc import ABC, abstractmethod
-from typing import List
-from types_core import PositionState
-from types_policy import MoveCandidate, TransitionOption
+For class `C_{n+1}`:
+- it must explicitly depend on one or more `C_n` classes,
+- inherit stable principles from those lesser classes,
+- add perturbation logic for added material/topological generators,
+- and re-evaluate manifold structure under the expanded operator set.
 
-class TransitionPolicy(ABC):
-    POLICY_ID: str
-    VERSION: str
+Example:
+- `KRvK` informs `KRvKp`
+- `KRvKp` informs `KRvKpp`
+- each additional pawn alters manifold geometry and transition boundaries
+- but interpretation remains anchored in inherited lower-class structure
 
-    @abstractmethod
-    def select_transition_bias(self, state: PositionState) -> str:
-        """
-        e.g., 'simplify', 'preserve tension', 'avoid liquidation', 'force reduction'
-        """
-        raise NotImplementedError
-
-    @abstractmethod
-    def score_transition_options(self, state: PositionState, options: List[TransitionOption]) -> List[TransitionOption]:
-        raise NotImplementedError
-
-    @abstractmethod
-    def apply_transition_constraints(self, state: PositionState, ranked_moves: List[MoveCandidate], transition_options: List[TransitionOption]) -> List[MoveCandidate]:
-        raise NotImplementedError
-```
+This is compositional topology, not flat evaluation.
 
 ---
 
-## 4.4 `SearchPolicy` Interface
-Enable bounded search only if topology is ambiguous.
+## 6) Runtime Logic (Correct Form)
 
-```python name=interfaces_search_policy.py
-from abc import ABC, abstractmethod
-from typing import List
-from types_core import PositionState, TopologyCategory
-from types_policy import SearchEnvelope, MoveCandidate
+Given board state:
+1. Identify piece class manifold object.
+2. Instantiate current board point in that manifold.
+3. Apply intra-class derivation operators to determine navigable principle directions.
+4. Evaluate available inter-class morphisms (reductions/transitions).
+5. If derivation yields a unique direction: execute without broad search.
+6. If derivation yields competing valid directions (ambiguity surface): run constrained combinatorial search over those derived branches only.
 
-class SearchPolicy(ABC):
-    POLICY_ID: str
-    VERSION: str
-
-    @abstractmethod
-    def should_search(self, state: PositionState, category: TopologyCategory, ranked_moves: List[MoveCandidate]) -> bool:
-        raise NotImplementedError
-
-    @abstractmethod
-    def build_envelope(self, state: PositionState, category: TopologyCategory, ranked_moves: List[MoveCandidate]) -> SearchEnvelope:
-        """
-        Build depth/node/time caps + candidate manifold constraints.
-        """
-        raise NotImplementedError
-```
+Search is a local resolver on a derived branch set, not global planner.
 
 ---
 
-## 4.5 `GroundTruthAdapter` Interface (Tablebase calibration)
-Connect low-piece modules to exact truth data for validation.
+## 7) Why This Is Lakatosian
+## Hard Core
+- chess as topological-combinatorial adversarial system
+- piece-class manifolds and morphisms as primary explanatory structure
+- derivability from first principles over board/piece topology
 
-```python name=interfaces_ground_truth.py
-from abc import ABC, abstractmethod
-from types_core import PositionState, OutcomeClass
+## Protective Belt
+- concrete module implementations
+- refinement of invariants, morphisms, ambiguity surfaces
+- error corrections against truth without replacing hard-core commitments
 
-class GroundTruthAdapter(ABC):
-    ADAPTER_ID: str
-    VERSION: str
-
-    @abstractmethod
-    def supports(self, state: PositionState) -> bool:
-        raise NotImplementedError
-
-    @abstractmethod
-    def query_outcome(self, state: PositionState) -> OutcomeClass:
-        """W/D/L truth for supported classes."""
-        raise NotImplementedError
-
-    @abstractmethod
-    def query_distance_metric(self, state: PositionState) -> int:
-        """
-        e.g., DTM/DTZ/other supported distance metric.
-        """
-        raise NotImplementedError
-```
+Hard core is preserved while belt improves.
 
 ---
 
-## 5) Central Orchestrator Contract
-
-```python name=engine_orchestrator.py
-class TopologicalEngine:
-    """
-    Main coordinator:
-    1) classify state
-    2) choose class module (or composed module)
-    3) derive topology category
-    4) produce admissible manifold
-    5) apply transition policy
-    6) optionally bounded search
-    7) emit decision packet + reasoning trace
-    """
-
-    def choose_move(self, fen: str) -> "DecisionPacket":
-        ...
-```
-
-## Required orchestration sequence
-1. Parse `fen`, detect `side_to_move`.
-2. Compute canonical `PieceClassId`.
-3. Select module:
-   - direct class module if available,
-   - else composition module built from substrate classes.
-4. Extract topology features.
-5. Categorize topology (`FORCED|CONSTRAINED|AMBIGUOUS|OPAQUE`).
-6. Derive objectives and admissible move manifold.
-7. Rank moves topologically.
-8. Evaluate transition options (trade/simplify/preserve tension).
-9. Apply transition policy.
-10. Invoke search policy only if needed.
-11. Return `DecisionPacket` with full rationale chain.
+## 8) What Must Be Avoided Going Forward
+1. Treating classes as heuristic scorecards.
+2. Treating categories as fixed handcrafted labels detached from manifold derivation.
+3. Treating ground truth as runtime brute-force replacement.
+4. Treating higher classes as isolated from lower-class dependencies.
+5. Running unconstrained search before derivation.
 
 ---
 
-## 6) Canonical Piece-Class Taxonomy Rules
+## 9) Required Shape of Future Class Files
+Each class file should be structured as:
 
-## 6.1 Naming convention
-- Format: `"WhitePiecesvBlackPieces"` with kings implicit but always present.
-- Example tokens:
-  - `KRvK`
-  - `KBNvK`
-  - `KQRPvKQRP`
-- Canonical ordering within side:
-  - `K Q R B N P` by descending piece hierarchy and multiplicity
+1. `ClassIdentity`
+   - piece multiset definition
+   - adjacency in class graph
 
-## 6.2 Normalization
-- Side-symmetric states should map to equivalent normalized IDs where possible.
-- Store side-to-move separately; do not encode turn into class token.
+2. `ManifoldDefinition`
+   - legal configuration topology for class
 
-## 6.3 Class tiering
-- Tier by total piece count (including kings), then by non-king material complexity.
-- Use tiers for scheduling module maturity and testing.
+3. `InvariantSet`
+   - derived, validated structural invariants
 
----
+4. `GeneratorSet`
+   - legal transformation operators
 
-## 7) Board Topology Category Schema (Initial)
+5. `IntraClassNavigationOperators`
+   - principle-driven directional derivations
 
-Each module defines class-specific categories; global categories provide common vocabulary:
+6. `InterClassMorphisms`
+   - transitions to neighboring classes with conditions
 
-1. `CONFINEMENT_GAIN`
-2. `CONFINEMENT_STABLE`
-3. `CONFINEMENT_LOSS_RISK`
-4. `OPPOSITION_FAVORABLE`
-5. `OPPOSITION_CONTESTED`
-6. `FORCING_CHANNEL_AVAILABLE`
-7. `FORCING_CHANNEL_BLOCKED`
-8. `TRANSITION_OPPORTUNITY`
-9. `TRANSITION_HAZARD`
-10. `TEMPO_CRITICAL`
+7. `DependencyContract`
+   - inherited principles from lesser classes
+   - perturbation terms introduced by added material
 
-Each category record includes:
-- feature vector,
-- certainty class,
-- explicit rationale list.
+8. `AmbiguitySurface`
+   - formal trigger conditions for constrained search
+
+9. `ValidationContract`
+   - how ground truth is used to test derivations and morphisms
 
 ---
 
-## 8) Feature Library (Portable primitives)
+## 10) Preserved Statement of Intent
+The program is a generative first-principles architecture where:
+- board state is interpreted through class topology,
+- navigation happens within and across piece-class manifolds,
+- lower-class truth-derived principles scaffold higher classes,
+- and combinatorial search is used only when topological derivation yields legitimate ambiguity.
 
-Minimum first-principles features (module-selective use):
-1. legal mobility counts (both sides)
-2. king-zone accessibility map
-3. opposition relation metrics
-4. confinement perimeter measure
-5. controlled escape-square count
-6. forcing-move availability count (checks, skewers, tempo gains)
-7. trade/reduction availability and consequence class
-8. repetition/stalemate risk flags
-9. promotion race and blockage metrics (pawn classes)
-10. move-to-dominance delta (control-shift forecast)
-
----
-
-## 9) Decision Semantics
-
-## 9.1 Choosing move != raw eval maximization
-Primary target:
-- navigate to topologically favorable region
-- improve certainty class (AMBIGUOUS -> CONSTRAINED -> FORCED)
-- reduce adversary’s counter-topology
-
-## 9.2 Search trigger semantics
-Search is invoked when:
-- multiple near-equivalent topological pathways exist,
-- transition options conflict,
-- tactical volatility exceeds topology-only resolution.
-
-Search is not invoked when:
-- a forced topological mode is identified with high certainty.
-
----
-
-## 10) Validation and Truth Alignment
-
-## 10.1 Module validation ladder
-1. `unvalidated`
-2. `partial` (unit/regression tests + sampled truth checks)
-3. `tablebase-validated` (full supported-space calibration)
-
-## 10.2 Required validation outputs
-Per module:
-- class coverage declaration
-- confusion matrix vs truth (`predicted W/D/L` vs ground truth)
-- distance metric error summaries (where available)
-- failure archetype inventory (where topology heuristic diverges)
-
----
-
-## 11) Suggested Python Package Layout
-
-```text name=package_layout.txt
-topochess/
-  core/
-    types_core.py
-    types_policy.py
-    classifier.py
-    topology_features.py
-  modules/
-    piece_classes/
-      krvk.py
-      kbvk.py
-      knvk.py
-      kbnvk.py
-      ...
-    composition/
-      compose_4piece.py
-      compose_5piece.py
-      ...
-  policies/
-    transition_policy_default.py
-    search_policy_default.py
-  adapters/
-    ground_truth_syzygy.py
-    ground_truth_local.py
-  engine/
-    orchestrator.py
-    tracing.py
-  tests/
-    test_classifier.py
-    test_krvk_truth.py
-    test_transition_policy.py
-    ...
-  docs/
-    artifacts/
-      LAKATOSIAN_TOPOLOGICAL_CHESS_ENGINE_REASONING_ARTIFACT.md
-      LAKATOSIAN_TOPOLOGICAL_CHESS_ENGINE_ARTIFACT_2_MODULE_SPEC.md
-```
-
----
-
-## 12) Tracing, Explainability, and Preservation
-
-Every `DecisionPacket` must include:
-1. module selected and version
-2. topology category and certainty
-3. admissible manifold size vs legal move count
-4. transition analysis summary
-5. whether search was used and exact envelope
-6. human-readable rationale chain (ordered)
-
-This preserves first-principles accountability and supports research iteration.
-
----
-
-## 13) Performance Strategy (Python-first)
-1. Python orchestration, compiled kernels later (Rust/C++/Cython/Numba) for:
-   - feature extraction
-   - move manifold filtering
-   - bounded search inner loops
-2. deterministic caching at:
-   - class normalization
-   - topology feature vectors
-   - category derivation outputs
-3. strict manifold pruning before search to avoid combinatorial blow-up.
-
----
-
-## 14) Minimal Viable Build Sequence
-
-1. Implement classifier + piece class normalization.
-2. Implement `KRvK`, `KBvK`, `KNvK` modules with truth adapter integration.
-3. Add transition policy with simple simplify/preserve modes.
-4. Add search policy with strict ambiguity trigger.
-5. Add first composition module (`KBNvK` from `KBvK` + `KNvK` substrate principles).
-6. Benchmark:
-   - move latency
-   - manifold reduction ratio
-   - truth-alignment in low-piece classes.
-
----
-
-## 15) Non-Negotiable Invariants
-1. Engine must always attempt topological derivation first.
-2. Search without topology envelope is disallowed by default.
-3. Every module declares dependencies and validation status.
-4. Cross-class transitions are first-class citizens (not side effects).
-5. Low-piece truth is the calibration anchor for upward composition.
-
----
-
-## 16) Closing Preservation Statement
-This specification operationalizes the first-principles Lakatosian architecture:
-- Hard core: topological classed reasoning over chess states.
-- Protective belt: modular class files, composition rules, transition/search policies.
-- Path forward: truth-validated low-piece modules driving scalable higher-piece navigation with constrained combinatorial search.
-
-The objective is not brute-force best-move extraction over full space, but principled navigation through interdependent topological classes with search only where theory-preserving ambiguity remains.
+This is the intended research program and should be the baseline for all future implementation artifacts.

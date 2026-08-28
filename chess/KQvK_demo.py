@@ -800,10 +800,10 @@ if __name__ == "__main__":
     print("\n\nTEST 3: THE HARD POSITION - WK:c8 WQ:d5 BK:b6")
 
     result_hard_topo = play_full_game(topo_hard_w, topo_hard_b, hard_state2, timeout_per_move=900.0)
-    print_game_summary(result_hard_topo, "Topological vs Topological (HARD: BK in center)")
+    print_game_summary(result_hard_topo, "Topological vs Topological (WK:c8 WQ:d5 BK:b6)")
     
     result_hard_topo = play_full_game(tradhard1, tradhard2, hard_state2, timeout_per_move=3600.0)
-    print_game_summary(result_hard_topo, "Topological vs Topological (HARD: BK in center)")
+    print_game_summary(result_hard_topo, "Traditional vs Topological (WK:c8 WQ:d5 BK:b6)")
     
     # Test 4: Random positions
     print("\n\nTEST 4: Random Position Tests (5 games each)")

@@ -1,4 +1,3 @@
-```markdown
 # Topological Chess Engine: A First-Principles Breakthrough in Chess AI
 
 ## Executive Summary
@@ -962,4 +961,4 @@ python topological_engine.py
 - Summary statistics
 
 **Runtime:** 5-10 minutes total for all tests
-```
+``

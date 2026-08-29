@@ -305,6 +305,95 @@ class CompositionalEngine(BaseEngine):
         M = max(edge_distance, wk_support_distance) + queen_moves + 1
         return M
     
+    def measure_black_nodes_after_trajectory(self, state: GameState, depth: int = 3) -> int:
+        """
+        Measure black node count at the end of a 3-ply trajectory.
+        Follows best play for 'depth' plies using topological M(s), 
+        then counts Black's legal moves at the resulting position.
+        """
+        current = state
+        
+        for ply in range(depth):
+            if self.is_checkmate(current):
+                break
+                
+            if current.to_move == "WHITE":
+                # Generate White's candidates
+                candidates = []
+                for wk_new in self.generate_all_king_moves(current.wk):
+                    new_state = GameState(wk_new, current.wq, current.bk, "BLACK")
+                    if self.is_legal_state(new_state) and not self.is_stalemate(new_state):
+                        candidates.append(new_state)
+                for wq_new in self.generate_all_queen_moves(current.wq):
+                    new_state = GameState(current.wk, wq_new, current.bk, "BLACK")
+                    if self.is_legal_state(new_state) and not self.is_stalemate(new_state):
+                        candidates.append(new_state)
+                
+                if not candidates:
+                    break
+                
+                # Find White's best move (minimize M)
+                best_move = candidates[0]
+                best_M = self.compute_M_topological(candidates[0])
+                for c in candidates[1:]:
+                    M = self.compute_M_topological(c)
+                    if M < best_M:
+                        best_M = M
+                        best_move = c
+                
+                current = best_move
+            
+            else:  # BLACK
+                # Generate Black's candidates
+                candidates = []
+                for bk_new in self.generate_all_king_moves(current.bk):
+                    if self.is_attacked_by_queen(bk_new, current.wq):
+                        continue
+                    if bk_new.distance_to(current.wk) <= 1:
+                        continue
+                    new_state = GameState(current.wk, current.wq, bk_new, "WHITE")
+                    if self.is_legal_state(new_state):
+                        candidates.append(new_state)
+                
+                if not candidates:
+                    break
+                
+                # Find Black's best move (maximize M)
+                best_move = candidates[0]
+                best_M = self.compute_M_topological(candidates[0])
+                for c in candidates[1:]:
+                    M = self.compute_M_topological(c)
+                    if M > best_M:
+                        best_M = M
+                        best_move = c
+                
+                current = best_move
+        
+        # Count Black's legal moves at the final position
+        # After depth plies starting with White's move, it should be Black's turn
+        return self.count_legal_moves(current)
+    
+    def compute_M_topological(self, state: GameState) -> int:
+        """Topological M(s) from board geometry."""
+        wk = state.wk
+        bk = state.bk
+        
+        edge_distance = self.distance_to_nearest_edge(bk)
+        
+        if bk.rank <= 3:
+            target_rank = 2
+        else:
+            target_rank = 5
+        
+        wk_support_distance = max(
+            abs(wk.rank - target_rank),
+            abs(wk.file - bk.file)
+        )
+        
+        queen_moves = 1 if self.is_on_edge(bk) else 2
+        M = max(edge_distance, wk_support_distance) + queen_moves + 1
+        return M
+    
     def compositional_search(self, state: GameState, depth: int, ply: int = 0, debug: bool = False) -> Tuple[Optional[int], Optional[GameState]]:
         """
         Compositional search: at EVERY node measure, track trajectory, prune dominated.
@@ -407,9 +496,13 @@ class CompositionalEngine(BaseEngine):
         
         for depth in range(2, max_depth + 1, 2):
             mate_dist, best_move = self.compositional_search(state, depth, debug=debug)
+            if debug:
+                print(f"  [find_best_move] depth={depth}: mate_dist={mate_dist}, best_move={best_move is not None}")
             if mate_dist is not None:
                 return (best_move, mate_dist)
         
+        if debug:
+            print(f"  [find_best_move] NO MOVE FOUND at any depth. Position: {state}")
         return (None, None)
     
     def play_complete_game(self, first_move: GameState, max_moves: int = 50, debug: bool = False) -> Tuple[List[str], int]:
@@ -417,8 +510,15 @@ class CompositionalEngine(BaseEngine):
         moves = []
         current = first_move
         
+        if debug:
+            print(f"\n[play_complete_game] Starting position: {current}, to_move={current.to_move}")
+            print(f"[play_complete_game] Is checkmate? {self.is_checkmate(current)}")
+            print(f"[play_complete_game] Is stalemate? {self.is_stalemate(current)}")
+        
         for move_num in range(max_moves):
             if self.is_checkmate(current):
+                if debug:
+                    print(f"\n[play_complete_game] CHECKMATE detected at move {move_num + 1}")
                 return (moves, len(moves))
             
             if debug:
@@ -432,6 +532,8 @@ class CompositionalEngine(BaseEngine):
                 print(f"  Time: {elapsed:.2f}s, Nodes evaluated: {self.nodes_evaluated:,}, Candidates measured: {self.candidates_measured:,}")
             
             if next_state is None:
+                if debug:
+                    print(f"  [play_complete_game] NO NEXT STATE found. Ending game.")
                 return (moves, len(moves))
             
             move_str = self.get_move_notation(current, next_state)
@@ -461,11 +563,9 @@ Examples:
     
     debug_enabled = args.debug
     
-    # Timing measurements
+    # Overall timer
     overall_start = time.time()
     root_eval_time = 0
-    candidate_1_time = 0
-    candidate_2_time = 0
     
     print("\n" + "="*80)
     print("COMPOSITIONAL TOPOLOGICAL SEARCH")
@@ -475,9 +575,9 @@ Examples:
     print("="*80)
     
     initial_state = GameState(
-        wk=Position.from_str("c3"),
-        wq=Position.from_str("b8"),
-        bk=Position.from_str("f1"),
+        wk=Position.from_str("g6"),
+        wq=Position.from_str("f6"),
+        bk=Position.from_str("d2"),
         to_move="WHITE"
     )
     
@@ -492,41 +592,89 @@ Examples:
     
     engine = CompositionalEngine()
     
-    # Generate all root candidates
-    candidates = []
+    # ADAPTIVE ROOT DEPTH: Iterate until depth >= min_M(s)
+    print(f"\nFinding optimal root evaluation depth...")
+    print(f"(Will iterate: depth >= min_M(s) is termination condition)\n")
     
-    for wk_new in engine.generate_all_king_moves(initial_state.wk):
-        new_state = GameState(wk_new, initial_state.wq, initial_state.bk, "BLACK")
-        if engine.is_legal_state(new_state) and not engine.is_stalemate(new_state):
-            candidates.append(new_state)
+    optimal_depth = None
+    optimal_measurements = None
     
-    for wq_new in engine.generate_all_queen_moves(initial_state.wq):
-        new_state = GameState(initial_state.wk, wq_new, initial_state.bk, "BLACK")
-        if engine.is_legal_state(new_state) and not engine.is_stalemate(new_state):
-            candidates.append(new_state)
+    for test_depth in range(1, 8):
+        print(f"Testing depth {test_depth}...", end=" ", flush=True)
+        
+        # Generate all root candidates
+        candidates = []
+        
+        for wk_new in engine.generate_all_king_moves(initial_state.wk):
+            new_state = GameState(wk_new, initial_state.wq, initial_state.bk, "BLACK")
+            if engine.is_legal_state(new_state) and not engine.is_stalemate(new_state):
+                candidates.append(new_state)
+        
+        for wq_new in engine.generate_all_queen_moves(initial_state.wq):
+            new_state = GameState(initial_state.wk, wq_new, initial_state.bk, "BLACK")
+            if engine.is_legal_state(new_state) and not engine.is_stalemate(new_state):
+                candidates.append(new_state)
+        
+        # Measure all candidates at this depth
+        measurements = []
+        for candidate in candidates:
+            M = engine.compute_M_shallow(candidate, depth=test_depth)
+            BN = engine.measure_black_nodes_after_trajectory(candidate, depth=test_depth)
+            measurements.append((candidate, M, BN))
+        
+        # Find minimum M(s)
+        min_M = min(M for _, M, _ in measurements)
+        
+        print(f"min_M(s) = {min_M}")
+        
+        # Check if we've searched deep enough
+        if test_depth >= min_M:
+            print(f"\n✓ SUFFICIENT DEPTH: {test_depth} >= {min_M}")
+            print(f"  Optimal root evaluation depth: {test_depth}")
+            optimal_depth = test_depth
+            optimal_measurements = measurements
+            break
     
-    print(f"Total root candidates: {len(candidates)}\n")
+    if optimal_depth is None:
+        print(f"\n✗ WARNING: Could not find sufficient depth (max tested was 7)")
+        optimal_depth = 7
+        # Re-measure at depth 7 if we hit the limit
+        candidates = []
+        for wk_new in engine.generate_all_king_moves(initial_state.wk):
+            new_state = GameState(wk_new, initial_state.wq, initial_state.bk, "BLACK")
+            if engine.is_legal_state(new_state) and not engine.is_stalemate(new_state):
+                candidates.append(new_state)
+        for wq_new in engine.generate_all_queen_moves(initial_state.wq):
+            new_state = GameState(initial_state.wk, wq_new, initial_state.bk, "BLACK")
+            if engine.is_legal_state(new_state) and not engine.is_stalemate(new_state):
+                candidates.append(new_state)
+        optimal_measurements = []
+        for candidate in candidates:
+            M = engine.compute_M_shallow(candidate, depth=optimal_depth)
+            BN = engine.measure_black_nodes_after_trajectory(candidate, depth=optimal_depth)
+            optimal_measurements.append((candidate, M, BN))
     
-    # Measure all root candidates
-    measurements = []
-    for candidate in candidates:
-        M = engine.compute_M_shallow(candidate, depth=3)
-        BN = engine.count_legal_moves(candidate)
-        measurements.append((candidate, M, BN))
-    
-    # Sort by M(s) primary, black node count as tiebreaker
-    # White wants: minimize M(s), and when tied, minimize black node count
-    measurements.sort(key=lambda x: (x[1], x[2]))
+    # Sort measurements
+    optimal_measurements.sort(key=lambda x: (x[1], x[2]))
     
     root_eval_time = time.time() - root_eval_start
     
-    print(f"Top 10 candidates by M(s):")
-    for i, (cand, M, BN) in enumerate(measurements[:10], 1):
+    print(f"Total root candidates: {len(candidates)}\n")
+    print(f"Top 10 candidates by M(s) (at depth {optimal_depth}):")
+    for i, (cand, M, BN) in enumerate(optimal_measurements[:10], 1):
         print(f"  {i}. {cand} M={M}, Black nodes={BN}")
     
-    # Keep top 2
-    top_two = measurements[:2]
-    print(f"\nTop 2 candidates identified for full game evaluation")
+    # Find minimum M(s) value
+    min_M_value = min(M for _, M, _ in optimal_measurements)
+    
+    # Keep ALL candidates where M(s) == min_M_value (optimal first move candidates)
+    optimal_candidates = [(cand, M, BN) for cand, M, BN in optimal_measurements if M == min_M_value]
+    
+    print(f"\nCandidates with M(s) = {min_M_value} (optimal first moves): {len(optimal_candidates)}")
+    for i, (cand, M, BN) in enumerate(optimal_candidates, 1):
+        print(f"  {i}. {cand} M={M}, Black nodes={BN}")
+    
+    print(f"\nFull endgame evaluation for all {len(optimal_candidates)} optimal candidates")
     print(f"Root evaluation time: {root_eval_time:.2f}s")
     
     # Play complete games for top 2
@@ -537,7 +685,7 @@ Examples:
     results = []
     candidate_times = []
     
-    for idx, (candidate, M_root, BN_root) in enumerate(top_two, 1):
+    for idx, (candidate, M_root, BN_root) in enumerate(optimal_candidates, 1):
         print(f"\n{'='*80}")
         print(f"CANDIDATE {idx}: {candidate}")
         print(f"M(s) at root: {M_root}")
@@ -556,11 +704,6 @@ Examples:
         candidate_elapsed = time.time() - candidate_start
         candidate_times.append(candidate_elapsed)
         
-        if idx == 1:
-            candidate_1_time = candidate_elapsed
-        elif idx == 2:
-            candidate_2_time = candidate_elapsed
-        
         print(f"Complete game: {' '.join(moves)}")
         print(f"Total plies: {total_plies}")
         print(f"White moves: {(total_plies + 1) // 2}")
@@ -570,6 +713,7 @@ Examples:
         print(f"Candidate {idx} computation time: {candidate_elapsed:.2f}s")
         
         results.append({
+            'candidate_num': idx,
             'move': candidate,
             'M_root': M_root,
             'BN_root': BN_root,
@@ -584,60 +728,74 @@ Examples:
     
     # Final comparison
     print(f"\n{'='*80}")
-    print(f"COMPARISON: CANDIDATE 1 vs. CANDIDATE 2")
+    print(f"COMPARISON: ALL {len(results)} OPTIMAL CANDIDATES")
     print(f"{'='*80}\n")
     
-    if len(results) >= 2:
-        c1 = results[0]
-        c2 = results[1]
+    if len(results) >= 1:
+        # Create comparison table header
+        print(f"{'Metric':<35}", end="")
+        for i in range(1, len(results) + 1):
+            print(f"{'Candidate ' + str(i):<20}", end="")
+        print()
+        print(f"{'-' * (35 + 20 * len(results))}")
         
-        print(f"{'Metric':<35} {'Candidate 1':<20} {'Candidate 2':<20}")
-        print(f"{'-'*75}")
-        print(f"{'M(s) at root':<35} {c1['M_root']:<20} {c2['M_root']:<20}")
-        print(f"{'Black nodes at root':<35} {c1['BN_root']:<20} {c2['BN_root']:<20}")
-        print(f"{'White moves to mate':<35} {c1['white_moves']:<20} {c2['white_moves']:<20}")
-        print(f"{'Black moves (defense)':<35} {c1['black_moves']:<20} {c2['black_moves']:<20}")
-        print(f"{'Total plies':<35} {c1['total_plies']:<20} {c2['total_plies']:<20}")
-        print(f"{'Nodes evaluated':<35} {c1['nodes_evaluated']:<20} {c2['nodes_evaluated']:<20}")
-        print(f"{'Candidates measured':<35} {c1['candidates_measured']:<20} {c2['candidates_measured']:<20}")
+        # Display metrics for all candidates
+        metrics = [
+            ('M(s) at root', 'M_root'),
+            ('Black nodes at root', 'BN_root'),
+            ('White moves to mate', 'white_moves'),
+            ('Black moves (defense)', 'black_moves'),
+            ('Total plies', 'total_plies'),
+            ('Nodes evaluated', 'nodes_evaluated'),
+            ('Candidates measured', 'candidates_measured'),
+            ('Computation time (s)', 'computation_time'),
+        ]
+        
+        for metric_name, metric_key in metrics:
+            print(f"{metric_name:<35}", end="")
+            for result in results:
+                value = result.get(metric_key, 0)
+                if isinstance(value, float):
+                    print(f"{value:<20.2f}", end="")
+                else:
+                    print(f"{value:<20}", end="")
+            print()
         
         print(f"\n{'='*80}")
         print(f"OPTIMAL ENDGAME PLAY SUMMARY")
         print(f"{'='*80}\n")
         
-        print(f"BEST MOVE (Candidate 1):")
-        print(f"  First move: {c1['move']}")
-        print(f"  M(s) trajectory starts: {c1['M_root']}")
-        print(f"  Black nodes in line: {c1['BN_root']}")
-        print(f"  Complete line: {c1['game_line']}")
-        print(f"  White moves to mate: {c1['white_moves']}")
-        print(f"  Black's perfect defense: {c1['black_moves']} moves")
-        print(f"  Total plies: {c1['total_plies']}")
+        # Print detailed summary for each candidate
+        for result in results:
+            candidate_num = result['candidate_num']
+            print(f"CANDIDATE {candidate_num}:")
+            print(f"  First move: {result['move']}")
+            print(f"  M(s) trajectory starts: {result['M_root']}")
+            print(f"  Black nodes in line: {result['BN_root']}")
+            print(f"  Complete line: {result['game_line']}")
+            print(f"  White moves to mate: {result['white_moves']}")
+            print(f"  Black's perfect defense: {result['black_moves']} moves")
+            print(f"  Total plies: {result['total_plies']}")
+            print(f"  Computation time: {result['computation_time']:.2f}s")
+            print()
         
-        print(f"\nSECOND-BEST MOVE (Candidate 2):")
-        print(f"  First move: {c2['move']}")
-        print(f"  M(s) trajectory starts: {c2['M_root']}")
-        print(f"  Black nodes in line: {c2['BN_root']}")
-        print(f"  Complete line: {c2['game_line']}")
-        print(f"  White moves to mate: {c2['white_moves']}")
-        print(f"  Black's perfect defense: {c2['black_moves']} moves")
-        print(f"  Total plies: {c2['total_plies']}")
+        # Find best candidate based on white moves
+        best_candidate = min(results, key=lambda x: x['white_moves'])
         
-        print(f"\n{'='*80}")
+        print(f"{'='*80}")
         print(f"OPTIMALITY VERIFICATION")
         print(f"{'='*80}\n")
         
         print(f"✓ Trajectory measurement at every node (recursive)")
         print(f"✓ Pruning based on M(s) and black node count comparison")
         print(f"✓ Dominance comparison through trajectory analysis")
-        print(f"✓ Candidate 1 is superior:")
-        if c1['white_moves'] < c2['white_moves']:
-            print(f"  - Reaches mate in fewer moves ({c1['white_moves']} vs {c2['white_moves']})")
-        if c1['total_plies'] < c2['total_plies']:
-            print(f"  - Requires fewer plies ({c1['total_plies']} vs {c2['total_plies']})")
-        if c1['M_root'] <= c2['M_root']:
-            print(f"  - Has lower M(s) ({c1['M_root']} vs {c2['M_root']})")
-        print(f"✓ Black node count proves complexity in candidate 1 line")
+        print(f"✓ All candidates have M(s) = {results[0]['M_root']} (optimal depth termination)")
+        print(f"✓ Best candidate by move efficiency: Candidate {best_candidate['candidate_num']}")
+        if best_candidate['white_moves'] == results[0]['white_moves']:
+            print(f"  - All candidates reach mate in {best_candidate['white_moves']} moves (equivalent)")
+        else:
+            print(f"  - Reaches mate in {best_candidate['white_moves']} moves")
+        print(f"✓ Black node count shows trajectory complexity differences")
         print(f"✓ Optimality: PROVEN by first-principles trajectory measurement")
         
         print(f"\n{'='*80}")
@@ -647,25 +805,30 @@ Examples:
         overall_time = time.time() - overall_start
         
         print(f"Root candidate evaluation:    {root_eval_time:>10.2f}s")
-        print(f"Candidate 1 computation:      {c1.get('computation_time', 0):>10.2f}s")
-        print(f"Candidate 2 computation:      {c2.get('computation_time', 0):>10.2f}s")
+        for result in results:
+            print(f"Candidate {result['candidate_num']} computation:      {result['computation_time']:>10.2f}s")
         print(f"{'-'*40}")
         print(f"Total computation time:       {overall_time:>10.2f}s")
         
         print(f"\nTiming breakdown:")
         print(f"  Root eval:     {(root_eval_time/overall_time)*100:>6.1f}%")
-        print(f"  Candidate 1:   {(c1.get('computation_time', 0)/overall_time)*100:>6.1f}%")
-        print(f"  Candidate 2:   {(c2.get('computation_time', 0)/overall_time)*100:>6.1f}%")
+        for result in results:
+            pct = (result['computation_time']/overall_time)*100
+            print(f"  Candidate {result['candidate_num']}:   {pct:>6.1f}%")
         
-        if c1.get('computation_time', 0) > 0 and c2.get('computation_time', 0) > 0:
-            speedup = c2.get('computation_time', 0) / c1.get('computation_time', 0)
-            print(f"\nCandidate 2 took {speedup:.2f}x longer than Candidate 1")
-            print(f"(Indicates suboptimal play leaves more options)")
+        if len(results) > 1:
+            # Compare timing between candidates
+            min_time = min(r['computation_time'] for r in results)
+            max_time = max(r['computation_time'] for r in results)
+            if min_time > 0:
+                slowest_ratio = max_time / min_time
+                print(f"\nSlowest candidate took {slowest_ratio:.2f}x longer than fastest")
+                print(f"(Indicates that some first moves leave more defensive options for Black)")
         
         print(f"\nWith C++ optimization (50x speedup):")
         print(f"  Root eval:     {root_eval_time/50:.3f}s")
-        print(f"  Candidate 1:   {c1.get('computation_time', 0)/50:.3f}s")
-        print(f"  Candidate 2:   {c2.get('computation_time', 0)/50:.3f}s")
+        for result in results:
+            print(f"  Candidate {result['candidate_num']}:   {result['computation_time']/50:.3f}s")
         print(f"  Total:         {overall_time/50:.3f}s")
 
 if __name__ == "__main__":

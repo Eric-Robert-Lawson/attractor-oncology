@@ -505,7 +505,7 @@ class CompositionalEngine(BaseEngine):
             print(f"  [find_best_move] NO MOVE FOUND at any depth. Position: {state}")
         return (None, None)
     
-    def play_complete_game(self, first_move: GameState, max_moves: int = 50, debug: bool = False) -> Tuple[List[str], int]:
+    def play_complete_game(self, first_move: GameState, max_moves: int = 50, debug: bool = False, M_root: int=12) -> Tuple[List[str], int]:
         """Play complete game from first move using compositional search."""
         moves = []
         current = first_move
@@ -525,7 +525,7 @@ class CompositionalEngine(BaseEngine):
                 print(f"\n[Move {move_num + 1}] Position: {current}, to_move={current.to_move}")
                 start = time.time()
             
-            next_state, _ = self.find_best_move(current, max_depth=8, debug=debug)
+            next_state, _ = self.find_best_move(current, max_depth=M_root, debug=debug)
             
             if debug:
                 elapsed = time.time() - start
@@ -539,6 +539,8 @@ class CompositionalEngine(BaseEngine):
             move_str = self.get_move_notation(current, next_state)
             moves.append(move_str)
             current = next_state
+
+            if moves == []: print("There was no move found within 8 depth, if M(s) > 8, this is expected and must modify code to allow for this situation. \n\n If this is not the case, this means this position was excluded from being optimal as no best move was truly found!")
         
         return (moves, len(moves))
 
@@ -699,7 +701,7 @@ Examples:
         candidate_start = time.time()
         
         # Find complete game (with optional debug output to see progress)
-        moves, total_plies = engine.play_complete_game(candidate, max_moves=50, debug=debug_enabled)
+        moves, total_plies = engine.play_complete_game(candidate, max_moves=50, debug=debug_enabled, M_root=M_root)
         
         candidate_elapsed = time.time() - candidate_start
         candidate_times.append(candidate_elapsed)

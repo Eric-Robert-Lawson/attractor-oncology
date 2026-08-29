@@ -356,6 +356,7 @@ public:
                 if (is_legal_state(ns) && !is_stalemate(ns)) cands.push_back(ns);
             }
             for (auto& wq_n : generate_all_queen_moves(st.wq)) {
+                if (wq_n.distance_to(st.bk) < 2) continue;  // Queen can't move adjacent to Black King (would be captured)
                 GameState ns(st.wk, wq_n, st.bk, 'B');
                 if (is_legal_state(ns) && !is_stalemate(ns)) cands.push_back(ns);
             }
@@ -532,8 +533,8 @@ int main(int argc, char* argv[]) {
     cout << "Trajectory Measurement with Black Node Count Accumulation\n";
     cout << string(80, '=') << "\n";
     
-    GameState init_st(Position::from_str("g6"), Position::from_str("f6"), 
-                      Position::from_str("d2"), 'W');
+    GameState init_st(Position::from_str("g7"), Position::from_str("f5"), 
+                      Position::from_str("c3"), 'W');
     cout << "\nInitial position: " << init_st.str() << "\n";
     
     cout << "\n" << string(80, '=') << "\n";

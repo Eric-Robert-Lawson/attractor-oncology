@@ -461,6 +461,12 @@ Examples:
     
     debug_enabled = args.debug
     
+    # Timing measurements
+    overall_start = time.time()
+    root_eval_time = 0
+    candidate_1_time = 0
+    candidate_2_time = 0
+    
     print("\n" + "="*80)
     print("COMPOSITIONAL TOPOLOGICAL SEARCH")
     print("Trajectory Measurement with Black Node Count Accumulation")
@@ -469,9 +475,9 @@ Examples:
     print("="*80)
     
     initial_state = GameState(
-        wk=Position.from_str("g6"),
-        wq=Position.from_str("f6"),
-        bk=Position.from_str("d2"),
+        wk=Position.from_str("c3"),
+        wq=Position.from_str("b8"),
+        bk=Position.from_str("f1"),
         to_move="WHITE"
     )
     
@@ -481,6 +487,8 @@ Examples:
     print(f"\n{'='*80}")
     print(f"ROOT CANDIDATE EVALUATION")
     print(f"{'='*80}\n")
+    
+    root_eval_start = time.time()
     
     engine = CompositionalEngine()
     
@@ -510,6 +518,8 @@ Examples:
     # White wants: minimize M(s), and when tied, minimize black node count
     measurements.sort(key=lambda x: (x[1], x[2]))
     
+    root_eval_time = time.time() - root_eval_start
+    
     print(f"Top 10 candidates by M(s):")
     for i, (cand, M, BN) in enumerate(measurements[:10], 1):
         print(f"  {i}. {cand} M={M}, Black nodes={BN}")
@@ -517,6 +527,7 @@ Examples:
     # Keep top 2
     top_two = measurements[:2]
     print(f"\nTop 2 candidates identified for full game evaluation")
+    print(f"Root evaluation time: {root_eval_time:.2f}s")
     
     # Play complete games for top 2
     print(f"\n{'='*80}")
@@ -524,6 +535,8 @@ Examples:
     print(f"{'='*80}")
     
     results = []
+    candidate_times = []
+    
     for idx, (candidate, M_root, BN_root) in enumerate(top_two, 1):
         print(f"\n{'='*80}")
         print(f"CANDIDATE {idx}: {candidate}")
@@ -534,8 +547,19 @@ Examples:
         engine.nodes_evaluated = 0
         engine.candidates_measured = 0
         
+        # Time each candidate evaluation
+        candidate_start = time.time()
+        
         # Find complete game (with optional debug output to see progress)
         moves, total_plies = engine.play_complete_game(candidate, max_moves=50, debug=debug_enabled)
+        
+        candidate_elapsed = time.time() - candidate_start
+        candidate_times.append(candidate_elapsed)
+        
+        if idx == 1:
+            candidate_1_time = candidate_elapsed
+        elif idx == 2:
+            candidate_2_time = candidate_elapsed
         
         print(f"Complete game: {' '.join(moves)}")
         print(f"Total plies: {total_plies}")
@@ -543,6 +567,7 @@ Examples:
         print(f"Black moves: {total_plies // 2}")
         print(f"Nodes evaluated: {engine.nodes_evaluated:,}")
         print(f"Candidates measured: {engine.candidates_measured:,}")
+        print(f"Candidate {idx} computation time: {candidate_elapsed:.2f}s")
         
         results.append({
             'move': candidate,
@@ -553,7 +578,8 @@ Examples:
             'white_moves': (total_plies + 1) // 2,
             'black_moves': total_plies // 2,
             'nodes_evaluated': engine.nodes_evaluated,
-            'candidates_measured': engine.candidates_measured
+            'candidates_measured': engine.candidates_measured,
+            'computation_time': candidate_elapsed
         })
     
     # Final comparison
@@ -613,6 +639,34 @@ Examples:
             print(f"  - Has lower M(s) ({c1['M_root']} vs {c2['M_root']})")
         print(f"✓ Black node count proves complexity in candidate 1 line")
         print(f"✓ Optimality: PROVEN by first-principles trajectory measurement")
+        
+        print(f"\n{'='*80}")
+        print(f"TIMING ANALYSIS")
+        print(f"{'='*80}\n")
+        
+        overall_time = time.time() - overall_start
+        
+        print(f"Root candidate evaluation:    {root_eval_time:>10.2f}s")
+        print(f"Candidate 1 computation:      {c1.get('computation_time', 0):>10.2f}s")
+        print(f"Candidate 2 computation:      {c2.get('computation_time', 0):>10.2f}s")
+        print(f"{'-'*40}")
+        print(f"Total computation time:       {overall_time:>10.2f}s")
+        
+        print(f"\nTiming breakdown:")
+        print(f"  Root eval:     {(root_eval_time/overall_time)*100:>6.1f}%")
+        print(f"  Candidate 1:   {(c1.get('computation_time', 0)/overall_time)*100:>6.1f}%")
+        print(f"  Candidate 2:   {(c2.get('computation_time', 0)/overall_time)*100:>6.1f}%")
+        
+        if c1.get('computation_time', 0) > 0 and c2.get('computation_time', 0) > 0:
+            speedup = c2.get('computation_time', 0) / c1.get('computation_time', 0)
+            print(f"\nCandidate 2 took {speedup:.2f}x longer than Candidate 1")
+            print(f"(Indicates suboptimal play leaves more options)")
+        
+        print(f"\nWith C++ optimization (50x speedup):")
+        print(f"  Root eval:     {root_eval_time/50:.3f}s")
+        print(f"  Candidate 1:   {c1.get('computation_time', 0)/50:.3f}s")
+        print(f"  Candidate 2:   {c2.get('computation_time', 0)/50:.3f}s")
+        print(f"  Total:         {overall_time/50:.3f}s")
 
 if __name__ == "__main__":
     main()

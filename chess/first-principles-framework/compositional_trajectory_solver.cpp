@@ -198,7 +198,7 @@ class CompositionalEngine : public BaseEngine {
 public:
     int nodes_evaluated = 0;
     int candidates_measured = 0;
-    
+    unordered_map<uint64_t, int> M_cache;
 // Hash function for memoization - converts position + depth to uint64_t
     uint64_t make_cache_key(const GameState& st, int depth) const {
         uint64_t key = 0;
@@ -332,24 +332,17 @@ public:
     ) {
         uint64_t cache_key = make_cache_key(st, depth);
         if (memo.count(cache_key)) {
-            if (ply == 0) cout << "[DEBUG] *** MEMO HIT at depth=" << depth << " ***\n";
             return memo[cache_key];
         }
         
-        if (ply == 0) {
-            cout << "\n[DEBUG compositional_search] START depth=" << depth << ", position=" << st.str()
-                 << ", to_move=" << st.to_move << "\n";
-        }
         
         if (is_checkmate(st)) {
-            if (ply == 0) cout << "[DEBUG] CHECKMATE at start\n";
             auto res = make_pair(optional<int>(0), optional<GameState>());
             memo[cache_key] = res;
             return res;
         }
         
         if (depth == 0) {
-            if (ply == 0) cout << "[DEBUG] Depth limit reached\n";
             auto res = make_pair(optional<int>(), optional<GameState>());
             memo[cache_key] = res;
             return res;
@@ -375,14 +368,8 @@ public:
             }
         }
         
-        if (ply == 0) cout << "[DEBUG] Generated " << cands.size() << " candidates\n";
         
         if (cands.empty()) {
-            if (ply == 0) {
-                cout << "[DEBUG] NO CANDIDATES FOUND!\n";
-                cout << "[DEBUG] Position: " << st.str() << "\n";
-                cout << "[DEBUG] to_move: " << st.to_move << "\n";
-            }
             auto res = make_pair(optional<int>(), optional<GameState>());
             memo[cache_key] = res;
             return res;
@@ -391,12 +378,21 @@ public:
         candidates_measured += cands.size();
         vector<tuple<GameState,int,int>> meas;
         for (auto& c : cands) {
-            int M = compute_M_shallow(c, 3);
+            uint64_t m_key = make_cache_key(c, 3);  // Reuse existing hash function
+            int M;
+            
+            auto it = M_cache.find(m_key);
+            if (it != M_cache.end()) {
+                M = it->second;  // Cache hit - instant
+            } else {
+                M = compute_M_shallow(c, 3);
+                M_cache[m_key] = M;  // Cache miss - compute once, reuse forever
+            }
+            
             int BN = count_legal_moves(c);
             meas.push_back({c, M, BN});
         }
         
-        if (ply == 0) cout << "[DEBUG] Measured " << meas.size() << " candidates\n";
         
         int best_M;
         string dir;
@@ -410,7 +406,6 @@ public:
             dir = "maximize";
         }
         
-        if (ply == 0) cout << "[DEBUG] best_M=" << best_M << ", direction=" << dir << "\n";
         
         int thresh = max(2, best_M / 3);
         vector<GameState> viable;
@@ -419,10 +414,8 @@ public:
             else if (dir == "maximize" && M >= best_M - thresh) viable.push_back(c);
         }
         
-        if (ply == 0) cout << "[DEBUG] threshold=" << thresh << ", viable=" << viable.size() << "/" << cands.size() << "\n";
         
         if (viable.size() < 3) {
-            if (ply == 0) cout << "[DEBUG] Increasing viable from " << viable.size() << " to 3\n";
             sort(meas.begin(), meas.end(), [](auto& a, auto& b) { return get<1>(a) < get<1>(b); });
             viable.clear();
             for (size_t i = 0; i < min(size_t(3), meas.size()); i++) {
@@ -441,17 +434,11 @@ public:
         optional<int> best_val;
         optional<GameState> best_mv;
         
-        if (ply == 0) cout << "[DEBUG] Recursing on " << viable.size() << " candidates\n";
         
         for (size_t i = 0; i < viable.size(); i++) {
             auto [val, mv] = compositional_search_impl(viable[i], depth-1, ply+1, debug, memo);
             nodes_evaluated++;
             
-            if (ply == 0) {
-                cout << "[DEBUG] Candidate " << (i+1) << "/" << viable.size() << ": value=";
-                if (val) cout << *val; else cout << "None";
-                cout << "\n";
-            }
             
             if (val) {
                 int v = *val + 1;
@@ -468,11 +455,6 @@ public:
             }
         }
         
-        if (ply == 0) {
-            cout << "[DEBUG] RESULT depth=" << depth << ": best_value=";
-            if (best_val) cout << *best_val; else cout << "None";
-            cout << ", best_move=" << (best_mv ? "True" : "False") << "\n";
-        }
         
         auto res = make_pair(best_val, best_mv);
         memo[cache_key] = res;
@@ -485,74 +467,48 @@ public:
         nodes_evaluated = 0;
         candidates_measured = 0;
         
-        cout << "\n[DEBUG find_best_move] Starting search from: " << st.str() << "\n";
-        cout << "[DEBUG find_best_move] to_move: " << st.to_move << "\n";
-        cout << "[DEBUG find_best_move] max_depth: " << max_depth << "\n";
         
         unordered_map<uint64_t, pair<optional<int>, optional<GameState>>> memo;
         
         for (int depth = 2; depth <= max_depth + 1; depth += 2) {
-            cout << "\n[DEBUG find_best_move] Testing depth " << depth << "...\n";
             auto [md, bm] = compositional_search_impl(st, depth, 0, debug, memo);
-            
-            cout << "[DEBUG find_best_move] depth=" << depth << ": mate_dist=";
-            if (md) cout << *md; else cout << "None";
-            cout << ", best_move=" << (bm ? "True" : "False") << "\n";
-            
             if (md) {
-                cout << "[DEBUG find_best_move] FOUND at depth " << depth << "\n";
                 return make_pair(bm, md);
             } else {
-                cout << "[DEBUG find_best_move] Continuing...\n";
             }
         }
         
-        cout << "\n[DEBUG find_best_move] EXHAUSTED ALL DEPTHS\n";
         return make_pair(optional<GameState>(), optional<int>());
     }
     
     tuple<vector<string>, int, vector<int>> play_complete_game(
-        const GameState& first, int max_moves = 50, bool debug = false, int game_search_depth = 8
+        const GameState& first, int max_moves = 50, bool debug = false, int game_search_depth = 8,
+        vector<string> initial_moves = {}, vector<int> initial_bnc = {}
     ) {
-        vector<string> mvs;
+        vector<string> mvs = initial_moves;
         GameState curr = first;
-        vector<int> bnc;
-        
-        cout << "\n[DEBUG play_complete_game] Starting game evaluation\n";
-        cout << "[DEBUG] Game search depth: " << game_search_depth << "\n";
-        cout << "[DEBUG] Starting position: " << curr.str() << "\n";
-        cout << "[DEBUG] to_move: " << curr.to_move << "\n";
+        vector<int> bnc = initial_bnc;
         
         for (int move_num = 0; move_num < max_moves; move_num++) {
-            cout << "\n[DEBUG] ========== MOVE " << (move_num+1) << " ==========\n";
-            cout << "[DEBUG] Current position: " << curr.str() << "\n";
-            cout << "[DEBUG] to_move: " << curr.to_move << "\n";
-            
             if (is_checkmate(curr)) {
-                cout << "[DEBUG] CHECKMATE DETECTED - Game over\n";
                 return make_tuple(mvs, (int)mvs.size(), bnc);
             }
             
-            cout << "[DEBUG] Calling find_best_move with max_depth=" << game_search_depth << "\n";
             auto [ns, md] = find_best_move(curr, 2*game_search_depth, debug);
             
             if (!ns) {
-                cout << "[DEBUG] NO NEXT STATE FOUND\n";
                 return make_tuple(mvs, (int)mvs.size(), bnc);
             }
             
             string mv_str = get_move_notation(curr, *ns);
-            cout << "[DEBUG] Move notation: " << mv_str << "\n";
             mvs.push_back(mv_str);
             
             int bn = count_legal_moves(*ns);
             bnc.push_back(bn);
-            cout << "[DEBUG] Black nodes at position: " << bn << "\n";
             
             curr = *ns;
         }
         
-        cout << "[DEBUG] Reached max_moves limit\n";
         return make_tuple(mvs, (int)mvs.size(), bnc);
     }
 };
@@ -574,11 +530,10 @@ int main(int argc, char* argv[]) {
     cout << "\n" << string(80, '=') << "\n";
     cout << "COMPOSITIONAL TOPOLOGICAL SEARCH\n";
     cout << "Trajectory Measurement with Black Node Count Accumulation\n";
-    if (debug_en) cout << "[DEBUG MODE ENABLED]\n";
     cout << string(80, '=') << "\n";
     
     GameState init_st(Position::from_str("g6"), Position::from_str("f6"), 
-                    Position::from_str("d2"), 'W');
+                      Position::from_str("d2"), 'W');
     cout << "\nInitial position: " << init_st.str() << "\n";
     
     cout << "\n" << string(80, '=') << "\n";

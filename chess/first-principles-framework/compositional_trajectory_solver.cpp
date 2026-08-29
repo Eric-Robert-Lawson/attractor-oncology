@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <unordered_map>
 #include <set>
 #include <string>
 #include <cmath>
@@ -198,6 +199,19 @@ public:
     int nodes_evaluated = 0;
     int candidates_measured = 0;
     
+// Hash function for memoization - converts position + depth to uint64_t
+    uint64_t make_cache_key(const GameState& st, int depth) const {
+        uint64_t key = 0;
+        key |= ((uint64_t)st.wk.file << 56);
+        key |= ((uint64_t)st.wk.rank << 52);
+        key |= ((uint64_t)st.wq.file << 48);
+        key |= ((uint64_t)st.wq.rank << 44);
+        key |= ((uint64_t)st.bk.file << 40);
+        key |= ((uint64_t)st.bk.rank << 36);
+        key |= ((uint64_t)depth << 32);
+        return key;
+    }
+
     int compute_M_topological(const GameState& st) const {
         int edge_dist = distance_to_nearest_edge(st.bk);
         int target_rank = (st.bk.rank <= 3) ? 2 : 5;
@@ -212,6 +226,7 @@ public:
         
         if (st.to_move == "WHITE") {
             vector<GameState> cands;
+            cands.reserve(64);
             for (auto& wk_n : generate_all_king_moves(st.wk)) {
                 GameState ns(wk_n, st.wq, st.bk, "BLACK");
                 if (is_legal_state(ns) && !is_stalemate(ns)) cands.push_back(ns);
@@ -223,19 +238,23 @@ public:
             if (cands.empty()) return 99;
             
             int best_M = INF_MAX;
-            for (auto& c : cands) {
-                best_M = min(best_M, 1 + compute_M_shallow(c, depth - 1));
-            }
-            int thresh = max(2, best_M / 3);
-            
             int res = INF_MAX;
+
+            vector<int> M_values;  // Cache the M values
             for (auto& c : cands) {
                 int M = 1 + compute_M_shallow(c, depth - 1);
+                M_values.push_back(M);
+                best_M = min(best_M, M);
+            }
+
+            int thresh = max(2, best_M / 3);
+            for (int M : M_values) {
                 if (M <= best_M + thresh) res = min(res, M);
             }
             return res;
         } else {
             vector<GameState> cands;
+            cands.reserve(64);
             for (auto& bk_n : generate_all_king_moves(st.bk)) {
                 if (is_attacked_by_queen(bk_n, st.wq)) continue;
                 if (bk_n.distance_to(st.wk) <= 1) continue;
@@ -266,6 +285,7 @@ public:
             
             if (curr.to_move == "WHITE") {
                 vector<GameState> cands;
+                cands.reserve(64);
                 for (auto& wk_n : generate_all_king_moves(curr.wk)) {
                     GameState ns(wk_n, curr.wq, curr.bk, "BLACK");
                     if (is_legal_state(ns) && !is_stalemate(ns)) cands.push_back(ns);
@@ -285,6 +305,7 @@ public:
                 curr = best;
             } else {
                 vector<GameState> cands;
+                cands.reserve(64);
                 for (auto& bk_n : generate_all_king_moves(curr.bk)) {
                     if (is_attacked_by_queen(bk_n, curr.wq)) continue;
                     if (bk_n.distance_to(curr.wk) <= 1) continue;
@@ -307,9 +328,9 @@ public:
     
     pair<optional<int>, optional<GameState>> compositional_search_impl(
         const GameState& st, int depth, int ply,
-        bool debug, map<string, pair<optional<int>, optional<GameState>>>& memo
+        bool debug, unordered_map<uint64_t, pair<optional<int>, optional<GameState>>>& memo
     ) {
-        string cache_key = st.str() + ":" + to_string(depth);
+        uint64_t cache_key = make_cache_key(st, depth);
         if (memo.count(cache_key)) {
             if (ply == 0) cout << "[DEBUG] *** MEMO HIT at depth=" << depth << " ***\n";
             return memo[cache_key];
@@ -335,6 +356,7 @@ public:
         }
         
         vector<GameState> cands;
+        cands.reserve(64);
         if (st.to_move == "WHITE") {
             for (auto& wk_n : generate_all_king_moves(st.wk)) {
                 GameState ns(wk_n, st.wq, st.bk, "BLACK");
@@ -467,7 +489,7 @@ public:
         cout << "[DEBUG find_best_move] to_move: " << st.to_move << "\n";
         cout << "[DEBUG find_best_move] max_depth: " << max_depth << "\n";
         
-        map<string, pair<optional<int>, optional<GameState>>> memo;
+        unordered_map<uint64_t, pair<optional<int>, optional<GameState>>> memo;
         
         for (int depth = 2; depth <= max_depth + 1; depth += 2) {
             cout << "\n[DEBUG find_best_move] Testing depth " << depth << "...\n";
@@ -576,6 +598,7 @@ int main(int argc, char* argv[]) {
         cout << "Testing depth " << td << "..."; cout.flush();
         
         vector<GameState> cands;
+        cands.reserve(64);
         for (auto& wk_n : eng.generate_all_king_moves(init_st.wk)) {
             GameState ns(wk_n, init_st.wq, init_st.bk, "BLACK");
             if (eng.is_legal_state(ns) && !eng.is_stalemate(ns)) cands.push_back(ns);
@@ -608,6 +631,7 @@ int main(int argc, char* argv[]) {
     if (opt_d == -1) {
         opt_d = 7;
         vector<GameState> cands;
+        cands.reserve(64);
         for (auto& wk_n : eng.generate_all_king_moves(init_st.wk)) {
             GameState ns(wk_n, init_st.wq, init_st.bk, "BLACK");
             if (eng.is_legal_state(ns) && !eng.is_stalemate(ns)) cands.push_back(ns);

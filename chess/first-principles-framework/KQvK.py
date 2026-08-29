@@ -394,15 +394,42 @@ class CompositionalEngine(BaseEngine):
         M = max(edge_distance, wk_support_distance) + queen_moves + 1
         return M
     
-    def compositional_search(self, state: GameState, depth: int, ply: int = 0, debug: bool = False) -> Tuple[Optional[int], Optional[GameState]]:
+    def compositional_search(self, state: GameState, depth: int, ply: int = 0, debug: bool = False, memo: dict = None) -> Tuple[Optional[int], Optional[GameState]]:
         """
-        Compositional search: at EVERY node measure, track trajectory, prune dominated.
+        Compositional search with MEMOIZATION to eliminate redundant searches.
+        
+        memo: persistent cache across iterative deepening calls
+              Key: (state_str, depth), Value: (best_value, best_move)
+              Prevents re-searching the same position at same depth
         """
+        if memo is None:
+            memo = {}
+        
+        # Create cache key: position + remaining depth
+        cache_key = (str(state), depth)
+        
+        # Check memo BEFORE any computation
+        if cache_key in memo:
+            if ply == 0:
+                print(f"[DEBUG] *** MEMO HIT at depth={depth} - skipping redundant search ***")
+            return memo[cache_key]
+        
+        if ply == 0:
+            print(f"\n[DEBUG compositional_search] START depth={depth}, position={state}, to_move={state.to_move}")
+        
         if self.is_checkmate(state):
-            return (0, None)
+            if ply == 0:
+                print(f"[DEBUG] CHECKMATE at start of search")
+            result = (0, None)
+            memo[cache_key] = result
+            return result
         
         if depth == 0:
-            return (None, None)
+            if ply == 0:
+                print(f"[DEBUG] Depth limit reached (depth=0)")
+            result = (None, None)
+            memo[cache_key] = result
+            return result
         
         # Generate all candidates
         candidates = []
@@ -426,8 +453,20 @@ class CompositionalEngine(BaseEngine):
                 if self.is_legal_state(new_state):
                     candidates.append(new_state)
         
+        if ply == 0:
+            print(f"[DEBUG] Generated {len(candidates)} candidates")
+        
         if not candidates:
-            return (None, None)
+            if ply == 0:
+                print(f"[DEBUG] NO CANDIDATES FOUND!")
+                print(f"[DEBUG] Position: {state}")
+                print(f"[DEBUG] to_move: {state.to_move}")
+                print(f"[DEBUG] WK: {state.wk}, WQ: {state.wq}, BK: {state.bk}")
+                print(f"[DEBUG] This means the position has no legal moves")
+                print(f"[DEBUG] Returning (None, None)")
+            result = (None, None)
+            memo[cache_key] = result
+            return result
         
         # CRITICAL: Measure M(s) and BN for EACH candidate at THIS node
         self.candidates_measured += len(candidates)
@@ -438,6 +477,9 @@ class CompositionalEngine(BaseEngine):
             BN = self.count_legal_moves(candidate)
             measurements.append((candidate, M, BN))
         
+        if ply == 0:
+            print(f"[DEBUG] Measured {len(measurements)} candidates")
+        
         # Find best measurement
         if state.to_move == "WHITE":
             best_M = min(M for _, M, _ in measurements)
@@ -445,6 +487,9 @@ class CompositionalEngine(BaseEngine):
         else:
             best_M = max(M for _, M, _ in measurements)
             direction = "maximize"
+        
+        if ply == 0:
+            print(f"[DEBUG] best_M={best_M}, direction={direction}")
         
         # Prune based on measurement
         threshold = max(2, best_M // 3)
@@ -456,8 +501,13 @@ class CompositionalEngine(BaseEngine):
             elif direction == "maximize" and M >= best_M - threshold:
                 viable.append(candidate)
         
+        if ply == 0:
+            print(f"[DEBUG] threshold={threshold}, viable={len(viable)}/{len(candidates)}")
+        
         # Ensure minimum viable
         if len(viable) < 3:
+            if ply == 0:
+                print(f"[DEBUG] Increasing viable from {len(viable)} to minimum 3")
             measurements.sort(key=lambda x: x[1])
             viable = [c for c, _, _ in measurements[:3]]
         
@@ -471,9 +521,16 @@ class CompositionalEngine(BaseEngine):
         best_value = None
         best_move = None
         
-        for candidate in viable:
-            value, _ = self.compositional_search(candidate, depth - 1, ply + 1, debug=debug)
+        if ply == 0:
+            print(f"[DEBUG] Recursing on {len(viable)} viable candidates...")
+        
+        for candidate_idx, candidate in enumerate(viable, 1):
+            # CRITICAL: Pass memo to recursive calls so they use cached results
+            value, _ = self.compositional_search(candidate, depth - 1, ply + 1, debug=debug, memo=memo)
             self.nodes_evaluated += 1
+            
+            if ply == 0:
+                print(f"[DEBUG] Candidate {candidate_idx}/{len(viable)}: value={value}")
             
             if value is not None:
                 value_with_ply = value + 1
@@ -487,61 +544,100 @@ class CompositionalEngine(BaseEngine):
                     best_value = value_with_ply
                     best_move = candidate
         
-        return (best_value, best_move)
+        if ply == 0:
+            print(f"[DEBUG] RESULT depth={depth}: best_value={best_value}, best_move={best_move is not None}")
+            if best_value is None:
+                print(f"[DEBUG] WARNING: best_value is None after recursing on {len(viable)} candidates!")
+                print(f"[DEBUG] This means no viable candidate produced a valid continuation")
+        
+        result = (best_value, best_move)
+        # Store in memo before returning
+        memo[cache_key] = result
+        return result
     
     def find_best_move(self, state: GameState, max_depth: int = 10, debug: bool = False) -> Tuple[Optional[GameState], Optional[int]]:
-        """Find best first move."""
+        """Find best first move with iterative deepening and persistent memoization."""
         self.nodes_evaluated = 0
         self.candidates_measured = 0
         
-        for depth in range(2, max_depth + 1, 2):
-            mate_dist, best_move = self.compositional_search(state, depth, debug=debug)
-            if debug:
-                print(f"  [find_best_move] depth={depth}: mate_dist={mate_dist}, best_move={best_move is not None}")
-            if mate_dist is not None:
-                return (best_move, mate_dist)
+        print(f"\n[DEBUG find_best_move] Starting search from: {state}")
+        print(f"[DEBUG find_best_move] to_move: {state.to_move}")
+        print(f"[DEBUG find_best_move] max_depth: {max_depth}")
         
-        if debug:
-            print(f"  [find_best_move] NO MOVE FOUND at any depth. Position: {state}")
+        # Persistent memoization cache across ALL depth iterations
+        # Key: (state_string, depth_remaining), Value: (mate_dist, best_move)
+        # This prevents re-searching the same position at the same depth
+        memo = {}
+        
+        for depth in range(2, max_depth + 2, 2):
+            print(f"\n[DEBUG find_best_move] Testing depth {depth}...")
+            
+            # Pass memo through - compositional_search will use and populate it
+            # Cached positions avoid redundant re-computation
+            mate_dist, best_move = self.compositional_search(state, depth, debug=debug, memo=memo)
+            
+            print(f"[DEBUG find_best_move] depth={depth}: mate_dist={mate_dist}, best_move={best_move is not None}")
+            
+            if mate_dist is not None:
+                print(f"[DEBUG find_best_move] FOUND at depth {depth}: mate_dist={mate_dist}, returning")
+                return (best_move, mate_dist)
+            else:
+                print(f"[DEBUG find_best_move] depth {depth}: No solution, continuing to deeper search...")
+        
+        print(f"\n[DEBUG find_best_move] EXHAUSTED ALL DEPTHS up to {max_depth}")
+        print(f"[DEBUG find_best_move] Position: {state}")
+        print(f"[DEBUG find_best_move] to_move: {state.to_move}")
+        print(f"[DEBUG find_best_move] Returning (None, None)")
         return (None, None)
     
-    def play_complete_game(self, first_move: GameState, max_moves: int = 50, debug: bool = False, M_root: int=12) -> Tuple[List[str], int]:
-        """Play complete game from first move using compositional search."""
+    def play_complete_game(self, first_move: GameState, max_moves: int = 50, debug: bool = False, game_search_depth: int = 8) -> Tuple[List[str], int]:
+        """Play complete game from first move using compositional search.
+        
+        game_search_depth: Search depth for finding best moves (should be set to M(s) value from root)
+        """
         moves = []
         current = first_move
         
-        if debug:
-            print(f"\n[play_complete_game] Starting position: {current}, to_move={current.to_move}")
-            print(f"[play_complete_game] Is checkmate? {self.is_checkmate(current)}")
-            print(f"[play_complete_game] Is stalemate? {self.is_stalemate(current)}")
+        print(f"\n[DEBUG play_complete_game] Starting game evaluation")
+        print(f"[DEBUG] Game search depth: {game_search_depth}")
+        print(f"[DEBUG] Starting position: {current}")
+        print(f"[DEBUG] to_move: {current.to_move}")
+        print(f"[DEBUG] Checking if starting position is checkmate...")
+        is_cm = self.is_checkmate(current)
+        print(f"[DEBUG] Is checkmate? {is_cm}")
+        print(f"[DEBUG] Checking if starting position is stalemate...")
+        is_sm = self.is_stalemate(current)
+        print(f"[DEBUG] Is stalemate? {is_sm}")
         
         for move_num in range(max_moves):
+            print(f"\n[DEBUG] ========== MOVE {move_num + 1} ==========")
+            print(f"[DEBUG] Current position: {current}")
+            print(f"[DEBUG] to_move: {current.to_move}")
+            
             if self.is_checkmate(current):
-                if debug:
-                    print(f"\n[play_complete_game] CHECKMATE detected at move {move_num + 1}")
+                print(f"[DEBUG] CHECKMATE DETECTED - Game over")
                 return (moves, len(moves))
             
-            if debug:
-                print(f"\n[Move {move_num + 1}] Position: {current}, to_move={current.to_move}")
-                start = time.time()
+            print(f"[DEBUG] Calling find_best_move with max_depth={game_search_depth}...")
+            next_state, mate_dist = self.find_best_move(current, max_depth=game_search_depth, debug=debug)
             
-            next_state, _ = self.find_best_move(current, max_depth=M_root, debug=debug)
-            
-            if debug:
-                elapsed = time.time() - start
-                print(f"  Time: {elapsed:.2f}s, Nodes evaluated: {self.nodes_evaluated:,}, Candidates measured: {self.candidates_measured:,}")
+            print(f"[DEBUG] find_best_move returned:")
+            print(f"[DEBUG]   next_state: {next_state}")
+            print(f"[DEBUG]   mate_dist: {mate_dist}")
             
             if next_state is None:
-                if debug:
-                    print(f"  [play_complete_game] NO NEXT STATE found. Ending game.")
+                print(f"[DEBUG] NO NEXT STATE FOUND - find_best_move returned None")
+                print(f"[DEBUG] Ending game with {len(moves)} moves collected")
                 return (moves, len(moves))
             
+            print(f"[DEBUG] Got valid next_state: {next_state}")
             move_str = self.get_move_notation(current, next_state)
+            print(f"[DEBUG] Move notation: {move_str}")
             moves.append(move_str)
             current = next_state
-
-            if moves == []: print("There was no move found within 8 depth, if M(s) > 8, this is expected and must modify code to allow for this situation. \n\n If this is not the case, this means this position was excluded from being optimal as no best move was truly found!")
+            print(f"[DEBUG] Appended move. Total moves so far: {len(moves)}")
         
+        print(f"[DEBUG] Reached max_moves limit ({max_moves})")
         return (moves, len(moves))
 
 def main():
@@ -700,8 +796,46 @@ Examples:
         # Time each candidate evaluation
         candidate_start = time.time()
         
-        # Find complete game (with optional debug output to see progress)
-        moves, total_plies = engine.play_complete_game(candidate, max_moves=50, debug=debug_enabled, M_root=2*M_root)
+        # DEBUG: Validate position before game evaluation
+        print(f"\n[DEBUG] ===== CANDIDATE {idx} VALIDATION =====")
+        print(f"[DEBUG] Position to evaluate: {candidate}")
+        print(f"[DEBUG] WK: {candidate.wk}, WQ: {candidate.wq}, BK: {candidate.bk}")
+        print(f"[DEBUG] to_move: {candidate.to_move}")
+        print(f"[DEBUG] Checking position validity...")
+        print(f"[DEBUG] Is legal state? {engine.is_legal_state(candidate)}")
+        print(f"[DEBUG] Is checkmate? {engine.is_checkmate(candidate)}")
+        print(f"[DEBUG] Is stalemate? {engine.is_stalemate(candidate)}")
+        
+        # Generate candidates to verify position has legal moves
+        if candidate.to_move == "BLACK":
+            test_candidates = []
+            for bk_new in engine.generate_all_king_moves(candidate.bk):
+                if engine.is_attacked_by_queen(bk_new, candidate.wq):
+                    continue
+                if bk_new.distance_to(candidate.wk) <= 1:
+                    continue
+                new_state = GameState(candidate.wk, candidate.wq, bk_new, "WHITE")
+                if engine.is_legal_state(new_state):
+                    test_candidates.append(new_state)
+        else:
+            test_candidates = []
+            for wk_new in engine.generate_all_king_moves(candidate.wk):
+                new_state = GameState(wk_new, candidate.wq, candidate.bk, "BLACK")
+                if engine.is_legal_state(new_state) and not engine.is_stalemate(new_state):
+                    test_candidates.append(new_state)
+            for wq_new in engine.generate_all_queen_moves(candidate.wq):
+                new_state = GameState(candidate.wk, wq_new, candidate.bk, "BLACK")
+                if engine.is_legal_state(new_state) and not engine.is_stalemate(new_state):
+                    test_candidates.append(new_state)
+        
+        print(f"[DEBUG] Legal candidates from this position: {len(test_candidates)}")
+        if len(test_candidates) == 0:
+            print(f"[DEBUG] ERROR: Position has NO legal moves!")
+        
+        print(f"[DEBUG] ===== STARTING GAME EVALUATION =====")
+        
+        # Find complete game using M(s) from root as search depth
+        moves, total_plies = engine.play_complete_game(candidate, max_moves=50, debug=debug_enabled, game_search_depth=M_root)
         
         candidate_elapsed = time.time() - candidate_start
         candidate_times.append(candidate_elapsed)

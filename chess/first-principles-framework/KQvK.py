@@ -701,7 +701,7 @@ Examples:
         candidate_start = time.time()
         
         # Find complete game (with optional debug output to see progress)
-        moves, total_plies = engine.play_complete_game(candidate, max_moves=50, debug=debug_enabled, M_root=M_root)
+        moves, total_plies = engine.play_complete_game(candidate, max_moves=50, debug=debug_enabled, M_root=2*M_root)
         
         candidate_elapsed = time.time() - candidate_start
         candidate_times.append(candidate_elapsed)

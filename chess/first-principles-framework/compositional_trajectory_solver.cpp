@@ -59,10 +59,10 @@ public:
 class GameState {
 public:
     Position wk, wq, bk;
-    string to_move;
+    char to_move;
     
-    GameState() : to_move("WHITE") {}
-    GameState(Position wk_, Position wq_, Position bk_, const string& to_move_)
+    GameState() : to_move('W') {}
+    GameState(Position wk_, Position wq_, Position bk_, char to_move_)
         : wk(wk_), wq(wq_), bk(bk_), to_move(to_move_) {}
     
     string str() const {
@@ -88,7 +88,7 @@ public:
         return pos.file == 0 || pos.file == 7 || pos.rank == 0 || pos.rank == 7;
     }
     
-    vector<Position> generate_all_king_moves(const Position& pos) const {
+    inline vector<Position> generate_all_king_moves(const Position& pos) const {
         vector<Position> moves;
         for (int df = -1; df <= 1; df++) {
             for (int dr = -1; dr <= 1; dr++) {
@@ -103,7 +103,7 @@ public:
         return moves;
     }
     
-    vector<Position> generate_all_queen_moves(const Position& pos) const {
+    inline vector<Position> generate_all_queen_moves(const Position& pos) const {
         vector<Position> moves;
         int dirs[][2] = {{1,0},{-1,0},{0,1},{0,-1},{1,1},{1,-1},{-1,1},{-1,-1}};
         
@@ -137,7 +137,7 @@ public:
     }
     
     bool is_checkmate(const GameState& st) const {
-        if (st.to_move != "BLACK") return false;
+        if (st.to_move != 'B') return false;
         if (!is_attacked_by_queen(st.bk, st.wq)) return false;
         for (auto& m : generate_all_king_moves(st.bk)) {
             if (is_attacked_by_queen(m, st.wq)) continue;
@@ -148,7 +148,7 @@ public:
     }
     
     bool is_stalemate(const GameState& st) const {
-        if (st.to_move != "BLACK") return false;
+        if (st.to_move != 'B') return false;
         if (is_attacked_by_queen(st.bk, st.wq)) return false;
         for (auto& m : generate_all_king_moves(st.bk)) {
             if (is_attacked_by_queen(m, st.wq)) continue;
@@ -166,14 +166,14 @@ public:
     }
     
     int count_legal_moves(const GameState& st) const {
-        if (st.to_move == "WHITE") {
+        if (st.to_move == 'W') {
             int cnt = 0;
             for (auto& wk_n : generate_all_king_moves(st.wk)) {
-                GameState ns(wk_n, st.wq, st.bk, "BLACK");
+                GameState ns(wk_n, st.wq, st.bk, 'B');
                 if (is_legal_state(ns) && !is_stalemate(ns)) cnt++;
             }
             for (auto& wq_n : generate_all_queen_moves(st.wq)) {
-                GameState ns(st.wk, wq_n, st.bk, "BLACK");
+                GameState ns(st.wk, wq_n, st.bk, 'B');
                 if (is_legal_state(ns) && !is_stalemate(ns)) cnt++;
             }
             return cnt;
@@ -182,7 +182,7 @@ public:
             for (auto& bk_n : generate_all_king_moves(st.bk)) {
                 if (is_attacked_by_queen(bk_n, st.wq)) continue;
                 if (bk_n.distance_to(st.wk) <= 1) continue;
-                GameState ns(st.wk, st.wq, bk_n, "WHITE");
+                GameState ns(st.wk, st.wq, bk_n, 'W');
                 if (is_legal_state(ns)) cnt++;
             }
             return cnt;
@@ -224,15 +224,15 @@ public:
         if (is_checkmate(st)) return 0;
         if (depth == 0) return compute_M_topological(st);
         
-        if (st.to_move == "WHITE") {
+        if (st.to_move == 'W') {
             vector<GameState> cands;
             cands.reserve(64);
             for (auto& wk_n : generate_all_king_moves(st.wk)) {
-                GameState ns(wk_n, st.wq, st.bk, "BLACK");
+                GameState ns(wk_n, st.wq, st.bk, 'B');
                 if (is_legal_state(ns) && !is_stalemate(ns)) cands.push_back(ns);
             }
             for (auto& wq_n : generate_all_queen_moves(st.wq)) {
-                GameState ns(st.wk, wq_n, st.bk, "BLACK");
+                GameState ns(st.wk, wq_n, st.bk, 'B');
                 if (is_legal_state(ns) && !is_stalemate(ns)) cands.push_back(ns);
             }
             if (cands.empty()) return 99;
@@ -258,7 +258,7 @@ public:
             for (auto& bk_n : generate_all_king_moves(st.bk)) {
                 if (is_attacked_by_queen(bk_n, st.wq)) continue;
                 if (bk_n.distance_to(st.wk) <= 1) continue;
-                GameState ns(st.wk, st.wq, bk_n, "WHITE");
+                GameState ns(st.wk, st.wq, bk_n, 'W');
                 if (is_legal_state(ns)) cands.push_back(ns);
             }
             if (cands.empty()) return 1;
@@ -283,15 +283,15 @@ public:
         for (int ply = 0; ply < depth; ply++) {
             if (is_checkmate(curr)) break;
             
-            if (curr.to_move == "WHITE") {
+            if (curr.to_move == 'W') {
                 vector<GameState> cands;
                 cands.reserve(64);
                 for (auto& wk_n : generate_all_king_moves(curr.wk)) {
-                    GameState ns(wk_n, curr.wq, curr.bk, "BLACK");
+                    GameState ns(wk_n, curr.wq, curr.bk, 'B');
                     if (is_legal_state(ns) && !is_stalemate(ns)) cands.push_back(ns);
                 }
                 for (auto& wq_n : generate_all_queen_moves(curr.wq)) {
-                    GameState ns(curr.wk, wq_n, curr.bk, "BLACK");
+                    GameState ns(curr.wk, wq_n, curr.bk, 'B');
                     if (is_legal_state(ns) && !is_stalemate(ns)) cands.push_back(ns);
                 }
                 if (cands.empty()) break;
@@ -309,7 +309,7 @@ public:
                 for (auto& bk_n : generate_all_king_moves(curr.bk)) {
                     if (is_attacked_by_queen(bk_n, curr.wq)) continue;
                     if (bk_n.distance_to(curr.wk) <= 1) continue;
-                    GameState ns(curr.wk, curr.wq, bk_n, "WHITE");
+                    GameState ns(curr.wk, curr.wq, bk_n, 'W');
                     if (is_legal_state(ns)) cands.push_back(ns);
                 }
                 if (cands.empty()) break;
@@ -357,20 +357,20 @@ public:
         
         vector<GameState> cands;
         cands.reserve(64);
-        if (st.to_move == "WHITE") {
+        if (st.to_move == 'W') {
             for (auto& wk_n : generate_all_king_moves(st.wk)) {
-                GameState ns(wk_n, st.wq, st.bk, "BLACK");
+                GameState ns(wk_n, st.wq, st.bk, 'B');
                 if (is_legal_state(ns) && !is_stalemate(ns)) cands.push_back(ns);
             }
             for (auto& wq_n : generate_all_queen_moves(st.wq)) {
-                GameState ns(st.wk, wq_n, st.bk, "BLACK");
+                GameState ns(st.wk, wq_n, st.bk, 'B');
                 if (is_legal_state(ns) && !is_stalemate(ns)) cands.push_back(ns);
             }
         } else {
             for (auto& bk_n : generate_all_king_moves(st.bk)) {
                 if (is_attacked_by_queen(bk_n, st.wq)) continue;
                 if (bk_n.distance_to(st.wk) <= 1) continue;
-                GameState ns(st.wk, st.wq, bk_n, "WHITE");
+                GameState ns(st.wk, st.wq, bk_n, 'W');
                 if (is_legal_state(ns)) cands.push_back(ns);
             }
         }
@@ -400,7 +400,7 @@ public:
         
         int best_M;
         string dir;
-        if (st.to_move == "WHITE") {
+        if (st.to_move == 'W') {
             best_M = INF_MAX;
             for (auto& [c,M,BN] : meas) best_M = min(best_M, M);
             dir = "minimize";
@@ -577,8 +577,8 @@ int main(int argc, char* argv[]) {
     if (debug_en) cout << "[DEBUG MODE ENABLED]\n";
     cout << string(80, '=') << "\n";
     
-    GameState init_st(Position::from_str("g7"), Position::from_str("f5"), 
-                      Position::from_str("c3"), "WHITE");
+    GameState init_st(Position::from_str("g6"), Position::from_str("f6"), 
+                    Position::from_str("d2"), 'W');
     cout << "\nInitial position: " << init_st.str() << "\n";
     
     cout << "\n" << string(80, '=') << "\n";
@@ -600,11 +600,11 @@ int main(int argc, char* argv[]) {
         vector<GameState> cands;
         cands.reserve(64);
         for (auto& wk_n : eng.generate_all_king_moves(init_st.wk)) {
-            GameState ns(wk_n, init_st.wq, init_st.bk, "BLACK");
+            GameState ns(wk_n, init_st.wq, init_st.bk, 'B');
             if (eng.is_legal_state(ns) && !eng.is_stalemate(ns)) cands.push_back(ns);
         }
         for (auto& wq_n : eng.generate_all_queen_moves(init_st.wq)) {
-            GameState ns(init_st.wk, wq_n, init_st.bk, "BLACK");
+            GameState ns(init_st.wk, wq_n, init_st.bk, 'B');
             if (eng.is_legal_state(ns) && !eng.is_stalemate(ns)) cands.push_back(ns);
         }
         
@@ -633,11 +633,11 @@ int main(int argc, char* argv[]) {
         vector<GameState> cands;
         cands.reserve(64);
         for (auto& wk_n : eng.generate_all_king_moves(init_st.wk)) {
-            GameState ns(wk_n, init_st.wq, init_st.bk, "BLACK");
+            GameState ns(wk_n, init_st.wq, init_st.bk, 'B');
             if (eng.is_legal_state(ns) && !eng.is_stalemate(ns)) cands.push_back(ns);
         }
         for (auto& wq_n : eng.generate_all_queen_moves(init_st.wq)) {
-            GameState ns(init_st.wk, wq_n, init_st.bk, "BLACK");
+            GameState ns(init_st.wk, wq_n, init_st.bk, 'B');
             if (eng.is_legal_state(ns) && !eng.is_stalemate(ns)) cands.push_back(ns);
         }
         for (auto& c : cands) {

@@ -124,20 +124,27 @@ public:
         ifstream file(filename);
         
         if (!file.is_open()) {
-            cout << "[Database] No existing database found. Starting fresh.\n";
             return;
         }
         
         string line;
         bool is_header = true;
+        int line_num = 0;
+        int loaded_count = 0;
         
         while (getline(file, line)) {
+            line_num++;
+            
             if (is_header) {
                 is_header = false;
-                continue;  // Skip header
+                continue;
             }
             
-            if (line.empty()) continue;
+            if (line.empty()) {
+                continue;
+            }
+            
+            cout << "\n[Database] Processing line " << line_num << ": '" << line << "'\n";
             
             // Parse CSV line
             vector<string> parts;
@@ -149,31 +156,52 @@ public:
             }
             
             if (parts.size() >= 8) {
-                SolvedPosition pos;
-                pos.position_key = parts[0];
-                pos.best_move = parts[1];
-                pos.M_value = stoi(parts[2]);
-                pos.total_plies = stoi(parts[3]);
-                pos.white_moves = stoi(parts[4]);
-                pos.black_moves = stoi(parts[5]);
-                pos.nodes_evaluated = stoi(parts[6]);
-                pos.computation_time = stod(parts[7]);
-                
-                // Parse BN trajectory
-                if (!parts[8].empty()) {
-                    stringstream bn_stream(parts[8]);
-                    string bn_part;
-                    while (getline(bn_stream, bn_part, ',')) {
-                        pos.BN_trajectory.push_back(stoi(bn_part));
+                try {
+                    SolvedPosition pos;
+                    pos.position_key = parts[0];
+                    pos.best_move = parts[1];
+                    pos.M_value = stoi(parts[2]);
+                    pos.total_plies = stoi(parts[3]);
+                    pos.white_moves = stoi(parts[4]);
+                    pos.black_moves = stoi(parts[5]);
+                    pos.nodes_evaluated = stoi(parts[6]);
+                    pos.computation_time = stod(parts[7]);
+                    if (parts.size() > 8) {
+                        
+                        if (!parts[8].empty()) {
+                            stringstream bn_stream(parts[8]);
+                            string bn_part;
+                            int bn_count = 0;
+                            
+                            while (getline(bn_stream, bn_part, ',')) {
+                                try {
+                                    int bn_val = stoi(bn_part);
+                                    pos.BN_trajectory.push_back(bn_val);
+                                    bn_count++;
+                                } catch (const exception& e) {
+                                    cout << "    -> ERROR parsing BN value: " << e.what() << "\n";
+                                }
+                            }
+                        } else {
+                        }
+                    } else {
                     }
+                    
+                    solved[pos.position_key] = pos;
+                    loaded_count++;
+                    cout << "  ✓ Successfully loaded position\n";
+                    
+                } catch (const exception& e) {
+                    cout << "  ✗ ERROR parsing line: " << e.what() << "\n";
                 }
-                
-                solved[pos.position_key] = pos;
+            } else {
+                cout << "  ✗ Skipping: parts.size() (" << parts.size() << ") < 8\n";
             }
         }
         
         file.close();
-        cout << "[Database] Loaded " << solved.size() << " positions from " << filename << "\n";
+        cout << "\n[Database] Finished loading. Loaded " << loaded_count << " positions from " << filename << "\n";
+        cout << "[Database] Total in map: " << solved.size() << " positions\n";
     }
     
     // Print summary statistics
@@ -765,8 +793,8 @@ int main(int argc, char* argv[]) {
     cout << "Trajectory Measurement with Black Node Count Accumulation\n";
     cout << string(80, '=') << "\n";
     
-    GameState init_st(Position::from_str("d3"), Position::from_str("b2"), 
-                      Position::from_str("g1"), 'W');
+    GameState init_st(Position::from_str("a1"), Position::from_str("b2"), 
+                      Position::from_str("d4"), 'W');
     cout << "\nInitial position: " << init_st.str() << "\n";
     
     cout << "\n" << string(80, '=') << "\n";
@@ -899,20 +927,49 @@ int main(int argc, char* argv[]) {
         auto c_end = chrono::high_resolution_clock::now();
         double c_el = chrono::duration<double>(c_end - c_start).count();
         c_times.push_back(c_el);
-        
-                // Record this solution in the database
-        SolvedPosition solution;
-        solution.position_key = cand.str();
-        solution.best_move = mvs.empty() ? "none" : mvs[0];
-        solution.M_value = M_r;
-        solution.BN_trajectory = bnc;
-        solution.total_plies = tp;
-        solution.white_moves = (tp + 1) / 2;
-        solution.black_moves = tp / 2;
-        solution.nodes_evaluated = eng.nodes_evaluated;
-        solution.computation_time = c_el;
-        
-        db.add_position(solution);
+
+        // Now replay the game and record EVERY position
+        GameState curr = cand;
+        int recorded_count = 0;
+
+        for (size_t i = 0; i < mvs.size(); i++) {
+            // Create solution record for current position
+            SolvedPosition solution;
+            solution.position_key = curr.str();
+            solution.best_move = mvs[i];  // The move played from THIS position
+            solution.M_value = M_r - (i / 2);  // M decreases by 1 each White move
+            
+            // BN trajectory from this point onward
+            solution.BN_trajectory.clear();
+            for (size_t j = i + 1; j < bnc.size(); j++) {
+                solution.BN_trajectory.push_back(bnc[j]);
+            }
+            
+            solution.total_plies = tp - i;
+            solution.white_moves = (tp - i + 1) / 2;
+            solution.black_moves = (tp - i) / 2;
+            solution.nodes_evaluated = eng.nodes_evaluated;
+            solution.computation_time = c_el / mvs.size();  // Distribute time
+            
+            db.add_position(solution);
+            recorded_count++;
+            
+            // Apply the move to get next position
+            char piece = mvs[i][0];  // 'K', 'Q', or 'k'
+            string dest = mvs[i].substr(1);  // destination square
+            Position dest_pos = Position::from_str(dest);
+            
+            if (piece == 'K') {
+                curr.wk = dest_pos;
+                curr.to_move = 'B';
+            } else if (piece == 'Q') {
+                curr.wq = dest_pos;
+                curr.to_move = 'B';
+            } else if (piece == 'k') {
+                curr.bk = dest_pos;
+                curr.to_move = 'W';
+            }
+        }
 
         cout << "Complete game: ";
         for (size_t i = 0; i < mvs.size(); i++) {
@@ -923,9 +980,12 @@ int main(int argc, char* argv[]) {
         cout << "Total plies: " << tp << "\n";
         cout << "White moves: " << ((tp+1)/2) << "\n";
         cout << "Black moves: " << (tp/2) << "\n";
+        cout << "Recorded positions: " << recorded_count << "\n";
         cout << "Nodes evaluated: " << eng.nodes_evaluated << "\n";
         cout << "Candidates measured: " << eng.candidates_measured << "\n";
         cout << "Candidate " << (idx+1) << " computation time: " << fixed << setprecision(2) << c_el << "s\n";
+    
+
     }
     
     auto t_end = chrono::high_resolution_clock::now();

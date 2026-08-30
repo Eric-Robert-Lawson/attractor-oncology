@@ -12,11 +12,201 @@
 #include <iomanip>
 #include <sstream>
 #include <limits>
+#include <fstream>
 
 using namespace std;
 
 const int INF_MAX = 2147483647;
 const int INF_MIN = -2147483648;
+
+// ============================================================================
+// SolvedPosition - Data structure for storing perfect play
+// ============================================================================
+
+struct SolvedPosition {
+    string position_key;        // "WK:a1 WQ:b2 BK:d5"
+    string best_move;           // "Q:e5" or "K:c2"
+    int M_value;                // Moves to mate
+    vector<int> BN_trajectory;  // Black node counts per ply
+    int total_plies;            // How many plies until mate
+    int white_moves;            // White's move count
+    int black_moves;            // Black's move count
+    int nodes_evaluated;        // Nodes searched
+    double computation_time;    // Time in seconds
+    
+    // Convert to CSV line for export
+    string to_csv() const {
+        stringstream ss;
+        ss << position_key << "|" 
+           << best_move << "|" 
+           << M_value << "|"
+           << total_plies << "|"
+           << white_moves << "|"
+           << black_moves << "|"
+           << nodes_evaluated << "|"
+           << fixed << setprecision(3) << computation_time << "|";
+        
+        // BN trajectory as comma-separated
+        for (size_t i = 0; i < BN_trajectory.size(); i++) {
+            if (i > 0) ss << ",";
+            ss << BN_trajectory[i];
+        }
+        ss << "\n";
+        return ss.str();
+    }
+    
+    static string csv_header() {
+        return "Position|BestMove|M|Plies|WhiteMoves|BlackMoves|NodesEval|Time|BN_Trajectory\n";
+    }
+};
+
+// ============================================================================
+// SolvedPositionDatabase - Manages the tablebase
+// ============================================================================
+
+class SolvedPositionDatabase {
+private:
+    map<string, SolvedPosition> solved;
+    string filename;
+    
+public:
+    SolvedPositionDatabase(const string& db_file = "kqvk_perfect_play.db")
+        : filename(db_file) {
+        load_from_file();
+    }
+    
+    // Add a solved position to the database
+    void add_position(const SolvedPosition& pos) {
+        if (is_solved(pos.position_key)) {
+            cout << "[Database] Position already exists, skipping: " << pos.position_key << "\n";
+            return;
+        }
+        solved[pos.position_key] = pos;
+        cout << "[Database] Added new position: " << pos.position_key << "\n";
+    }
+    
+    // Check if position is already solved
+    bool is_solved(const string& position_key) const {
+        return solved.count(position_key) > 0;
+    }
+    
+    // Get optimal move for a position
+    optional<SolvedPosition> get_solution(const string& position_key) const {
+        auto it = solved.find(position_key);
+        if (it != solved.end()) {
+            return it->second;
+        }
+        return nullopt;
+    }
+    
+    // Export all solved positions to file
+    void export_to_file() {
+        ofstream file(filename, ios::trunc);  // ← Truncate mode (overwrite)
+        
+        if (!file.is_open()) {
+            cerr << "ERROR: Cannot open database file: " << filename << "\n";
+            return;
+        }
+        
+        // Always write header
+        file << SolvedPosition::csv_header();
+        
+        // Write all positions
+        for (const auto& [key, pos] : solved) {
+            file << pos.to_csv();
+        }
+        
+        file.close();
+    }
+    
+    // Load from file for future runs
+    void load_from_file() {
+        ifstream file(filename);
+        
+        if (!file.is_open()) {
+            cout << "[Database] No existing database found. Starting fresh.\n";
+            return;
+        }
+        
+        string line;
+        bool is_header = true;
+        
+        while (getline(file, line)) {
+            if (is_header) {
+                is_header = false;
+                continue;  // Skip header
+            }
+            
+            if (line.empty()) continue;
+            
+            // Parse CSV line
+            vector<string> parts;
+            stringstream ss(line);
+            string part;
+            
+            while (getline(ss, part, '|')) {
+                parts.push_back(part);
+            }
+            
+            if (parts.size() >= 8) {
+                SolvedPosition pos;
+                pos.position_key = parts[0];
+                pos.best_move = parts[1];
+                pos.M_value = stoi(parts[2]);
+                pos.total_plies = stoi(parts[3]);
+                pos.white_moves = stoi(parts[4]);
+                pos.black_moves = stoi(parts[5]);
+                pos.nodes_evaluated = stoi(parts[6]);
+                pos.computation_time = stod(parts[7]);
+                
+                // Parse BN trajectory
+                if (!parts[8].empty()) {
+                    stringstream bn_stream(parts[8]);
+                    string bn_part;
+                    while (getline(bn_stream, bn_part, ',')) {
+                        pos.BN_trajectory.push_back(stoi(bn_part));
+                    }
+                }
+                
+                solved[pos.position_key] = pos;
+            }
+        }
+        
+        file.close();
+        cout << "[Database] Loaded " << solved.size() << " positions from " << filename << "\n";
+    }
+    
+    // Print summary statistics
+    void print_summary() const {
+        cout << "\n" << string(80, '=') << "\n";
+        cout << "TABLEBASE SUMMARY\n";
+        cout << string(80, '=') << "\n";
+        cout << "Total positions solved: " << solved.size() << "\n";
+        cout << "Database file: " << filename << "\n";
+        
+        if (solved.empty()) return;
+        
+        int total_M = 0;
+        int total_plies = 0;
+        int total_nodes = 0;
+        double total_time = 0;
+        
+        for (const auto& [key, pos] : solved) {
+            total_M += pos.M_value;
+            total_plies += pos.total_plies;
+            total_nodes += pos.nodes_evaluated;
+            total_time += pos.computation_time;
+        }
+        
+        cout << "\nStatistics:\n";
+        cout << "  Average M: " << fixed << setprecision(1) << (double)total_M / solved.size() << "\n";
+        cout << "  Average plies to mate: " << (double)total_plies / solved.size() << "\n";
+        cout << "  Total nodes evaluated: " << total_nodes << "\n";
+        cout << "  Total computation time: " << setprecision(1) << total_time << "s\n";
+        cout << "\n";
+    }
+};
+
 
 // ============================================================================
 // Position class
@@ -335,7 +525,6 @@ public:
             return memo[cache_key];
         }
         
-        
         if (is_checkmate(st)) {
             auto res = make_pair(optional<int>(0), optional<GameState>());
             memo[cache_key] = res;
@@ -343,7 +532,8 @@ public:
         }
         
         if (depth == 0) {
-            auto res = make_pair(optional<int>(), optional<GameState>());
+            int estimated_M = compute_M_topological(st);
+            auto res = make_pair(optional<int>(estimated_M), optional<GameState>());
             memo[cache_key] = res;
             return res;
         }
@@ -364,6 +554,7 @@ public:
             }
         } else {
             for (auto& bk_n : generate_all_king_moves(st.bk)) {
+                //cout << "\n  Checking BK move: " << st.bk.str() << " -> " << bk_n.str();
                 if (is_attacked_by_queen(bk_n, st.wq)) continue;
                 if (bk_n.distance_to(st.wk) <= 1) continue;
                 GameState ns(st.wk, st.wq, bk_n, 'W');
@@ -371,6 +562,14 @@ public:
             }
         }
         
+        // DEBUG: Show Black candidates
+        if (st.to_move == 'B' && ply < 2) {
+            //cout << "\n[BLACK MOVE DEBUG] Position: " << st.str() << "\n";
+            //cout << "Black candidates generated:\n";
+            for (size_t i = 0; i < cands.size(); i++) {
+                // cout << "  " << i << ". " << cands[i].str() << "\n";
+            }
+        }
         
         if (cands.empty()) {
             auto res = make_pair(optional<int>(), optional<GameState>());
@@ -381,21 +580,20 @@ public:
         candidates_measured += cands.size();
         vector<tuple<GameState,int,int>> meas;
         for (auto& c : cands) {
-            uint64_t m_key = make_cache_key(c, 3);  // Reuse existing hash function
+            uint64_t m_key = make_cache_key(c, 3);
             int M;
             
             auto it = M_cache.find(m_key);
             if (it != M_cache.end()) {
-                M = it->second;  // Cache hit - instant
+                M = it->second;
             } else {
                 M = compute_M_shallow(c, 3);
-                M_cache[m_key] = M;  // Cache miss - compute once, reuse forever
+                M_cache[m_key] = M;
             }
             
             int BN = count_legal_moves(c);
             meas.push_back({c, M, BN});
         }
-        
         
         int best_M;
         string dir;
@@ -409,6 +607,14 @@ public:
             dir = "maximize";
         }
         
+        // DEBUG: Show measured M values and best_M (NOW DECLARED)
+        if (st.to_move == 'B' && ply < 2) {
+            //cout << "Measured M values:\n";
+            for (auto& [c,M,BN] : meas) {
+                //cout << "  " << c.str() << " M=" << M << "\n";
+            }
+            //cout << "best_M=" << best_M << " direction=" << dir << "\n";
+        }
         
         int thresh = max(2, best_M / 3);
         vector<GameState> viable;
@@ -416,7 +622,6 @@ public:
             if (dir == "minimize" && M <= best_M + thresh) viable.push_back(c);
             else if (dir == "maximize" && M >= best_M - thresh) viable.push_back(c);
         }
-        
         
         if (viable.size() < 3) {
             sort(meas.begin(), meas.end(), [](auto& a, auto& b) { return get<1>(a) < get<1>(b); });
@@ -429,35 +634,49 @@ public:
         if (debug && ply < 4) {
             string ind(ply*2, ' ');
             double ratio = cands.empty() ? 0 : (double)viable.size()/cands.size();
-            cout << ind << "[Ply " << ply << "] " << st.to_move << ": " << cands.size()
-                 << " -> " << viable.size() << " (" << fixed << setprecision(1) << (ratio*100)
-                 << "%), best_M=" << best_M << ", thresh=" << thresh << "\n";
+            //cout << ind << "[Ply " << ply << "] " << st.to_move << ": " << cands.size()
+                 //<< " -> " << viable.size() << " (" << fixed << setprecision(1) << (ratio*100)
+                // << "%), best_M=" << best_M << ", thresh=" << thresh << "\n";
         }
         
         optional<int> best_val;
         optional<GameState> best_mv;
         
-        
         for (size_t i = 0; i < viable.size(); i++) {
             auto [val, mv] = compositional_search_impl(viable[i], depth-1, ply+1, debug, memo);
             nodes_evaluated++;
             
+            // DEBUG: Show what each viable move returns
+            if (st.to_move == 'B' && ply < 2) {
+                //cout << "  Viable[" << i << "] " << viable[i].str() << " returned val=";
+                //if (val) cout << *val; else cout << "NONE";
+                //cout << "\n";
+            }
             
             if (val) {
                 int v = *val + 1;
-                if (!best_val) {
-                    best_val = v;
-                    best_mv = viable[i];
-                } else if (dir == "minimize" && v < *best_val) {
-                    best_val = v;
-                    best_mv = viable[i];
-                } else if (dir == "maximize" && v > *best_val) {
-                    best_val = v;
-                    best_mv = viable[i];
+                if (val) {
+                    int v = *val + 1;
+                    if (!best_val) {
+                        best_val = v;
+                        best_mv = viable[i];
+                    } else if (dir == "minimize" && v < *best_val) {
+                        best_val = v;
+                        best_mv = viable[i];
+                    } else if (dir == "maximize" && v > *best_val) {
+                        best_val = v;
+                        best_mv = viable[i];
+                    } else if (dir == "maximize" && v == *best_val) {
+                        // ← TIE FOR BLACK: use topological M as tiebreaker
+                        int curr_topo = compute_M_topological(viable[i]);
+                        int best_topo = compute_M_topological(*best_mv);
+                        if (curr_topo > best_topo) {
+                            best_mv = viable[i];
+                        }
+                    }
                 }
             }
         }
-        
         
         auto res = make_pair(best_val, best_mv);
         memo[cache_key] = res;
@@ -470,18 +689,30 @@ public:
         nodes_evaluated = 0;
         candidates_measured = 0;
         
-        
         unordered_map<uint64_t, pair<optional<int>, optional<GameState>>> memo;
+        
+        optional<GameState> best_move;
+        optional<int> best_value;
         
         for (int depth = 2; depth <= max_depth + 1; depth += 2) {
             auto [md, bm] = compositional_search_impl(st, depth, 0, debug, memo);
-            if (md) {
-                return make_pair(bm, md);
+            
+            if (st.to_move == 'W') {
+                // WHITE: Return immediately on first value found
+                if (md) {
+                    return make_pair(bm, md);
+                }
             } else {
+                // BLACK: Continue searching until max_depth regardless
+                // Only update if we found a value (or keep previous best)
+                if (md) {
+                    best_value = md;
+                    best_move = bm;
+                }
             }
         }
         
-        return make_pair(optional<GameState>(), optional<int>());
+        return make_pair(best_move, best_value);
     }
     
     tuple<vector<string>, int, vector<int>> play_complete_game(
@@ -527,7 +758,6 @@ int main(int argc, char* argv[]) {
         if (arg == "--debug" || arg == "-d") debug_en = true;
     }
     
-    auto t_start = chrono::high_resolution_clock::now();
     double root_t = 0;
     
     cout << "\n" << string(80, '=') << "\n";
@@ -535,8 +765,8 @@ int main(int argc, char* argv[]) {
     cout << "Trajectory Measurement with Black Node Count Accumulation\n";
     cout << string(80, '=') << "\n";
     
-    GameState init_st(Position::from_str("a1"), Position::from_str("b2"), 
-                      Position::from_str("d5"), 'W');
+    GameState init_st(Position::from_str("d3"), Position::from_str("b2"), 
+                      Position::from_str("g1"), 'W');
     cout << "\nInitial position: " << init_st.str() << "\n";
     
     cout << "\n" << string(80, '=') << "\n";
@@ -551,7 +781,8 @@ int main(int argc, char* argv[]) {
     
     int opt_d = -1;
     vector<tuple<GameState, int, int>> opt_meas;
-    
+    SolvedPositionDatabase db("kqvk_perfect_play.db");
+    auto t_start = chrono::high_resolution_clock::now();
     for (int td = 1; td <= 10; td++) {
         cout << "Testing depth " << td << "..."; cout.flush();
         
@@ -589,6 +820,7 @@ int main(int argc, char* argv[]) {
     }
     
     if (opt_d == -1) {
+
         opt_d = 7;
         vector<GameState> cands;
         cands.reserve(64);
@@ -668,6 +900,20 @@ int main(int argc, char* argv[]) {
         double c_el = chrono::duration<double>(c_end - c_start).count();
         c_times.push_back(c_el);
         
+                // Record this solution in the database
+        SolvedPosition solution;
+        solution.position_key = cand.str();
+        solution.best_move = mvs.empty() ? "none" : mvs[0];
+        solution.M_value = M_r;
+        solution.BN_trajectory = bnc;
+        solution.total_plies = tp;
+        solution.white_moves = (tp + 1) / 2;
+        solution.black_moves = tp / 2;
+        solution.nodes_evaluated = eng.nodes_evaluated;
+        solution.computation_time = c_el;
+        
+        db.add_position(solution);
+
         cout << "Complete game: ";
         for (size_t i = 0; i < mvs.size(); i++) {
             if (i > 0) cout << " ";
@@ -695,13 +941,8 @@ int main(int argc, char* argv[]) {
     }
     cout << string(40, '-') << "\n";
     cout << "Total computation time:       " << setw(10) << tot_t << "s\n";
-    
-    cout << "\nWith C++ optimization (50x speedup):\n";
-    cout << "  Root eval:     " << fixed << setprecision(3) << (root_t/50) << "s\n";
-    for (size_t i = 0; i < c_times.size(); i++) {
-        cout << "  Candidate " << (i+1) << ":   " << (c_times[i]/50) << "s\n";
-    }
-    cout << "  Total:         " << (tot_t/50) << "s\n";
-    
+    cout << "\n";
+    db.export_to_file();
+    db.print_summary();
     return 0;
 }

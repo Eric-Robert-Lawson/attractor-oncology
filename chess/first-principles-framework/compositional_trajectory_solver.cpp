@@ -352,11 +352,13 @@ public:
         cands.reserve(64);
         if (st.to_move == 'W') {
             for (auto& wk_n : generate_all_king_moves(st.wk)) {
+                if (wk_n.distance_to(st.bk) > st.wk.distance_to(st.bk)) continue;
                 GameState ns(wk_n, st.wq, st.bk, 'B');
                 if (is_legal_state(ns) && !is_stalemate(ns)) cands.push_back(ns);
             }
             for (auto& wq_n : generate_all_queen_moves(st.wq)) {
-                if (wq_n.distance_to(st.bk) < 2) continue;  // Queen can't move adjacent to Black King (would be captured)
+                if (wq_n.distance_to(st.bk) > st.wq.distance_to(st.bk)) continue;
+                if (wq_n.distance_to(st.bk) < 2 && wq_n.distance_to(st.wk) > 1) continue;
                 GameState ns(st.wk, wq_n, st.bk, 'B');
                 if (is_legal_state(ns) && !is_stalemate(ns)) cands.push_back(ns);
             }
@@ -533,8 +535,8 @@ int main(int argc, char* argv[]) {
     cout << "Trajectory Measurement with Black Node Count Accumulation\n";
     cout << string(80, '=') << "\n";
     
-    GameState init_st(Position::from_str("g7"), Position::from_str("f5"), 
-                      Position::from_str("c3"), 'W');
+    GameState init_st(Position::from_str("a1"), Position::from_str("b2"), 
+                      Position::from_str("d5"), 'W');
     cout << "\nInitial position: " << init_st.str() << "\n";
     
     cout << "\n" << string(80, '=') << "\n";
@@ -550,16 +552,18 @@ int main(int argc, char* argv[]) {
     int opt_d = -1;
     vector<tuple<GameState, int, int>> opt_meas;
     
-    for (int td = 1; td <= 7; td++) {
+    for (int td = 1; td <= 10; td++) {
         cout << "Testing depth " << td << "..."; cout.flush();
         
         vector<GameState> cands;
         cands.reserve(64);
         for (auto& wk_n : eng.generate_all_king_moves(init_st.wk)) {
+            if (wk_n.distance_to(init_st.bk) > init_st.wk.distance_to(init_st.bk)) continue;
             GameState ns(wk_n, init_st.wq, init_st.bk, 'B');
             if (eng.is_legal_state(ns) && !eng.is_stalemate(ns)) cands.push_back(ns);
         }
         for (auto& wq_n : eng.generate_all_queen_moves(init_st.wq)) {
+            if (wq_n.distance_to(init_st.bk) < 2 && wq_n.distance_to(init_st.wk) > 1) continue;
             GameState ns(init_st.wk, wq_n, init_st.bk, 'B');
             if (eng.is_legal_state(ns) && !eng.is_stalemate(ns)) cands.push_back(ns);
         }
@@ -588,11 +592,14 @@ int main(int argc, char* argv[]) {
         opt_d = 7;
         vector<GameState> cands;
         cands.reserve(64);
+        // White's turn - White King shouldn't move away from Black King
         for (auto& wk_n : eng.generate_all_king_moves(init_st.wk)) {
+            if (wk_n.distance_to(init_st.bk) > init_st.wk.distance_to(init_st.bk)) continue;  // Prune if moving away
             GameState ns(wk_n, init_st.wq, init_st.bk, 'B');
             if (eng.is_legal_state(ns) && !eng.is_stalemate(ns)) cands.push_back(ns);
         }
         for (auto& wq_n : eng.generate_all_queen_moves(init_st.wq)) {
+            if (wq_n.distance_to(init_st.bk) < 2 && wq_n.distance_to(init_st.wk) > 1) continue;
             GameState ns(init_st.wk, wq_n, init_st.bk, 'B');
             if (eng.is_legal_state(ns) && !eng.is_stalemate(ns)) cands.push_back(ns);
         }

@@ -877,7 +877,8 @@ public:
     }
     
     tuple<vector<string>, int, vector<int>> play_complete_game(
-        const GameState& first, int max_moves = 50, bool debug = false, int game_search_depth = 8,
+        const GameState& first, SolvedPositionDatabase& db,
+        int max_moves = 50, bool debug = false, int game_search_depth = 8,
         vector<string> initial_moves = {}, vector<int> initial_bnc = {}
     ) {
         vector<string> mvs = initial_moves;
@@ -895,6 +896,18 @@ public:
                 return make_tuple(mvs, (int)mvs.size(), bnc);
             }
             
+            // CHECK DB HERE - if next position already solved, stop
+            if (db.is_solved(ns->str())) {
+                auto cached = db.get_solution(ns->str());
+                if (cached) {
+                    string mv_str = get_move_notation(curr, *ns);
+                    mvs.push_back(mv_str);
+                    int tp = mvs.size() + cached->total_plies;  // Add remaining plies from cache
+                    cout << "DB FINISHED COMPLETE GAME FROM SOLVED POINT\n";
+                    return make_tuple(mvs, tp, bnc);
+                }
+            }
+
             string mv_str = get_move_notation(curr, *ns);
             mvs.push_back(mv_str);
             
@@ -908,15 +921,210 @@ public:
     }
 };
 
+// ============================================================================ 
+// batch mode
+// ============================================================================
+ 
+void batch_solve_all_kqvk_positions(CompositionalEngine& eng, SolvedPositionDatabase& db, int max_depth = 16) {
+    cout << "\n" << string(80, '=') << "\n";
+    cout << "BATCH SOLVER: ALL KQvK POSITIONS\n";
+    cout << string(80, '=') << "\n\n";
+    
+    // Generate all legal positions
+    cout << "Generating all legal KQvK positions...\n";
+    vector<GameState> positions;
+    
+    for (int wkf = 0; wkf < 8; wkf++) {
+        for (int wkr = 0; wkr < 8; wkr++) {
+            for (int wqf = 0; wqf < 8; wqf++) {
+                for (int wqr = 0; wqr < 8; wqr++) {
+                    for (int bkf = 0; bkf < 8; bkf++) {
+                        for (int bkr = 0; bkr < 8; bkr++) {
+                            Position wk(wkf, wkr);
+                            Position wq(wqf, wqr);
+                            Position bk(bkf, bkr);
+                            
+                            if (wk == wq || wk == bk || wq == bk) continue;
+                            if (wk.distance_to(bk) < 2) continue;
+                            
+                            // ONLY White to move
+                            GameState st_w(wk, wq, bk, 'W');
+                            if (eng.is_legal_state(st_w)) {
+                                if (!eng.is_attacked_by_queen(bk, wq, wk, wq)) {
+                                    positions.push_back(st_w);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    cout << "Generated " << positions.size() << " legal positions\n\n";
+    
+    // Sort by DTM (easy to hard)
+    cout << "Sorting by estimated DTM (topological M)...\n";
+    sort(positions.begin(), positions.end(), [&](const GameState& a, const GameState& b) {
+        int m_a = eng.compute_M_topological(a);
+        int m_b = eng.compute_M_topological(b);
+        if (m_a != m_b) return m_a < m_b;  // Lower DTM first
+        return a.str() < b.str();  // Tie-break alphabetically
+    });
+    
+    cout << "Sorted by DTM\n\n";
+    
+    // Batch solve
+    int solved_count = 0;
+    int cache_hit_count = 0;
+    auto batch_start = chrono::high_resolution_clock::now();
+
+    for (size_t idx = 0; idx < positions.size(); idx++) {
+        const GameState& pos = positions[idx];
+        int m_est = eng.compute_M_topological(pos);
+        
+        // Check database first
+        if (db.is_solved(pos.str())) {
+            cache_hit_count++;
+            if (idx % 100 == 0) {
+                cout << "[" << idx << "/" << positions.size() << "] [CACHE] " 
+                     << pos.str() << " M~" << m_est << "\n";
+            }
+            continue;
+        }
+        
+        // SHALLOW ROOT EVALUATION
+        vector<GameState> root_cands;
+        if (pos.to_move == 'W') {
+            for (auto& wk_n : eng.generate_all_king_moves(pos.wk)) {
+                if (wk_n.distance_to(pos.bk) > pos.wk.distance_to(pos.bk)) continue;
+                GameState ns(wk_n, pos.wq, pos.bk, 'B');
+                if (eng.is_legal_state(ns) && !eng.is_stalemate(ns)) root_cands.push_back(ns);
+            }
+            for (auto& wq_n : eng.generate_all_queen_moves(pos.wq)) {
+                if (wq_n.distance_to(pos.bk) < 2 && wq_n.distance_to(pos.wk) > 1) continue;
+                GameState ns(pos.wk, wq_n, pos.bk, 'B');
+                if (eng.is_legal_state(ns) && !eng.is_stalemate(ns)) root_cands.push_back(ns);
+            }
+        }
+        
+        if (root_cands.empty()) {
+            cout << "[" << idx << "/" << positions.size() << "] [FAILED] " 
+                 << pos.str() << " (no legal moves)\n";
+            continue;
+        }
+        
+        // Measure each candidate
+        int best_M = INF_MAX;
+        GameState best_cand = root_cands[0];
+        int best_BN = 0;
+        
+        for (auto& c : root_cands) {
+            int M = eng.compute_M_shallow(c, 3);
+            int BN = eng.measure_black_nodes_after_trajectory(c, 3);
+            if (M < best_M) {
+                best_M = M;
+                best_cand = c;
+                best_BN = BN;
+            }
+        }
+        
+            // CHECK FOR INSTANT CHECKMATE
+        if (best_M == 0 || eng.is_checkmate(best_cand)) {
+            SolvedPosition solution;
+            solution.position_key = pos.str();
+            solution.best_move = eng.get_move_notation(pos, best_cand);
+            solution.M_value = 1;
+            solution.total_plies = 1;
+            solution.white_moves = 1;
+            solution.black_moves = 0;
+            solution.nodes_evaluated = 0;
+            solution.computation_time = 0;
+            solution.BN_trajectory = {};
+            
+            db.add_position(solution);
+            solved_count++;
+            
+            cout << "[" << idx << "/" << positions.size() << "] [SOLVED-MATE] " 
+                 << pos.str() << "\n";
+        } else {
+            auto solve_start = chrono::high_resolution_clock::now();
+            auto [mvs, tp, bnc] = eng.play_complete_game(best_cand, db, 50, false, best_M);
+            auto solve_end = chrono::high_resolution_clock::now();
+            double solve_time = chrono::duration<double>(solve_end - solve_start).count();
+            
+            if (!mvs.empty()) {
+                SolvedPosition solution;
+                solution.position_key = pos.str();
+                solution.best_move = mvs[0];
+                solution.M_value = best_M;
+                solution.total_plies = tp;
+                solution.white_moves = (tp + 1) / 2;
+                solution.black_moves = tp / 2;
+                solution.nodes_evaluated = 0;
+                solution.computation_time = solve_time;
+                solution.BN_trajectory = bnc;
+                
+                db.add_position(solution);
+                solved_count++;
+                
+                cout << "[" << idx << "/" << positions.size() << "] [SOLVED] " 
+                     << pos.str() << " M=" << best_M
+                     << " (" << fixed << setprecision(3) << solve_time << "s)\n";
+            } else {
+                cout << "[" << idx << "/" << positions.size() << "] [FAILED] " 
+                     << pos.str() << "\n";
+            }
+        }
+        
+        // Export every 5 positions
+        if (solved_count % 5 == 0 && solved_count > 0) {
+            auto export_start = chrono::high_resolution_clock::now();
+            db.export_to_file();
+            auto export_end = chrono::high_resolution_clock::now();
+            double export_time = chrono::duration<double>(export_end - export_start).count();
+            
+            auto batch_current = chrono::high_resolution_clock::now();
+            double elapsed = chrono::duration<double>(batch_current - batch_start).count();
+            double rate = solved_count / elapsed;
+            
+            cout << "\n[CHECKPOINT] Exported " << solved_count << " solutions\n";
+            cout << "  Cache hits: " << cache_hit_count << "\n";
+            cout << "  Rate: " << fixed << setprecision(1) << rate << " pos/sec\n";
+            cout << "  Export time: " << fixed << setprecision(2) << export_time << "s\n";
+            cout << "  Elapsed: " << fixed << setprecision(1) << elapsed << "s\n";
+            cout << "  ETA: " << fixed << setprecision(1) 
+                 << (positions.size() - idx) / rate << "s remaining\n\n";
+        }
+    }
+
+    // Final export
+    db.export_to_file();
+
+    auto batch_end = chrono::high_resolution_clock::now();
+    double total_time = chrono::duration<double>(batch_end - batch_start).count();
+
+    cout << "\n" << string(80, '=') << "\n";
+    cout << "BATCH SOLVER COMPLETE\n";
+    cout << string(80, '=') << "\n";
+    cout << "Total positions: " << positions.size() << "\n";
+    cout << "Solved: " << solved_count << "\n";
+    cout << "Cache hits: " << cache_hit_count << "\n";
+    cout << "Total time: " << fixed << setprecision(1) << total_time << "s\n";
+    cout << "Rate: " << fixed << setprecision(1) << solved_count / total_time << " pos/sec\n\n";
+    }
+
 // ============================================================================
 // MAIN
 // ============================================================================
 
 int main(int argc, char* argv[]) {
     bool debug_en = false;
+    bool batch_mode = false;
     for (int i = 1; i < argc; i++) {
         string arg = argv[i];
         if (arg == "--debug" || arg == "-d") debug_en = true;
+        if (arg == "--batch" || arg == "-b") batch_mode = true;
     }
     
     double root_t = 0;
@@ -926,8 +1134,8 @@ int main(int argc, char* argv[]) {
     cout << "Trajectory Measurement with Black Node Count Accumulation\n";
     cout << string(80, '=') << "\n";
     
-    GameState init_st(Position::from_str("b3"), Position::from_str("b2"), 
-                      Position::from_str("a5"), 'W');
+    GameState init_st(Position::from_str("e3"), Position::from_str("a7"), 
+                      Position::from_str("e1"), 'W');
     cout << "\nInitial position: " << init_st.str() << "\n";
     
     cout << "\n" << string(80, '=') << "\n";
@@ -936,259 +1144,281 @@ int main(int argc, char* argv[]) {
     
     auto root_t_start = chrono::high_resolution_clock::now();
     CompositionalEngine eng;
-    
-    cout << "Finding optimal root evaluation depth...\n";
-    cout << "(Will iterate: depth >= min_M(s) is termination condition)\n\n";
-    
-    int opt_d = -1;
-    vector<tuple<GameState, int, int>> opt_meas;
     SolvedPositionDatabase db("kqvk_perfect_play.db");
-    auto t_start = chrono::high_resolution_clock::now();
-    for (int td = 1; td <= 10; td++) {
-        cout << "Testing depth " << td << "..."; cout.flush();
+    if (batch_mode) {
+        batch_solve_all_kqvk_positions(eng, db, 16);
+    } else {
+        cout << "Finding optimal root evaluation depth...\n";
+        cout << "(Will iterate: depth >= min_M(s) is termination condition)\n\n";
         
-        vector<GameState> cands;
-        cands.reserve(64);
-        for (auto& wk_n : eng.generate_all_king_moves(init_st.wk)) {
-            if (wk_n.distance_to(init_st.bk) > init_st.wk.distance_to(init_st.bk)) continue;
-            GameState ns(wk_n, init_st.wq, init_st.bk, 'B');
-            if (eng.is_legal_state(ns) && !eng.is_stalemate(ns)) cands.push_back(ns);
-        }
-        for (auto& wq_n : eng.generate_all_queen_moves(init_st.wq)) {
-            if (wq_n.distance_to(init_st.bk) < 2 && wq_n.distance_to(init_st.wk) > 1) continue;
+        int opt_d = -1;
+        vector<tuple<GameState, int, int>> opt_meas;
+        auto t_start = chrono::high_resolution_clock::now();
+        for (int td = 1; td <= 10; td++) {
+            cout << "Testing depth " << td << "..."; cout.flush();
             
-            // Check if White King blocks the Queen's path
-            bool blocked = false;
-            if (wq_n.file == init_st.wq.file) {
-                int init_start = min(init_st.wq.rank, wq_n.rank) + 1;
-                int end = max(init_st.wq.rank, wq_n.rank);
-                for (int r = init_start; r < end; r++) {
-                    if (Position(wq_n.file, r) == init_st.wk) { blocked = true; break; }
-                }
-            } else if (wq_n.rank == init_st.wq.rank) {
-                int init_start = min(init_st.wq.file, wq_n.file) + 1;
-                int end = max(init_st.wq.file, wq_n.file);
-                for (int f = init_start; f < end; f++) {
-                    if (Position(f, wq_n.rank) == init_st.wk) { blocked = true; break; }
-                }
-            } else if (abs(wq_n.file - init_st.wq.file) == abs(wq_n.rank - init_st.wq.rank)) {
-                int df = (wq_n.file > init_st.wq.file) ? 1 : -1;
-                int dr = (wq_n.rank > init_st.wq.rank) ? 1 : -1;
-                int f = init_st.wq.file + df;
-                int r = init_st.wq.rank + dr;
-                while (f != wq_n.file) {
-                    if (Position(f, r) == init_st.wk) { blocked = true; break; }
-                    f += df;
-                    r += dr;
-                }
+            vector<GameState> cands;
+            cands.reserve(64);
+            for (auto& wk_n : eng.generate_all_king_moves(init_st.wk)) {
+                if (wk_n.distance_to(init_st.bk) > init_st.wk.distance_to(init_st.bk)) continue;
+                GameState ns(wk_n, init_st.wq, init_st.bk, 'B');
+                if (eng.is_legal_state(ns) && !eng.is_stalemate(ns)) cands.push_back(ns);
             }
-            if (blocked) continue;
+            for (auto& wq_n : eng.generate_all_queen_moves(init_st.wq)) {
+                if (wq_n.distance_to(init_st.bk) < 2 && wq_n.distance_to(init_st.wk) > 1) continue;
+                
+                // Check if White King blocks the Queen's path
+                bool blocked = false;
+                if (wq_n.file == init_st.wq.file) {
+                    int init_start = min(init_st.wq.rank, wq_n.rank) + 1;
+                    int end = max(init_st.wq.rank, wq_n.rank);
+                    for (int r = init_start; r < end; r++) {
+                        if (Position(wq_n.file, r) == init_st.wk) { blocked = true; break; }
+                    }
+                } else if (wq_n.rank == init_st.wq.rank) {
+                    int init_start = min(init_st.wq.file, wq_n.file) + 1;
+                    int end = max(init_st.wq.file, wq_n.file);
+                    for (int f = init_start; f < end; f++) {
+                        if (Position(f, wq_n.rank) == init_st.wk) { blocked = true; break; }
+                    }
+                } else if (abs(wq_n.file - init_st.wq.file) == abs(wq_n.rank - init_st.wq.rank)) {
+                    int df = (wq_n.file > init_st.wq.file) ? 1 : -1;
+                    int dr = (wq_n.rank > init_st.wq.rank) ? 1 : -1;
+                    int f = init_st.wq.file + df;
+                    int r = init_st.wq.rank + dr;
+                    while (f != wq_n.file) {
+                        if (Position(f, r) == init_st.wk) { blocked = true; break; }
+                        f += df;
+                        r += dr;
+                    }
+                }
+                if (blocked) continue;
 
-            GameState ns(init_st.wk, wq_n, init_st.bk, 'B');
-            if (eng.is_legal_state(ns) && !eng.is_stalemate(ns)) cands.push_back(ns);
-        }
-        
-        vector<tuple<GameState, int, int>> meas;
-        for (auto& c : cands) {
-            int M = eng.compute_M_shallow(c, td);
-            int BN = eng.measure_black_nodes_after_trajectory(c, td);
-            meas.push_back({c, M, BN});
-        }
-        
-        int min_M = INF_MAX;
-        for (auto& [c,M,BN] : meas) min_M = min(min_M, M);
-        
-        if (td >= min_M) {
-            opt_d = td;
-            opt_meas = meas;
-            break;
-        }
-    }
-    
-    if (opt_d == -1) {
-
-        opt_d = 7;
-        vector<GameState> cands;
-        cands.reserve(64);
-        // White's turn - White King shouldn't move away from Black King
-        for (auto& wk_n : eng.generate_all_king_moves(init_st.wk)) {
-            if (wk_n.distance_to(init_st.bk) > init_st.wk.distance_to(init_st.bk)) continue;  // Prune if moving away
-            GameState ns(wk_n, init_st.wq, init_st.bk, 'B');
-            if (eng.is_legal_state(ns) && !eng.is_stalemate(ns)) cands.push_back(ns);
-        }
-        for (auto& wq_n : eng.generate_all_queen_moves(init_st.wq)) {
-            if (wq_n.distance_to(init_st.bk) < 2 && wq_n.distance_to(init_st.wk) > 1) continue;
+                GameState ns(init_st.wk, wq_n, init_st.bk, 'B');
+                if (eng.is_legal_state(ns) && !eng.is_stalemate(ns)) cands.push_back(ns);
+            }
             
-            // Check if White King blocks the Queen's path
-            bool blocked = false;
-            if (wq_n.file == init_st.wq.file) {
-                int init_start = min(init_st.wq.rank, wq_n.rank) + 1;
-                int end = max(init_st.wq.rank, wq_n.rank);
-                for (int r = init_start; r < end; r++) {
-                    if (Position(wq_n.file, r) == init_st.wk) { blocked = true; break; }
-                }
-            } else if (wq_n.rank == init_st.wq.rank) {
-                int init_start = min(init_st.wq.file, wq_n.file) + 1;
-                int end = max(init_st.wq.file, wq_n.file);
-                for (int f = init_start; f < end; f++) {
-                    if (Position(f, wq_n.rank) == init_st.wk) { blocked = true; break; }
-                }
-            } else if (abs(wq_n.file - init_st.wq.file) == abs(wq_n.rank - init_st.wq.rank)) {
-                int df = (wq_n.file > init_st.wq.file) ? 1 : -1;
-                int dr = (wq_n.rank > init_st.wq.rank) ? 1 : -1;
-                int f = init_st.wq.file + df;
-                int r = init_st.wq.rank + dr;
-                while (f != wq_n.file) {
-                    if (Position(f, r) == init_st.wk) { blocked = true; break; }
-                    f += df;
-                    r += dr;
-                }
+            vector<tuple<GameState, int, int>> meas;
+            for (auto& c : cands) {
+                int M = eng.compute_M_shallow(c, td);
+                int BN = eng.measure_black_nodes_after_trajectory(c, td);
+                meas.push_back({c, M, BN});
             }
-            if (blocked) continue;
+            
+            int min_M = INF_MAX;
+            for (auto& [c,M,BN] : meas) min_M = min(min_M, M);
+            
+            if (td >= min_M) {
+                opt_d = td;
+                opt_meas = meas;
+                break;
+            }
+        }
+        
+        if (opt_d == -1) {
 
-            GameState ns(init_st.wk, wq_n, init_st.bk, 'B');
-            if (eng.is_legal_state(ns) && !eng.is_stalemate(ns)) cands.push_back(ns);
+            opt_d = 7;
+            vector<GameState> cands;
+            cands.reserve(64);
+            // White's turn - White King shouldn't move away from Black King
+            for (auto& wk_n : eng.generate_all_king_moves(init_st.wk)) {
+                if (wk_n.distance_to(init_st.bk) > init_st.wk.distance_to(init_st.bk)) continue;  // Prune if moving away
+                GameState ns(wk_n, init_st.wq, init_st.bk, 'B');
+                if (eng.is_legal_state(ns) && !eng.is_stalemate(ns)) cands.push_back(ns);
+            }
+            for (auto& wq_n : eng.generate_all_queen_moves(init_st.wq)) {
+                if (wq_n.distance_to(init_st.bk) < 2 && wq_n.distance_to(init_st.wk) > 1) continue;
+                
+                // Check if White King blocks the Queen's path
+                bool blocked = false;
+                if (wq_n.file == init_st.wq.file) {
+                    int init_start = min(init_st.wq.rank, wq_n.rank) + 1;
+                    int end = max(init_st.wq.rank, wq_n.rank);
+                    for (int r = init_start; r < end; r++) {
+                        if (Position(wq_n.file, r) == init_st.wk) { blocked = true; break; }
+                    }
+                } else if (wq_n.rank == init_st.wq.rank) {
+                    int init_start = min(init_st.wq.file, wq_n.file) + 1;
+                    int end = max(init_st.wq.file, wq_n.file);
+                    for (int f = init_start; f < end; f++) {
+                        if (Position(f, wq_n.rank) == init_st.wk) { blocked = true; break; }
+                    }
+                } else if (abs(wq_n.file - init_st.wq.file) == abs(wq_n.rank - init_st.wq.rank)) {
+                    int df = (wq_n.file > init_st.wq.file) ? 1 : -1;
+                    int dr = (wq_n.rank > init_st.wq.rank) ? 1 : -1;
+                    int f = init_st.wq.file + df;
+                    int r = init_st.wq.rank + dr;
+                    while (f != wq_n.file) {
+                        if (Position(f, r) == init_st.wk) { blocked = true; break; }
+                        f += df;
+                        r += dr;
+                    }
+                }
+                if (blocked) continue;
+
+                GameState ns(init_st.wk, wq_n, init_st.bk, 'B');
+                if (eng.is_legal_state(ns) && !eng.is_stalemate(ns)) cands.push_back(ns);
+            }
+            for (auto& c : cands) {
+                int M = eng.compute_M_shallow(c, opt_d);
+                int BN = eng.measure_black_nodes_after_trajectory(c, opt_d);
+                opt_meas.push_back({c, M, BN});
+            }
         }
-        for (auto& c : cands) {
-            int M = eng.compute_M_shallow(c, opt_d);
-            int BN = eng.measure_black_nodes_after_trajectory(c, opt_d);
-            opt_meas.push_back({c, M, BN});
+        
+        sort(opt_meas.begin(), opt_meas.end(), [](auto& a, auto& b) {
+            if (get<1>(a) != get<1>(b)) return get<1>(a) < get<1>(b);
+            return get<2>(a) < get<2>(b);
+        });
+        
+        auto root_t_end = chrono::high_resolution_clock::now();
+        root_t = chrono::duration<double>(root_t_end - root_t_start).count();
+        
+        cout << "Total root candidates: " << opt_meas.size() << "\n\n";
+        cout << "Top 10 candidates by M(s):\n";
+        for (size_t i = 0; i < min(size_t(10), opt_meas.size()); i++) {
+            cout << "  " << (i+1) << ". " << get<0>(opt_meas[i]).str()
+                 << " M=" << get<1>(opt_meas[i])
+                 << ", Black nodes=" << get<2>(opt_meas[i]) << "\n";
         }
-    }
-    
-    sort(opt_meas.begin(), opt_meas.end(), [](auto& a, auto& b) {
-        if (get<1>(a) != get<1>(b)) return get<1>(a) < get<1>(b);
-        return get<2>(a) < get<2>(b);
-    });
-    
-    auto root_t_end = chrono::high_resolution_clock::now();
-    root_t = chrono::duration<double>(root_t_end - root_t_start).count();
-    
-    cout << "Total root candidates: " << opt_meas.size() << "\n\n";
-    cout << "Top 10 candidates by M(s):\n";
-    for (size_t i = 0; i < min(size_t(10), opt_meas.size()); i++) {
-        cout << "  " << (i+1) << ". " << get<0>(opt_meas[i]).str()
-             << " M=" << get<1>(opt_meas[i])
-             << ", Black nodes=" << get<2>(opt_meas[i]) << "\n";
-    }
-    
-    int min_M_v = INF_MAX;
-    for (auto& [c,M,BN] : opt_meas) min_M_v = min(min_M_v, M);
-    
-    vector<tuple<GameState, int, int>> opt_cands;
-    for (auto& [c,M,BN] : opt_meas) {
-        if (M == min_M_v) opt_cands.push_back({c, M, BN});
-    }
-    
-    cout << "\nCandidates with M(s) = " << min_M_v << ": " << opt_cands.size() << "\n";
-    for (size_t i = 0; i < opt_cands.size(); i++) {
-        cout << "  " << (i+1) << ". " << get<0>(opt_cands[i]).str()
-             << " M=" << get<1>(opt_cands[i])
-             << ", Black nodes=" << get<2>(opt_cands[i]) << "\n";
-    }
-    
-    cout << "\nFull endgame evaluation for all " << opt_cands.size() << " candidates\n";
-    cout << "Root evaluation time: " << fixed << setprecision(2) << root_t << "s\n";
-    
-    cout << "\n" << string(80, '=') << "\n";
-    cout << "COMPLETE GAME EVALUATION\n";
-    cout << string(80, '=') << "\n";
-    
-    vector<double> c_times;
-    
-    for (size_t idx = 0; idx < opt_cands.size(); idx++) {
-        auto [cand, M_r, BN_r] = opt_cands[idx];
+        
+        int min_M_v = INF_MAX;
+        for (auto& [c,M,BN] : opt_meas) min_M_v = min(min_M_v, M);
+        
+        vector<tuple<GameState, int, int>> opt_cands;
+        for (auto& [c,M,BN] : opt_meas) {
+            if (M == min_M_v) opt_cands.push_back({c, M, BN});
+        }
+        
+        cout << "\nCandidates with M(s) = " << min_M_v << ": " << opt_cands.size() << "\n";
+        for (size_t i = 0; i < opt_cands.size(); i++) {
+            cout << "  " << (i+1) << ". " << get<0>(opt_cands[i]).str()
+                 << " M=" << get<1>(opt_cands[i])
+                 << ", Black nodes=" << get<2>(opt_cands[i]) << "\n";
+        }
+        
+        cout << "\nFull endgame evaluation for all " << opt_cands.size() << " candidates\n";
+        cout << "Root evaluation time: " << fixed << setprecision(2) << root_t << "s\n";
         
         cout << "\n" << string(80, '=') << "\n";
-        cout << "CANDIDATE " << (idx+1) << ": " << cand.str() << "\n";
-        cout << "M(s) at root: " << M_r << "\n";
-        cout << "Black nodes at root: " << BN_r << "\n";
-        cout << string(80, '=') << "\n\n";
+        cout << "COMPLETE GAME EVALUATION\n";
+        cout << string(80, '=') << "\n";
         
-        eng.nodes_evaluated = 0;
-        eng.candidates_measured = 0;
+        vector<double> c_times;
         
-        auto c_start = chrono::high_resolution_clock::now();
-        auto [mvs, tp, bnc] = eng.play_complete_game(cand, 50, debug_en, M_r);
-        auto c_end = chrono::high_resolution_clock::now();
-        double c_el = chrono::duration<double>(c_end - c_start).count();
-        c_times.push_back(c_el);
+        for (size_t idx = 0; idx < opt_cands.size(); idx++) {
+            auto [cand, M_r, BN_r] = opt_cands[idx];
 
-        // Now replay the game and record EVERY position
-        GameState curr = cand;
-        int recorded_count = 0;
+            if (M_r == 0 || eng.is_checkmate(cand)) {
+                // Record the INITIAL position with the mating move
+                SolvedPosition solution;
+                solution.position_key = init_st.str();
+                solution.best_move = eng.get_move_notation(init_st, cand);
+                solution.M_value = 1;  // 1 ply to mate
+                solution.BN_trajectory = {};
+                solution.total_plies = 1;
+                solution.white_moves = 1;
+                solution.black_moves = 0;
+                solution.nodes_evaluated = 0;
+                solution.computation_time = 0.0;
+                
+                db.add_position(solution);
+                cout << "Complete game: " << solution.best_move << "\n";
+                cout << "Total plies: 1\n";
+                cout << "Recorded positions: 1\n";
+            } else {
+                cout << "\n" << string(80, '=') << "\n";
+                cout << "CANDIDATE " << (idx+1) << ": " << cand.str() << "\n";
+                cout << "M(s) at root: " << M_r << "\n";
+                cout << "Black nodes at root: " << BN_r << "\n";
+                cout << string(80, '=') << "\n\n";
+                
+                eng.nodes_evaluated = 0;
+                eng.candidates_measured = 0;
+                
+                auto c_start = chrono::high_resolution_clock::now();
+                auto [mvs, tp, bnc] = eng.play_complete_game(cand, db, 50, debug_en, M_r);
+                auto c_end = chrono::high_resolution_clock::now();
+                double c_el = chrono::duration<double>(c_end - c_start).count();
+                c_times.push_back(c_el);
 
-        for (size_t i = 0; i < mvs.size(); i++) {
-            // Create solution record for current position
-            SolvedPosition solution;
-            solution.position_key = curr.str();
-            solution.best_move = mvs[i];  // The move played from THIS position
-            solution.M_value = M_r - (i / 2);  // M decreases by 1 each White move
+                // Now replay the game and record EVERY position
+                GameState curr = cand;
+                int recorded_count = 0;
+
+                for (size_t i = 0; i < mvs.size(); i++) {
+                    // Create solution record for current position
+                    SolvedPosition solution;
+                    solution.position_key = curr.str();
+                    solution.best_move = mvs[i];  // The move played from THIS position
+                    solution.M_value = M_r - (i / 2);  // M decreases by 1 each White move
+                    
+                    // BN trajectory from this point onward
+                    solution.BN_trajectory.clear();
+                    for (size_t j = i + 1; j < bnc.size(); j++) {
+                        solution.BN_trajectory.push_back(bnc[j]);
+                    }
+                    
+                    solution.total_plies = tp - i;
+                    solution.white_moves = (tp - i + 1) / 2;
+                    solution.black_moves = (tp - i) / 2;
+                    solution.nodes_evaluated = eng.nodes_evaluated;
+                    solution.computation_time = c_el / mvs.size();  // Distribute time
+                    
+                    db.add_position(solution);
+                    recorded_count++;
+                    
+                    // Apply the move to get next position
+                    char piece = mvs[i][0];  // 'K', 'Q', or 'k'
+                    string dest = mvs[i].substr(1);  // destination square
+                    Position dest_pos = Position::from_str(dest);
+                    
+                    if (piece == 'K') {
+                        curr.wk = dest_pos;
+                        curr.to_move = 'B';
+                    } else if (piece == 'Q') {
+                        curr.wq = dest_pos;
+                        curr.to_move = 'B';
+                    } else if (piece == 'k') {
+                        curr.bk = dest_pos;
+                        curr.to_move = 'W';
+                    }
+                }
+
+                cout << "Complete game: ";
+                for (size_t i = 0; i < mvs.size(); i++) {
+                    if (i > 0) cout << " ";
+                    cout << mvs[i];
+                }
+                cout << "\n";
+                cout << "Total plies: " << tp << "\n";
+                cout << "White moves: " << ((tp+1)/2) << "\n";
+                cout << "Black moves: " << (tp/2) << "\n";
+                cout << "Recorded positions: " << recorded_count << "\n";
+                cout << "Nodes evaluated: " << eng.nodes_evaluated << "\n";
+                cout << "Candidates measured: " << eng.candidates_measured << "\n";
+                cout << "Candidate " << (idx+1) << " computation time: " << fixed << setprecision(2) << c_el << "s\n";
             
-            // BN trajectory from this point onward
-            solution.BN_trajectory.clear();
-            for (size_t j = i + 1; j < bnc.size(); j++) {
-                solution.BN_trajectory.push_back(bnc[j]);
+
             }
             
-            solution.total_plies = tp - i;
-            solution.white_moves = (tp - i + 1) / 2;
-            solution.black_moves = (tp - i) / 2;
-            solution.nodes_evaluated = eng.nodes_evaluated;
-            solution.computation_time = c_el / mvs.size();  // Distribute time
+            auto t_end = chrono::high_resolution_clock::now();
+            double tot_t = chrono::duration<double>(t_end - t_start).count();
             
-            db.add_position(solution);
-            recorded_count++;
+            cout << "\n" << string(80, '=') << "\n";
+            cout << "TIMING ANALYSIS\n";
+            cout << string(80, '=') << "\n\n";
             
-            // Apply the move to get next position
-            char piece = mvs[i][0];  // 'K', 'Q', or 'k'
-            string dest = mvs[i].substr(1);  // destination square
-            Position dest_pos = Position::from_str(dest);
-            
-            if (piece == 'K') {
-                curr.wk = dest_pos;
-                curr.to_move = 'B';
-            } else if (piece == 'Q') {
-                curr.wq = dest_pos;
-                curr.to_move = 'B';
-            } else if (piece == 'k') {
-                curr.bk = dest_pos;
-                curr.to_move = 'W';
+            cout << "Root candidate evaluation:    " << fixed << setprecision(2) << setw(10) << root_t << "s\n";
+            for (size_t i = 0; i < c_times.size(); i++) {
+                cout << "Candidate " << (i+1) << " computation:      " << setw(10) << c_times[i] << "s\n";
             }
+            cout << string(40, '-') << "\n";
+            cout << "Total computation time:       " << setw(10) << tot_t << "s\n";
+            cout << "\n";
+            db.export_to_file();
+            db.print_summary();
         }
-
-        cout << "Complete game: ";
-        for (size_t i = 0; i < mvs.size(); i++) {
-            if (i > 0) cout << " ";
-            cout << mvs[i];
-        }
-        cout << "\n";
-        cout << "Total plies: " << tp << "\n";
-        cout << "White moves: " << ((tp+1)/2) << "\n";
-        cout << "Black moves: " << (tp/2) << "\n";
-        cout << "Recorded positions: " << recorded_count << "\n";
-        cout << "Nodes evaluated: " << eng.nodes_evaluated << "\n";
-        cout << "Candidates measured: " << eng.candidates_measured << "\n";
-        cout << "Candidate " << (idx+1) << " computation time: " << fixed << setprecision(2) << c_el << "s\n";
-    
-
     }
-    
-    auto t_end = chrono::high_resolution_clock::now();
-    double tot_t = chrono::duration<double>(t_end - t_start).count();
-    
-    cout << "\n" << string(80, '=') << "\n";
-    cout << "TIMING ANALYSIS\n";
-    cout << string(80, '=') << "\n\n";
-    
-    cout << "Root candidate evaluation:    " << fixed << setprecision(2) << setw(10) << root_t << "s\n";
-    for (size_t i = 0; i < c_times.size(); i++) {
-        cout << "Candidate " << (i+1) << " computation:      " << setw(10) << c_times[i] << "s\n";
-    }
-    cout << string(40, '-') << "\n";
-    cout << "Total computation time:       " << setw(10) << tot_t << "s\n";
-    cout << "\n";
-    db.export_to_file();
-    db.print_summary();
     return 0;
 }

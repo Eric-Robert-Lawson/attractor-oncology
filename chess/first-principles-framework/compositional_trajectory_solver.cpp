@@ -65,71 +65,135 @@ struct SolvedPosition {
 // ============================================================================
 
 class SolvedPositionDatabase {
-private:
-    map<string, SolvedPosition> solved;
-    string filename;
-    
-public:
-    SolvedPositionDatabase(const string& db_file = "kqvk_perfect_play.db")
-        : filename(db_file) {
-        load_from_file();
-    }
-    
-    // Add a solved position to the database
-    void add_position(const SolvedPosition& pos) {
-        if (is_solved(pos.position_key)) {
-            return;
+    private:
+        map<string, SolvedPosition> solved;
+        string filename;
+        
+    public:
+        SolvedPositionDatabase(const string& db_file = "kqvk_perfect_play.db")
+            : filename(db_file) {
+            load_from_file();
         }
-        solved[pos.position_key] = pos;
         
-        // Helper lambda to rotate a square string (e.g., "a1" -> "h1")
-        auto rotate_square = [](const string& sq) {
-            if (sq.length() < 2) return sq;
-            int file = sq[0] - 'a';  // 0-7
-            int rank = sq[1] - '1';  // 0-7
-            int new_file = 7 - rank;
-            int new_rank = file;
-            return string(1, char('a' + new_file)) + char('1' + new_rank);
-        };
-        
-        string current_pos = pos.position_key;
-        string current_move = pos.best_move;
-        
-        // Generate 3 rotated versions
-        for (int rot = 1; rot < 4; rot++) {
-            // Extract squares from current position
-            size_t wk_pos = current_pos.find("WK:") + 3;
-            size_t wq_pos = current_pos.find("WQ:") + 3;
-            size_t bk_pos = current_pos.find("BK:") + 3;
+        // Add a solved position to the database
+        void add_position(const SolvedPosition& pos) {
+            if (is_solved(pos.position_key)) {
+                return;
+            }
+            solved[pos.position_key] = pos;
             
-            string wk_sq = current_pos.substr(wk_pos, 2);
-            string wq_sq = current_pos.substr(wq_pos, 2);
-            string bk_sq = current_pos.substr(bk_pos, 2);
+            // Helper lambdas for transformations
+            auto rotate_square = [](const string& sq) {
+                if (sq.length() < 2) return sq;
+                int file = sq[0] - 'a';
+                int rank = sq[1] - '1';
+                int new_file = 7 - rank;
+                int new_rank = file;
+                return string(1, char('a' + new_file)) + char('1' + new_rank);
+            };
             
-            // Rotate each square
-            string new_wk = rotate_square(wk_sq);
-            string new_wq = rotate_square(wq_sq);
-            string new_bk = rotate_square(bk_sq);
+            auto flip_vertical = [](const string& sq) {
+                if (sq.length() < 2) return sq;
+                int file = sq[0] - 'a';
+                int rank = sq[1] - '1';
+                int new_rank = 7 - rank;
+                return string(1, char('a' + file)) + char('1' + new_rank);
+            };
             
-            current_pos = "WK:" + new_wk + " WQ:" + new_wq + " BK:" + new_bk;
+            auto flip_horizontal = [](const string& sq) {
+                if (sq.length() < 2) return sq;
+                int file = sq[0] - 'a';
+                int rank = sq[1] - '1';
+                int new_file = 7 - file;
+                return string(1, char('a' + new_file)) + char('1' + rank);
+            };
             
-            // Rotate move
-            if (!current_move.empty() && current_move != "mate" && current_move != "checkmate") {
-                if (current_move.length() >= 3) {
-                    char piece = current_move[0];
-                    string dest = current_move.substr(1);
-                    current_move = piece + rotate_square(dest);
+            auto flip_diagonal_a1h8 = [](const string& sq) {
+                if (sq.length() < 2) return sq;
+                int file = sq[0] - 'a';
+                int rank = sq[1] - '1';
+                return string(1, char('a' + rank)) + char('1' + file);
+            };
+            
+            auto flip_diagonal_a8h1 = [](const string& sq) {
+                if (sq.length() < 2) return sq;
+                int file = sq[0] - 'a';
+                int rank = sq[1] - '1';
+                int new_file = 7 - rank;
+                int new_rank = 7 - file;
+                return string(1, char('a' + new_file)) + char('1' + new_rank);
+            };
+            
+            // Helper macro to add transformed position
+            auto add_transformed = [&](auto transform_func, const string& base_pos, const string& base_move) {
+                size_t wk_pos = base_pos.find("WK:") + 3;
+                size_t wq_pos = base_pos.find("WQ:") + 3;
+                size_t bk_pos = base_pos.find("BK:") + 3;
+                
+                string wk_sq = base_pos.substr(wk_pos, 2);
+                string wq_sq = base_pos.substr(wq_pos, 2);
+                string bk_sq = base_pos.substr(bk_pos, 2);
+                
+                string new_wk = transform_func(wk_sq);
+                string new_wq = transform_func(wq_sq);
+                string new_bk = transform_func(bk_sq);
+                
+                string new_pos = "WK:" + new_wk + " WQ:" + new_wq + " BK:" + new_bk;
+                
+                string new_move = base_move;
+                if (!new_move.empty() && new_move != "mate" && new_move != "checkmate") {
+                    if (new_move.length() >= 3) {
+                        char piece = new_move[0];
+                        string dest = new_move.substr(1);
+                        new_move = piece + transform_func(dest);
+                    }
+                }
+                
+                if (!is_solved(new_pos)) {
+                    SolvedPosition transformed = pos;
+                    transformed.position_key = new_pos;
+                    transformed.best_move = new_move;
+                    solved[new_pos] = transformed;
+                }
+            };
+            
+            // Generate 4 rotations
+            string current_pos = pos.position_key;
+            string current_move = pos.best_move;
+            
+            for (int rot = 1; rot < 4; rot++) {
+                add_transformed(rotate_square, current_pos, current_move);
+                
+                // Update current for next rotation
+                size_t wk_pos = current_pos.find("WK:") + 3;
+                size_t wq_pos = current_pos.find("WQ:") + 3;
+                size_t bk_pos = current_pos.find("BK:") + 3;
+                
+                string wk_sq = current_pos.substr(wk_pos, 2);
+                string wq_sq = current_pos.substr(wq_pos, 2);
+                string bk_sq = current_pos.substr(bk_pos, 2);
+                
+                string new_wk = rotate_square(wk_sq);
+                string new_wq = rotate_square(wq_sq);
+                string new_bk = rotate_square(bk_sq);
+                
+                current_pos = "WK:" + new_wk + " WQ:" + new_wq + " BK:" + new_bk;
+                
+                if (!current_move.empty() && current_move != "mate" && current_move != "checkmate") {
+                    if (current_move.length() >= 3) {
+                        char piece = current_move[0];
+                        string dest = current_move.substr(1);
+                        current_move = piece + rotate_square(dest);
+                    }
                 }
             }
             
-            if (!is_solved(current_pos)) {
-                SolvedPosition rotated = pos;
-                rotated.position_key = current_pos;
-                rotated.best_move = current_move;
-                solved[rotated.position_key] = rotated;
-            }
+            // Generate 4 reflections from original
+            add_transformed(flip_vertical, pos.position_key, pos.best_move);
+            add_transformed(flip_horizontal, pos.position_key, pos.best_move);
+            add_transformed(flip_diagonal_a1h8, pos.position_key, pos.best_move);
+            add_transformed(flip_diagonal_a8h1, pos.position_key, pos.best_move);
         }
-    }
     
     // Check if position is already solved
     bool is_solved(const string& position_key) const {
@@ -967,10 +1031,87 @@ public:
 // batch mode
 // ============================================================================
  
+// Helper function to parse position from string
+Position parse_position_from_string(const string& pos_str) {
+    // Input: "a1" or "h8"
+    char file_char = pos_str[0];
+    char rank_char = pos_str[1];
+    int file = file_char - 'a';
+    int rank = rank_char - '1';
+    return Position(file, rank);
+}
+
+// Load positions from the Python-generated file
+vector<GameState> load_positions_from_file(const string& filename) {
+    vector<GameState> positions;
+    ifstream file(filename);
+    
+    if (!file.is_open()) {
+        cerr << "ERROR: Cannot open file: " << filename << "\n";
+        return positions;
+    }
+    
+    string line;
+    bool is_header = true;
+    int line_num = 0;
+    
+    while (getline(file, line)) {
+        line_num++;
+        
+        // Skip header
+        if (is_header) {
+            is_header = false;
+            continue;
+        }
+        
+        if (line.empty()) continue;
+        
+        // Parse line: "DTZ,WK:a1 WQ:b2 BK:c3"
+        size_t comma_pos = line.find(',');
+        if (comma_pos == string::npos) {
+            cerr << "  ✗ Line " << line_num << " has no comma\n";
+            continue;
+        }
+        
+        string position_str = line.substr(comma_pos + 1);
+        
+        // Parse position string: "WK:a1 WQ:b2 BK:c3"
+        size_t wk_pos = position_str.find("WK:") + 3;
+        size_t wq_pos = position_str.find("WQ:") + 3;
+        size_t bk_pos = position_str.find("BK:") + 3;
+        
+        try {
+            Position wk = parse_position_from_string(position_str.substr(wk_pos, 2));
+            Position wq = parse_position_from_string(position_str.substr(wq_pos, 2));
+            Position bk = parse_position_from_string(position_str.substr(bk_pos, 2));
+            
+            GameState st(wk, wq, bk, 'W');
+            positions.push_back(st);
+        } catch (const exception& e) {
+            cerr << "  ✗ Line " << line_num << " parse error: " << e.what() << "\n";
+        }
+    }
+    
+    file.close();
+    cout << "  ✓ Loaded " << positions.size() << " positions from " << filename << "\n";
+    return positions;
+}
+
 void batch_solve_all_kqvk_positions(CompositionalEngine& eng, SolvedPositionDatabase& db, int max_depth = 16) {
     cout << "\n" << string(80, '=') << "\n";
     cout << "BATCH SOLVER: ALL KQvK POSITIONS\n";
     cout << string(80, '=') << "\n\n";
+    
+    // // Load positions from file (COMMENT OUT THE GENERATION BELOW)
+    // cout << "Loading positions from file...\n";
+    // vector<GameState> positions = load_positions_from_file("kqvk_positions_by_dtz.txt");
+    
+    // if (positions.empty()) {
+    //     cerr << "ERROR: No positions loaded!\n";
+    //     return;
+    // }
+    
+    // cout << "Loaded " << positions.size() << " legal positions from file\n\n";
     
     // Generate all legal positions
     cout << "Generating all legal KQvK positions...\n";

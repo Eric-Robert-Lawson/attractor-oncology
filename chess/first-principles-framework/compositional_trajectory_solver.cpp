@@ -78,11 +78,9 @@ public:
     // Add a solved position to the database
     void add_position(const SolvedPosition& pos) {
         if (is_solved(pos.position_key)) {
-            cout << "[Database] Position already exists, skipping: " << pos.position_key << "\n";
             return;
         }
         solved[pos.position_key] = pos;
-        cout << "[Database] Added new position: " << pos.position_key << "\n";
     }
     
     // Check if position is already solved
@@ -143,8 +141,6 @@ public:
             if (line.empty()) {
                 continue;
             }
-            
-            cout << "\n[Database] Processing line " << line_num << ": '" << line << "'\n";
             
             // Parse CSV line
             vector<string> parts;
@@ -728,47 +724,29 @@ public:
         } else {
             vector<Position> all_bk_moves = generate_all_king_moves(st.bk);
             
-            bool debug_this = (st.wk.str() == "b3" && st.wq.str() == "b1" && st.bk.str() == "a5");
             
-            if (debug_this) {
-                cout << "\n[DEBUG] Position: WK:" << st.wk.str() << " WQ:" << st.wq.str() << " BK:" << st.bk.str() << "\n";
-                cout << "[DEBUG] Generated BK moves: ";
-                for (auto& m : all_bk_moves) cout << m.str() << " ";
-                cout << "\n";
-            }
             
             for (auto& bk_n : all_bk_moves) {
-                if (debug_this) cout << "[DEBUG] Testing " << st.bk.str() << "->" << bk_n.str() << ": ";
-                
                 if (is_attacked_by_queen(bk_n, st.wq, st.wk, st.wq)) {
-                    if (debug_this) cout << "ATTACKED\n";
                     continue;
                 }
                 
                 if (bk_n.distance_to(st.wk) <= 1) {
-                    if (debug_this) cout << "TOO_CLOSE\n";
                     continue;
                 }
                 
                 GameState ns(st.wk, st.wq, bk_n, 'W');
                 if (!is_legal_state(ns)) {
-                    if (debug_this) cout << "ILLEGAL\n";
                     continue;
                 }
                 
-                if (debug_this) cout << "ADDED\n";
                 cands.push_back(ns);
             }
-            
-            if (debug_this) cout << "[DEBUG] Final cands.size()=" << cands.size() << "\n";
         }
         
         // DEBUG: Show Black candidates
         if (st.to_move == 'B' && ply < 2) {
-            //cout << "\n[BLACK MOVE DEBUG] Position: " << st.str() << "\n";
-            //cout << "Black candidates generated:\n";
             for (size_t i = 0; i < cands.size(); i++) {
-                // cout << "  " << i << ". " << cands[i].str() << "\n";
             }
         }
         
@@ -808,15 +786,6 @@ public:
             dir = "maximize";
         }
         
-        // DEBUG: Show measured M values and best_M (NOW DECLARED)
-        if (st.to_move == 'B' && ply < 2) {
-            //cout << "Measured M values:\n";
-            for (auto& [c,M,BN] : meas) {
-                //cout << "  " << c.str() << " M=" << M << "\n";
-            }
-            //cout << "best_M=" << best_M << " direction=" << dir << "\n";
-        }
-        
         int thresh = max(2, best_M / 3);
         vector<GameState> viable;
         for (auto& [c,M,BN] : meas) {
@@ -846,13 +815,6 @@ public:
         for (size_t i = 0; i < viable.size(); i++) {
             auto [val, mv] = compositional_search_impl(viable[i], depth-1, ply+1, debug, memo);
             nodes_evaluated++;
-            
-            // DEBUG: Show what each viable move returns
-            if (st.to_move == 'B' && ply < 2) {
-                //cout << "  Viable[" << i << "] " << viable[i].str() << " returned val=";
-                //if (val) cout << *val; else cout << "NONE";
-                //cout << "\n";
-            }
             
             if (val) {
                 int v = *val + 1;
@@ -895,50 +857,22 @@ public:
         optional<GameState> best_move;
         optional<int> best_value;
         
-        // cout << "\n[FIND_BEST_MOVE] Position: " << st.str() << "\n";
-        // cout << "[FIND_BEST_MOVE] To move: " << st.to_move << "\n";
-        
         for (int depth = 2; depth <= max_depth + 1; depth += 2) {
-            // cout << "\n[DEPTH " << depth << "] Searching...\n";
             
             auto [md, bm] = compositional_search_impl(st, depth, 0, debug, memo);
             
-            // cout << "[DEPTH " << depth << "] Returned: ";
-            if (md) {
-                // cout << "md=" << *md << ", move=" << (bm ? bm->str() : "NONE");
-            } else {
-                // cout << "NONE";
-            }
-            // cout << "\n";
-            
             if (md) {
                 if (!best_value) {
-                    // cout << "  -> First value found, setting best_move\n";
                     best_value = md;
                     best_move = bm;
                 } else if (st.to_move == 'W' && md < *best_value) {
-                    // cout << "  -> WHITE: " << *md << " < " << *best_value << " (better), updating\n";
                     best_value = md;
                     best_move = bm;
-                } else if (st.to_move == 'W' && md >= *best_value) {
-                    // cout << "  -> WHITE: " << *md << " >= " << *best_value << " (worse), keeping previous\n";
                 } else if (st.to_move == 'B' && md > *best_value) {
-                    // cout << "  -> BLACK: " << *md << " > " << *best_value << " (better), updating\n";
                     best_value = md;
                     best_move = bm;
-                } else if (st.to_move == 'B' && md <= *best_value) {
-                    // cout << "  -> BLACK: " << *md << " <= " << *best_value << " (worse), keeping previous\n";
                 }
-            }
-            
-            // cout << "[DEPTH " << depth << "] Current best: move=" 
-                 // << (best_move ? best_move->str() : "NONE") 
-                 // << " value=" << (best_value ? to_string(*best_value) : "NONE") << "\n";
-        }
-        
-        // cout << "\n[FINAL] Selected move: " << (best_move ? best_move->str() : "NONE")
-             // << " with value " << (best_value ? to_string(*best_value) : "NONE") << "\n";
-        
+            }}
         return make_pair(best_move, best_value);
     }
     
@@ -1063,11 +997,8 @@ int main(int argc, char* argv[]) {
         
         int min_M = INF_MAX;
         for (auto& [c,M,BN] : meas) min_M = min(min_M, M);
-        cout << " min_M(s) = " << min_M << "\n";
         
         if (td >= min_M) {
-            cout << "\n✓ SUFFICIENT DEPTH: " << td << " >= " << min_M << "\n";
-            cout << "  Optimal root evaluation depth: " << td << "\n";
             opt_d = td;
             opt_meas = meas;
             break;

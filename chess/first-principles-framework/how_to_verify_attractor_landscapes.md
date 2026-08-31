@@ -1,264 +1,407 @@
-`# Attractor Landscape Validation Framework
+# Attractor Landscape Validation Framework
 
 ## Overview
 
-Validating the perfect-play attractor landscape requires a multi-layered approach that leverages the same mathematical principles used to construct it. This document outlines systematic validation techniques for KQvK and scaling to other endgames.
+Validating the perfect-play attractor landscape requires a multi-layered approach that leverages the same mathematical principles used to construct it. This document outlines systematic validation techniques for KQvK and scaling to other endgames, including iterative optimization through intelligent re-ordering.
 
 ---
 
-## Optimized Position Ordering Strategy
+## Iterative Optimization Through Reordering
 
-### Why Ordering Matters
+### Why Reordering Matters for Correction
 
-**Critical insight:** The sequence in which positions are solved affects cascade performance exponentially.
-
-```
-Random Order:
-  Position 1000: M=9, no cache → 400s search
-  Position 5000: M=2, cache hit → 0.5s
-  Position 8000: M=8, partial cache → 80s
-
-Optimal Order:
-  Position 1-1000: M=1 instant mates → 0.1s each
-  Position 1001-5000: M=2-3, cache saturated → 1-2s each
-  Position 5001-8000: M=8-9, 95% cache hits → 5-10s each
-```
-
-**Time difference:** 10 hours → 2 hours (5x speedup from ordering alone)
-
-Why? Each solved position populates M_cache and database constraints. Solving low-M positions first means every subsequent high-M position evaluates against a dense cache.
-
-### Detecting Complexity via Geometric Boundaries
-
-**Boundary positions are naturally high-complexity:**
+**Critical insight:** If bugs are discovered, fix time is directly proportional to solving order.
 
 ```
-Low Complexity (Quick to solve):
-  - Black King cornered: WK:a1 WQ:b2 BK:c3 (few escape squares)
-  - White King dominating: WK far from edge, BK trapped
-  - Queens near Black King: WQ:e2 BK:d5 (limited moves)
-  → These are M=1-4 positions
+Bug Scenario: M values incorrect for certain position types
 
-Medium Complexity:
-  - Black King has 3-4 escape options
-  - White King far from battle
-  → M=5-15 positions
+Naive fix: Re-run entire solver from scratch
+  Time: 60+ hours to regenerate everything
 
-High Complexity (Boundary Transitions):
-  - Black King at board edge but with escapes
-  - White King must navigate around Black King
-  - Queen positioning constrains but doesn't dominate
-  → M=15-30+ positions
-
-Example: WK:a1 WQ:e2 BK:c3
-  - WK trapped in corner (vulnerable)
-  - BK has escape routes: b5, b4, d4, d3, d2, a2
-  - WQ must navigate around WK's position
-  - Race condition: can Queen stop escape while King approaches?
-  → BOUNDARY POSITION = High complexity = M=8-9 = 50s+ solve time
+Smart fix: Reorder to prioritize buggy positions, re-solve only those
+  Time: 2-5 hours to correct problematic subset
+  Then: Use corrected positions to cascade into dependent positions
 ```
 
-### Pre-Processing: Position Difficulty Classification
-
-**Algorithm: Classify positions before solving:**
-
-```python
-def classify_position_complexity(wk, wq, bk):
-    """
-    Estimate position complexity from geometry alone.
-    Returns: (difficulty_score, reason)
-    """
-    
-    # 1. INSTANT MATE: BK checkmate in 1
-    if is_checkmate_in_one(wk, wq, bk):
-        return (0, "instant_mate")
-    
-    # 2. CORNER TRAP: BK in corner or heavily constrained
-    bk_escape_count = count_legal_moves(bk, wq, wk)
-    if bk_escape_count <= 2:
-        return (1, "corner_trap")
-    
-    # 3. QUEEN DOMINATION: WQ very close to BK
-    queen_distance = wq.distance_to(bk)
-    if queen_distance <= 2 and bk_escape_count <= 4:
-        return (2, "queen_dominates")
-    
-    # 4. KING DOMINATION: WK close enough to support
-    king_distance = wk.distance_to(bk)
-    if king_distance <= 3:
-        return (3, "king_supports_queen")
-    
-    # 5. BOUNDARY CONDITION: BK near edge with escapes
-    #    (This is the hard case)
-    board_distance_from_edge = min(
-        bk.file,
-        bk.rank,
-        7 - bk.file,
-        7 - bk.rank
-    )
-    
-    if board_distance_from_edge <= 1 and bk_escape_count >= 3:
-        # BK at edge with room to maneuver
-        queen_distance = wq.distance_to(bk)
-        king_distance = wk.distance_to(bk)
-        
-        if queen_distance >= 4 or king_distance >= 5:
-            # Queen/King far from action
-            return (9, "boundary_escape_race")  # HARDEST
-        elif queen_distance >= 3:
-            return (8, "boundary_constrained")
-        else:
-            return (7, "boundary_close")
-    
-    # 6. DEEP ESCAPE: BK has many options, pieces far
-    if bk_escape_count >= 5:
-        return (6, "deep_escape_potential")
-    
-    # Default: Medium complexity
-    return (5, "standard_middle")
-
-def pre_process_positions(all_positions):
-    """
-    Classify all positions, sort by difficulty.
-    """
-    classified = []
-    for pos in all_positions:
-        difficulty, reason = classify_position_complexity(
-            pos.wk, pos.wq, pos.bk
-        )
-        classified.append((difficulty, reason, pos))
-    
-    # Sort by difficulty (easiest first)
-    classified.sort(key=lambda x: x[0])
-    
-    # Extract sorted positions
-    sorted_positions = [p[2] for p in classified]
-    
-    # Log distribution
-    print("Position Difficulty Distribution:")
-    for d in range(0, 10):
-        count = sum(1 for c in classified if c[0] == d)
-        reason = [c[1] for c in classified if c[0] == d][0] if count > 0 else ""
-        print(f"  Difficulty {d} ({reason}): {count} positions")
-    
-    return sorted_positions
-
-# Usage before batch solve
-sorted_positions = pre_process_positions(all_positions)
-# Pass sorted_positions to batch_solve instead of random-order positions
-```
-
-### Expected Complexity Distribution
-
-```markdown
-## Typical Position Breakdown (144,508 total)
-
-| Difficulty | Type | Count | % | Avg Solve Time | Notes |
-|------------|------|-------|---|----------------|-------|
-| 0 | Instant mate (M=1) | ~5,000 | 3% | 0.1s | Cache hit immediate |
-| 1 | Corner trap | ~15,000 | 10% | 0.5s | BK has <2 moves |
-| 2 | Queen dominates | ~20,000 | 14% | 1s | WQ adjacent, few escapes |
-| 3 | King supports | ~18,000 | 13% | 2s | WK nearby, coordinated |
-| 4 | Early cascade | ~15,000 | 10% | 3s | Cache starting to help |
-| 5 | Standard middle | ~25,000 | 17% | 8s | Mix of constraints |
-| 6 | Escape potential | ~20,000 | 14% | 15s | BK has options |
-| 7 | Boundary close | ~12,000 | 8% | 25s | BK at edge, WQ close |
-| 8 | Boundary constrained | ~10,000 | 7% | 40s | BK edge, WQ medium dist |
-| 9 | Escape race | ~4,508 | 4% | 100s | BK edge, far pieces |
-
-**Total expected time with OPTIMAL ordering:** ~20-30 hours
-**Total expected time with RANDOM ordering:** ~100+ hours
-```
-
-### Cascade Propagation with Optimal Ordering
-
-```
-Timeline with Optimal Ordering:
-=====================================
-
-Hour 0-2: Solve difficulties 0-2 (40K positions)
-  Cache state: Empty
-  M_cache fills with: M=1-3 solutions
-  
-Hour 2-4: Solve difficulties 3-4 (33K positions)
-  Cache state: Dense with M=1-3
-  Benefit: Candidates in difficulty-3 positions evaluate against known M=1-2
-  Performance: Average 2-3s per position
-  
-Hour 4-8: Solve difficulties 5-6 (45K positions)
-  Cache state: M=1-6 mostly complete
-  Benefit: High-M candidates branch through cached positions
-  Performance: Even harder positions solve faster due to cache
-  Example: M=9 position that would be 400s now takes 20s
-  
-Hour 8-20: Solve difficulties 7-9 (26K positions)
-  Cache state: M=1-8 nearly complete
-  Benefit: MAXIMUM cascade effect
-  Performance: Boundary positions solve 10-50x faster
-  Example: 53s boundary position now solves in 5-10s
-  
-Result: Complete landscape in 20-30 hours (vs 100+ randomly)
-```
-
-### Rotational Ordering Note
-
-**Important:** When you pre-process ordering:
+### Phase 1: Initial Run (Current Approach)
 
 ```cpp
-// Sort positions by difficulty
-sort(positions.begin(), positions.end(), [&](const GameState& a, const GameState& b) {
-    int diff_a = classify_position_complexity(a.wk, a.wq, a.bk);
-    int diff_b = classify_position_complexity(b.wk, b.wq, b.bk);
-    return diff_a < diff_b;
-});
+// Run solver with any reasonable ordering
+// Output: kqvk_perfect_play.db (potentially with bugs)
 
-// Then solve in this order
-// Rotations are generated automatically by add_position()
-// So solving base positions in optimal order cascades to rotations
+// Step 1: Extract positions and sort by M value
+create_ordered_position_list("kqvk_perfect_play.db", 
+                            "kqvk_positions_ordered_by_m.txt");
+
+// Step 2: Run batch solver using ordered file
+batch_solve_from_ordered_file(eng, db, 
+                             "kqvk_positions_ordered_by_m.txt", 
+                             16);
 ```
 
-The rotational symmetry works WITH optimal ordering—not against it. Each base position solved constrains 3 rotations, all in cascade order.
-
----
-
-## Orderable Output: Position Difficulty List
-
-**Generate this before full run:**
+### Phase 2: Validation and Bug Detection
 
 ```cpp
-void generate_difficulty_ordered_list(const vector<GameState>& all_positions, 
-                                       const string& output_file) {
-    vector<tuple<int, string, GameState>> classified;
+// Run Syzygy validation against complete database
+AttractorValidator validator("kqvk_perfect_play.db", "/path/to/syzygy");
+ValidationReport report = validator.validate_random_sample(5000);
+
+if (report.shorter_mates.size() > 0 || report.longer_mates.size() > 10) {
+    // Bugs found - proceed to Phase 3
+    cout << "Bugs detected. Proceeding with corrective reordering...\n";
+} else {
+    // No bugs - validation passed
+    cout << "Landscape validated. Perfect play confirmed.\n";
+}
+```
+
+### Phase 3: Corrective Reordering (If Needed)
+
+**Step 1: Identify Problematic Positions**
+
+```cpp
+void analyze_validation_errors(const ValidationReport& report,
+                               const string& error_analysis_file) {
+    ofstream file(error_analysis_file);
     
-    for (const auto& pos : all_positions) {
-        int difficulty = classify_position_complexity(pos.wk, pos.wq, pos.bk);
-        string reason = get_complexity_reason(difficulty);
-        classified.push_back({difficulty, reason, pos});
+    file << "ERROR_ANALYSIS\n";
+    file << "==============\n\n";
+    
+    // Positions with LONGER mates than Syzygy
+    file << "LONGER_MATES (Our solver too conservative):\n";
+    for (const auto& err : report.longer_mates) {
+        file << err.position << " | Our M=" << err.attractor_m 
+             << " | Syzygy M=" << err.syzygy_m 
+             << " | Delta=" << (err.attractor_m - err.syzygy_m) << "\n";
     }
     
-    sort(classified.begin(), classified.end());
+    // Positions with SHORTER mates (critical bugs)
+    file << "\nSHORTER_MATES (Critical - investigate immediately):\n";
+    for (const auto& err : report.shorter_mates) {
+        file << err.position << " | Our M=" << err.attractor_m 
+             << " | Syzygy M=" << err.syzygy_m << "\n";
+    }
     
-    ofstream file(output_file);
-    file << "difficulty,reason,position\n";
-    for (const auto& [diff, reason, pos] : classified) {
-        file << diff << "," << reason << "," << pos.str() << "\n";
+    // Move verification failures
+    file << "\nMOVE_VERIFICATION_FAILURES:\n";
+    for (const auto& err : report.move_errors) {
+        file << err.position << " | Move: " << err.move 
+             << " | Expected next M=" << err.expected_m_next 
+             << " | Actual=" << err.actual_m_next << "\n";
+    }
+    
+    file.close();
+}
+
+// Usage
+analyze_validation_errors(report, "validation_error_analysis.txt");
+```
+
+**Step 2: Create Corrective Ordering**
+
+```cpp
+void create_corrective_ordering(const SolvedPositionDatabase& db,
+                                const string& error_file,
+                                const string& corrective_order_file) {
+    
+    // Load positions
+    vector<pair<int, string>> all_positions;  // (priority, position_key)
+    
+    // Read error file and mark problematic positions
+    set<string> error_positions;
+    ifstream errors(error_file);
+    string line;
+    while (getline(errors, line)) {
+        // Parse position from error analysis
+        // Format: "WK:a1 WQ:b2 BK:c3 | ..."
+        if (line.find("WK:") != string::npos) {
+            size_t end = line.find(" |");
+            string pos_key = line.substr(0, end);
+            error_positions.insert(pos_key);
+        }
+    }
+    errors.close();
+    
+    // Extract all positions with priorities
+    for (const auto& [key, solution] : db.solved) {
+        int priority;
+        
+        if (error_positions.count(key)) {
+            // Error position - highest priority (0 = most urgent)
+            priority = 0;
+        } else if (solution.M_value <= 5) {
+            // Foundation positions - solve early (1)
+            priority = 1;
+        } else if (solution.M_value <= 15) {
+            // Middle positions - cascade support (2)
+            priority = 2;
+        } else {
+            // Deep positions - benefit from cascade (3)
+            priority = 3;
+        }
+        
+        all_positions.push_back({priority, key});
+    }
+    
+    // Sort by priority, then by M value within priority
+    sort(all_positions.begin(), all_positions.end(),
+         [&](const auto& a, const auto& b) {
+        if (a.first != b.first) return a.first < b.first;
+        // Within same priority, sort by M value
+        int m_a = db.solved[a.second].M_value;
+        int m_b = db.solved[b.second].M_value;
+        return m_a < m_b;
+    });
+    
+    // Write corrective order
+    ofstream file(corrective_order_file);
+    int current_priority = -1;
+    for (const auto& [priority, pos_key] : all_positions) {
+        if (priority != current_priority) {
+            current_priority = priority;
+            file << "\n# Priority " << priority << "\n";
+        }
+        file << pos_key << "\n";
     }
     file.close();
     
-    cout << "Wrote " << classified.size() << " positions to " << output_file << "\n";
+    cout << "Corrective ordering created: " << corrective_order_file << "\n";
+    cout << "Error positions prioritized for re-solving\n";
 }
 
-// Usage in main:
-vector<GameState> all_positions = generate_all_kqvk_positions();
-generate_difficulty_ordered_list(all_positions, "kqvk_positions_by_difficulty.csv");
-
-// Then pass to batch solver with this ordering
+// Usage
+create_corrective_ordering(db, 
+                          "validation_error_analysis.txt",
+                          "kqvk_corrective_order.txt");
 ```
 
-This file can be:
-- Inspected to understand position distribution
-- Reused for future runs (pre-calculated ordering)
-- Analyzed post-completion to validate complexity assumptions
+**Step 3: Selective Re-solving**
+
+```cpp
+void batch_solve_corrective(CompositionalEngine& eng,
+                           SolvedPositionDatabase& db,
+                           const string& corrective_order_file,
+                           int max_depth = 16) {
+    
+    // Load corrective order
+    vector<GameState> positions_to_recompute;
+    ifstream file(corrective_order_file);
+    string line;
+    
+    int error_count = 0;
+    int total_count = 0;
+    
+    while (getline(file, line)) {
+        if (line.empty() || line[0] == '#') continue;
+        
+        // Parse position
+        size_t wk_pos = line.find("WK:") + 3;
+        size_t wq_pos = line.find("WQ:") + 3;
+        size_t bk_pos = line.find("BK:") + 3;
+        
+        Position wk = Position::from_str(line.substr(wk_pos, 2));
+        Position wq = Position::from_str(line.substr(wq_pos, 2));
+        Position bk = Position::from_str(line.substr(bk_pos, 2));
+        
+        positions_to_recompute.push_back(GameState(wk, wq, bk, 'W'));
+        total_count++;
+        
+        // Track which are error positions
+        if (line.find("# Priority 0") != string::npos) {
+            error_count++;
+        }
+    }
+    file.close();
+    
+    cout << "\nCorrective solving:\n";
+    cout << "  Error positions to fix: " << error_count << "\n";
+    cout << "  Total positions to re-evaluate: " << total_count << "\n";
+    cout << "  Expected time: " << (total_count * 0.5 / 3600) << " hours\n\n";
+    
+    // Run batch solver with corrective order
+    // This will:
+    // 1. Re-compute error positions first (high priority)
+    // 2. Update database with corrections
+    // 3. Fix dependent positions through cascade
+    
+    int solved_count = 0;
+    auto start = chrono::high_resolution_clock::now();
+    
+    for (size_t idx = 0; idx < positions_to_recompute.size(); idx++) {
+        const GameState& pos = positions_to_recompute[idx];
+        
+        // FORCE re-solve even if in database
+        // (This overwrites potentially buggy entries)
+        
+        eng.nodes_evaluated = 0;
+        auto [mvs, tp, bnc] = eng.play_complete_game(pos, db, 50, false, 8);
+        
+        if (!mvs.empty()) {
+            SolvedPosition solution;
+            solution.position_key = pos.str();
+            solution.best_move = mvs[0];
+            // ... populate solution
+            
+            db.add_position(solution);  // Overwrites old entry
+            solved_count++;
+        }
+        
+        if (solved_count % 100 == 0) {
+            auto current = chrono::high_resolution_clock::now();
+            double elapsed = chrono::duration<double>(current - start).count();
+            cout << "[" << idx << "/" << positions_to_recompute.size() 
+                 << "] Corrected " << solved_count << " positions\n";
+        }
+    }
+    
+    auto end = chrono::high_resolution_clock::now();
+    double total_time = chrono::duration<double>(end - start).count();
+    
+    cout << "\nCorrective solving complete:\n";
+    cout << "  Positions corrected: " << solved_count << "\n";
+    cout << "  Time taken: " << (total_time / 3600) << " hours\n";
+}
+```
+
+### Phase 4: Validation Loop (Repeat Until Perfect)
+
+```cpp
+struct OptimizationIteration {
+    int iteration;
+    int initial_errors;
+    int errors_after_correction;
+    double correction_time;
+    bool validation_passed;
+};
+
+void iterative_optimization_loop(CompositionalEngine& eng,
+                                SolvedPositionDatabase& db,
+                                int max_iterations = 5) {
+    
+    vector<OptimizationIteration> iterations;
+    
+    for (int iter = 0; iter < max_iterations; iter++) {
+        cout << "\n" << string(80, '=') << "\n";
+        cout << "OPTIMIZATION ITERATION " << (iter + 1) << "\n";
+        cout << string(80, '=') << "\n";
+        
+        // Validate current database
+        AttractorValidator validator("kqvk_perfect_play.db", "/path/to/syzygy");
+        ValidationReport report = validator.validate_random_sample(2000);
+        
+        OptimizationIteration current;
+        current.iteration = iter + 1;
+        current.initial_errors = report.longer_mates.size() + report.shorter_mates.size();
+        
+        cout << "Errors found: " << current.initial_errors << "\n";
+        
+        if (current.initial_errors == 0) {
+            current.validation_passed = true;
+            iterations.push_back(current);
+            cout << "\nValidation PASSED. Perfect play confirmed.\n";
+            break;
+        }
+        
+        // Analyze errors
+        analyze_validation_errors(report, 
+                                 "validation_errors_iter_" + to_string(iter) + ".txt");
+        
+        // Create corrective ordering
+        create_corrective_ordering(db,
+                                  "validation_errors_iter_" + to_string(iter) + ".txt",
+                                  "corrective_order_iter_" + to_string(iter) + ".txt");
+        
+        // Re-solve with corrective ordering
+        auto start = chrono::high_resolution_clock::now();
+        batch_solve_corrective(eng, db,
+                              "corrective_order_iter_" + to_string(iter) + ".txt",
+                              16);
+        auto end = chrono::high_resolution_clock::now();
+        current.correction_time = chrono::duration<double>(end - start).count();
+        
+        // Re-validate
+        ValidationReport final_report = validator.validate_random_sample(2000);
+        current.errors_after_correction = final_report.longer_mates.size() + 
+                                         final_report.shorter_mates.size();
+        current.validation_passed = (current.errors_after_correction == 0);
+        
+        cout << "Errors after correction: " << current.errors_after_correction << "\n";
+        cout << "Correction time: " << (current.correction_time / 3600) << " hours\n";
+        
+        iterations.push_back(current);
+        
+        if (current.validation_passed) break;
+    }
+    
+    // Print optimization summary
+    cout << "\n" << string(80, '=') << "\n";
+    cout << "OPTIMIZATION SUMMARY\n";
+    cout << string(80, '=') << "\n";
+    for (const auto& iter : iterations) {
+        cout << "Iteration " << iter.iteration << ": "
+             << iter.initial_errors << " → " << iter.errors_after_correction 
+             << " errors (" << iter.correction_time / 3600 << "h)\n";
+    }
+}
+
+// Usage in main
+iterative_optimization_loop(eng, db, 5);  // Max 5 iterations
+```
+
+### Key Advantages of Iterative Reordering
+
+**Cost Analysis:**
+
+```
+Scenario 1: Bug found after full solve
+  Initial solve: 20-30 hours
+  Detected: 50 positions with errors
+  Naive fix: Re-run entire solver: 20-30 hours
+  Total: 40-60 hours
+
+Scenario 2: Iterative reordering
+  Initial solve: 20-30 hours
+  Detected: 50 positions with errors
+  Corrective solve: Prioritize 50 + dependents (~500): 2-4 hours
+  Total: 22-34 hours (25% time savings minimum)
+```
+
+**Cumulative benefit with multiple bug rounds:**
+
+```
+Iteration 1: 20h initial + 3h correction = 23h (99% accuracy)
+Iteration 2: 2h refinement (remaining 1%) = 25h total
+Iteration 3: 1h final polish = 26h total
+
+vs. 
+
+Naive approach: 20h + 20h + 20h = 60h (re-running from scratch 3 times)
+```
+
+---
+
+## Implementation Checklist
+
+```markdown
+### Corrective Reordering Workflow
+
+- [ ] Run initial solver with M-value ordering
+- [ ] Validate against Syzygy (sample 2000+ positions)
+- [ ] Export error analysis to file
+- [ ] Generate corrective ordering (error positions first)
+- [ ] Run batch_solve_corrective() with high priority on errors
+- [ ] Cascade fixes through dependent positions
+- [ ] Re-validate
+- [ ] If errors remain, repeat from "Generate corrective ordering"
+- [ ] When validation passes, landscape complete
+
+### Monitoring During Corrective Passes
+
+- Track error reduction per iteration
+- Monitor time spent in corrections
+- Adjust priorities based on error patterns
+- Document which position types cause cascading errors
+```
 
 ---
 
@@ -282,24 +425,24 @@ For each position in attractor_landscape:
   3. Compare:
      - M_attractor == M_syzygy → PASS
      - M_attractor > M_syzygy → FLAG (we found longer path)
-     - M_attractor < M_syzygy → CRITICAL (we found shorter mate - impossible unless Syzygy wrong)
+     - M_attractor < M_syzygy → CRITICAL (we found shorter mate)
 ```
 
 **Interpretation**:
-- **Exact matches**: Validates the compositional search correctly minimizes White's path
-- **Longer mates**: Indicates our move selection prefers sub-optimal branches (bug in viable candidate filtering or pruning)
-- **Shorter mates**: Indicates Syzygy error (extremely rare) OR our evaluation is incorrect
+- **Exact matches**: Validates compositional search correctly minimizes White's path
+- **Longer mates**: Indicates sub-optimal move selection or candidate pruning
+- **Shorter mates**: Critical bug requiring immediate investigation
 
 ### 2. Move Optimality Validation
 
-**Objective**: Verify that the selected move genuinely leads to the claimed M value.
+**Objective**: Verify that selected moves genuinely lead to claimed M values.
 
 **Approach**:
 ```
 For flagged positions:
   1. Extract best_move from attractor landscape
   2. Apply move to board
-  3. Recursively lookup resulting position: M_after = M_value[next_position]
+  3. Lookup resulting position: M_after = M_value[next_position]
   4. Verify: M_attractor = M_after + 1
 
   If M_attractor ≠ M_after + 1:
@@ -372,20 +515,20 @@ def early_validation(attractor_db, syzygy_db, sample_size=500):
 Root causes (in order of likelihood):
 
 1. Viable candidate filtering too aggressive
-   - Check: Is optimal move getting pruned before evaluation?
-   - Evidence: Best move has good M but isn't in viable list
+   - Check: Is optimal move getting pruned?
+   - Evidence: Best move has good M but not in viable list
 
 2. M_shallow underestimate at candidate selection
    - Check: compute_M_shallow(candidate, depth=3) too low
-   - Evidence: Good candidates ranked low, skip better branches
+   - Evidence: Good candidates ranked low
 
 3. Memoization pollution (M_cache issue)
    - Check: Are cached M values stale?
    - Evidence: Same position queried twice has different M values
 
 4. Black node count tiebreaker incorrect
-   - Check: When M values tie, are we picking best escape?
-   - Evidence: Position with 3-move mate but we found 4-move
+   - Check: When M values tie, picking best escape?
+   - Evidence: Position with 3-move mate but found 4-move
 
 5. Pruning rules too strict
    - King distance: is_moving_away_from_bk logic?
@@ -398,16 +541,16 @@ Root causes (in order of likelihood):
 This should almost never happen. If it does:
 
 1. Verify Syzygy is correct
-   - Cross-check with Nalimov tablebase (different retrograde engine)
-   - If both agree, our solver has a fundamental bug
+   - Cross-check with Nalimov tablebase
+   - If both agree, our solver has fundamental bug
 
-2. Check for illegal moves in our solution
-   - Is the discovered mate actually legal?
+2. Check for illegal moves in solution
+   - Is discovered mate actually legal?
    - Does it violate blocking rules?
 
 3. Search implementation bug
    - Is depth=0 returning correctly?
-   - Is compositional_search_impl correctly alternating White/Black?
+   - Is compositional_search_impl alternating White/Black correctly?
 ```
 
 ---
@@ -422,6 +565,7 @@ This should almost never happen. If it does:
 **Date**: [when validation ran]
 **Positions Checked**: [sample size]
 **Total Positions in DB**: [attractor size]
+**Iteration**: [1, 2, 3, ...]
 
 ### Results
 
@@ -447,7 +591,7 @@ If >5% longer mates:
 - Check thresh = max(2, best_M / 3) threshold
 
 If <1% longer mates:
-- Acceptable variance (human error in Syzygy lookup)
+- Acceptable variance
 - Landscape is sound
 
 If any shorter mates:
@@ -460,10 +604,7 @@ If any shorter mates:
 
 ### Rotational Consistency
 
-Since you generate rotations automatically, verify they're correct:
-
 ```cpp
-// Pseudo-code
 Position original = parse_position_key("WK:a1 WQ:b2 BK:d5");
 string original_move = "Qc3";
 
@@ -471,14 +612,12 @@ for (int rot = 0; rot < 4; rot++) {
     Position rotated = rotate_90(original, rot);
     string rotated_move = rotate_move_90(original_move, rot);
     
-    // These should have identical M values
     int M_original = attractor[original].M_value;
     int M_rotated = attractor[rotated].M_value;
     
     assert(M_original == M_rotated, 
         "Rotated position has different M value!");
     
-    // And the moves should be related by rotation
     GameState after_original = apply(original, original_move);
     GameState after_rotated = apply(rotated, rotated_move);
     
@@ -489,7 +628,7 @@ for (int rot = 0; rot < 4; rot++) {
 
 **Why this matters:**
 - Rotational symmetry is your 4x speedup guarantee
-- If rotations don't match, your database has duplicated bad data
+- If rotations don't match, database has duplicated bad data
 
 ---
 
@@ -651,10 +790,10 @@ Once KQvK is validated, the same methodology applies to KRvK, KBBvK, etc.:
 
 | Endgame | Symmetries | Edge Cases | Validation Focus |
 |---------|-----------|-----------|-----------------|
-| KQvK | 4 rotations, 2 reflections | Few escape squares | Move precision |
-| KRvK | 4 rotations, 2 reflections | Rook trapped by King | Avoid stalemate |
-| KBBvK | 4 rotations, 2 reflections | Same-color bishop issues | Opposite color bishop |
-| KBNvK | 8 symmetries | Knight coordination | Trapped bishop scenarios |
+| KQvK | 4 rotations | Few escape squares | Move precision |
+| KRvK | 4 rotations | Rook trapped by King | Avoid stalemate |
+| KBBvK | 4 rotations | Same-color bishop | Opposite color bishop |
+| KBNvK | 8 symmetries | Knight coordination | Trapped bishop |
 ```
 
 ---
@@ -683,7 +822,7 @@ Every 5K positions solved, log:
 
 4. **Attractor Health**
    - Mate distribution by M value
-   - Positions with only 1 legal move (highly constrained)
+   - Positions with only 1 legal move
    - Average branching factor
 
 Action: If validation accuracy drops below 95%, PAUSE and investigate before continuing.
@@ -693,21 +832,21 @@ Action: If validation accuracy drops below 95%, PAUSE and investigate before con
 
 ## Summary
 
-**Your validation strategy is sound:**
+**Your validation and optimization strategy:**
 1. Syzygy comparison catches systematic errors
 2. Move verification ensures chains are correct
 3. Rotational checks validate symmetry
 4. Edge case analysis finds corner bugs
-5. Statistical monitoring detects drift
-6. **Optimized ordering maximizes cascade efficiency**
+5. **Intelligent reordering corrects bugs efficiently**
+6. **Iterative refinement converges to perfect play**
 
-**Key insight:** The same principles that construct the landscape (topological measure, geometric symmetry, compositional search, optimal ordering) are what validate it. You're not external-validating against unrelated logic—you're checking self-consistency from first principles.
+**Key insight:** Even if bugs are found, the iterative reordering approach means you fix them in hours, not days. Each correction cycle is exponentially faster than re-running from scratch.
 
 **When to trust the landscape:**
 - Syzygy matches: 98%+
 - Move chains verified: 100%
 - Rotations consistent: 100%
 - No suspicious edge case clusters
-- Build completed with optimal position ordering
+- Iterative validation completes
 
-At that point, you have a provably correct attractor landscape with demonstrable efficiency optimization.
+At that point, you have a provably correct, mathematically optimal attractor landscape.

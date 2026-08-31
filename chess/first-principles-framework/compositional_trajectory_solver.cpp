@@ -337,10 +337,43 @@ public:
         return moves;
     }
     
-    bool is_attacked_by_queen(const Position& pos, const Position& qp) const {
+    bool is_attacked_by_queen(const Position& pos, const Position& qp, const Position& wk, const Position& wq) const {
         if (pos == qp) return false;
-        if (pos.file == qp.file || pos.rank == qp.rank) return true;
-        if (abs(pos.file - qp.file) == abs(pos.rank - qp.rank)) return true;
+        
+        // Check file
+        if (pos.file == qp.file) {
+            int start = min(pos.rank, qp.rank) + 1;
+            int end = max(pos.rank, qp.rank);
+            for (int r = start; r < end; r++) {
+                if (Position(pos.file, r) == wk || Position(pos.file, r) == wq) return false;  // Blocked
+            }
+            return true;
+        }
+        
+        // Check rank
+        if (pos.rank == qp.rank) {
+            int start = min(pos.file, qp.file) + 1;
+            int end = max(pos.file, qp.file);
+            for (int f = start; f < end; f++) {
+                if (Position(f, pos.rank) == wk || Position(f, pos.rank) == wq) return false;  // Blocked
+            }
+            return true;
+        }
+        
+        // Check diagonals
+        if (abs(pos.file - qp.file) == abs(pos.rank - qp.rank)) {
+            int df = (pos.file > qp.file) ? 1 : -1;
+            int dr = (pos.rank > qp.rank) ? 1 : -1;
+            int f = qp.file + df;
+            int r = qp.rank + dr;
+            while (f != pos.file) {
+                if (Position(f, r) == wk || Position(f, r) == wq) return false;  // Blocked
+                f += df;
+                r += dr;
+            }
+            return true;
+        }
+        
         return false;
     }
     
@@ -356,9 +389,9 @@ public:
     
     bool is_checkmate(const GameState& st) const {
         if (st.to_move != 'B') return false;
-        if (!is_attacked_by_queen(st.bk, st.wq)) return false;
+        if (!is_attacked_by_queen(st.bk, st.wq, st.wk, st.wq)) return false;
         for (auto& m : generate_all_king_moves(st.bk)) {
-            if (is_attacked_by_queen(m, st.wq)) continue;
+            if (is_attacked_by_queen(m, st.wq, st.wk, st.wq)) continue;
             if (m.distance_to(st.wk) <= 1) continue;
             return false;
         }
@@ -367,9 +400,9 @@ public:
     
     bool is_stalemate(const GameState& st) const {
         if (st.to_move != 'B') return false;
-        if (is_attacked_by_queen(st.bk, st.wq)) return false;
+        if (is_attacked_by_queen(st.bk, st.wq, st.wk, st.wq)) return false;
         for (auto& m : generate_all_king_moves(st.bk)) {
-            if (is_attacked_by_queen(m, st.wq)) continue;
+            if (is_attacked_by_queen(m, st.wq, st.wk, st.wq)) continue;
             if (m.distance_to(st.wk) <= 1) continue;
             return false;
         }
@@ -391,6 +424,35 @@ public:
                 if (is_legal_state(ns) && !is_stalemate(ns)) cnt++;
             }
             for (auto& wq_n : generate_all_queen_moves(st.wq)) {
+                if (wq_n.distance_to(st.bk) < 2 && wq_n.distance_to(st.wk) > 1) continue;
+                
+                // Check if White King blocks the Queen's path
+                bool blocked = false;
+                if (wq_n.file == st.wq.file) {
+                    int start = min(st.wq.rank, wq_n.rank) + 1;
+                    int end = max(st.wq.rank, wq_n.rank);
+                    for (int r = start; r < end; r++) {
+                        if (Position(wq_n.file, r) == st.wk) { blocked = true; break; }
+                    }
+                } else if (wq_n.rank == st.wq.rank) {
+                    int start = min(st.wq.file, wq_n.file) + 1;
+                    int end = max(st.wq.file, wq_n.file);
+                    for (int f = start; f < end; f++) {
+                        if (Position(f, wq_n.rank) == st.wk) { blocked = true; break; }
+                    }
+                } else if (abs(wq_n.file - st.wq.file) == abs(wq_n.rank - st.wq.rank)) {
+                    int df = (wq_n.file > st.wq.file) ? 1 : -1;
+                    int dr = (wq_n.rank > st.wq.rank) ? 1 : -1;
+                    int f = st.wq.file + df;
+                    int r = st.wq.rank + dr;
+                    while (f != wq_n.file) {
+                        if (Position(f, r) == st.wk) { blocked = true; break; }
+                        f += df;
+                        r += dr;
+                    }
+                }
+                if (blocked) continue;
+
                 GameState ns(st.wk, wq_n, st.bk, 'B');
                 if (is_legal_state(ns) && !is_stalemate(ns)) cnt++;
             }
@@ -398,7 +460,7 @@ public:
         } else {
             int cnt = 0;
             for (auto& bk_n : generate_all_king_moves(st.bk)) {
-                if (is_attacked_by_queen(bk_n, st.wq)) continue;
+                if (is_attacked_by_queen(bk_n, st.wq, st.wk, st.wq)) continue;
                 if (bk_n.distance_to(st.wk) <= 1) continue;
                 GameState ns(st.wk, st.wq, bk_n, 'W');
                 if (is_legal_state(ns)) cnt++;
@@ -450,6 +512,35 @@ public:
                 if (is_legal_state(ns) && !is_stalemate(ns)) cands.push_back(ns);
             }
             for (auto& wq_n : generate_all_queen_moves(st.wq)) {
+                if (wq_n.distance_to(st.bk) < 2 && wq_n.distance_to(st.wk) > 1) continue;
+                
+                // Check if White King blocks the Queen's path
+                bool blocked = false;
+                if (wq_n.file == st.wq.file) {
+                    int start = min(st.wq.rank, wq_n.rank) + 1;
+                    int end = max(st.wq.rank, wq_n.rank);
+                    for (int r = start; r < end; r++) {
+                        if (Position(wq_n.file, r) == st.wk) { blocked = true; break; }
+                    }
+                } else if (wq_n.rank == st.wq.rank) {
+                    int start = min(st.wq.file, wq_n.file) + 1;
+                    int end = max(st.wq.file, wq_n.file);
+                    for (int f = start; f < end; f++) {
+                        if (Position(f, wq_n.rank) == st.wk) { blocked = true; break; }
+                    }
+                } else if (abs(wq_n.file - st.wq.file) == abs(wq_n.rank - st.wq.rank)) {
+                    int df = (wq_n.file > st.wq.file) ? 1 : -1;
+                    int dr = (wq_n.rank > st.wq.rank) ? 1 : -1;
+                    int f = st.wq.file + df;
+                    int r = st.wq.rank + dr;
+                    while (f != wq_n.file) {
+                        if (Position(f, r) == st.wk) { blocked = true; break; }
+                        f += df;
+                        r += dr;
+                    }
+                }
+                if (blocked) continue;
+
                 GameState ns(st.wk, wq_n, st.bk, 'B');
                 if (is_legal_state(ns) && !is_stalemate(ns)) cands.push_back(ns);
             }
@@ -474,7 +565,7 @@ public:
             vector<GameState> cands;
             cands.reserve(64);
             for (auto& bk_n : generate_all_king_moves(st.bk)) {
-                if (is_attacked_by_queen(bk_n, st.wq)) continue;
+                if (is_attacked_by_queen(bk_n, st.wq, st.wk, st.wq)) continue;
                 if (bk_n.distance_to(st.wk) <= 1) continue;
                 GameState ns(st.wk, st.wq, bk_n, 'W');
                 if (is_legal_state(ns)) cands.push_back(ns);
@@ -509,6 +600,35 @@ public:
                     if (is_legal_state(ns) && !is_stalemate(ns)) cands.push_back(ns);
                 }
                 for (auto& wq_n : generate_all_queen_moves(curr.wq)) {
+                    if (wq_n.distance_to(curr.bk) < 2 && wq_n.distance_to(curr.wk) > 1) continue;
+                    
+                    // Check if White King blocks the Queen's path
+                    bool blocked = false;
+                    if (wq_n.file == curr.wq.file) {
+                        int start = min(curr.wq.rank, wq_n.rank) + 1;
+                        int end = max(curr.wq.rank, wq_n.rank);
+                        for (int r = start; r < end; r++) {
+                            if (Position(wq_n.file, r) == curr.wk) { blocked = true; break; }
+                        }
+                    } else if (wq_n.rank == curr.wq.rank) {
+                        int start = min(curr.wq.file, wq_n.file) + 1;
+                        int end = max(curr.wq.file, wq_n.file);
+                        for (int f = start; f < end; f++) {
+                            if (Position(f, wq_n.rank) == curr.wk) { blocked = true; break; }
+                        }
+                    } else if (abs(wq_n.file - curr.wq.file) == abs(wq_n.rank - curr.wq.rank)) {
+                        int df = (wq_n.file > curr.wq.file) ? 1 : -1;
+                        int dr = (wq_n.rank > curr.wq.rank) ? 1 : -1;
+                        int f = curr.wq.file + df;
+                        int r = curr.wq.rank + dr;
+                        while (f != wq_n.file) {
+                            if (Position(f, r) == curr.wk) { blocked = true; break; }
+                            f += df;
+                            r += dr;
+                        }
+                    }
+                    if (blocked) continue;
+
                     GameState ns(curr.wk, wq_n, curr.bk, 'B');
                     if (is_legal_state(ns) && !is_stalemate(ns)) cands.push_back(ns);
                 }
@@ -525,7 +645,7 @@ public:
                 vector<GameState> cands;
                 cands.reserve(64);
                 for (auto& bk_n : generate_all_king_moves(curr.bk)) {
-                    if (is_attacked_by_queen(bk_n, curr.wq)) continue;
+                    if (is_attacked_by_queen(bk_n, curr.wq, curr.wk, curr.wk)) continue;
                     if (bk_n.distance_to(curr.wk) <= 1) continue;
                     GameState ns(curr.wk, curr.wq, bk_n, 'W');
                     if (is_legal_state(ns)) cands.push_back(ns);
@@ -575,19 +695,72 @@ public:
                 if (is_legal_state(ns) && !is_stalemate(ns)) cands.push_back(ns);
             }
             for (auto& wq_n : generate_all_queen_moves(st.wq)) {
-                if (wq_n.distance_to(st.bk) > st.wq.distance_to(st.bk)) continue;
                 if (wq_n.distance_to(st.bk) < 2 && wq_n.distance_to(st.wk) > 1) continue;
+                // Check if White King blocks the Queen's path
+                bool blocked = false;
+                if (wq_n.file == st.wq.file) {
+                    int start = min(st.wq.rank, wq_n.rank) + 1;
+                    int end = max(st.wq.rank, wq_n.rank);
+                    for (int r = start; r < end; r++) {
+                        if (Position(wq_n.file, r) == st.wk) { blocked = true; break; }
+                    }
+                } else if (wq_n.rank == st.wq.rank) {
+                    int start = min(st.wq.file, wq_n.file) + 1;
+                    int end = max(st.wq.file, wq_n.file);
+                    for (int f = start; f < end; f++) {
+                        if (Position(f, wq_n.rank) == st.wk) { blocked = true; break; }
+                    }
+                } else if (abs(wq_n.file - st.wq.file) == abs(wq_n.rank - st.wq.rank)) {
+                    int df = (wq_n.file > st.wq.file) ? 1 : -1;
+                    int dr = (wq_n.rank > st.wq.rank) ? 1 : -1;
+                    int f = st.wq.file + df;
+                    int r = st.wq.rank + dr;
+                    while (f != wq_n.file) {
+                        if (Position(f, r) == st.wk) { blocked = true; break; }
+                        f += df;
+                        r += dr;
+                    }
+                }
+                if (blocked) continue;
                 GameState ns(st.wk, wq_n, st.bk, 'B');
                 if (is_legal_state(ns) && !is_stalemate(ns)) cands.push_back(ns);
             }
         } else {
-            for (auto& bk_n : generate_all_king_moves(st.bk)) {
-                //cout << "\n  Checking BK move: " << st.bk.str() << " -> " << bk_n.str();
-                if (is_attacked_by_queen(bk_n, st.wq)) continue;
-                if (bk_n.distance_to(st.wk) <= 1) continue;
-                GameState ns(st.wk, st.wq, bk_n, 'W');
-                if (is_legal_state(ns)) cands.push_back(ns);
+            vector<Position> all_bk_moves = generate_all_king_moves(st.bk);
+            
+            bool debug_this = (st.wk.str() == "b3" && st.wq.str() == "b1" && st.bk.str() == "a5");
+            
+            if (debug_this) {
+                cout << "\n[DEBUG] Position: WK:" << st.wk.str() << " WQ:" << st.wq.str() << " BK:" << st.bk.str() << "\n";
+                cout << "[DEBUG] Generated BK moves: ";
+                for (auto& m : all_bk_moves) cout << m.str() << " ";
+                cout << "\n";
             }
+            
+            for (auto& bk_n : all_bk_moves) {
+                if (debug_this) cout << "[DEBUG] Testing " << st.bk.str() << "->" << bk_n.str() << ": ";
+                
+                if (is_attacked_by_queen(bk_n, st.wq, st.wk, st.wq)) {
+                    if (debug_this) cout << "ATTACKED\n";
+                    continue;
+                }
+                
+                if (bk_n.distance_to(st.wk) <= 1) {
+                    if (debug_this) cout << "TOO_CLOSE\n";
+                    continue;
+                }
+                
+                GameState ns(st.wk, st.wq, bk_n, 'W');
+                if (!is_legal_state(ns)) {
+                    if (debug_this) cout << "ILLEGAL\n";
+                    continue;
+                }
+                
+                if (debug_this) cout << "ADDED\n";
+                cands.push_back(ns);
+            }
+            
+            if (debug_this) cout << "[DEBUG] Final cands.size()=" << cands.size() << "\n";
         }
         
         // DEBUG: Show Black candidates
@@ -722,23 +895,49 @@ public:
         optional<GameState> best_move;
         optional<int> best_value;
         
+        // cout << "\n[FIND_BEST_MOVE] Position: " << st.str() << "\n";
+        // cout << "[FIND_BEST_MOVE] To move: " << st.to_move << "\n";
+        
         for (int depth = 2; depth <= max_depth + 1; depth += 2) {
+            // cout << "\n[DEPTH " << depth << "] Searching...\n";
+            
             auto [md, bm] = compositional_search_impl(st, depth, 0, debug, memo);
             
-            if (st.to_move == 'W') {
-                // WHITE: Return immediately on first value found
-                if (md) {
-                    return make_pair(bm, md);
-                }
+            // cout << "[DEPTH " << depth << "] Returned: ";
+            if (md) {
+                // cout << "md=" << *md << ", move=" << (bm ? bm->str() : "NONE");
             } else {
-                // BLACK: Continue searching until max_depth regardless
-                // Only update if we found a value (or keep previous best)
-                if (md) {
+                // cout << "NONE";
+            }
+            // cout << "\n";
+            
+            if (md) {
+                if (!best_value) {
+                    // cout << "  -> First value found, setting best_move\n";
                     best_value = md;
                     best_move = bm;
+                } else if (st.to_move == 'W' && md < *best_value) {
+                    // cout << "  -> WHITE: " << *md << " < " << *best_value << " (better), updating\n";
+                    best_value = md;
+                    best_move = bm;
+                } else if (st.to_move == 'W' && md >= *best_value) {
+                    // cout << "  -> WHITE: " << *md << " >= " << *best_value << " (worse), keeping previous\n";
+                } else if (st.to_move == 'B' && md > *best_value) {
+                    // cout << "  -> BLACK: " << *md << " > " << *best_value << " (better), updating\n";
+                    best_value = md;
+                    best_move = bm;
+                } else if (st.to_move == 'B' && md <= *best_value) {
+                    // cout << "  -> BLACK: " << *md << " <= " << *best_value << " (worse), keeping previous\n";
                 }
             }
+            
+            // cout << "[DEPTH " << depth << "] Current best: move=" 
+                 // << (best_move ? best_move->str() : "NONE") 
+                 // << " value=" << (best_value ? to_string(*best_value) : "NONE") << "\n";
         }
+        
+        // cout << "\n[FINAL] Selected move: " << (best_move ? best_move->str() : "NONE")
+             // << " with value " << (best_value ? to_string(*best_value) : "NONE") << "\n";
         
         return make_pair(best_move, best_value);
     }
@@ -793,8 +992,8 @@ int main(int argc, char* argv[]) {
     cout << "Trajectory Measurement with Black Node Count Accumulation\n";
     cout << string(80, '=') << "\n";
     
-    GameState init_st(Position::from_str("a1"), Position::from_str("b2"), 
-                      Position::from_str("d4"), 'W');
+    GameState init_st(Position::from_str("b3"), Position::from_str("b2"), 
+                      Position::from_str("a5"), 'W');
     cout << "\nInitial position: " << init_st.str() << "\n";
     
     cout << "\n" << string(80, '=') << "\n";
@@ -823,6 +1022,34 @@ int main(int argc, char* argv[]) {
         }
         for (auto& wq_n : eng.generate_all_queen_moves(init_st.wq)) {
             if (wq_n.distance_to(init_st.bk) < 2 && wq_n.distance_to(init_st.wk) > 1) continue;
+            
+            // Check if White King blocks the Queen's path
+            bool blocked = false;
+            if (wq_n.file == init_st.wq.file) {
+                int init_start = min(init_st.wq.rank, wq_n.rank) + 1;
+                int end = max(init_st.wq.rank, wq_n.rank);
+                for (int r = init_start; r < end; r++) {
+                    if (Position(wq_n.file, r) == init_st.wk) { blocked = true; break; }
+                }
+            } else if (wq_n.rank == init_st.wq.rank) {
+                int init_start = min(init_st.wq.file, wq_n.file) + 1;
+                int end = max(init_st.wq.file, wq_n.file);
+                for (int f = init_start; f < end; f++) {
+                    if (Position(f, wq_n.rank) == init_st.wk) { blocked = true; break; }
+                }
+            } else if (abs(wq_n.file - init_st.wq.file) == abs(wq_n.rank - init_st.wq.rank)) {
+                int df = (wq_n.file > init_st.wq.file) ? 1 : -1;
+                int dr = (wq_n.rank > init_st.wq.rank) ? 1 : -1;
+                int f = init_st.wq.file + df;
+                int r = init_st.wq.rank + dr;
+                while (f != wq_n.file) {
+                    if (Position(f, r) == init_st.wk) { blocked = true; break; }
+                    f += df;
+                    r += dr;
+                }
+            }
+            if (blocked) continue;
+
             GameState ns(init_st.wk, wq_n, init_st.bk, 'B');
             if (eng.is_legal_state(ns) && !eng.is_stalemate(ns)) cands.push_back(ns);
         }
@@ -860,6 +1087,34 @@ int main(int argc, char* argv[]) {
         }
         for (auto& wq_n : eng.generate_all_queen_moves(init_st.wq)) {
             if (wq_n.distance_to(init_st.bk) < 2 && wq_n.distance_to(init_st.wk) > 1) continue;
+            
+            // Check if White King blocks the Queen's path
+            bool blocked = false;
+            if (wq_n.file == init_st.wq.file) {
+                int init_start = min(init_st.wq.rank, wq_n.rank) + 1;
+                int end = max(init_st.wq.rank, wq_n.rank);
+                for (int r = init_start; r < end; r++) {
+                    if (Position(wq_n.file, r) == init_st.wk) { blocked = true; break; }
+                }
+            } else if (wq_n.rank == init_st.wq.rank) {
+                int init_start = min(init_st.wq.file, wq_n.file) + 1;
+                int end = max(init_st.wq.file, wq_n.file);
+                for (int f = init_start; f < end; f++) {
+                    if (Position(f, wq_n.rank) == init_st.wk) { blocked = true; break; }
+                }
+            } else if (abs(wq_n.file - init_st.wq.file) == abs(wq_n.rank - init_st.wq.rank)) {
+                int df = (wq_n.file > init_st.wq.file) ? 1 : -1;
+                int dr = (wq_n.rank > init_st.wq.rank) ? 1 : -1;
+                int f = init_st.wq.file + df;
+                int r = init_st.wq.rank + dr;
+                while (f != wq_n.file) {
+                    if (Position(f, r) == init_st.wk) { blocked = true; break; }
+                    f += df;
+                    r += dr;
+                }
+            }
+            if (blocked) continue;
+
             GameState ns(init_st.wk, wq_n, init_st.bk, 'B');
             if (eng.is_legal_state(ns) && !eng.is_stalemate(ns)) cands.push_back(ns);
         }

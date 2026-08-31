@@ -81,6 +81,54 @@ public:
             return;
         }
         solved[pos.position_key] = pos;
+        
+        // Helper lambda to rotate a square string (e.g., "a1" -> "h1")
+        auto rotate_square = [](const string& sq) {
+            if (sq.length() < 2) return sq;
+            int file = sq[0] - 'a';  // 0-7
+            int rank = sq[1] - '1';  // 0-7
+            int new_file = 7 - rank;
+            int new_rank = file;
+            return string(1, char('a' + new_file)) + char('1' + new_rank);
+        };
+        
+        string current_pos = pos.position_key;
+        string current_move = pos.best_move;
+        
+        // Generate 3 rotated versions
+        for (int rot = 1; rot < 4; rot++) {
+            // Extract squares from current position
+            size_t wk_pos = current_pos.find("WK:") + 3;
+            size_t wq_pos = current_pos.find("WQ:") + 3;
+            size_t bk_pos = current_pos.find("BK:") + 3;
+            
+            string wk_sq = current_pos.substr(wk_pos, 2);
+            string wq_sq = current_pos.substr(wq_pos, 2);
+            string bk_sq = current_pos.substr(bk_pos, 2);
+            
+            // Rotate each square
+            string new_wk = rotate_square(wk_sq);
+            string new_wq = rotate_square(wq_sq);
+            string new_bk = rotate_square(bk_sq);
+            
+            current_pos = "WK:" + new_wk + " WQ:" + new_wq + " BK:" + new_bk;
+            
+            // Rotate move
+            if (!current_move.empty() && current_move != "mate" && current_move != "checkmate") {
+                if (current_move.length() >= 3) {
+                    char piece = current_move[0];
+                    string dest = current_move.substr(1);
+                    current_move = piece + rotate_square(dest);
+                }
+            }
+            
+            if (!is_solved(current_pos)) {
+                SolvedPosition rotated = pos;
+                rotated.position_key = current_pos;
+                rotated.best_move = current_move;
+                solved[rotated.position_key] = rotated;
+            }
+        }
     }
     
     // Check if position is already solved
@@ -99,17 +147,15 @@ public:
     
     // Export all solved positions to file
     void export_to_file() {
-        ofstream file(filename, ios::trunc);  // ← Truncate mode (overwrite)
+        ofstream file(filename, ios::trunc);
         
         if (!file.is_open()) {
             cerr << "ERROR: Cannot open database file: " << filename << "\n";
             return;
         }
         
-        // Always write header
         file << SolvedPosition::csv_header();
         
-        // Write all positions
         for (const auto& [key, pos] : solved) {
             file << pos.to_csv();
         }
@@ -142,7 +188,6 @@ public:
                 continue;
             }
             
-            // Parse CSV line
             vector<string> parts;
             stringstream ss(line);
             string part;
@@ -163,7 +208,6 @@ public:
                     pos.nodes_evaluated = stoi(parts[6]);
                     pos.computation_time = stod(parts[7]);
                     if (parts.size() > 8) {
-                        
                         if (!parts[8].empty()) {
                             stringstream bn_stream(parts[8]);
                             string bn_part;
@@ -178,9 +222,7 @@ public:
                                     cout << "    -> ERROR parsing BN value: " << e.what() << "\n";
                                 }
                             }
-                        } else {
                         }
-                    } else {
                     }
                     
                     solved[pos.position_key] = pos;

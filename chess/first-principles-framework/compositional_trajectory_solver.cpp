@@ -25,7 +25,8 @@ const int INF_MIN = -2147483648;
 
 struct SolvedPosition {
     string position_key;        // "WK:a1 WQ:b2 BK:d5"
-    string best_move;           // "Q:e5" or "K:c2"
+    char turn;                  // white or black
+    string best_move;           // ""
     int M_value;                // Moves to mate
     vector<int> BN_trajectory;  // Black node counts per ply
     int total_plies;            // How many plies until mate
@@ -38,6 +39,7 @@ struct SolvedPosition {
     string to_csv() const {
         stringstream ss;
         ss << position_key << "|" 
+           << turn << "|"
            << best_move << "|" 
            << M_value << "|"
            << total_plies << "|"
@@ -56,7 +58,7 @@ struct SolvedPosition {
     }
     
     static string csv_header() {
-        return "Position|BestMove|M|Plies|WhiteMoves|BlackMoves|NodesEval|Time|BN_Trajectory\n";
+        return "Position|Turn|BestMove|M|Plies|WhiteMoves|BlackMoves|NodesEval|Time|BN_Trajectory\n";
     }
 };
 
@@ -66,7 +68,7 @@ struct SolvedPosition {
 
 class SolvedPositionDatabase {
     private:
-        map<string, SolvedPosition> solved;
+        map<pair<string, char>, SolvedPosition> solved;
         string filename;
         
     public:
@@ -77,10 +79,10 @@ class SolvedPositionDatabase {
         
         // Add a solved position to the database
         void add_position(const SolvedPosition& pos) {
-            if (is_solved(pos.position_key)) {
+            if (is_solved(pos.position_key, pos.turn)) {
                 return;
             }
-            solved[pos.position_key] = pos;
+            solved[{pos.position_key, pos.turn}] = pos;
             
             // Helper lambdas for transformations
             auto rotate_square = [](const string& sq) {
@@ -149,11 +151,11 @@ class SolvedPositionDatabase {
                     }
                 }
                 
-                if (!is_solved(new_pos)) {
+                if (!is_solved(new_pos, pos.turn)) {
                     SolvedPosition transformed = pos;
                     transformed.position_key = new_pos;
                     transformed.best_move = new_move;
-                    solved[new_pos] = transformed;
+                    solved[{new_pos, pos.turn}] = transformed;
                 }
             };
             
@@ -196,13 +198,13 @@ class SolvedPositionDatabase {
         }
     
     // Check if position is already solved
-    bool is_solved(const string& position_key) const {
-        return solved.count(position_key) > 0;
-    }
+    bool is_solved(const string& position_key, char turn) const {
+    return solved.count({position_key, turn}) > 0;
+}
     
     // Get optimal move for a position
-    optional<SolvedPosition> get_solution(const string& position_key) const {
-        auto it = solved.find(position_key);
+    optional<SolvedPosition> get_solution(const string& position_key, char turn) const {
+        auto it = solved.find({position_key, turn});
         if (it != solved.end()) {
             return it->second;
         }
@@ -264,16 +266,17 @@ class SolvedPositionDatabase {
                 try {
                     SolvedPosition pos;
                     pos.position_key = parts[0];
-                    pos.best_move = parts[1];
-                    pos.M_value = stoi(parts[2]);
-                    pos.total_plies = stoi(parts[3]);
-                    pos.white_moves = stoi(parts[4]);
-                    pos.black_moves = stoi(parts[5]);
-                    pos.nodes_evaluated = stoi(parts[6]);
-                    pos.computation_time = stod(parts[7]);
-                    if (parts.size() > 8) {
-                        if (!parts[8].empty()) {
-                            stringstream bn_stream(parts[8]);
+                    pos.turn = parts[1].empty() ? 'W' : parts[1][0];
+                    pos.best_move = parts[2];
+                    pos.M_value = stoi(parts[3]);
+                    pos.total_plies = stoi(parts[4]);
+                    pos.white_moves = stoi(parts[5]);
+                    pos.black_moves = stoi(parts[6]);
+                    pos.nodes_evaluated = stoi(parts[7]);
+                    pos.computation_time = stod(parts[8]);
+                    if (parts.size() > 9) {
+                        if (!parts[9].empty()) {
+                            stringstream bn_stream(parts[9]);
                             string bn_part;
                             int bn_count = 0;
                             
@@ -289,9 +292,9 @@ class SolvedPositionDatabase {
                         }
                     }
                     
-                    solved[pos.position_key] = pos;
+                    solved[{pos.position_key, pos.turn}] = pos;
                     loaded_count++;
-                    cout << "  ✓ Successfully loaded position\n";
+                    // cout << "  ✓ Successfully loaded position\n";
                     
                 } catch (const exception& e) {
                     cout << "  ✗ ERROR parsing line: " << e.what() << "\n";
@@ -1003,8 +1006,8 @@ public:
             }
             
             // CHECK DB HERE - if next position already solved, stop
-            if (db.is_solved(ns->str())) {
-                auto cached = db.get_solution(ns->str());
+            if (db.is_solved(ns->str(), ns->to_move)) {
+                auto cached = db.get_solution(ns->str(), ns->to_move);
                 if (cached) {
                     string mv_str = get_move_notation(curr, *ns);
                     mvs.push_back(mv_str);
@@ -1167,7 +1170,7 @@ void batch_solve_all_kqvk_positions(CompositionalEngine& eng, SolvedPositionData
         int m_est = eng.compute_M_topological(pos);
         
         // Check database first
-        if (db.is_solved(pos.str())) {
+        if (db.is_solved(pos.str(), pos.to_move)) {
             cache_hit_count++;
             if (idx % 100 == 0) {
                 cout << "[" << idx << "/" << positions.size() << "] [CACHE] " 
@@ -1216,6 +1219,7 @@ void batch_solve_all_kqvk_positions(CompositionalEngine& eng, SolvedPositionData
         if (best_M == 0 || eng.is_checkmate(best_cand)) {
             SolvedPosition solution;
             solution.position_key = pos.str();
+            solution.turn = pos.to_move;
             solution.best_move = eng.get_move_notation(pos, best_cand);
             solution.M_value = 1;
             solution.total_plies = 1;
@@ -1239,7 +1243,8 @@ void batch_solve_all_kqvk_positions(CompositionalEngine& eng, SolvedPositionData
             if (!mvs.empty()) {
                 SolvedPosition solution;
                 solution.position_key = pos.str();
-                solution.best_move = mvs[0];
+                solution.turn = pos.to_move;
+                solution.best_move = eng.get_move_notation(pos, best_cand);
                 solution.M_value = best_M;
                 solution.total_plies = tp;
                 solution.white_moves = (tp + 1) / 2;
@@ -1250,6 +1255,32 @@ void batch_solve_all_kqvk_positions(CompositionalEngine& eng, SolvedPositionData
                 
                 db.add_position(solution);
                 solved_count++;
+
+                // records the rest of the end game
+                GameState curr = best_cand;
+                for (size_t i = 0; i < mvs.size(); i++) {
+                    SolvedPosition ply_solution;
+                    ply_solution.position_key = curr.str();
+                    ply_solution.turn = curr.to_move;
+                    ply_solution.best_move = mvs[i];
+                    ply_solution.M_value = best_M;          // reused as-is, per your instruction
+                    ply_solution.total_plies = tp;          // reused as-is
+                    ply_solution.white_moves = (tp + 1) / 2; // reused as-is
+                    ply_solution.black_moves = tp / 2;       // reused as-is
+                    ply_solution.nodes_evaluated = 0;
+                    ply_solution.computation_time = solve_time; // reused as-is
+                    ply_solution.BN_trajectory = bnc;            // reused as-is, not sliced
+
+                    db.add_position(ply_solution);
+                    solved_count++;
+
+                    char piece = mvs[i][0];
+                    string dest = mvs[i].substr(1);
+                    Position dest_pos = Position::from_str(dest);
+                    if (piece == 'K') { curr.wk = dest_pos; curr.to_move = 'B'; }
+                    else if (piece == 'Q') { curr.wq = dest_pos; curr.to_move = 'B'; }
+                    else if (piece == 'k') { curr.bk = dest_pos; curr.to_move = 'W'; }
+                }
                 
                 cout << "[" << idx << "/" << positions.size() << "] [SOLVED] " 
                      << pos.str() << " M=" << best_M
@@ -1317,8 +1348,8 @@ int main(int argc, char* argv[]) {
     cout << "Trajectory Measurement with Black Node Count Accumulation\n";
     cout << string(80, '=') << "\n";
     
-    GameState init_st(Position::from_str("c4"), Position::from_str("a7"), 
-                      Position::from_str("e1"), 'W');
+    GameState init_st(Position::from_str("c3"), Position::from_str("b8"), 
+                      Position::from_str("f1"), 'W');
     cout << "\nInitial position: " << init_st.str() << "\n";
     
     cout << "\n" << string(80, '=') << "\n";
@@ -1496,6 +1527,7 @@ int main(int argc, char* argv[]) {
                 // Record the INITIAL position with the mating move
                 SolvedPosition solution;
                 solution.position_key = init_st.str();
+                solution.turn = init_st.to_move;
                 solution.best_move = eng.get_move_notation(init_st, cand);
                 solution.M_value = 1;  // 1 ply to mate
                 solution.BN_trajectory = {};
@@ -1533,6 +1565,7 @@ int main(int argc, char* argv[]) {
                     // Create solution record for current position
                     SolvedPosition solution;
                     solution.position_key = curr.str();
+                    solution.turn = curr.to_move;
                     solution.best_move = mvs[i];  // The move played from THIS position
                     solution.M_value = M_r - (i / 2);  // M decreases by 1 each White move
                     

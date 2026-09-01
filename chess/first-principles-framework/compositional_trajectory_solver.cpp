@@ -848,14 +848,11 @@ public:
                 if (!is_legal_state(ns)) {
                     continue;
                 }
-                
+                // if (st.to_move == 'B' && ply < 2) {
+                //     cout << string(ply*2, ' ') << "[BLACK CAND ply=" << ply << "] bk -> "
+                //          << bk_n.str() << " survived filters, state=" << ns.str() << "\n";
+                // }
                 cands.push_back(ns);
-            }
-        }
-        
-        // DEBUG: Show Black candidates
-        if (st.to_move == 'B' && ply < 2) {
-            for (size_t i = 0; i < cands.size(); i++) {
             }
         }
         
@@ -864,7 +861,10 @@ public:
             memo[cache_key] = res;
             return res;
         }
-        
+        // cout << "[ply " << ply << "] cands: ";
+        // for (auto& c : cands) cout << c.str() << " | ";
+        // cout << "\n";
+        candidates_measured += cands.size();
         candidates_measured += cands.size();
         vector<tuple<GameState,int,int>> meas;
         for (auto& c : cands) {
@@ -1205,6 +1205,8 @@ void batch_solve_all_kqvk_positions(CompositionalEngine& eng, SolvedPositionData
         GameState best_cand = root_cands[0];
         int best_BN = 0;
         
+        // BELOW IS ROOT CAUSE FOR FIRST HORRIBLE MOVE
+        cout << "[root_cands] "; for (auto& c : root_cands) cout << c.str() << " | "; cout << "\n";
         for (auto& c : root_cands) {
             int M = eng.compute_M_shallow(c, 3);
             int BN = eng.measure_black_nodes_after_trajectory(c, 3);
@@ -1214,7 +1216,11 @@ void batch_solve_all_kqvk_positions(CompositionalEngine& eng, SolvedPositionData
                 best_BN = BN;
             }
         }
-        
+        cout << "[chosen] " << best_cand.str() << " M=" << best_M << " BN=" << best_BN << "\n";
+        // end of root cause issue
+
+        // THE SOLUTION: completely remove any approximation of any kind, construct it so that it goes to exhaustive depth if need be. Should run from complete game with perfect play constructions from easier positions to aid in the solution. This ensures the proper landscape is constructed, utilizes the optimization, at the cost of positions being longer to solve if ordered sub-optimally. This is the biggest issue from success as it stands, if not the only blocker from completing a functioning finished product, metadata adjustments likely required for final.
+
             // CHECK FOR INSTANT CHECKMATE
         if (best_M == 0 || eng.is_checkmate(best_cand)) {
             SolvedPosition solution;

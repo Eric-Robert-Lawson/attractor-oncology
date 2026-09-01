@@ -1102,60 +1102,60 @@ void batch_solve_all_kqvk_positions(CompositionalEngine& eng, SolvedPositionData
     cout << "BATCH SOLVER: ALL KQvK POSITIONS\n";
     cout << string(80, '=') << "\n\n";
     
-    // // Load positions from file (COMMENT OUT THE GENERATION BELOW)
-    // cout << "Loading positions from file...\n";
-    // vector<GameState> positions = load_positions_from_file("kqvk_positions_by_dtz.txt");
+    // Load positions from file (COMMENT OUT THE GENERATION BELOW)
+    cout << "Loading positions from file...\n";
+    vector<GameState> positions = load_positions_from_file("kqvk_positions_by_dtz.txt");
     
-    // if (positions.empty()) {
-    //     cerr << "ERROR: No positions loaded!\n";
-    //     return;
-    // }
-    
-    // cout << "Loaded " << positions.size() << " legal positions from file\n\n";
-    
-    // Generate all legal positions
-    cout << "Generating all legal KQvK positions...\n";
-    vector<GameState> positions;
-    
-    for (int wkf = 0; wkf < 8; wkf++) {
-        for (int wkr = 0; wkr < 8; wkr++) {
-            for (int wqf = 0; wqf < 8; wqf++) {
-                for (int wqr = 0; wqr < 8; wqr++) {
-                    for (int bkf = 0; bkf < 8; bkf++) {
-                        for (int bkr = 0; bkr < 8; bkr++) {
-                            Position wk(wkf, wkr);
-                            Position wq(wqf, wqr);
-                            Position bk(bkf, bkr);
-                            
-                            if (wk == wq || wk == bk || wq == bk) continue;
-                            if (wk.distance_to(bk) < 2) continue;
-                            
-                            // ONLY White to move
-                            GameState st_w(wk, wq, bk, 'W');
-                            if (eng.is_legal_state(st_w)) {
-                                if (!eng.is_attacked_by_queen(bk, wq, wk, wq)) {
-                                    positions.push_back(st_w);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    if (positions.empty()) {
+        cerr << "ERROR: No positions loaded!\n";
+        return;
     }
     
-    cout << "Generated " << positions.size() << " legal positions\n\n";
+    cout << "Loaded " << positions.size() << " legal positions from file\n\n";
     
-    // Sort by DTM (easy to hard)
-    cout << "Sorting by estimated DTM (topological M)...\n";
-    sort(positions.begin(), positions.end(), [&](const GameState& a, const GameState& b) {
-        int m_a = eng.compute_M_topological(a);
-        int m_b = eng.compute_M_topological(b);
-        if (m_a != m_b) return m_a < m_b;  // Lower DTM first
-        return a.str() < b.str();  // Tie-break alphabetically
-    });
+    // // Generate all legal positions
+    // cout << "Generating all legal KQvK positions...\n";
+    // vector<GameState> positions;
     
-    cout << "Sorted by DTM\n\n";
+    // for (int wkf = 0; wkf < 8; wkf++) {
+    //     for (int wkr = 0; wkr < 8; wkr++) {
+    //         for (int wqf = 0; wqf < 8; wqf++) {
+    //             for (int wqr = 0; wqr < 8; wqr++) {
+    //                 for (int bkf = 0; bkf < 8; bkf++) {
+    //                     for (int bkr = 0; bkr < 8; bkr++) {
+    //                         Position wk(wkf, wkr);
+    //                         Position wq(wqf, wqr);
+    //                         Position bk(bkf, bkr);
+                            
+    //                         if (wk == wq || wk == bk || wq == bk) continue;
+    //                         if (wk.distance_to(bk) < 2) continue;
+                            
+    //                         // ONLY White to move
+    //                         GameState st_w(wk, wq, bk, 'W');
+    //                         if (eng.is_legal_state(st_w)) {
+    //                             if (!eng.is_attacked_by_queen(bk, wq, wk, wq)) {
+    //                                 positions.push_back(st_w);
+    //                             }
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+    
+    // cout << "Generated " << positions.size() << " legal positions\n\n";
+    
+    // // Sort by DTM (easy to hard)
+    // cout << "Sorting by estimated DTM (topological M)...\n";
+    // sort(positions.begin(), positions.end(), [&](const GameState& a, const GameState& b) {
+    //     int m_a = eng.compute_M_topological(a);
+    //     int m_b = eng.compute_M_topological(b);
+    //     if (m_a != m_b) return m_a < m_b;  // Lower DTM first
+    //     return a.str() < b.str();  // Tie-break alphabetically
+    // });
+    
+    // cout << "Sorted by DTM\n\n";
     
     // Batch solve
     int solved_count = 0;
@@ -1317,7 +1317,7 @@ int main(int argc, char* argv[]) {
     cout << "Trajectory Measurement with Black Node Count Accumulation\n";
     cout << string(80, '=') << "\n";
     
-    GameState init_st(Position::from_str("e3"), Position::from_str("a7"), 
+    GameState init_st(Position::from_str("c4"), Position::from_str("a7"), 
                       Position::from_str("e1"), 'W');
     cout << "\nInitial position: " << init_st.str() << "\n";
     

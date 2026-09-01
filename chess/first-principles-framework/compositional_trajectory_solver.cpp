@@ -770,10 +770,11 @@ public:
         }
         return count_legal_moves(curr);
     }
-    
+
     pair<optional<int>, optional<GameState>> compositional_search_impl(
         const GameState& st, int depth, int ply,
-        bool debug, unordered_map<uint64_t, pair<optional<int>, optional<GameState>>>& memo
+        bool debug, unordered_map<uint64_t, pair<optional<int>, optional<GameState>>>& memo,
+        SolvedPositionDatabase& db
     ) {
         uint64_t cache_key = make_cache_key(st, depth);
         if (memo.count(cache_key)) {
@@ -785,11 +786,29 @@ public:
             memo[cache_key] = res;
             return res;
         }
+
+        // DB CHECK ON st ITSELF -- if this exact position is already proven,
+        // use it directly with zero search, regardless of remaining depth budget.
+        if (db.is_solved(st.str(), st.to_move)) {
+            auto cached = db.get_solution(st.str(), st.to_move);
+            if (cached && !cached->best_move.empty()) {
+                GameState next = st;
+                char piece = cached->best_move[0];
+                string dest = cached->best_move.substr(1);
+                Position dest_pos = Position::from_str(dest);
+                if (piece == 'K') { next.wk = dest_pos; next.to_move = 'B'; }
+                else if (piece == 'Q') { next.wq = dest_pos; next.to_move = 'B'; }
+                else if (piece == 'k') { next.bk = dest_pos; next.to_move = 'W'; }
+                auto res = make_pair(optional<int>(cached->total_plies), optional<GameState>(next));
+                memo[cache_key] = res;
+                return res;
+            }
+        }
         
         if (depth == 0) {
-            // HERE A COUPLE OF BAD ESTIMATES
-            int estimated_M = compute_M_topological(st);
-            auto res = make_pair(optional<int>(estimated_M), optional<GameState>());
+            // Ran out of search budget without proof -- unproven, same as "no candidates".
+            // No more fabricated estimate here.
+            auto res = make_pair(optional<int>(), optional<GameState>());
             memo[cache_key] = res;
             return res;
         }
@@ -804,7 +823,6 @@ public:
             }
             for (auto& wq_n : generate_all_queen_moves(st.wq)) {
                 if (wq_n.distance_to(st.bk) < 2 && wq_n.distance_to(st.wk) > 1) continue;
-                // Check if White King blocks the Queen's path
                 bool blocked = false;
                 if (wq_n.file == st.wq.file) {
                     int start = min(st.wq.rank, wq_n.rank) + 1;
@@ -835,26 +853,11 @@ public:
             }
         } else {
             vector<Position> all_bk_moves = generate_all_king_moves(st.bk);
-            
-            
-            
             for (auto& bk_n : all_bk_moves) {
-                if (is_attacked_by_queen(bk_n, st.wq, st.wk, st.wq)) {
-                    continue;
-                }
-                
-                if (bk_n.distance_to(st.wk) <= 1) {
-                    continue;
-                }
-                
+                if (is_attacked_by_queen(bk_n, st.wq, st.wk, st.wq)) continue;
+                if (bk_n.distance_to(st.wk) <= 1) continue;
                 GameState ns(st.wk, st.wq, bk_n, 'W');
-                if (!is_legal_state(ns)) {
-                    continue;
-                }
-                // if (st.to_move == 'B' && ply < 2) {
-                //     cout << string(ply*2, ' ') << "[BLACK CAND ply=" << ply << "] bk -> "
-                //          << bk_n.str() << " survived filters, state=" << ns.str() << "\n";
-                // }
+                if (!is_legal_state(ns)) continue;
                 cands.push_back(ns);
             }
         }
@@ -864,99 +867,76 @@ public:
             memo[cache_key] = res;
             return res;
         }
-        // cout << "[ply " << ply << "] cands: ";
-        // for (auto& c : cands) cout << c.str() << " | ";
-        // cout << "\n";
         candidates_measured += cands.size();
-        candidates_measured += cands.size();
-        vector<tuple<GameState,int,int>> meas;
-        for (auto& c : cands) {
-            uint64_t m_key = make_cache_key(c, 3);
-            int M;
-            
-            auto it = M_cache.find(m_key);
-            if (it != M_cache.end()) {
-                M = it->second;
-            } else {
-                // HERE A BAD RECURSIVE CALL
-                M = compute_M_shallow(c, 3);
-                M_cache[m_key] = M;
-            }
-            
-            int BN = count_legal_moves(c);
-            meas.push_back({c, M, BN});
-        }
+
+        // No more shallow-M pruning, no more meas/viable/thresh narrowing.
+        // Every legal candidate gets considered -- exhaustive by construction.
         
-        int best_M;
-        string dir;
-        if (st.to_move == 'W') {
-            best_M = INF_MAX;
-            for (auto& [c,M,BN] : meas) best_M = min(best_M, M);
-            dir = "minimize";
-        } else {
-            best_M = INF_MIN;
-            for (auto& [c,M,BN] : meas) best_M = max(best_M, M);
-            dir = "maximize";
-        }
-        
-        int thresh = max(2, best_M / 3);
-        vector<GameState> viable;
-        for (auto& [c,M,BN] : meas) {
-            if (dir == "minimize" && M <= best_M + thresh) viable.push_back(c);
-            else if (dir == "maximize" && M >= best_M - thresh) viable.push_back(c);
-        }
-        
-        if (viable.size() < 3) {
-            sort(meas.begin(), meas.end(), [](auto& a, auto& b) { return get<1>(a) < get<1>(b); });
-            viable.clear();
-            for (size_t i = 0; i < min(size_t(3), meas.size()); i++) {
-                viable.push_back(get<0>(meas[i]));
-            }
-        }
-        
-        if (debug && ply < 4) {
-            string ind(ply*2, ' ');
-            double ratio = cands.empty() ? 0 : (double)viable.size()/cands.size();
-            //cout << ind << "[Ply " << ply << "] " << st.to_move << ": " << cands.size()
-                 //<< " -> " << viable.size() << " (" << fixed << setprecision(1) << (ratio*100)
-                // << "%), best_M=" << best_M << ", thresh=" << thresh << "\n";
-        }
+        string dir = (st.to_move == 'W') ? "minimize" : "maximize";
         
         optional<int> best_val;
         optional<GameState> best_mv;
         
-        for (size_t i = 0; i < viable.size(); i++) {
-            auto [val, mv] = compositional_search_impl(viable[i], depth-1, ply+1, debug, memo);
-            nodes_evaluated++;
+        for (auto& c : cands) {
+            optional<int> val;
+
+            // DB CHECK ON EACH CANDIDATE -- if already proven, use it directly (O(1)),
+            // skip recursing into it entirely. This is the retrograde-acceleration
+            // shortcut: candidates that transpose into already-solved territory
+            // (typically positions with fewer moves-to-mate, solved earlier in the
+            // batch) short-circuit here instead of re-deriving their value.
+            if (db.is_solved(c.str(), c.to_move)) {
+                auto cached = db.get_solution(c.str(), c.to_move);
+                if (cached) {
+                    val = cached->total_plies;
+                }
+            }
+
+            if (!val) {
+                auto [rec_val, rec_mv] = compositional_search_impl(c, depth-1, ply+1, debug, memo, db);
+                nodes_evaluated++;
+                val = rec_val;
+            }
             
-                        if (val) {
+            if (val) {
                 int v = *val + 1;
-                if (val) {
-                    int v = *val + 1;
-                    if (!best_val) {
-                        best_val = v;
-                        best_mv = viable[i];
-                    } else if (dir == "minimize" && v < *best_val) {
-                        best_val = v;
-                        best_mv = viable[i];
-                    } else if (dir == "minimize" && v == *best_val) {
-                        // ← TIE FOR WHITE: prefer the move that minimizes Black's resulting options
-                        int curr_bn = count_legal_moves(viable[i]);
-                        int best_bn = count_legal_moves(*best_mv);
-                        if (curr_bn < best_bn) {
-                            best_mv = viable[i];
+                if (!best_val) {
+                    best_val = v;
+                    best_mv = c;
+                } else if (dir == "minimize" && v < *best_val) {
+                    best_val = v;
+                    best_mv = c;
+                } else if (dir == "minimize" && v == *best_val) {
+                    // TIE FOR WHITE: prefer the move that minimizes Black's resulting options
+                    int curr_bn = count_legal_moves(c);
+                    int best_bn = count_legal_moves(*best_mv);
+                    if (curr_bn < best_bn) {
+                        best_mv = c;
+                    }
+                } else if (dir == "maximize" && v > *best_val) {
+                    best_val = v;
+                    best_mv = c;
+                } else if (dir == "maximize" && v == *best_val) {
+                    // TIE FOR BLACK: prefer the move that leaves Black with the most of its
+                    // OWN escape squares, measured directly (not simulated/estimated).
+                    // count_legal_moves(c) can't be reused symmetrically here -- after Black
+                    // moves, c.to_move == 'W', so count_legal_moves(c) would report White's
+                    // options, not Black's. This computes Black's own king mobility at c
+                    // regardless of whose turn c represents.
+                    auto black_escape_count = [&](const GameState& gs) {
+                        int cnt = 0;
+                        for (auto& bk_n : generate_all_king_moves(gs.bk)) {
+                            if (is_attacked_by_queen(bk_n, gs.wq, gs.wk, gs.wq)) continue;
+                            if (bk_n.distance_to(gs.wk) <= 1) continue;
+                            GameState ns(gs.wk, gs.wq, bk_n, 'W');
+                            if (is_legal_state(ns)) cnt++;
                         }
-                    } else if (dir == "maximize" && v > *best_val) {
-                        best_val = v;
-                        best_mv = viable[i];
-                    } else if (dir == "maximize" && v == *best_val) {
-                        // ← TIE FOR BLACK: use topological M as tiebreaker
-                        // HERE A COUPLE OF BAD ESTIMATES
-                        int curr_topo = compute_M_topological(viable[i]);
-                        int best_topo = compute_M_topological(*best_mv);
-                        if (curr_topo > best_topo) {
-                            best_mv = viable[i];
-                        }
+                        return cnt;
+                    };
+                    int curr_escapes = black_escape_count(c);
+                    int best_escapes = black_escape_count(*best_mv);
+                    if (curr_escapes > best_escapes) {
+                        best_mv = c;
                     }
                 }
             }
@@ -968,7 +948,7 @@ public:
     }
     
     pair<optional<GameState>, optional<int>> find_best_move(
-        const GameState& st, int max_depth = 10, bool debug = false
+        const GameState& st, SolvedPositionDatabase& db, int max_depth = 10, bool debug = false
     ) {
         nodes_evaluated = 0;
         candidates_measured = 0;
@@ -978,22 +958,22 @@ public:
         optional<GameState> best_move;
         optional<int> best_value;
         
-        for (int depth = 2; depth <= max_depth + 1; depth += 2) {
-            
-            auto [md, bm] = compositional_search_impl(st, depth, 0, debug, memo);
-            
-            if (md) {
-                if (!best_value) {
-                    best_value = md;
-                    best_move = bm;
-                } else if (st.to_move == 'W' && md < *best_value) {
-                    best_value = md;
-                    best_move = bm;
-                } else if (st.to_move == 'B' && md > *best_value) {
-                    best_value = md;
-                    best_move = bm;
-                }
-            }}
+    for (int depth = 2; depth <= max_depth + 1; depth += 2) {
+        auto [md, bm] = compositional_search_impl(st, depth, 0, debug, memo, db);
+        if (md) {
+            if (!best_value) {
+                best_value = md;
+                best_move = bm;
+            } else if (st.to_move == 'W' && md < *best_value) {
+                best_value = md;
+                best_move = bm;
+            } else if (st.to_move == 'B' && md > *best_value) {
+                best_value = md;
+                best_move = bm;
+            }
+            break;   // proven value found -- deeper search cannot improve on it
+        }
+    }
         return make_pair(best_move, best_value);
     }
     
@@ -1011,7 +991,7 @@ public:
                 return make_tuple(mvs, (int)mvs.size(), bnc);
             }
             
-            auto [ns, md] = find_best_move(curr, 2*game_search_depth, debug);
+            auto [ns, md] = find_best_move(curr, db, 2*game_search_depth, debug);
             
             if (!ns) {
                 return make_tuple(mvs, (int)mvs.size(), bnc);
@@ -1136,15 +1116,13 @@ void batch_solve_all_kqvk_positions(CompositionalEngine& eng, SolvedPositionData
     for (size_t idx = 0; idx < positions.size(); idx++) {
         // BELOW IS ROOT CAUSE FOR FIRST HORRIBLE MOVE -- replaced with non-batch's exhaustive methodology
         const GameState& pos = positions[idx];
-        // HERE A BAD ESTIMATE
-        int m_est = eng.compute_M_topological(pos);
         
         // Check database first
         if (db.is_solved(pos.str(), pos.to_move)) {
             cache_hit_count++;
             if (idx % 100 == 0) {
                 cout << "[" << idx << "/" << positions.size() << "] [CACHE] " 
-                     << pos.str() << " M~" << m_est << "\n";
+                     << pos.str() << "\n";
             }
             continue;
         }
@@ -1155,215 +1133,51 @@ void batch_solve_all_kqvk_positions(CompositionalEngine& eng, SolvedPositionData
             continue;
         }
 
-        int opt_d = -1;
-        vector<tuple<GameState, int, int>> opt_meas;
+        eng.nodes_evaluated = 0;
+        eng.candidates_measured = 0;
 
-        for (int td = 1; td <= 10; td++) {
-            vector<GameState> root_cands;
-            for (auto& wk_n : eng.generate_all_king_moves(pos.wk)) {
-                if (wk_n.distance_to(pos.bk) > pos.wk.distance_to(pos.bk)) continue;
-                GameState ns(wk_n, pos.wq, pos.bk, 'B');
-                if (eng.is_legal_state(ns) && !eng.is_stalemate(ns)) root_cands.push_back(ns);
-            }
-            for (auto& wq_n : eng.generate_all_queen_moves(pos.wq)) {
-                if (wq_n.distance_to(pos.bk) < 2 && wq_n.distance_to(pos.wk) > 1) continue;
+        auto solve_start = chrono::high_resolution_clock::now();
+        auto [mvs, tp, bnc] = eng.play_complete_game(pos, db, 50, false, max_depth);
+        auto solve_end = chrono::high_resolution_clock::now();
+        double solve_time = chrono::duration<double>(solve_end - solve_start).count();
 
-                bool blocked = false;
-                if (wq_n.file == pos.wq.file) {
-                    int start = min(pos.wq.rank, wq_n.rank) + 1;
-                    int end = max(pos.wq.rank, wq_n.rank);
-                    for (int r = start; r < end; r++) {
-                        if (Position(wq_n.file, r) == pos.wk) { blocked = true; break; }
-                    }
-                } else if (wq_n.rank == pos.wq.rank) {
-                    int start = min(pos.wq.file, wq_n.file) + 1;
-                    int end = max(pos.wq.file, wq_n.file);
-                    for (int f = start; f < end; f++) {
-                        if (Position(f, wq_n.rank) == pos.wk) { blocked = true; break; }
-                    }
-                } else if (abs(wq_n.file - pos.wq.file) == abs(wq_n.rank - pos.wq.rank)) {
-                    int df = (wq_n.file > pos.wq.file) ? 1 : -1;
-                    int dr = (wq_n.rank > pos.wq.rank) ? 1 : -1;
-                    int f = pos.wq.file + df;
-                    int r = pos.wq.rank + dr;
-                    while (f != wq_n.file) {
-                        if (Position(f, r) == pos.wk) { blocked = true; break; }
-                        f += df;
-                        r += dr;
-                    }
-                }
-                if (blocked) continue;
-
-                GameState ns(pos.wk, wq_n, pos.bk, 'B');
-                if (eng.is_legal_state(ns) && !eng.is_stalemate(ns)) root_cands.push_back(ns);
-            }
-
-            if (root_cands.empty()) break;
-
-            vector<tuple<GameState,int,int>> meas;
-            for (auto& c : root_cands) {
-                // HERE we have the recursive call.
-                int M = eng.compute_M_shallow(c, td);
-                int BN = eng.measure_black_nodes_after_trajectory(c, td);
-                meas.push_back({c, M, BN});
-            }
-
-            int min_M = INF_MAX;
-            for (auto& [c,M,BN] : meas) min_M = min(min_M, M);
-
-            if (td >= min_M) {
-                opt_d = td;
-                opt_meas = meas;
-                break;
-            }
-        }
-
-        if (opt_d == -1) {
-            opt_d = 7;
-            vector<GameState> root_cands;
-            for (auto& wk_n : eng.generate_all_king_moves(pos.wk)) {
-                if (wk_n.distance_to(pos.bk) > pos.wk.distance_to(pos.bk)) continue;
-                GameState ns(wk_n, pos.wq, pos.bk, 'B');
-                if (eng.is_legal_state(ns) && !eng.is_stalemate(ns)) root_cands.push_back(ns);
-            }
-            for (auto& wq_n : eng.generate_all_queen_moves(pos.wq)) {
-                if (wq_n.distance_to(pos.bk) < 2 && wq_n.distance_to(pos.wk) > 1) continue;
-
-                bool blocked = false;
-                if (wq_n.file == pos.wq.file) {
-                    int start = min(pos.wq.rank, wq_n.rank) + 1;
-                    int end = max(pos.wq.rank, wq_n.rank);
-                    for (int r = start; r < end; r++) {
-                        if (Position(wq_n.file, r) == pos.wk) { blocked = true; break; }
-                    }
-                } else if (wq_n.rank == pos.wq.rank) {
-                    int start = min(pos.wq.file, wq_n.file) + 1;
-                    int end = max(pos.wq.file, wq_n.file);
-                    for (int f = start; f < end; f++) {
-                        if (Position(f, wq_n.rank) == pos.wk) { blocked = true; break; }
-                    }
-                } else if (abs(wq_n.file - pos.wq.file) == abs(wq_n.rank - pos.wq.rank)) {
-                    int df = (wq_n.file > pos.wq.file) ? 1 : -1;
-                    int dr = (wq_n.rank > pos.wq.rank) ? 1 : -1;
-                    int f = pos.wq.file + df;
-                    int r = pos.wq.rank + dr;
-                    while (f != wq_n.file) {
-                        if (Position(f, r) == pos.wk) { blocked = true; break; }
-                        f += df;
-                        r += dr;
-                    }
-                }
-                if (blocked) continue;
-
-                GameState ns(pos.wk, wq_n, pos.bk, 'B');
-                if (eng.is_legal_state(ns) && !eng.is_stalemate(ns)) root_cands.push_back(ns);
-            }
-            for (auto& c : root_cands) {
-                // HERE WE HAVE A RECURSIVE CALL
-                int M = eng.compute_M_shallow(c, opt_d);
-                int BN = eng.measure_black_nodes_after_trajectory(c, opt_d);
-                opt_meas.push_back({c, M, BN});
-            }
-        }
-
-        if (opt_meas.empty()) {
+        if (mvs.empty()) {
             cout << "[" << idx << "/" << positions.size() << "] [FAILED] " 
-                 << pos.str() << " (no legal moves)\n";
+                 << pos.str() << " (no moves found)\n";
             continue;
         }
 
-        sort(opt_meas.begin(), opt_meas.end(), [](auto& a, auto& b) {
-            if (get<1>(a) != get<1>(b)) return get<1>(a) < get<1>(b);
-            return get<2>(a) < get<2>(b);
-        });
+        GameState curr = pos;
+        int recorded_count = 0;
 
-        int min_M_v = INF_MAX;
-        for (auto& [c,M,BN] : opt_meas) min_M_v = min(min_M_v, M);
+        for (size_t i = 0; i < mvs.size(); i++) {
+            SolvedPosition solution;
+            solution.position_key = curr.str();
+            solution.turn = curr.to_move;
+            solution.best_move = mvs[i];
+            solution.white_moves = (tp - i + 1) / 2;
+            solution.black_moves = (tp - i) / 2;
+            solution.M_value = solution.white_moves;
+            solution.total_plies = tp - i;
+            solution.nodes_evaluated = eng.nodes_evaluated;
+            solution.computation_time = solve_time / mvs.size();
+            solution.BN_trajectory = bnc;
 
-        vector<tuple<GameState,int,int>> opt_cands;
-        for (auto& [c,M,BN] : opt_meas) {
-            if (M == min_M_v) opt_cands.push_back({c, M, BN});
+            db.add_position(solution);
+            solved_count++;
+            recorded_count++;
+
+            char piece = mvs[i][0];
+            string dest = mvs[i].substr(1);
+            Position dest_pos = Position::from_str(dest);
+            if (piece == 'K') { curr.wk = dest_pos; curr.to_move = 'B'; }
+            else if (piece == 'Q') { curr.wq = dest_pos; curr.to_move = 'B'; }
+            else if (piece == 'k') { curr.bk = dest_pos; curr.to_move = 'W'; }
         }
 
-        // Solve and record EVERY tied-optimal candidate -- exhaustive, not just the first
-        for (size_t cand_idx = 0; cand_idx < opt_cands.size(); cand_idx++) {
-            auto [best_cand, best_M, best_BN] = opt_cands[cand_idx];
-
-            if (best_M == 0 || eng.is_checkmate(best_cand)) {
-                SolvedPosition solution;
-                solution.position_key = pos.str();
-                solution.turn = pos.to_move;
-                solution.best_move = eng.get_move_notation(pos, best_cand);
-                solution.M_value = 1;
-                solution.total_plies = 1;
-                solution.white_moves = 1;
-                solution.black_moves = 0;
-                solution.nodes_evaluated = 0;
-                solution.computation_time = 0;
-                solution.BN_trajectory = {};
-
-                db.add_position(solution);
-                solved_count++;
-
-                cout << "[" << idx << "/" << positions.size() << "] [SOLVED-MATE] " 
-                     << pos.str() << " (candidate " << (cand_idx+1) << "/" << opt_cands.size() << ")\n";
-            } else {
-                auto solve_start = chrono::high_resolution_clock::now();
-                auto [mvs, tp, bnc] = eng.play_complete_game(best_cand, db, 50, false, best_M);
-                auto solve_end = chrono::high_resolution_clock::now();
-                double solve_time = chrono::duration<double>(solve_end - solve_start).count();
-
-                if (!mvs.empty()) {
-                    SolvedPosition solution;
-                    solution.position_key = pos.str();
-                    solution.turn = pos.to_move;
-                    solution.best_move = eng.get_move_notation(pos, best_cand);
-                    solution.M_value = best_M;
-                    solution.total_plies = tp;
-                    solution.white_moves = (tp + 1) / 2;
-                    solution.black_moves = tp / 2;
-                    solution.nodes_evaluated = 0;
-                    solution.computation_time = solve_time;
-                    solution.BN_trajectory = bnc;
-
-                    db.add_position(solution);
-                    solved_count++;
-
-                    GameState curr = best_cand;
-                    for (size_t i = 0; i < mvs.size(); i++) {
-                        SolvedPosition ply_solution;
-                        ply_solution.position_key = curr.str();
-                        ply_solution.turn = curr.to_move;
-                        ply_solution.best_move = mvs[i];
-                        ply_solution.M_value = best_M;
-                        ply_solution.total_plies = tp;
-                        ply_solution.white_moves = (tp + 1) / 2;
-                        ply_solution.black_moves = tp / 2;
-                        ply_solution.nodes_evaluated = 0;
-                        ply_solution.computation_time = solve_time;
-                        ply_solution.BN_trajectory = bnc;
-
-                        db.add_position(ply_solution);
-                        solved_count++;
-
-                        char piece = mvs[i][0];
-                        string dest = mvs[i].substr(1);
-                        Position dest_pos = Position::from_str(dest);
-                        if (piece == 'K') { curr.wk = dest_pos; curr.to_move = 'B'; }
-                        else if (piece == 'Q') { curr.wq = dest_pos; curr.to_move = 'B'; }
-                        else if (piece == 'k') { curr.bk = dest_pos; curr.to_move = 'W'; }
-                    }
-
-                    cout << "[" << idx << "/" << positions.size() << "] [SOLVED] " 
-                         << pos.str() << " M=" << best_M
-                         << " (candidate " << (cand_idx+1) << "/" << opt_cands.size()
-                         << ", " << fixed << setprecision(3) << solve_time << "s)\n";
-                } else {
-                    cout << "[" << idx << "/" << positions.size() << "] [FAILED] " 
-                         << pos.str() << " (candidate " << (cand_idx+1) << "/" << opt_cands.size() << ")\n";
-                }
-            }
-        }
+        cout << "[" << idx << "/" << positions.size() << "] [SOLVED] " 
+             << pos.str() << " plies=" << tp << " recorded=" << recorded_count
+             << " (" << fixed << setprecision(3) << solve_time << "s)\n";
         // end of root cause issue
 
         // Export every 5 positions
@@ -1426,6 +1240,6 @@ int main(int argc, char* argv[]) {
     auto root_t_start = chrono::high_resolution_clock::now();
     CompositionalEngine eng;
     SolvedPositionDatabase db("kqvk_perfect_play.db");
-    batch_solve_all_kqvk_positions(eng, db, 16);
+    batch_solve_all_kqvk_positions(eng, db, 25);
     return 0;
 }

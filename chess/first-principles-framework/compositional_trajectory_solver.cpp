@@ -610,11 +610,47 @@ public:
         return key;
     }
 
+    // A proven value (real checkmate reached, or a fully-resolved comparison) is a fact
+    // about the position that does not depend on how much depth budget was used to derive
+    // it -- unlike make_cache_key's entries, which are tied to a specific depth and only
+    // valid for that one iterative-deepening attempt. Keeping proven results in a separate,
+    // depth-independent cache lets later, larger-depth retries reuse everything that was
+    // already proven during earlier, smaller-depth attempts, instead of re-deriving it from
+    // scratch every time the outer loop grows the depth budget. Must include to_move
+    // explicitly, since depth is no longer part of the key to implicitly disambiguate it.
+    unordered_map<uint64_t, SearchResult> proven_cache;
+
+    uint64_t make_state_key(const GameState& st) const {
+        uint64_t key = 0;
+        key |= ((uint64_t)st.wk.file << 56);
+        key |= ((uint64_t)st.wk.rank << 52);
+        key |= ((uint64_t)st.wq.file << 48);
+        key |= ((uint64_t)st.wq.rank << 44);
+        key |= ((uint64_t)st.bk.file << 40);
+        key |= ((uint64_t)st.bk.rank << 36);
+        key |= ((uint64_t)(st.to_move == 'W' ? 1 : 0) << 32);
+        return key;
+    }
+
     SearchResult compositional_search_impl(
         const GameState& st, int depth, int ply,
         bool debug, unordered_map<uint64_t, SearchResult>& memo,
         SolvedPositionDatabase& db
     ) {
+        uint64_t state_key = make_state_key(st);
+        if (proven_cache.count(state_key)) {
+            // Same gate as the DB check below, for the same reason: a proven value is a
+            // permanent fact about the state, but using it here without checking depth
+            // would reintroduce the exact depth-vs-cache-shortcut unfairness bug this
+            // engine already had fixed once, just via a new cache instead of the old one.
+            // Only trust it if it would also have been provable by real recursion within
+            // the current budget.
+            const SearchResult& cached_res = proven_cache[state_key];
+            if (cached_res.val && *cached_res.val <= depth) {
+                return cached_res;
+            }
+        }
+
         uint64_t cache_key = make_cache_key(st, depth);
         if (memo.count(cache_key)) {
             return memo[cache_key];
@@ -623,6 +659,7 @@ public:
         if (is_checkmate(st)) {
             SearchResult res{0, 0, nullopt};   // mate: no further black escapes to accumulate
             memo[cache_key] = res;
+            proven_cache[state_key] = res;
             return res;
         }
 
@@ -645,6 +682,7 @@ public:
                 else if (piece == 'k') { next.bk = dest_pos; next.to_move = 'W'; }
                 SearchResult res{cached->total_plies, cached->cumulative_bn, next};
                 memo[cache_key] = res;
+                proven_cache[state_key] = res;
                 return res;
             }
         }
@@ -834,6 +872,9 @@ public:
 
         SearchResult res{best_val, best_bn_cum, best_mv};
         memo[cache_key] = res;
+        if (res.val) {
+            proven_cache[state_key] = res;
+        }
         return res;
     }
 

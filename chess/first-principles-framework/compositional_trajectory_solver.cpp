@@ -34,6 +34,9 @@ struct SolvedPosition {
     int black_moves;            // Black's move count
     int nodes_evaluated;        // Nodes searched
     double computation_time;    // Time in seconds
+    int cumulative_bn = 0;      // Sum of Black's own escape-count at every Black-to-move
+                                 // position from here through to mate, under the recorded
+                                 // best_move and every move after it
     
     // Convert to CSV line for export
     string to_csv() const {
@@ -46,7 +49,8 @@ struct SolvedPosition {
            << white_moves << "|"
            << black_moves << "|"
            << nodes_evaluated << "|"
-           << fixed << setprecision(3) << computation_time << "|";
+           << fixed << setprecision(3) << computation_time << "|"
+           << cumulative_bn << "|";
         
         // BN trajectory as comma-separated
         for (size_t i = 0; i < BN_trajectory.size(); i++) {
@@ -58,7 +62,7 @@ struct SolvedPosition {
     }
     
     static string csv_header() {
-        return "Position|Turn|BestMove|M|Plies|WhiteMoves|BlackMoves|NodesEval|Time|BN_Trajectory\n";
+        return "Position|Turn|BestMove|M|Plies|WhiteMoves|BlackMoves|NodesEval|Time|CumulativeBN|BN_Trajectory\n";
     }
 };
 
@@ -274,9 +278,10 @@ class SolvedPositionDatabase {
                     pos.black_moves = stoi(parts[6]);
                     pos.nodes_evaluated = stoi(parts[7]);
                     pos.computation_time = stod(parts[8]);
-                    if (parts.size() > 9) {
-                        if (!parts[9].empty()) {
-                            stringstream bn_stream(parts[9]);
+                    pos.cumulative_bn = (parts.size() > 9 && !parts[9].empty()) ? stoi(parts[9]) : 0;
+                    if (parts.size() > 10) {
+                        if (!parts[10].empty()) {
+                            stringstream bn_stream(parts[10]);
                             string bn_part;
                             int bn_count = 0;
                             
@@ -622,11 +627,15 @@ public:
         }
 
         // DB CHECK ON st ITSELF -- if this exact position is already proven, use it directly.
-        // NOTE: bn_cum is set to nullopt here because SolvedPosition does not currently store
-        // a cumulative black-node count. This is a real gap -- see explanation below.
+        // Gated on depth: only trust this shortcut if the cached value would ALSO have been
+        // provable by real recursion within the current budget (cached->total_plies <= depth).
+        // Otherwise a DB hit could report a "resolved" value at a shallower depth than a
+        // fresh-recursion sibling candidate ever gets a fair chance at, letting a worse but
+        // cache-lucky branch win a comparison it shouldn't -- see per-candidate gate below
+        // for the concrete failure mode this prevents.
         if (db.is_solved(st.str(), st.to_move)) {
             auto cached = db.get_solution(st.str(), st.to_move);
-            if (cached && !cached->best_move.empty()) {
+            if (cached && !cached->best_move.empty() && cached->total_plies <= depth) {
                 GameState next = st;
                 char piece = cached->best_move[0];
                 string dest = cached->best_move.substr(1);
@@ -634,7 +643,7 @@ public:
                 if (piece == 'K') { next.wk = dest_pos; next.to_move = 'B'; }
                 else if (piece == 'Q') { next.wq = dest_pos; next.to_move = 'B'; }
                 else if (piece == 'k') { next.bk = dest_pos; next.to_move = 'W'; }
-                SearchResult res{cached->total_plies, nullopt, next};
+                SearchResult res{cached->total_plies, cached->cumulative_bn, next};
                 memo[cache_key] = res;
                 return res;
             }
@@ -650,12 +659,10 @@ public:
         cands.reserve(64);
         if (st.to_move == 'W') {
             for (auto& wk_n : generate_all_king_moves(st.wk)) {
-                if (wk_n.distance_to(st.bk) > st.wk.distance_to(st.bk)) continue;
                 GameState ns(wk_n, st.wq, st.bk, 'B');
                 if (is_legal_state(ns) && !is_stalemate(ns)) cands.push_back(ns);
             }
             for (auto& wq_n : generate_all_queen_moves(st.wq)) {
-                if (wq_n.distance_to(st.bk) < 2 && wq_n.distance_to(st.wk) > 1) continue;
                 bool blocked = false;
                 if (wq_n.file == st.wq.file) {
                     int start = min(st.wq.rank, wq_n.rank) + 1;
@@ -711,11 +718,21 @@ public:
             optional<int> val;
             optional<int> child_bn_cum;
 
+            // Gated the same way as the st-itself check above: a cached value is only
+            // usable here if it fits within the budget a fresh recursive call would have
+            // (cached->total_plies < depth, since v = cached->total_plies + 1 must be <= depth).
+            // If it doesn't fit yet, fall through to real recursion below -- which, for
+            // consistency, will hit the same gate on its own "st itself" check and correctly
+            // decline to use it too, forcing genuine step-by-step exploration until a later,
+            // deeper find_best_move iteration naturally catches up to what the cache already
+            // knows. Without this gate, a cache hit can report a "resolved" value at a much
+            // shallower depth than a genuinely-better sibling candidate needs to prove itself,
+            // letting a worse but cache-lucky move win a comparison it has no right to win.
             if (db.is_solved(c.str(), c.to_move)) {
                 auto cached = db.get_solution(c.str(), c.to_move);
-                if (cached) {
+                if (cached && cached->total_plies < depth) {
                     val = cached->total_plies;
-                    // child_bn_cum stays nullopt -- same schema gap as above
+                    child_bn_cum = cached->cumulative_bn;
                 }
             }
 
@@ -808,7 +825,7 @@ public:
         return make_pair(best_move, best_value);
     }
     
-    tuple<vector<string>, int, vector<int>> play_complete_game(
+    tuple<vector<string>, int, vector<int>, bool> play_complete_game(
         const GameState& first, SolvedPositionDatabase& db,
         int max_moves = 50, bool debug = false, int game_search_depth = 8,
         vector<string> initial_moves = {}, vector<int> initial_bnc = {}
@@ -819,13 +836,13 @@ public:
         
         for (int move_num = 0; move_num < max_moves; move_num++) {
             if (is_checkmate(curr)) {
-                return make_tuple(mvs, (int)mvs.size(), bnc);
+                return make_tuple(mvs, (int)mvs.size(), bnc, true);
             }
             
             auto [ns, md] = find_best_move(curr, db, 2*game_search_depth, debug);
             
             if (!ns) {
-                return make_tuple(mvs, (int)mvs.size(), bnc);
+                return make_tuple(mvs, (int)mvs.size(), bnc, false);
             }
             
             // CHECK DB HERE - if next position already solved, stop
@@ -834,22 +851,24 @@ public:
                 if (cached) {
                     string mv_str = get_move_notation(curr, *ns);
                     mvs.push_back(mv_str);
+                    int bn = (ns->to_move == 'B') ? count_legal_moves(*ns) : 0;
+                    bnc.push_back(bn);
                     int tp = mvs.size() + cached->total_plies;  // Add remaining plies from cache
-                    cout << "DB FINISHED COMPLETE GAME FROM SOLVED POINT\n";
-                    return make_tuple(mvs, tp, bnc);
+                    // cout << "DB FINISHED COMPLETE GAME FROM SOLVED POINT\n";
+                    return make_tuple(mvs, tp, bnc, true);
                 }
             }
 
             string mv_str = get_move_notation(curr, *ns);
             mvs.push_back(mv_str);
             
-            int bn = count_legal_moves(*ns);
+            int bn = (ns->to_move == 'B') ? count_legal_moves(*ns) : 0;
             bnc.push_back(bn);
             
             curr = *ns;
         }
         
-        return make_tuple(mvs, (int)mvs.size(), bnc);
+        return make_tuple(mvs, (int)mvs.size(), bnc, false);
     }
 };
 
@@ -969,13 +988,13 @@ void batch_solve_all_kqvk_positions(CompositionalEngine& eng, SolvedPositionData
         eng.candidates_measured = 0;
 
         auto solve_start = chrono::high_resolution_clock::now();
-        auto [mvs, tp, bnc] = eng.play_complete_game(pos, db, 50, false, max_depth);
+        auto [mvs, tp, bnc, reached_mate] = eng.play_complete_game(pos, db, 50, false, max_depth);
         auto solve_end = chrono::high_resolution_clock::now();
         double solve_time = chrono::duration<double>(solve_end - solve_start).count();
 
-        if (mvs.empty()) {
+        if (mvs.empty() || !reached_mate) {
             cout << "[" << idx << "/" << positions.size() << "] [FAILED] " 
-                 << pos.str() << " (no moves found)\n";
+                 << pos.str() << " (no proven mate found, mvs=" << mvs.size() << ")\n";
             continue;
         }
 
@@ -993,7 +1012,15 @@ void batch_solve_all_kqvk_positions(CompositionalEngine& eng, SolvedPositionData
             solution.total_plies = tp - i;
             solution.nodes_evaluated = eng.nodes_evaluated;
             solution.computation_time = solve_time / mvs.size();
-            solution.BN_trajectory = bnc;
+
+            // bnc[i] is the black-escape-count measured AFTER mvs[i] is played -- i.e. it's
+            // exactly the "own_contribution" of curr's own chosen next move, matching how
+            // bn_cum is defined recursively in compositional_search_impl. So the trajectory
+            // "from here to mate" for the position being recorded THIS iteration is bnc[i:],
+            // inclusive of i -- not bnc[i+1:].
+            solution.BN_trajectory.assign(bnc.begin() + i, bnc.end());
+            solution.cumulative_bn = 0;
+            for (int v : solution.BN_trajectory) solution.cumulative_bn += v;
 
             db.add_position(solution);
             solved_count++;
@@ -1012,8 +1039,8 @@ void batch_solve_all_kqvk_positions(CompositionalEngine& eng, SolvedPositionData
              << " (" << fixed << setprecision(3) << solve_time << "s)\n";
         // end of root cause issue
 
-        // Export every 5 positions
-        if (solved_count % 5 == 0 && solved_count > 0) {
+        // Export every 50 positions
+        if (solved_count % 50 == 0 && solved_count > 0) {
             auto export_start = chrono::high_resolution_clock::now();
             db.export_to_file();
             auto export_end = chrono::high_resolution_clock::now();

@@ -854,7 +854,7 @@ public:
                     int bn = (ns->to_move == 'B') ? count_legal_moves(*ns) : 0;
                     bnc.push_back(bn);
                     int tp = mvs.size() + cached->total_plies;  // Add remaining plies from cache
-                    // cout << "DB FINISHED COMPLETE GAME FROM SOLVED POINT\n";
+                    cout << "DB FINISHED COMPLETE GAME FROM SOLVED POINT\n";
                     return make_tuple(mvs, tp, bnc, true);
                 }
             }
@@ -1039,8 +1039,8 @@ void batch_solve_all_kqvk_positions(CompositionalEngine& eng, SolvedPositionData
              << " (" << fixed << setprecision(3) << solve_time << "s)\n";
         // end of root cause issue
 
-        // Export every 50 positions
-        if (solved_count % 50 == 0 && solved_count > 0) {
+        // Export every 5 positions
+        if (solved_count % 5 == 0 && solved_count > 0) {
             auto export_start = chrono::high_resolution_clock::now();
             db.export_to_file();
             auto export_end = chrono::high_resolution_clock::now();

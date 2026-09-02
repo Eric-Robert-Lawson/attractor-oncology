@@ -219,7 +219,67 @@ same rigorous way the depth-gate bounds a cache hit. This is the concrete
 bar the generative-scoping branch of the programme (Section 6, Section 11)
 needs to clear to move from a compelling idea to a working result.
 
-## 7. Negative Heuristic: What the Programme Does Not Abandon Under Pressure
+## 6b. Formal Closure Criterion for Candidate Classes
+
+Section 6a establishes that a principle can only be used to exclude
+positions from search once it comes with an incremental, checkable proof
+of safety, not a track record. This section states that proof criterion
+precisely, so any future candidate class can be tested mechanically rather
+than argued about.
+
+**Definition (closure under the transition function).** A class of
+positions `P` is safe to solve in isolation, with no loss of completeness
+relative to the full space, if and only if every legal move from every
+position in `P` either (a) results in a position also in `P`, or (b) exits
+to a strictly smaller, already-solved space — fewer pieces, via a capture.
+If this holds, exhaustively solving `P` alone is provably complete for
+`P`: nothing outside `P` needed to be touched, and nothing was skipped,
+estimated, or generalized from a sample.
+
+**This property is not hypothetical — it is already load-bearing in the
+current architecture, in two places:**
+
+- **Material configuration.** A capture only ever reduces piece count,
+  never increases it, so "all positions with exactly King+Queen vs. King"
+  is closed downward into King+Queen vs. nothing and King vs. King. This
+  is precisely why tablebases (Syzygy included) can be built one material
+  configuration at a time at all, and why this programme's own planned
+  KRvK/KPvK extension (Section 6) is sound: each material class is closed
+  by the same argument.
+- **Board symmetry.** A reflection or rotation of the board commutes with
+  every legal move by construction — a legal move in the original position
+  transforms into a legal move in the reflected one, landing in the
+  reflected resulting position. Each of the 8 symmetry classes is
+  therefore trivially closed, which is why solving one representative and
+  copying the transform (Section 3) loses no completeness.
+
+**The open question for the generative-scoping branch of the programme is
+whether a further, non-trivial split exists *within* a single material
+configuration** — some geometric predicate on relative piece position
+(not material count, not symmetry) that is also closed, and therefore
+solvable in isolation with the same guarantee.
+
+**A specific reason for caution, stated precisely rather than as general
+skepticism:** a queen's legal moves span an entire rank, file, or diagonal
+in a single move, reaching a large fraction of the board from nearly any
+starting square. For a region-based geometric predicate to satisfy the
+closure definition above, *every* legal queen move from *every* position
+satisfying the predicate must land back inside the predicate's region (or
+capture) — a constraint that a queen's long reach makes structurally hard
+to satisfy with a non-trivial region. This does not rule the idea out; it
+identifies exactly what a candidate predicate has to survive.
+
+**The concrete, mechanical test for any future candidate:** state the
+geometric predicate precisely (a condition on WK/WQ/BK squares), enumerate
+every position satisfying it, generate every legal move from each, and
+check whether every single one stays inside the class or exits to strictly
+smaller material. Passing this test on real generated data is what
+distinguishes a genuinely closed class from a plausible-sounding one; a
+single counterexample move is sufficient to falsify a candidate, and
+identifies precisely which case needs the predicate sharpened or the idea
+abandoned.
+
+
 
 - The commitment to *exhaustive, verified* correctness is not traded away
   for speed or elegance. Every acceleration technique (caching, symmetry,
@@ -317,3 +377,10 @@ programme's most important open frontier, not a completed result.
   its formalism onto chess board geometry, as the leading candidate for
   turning the generative-scoping hard-core commitment into a working
   result.
+- State a specific candidate geometric predicate for a sub-material class
+  within KQvK, and run it against the closure test in Section 6b: enumerate
+  every matching position, generate every legal move from each, and check
+  whether the class is closed. This is the first concrete, falsifiable
+  test of whether the generative-scoping branch of the programme has a
+  genuinely sound target within KQvK, rather than only at the
+  material-configuration and symmetry-class level already in use.

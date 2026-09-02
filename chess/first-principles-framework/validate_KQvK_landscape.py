@@ -24,43 +24,58 @@ class ValidationAnalyzer:
         total_plies field -- NOT the landscape's M field, which is White's move
         count only."""
         print(f"Loading Syzygy DTZ from {filename}...")
-        
+        duplicate_conflicts = []
+
         try:
             with open(filename, 'r') as f:
                 reader = csv.reader(f)
                 header = next(reader)
-                
-                for row in reader:
+
+                for row_num, row in enumerate(reader, start=2):
                     if len(row) < 2:
                         continue
-                    
+
                     dtz_str = row[0].strip()
                     position = row[1].strip()
-                    
+
                     try:
                         dtz = int(dtz_str)
-                        self.dtz_data[(position, 'W')] = dtz
+                        key = (position, 'W')
+                        if key in self.dtz_data and self.dtz_data[key] != dtz:
+                            duplicate_conflicts.append((row_num, position, self.dtz_data[key], dtz))
+                        self.dtz_data[key] = dtz
                     except ValueError:
                         pass
         except Exception as e:
             print(f"ERROR loading DTZ: {e}")
             return
-        
+
         print(f"  Loaded {len(self.dtz_data)} positions from Syzygy DTZ\n")
+
+        if duplicate_conflicts:
+            print(f"  \u26a0 WARNING: {len(duplicate_conflicts)} positions appeared more than once "
+                  f"in {filename} with DIFFERENT DTZ values. Whichever row came last silently won "
+                  f"-- this file should not be trusted as ground truth until these are resolved:")
+            for row_num, pos, old_dtz, new_dtz in duplicate_conflicts[:20]:
+                print(f"    line {row_num}: {pos}  previous_dtz={old_dtz}  new_dtz={new_dtz}")
+            if len(duplicate_conflicts) > 20:
+                print(f"    ... and {len(duplicate_conflicts) - 20} more")
+            print()
     
     def load_landscape(self, filename):
         """Load landscape database with full data, keyed by (position, turn)"""
         print(f"Loading landscape database from {filename}...")
-        
+        duplicate_conflicts = []
+
         try:
             with open(filename, 'r') as f:
                 reader = csv.reader(f, delimiter='|')
                 header = next(reader)
-                
-                for row in reader:
+
+                for row_num, row in enumerate(reader, start=2):
                     if len(row) < 4:
                         continue
-                    
+
                     position = row[0].strip()
                     turn = row[1].strip() if len(row) > 1 else "?"
                     best_move = row[2].strip() if len(row) > 2 else "?"
@@ -71,8 +86,13 @@ class ValidationAnalyzer:
                     nodes_eval = int(row[7]) if len(row) > 7 else 0
                     comp_time = float(row[8]) if len(row) > 8 else 0.0
                     bn_trajectory = row[9].strip() if len(row) > 9 else ""
-                    
-                    self.landscape_data[(position, turn)] = {
+
+                    key = (position, turn)
+                    if key in self.landscape_data and self.landscape_data[key]['total_plies'] != total_plies:
+                        duplicate_conflicts.append(
+                            (row_num, position, turn, self.landscape_data[key]['total_plies'], total_plies))
+
+                    self.landscape_data[key] = {
                         'turn': turn,
                         'best_move': best_move,
                         'M': m_value,
@@ -86,8 +106,19 @@ class ValidationAnalyzer:
         except Exception as e:
             print(f"ERROR loading landscape: {e}")
             return
-        
+
         print(f"  Loaded {len(self.landscape_data)} positions from landscape\n")
+
+        if duplicate_conflicts:
+            print(f"  \u26a0 WARNING: {len(duplicate_conflicts)} (position, turn) pairs appeared more "
+                  f"than once in {filename} with DIFFERENT total_plies values. Whichever row came "
+                  f"last silently won -- this normally shouldn't happen given add_position's "
+                  f"first-write-wins guard, so this points at something worth investigating:")
+            for row_num, pos, turn, old_plies, new_plies in duplicate_conflicts[:20]:
+                print(f"    line {row_num}: {pos} turn={turn}  previous_plies={old_plies}  new_plies={new_plies}")
+            if len(duplicate_conflicts) > 20:
+                print(f"    ... and {len(duplicate_conflicts) - 20} more")
+            print()
     
     def parse_position(self, pos_str):
         """Parse position string 'WK:a1 WQ:b2 BK:c3' into components"""

@@ -2,6 +2,8 @@
 #include <vector>
 #include <map>
 #include <unordered_map>
+#include <unordered_set>
+#include <deque>
 #include <set>
 #include <string>
 #include <cmath>
@@ -37,7 +39,16 @@ struct SolvedPosition {
     int cumulative_bn = 0;      // Sum of Black's own escape-count at every Black-to-move
                                  // position from here through to mate, under the recorded
                                  // best_move and every move after it
-    
+
+    // Every move at THIS position that achieves the exact same M_value (i.e. every move
+    // provably tied for game-theoretically optimal), each paired with its own cumulative
+    // black-escape count. best_move is always one entry of this list -- kept as a separate
+    // field for backward compatibility with anything that only reads BestMove/M and ignores
+    // this column. Populated by compositional_search_impl's tie-collection pass (see the
+    // `tied` field on SearchResult); NOT a re-derivation from best_move, so it is exact,
+    // not approximated after the fact.
+    vector<pair<string, int>> tied_moves;
+
     // Convert to CSV line for export
     string to_csv() const {
         stringstream ss;
@@ -57,12 +68,21 @@ struct SolvedPosition {
             if (i > 0) ss << ",";
             ss << BN_trajectory[i];
         }
+        ss << "|";
+
+        // Tied moves as "move:bncum" pairs, semicolon-separated (comma is already used
+        // above by BN_trajectory, and pipe is the field separator, so semicolon/colon
+        // are the only delimiters left unused by the existing format).
+        for (size_t i = 0; i < tied_moves.size(); i++) {
+            if (i > 0) ss << ";";
+            ss << tied_moves[i].first << ":" << tied_moves[i].second;
+        }
         ss << "\n";
         return ss.str();
     }
     
     static string csv_header() {
-        return "Position|Turn|BestMove|M|Plies|WhiteMoves|BlackMoves|NodesEval|Time|CumulativeBN|BN_Trajectory\n";
+        return "Position|Turn|BestMove|M|Plies|WhiteMoves|BlackMoves|NodesEval|Time|CumulativeBN|BN_Trajectory|TiedMoves\n";
     }
 };
 
@@ -130,8 +150,22 @@ class SolvedPositionDatabase {
                 return string(1, char('a' + new_file)) + char('1' + new_rank);
             };
             
+            // Applies transform_func to a single "K"/"Q"/"k" + destination-square move
+            // string. Shared by best_move and by every entry of tied_moves so both stay
+            // in exact agreement after any symmetry transform.
+            auto transform_move = [&](auto transform_func, const string& mv) {
+                string new_mv = mv;
+                if (!new_mv.empty() && new_mv != "mate" && new_mv != "checkmate" && new_mv.length() >= 3) {
+                    char piece = new_mv[0];
+                    string dest = new_mv.substr(1);
+                    new_mv = piece + transform_func(dest);
+                }
+                return new_mv;
+            };
+
             // Helper macro to add transformed position
-            auto add_transformed = [&](auto transform_func, const string& base_pos, const string& base_move) {
+            auto add_transformed = [&](auto transform_func, const string& base_pos, const string& base_move,
+                                        const vector<pair<string,int>>& base_tied) {
                 size_t wk_pos = base_pos.find("WK:") + 3;
                 size_t wq_pos = base_pos.find("WQ:") + 3;
                 size_t bk_pos = base_pos.find("BK:") + 3;
@@ -146,19 +180,19 @@ class SolvedPositionDatabase {
                 
                 string new_pos = "WK:" + new_wk + " WQ:" + new_wq + " BK:" + new_bk;
                 
-                string new_move = base_move;
-                if (!new_move.empty() && new_move != "mate" && new_move != "checkmate") {
-                    if (new_move.length() >= 3) {
-                        char piece = new_move[0];
-                        string dest = new_move.substr(1);
-                        new_move = piece + transform_func(dest);
-                    }
+                string new_move = transform_move(transform_func, base_move);
+
+                vector<pair<string,int>> new_tied;
+                new_tied.reserve(base_tied.size());
+                for (auto& [mv, bncum] : base_tied) {
+                    new_tied.emplace_back(transform_move(transform_func, mv), bncum);
                 }
                 
                 if (!is_solved(new_pos, pos.turn)) {
                     SolvedPosition transformed = pos;
                     transformed.position_key = new_pos;
                     transformed.best_move = new_move;
+                    transformed.tied_moves = new_tied;
                     solved[{new_pos, pos.turn}] = transformed;
                 }
             };
@@ -166,9 +200,10 @@ class SolvedPositionDatabase {
             // Generate 4 rotations
             string current_pos = pos.position_key;
             string current_move = pos.best_move;
+            vector<pair<string,int>> current_tied = pos.tied_moves;
             
             for (int rot = 1; rot < 4; rot++) {
-                add_transformed(rotate_square, current_pos, current_move);
+                add_transformed(rotate_square, current_pos, current_move, current_tied);
                 
                 // Update current for next rotation
                 size_t wk_pos = current_pos.find("WK:") + 3;
@@ -184,21 +219,21 @@ class SolvedPositionDatabase {
                 string new_bk = rotate_square(bk_sq);
                 
                 current_pos = "WK:" + new_wk + " WQ:" + new_wq + " BK:" + new_bk;
-                
-                if (!current_move.empty() && current_move != "mate" && current_move != "checkmate") {
-                    if (current_move.length() >= 3) {
-                        char piece = current_move[0];
-                        string dest = current_move.substr(1);
-                        current_move = piece + rotate_square(dest);
-                    }
+                current_move = transform_move(rotate_square, current_move);
+
+                vector<pair<string,int>> next_tied;
+                next_tied.reserve(current_tied.size());
+                for (auto& [mv, bncum] : current_tied) {
+                    next_tied.emplace_back(transform_move(rotate_square, mv), bncum);
                 }
+                current_tied = next_tied;
             }
             
             // Generate 4 reflections from original
-            add_transformed(flip_vertical, pos.position_key, pos.best_move);
-            add_transformed(flip_horizontal, pos.position_key, pos.best_move);
-            add_transformed(flip_diagonal_a1h8, pos.position_key, pos.best_move);
-            add_transformed(flip_diagonal_a8h1, pos.position_key, pos.best_move);
+            add_transformed(flip_vertical, pos.position_key, pos.best_move, pos.tied_moves);
+            add_transformed(flip_horizontal, pos.position_key, pos.best_move, pos.tied_moves);
+            add_transformed(flip_diagonal_a1h8, pos.position_key, pos.best_move, pos.tied_moves);
+            add_transformed(flip_diagonal_a8h1, pos.position_key, pos.best_move, pos.tied_moves);
         }
     
     // Check if position is already solved
@@ -213,6 +248,21 @@ class SolvedPositionDatabase {
             return it->second;
         }
         return nullopt;
+    }
+
+    // Patch ONLY tied_moves onto an already-solved entry -- used when DAG exploration
+    // encounters a position solved by an older run (before tied-move tracking existed),
+    // where M_value/best_move/etc. are already trustworthy and don't need to be
+    // recomputed, but tied_moves is empty and needs to be filled in from a fresh
+    // find_best_move call. No-op if the position isn't already solved (callers should
+    // use add_position for that case instead). Note: this does NOT propagate to that
+    // entry's 8 symmetric siblings -- if they're also legacy rows missing tied_moves,
+    // each will independently backfill itself the first time DAG exploration visits it.
+    void set_tied_moves(const string& position_key, char turn, const vector<pair<string,int>>& tied) {
+        auto it = solved.find({position_key, turn});
+        if (it != solved.end()) {
+            it->second.tied_moves = tied;
+        }
     }
     
     // Export all solved positions to file
@@ -293,6 +343,26 @@ class SolvedPositionDatabase {
                                 } catch (const exception& e) {
                                     cout << "    -> ERROR parsing BN value: " << e.what() << "\n";
                                 }
+                            }
+                        }
+                    }
+                    // TiedMoves: "move:bncum" entries separated by ';'. Older database
+                    // files (written before this field existed) simply won't have this
+                    // 12th column -- parts.size() <= 11 leaves tied_moves empty, which is
+                    // the correct, honest representation of "this row predates tie
+                    // tracking" rather than guessing at a fabricated tie set.
+                    if (parts.size() > 11 && !parts[11].empty()) {
+                        stringstream tie_stream(parts[11]);
+                        string tie_part;
+                        while (getline(tie_stream, tie_part, ';')) {
+                            size_t colon = tie_part.rfind(':');
+                            if (colon == string::npos) continue;
+                            try {
+                                string mv = tie_part.substr(0, colon);
+                                int bncum = stoi(tie_part.substr(colon + 1));
+                                pos.tied_moves.emplace_back(mv, bncum);
+                            } catch (const exception& e) {
+                                cout << "    -> ERROR parsing TiedMoves entry: " << e.what() << "\n";
                             }
                         }
                     }
@@ -525,6 +595,21 @@ public:
         if (from.bk != to.bk) return "k" + to.bk.str();
         return "??";
     }
+
+    // Inverse of get_move_notation: applies a "K"/"Q"/"k" + destination-square move
+    // string to `from`, returning the resulting GameState (including the turn flip).
+    // Used by DAG exploration to reconstruct a tied move's child state directly from
+    // a stored (or freshly computed) move string, without re-running search on it.
+    GameState apply_move_notation(const GameState& from, const string& mv) const {
+        GameState result = from;
+        if (mv.length() < 2) return result;
+        char piece = mv[0];
+        Position dest = Position::from_str(mv.substr(1));
+        if (piece == 'K') { result.wk = dest; result.to_move = 'B'; }
+        else if (piece == 'Q') { result.wq = dest; result.to_move = 'B'; }
+        else if (piece == 'k') { result.bk = dest; result.to_move = 'W'; }
+        return result;
+    }
     
     int count_legal_moves(const GameState& st) const {
         if (st.to_move == 'W') {
@@ -590,6 +675,17 @@ struct SearchResult {
                              // Black-to-move position along this result's chosen
                              // line, from here through to mate
     optional<GameState> mv; // chosen next state -- same meaning as before
+
+    // Every RESOLVED candidate whose v exactly equals val (the game-theoretic optimum),
+    // each with its own bn_cum computed by the same own_contribution + child_bn_cum
+    // formula used everywhere else in this engine. This is a pure addition: val/bn_cum/mv
+    // above keep exactly their previous single-choice meaning (mv == tied[k].second for
+    // whichever k the existing tie-break rule selected), so nothing that already reads
+    // val/bn_cum/mv changes behavior. Unresolved candidates are never in this list --
+    // see the comment above the resolution loop in compositional_search_impl for why an
+    // unresolved candidate can never tie val, for either side to move.
+    // Empty for terminal (checkmate) and unresolved (nullopt val) results.
+    vector<pair<GameState, int>> tied;
 };
 
 class CompositionalEngine : public BaseEngine {
@@ -599,36 +695,21 @@ public:
     unordered_map<uint64_t, int> M_cache;
 
     uint64_t make_cache_key(const GameState& st, int depth) const {
+        // Each board field only ever holds 0-7 (3 bits), given 4 bits of margin here.
+        // depth has real range up to ~50 in practice -- given the full remaining 40 bits
+        // (shift 0) so it cannot overflow into bk_rank's field the way the previous layout
+        // did. Confirmed by direct collision test: the old layout (depth at shift 32, only
+        // 4 bits before bk_rank's field at shift 36) made (bk_rank=3, depth=0) produce the
+        // exact same key as the unrelated (bk_rank=2, depth=16) -- any depth >= 16 corrupted
+        // memo lookups into a different board position entirely.
         uint64_t key = 0;
-        key |= ((uint64_t)st.wk.file << 56);
-        key |= ((uint64_t)st.wk.rank << 52);
-        key |= ((uint64_t)st.wq.file << 48);
-        key |= ((uint64_t)st.wq.rank << 44);
-        key |= ((uint64_t)st.bk.file << 40);
-        key |= ((uint64_t)st.bk.rank << 36);
-        key |= ((uint64_t)depth << 32);
-        return key;
-    }
-
-    // A proven value (real checkmate reached, or a fully-resolved comparison) is a fact
-    // about the position that does not depend on how much depth budget was used to derive
-    // it -- unlike make_cache_key's entries, which are tied to a specific depth and only
-    // valid for that one iterative-deepening attempt. Keeping proven results in a separate,
-    // depth-independent cache lets later, larger-depth retries reuse everything that was
-    // already proven during earlier, smaller-depth attempts, instead of re-deriving it from
-    // scratch every time the outer loop grows the depth budget. Must include to_move
-    // explicitly, since depth is no longer part of the key to implicitly disambiguate it.
-    unordered_map<uint64_t, SearchResult> proven_cache;
-
-    uint64_t make_state_key(const GameState& st) const {
-        uint64_t key = 0;
-        key |= ((uint64_t)st.wk.file << 56);
-        key |= ((uint64_t)st.wk.rank << 52);
-        key |= ((uint64_t)st.wq.file << 48);
-        key |= ((uint64_t)st.wq.rank << 44);
-        key |= ((uint64_t)st.bk.file << 40);
-        key |= ((uint64_t)st.bk.rank << 36);
-        key |= ((uint64_t)(st.to_move == 'W' ? 1 : 0) << 32);
+        key |= ((uint64_t)st.wk.file << 60);
+        key |= ((uint64_t)st.wk.rank << 56);
+        key |= ((uint64_t)st.wq.file << 52);
+        key |= ((uint64_t)st.wq.rank << 48);
+        key |= ((uint64_t)st.bk.file << 44);
+        key |= ((uint64_t)st.bk.rank << 40);
+        key |= (uint64_t)depth;
         return key;
     }
 
@@ -637,20 +718,6 @@ public:
         bool debug, unordered_map<uint64_t, SearchResult>& memo,
         SolvedPositionDatabase& db
     ) {
-        uint64_t state_key = make_state_key(st);
-        if (proven_cache.count(state_key)) {
-            // Same gate as the DB check below, for the same reason: a proven value is a
-            // permanent fact about the state, but using it here without checking depth
-            // would reintroduce the exact depth-vs-cache-shortcut unfairness bug this
-            // engine already had fixed once, just via a new cache instead of the old one.
-            // Only trust it if it would also have been provable by real recursion within
-            // the current budget.
-            const SearchResult& cached_res = proven_cache[state_key];
-            if (cached_res.val && *cached_res.val <= depth) {
-                return cached_res;
-            }
-        }
-
         uint64_t cache_key = make_cache_key(st, depth);
         if (memo.count(cache_key)) {
             return memo[cache_key];
@@ -659,33 +726,24 @@ public:
         if (is_checkmate(st)) {
             SearchResult res{0, 0, nullopt};   // mate: no further black escapes to accumulate
             memo[cache_key] = res;
-            proven_cache[state_key] = res;
             return res;
         }
 
-        // DB CHECK ON st ITSELF -- if this exact position is already proven, use it directly.
-        // Gated on depth: only trust this shortcut if the cached value would ALSO have been
-        // provable by real recursion within the current budget (cached->total_plies <= depth).
-        // Otherwise a DB hit could report a "resolved" value at a shallower depth than a
-        // fresh-recursion sibling candidate ever gets a fair chance at, letting a worse but
-        // cache-lucky branch win a comparison it shouldn't -- see per-candidate gate below
-        // for the concrete failure mode this prevents.
-        if (db.is_solved(st.str(), st.to_move)) {
-            auto cached = db.get_solution(st.str(), st.to_move);
-            if (cached && !cached->best_move.empty() && cached->total_plies <= depth) {
-                GameState next = st;
-                char piece = cached->best_move[0];
-                string dest = cached->best_move.substr(1);
-                Position dest_pos = Position::from_str(dest);
-                if (piece == 'K') { next.wk = dest_pos; next.to_move = 'B'; }
-                else if (piece == 'Q') { next.wq = dest_pos; next.to_move = 'B'; }
-                else if (piece == 'k') { next.bk = dest_pos; next.to_move = 'W'; }
-                SearchResult res{cached->total_plies, cached->cumulative_bn, next};
-                memo[cache_key] = res;
-                proven_cache[state_key] = res;
-                return res;
-            }
-        }
+        // DB shortcuts (both "check st itself" and per-candidate, further below) have been
+        // REMOVED from this comparison path entirely -- not just re-gated. The gate this
+        // engine used (cached->total_plies <= depth) checks whether the ANSWER fits in the
+        // current budget, but proving that answer -- under the rule that every one of
+        // Black's legal replies must also fully resolve -- can require far more depth than
+        // the answer itself. A cached entry whose original proof needed, say, 12 plies of
+        // budget can still slip through a "value <= depth" gate at depth 5, getting treated
+        // as resolved when a fresh, honest recursion at that same depth would correctly say
+        // unresolved. That's not a timing-fairness problem this gate can catch; it's a gap
+        // in what the gate checks. Confirmed empirically: WK:d1 WQ:f7 BK:c6 resolves to an
+        // impossible 13 plies with this shortcut enabled (proven_cache, in that instance),
+        // and to the correct, Syzygy-verified 15 plies with it removed. The database is
+        // still safely used elsewhere -- see play_complete_game's own lookup, and the
+        // top-level cache check in batch_solve_all_kqvk_positions -- both of which consult
+        // it only AFTER a decision is already made, never as a substitute inside one.
 
         if (depth == 0) {
             SearchResult res{nullopt, nullopt, nullopt};
@@ -768,34 +826,25 @@ public:
         // computing it costs nothing extra: it's just tracking whether every candidate resolved.
         bool all_candidates_resolved = true;
 
+        // Every candidate that resolves this ply, regardless of whether it ends up winning
+        // the best_val/best_bn_cum comparison below. best_val/best_bn_cum/best_mv's selection
+        // logic is completely untouched by this addition -- this is purely bookkeeping so that,
+        // once best_val is known, every candidate tied on it (not just the tie-break winner)
+        // can be recovered in one filtering pass instead of being discarded as the loop runs.
+        vector<pair<int, pair<optional<int>, GameState>>> resolved_candidates;
+        resolved_candidates.reserve(cands.size());
+
         for (auto& c : cands) {
             optional<int> val;
             optional<int> child_bn_cum;
 
-            // Gated the same way as the st-itself check above: a cached value is only
-            // usable here if it fits within the budget a fresh recursive call would have
-            // (cached->total_plies < depth, since v = cached->total_plies + 1 must be <= depth).
-            // If it doesn't fit yet, fall through to real recursion below -- which, for
-            // consistency, will hit the same gate on its own "st itself" check and correctly
-            // decline to use it too, forcing genuine step-by-step exploration until a later,
-            // deeper find_best_move iteration naturally catches up to what the cache already
-            // knows. Without this gate, a cache hit can report a "resolved" value at a much
-            // shallower depth than a genuinely-better sibling candidate needs to prove itself,
-            // letting a worse but cache-lucky move win a comparison it has no right to win.
-            if (db.is_solved(c.str(), c.to_move)) {
-                auto cached = db.get_solution(c.str(), c.to_move);
-                if (cached && cached->total_plies < depth) {
-                    val = cached->total_plies;
-                    child_bn_cum = cached->cumulative_bn;
-                }
-            }
-
-            if (!val) {
-                SearchResult rec = compositional_search_impl(c, depth-1, ply+1, debug, memo, db);
-                nodes_evaluated++;
-                val = rec.val;
-                child_bn_cum = rec.bn_cum;
-            }
+            // No database shortcut here -- see the note above this function for why a
+            // "cached value fits within the current depth budget" gate is not sufficient
+            // to make this safe. Every candidate is honestly recursed into.
+            SearchResult rec = compositional_search_impl(c, depth-1, ply+1, debug, memo, db);
+            nodes_evaluated++;
+            val = rec.val;
+            child_bn_cum = rec.bn_cum;
 
             if (!val) {
                 // An unresolved candidate's true value is provably larger than the current
@@ -826,6 +875,8 @@ public:
                     this_bn_cum = own_contribution + *child_bn_cum;
                 }
                 // if child_bn_cum is nullopt (cache-shortcut gap), this_bn_cum stays nullopt too
+
+                resolved_candidates.push_back({v, {this_bn_cum, c}});
 
                 if (!best_val) {
                     best_val = v;
@@ -870,15 +921,26 @@ public:
             return res;
         }
 
-        SearchResult res{best_val, best_bn_cum, best_mv};
-        memo[cache_key] = res;
-        if (res.val) {
-            proven_cache[state_key] = res;
+        vector<pair<GameState, int>> tied;
+        if (best_val) {
+            for (auto& [v, rest] : resolved_candidates) {
+                if (v != *best_val) continue;
+                auto& [bncum_opt, state] = rest;
+                // See the inductive argument in the SearchResult struct comment: bncum_opt
+                // should always be populated whenever v is; -1 is a defensive fallback only,
+                // never expected to actually trigger given the current (post-DB-shortcut-
+                // removal) code path.
+                int bncum_val = bncum_opt ? *bncum_opt : -1;
+                tied.emplace_back(state, bncum_val);
+            }
         }
+
+        SearchResult res{best_val, best_bn_cum, best_mv, tied};
+        memo[cache_key] = res;
         return res;
     }
 
-    pair<optional<GameState>, optional<int>> find_best_move(
+    tuple<optional<GameState>, optional<int>, vector<pair<GameState, int>>> find_best_move(
         const GameState& st, SolvedPositionDatabase& db, int max_depth = 10, bool debug = false
     ) {
         nodes_evaluated = 0;
@@ -888,6 +950,7 @@ public:
 
         optional<GameState> best_move;
         optional<int> best_value;
+        vector<pair<GameState, int>> tied;
 
         for (int depth = 2; depth <= max_depth + 1; depth += 2) {
             SearchResult r = compositional_search_impl(st, depth, 0, debug, memo, db);
@@ -895,37 +958,51 @@ public:
                 if (!best_value) {
                     best_value = r.val;
                     best_move = r.mv;
+                    tied = r.tied;
                 } else if (st.to_move == 'W' && r.val < *best_value) {
                     best_value = r.val;
                     best_move = r.mv;
+                    tied = r.tied;
                 } else if (st.to_move == 'B' && r.val > *best_value) {
                     best_value = r.val;
                     best_move = r.mv;
+                    tied = r.tied;
                 }
                 break;
             }
         }
-        return make_pair(best_move, best_value);
+        return make_tuple(best_move, best_value, tied);
     }
     
-    tuple<vector<string>, int, vector<int>, bool> play_complete_game(
+    tuple<vector<string>, int, vector<int>, bool, vector<vector<pair<string,int>>>> play_complete_game(
         const GameState& first, SolvedPositionDatabase& db,
-        int max_moves = 50, bool debug = false, int game_search_depth = 8,
-        vector<string> initial_moves = {}, vector<int> initial_bnc = {}
+        int max_moves = 50, bool debug = false, int game_search_depth = 10,
+        vector<string> initial_moves = {}, vector<int> initial_bnc = {},
+        vector<vector<pair<string,int>>> initial_tied = {}
     ) {
         vector<string> mvs = initial_moves;
         GameState curr = first;
         vector<int> bnc = initial_bnc;
+        // tied_per_ply[i] is the FULL set of moves (as "notation:bncum") that tied for
+        // optimal AT the position mvs[i] was played from -- i.e. every move provably as
+        // good as mvs[i] itself, not just the one this game trajectory actually took.
+        vector<vector<pair<string,int>>> tied_per_ply = initial_tied;
         
         for (int move_num = 0; move_num < max_moves; move_num++) {
             if (is_checkmate(curr)) {
-                return make_tuple(mvs, (int)mvs.size(), bnc, true);
+                return make_tuple(mvs, (int)mvs.size(), bnc, true, tied_per_ply);
             }
             
-            auto [ns, md] = find_best_move(curr, db, 2*game_search_depth, debug);
+            auto [ns, md, tied] = find_best_move(curr, db, 2*game_search_depth, debug);
             
             if (!ns) {
-                return make_tuple(mvs, (int)mvs.size(), bnc, false);
+                return make_tuple(mvs, (int)mvs.size(), bnc, false, tied_per_ply);
+            }
+
+            vector<pair<string,int>> tied_notation;
+            tied_notation.reserve(tied.size());
+            for (auto& [tstate, tbncum] : tied) {
+                tied_notation.emplace_back(get_move_notation(curr, tstate), tbncum);
             }
             
             // CHECK DB HERE - if next position already solved, stop
@@ -936,9 +1013,10 @@ public:
                     mvs.push_back(mv_str);
                     int bn = (ns->to_move == 'B') ? count_legal_moves(*ns) : 0;
                     bnc.push_back(bn);
+                    tied_per_ply.push_back(tied_notation);
                     int tp = mvs.size() + cached->total_plies;  // Add remaining plies from cache
                     cout << "DB FINISHED COMPLETE GAME FROM SOLVED POINT\n";
-                    return make_tuple(mvs, tp, bnc, true);
+                    return make_tuple(mvs, tp, bnc, true, tied_per_ply);
                 }
             }
 
@@ -947,11 +1025,12 @@ public:
             
             int bn = (ns->to_move == 'B') ? count_legal_moves(*ns) : 0;
             bnc.push_back(bn);
+            tied_per_ply.push_back(tied_notation);
             
             curr = *ns;
         }
         
-        return make_tuple(mvs, (int)mvs.size(), bnc, false);
+        return make_tuple(mvs, (int)mvs.size(), bnc, false, tied_per_ply);
     }
 };
 
@@ -1026,6 +1105,185 @@ vector<GameState> load_positions_from_file(const string& filename) {
     return positions;
 }
 
+// ============================================================================
+// Full attractor-DAG exploration
+// ============================================================================
+//
+// Packs (WK,WQ,BK,turn) into a node identity key -- deliberately NOT keyed on
+// search depth (unlike CompositionalEngine::make_cache_key), because this is
+// used for a single "have I already fully processed this NODE at all, ever,
+// in this run" visited-set, not a per-depth memo. 3 bits per coordinate x 6
+// coordinates + 1 bit for turn = 19 bits; comfortably fits uint64_t.
+uint64_t pack_state_key(const GameState& st) {
+    uint64_t key = 0;
+    key |= ((uint64_t)st.wk.file << 20);
+    key |= ((uint64_t)st.wk.rank << 17);
+    key |= ((uint64_t)st.wq.file << 14);
+    key |= ((uint64_t)st.wq.rank << 11);
+    key |= ((uint64_t)st.bk.file << 8);
+    key |= ((uint64_t)st.bk.rank << 5);
+    key |= (st.to_move == 'W' ? 1ull : 0ull) << 4;
+    return key;
+}
+
+// Explores every position reachable from `roots` by following ONLY tied-optimal
+// moves at every step -- the actual perfect-play attractor DAG, not a single
+// canonical line through it. This is the direct generalization of
+// batch_solve_all_kqvk_positions (which records one game-length line per root)
+// to record every branch that is exactly as good as that line.
+//
+// The combinatorial-explosion concern that applies to PATH enumeration (tied
+// branches compounding multiplicatively ply over ply) does NOT apply here,
+// because this is a graph/BFS traversal with a visited-node set, not a tree
+// walk: any branch that reconverges onto an already-visited node is cut
+// immediately via `visited_this_run` (in-memory, this run) and via
+// `db.is_solved` (on disk, persists across runs/resumptions). Total work is
+// therefore bounded by the number of DISTINCT REACHABLE NODES, which for
+// KQvK is bounded by the full legal-position count (roughly 64*63*62*2 minus
+// illegal-adjacency exclusions -- on the order of a few hundred thousand,
+// matching the ~178,856 rows already in a completed single-path table), not
+// by the number of paths between them.
+//
+// Known, deliberate simplifications versus batch_solve_all_kqvk_positions:
+//   - BN_trajectory (the full per-ply array) is left empty. It was defined as
+//     "the sequence of black-mobility counts along ONE specific forward line",
+//     which doesn't have a single canonical meaning for a DAG node that may
+//     have several equally-optimal continuations. cumulative_bn (the scalar,
+//     taken directly from find_best_move's own recursive bn_cum) IS populated
+//     correctly per node and per tied move, and is the field the tie-ranking
+//     analysis actually needs.
+//   - computation_time/nodes_evaluated are now genuinely PER-NODE (timed
+//     around each individual find_best_move call), which is more precise than
+//     the old single-path code's behavior of stamping one aggregate number
+//     from the whole game onto every position it visited.
+void explore_full_attractor_dag(
+    CompositionalEngine& eng, SolvedPositionDatabase& db,
+    const vector<GameState>& roots, int max_depth = 16,
+    int checkpoint_every = 2000
+) {
+    cout << "\n" << string(80, '=') << "\n";
+    cout << "FULL ATTRACTOR-DAG EXPLORATION\n";
+    cout << string(80, '=') << "\n\n";
+
+    unordered_set<uint64_t> visited_this_run;
+    deque<GameState> frontier;
+
+    for (auto& r : roots) {
+        if (!eng.is_checkmate(r)) frontier.push_back(r);
+    }
+    cout << "Seeded frontier with " << frontier.size() << " root positions\n\n";
+
+    long long processed = 0, newly_solved = 0, cache_reused = 0, backfilled = 0, failed = 0;
+    auto run_start = chrono::high_resolution_clock::now();
+
+    while (!frontier.empty()) {
+        GameState st = frontier.front();
+        frontier.pop_front();
+
+        uint64_t key = pack_state_key(st);
+        if (visited_this_run.count(key)) continue;
+        visited_this_run.insert(key);
+
+        if (eng.is_checkmate(st)) continue;  // terminal: nothing to expand
+
+        vector<pair<string,int>> tied_notation;
+
+        if (db.is_solved(st.str(), st.to_move)) {
+            auto cached = db.get_solution(st.str(), st.to_move);
+            if (cached && !cached->tied_moves.empty()) {
+                tied_notation = cached->tied_moves;
+                cache_reused++;
+            } else {
+                // Legacy row (solved before tied-move tracking existed): M_value/
+                // best_move are already trustworthy, but we need a fresh search at
+                // THIS node specifically to recover its tied set.
+                auto search_start = chrono::high_resolution_clock::now();
+                auto [ns, fval, tied] = eng.find_best_move(st, db, 2*max_depth, false);
+                auto search_end = chrono::high_resolution_clock::now();
+                (void)search_start; (void)search_end;
+                if (!fval) { failed++; continue; }
+                for (auto& [tstate, tbncum] : tied) {
+                    tied_notation.emplace_back(eng.get_move_notation(st, tstate), tbncum);
+                }
+                db.set_tied_moves(st.str(), st.to_move, tied_notation);
+                backfilled++;
+            }
+            processed++;
+        } else {
+            auto search_start = chrono::high_resolution_clock::now();
+            auto [ns, fval, tied] = eng.find_best_move(st, db, 2*max_depth, false);
+            auto search_end = chrono::high_resolution_clock::now();
+            double search_time = chrono::duration<double>(search_end - search_start).count();
+
+            if (!fval) {
+                failed++;
+                cout << "  [FAILED] " << st.str() << " (to_move=" << st.to_move
+                     << ") -- unresolved within depth budget " << (2*max_depth) << "\n";
+                continue;
+            }
+
+            for (auto& [tstate, tbncum] : tied) {
+                tied_notation.emplace_back(eng.get_move_notation(st, tstate), tbncum);
+            }
+
+            int val = *fval;
+            SolvedPosition solution;
+            solution.position_key = st.str();
+            solution.turn = st.to_move;
+            solution.best_move = tied_notation.empty() ? "" : tied_notation[0].first;
+            solution.white_moves = (val + 1) / 2;
+            solution.black_moves = val / 2;
+            solution.M_value = solution.white_moves;
+            solution.total_plies = val;
+            solution.nodes_evaluated = eng.nodes_evaluated;
+            solution.computation_time = search_time;
+            solution.cumulative_bn = tied_notation.empty() ? 0 : tied_notation[0].second;
+            solution.tied_moves = tied_notation;
+
+            db.add_position(solution);
+            newly_solved++;
+            processed++;
+        }
+
+        for (auto& [mv_str, bncum] : tied_notation) {
+            (void)bncum;
+            GameState child = eng.apply_move_notation(st, mv_str);
+            uint64_t ckey = pack_state_key(child);
+            if (!visited_this_run.count(ckey)) {
+                frontier.push_back(child);
+            }
+        }
+
+        if (processed % checkpoint_every == 0) {
+            db.export_to_file();
+            double elapsed = chrono::duration<double>(
+                chrono::high_resolution_clock::now() - run_start).count();
+            cout << "[CHECKPOINT] processed=" << processed
+                 << " newly_solved=" << newly_solved
+                 << " cache_reused=" << cache_reused
+                 << " backfilled=" << backfilled
+                 << " failed=" << failed
+                 << " frontier=" << frontier.size()
+                 << " visited=" << visited_this_run.size()
+                 << " elapsed=" << fixed << setprecision(1) << elapsed << "s\n";
+        }
+    }
+
+    db.export_to_file();
+    double total_time = chrono::duration<double>(
+        chrono::high_resolution_clock::now() - run_start).count();
+
+    cout << "\n" << string(80, '=') << "\n";
+    cout << "FULL ATTRACTOR-DAG EXPLORATION COMPLETE\n";
+    cout << string(80, '=') << "\n";
+    cout << "Distinct nodes visited: " << visited_this_run.size() << "\n";
+    cout << "Newly solved this run:  " << newly_solved << "\n";
+    cout << "Reused from DB cache:   " << cache_reused << "\n";
+    cout << "Backfilled (legacy):    " << backfilled << "\n";
+    cout << "Failed to resolve:      " << failed << "\n";
+    cout << "Total time:             " << fixed << setprecision(1) << total_time << "s\n\n";
+}
+
 void batch_solve_all_kqvk_positions(CompositionalEngine& eng, SolvedPositionDatabase& db, int max_depth = 16) {
     cout << "\n" << string(80, '=') << "\n";
     cout << "BATCH SOLVER: ALL KQvK POSITIONS\n";
@@ -1071,7 +1329,7 @@ void batch_solve_all_kqvk_positions(CompositionalEngine& eng, SolvedPositionData
         eng.candidates_measured = 0;
 
         auto solve_start = chrono::high_resolution_clock::now();
-        auto [mvs, tp, bnc, reached_mate] = eng.play_complete_game(pos, db, 50, false, max_depth);
+        auto [mvs, tp, bnc, reached_mate, tied_per_ply] = eng.play_complete_game(pos, db, 50, false, max_depth);
         auto solve_end = chrono::high_resolution_clock::now();
         double solve_time = chrono::duration<double>(solve_end - solve_start).count();
 
@@ -1104,6 +1362,10 @@ void batch_solve_all_kqvk_positions(CompositionalEngine& eng, SolvedPositionData
             solution.BN_trajectory.assign(bnc.begin() + i, bnc.end());
             solution.cumulative_bn = 0;
             for (int v : solution.BN_trajectory) solution.cumulative_bn += v;
+
+            if (i < tied_per_ply.size()) {
+                solution.tied_moves = tied_per_ply[i];
+            }
 
             db.add_position(solution);
             solved_count++;
@@ -1166,10 +1428,14 @@ void batch_solve_all_kqvk_positions(CompositionalEngine& eng, SolvedPositionData
 int main(int argc, char* argv[]) {
     bool debug_en = false;
     bool batch_mode = false;
+    bool full_dag_mode = false;
+    string positions_file = "kqvk_positions_by_dtz.txt";
     for (int i = 1; i < argc; i++) {
         string arg = argv[i];
         if (arg == "--debug" || arg == "-d") debug_en = true;
         if (arg == "--batch" || arg == "-b") batch_mode = true;
+        if (arg == "--full-dag" || arg == "-g") full_dag_mode = true;
+        if (arg == "--positions" && i + 1 < argc) positions_file = argv[++i];
     }
     
     double root_t = 0;
@@ -1182,6 +1448,19 @@ int main(int argc, char* argv[]) {
     auto root_t_start = chrono::high_resolution_clock::now();
     CompositionalEngine eng;
     SolvedPositionDatabase db("kqvk_perfect_play.db");
-    batch_solve_all_kqvk_positions(eng, db, 25);
+
+    if (full_dag_mode) {
+        // Full perfect-play attractor DAG: every branch tied for optimal, not just
+        // one canonical line per root. See explore_full_attractor_dag's comment
+        // block for why this doesn't combinatorially explode.
+        vector<GameState> roots = load_positions_from_file(positions_file);
+        if (roots.empty()) {
+            cerr << "ERROR: No root positions loaded from " << positions_file << "\n";
+            return 1;
+        }
+        explore_full_attractor_dag(eng, db, roots, 25);
+    } else {
+        batch_solve_all_kqvk_positions(eng, db, 25);
+    }
     return 0;
 }

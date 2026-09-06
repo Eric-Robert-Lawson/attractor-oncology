@@ -82,7 +82,8 @@ struct SolvedPosition {
     }
     
     static string csv_header() {
-        return "Position|Turn|BestMove|M|Plies|WhiteMoves|BlackMoves|NodesEval|Time|CumulativeBN|BN_Trajectory|TiedMoves\n";
+        return "Position|Turn|BestMove|M|Plies|WhiteMoves|BlackMoves|NodesEval|Time|CumulativeBN|"
+               "BN_Trajectory|TiedMoves\n";
     }
 };
 
@@ -94,6 +95,10 @@ class SolvedPositionDatabase {
     private:
         map<pair<string, char>, SolvedPosition> solved;
         string filename;
+        // Keys added or mutated since the last append_new_to_file() call. Tracking
+        // ONLY the delta is what makes frequent, cheap on-disk checkpointing possible --
+        // see append_new_to_file() below for why this replaces repeated full rewrites.
+        vector<pair<string, char>> pending_export;
         
     public:
         SolvedPositionDatabase(const string& db_file = "kqvk_perfect_play.db")
@@ -107,6 +112,7 @@ class SolvedPositionDatabase {
                 return;
             }
             solved[{pos.position_key, pos.turn}] = pos;
+            pending_export.push_back({pos.position_key, pos.turn});
             
             // Helper lambdas for transformations
             auto rotate_square = [](const string& sq) {
@@ -194,6 +200,7 @@ class SolvedPositionDatabase {
                     transformed.best_move = new_move;
                     transformed.tied_moves = new_tied;
                     solved[{new_pos, pos.turn}] = transformed;
+                    pending_export.push_back({new_pos, pos.turn});
                 }
             };
             
@@ -262,6 +269,7 @@ class SolvedPositionDatabase {
         auto it = solved.find({position_key, turn});
         if (it != solved.end()) {
             it->second.tied_moves = tied;
+            pending_export.push_back({position_key, turn});
         }
     }
     
@@ -281,6 +289,52 @@ class SolvedPositionDatabase {
         }
         
         file.close();
+        pending_export.clear();  // this rewrite already covers everything pending
+    }
+
+    // Appends ONLY the rows added or mutated since the last flush (export_to_file
+    // or append_new_to_file) -- O(size of the delta), not O(total database size).
+    // This is what makes it cheap to checkpoint constantly instead of every few
+    // thousand positions: export_to_file() rewrites the entire file every single
+    // call (that's what the original single-path driver's "every 5 positions"
+    // checkpoint was doing, and it compounds badly as the file grows), whereas
+    // this only ever writes what's new.
+    //
+    // One consequence worth knowing: if a key was already written to disk in an
+    // earlier flush and is later MUTATED (this happens for set_tied_moves backfills
+    // on legacy rows -- see that method), this appends a SECOND, updated line for
+    // the same key rather than editing the earlier line in place. That's safe, not
+    // silent corruption: load_from_file() reads the file top-to-bottom and does an
+    // unconditional map assignment per row, so whichever occurrence of a key comes
+    // LAST in the file wins on reload -- appends always land after whatever was
+    // already there, so the final in-memory state after reloading is always
+    // correct. The only cost is a few harmless stale duplicate lines accumulating
+    // for positions that got backfilled mid-run, which export_to_file()'s full
+    // rewrite (deduplicated by construction, since it iterates the in-memory map)
+    // cleans up the next time it's called -- e.g. once at the very end of a run.
+    void append_new_to_file() {
+        if (pending_export.empty()) return;
+
+        ifstream check(filename);
+        bool need_header = !check.good() || check.peek() == std::ifstream::traits_type::eof();
+        check.close();
+
+        ofstream file(filename, ios::app);
+        if (!file.is_open()) {
+            cerr << "ERROR: Cannot open database file for append: " << filename << "\n";
+            return;
+        }
+        if (need_header) {
+            file << SolvedPosition::csv_header();
+        }
+        for (auto& key : pending_export) {
+            auto it = solved.find(key);
+            if (it != solved.end()) {
+                file << it->second.to_csv();
+            }
+        }
+        file.close();
+        pending_export.clear();
     }
     
     // Load from file for future runs
@@ -676,16 +730,36 @@ struct SearchResult {
                              // line, from here through to mate
     optional<GameState> mv; // chosen next state -- same meaning as before
 
-    // Every RESOLVED candidate whose v exactly equals val (the game-theoretic optimum),
-    // each with its own bn_cum computed by the same own_contribution + child_bn_cum
-    // formula used everywhere else in this engine. This is a pure addition: val/bn_cum/mv
-    // above keep exactly their previous single-choice meaning (mv == tied[k].second for
-    // whichever k the existing tie-break rule selected), so nothing that already reads
-    // val/bn_cum/mv changes behavior. Unresolved candidates are never in this list --
-    // see the comment above the resolution loop in compositional_search_impl for why an
-    // unresolved candidate can never tie val, for either side to move.
+    // The full set of moves this engine considers PERFECT PLAY from this position,
+    // under a two-stage definition: (1) every RESOLVED candidate whose v exactly
+    // equals val (the game-theoretic optimum -- mate distance), THEN (2) among
+    // those, only the ones ALSO achieving the extremal cumulative black-escape
+    // count (bn_cum) -- minimum for White, maximum for Black. A move tied on M
+    // alone but with a worse bn_cum than another M-tied move is NOT perfect play
+    // by this definition and will not appear here, even though it does resolve
+    // to the same mate distance. mv above is always one entry of this set (the
+    // same one the pre-existing tie-break logic already selected), so nothing
+    // that reads val/bn_cum/mv changes behavior -- this field is what to use for
+    // "give me every move that's actually perfect from here", not val/mv alone.
+    // Unresolved candidates are never in this list -- see the comment above the
+    // resolution loop in compositional_search_impl for why an unresolved
+    // candidate can never tie val, for either side to move.
     // Empty for terminal (checkmate) and unresolved (nullopt val) results.
     vector<pair<GameState, int>> tied;
+
+    // NOTE: a legal_move_count/choice_spread pair was tried here and removed.
+    // Reading them off resolved_candidates (the same early-stopping that's
+    // provably safe for val/tied) is NOT safe for a count or a worst-case
+    // value: find_best_move stops at the first depth where val resolves,
+    // which can leave most OTHER legal candidates simply not yet resolved
+    // even though they don't affect val at all. Measured directly on
+    // WK:b1 WQ:d8 BK:c4: only 4 of White's 23 legal candidates had resolved
+    // at the depth the search stopped at, giving legal_move_count=4 -- wrong
+    // by a factor of nearly 6. Computing it correctly requires fully
+    // resolving every legal candidate independently at the point of
+    // recording a position, which is a fundamentally different (and much
+    // more expensive) operation than anything this struct can provide as a
+    // byproduct of the existing search.
 };
 
 class CompositionalEngine : public BaseEngine {
@@ -713,44 +787,11 @@ public:
         return key;
     }
 
-    SearchResult compositional_search_impl(
-        const GameState& st, int depth, int ply,
-        bool debug, unordered_map<uint64_t, SearchResult>& memo,
-        SolvedPositionDatabase& db
-    ) {
-        uint64_t cache_key = make_cache_key(st, depth);
-        if (memo.count(cache_key)) {
-            return memo[cache_key];
-        }
-
-        if (is_checkmate(st)) {
-            SearchResult res{0, 0, nullopt};   // mate: no further black escapes to accumulate
-            memo[cache_key] = res;
-            return res;
-        }
-
-        // DB shortcuts (both "check st itself" and per-candidate, further below) have been
-        // REMOVED from this comparison path entirely -- not just re-gated. The gate this
-        // engine used (cached->total_plies <= depth) checks whether the ANSWER fits in the
-        // current budget, but proving that answer -- under the rule that every one of
-        // Black's legal replies must also fully resolve -- can require far more depth than
-        // the answer itself. A cached entry whose original proof needed, say, 12 plies of
-        // budget can still slip through a "value <= depth" gate at depth 5, getting treated
-        // as resolved when a fresh, honest recursion at that same depth would correctly say
-        // unresolved. That's not a timing-fairness problem this gate can catch; it's a gap
-        // in what the gate checks. Confirmed empirically: WK:d1 WQ:f7 BK:c6 resolves to an
-        // impossible 13 plies with this shortcut enabled (proven_cache, in that instance),
-        // and to the correct, Syzygy-verified 15 plies with it removed. The database is
-        // still safely used elsewhere -- see play_complete_game's own lookup, and the
-        // top-level cache check in batch_solve_all_kqvk_positions -- both of which consult
-        // it only AFTER a decision is already made, never as a substitute inside one.
-
-        if (depth == 0) {
-            SearchResult res{nullopt, nullopt, nullopt};
-            memo[cache_key] = res;
-            return res;
-        }
-
+    // Extracted from compositional_search_impl's own candidate-generation logic
+    // so there's exactly one implementation of "what counts as a legal
+    // candidate from this position", not a risk of hand-maintained copies
+    // drifting apart.
+    vector<GameState> generate_candidates(const GameState& st) const {
         vector<GameState> cands;
         cands.reserve(64);
         if (st.to_move == 'W') {
@@ -808,6 +849,48 @@ public:
                 cands.push_back(ns);
             }
         }
+        return cands;
+    }
+
+    SearchResult compositional_search_impl(
+        const GameState& st, int depth, int ply,
+        bool debug, unordered_map<uint64_t, SearchResult>& memo,
+        SolvedPositionDatabase& db
+    ) {
+        uint64_t cache_key = make_cache_key(st, depth);
+        if (memo.count(cache_key)) {
+            return memo[cache_key];
+        }
+
+        if (is_checkmate(st)) {
+            SearchResult res{0, 0, nullopt};   // mate: no further black escapes to accumulate
+            memo[cache_key] = res;
+            return res;
+        }
+
+        // DB shortcuts (both "check st itself" and per-candidate, further below) have been
+        // REMOVED from this comparison path entirely -- not just re-gated. The gate this
+        // engine used (cached->total_plies <= depth) checks whether the ANSWER fits in the
+        // current budget, but proving that answer -- under the rule that every one of
+        // Black's legal replies must also fully resolve -- can require far more depth than
+        // the answer itself. A cached entry whose original proof needed, say, 12 plies of
+        // budget can still slip through a "value <= depth" gate at depth 5, getting treated
+        // as resolved when a fresh, honest recursion at that same depth would correctly say
+        // unresolved. That's not a timing-fairness problem this gate can catch; it's a gap
+        // in what the gate checks. Confirmed empirically: WK:d1 WQ:f7 BK:c6 resolves to an
+        // impossible 13 plies with this shortcut enabled (proven_cache, in that instance),
+        // and to the correct, Syzygy-verified 15 plies with it removed. The database is
+        // still safely used elsewhere -- see play_complete_game's own lookup, and the
+        // top-level cache check in batch_solve_all_kqvk_positions -- both of which consult
+        // it only AFTER a decision is already made, never as a substitute inside one.
+
+        if (depth == 0) {
+            SearchResult res{nullopt, nullopt, nullopt};
+            memo[cache_key] = res;
+            return res;
+        }
+
+        vector<GameState> cands = generate_candidates(st);
 
         if (cands.empty()) {
             SearchResult res{nullopt, nullopt, nullopt};
@@ -921,7 +1004,17 @@ public:
             return res;
         }
 
-        vector<pair<GameState, int>> tied;
+        // TWO-STAGE definition of "tied for perfect play", per the actual
+        // definition of optimal play in this engine: (1) exactly optimal mate
+        // distance (M), AND (2) among those, exactly optimal cumulative
+        // black-escape count over the rest of the game -- minimum for White
+        // (most confining), maximum for Black (most resistant). A move that
+        // ties on M alone but has a WORSE cumulative escape count than another
+        // M-tied move is not perfect play; it merely matches the mate distance.
+        // `tied` below is therefore the set of every move an engine playing
+        // perfectly under this definition could choose from THIS position --
+        // not the broader (and looser) set of everything merely tied on M.
+        vector<pair<GameState, int>> m_tied;  // stage 1: tied on M only
         if (best_val) {
             for (auto& [v, rest] : resolved_candidates) {
                 if (v != *best_val) continue;
@@ -931,7 +1024,19 @@ public:
                 // never expected to actually trigger given the current (post-DB-shortcut-
                 // removal) code path.
                 int bncum_val = bncum_opt ? *bncum_opt : -1;
-                tied.emplace_back(state, bncum_val);
+                m_tied.emplace_back(state, bncum_val);
+            }
+        }
+
+        vector<pair<GameState, int>> tied;  // stage 2: also extremal on bn_cum
+        if (!m_tied.empty()) {
+            int extremal_bncum = m_tied[0].second;
+            for (auto& [state, bn] : m_tied) {
+                if (dir == "minimize") extremal_bncum = min(extremal_bncum, bn);
+                else extremal_bncum = max(extremal_bncum, bn);
+            }
+            for (auto& [state, bn] : m_tied) {
+                if (bn == extremal_bncum) tied.emplace_back(state, bn);
             }
         }
 
@@ -1159,7 +1264,7 @@ uint64_t pack_state_key(const GameState& st) {
 void explore_full_attractor_dag(
     CompositionalEngine& eng, SolvedPositionDatabase& db,
     const vector<GameState>& roots, int max_depth = 16,
-    int checkpoint_every = 2000
+    int checkpoint_every = 100
 ) {
     cout << "\n" << string(80, '=') << "\n";
     cout << "FULL ATTRACTOR-DAG EXPLORATION\n";
@@ -1177,8 +1282,16 @@ void explore_full_attractor_dag(
     auto run_start = chrono::high_resolution_clock::now();
 
     while (!frontier.empty()) {
-        GameState st = frontier.front();
-        frontier.pop_front();
+        // LIFO (stack), not FIFO: pop from the back, same end new children get
+        // pushed onto. This makes traversal depth-first -- a root's children
+        // are processed immediately after it, not after every other root in
+        // the frontier. With a FIFO queue, a large root file (yours has
+        // 144,508 White-to-move roots) means EVERY root gets dequeued before
+        // ANY child ever does, since children only ever get pushed to the
+        // back -- that's exactly why an in-progress run showed zero
+        // Black-to-move rows no matter how long it had been running.
+        GameState st = frontier.back();
+        frontier.pop_back();
 
         uint64_t key = pack_state_key(st);
         if (visited_this_run.count(key)) continue;
@@ -1194,9 +1307,6 @@ void explore_full_attractor_dag(
                 tied_notation = cached->tied_moves;
                 cache_reused++;
             } else {
-                // Legacy row (solved before tied-move tracking existed): M_value/
-                // best_move are already trustworthy, but we need a fresh search at
-                // THIS node specifically to recover its tied set.
                 auto search_start = chrono::high_resolution_clock::now();
                 auto [ns, fval, tied] = eng.find_best_move(st, db, 2*max_depth, false);
                 auto search_end = chrono::high_resolution_clock::now();
@@ -1226,18 +1336,31 @@ void explore_full_attractor_dag(
                 tied_notation.emplace_back(eng.get_move_notation(st, tstate), tbncum);
             }
 
+            // best_move/cumulative_bn must come from `ns` -- the SAME candidate
+            // find_best_move already selected via the existing (unmodified)
+            // minimize/maximize-bn_cum tie-break -- NOT from tied_notation[0],
+            // which is just whichever resolved candidate happened to be generated
+            // first and carries no such guarantee. tied_notation itself is a
+            // complete, correctly-computed enumeration regardless; this only
+            // affects which one gets labeled the single "best_move".
+            string best_move_str = eng.get_move_notation(st, *ns);
+            int best_move_bncum = 0;
+            for (auto& [mv_str, bncum] : tied_notation) {
+                if (mv_str == best_move_str) { best_move_bncum = bncum; break; }
+            }
+
             int val = *fval;
             SolvedPosition solution;
             solution.position_key = st.str();
             solution.turn = st.to_move;
-            solution.best_move = tied_notation.empty() ? "" : tied_notation[0].first;
+            solution.best_move = best_move_str;
             solution.white_moves = (val + 1) / 2;
             solution.black_moves = val / 2;
             solution.M_value = solution.white_moves;
             solution.total_plies = val;
             solution.nodes_evaluated = eng.nodes_evaluated;
             solution.computation_time = search_time;
-            solution.cumulative_bn = tied_notation.empty() ? 0 : tied_notation[0].second;
+            solution.cumulative_bn = best_move_bncum;
             solution.tied_moves = tied_notation;
 
             db.add_position(solution);
@@ -1255,7 +1378,7 @@ void explore_full_attractor_dag(
         }
 
         if (processed % checkpoint_every == 0) {
-            db.export_to_file();
+            db.append_new_to_file();
             double elapsed = chrono::duration<double>(
                 chrono::high_resolution_clock::now() - run_start).count();
             cout << "[CHECKPOINT] processed=" << processed
@@ -1269,6 +1392,10 @@ void explore_full_attractor_dag(
         }
     }
 
+    // One full, deduplicated rewrite at the end -- cleans up any stale duplicate
+    // lines left behind by mid-run backfill re-exports (see append_new_to_file's
+    // comment). Everything in between was already durable on disk via the cheap
+    // incremental appends above; this isn't "the only real save", just tidying.
     db.export_to_file();
     double total_time = chrono::duration<double>(
         chrono::high_resolution_clock::now() - run_start).count();
@@ -1384,10 +1511,13 @@ void batch_solve_all_kqvk_positions(CompositionalEngine& eng, SolvedPositionData
              << " (" << fixed << setprecision(3) << solve_time << "s)\n";
         // end of root cause issue
 
-        // Export every 5 positions
+        // Checkpoint every 5 positions. append_new_to_file() only writes what's new
+        // since the last flush (O(delta)), not the previous export_to_file()'s full
+        // rewrite of the whole file (O(total size)) -- watch export_time below stay
+        // small and roughly flat as solved_count grows, instead of climbing with it.
         if (solved_count % 5 == 0 && solved_count > 0) {
             auto export_start = chrono::high_resolution_clock::now();
-            db.export_to_file();
+            db.append_new_to_file();
             auto export_end = chrono::high_resolution_clock::now();
             double export_time = chrono::duration<double>(export_end - export_start).count();
             
@@ -1430,12 +1560,30 @@ int main(int argc, char* argv[]) {
     bool batch_mode = false;
     bool full_dag_mode = false;
     string positions_file = "kqvk_positions_by_dtz.txt";
+    string db_file = "kqvk_perfect_play.db";
+    vector<string> unrecognized;
+
     for (int i = 1; i < argc; i++) {
         string arg = argv[i];
-        if (arg == "--debug" || arg == "-d") debug_en = true;
-        if (arg == "--batch" || arg == "-b") batch_mode = true;
-        if (arg == "--full-dag" || arg == "-g") full_dag_mode = true;
-        if (arg == "--positions" && i + 1 < argc) positions_file = argv[++i];
+        if (arg == "--debug" || arg == "-d") { debug_en = true; }
+        else if (arg == "--batch" || arg == "-b") { batch_mode = true; }
+        else if (arg == "--full-dag" || arg == "-g") { full_dag_mode = true; }
+        else if (arg == "--positions" && i + 1 < argc) { positions_file = argv[++i]; }
+        else if (arg == "--db" && i + 1 < argc) { db_file = argv[++i]; }
+        else { unrecognized.push_back(arg); }
+    }
+
+    // A silently-ignored flag is exactly the bug class that caused --db to be a
+    // no-op in the previous version of this file: the arg-parsing loop just skipped
+    // anything it didn't recognize instead of complaining. Refusing to start on an
+    // unrecognized argument (rather than plausibly running against the wrong file)
+    // is the safer failure mode here.
+    if (!unrecognized.empty()) {
+        cerr << "ERROR: unrecognized argument(s):";
+        for (auto& u : unrecognized) cerr << " " << u;
+        cerr << "\nKnown flags: --debug/-d, --batch/-b, --full-dag/-g, "
+                "--positions <file>, --db <file>\n";
+        return 1;
     }
     
     double root_t = 0;
@@ -1444,10 +1592,13 @@ int main(int argc, char* argv[]) {
     cout << "COMPOSITIONAL TOPOLOGICAL SEARCH\n";
     cout << "Measurement with Black Node Count Accumulation\n";
     cout << string(80, '=') << "\n";
+    cout << "Database file: " << db_file << "\n";
+    if (full_dag_mode) cout << "Mode: full attractor-DAG exploration\n";
+    else cout << "Mode: single-path batch solve\n";
 
     auto root_t_start = chrono::high_resolution_clock::now();
     CompositionalEngine eng;
-    SolvedPositionDatabase db("kqvk_perfect_play.db");
+    SolvedPositionDatabase db(db_file);
 
     if (full_dag_mode) {
         // Full perfect-play attractor DAG: every branch tied for optimal, not just

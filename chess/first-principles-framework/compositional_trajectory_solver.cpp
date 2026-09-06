@@ -1,5 +1,5 @@
-// g++ -std=c++17 -O2 -o kqvk_solver compositional_trajectory_solver.cpp = kqvk
-// g++ -std=c++17 -O2 -DPIECE_ROOK -o krvk_solver compositional_trajectory_solver.cpp
+// KQVK: g++ -std=c++17 -O2 -o kqvk_solver compositional_trajectory_solver.cpp
+// KRVK: g++ -std=c++17 -O2 -DPIECE_ROOK -o krvk_solver compositional_trajectory_solver.cpp
 
 
 #include <iostream>

@@ -35,6 +35,10 @@ Usage:
     python3 kqvk_analyzer.py tree full_dag.db \\
         --position "WK:a4 WQ:e4 BK:h4" --turn W --out tree.txt \\
         --classifications tie_analysis/all_classifications.csv
+
+    example:
+    python kqvk_analyzer.py classify kqvk_perfect_play.db --out-dir tie_analysis
+    python kqvk_analyzer.py families tie_analysis/independent_findings_deduped.csv --out-dir families --render-trees kqvk_perfect_play.db
 """
 
 import argparse

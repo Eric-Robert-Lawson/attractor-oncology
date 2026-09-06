@@ -1,3 +1,7 @@
+// g++ -std=c++17 -O2 -o kqvk_solver compositional_trajectory_solver.cpp = kqvk
+// g++ -std=c++17 -O2 -DPIECE_ROOK -o krvk_solver compositional_trajectory_solver.cpp
+
+
 #include <iostream>
 #include <vector>
 #include <map>
@@ -527,9 +531,156 @@ public:
 };
 
 // ============================================================================
+// AttackerRules -- the piece-agnostic interface
+// ============================================================================
+//
+// A compile-time (template parameter) interface, not a virtual base class --
+// this is a search-heavy engine and template instantiation lets the compiler
+// fully inline move generation and attack checks, with zero runtime dispatch
+// overhead versus the original hardcoded-to-queen code. Each endgame
+// (KQvK, KRvK, ...) compiles to its own binary from the same source, chosen
+// by which Rules struct BaseEngine/CompositionalEngine are instantiated with.
+//
+// Required members of any Rules struct:
+//   static constexpr char letter        -- algebraic notation letter (e.g. 'Q')
+//   static vector<Position> generate_moves(const Position& pos)
+//       Pseudo-legal move generation: every square this piece could reach
+//       from `pos` on an otherwise-empty board. Occupancy/blocking is
+//       checked separately by the caller (matches how generate_all_queen_
+//       moves already worked -- it never looked at other pieces).
+//   static bool attacks(const Position& target, const Position& piece_pos,
+//                        const Position& blocker_a, const Position& blocker_b)
+//       Does the piece at `piece_pos` attack `target`, given up to two other
+//       occupied squares (blocker_a, blocker_b) that can block the line?
+//       Mirrors is_attacked_by_queen's exact signature and semantics,
+//       including piece_pos==target returning false (used contextually to
+//       mean "you can't be attacked by the square you're moving onto", which
+//       lets a king safely walk onto an undefended attacker's square).
+//
+// QueenRules below is a direct, behavior-preserving extraction of the
+// pre-refactor generate_all_queen_moves/is_attacked_by_queen -- verified via
+// a full regression harness comparing this binary's output against the
+// pre-refactor original, not just by inspection.
+// ============================================================================
+
+struct QueenRules {
+    static constexpr char letter = 'Q';
+
+    static vector<Position> generate_moves(const Position& pos) {
+        vector<Position> moves;
+        int dirs[][2] = {{1,0},{-1,0},{0,1},{0,-1},{1,1},{1,-1},{-1,1},{-1,-1}};
+
+        for (auto& d : dirs) {
+            for (int dist = 1; dist <= 7; dist++) {
+                int nf = pos.file + d[0] * dist;
+                int nr = pos.rank + d[1] * dist;
+                if (nf >= 0 && nf <= 7 && nr >= 0 && nr <= 7) {
+                    moves.push_back(Position(nf, nr));
+                } else break;
+            }
+        }
+        return moves;
+    }
+
+    static bool attacks(const Position& pos, const Position& qp,
+                         const Position& wk, const Position& wq) {
+        if (pos == qp) return false;
+
+        // Check file
+        if (pos.file == qp.file) {
+            int start = min(pos.rank, qp.rank) + 1;
+            int end = max(pos.rank, qp.rank);
+            for (int r = start; r < end; r++) {
+                if (Position(pos.file, r) == wk || Position(pos.file, r) == wq) return false;
+            }
+            return true;
+        }
+
+        // Check rank
+        if (pos.rank == qp.rank) {
+            int start = min(pos.file, qp.file) + 1;
+            int end = max(pos.file, qp.file);
+            for (int f = start; f < end; f++) {
+                if (Position(f, pos.rank) == wk || Position(f, pos.rank) == wq) return false;
+            }
+            return true;
+        }
+
+        // Check diagonals
+        if (abs(pos.file - qp.file) == abs(pos.rank - qp.rank)) {
+            int df = (pos.file > qp.file) ? 1 : -1;
+            int dr = (pos.rank > qp.rank) ? 1 : -1;
+            int f = qp.file + df;
+            int r = qp.rank + dr;
+            while (f != pos.file) {
+                if (Position(f, r) == wk || Position(f, r) == wq) return false;
+                f += df;
+                r += dr;
+            }
+            return true;
+        }
+
+        return false;
+    }
+};
+
+// RookRules -- a direct sibling of QueenRules, restricted to the 4
+// orthogonal directions (no diagonals). Everything else about how it plugs
+// into BaseEngine/CompositionalEngine is identical to the queen case.
+struct RookRules {
+    static constexpr char letter = 'R';
+
+    static vector<Position> generate_moves(const Position& pos) {
+        vector<Position> moves;
+        int dirs[][2] = {{1,0},{-1,0},{0,1},{0,-1}};  // orthogonal only
+
+        for (auto& d : dirs) {
+            for (int dist = 1; dist <= 7; dist++) {
+                int nf = pos.file + d[0] * dist;
+                int nr = pos.rank + d[1] * dist;
+                if (nf >= 0 && nf <= 7 && nr >= 0 && nr <= 7) {
+                    moves.push_back(Position(nf, nr));
+                } else break;
+            }
+        }
+        return moves;
+    }
+
+    static bool attacks(const Position& pos, const Position& rp,
+                         const Position& wk, const Position& wr) {
+        if (pos == rp) return false;
+
+        // Check file
+        if (pos.file == rp.file) {
+            int start = min(pos.rank, rp.rank) + 1;
+            int end = max(pos.rank, rp.rank);
+            for (int r = start; r < end; r++) {
+                if (Position(pos.file, r) == wk || Position(pos.file, r) == wr) return false;
+            }
+            return true;
+        }
+
+        // Check rank
+        if (pos.rank == rp.rank) {
+            int start = min(pos.file, rp.file) + 1;
+            int end = max(pos.file, rp.file);
+            for (int f = start; f < end; f++) {
+                if (Position(f, pos.rank) == wk || Position(f, pos.rank) == wr) return false;
+            }
+            return true;
+        }
+
+        // No diagonal attack -- a rook simply doesn't threaten off-file/off-rank
+        // squares, unlike the queen's third branch above.
+        return false;
+    }
+};
+
+// ============================================================================
 // BaseEngine
 // ============================================================================
 
+template<typename AttackerRules>
 class BaseEngine {
 public:
     int distance_to_nearest_edge(const Position& pos) const {
@@ -555,60 +706,16 @@ public:
         return moves;
     }
     
+    // Thin forwarding wrappers to AttackerRules -- kept under their original
+    // names so every existing call site in this file (there are many) needs
+    // no changes at all. The actual logic now lives in QueenRules (or
+    // whichever Rules struct this engine is instantiated with) above.
     inline vector<Position> generate_all_queen_moves(const Position& pos) const {
-        vector<Position> moves;
-        int dirs[][2] = {{1,0},{-1,0},{0,1},{0,-1},{1,1},{1,-1},{-1,1},{-1,-1}};
-        
-        for (auto& d : dirs) {
-            for (int dist = 1; dist <= 7; dist++) {
-                int nf = pos.file + d[0] * dist;
-                int nr = pos.rank + d[1] * dist;
-                if (nf >= 0 && nf <= 7 && nr >= 0 && nr <= 7) {
-                    moves.push_back(Position(nf, nr));
-                } else break;
-            }
-        }
-        return moves;
+        return AttackerRules::generate_moves(pos);
     }
-    
+
     bool is_attacked_by_queen(const Position& pos, const Position& qp, const Position& wk, const Position& wq) const {
-        if (pos == qp) return false;
-        
-        // Check file
-        if (pos.file == qp.file) {
-            int start = min(pos.rank, qp.rank) + 1;
-            int end = max(pos.rank, qp.rank);
-            for (int r = start; r < end; r++) {
-                if (Position(pos.file, r) == wk || Position(pos.file, r) == wq) return false;  // Blocked
-            }
-            return true;
-        }
-        
-        // Check rank
-        if (pos.rank == qp.rank) {
-            int start = min(pos.file, qp.file) + 1;
-            int end = max(pos.file, qp.file);
-            for (int f = start; f < end; f++) {
-                if (Position(f, pos.rank) == wk || Position(f, pos.rank) == wq) return false;  // Blocked
-            }
-            return true;
-        }
-        
-        // Check diagonals
-        if (abs(pos.file - qp.file) == abs(pos.rank - qp.rank)) {
-            int df = (pos.file > qp.file) ? 1 : -1;
-            int dr = (pos.rank > qp.rank) ? 1 : -1;
-            int f = qp.file + df;
-            int r = qp.rank + dr;
-            while (f != pos.file) {
-                if (Position(f, r) == wk || Position(f, r) == wq) return false;  // Blocked
-                f += df;
-                r += dr;
-            }
-            return true;
-        }
-        
-        return false;
+        return AttackerRules::attacks(pos, qp, wk, wq);
     }
     
     bool is_legal_state(const GameState& st) const {
@@ -645,7 +752,7 @@ public:
     
     string get_move_notation(const GameState& from, const GameState& to) const {
         if (from.wk != to.wk) return "K" + to.wk.str();
-        if (from.wq != to.wq) return "Q" + to.wq.str();
+        if (from.wq != to.wq) return string(1, AttackerRules::letter) + to.wq.str();
         if (from.bk != to.bk) return "k" + to.bk.str();
         return "??";
     }
@@ -660,7 +767,7 @@ public:
         char piece = mv[0];
         Position dest = Position::from_str(mv.substr(1));
         if (piece == 'K') { result.wk = dest; result.to_move = 'B'; }
-        else if (piece == 'Q') { result.wq = dest; result.to_move = 'B'; }
+        else if (piece == AttackerRules::letter) { result.wq = dest; result.to_move = 'B'; }
         else if (piece == 'k') { result.bk = dest; result.to_move = 'W'; }
         return result;
     }
@@ -762,8 +869,22 @@ struct SearchResult {
     // byproduct of the existing search.
 };
 
-class CompositionalEngine : public BaseEngine {
+template<typename AttackerRules>
+class CompositionalEngine : public BaseEngine<AttackerRules> {
 public:
+    // Required because BaseEngine<AttackerRules> is a DEPENDENT base class:
+    // the compiler's first lookup phase won't find unqualified calls to
+    // inherited members without these. Every BaseEngine method actually
+    // called anywhere below is listed here.
+    using BaseEngine<AttackerRules>::generate_all_king_moves;
+    using BaseEngine<AttackerRules>::generate_all_queen_moves;
+    using BaseEngine<AttackerRules>::is_attacked_by_queen;
+    using BaseEngine<AttackerRules>::is_legal_state;
+    using BaseEngine<AttackerRules>::is_checkmate;
+    using BaseEngine<AttackerRules>::is_stalemate;
+    using BaseEngine<AttackerRules>::get_move_notation;
+    using BaseEngine<AttackerRules>::count_legal_moves;
+
     int nodes_evaluated = 0;
     int candidates_measured = 0;
     unordered_map<uint64_t, int> M_cache;
@@ -1261,8 +1382,9 @@ uint64_t pack_state_key(const GameState& st) {
 //     around each individual find_best_move call), which is more precise than
 //     the old single-path code's behavior of stamping one aggregate number
 //     from the whole game onto every position it visited.
+template<typename AttackerRules>
 void explore_full_attractor_dag(
-    CompositionalEngine& eng, SolvedPositionDatabase& db,
+    CompositionalEngine<AttackerRules>& eng, SolvedPositionDatabase& db,
     const vector<GameState>& roots, int max_depth = 16,
     int checkpoint_every = 100
 ) {
@@ -1411,7 +1533,8 @@ void explore_full_attractor_dag(
     cout << "Total time:             " << fixed << setprecision(1) << total_time << "s\n\n";
 }
 
-void batch_solve_all_kqvk_positions(CompositionalEngine& eng, SolvedPositionDatabase& db, int max_depth = 16) {
+template<typename AttackerRules>
+void batch_solve_all_kqvk_positions(CompositionalEngine<AttackerRules>& eng, SolvedPositionDatabase& db, int max_depth = 16) {
     cout << "\n" << string(80, '=') << "\n";
     cout << "BATCH SOLVER: ALL KQvK POSITIONS\n";
     cout << string(80, '=') << "\n\n";
@@ -1502,7 +1625,7 @@ void batch_solve_all_kqvk_positions(CompositionalEngine& eng, SolvedPositionData
             string dest = mvs[i].substr(1);
             Position dest_pos = Position::from_str(dest);
             if (piece == 'K') { curr.wk = dest_pos; curr.to_move = 'B'; }
-            else if (piece == 'Q') { curr.wq = dest_pos; curr.to_move = 'B'; }
+            else if (piece == AttackerRules::letter) { curr.wq = dest_pos; curr.to_move = 'B'; }
             else if (piece == 'k') { curr.bk = dest_pos; curr.to_move = 'W'; }
         }
 
@@ -1555,12 +1678,28 @@ void batch_solve_all_kqvk_positions(CompositionalEngine& eng, SolvedPositionData
 // MAIN
 // ============================================================================
 
+// ============================================================================
+// Which endgame this binary is built for. Default (no flag) is KQvK. Compile
+// with -DPIECE_ROOK to build KRvK instead -- same source file, same search
+// and DAG-exploration logic, just a different AttackerRules instantiation.
+// ============================================================================
+#ifdef PIECE_ROOK
+using Engine = CompositionalEngine<RookRules>;
+#else
+using Engine = CompositionalEngine<QueenRules>;
+#endif
+
 int main(int argc, char* argv[]) {
     bool debug_en = false;
     bool batch_mode = false;
     bool full_dag_mode = false;
+#ifdef PIECE_ROOK
+    string positions_file = "krvk_positions_by_dtz.txt";
+    string db_file = "krvk_perfect_play.db";
+#else
     string positions_file = "kqvk_positions_by_dtz.txt";
     string db_file = "kqvk_perfect_play.db";
+#endif
     vector<string> unrecognized;
 
     for (int i = 1; i < argc; i++) {
@@ -1597,7 +1736,7 @@ int main(int argc, char* argv[]) {
     else cout << "Mode: single-path batch solve\n";
 
     auto root_t_start = chrono::high_resolution_clock::now();
-    CompositionalEngine eng;
+    Engine eng;
     SolvedPositionDatabase db(db_file);
 
     if (full_dag_mode) {

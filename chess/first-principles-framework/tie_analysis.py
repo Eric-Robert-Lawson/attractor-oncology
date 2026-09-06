@@ -253,7 +253,7 @@ def is_checkmate_state(state):
 def load_db(path):
     """Returns dict (position, turn) -> {'total_plies': int, 'tied': [(mv,bn),...]}"""
     db = {}
-    with open(path) as f:
+    with open(path, encoding='utf-8') as f:
         header = f.readline()
         for line_num, line in enumerate(f, start=2):
             line = line.rstrip("\n")
@@ -480,7 +480,7 @@ def summarize(results, out_dir):
               f"from a missing branch. This will be large for --batch-sourced data (expected -- see "
               f"the module docstring) and should be small for a fully-explored --full-dag file.")
         if unverified_frac > 0.5:
-            print("  \u26a0 Over half of all classified positions are unverified. If this file came "
+            print("  WARNING: Over half of all classified positions are unverified. If this file came "
                   "from --batch mode, that's exactly the expected outcome, not a bug: --batch never "
                   "explores sibling branches, so most ties simply can't be checked. Treat every "
                   "INDEPENDENT count below as a LOWER BOUND at best, not a real measurement, until "
@@ -509,7 +509,7 @@ def summarize(results, out_dir):
     for plies in sorted(by_plies_dedup):
         print(f"  {plies:>3} plies: {by_plies_dedup[plies]}")
 
-    with open(f"{out_dir}/independent_findings_deduped.csv", "w") as f:
+    with open(f"{out_dir}/independent_findings_deduped.csv", "w", encoding="utf-8") as f:
         f.write("Position,Turn,TotalPlies,NumComponents,TiedMoves,ComponentGroups\n")
         for r in sorted(deduped, key=lambda x: -x['total_plies']):
             tied_str = ";".join(f"{mv}:{bn}" for mv, bn in r['tied'])
@@ -518,25 +518,25 @@ def summarize(results, out_dir):
             )
             f.write(f'"{r["position"]}",{r["turn"]},{r["total_plies"]},'
                     f'{r["n_components"]},"{tied_str}","{groups_str}"\n')
-    print(f"\n\u2713 Wrote {len(deduped)} deduplicated VERIFIED independent findings to "
+    print(f"\nWrote {len(deduped)} deduplicated VERIFIED independent findings to "
           f"{out_dir}/independent_findings_deduped.csv")
 
     unverified = [r for r in results if r['category'] == 'INDEPENDENT_UNVERIFIED']
-    with open(f"{out_dir}/independent_unverified.csv", "w") as f:
+    with open(f"{out_dir}/independent_unverified.csv", "w", encoding="utf-8") as f:
         f.write("Position,Turn,TotalPlies,NumComponents,TiedMoves\n")
         for r in sorted(unverified, key=lambda x: -x['total_plies']):
             tied_str = ";".join(f"{mv}:{bn}" for mv, bn in r['tied'])
             f.write(f'"{r["position"]}",{r["turn"]},{r["total_plies"]},'
                     f'{r["n_components"]},"{tied_str}"\n')
-    print(f"\u2713 Wrote {len(unverified)} INDEPENDENT_UNVERIFIED (data-limited) positions to "
+    print(f"Wrote {len(unverified)} INDEPENDENT_UNVERIFIED (data-limited) positions to "
           f"{out_dir}/independent_unverified.csv -- these are NOT findings, they're gaps")
 
-    with open(f"{out_dir}/all_classifications.csv", "w") as f:
+    with open(f"{out_dir}/all_classifications.csv", "w", encoding="utf-8") as f:
         f.write("Position,Turn,TotalPlies,Category,NumComponents\n")
         for r in results:
             f.write(f'"{r["position"]}",{r["turn"]},{r["total_plies"]},'
                     f'{r["category"]},{r["n_components"]}\n')
-    print(f"\u2713 Wrote {len(results)} total classifications to {out_dir}/all_classifications.csv")
+    print(f"Wrote {len(results)} total classifications to {out_dir}/all_classifications.csv")
 
     print("\nSample deduplicated VERIFIED independent findings (deepest first):")
     for r in sorted(deduped, key=lambda x: -x['total_plies'])[:15]:
@@ -586,7 +586,7 @@ def main():
         print(f"  Quick check: {missing_immediate}/{len(multi_positions)} ({frac:.1%}) of multi-way-tied "
               f"positions have at least one tied move whose child isn't in this file at all.")
         if frac > 0.3:
-            print("  \u26a0 This looks like it may be --batch-sourced (or a partial --full-dag run) -- "
+            print("  WARNING: This looks like it may be --batch-sourced (or a partial --full-dag run) -- "
                   "expect INDEPENDENT_UNVERIFIED to dominate the results below.")
 
     results = run_categorization(db, min_plies=args.min_plies, max_positions=args.max_positions)

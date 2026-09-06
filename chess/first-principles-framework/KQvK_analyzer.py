@@ -35,11 +35,6 @@ Usage:
     python3 kqvk_analyzer.py tree full_dag.db \\
         --position "WK:a4 WQ:e4 BK:h4" --turn W --out tree.txt \\
         --classifications tie_analysis/all_classifications.csv
-
-
-        example:
-        python kqvk_analyzer.py classify kqvk_perfect_play.db --out-dir tie_analysis
-        python kqvk_analyzer.py families tie_analysis/independent_findings_deduped.csv --out-dir families --render-trees kqvk_perfect_play.db
 """
 
 import argparse
@@ -704,7 +699,7 @@ def find_families(findings):
             key = (finding[fix_piece], finding['turn'], finding['tied_moves'])
             groups[key].append(finding)
         for (fixed_val, turn, tied_moves), members in groups.items():
-            distinct_positions = {m['position']: m for m in members}
+            distinct_positions = {(m['position'], m['turn']): m for m in members}
             if len(distinct_positions) < 2:
                 continue
             member_list = list(distinct_positions.values())
@@ -721,8 +716,8 @@ def find_families(findings):
                 'symmetric_pairs': symmetric_pairs,
             })
             for m in member_list:
-                seen_in_a_family.add(m['position'])
-    unique_findings = [f for f in findings if f['position'] not in seen_in_a_family]
+                seen_in_a_family.add((m['position'], m['turn']))
+    unique_findings = [f for f in findings if (f['position'], f['turn']) not in seen_in_a_family]
     return families, unique_findings
 
 

@@ -2152,6 +2152,27 @@ public:
     // output file accumulate across runs instead of being overwritten.
     unordered_set<uint64_t> preloaded_keys;
 
+    // Same idea, for DRAWS specifically. A position that's fully discovered
+    // (not aborted for memory) and never enters `classified` once classify()
+    // reaches its fixed point is JUST AS PERMANENTLY PROVEN as a win -- this
+    // project has computed "positions proven drawn" as exactly
+    // nodes.size() - classified.size() since the very first KQvK runs. The
+    // gap this fixes: that fact was never persisted anywhere, so every
+    // resumed run had to rediscover and re-verify the ENTIRE drawn portion
+    // of the graph from scratch, forever -- for KBNvK that's millions of
+    // positions, every single batch. proven_draws is the in-memory set
+    // (preloaded ones plus any newly confirmed this run); preloaded_draw_keys
+    // tracks which were ALREADY on disk, so export only appends what's new.
+    unordered_set<uint64_t> proven_draws;
+    unordered_set<uint64_t> preloaded_draw_keys;
+
+    void seed_draws_from_preloaded(const unordered_set<uint64_t>& draws) {
+        for (auto& key : draws) {
+            proven_draws.insert(key);
+            preloaded_draw_keys.insert(key);
+        }
+    }
+
     // Measured directly, not estimated: KQvK and KRvK's full reachable
     // graphs (~370-400K states) use well under 200MB with this packed
     // representation. KBPvK's full graph (two non-king White pieces) was
@@ -2230,7 +2251,7 @@ public:
             // positions" on a resumed run where 376,823 of those were
             // already fully proven on disk. Not expanding known positions'
             // children is what actually shrinks that number.
-            if (classified.count(key)) { sealed_count++; continue; }
+            if (classified.count(key) || proven_draws.count(key)) { sealed_count++; continue; }
             GeneralState st = unpack_general_state(key);
             RetroNode node;
             if (st.to_move == 'W') node.flags |= 4;
@@ -2244,7 +2265,7 @@ public:
             for (auto& c : cands) {
                 uint64_t ckey = pack_general_state(c);
                 node.children.push_back(ckey);
-                if (!nodes.count(ckey) && !classified.count(ckey)) queue.push_back(ckey);
+                if (!nodes.count(ckey) && !classified.count(ckey) && !proven_draws.count(ckey)) queue.push_back(ckey);
             }
             nodes[key] = node;
         }
@@ -2562,6 +2583,62 @@ inline void export_general_classification(RetrogradeClassifier& rc, const string
     cout << "\n";
 }
 
+// Draws are kept in a SEPARATE file (<db_file>.draws) rather than mixed
+// into the main db, deliberately: the main file's format and semantics
+// (every row is a real, distance-bearing win) stay exactly as they were,
+// so general_analyzer.py and any other existing consumer of the main db
+// needs no changes and carries no risk from this. This file is purely an
+// internal resume-efficiency cache for the solver itself -- minimal
+// format (just enough to reconstruct the packed key), no analysis value.
+inline string draws_file_for(const string& db_file) { return db_file + ".draws"; }
+
+inline unordered_set<uint64_t> load_general_draws_for_resume(const string& db_file) {
+    unordered_set<uint64_t> result;
+    ifstream file(draws_file_for(db_file));
+    if (!file.is_open()) return result;
+    string line;
+    bool is_header = true;
+    while (getline(file, line)) {
+        if (is_header) { is_header = false; continue; }
+        if (line.empty()) continue;
+        size_t bar = line.find('|');
+        if (bar == string::npos) continue;
+        string pos_str = line.substr(0, bar);
+        char turn = (bar + 1 < line.size()) ? line[bar + 1] : 'W';
+        auto st = parse_general_state_str(pos_str);
+        if (!st) continue;
+        st->to_move = turn;
+        result.insert(pack_general_state(*st));
+    }
+    if (!result.empty()) cout << "  Loaded " << result.size() << " previously-proven draws from " << draws_file_for(db_file) << "\n";
+    return result;
+}
+
+// Appends every NEWLY confirmed draw (present in rc.nodes, never entered
+// rc.classified, and not already known from a preloaded draws file) --
+// but ONLY when this run's discovery was NOT aborted for memory. An
+// aborted discovery means the graph is genuinely incomplete, and
+// "unclassified" there does not mean "proven drawn", it means "not yet
+// known" -- writing those as draws would be a real, silent correctness
+// bug, exactly the situation aborted_for_memory already exists to guard
+// callers against elsewhere in this file.
+inline void export_general_draws(RetrogradeClassifier& rc, const string& db_file) {
+    if (rc.aborted_for_memory) return;
+    bool file_already_exists = ifstream(draws_file_for(db_file)).good();
+    ofstream out(draws_file_for(db_file), ios::app);
+    if (!file_already_exists) out << "Position|Turn\n";
+    long long written = 0;
+    for (auto& [key, node] : rc.nodes) {
+        if (rc.classified.count(key)) continue;       // a win, not a draw
+        if (rc.preloaded_draw_keys.count(key)) continue;  // already on disk
+        GeneralState st = unpack_general_state(key);
+        out << st.str() << "|" << st.to_move << "\n";
+        written++;
+    }
+    out.close();
+    if (written) cout << "Wrote " << written << " newly-confirmed draws to " << draws_file_for(db_file) << "\n";
+}
+
 // Detects available system memory, for --max-nodes auto-sizing. Returns -1
 // on any failure (unsupported platform, syscall error) -- callers must
 // treat that as "detection unavailable" and fall back to a fixed safe
@@ -2648,6 +2725,8 @@ inline void run_general_sweep(const vector<GeneralState>& roots, const string& d
     // correct behavior in that case, not a failure).
     auto preloaded = load_general_db_for_resume(db_file);
     if (!preloaded.empty()) rc.seed_from_preloaded(preloaded);
+    auto preloaded_draws = load_general_draws_for_resume(db_file);
+    if (!preloaded_draws.empty()) rc.seed_draws_from_preloaded(preloaded_draws);
 
     auto start = chrono::high_resolution_clock::now();
     rc.discover(roots);
@@ -2675,7 +2754,18 @@ inline void run_general_sweep(const vector<GeneralState>& roots, const string& d
              << "0 re-verification passes spent on them)";
     }
     cout << "\n";
-    cout << "(" << (rc.nodes.size() - rc.classified.size()) << " positions proven drawn)\n\n";
+    // Direct count, not nodes.size() - classified.size() -- that subtraction
+    // assumed classified was always a subset of nodes, which broke under
+    // sealing: a fully-resumed run can have classified.size() (preloaded
+    // wins, never added to nodes since they're sealed) EXCEED nodes.size()
+    // (possibly empty, if nothing new was discovered), underflowing the
+    // unsigned subtraction into a huge garbage number. Confirmed directly:
+    // a fully-sealed rerun reported "18446744073709206204 positions proven
+    // drawn" with the old formula. This counts only positions actually in
+    // THIS run's own nodes map, which is well-defined regardless of sealing.
+    long long drawn_in_nodes = 0;
+    for (auto& [key, node] : rc.nodes) if (!rc.classified.count(key)) drawn_in_nodes++;
+    cout << "(" << drawn_in_nodes << " positions proven drawn)\n\n";
 
     for (auto& r : roots) {
         uint64_t rkey = pack_general_state(r);
@@ -2686,6 +2776,7 @@ inline void run_general_sweep(const vector<GeneralState>& roots, const string& d
     }
 
     export_general_classification(rc, db_file);
+    export_general_draws(rc, db_file);
 
     auto total_end = chrono::high_resolution_clock::now();
     cout << "\nTotal time: " << fixed << setprecision(1)

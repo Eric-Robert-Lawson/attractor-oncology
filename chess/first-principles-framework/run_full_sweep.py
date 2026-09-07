@@ -5,19 +5,37 @@ Automated batch sweep for general_solver, over an exhaustive position list.
 WHAT THIS ACTUALLY DOES, PRECISELY:
 
 Takes a positions file (from generate_exhaustive_positions.py, or any file
-in the same format), slices it into batches of --batch-size seed positions,
-and runs general_solver once PER BATCH, as a completely separate process
-invocation, against the SAME shared database file.
+in the same format) and walks it once, greedily pruning any seed that
+already has a proven answer on disk (checked against an in-memory set
+loaded ONCE at sweep start, not re-scanned per seed) and accumulating the
+genuinely NOT-yet-known seeds into groups of --batch-size. Each full group
+is run through general_solver once, as a completely separate process
+invocation, against the SAME shared database file. The final, possibly
+undersized group (fewer than --batch-size genuinely new seeds, once the
+list is exhausted) still runs rather than being silently dropped.
 
-Each batch benefits from every batch before it: general_solver loads the
-database at the start of every run, seeds its classifier directly with
-every already-proven position (verified sound -- see the engine's own
-comments on seed_from_preloaded), and its discovery phase skips expanding
-the children of anything already known, rather than rediscovering the
-whole graph each time. Confirmed directly on real material: a resumed run
-against an already-solved database dropped from rediscovering 402,688
-positions down to 67, because only the genuinely new frontier gets
-expanded.
+WHY PRUNE-AND-ACCUMULATE RATHER THAN FIXED WINDOWS OF THE ORIGINAL FILE
+ORDER: every solver invocation -- however little new work it actually has
+-- pays a fixed startup cost re-parsing the entire db and draws files from
+scratch (confirmed directly in the C++ source: load_general_db_for_resume
+and load_general_draws_for_resume both run unconditionally on every call,
+regardless of how much of that call's own work turns out to be new). A
+fixed window of 12 seeds where 9 are already known and only 3 are
+genuinely new still pays that full cost for just 3 seeds' worth of actual
+work. Pruning known seeds before ever invoking the solver, and only
+spending an invocation once a FULL batch of genuinely new seeds has
+accumulated, means every invocation's fixed cost is spent on a full
+batch's worth of real work, never diluted by already-known seeds riding
+along for free.
+
+Each batch still benefits from every batch before it, exactly as before:
+general_solver loads the database at the start of every run, seeds its
+classifier directly with every already-proven position (verified sound --
+see the engine's own comments on seed_from_preloaded), and its discovery
+phase skips expanding the children of anything already known. Confirmed
+directly on real material: a resumed run against an already-solved
+database dropped from rediscovering 402,688 positions down to 67, because
+only the genuinely new frontier gets expanded.
 
 WHY EACH BATCH IS A SEPARATE PROCESS, NOT A LOOP INSIDE ONE LONG-RUNNING
 PROGRAM: a fresh process is the only mechanism that GUARANTEES memory is
@@ -27,10 +45,14 @@ system immediately, depending on the allocator, whereas the OS reclaiming
 an entire exited process's memory is unconditional. This is what actually
 delivers "batch completes, memory drops to zero, next batch starts clean."
 
-Once the graph for a given material is fully covered, later batches will
-typically discover ~0 new positions and complete almost instantly -- this
-is expected and correct, not something to optimize away: it's the direct
-result of everything already being proven and sealed from disk.
+Once the graph for a given material is fully covered, a batch invocation
+will typically discover ~0 new positions and complete almost instantly --
+this is expected and correct, not something to optimize away. Under the
+prune-and-accumulate strategy, this should now be rare rather than the
+common case: a batch only gets invoked once 12 genuinely-not-yet-known
+seeds have accumulated, so a batch turning out to be entirely already-known
+would mean the pruning check itself was somehow wrong, not that the
+material happened to already be solved.
 
 Each batch's output streams live, line by line, as the solver produces it
 -- including its own periodic "[discovery progress]" (every 1M positions)
@@ -171,71 +193,59 @@ def main():
         sys.exit(1)
 
     os.makedirs(args.tmp_dir, exist_ok=True)
-    num_batches = (total + args.batch_size - 1) // args.batch_size
 
     print(f"Loaded {total} seed positions from {args.positions_file}")
-    print(f"Running {num_batches} batches of up to {args.batch_size} seeds each, "
-          f"accumulating into {args.db}\n")
+    print(f"Scanning for genuinely new work, accumulating into batches of up to "
+          f"{args.batch_size} not-yet-known seeds each, writing into {args.db}\n")
 
-    # Loaded ONCE here, not re-scanned per batch -- checking a batch's seeds
-    # against this in-memory set is then a fast dict lookup, not a fresh
-    # multi-million-line file read. This is what actually removes the fixed
-    # startup cost on an already-fully-resolved batch: every solver
-    # invocation, sealed or not, currently re-parses the ENTIRE db and
-    # draws files from scratch before discovery even starts (confirmed
-    # directly in the C++ source -- load_general_db_for_resume and
-    # load_general_draws_for_resume both run unconditionally on every
-    # call). For a batch whose seeds are already fully known, that parse is
-    # the whole cost -- discovery and classification themselves are already
-    # measured at 0.0s in that case. Skipping the subprocess call entirely
-    # for such a batch skips that parse too, not just the (already-free)
-    # search.
+    # Loaded ONCE here, not re-scanned per batch -- checking a seed against
+    # this in-memory set is a fast dict lookup, not a fresh multi-million-
+    # line file read. Every solver invocation, sealed or not, currently
+    # re-parses the ENTIRE db and draws files from scratch before discovery
+    # even starts (confirmed directly in the C++ source --
+    # load_general_db_for_resume and load_general_draws_for_resume both run
+    # unconditionally on every call). That reload is a fixed cost per
+    # invocation, independent of how much of the batch is genuinely new --
+    # which is exactly why a batch diluted with already-known seeds still
+    # pays the full cost for however few new seeds it actually contains.
     known_keys = load_known_keys(args.db)
 
-    sweep_start = time.time()
-    skipped_batches = 0
-    for batch_idx in range(num_batches):
-        start = batch_idx * args.batch_size
-        end = min(start + args.batch_size, total)
-        batch_seeds = all_seeds[start:end]
-
-        # Pre-check: does every seed in this batch already have a proven
-        # answer (win or draw) on disk? If so, the solver would discover
-        # exactly 0 new positions and write exactly 0 new rows -- skip
-        # invoking it at all rather than pay the full-file reload just to
-        # confirm that.
-        seed_keys = [canonical_position_key(s, 'W') for s in batch_seeds]
-        if seed_keys and all(k in known_keys for k in seed_keys):
-            skipped_batches += 1
-            print(f"BATCH {batch_idx + 1}/{num_batches}  (seeds {start}-{end - 1} of {total}) "
-                  f"-- all {len(seed_keys)} seeds already resolved, skipping\n")
-            continue
-
-        batch_file = os.path.join(args.tmp_dir, f"batch_{batch_idx:06d}.txt")
+    # Greedy prune-and-accumulate, not fixed windows of the original file
+    # order: walk the seed list once, silently dropping any seed already
+    # resolved (no solver call spent on it at all, not even a diluted one),
+    # and only invoking the solver once `batch_size` genuinely new seeds
+    # have accumulated -- so every actual invocation's fixed startup cost
+    # is spent on a full batch of real, new work, never diluted by
+    # already-known seeds riding along. The final leftover group (fewer
+    # than batch_size genuinely new seeds, once the seed list is exhausted)
+    # still gets run rather than silently dropped -- that's the explicit
+    # "last batch" exception.
+    def run_batch(seed_group, batch_num):
+        nonlocal known_keys
+        batch_file = os.path.join(args.tmp_dir, f"batch_{batch_num:06d}.txt")
         with open(batch_file, 'w') as f:
             f.write(header + "\n")
-            for line in batch_seeds:
+            for line in seed_group:
                 f.write(line + "\n")
 
         cmd = [args.solver, "--full-dag", "--positions", batch_file, "--db", args.db]
         if args.max_nodes:
             cmd += ["--max-nodes", str(args.max_nodes)]
-        if args.fresh and batch_idx == 0:
+        if args.fresh and batch_num == 1:
             cmd += ["--fresh"]
 
         batch_start = time.time()
         print(f"{'='*70}")
-        print(f"BATCH {batch_idx + 1}/{num_batches}  (seeds {start}-{end - 1} of {total})")
+        print(f"BATCH {batch_num}  ({len(seed_group)} genuinely new seeds)")
         print(f"{'='*70}")
 
         # Streamed line-by-line, NOT captured and printed after the fact --
         # capture_output=True blocks until the whole subprocess exits, so on
-        # a long first batch (a not-yet-covered material's real discovery
-        # can run minutes) nothing would appear on screen at all until it
-        # finished, indistinguishable from a hang. This surfaces the
-        # solver's own periodic "[discovery progress]" (every 1M positions)
-        # and "[classify progress]" (every pass) lines live, as they're
-        # printed, exactly like running the solver directly would show.
+        # a long batch (a not-yet-covered material's real discovery can run
+        # minutes) nothing would appear on screen until it finished,
+        # indistinguishable from a hang. This surfaces the solver's own
+        # periodic "[discovery progress]" and "[classify progress]" lines
+        # live, exactly like running the solver directly would show.
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                                  text=True, bufsize=1)
         stdout_lines = []
@@ -250,26 +260,52 @@ def main():
         batch_elapsed = time.time() - batch_start
 
         if proc.returncode != 0:
-            print(f"  [WARNING] batch {batch_idx + 1} exited with code {proc.returncode}")
+            print(f"  [WARNING] batch {batch_num} exited with code {proc.returncode}")
             tail = "".join(stdout_lines).strip()
             if tail:
                 print("  output tail:", tail[-2000:])
 
         print(f"  batch time: {batch_elapsed:.1f}s\n")
-
         os.remove(batch_file)
 
         # Refresh from disk -- this batch may have written genuinely new
-        # rows (wins and/or draws), which future batches' pre-checks need
-        # to see. Only happens after a batch that actually ran the solver,
-        # which the observed pattern so far suggests is the minority case.
+        # rows (wins and/or draws), which the rest of the scan needs to see.
         known_keys = load_known_keys(args.db)
+
+    sweep_start = time.time()
+    batches_run = 0
+    seeds_pruned = 0
+    pending = []
+
+    for seed in all_seeds:
+        key = canonical_position_key(seed, 'W')
+        if key in known_keys:
+            seeds_pruned += 1
+            continue
+        pending.append(seed)
+        if len(pending) >= args.batch_size:
+            batches_run += 1
+            run_batch(pending, batches_run)
+            pending = []
+
+    # Flush any leftover genuinely-new seeds after the scan completes -- NOT
+    # an in-loop "is this the last seed" check, which silently fails to
+    # fire whenever the file happens to END on an already-known (pruned)
+    # seed: that seed hits `continue` and the check is never reached, so a
+    # non-empty `pending` from earlier in the scan would be dropped with no
+    # warning. Confirmed as a real bug this way, not a hypothetical: an
+    # interleaved test (4 known, 3 new, ending on a known seed) silently
+    # lost its 3rd genuinely-new seed before this fix -- ran only 2 of the
+    # 3 seeds that should have been processed, with no error at all.
+    if pending:
+        batches_run += 1
+        run_batch(pending, batches_run)
 
     total_elapsed = time.time() - sweep_start
     print(f"{'='*70}")
-    print(f"SWEEP COMPLETE: {num_batches} batches ({skipped_batches} skipped via pre-check, "
-          f"{num_batches - skipped_batches} actually run), {total} total seed positions, "
-          f"{total_elapsed:.1f}s total")
+    print(f"SWEEP COMPLETE: {total} seed positions scanned, {seeds_pruned} pruned as "
+          f"already-known (never invoked the solver), {batches_run} batch(es) actually "
+          f"run, {total_elapsed:.1f}s total")
     print(f"{'='*70}")
     print(f"Final accumulated database: {args.db}")
 

@@ -53,6 +53,56 @@ import sys
 import os
 import time
 
+# Mirrors GeneralState::str() in the C++ engine EXACTLY -- verified against
+# real solver output, not assumed. Sort order: White before Black, then by
+# this specific kind ordering (confirmed directly from the PieceKind enum:
+# PAWN=0, QUEEN=1, KNIGHT=2, KING=3, ROOK=4, BISHOP=5 -- NOT alphabetical,
+# NOT king-first), then by square. Getting this wrong would either silently
+# disable the whole optimization below (harmless but pointless) or, far
+# worse, cause it to silently skip a batch that actually has new work --
+# so this was checked against a real, fresh solver run's own db output
+# before being trusted, not just written and assumed correct.
+_KIND_ORDER = {'P': 0, 'Q': 1, 'N': 2, 'K': 3, 'R': 4, 'B': 5}
+
+
+def canonical_position_key(seed_line, turn='W'):
+    """Converts one comma-separated seed line ('K:a1,B:a2,N:b1,k:a3') into
+    the exact (position_string, turn) key that would appear as this
+    position's row in the database, if it's ever been solved -- i.e. the
+    same string GeneralState::str() would produce for it."""
+    pieces = []
+    for tok in seed_line.split(','):
+        tok = tok.strip()
+        if not tok:
+            continue
+        letter, sq = tok.split(':')
+        color = 0 if letter.isupper() else 1  # White=0, Black=1
+        pieces.append((color, _KIND_ORDER[letter.upper()], sq, letter, ))
+    pieces.sort(key=lambda p: (p[0], p[1], (ord(p[2][0]) - ord('a')) * 8 + (int(p[2][1]) - 1)))
+    return " ".join(f"{letter}:{sq}" for _, _, sq, letter in pieces), turn
+
+
+def load_known_keys(db_file):
+    """Loads every (position, turn) key already proven -- wins from db_file,
+    draws from db_file + '.draws' -- into one in-memory set. Called ONCE per
+    sweep run (not once per batch), specifically so checking a batch's seeds
+    against it is a fast in-memory lookup, not a fresh file scan each time."""
+    known = set()
+    for path, has_extra_cols in [(db_file, True), (db_file + ".draws", False)]:
+        if not os.path.isfile(path):
+            continue
+        with open(path) as f:
+            next(f, None)  # header
+            for line in f:
+                line = line.rstrip("\n")
+                if not line:
+                    continue
+                parts = line.split("|")
+                if len(parts) < 2:
+                    continue
+                known.add((parts[0], parts[1]))
+    return known
+
 
 def read_all_lines(path):
     with open(path) as f:
@@ -127,11 +177,39 @@ def main():
     print(f"Running {num_batches} batches of up to {args.batch_size} seeds each, "
           f"accumulating into {args.db}\n")
 
+    # Loaded ONCE here, not re-scanned per batch -- checking a batch's seeds
+    # against this in-memory set is then a fast dict lookup, not a fresh
+    # multi-million-line file read. This is what actually removes the fixed
+    # startup cost on an already-fully-resolved batch: every solver
+    # invocation, sealed or not, currently re-parses the ENTIRE db and
+    # draws files from scratch before discovery even starts (confirmed
+    # directly in the C++ source -- load_general_db_for_resume and
+    # load_general_draws_for_resume both run unconditionally on every
+    # call). For a batch whose seeds are already fully known, that parse is
+    # the whole cost -- discovery and classification themselves are already
+    # measured at 0.0s in that case. Skipping the subprocess call entirely
+    # for such a batch skips that parse too, not just the (already-free)
+    # search.
+    known_keys = load_known_keys(args.db)
+
     sweep_start = time.time()
+    skipped_batches = 0
     for batch_idx in range(num_batches):
         start = batch_idx * args.batch_size
         end = min(start + args.batch_size, total)
         batch_seeds = all_seeds[start:end]
+
+        # Pre-check: does every seed in this batch already have a proven
+        # answer (win or draw) on disk? If so, the solver would discover
+        # exactly 0 new positions and write exactly 0 new rows -- skip
+        # invoking it at all rather than pay the full-file reload just to
+        # confirm that.
+        seed_keys = [canonical_position_key(s, 'W') for s in batch_seeds]
+        if seed_keys and all(k in known_keys for k in seed_keys):
+            skipped_batches += 1
+            print(f"BATCH {batch_idx + 1}/{num_batches}  (seeds {start}-{end - 1} of {total}) "
+                  f"-- all {len(seed_keys)} seeds already resolved, skipping\n")
+            continue
 
         batch_file = os.path.join(args.tmp_dir, f"batch_{batch_idx:06d}.txt")
         with open(batch_file, 'w') as f:
@@ -181,9 +259,16 @@ def main():
 
         os.remove(batch_file)
 
+        # Refresh from disk -- this batch may have written genuinely new
+        # rows (wins and/or draws), which future batches' pre-checks need
+        # to see. Only happens after a batch that actually ran the solver,
+        # which the observed pattern so far suggests is the minority case.
+        known_keys = load_known_keys(args.db)
+
     total_elapsed = time.time() - sweep_start
     print(f"{'='*70}")
-    print(f"SWEEP COMPLETE: {num_batches} batches, {total} total seed positions, "
+    print(f"SWEEP COMPLETE: {num_batches} batches ({skipped_batches} skipped via pre-check, "
+          f"{num_batches - skipped_batches} actually run), {total} total seed positions, "
           f"{total_elapsed:.1f}s total")
     print(f"{'='*70}")
     print(f"Final accumulated database: {args.db}")

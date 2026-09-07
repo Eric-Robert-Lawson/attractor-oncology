@@ -2150,10 +2150,19 @@ public:
     void discover(const vector<GeneralState>& roots) {
         deque<uint64_t> queue;
         for (auto& r : roots) queue.push_back(pack_general_state(r));
+        auto discover_start = chrono::high_resolution_clock::now();
+        long long last_reported = 0;
         while (!queue.empty()) {
             if ((long long)nodes.size() >= max_nodes_before_abort) {
                 aborted_for_memory = true;
                 return;
+            }
+            if ((long long)nodes.size() - last_reported >= 1000000) {
+                last_reported = (long long)nodes.size();
+                double elapsed = chrono::duration<double>(chrono::high_resolution_clock::now() - discover_start).count();
+                cout << "  [discovery progress] " << nodes.size() << " positions found so far, "
+                     << "frontier=" << queue.size() << ", elapsed=" << fixed << setprecision(1)
+                     << elapsed << "s\n" << flush;
             }
             uint64_t key = queue.front(); queue.pop_front();
             if (nodes.count(key)) continue;
@@ -2180,6 +2189,7 @@ public:
         for (auto& [key, node] : nodes) if (node.flags & 1) classified[key] = {0, 0, 0};
         passes_run = 0;
         bool changed = true;
+        auto classify_start = chrono::high_resolution_clock::now();
         while (changed) {
             changed = false;
             passes_run++;
@@ -2227,6 +2237,10 @@ public:
                 }
             }
             for (auto& [key, res] : newly_classified) classified[key] = res;
+            double elapsed = chrono::duration<double>(chrono::high_resolution_clock::now() - classify_start).count();
+            cout << "  [classify progress] pass " << passes_run << ": " << classified.size() << "/"
+                 << nodes.size() << " classified, elapsed=" << fixed << setprecision(1) << elapsed
+                 << "s\n" << flush;
         }
     }
 
@@ -3671,6 +3685,7 @@ int main(int argc, char* argv[]) {
     bool batch_mode = false;
     bool full_dag_mode = false;
     bool fresh_start = false;
+    long long max_nodes_arg = 15000000;
 #ifdef PIECE_GENERAL
     string positions_file = "general_positions.txt";
     string db_file = "general_perfect_play.db";
@@ -3694,6 +3709,7 @@ int main(int argc, char* argv[]) {
         else if (arg == "--positions" && i + 1 < argc) { positions_file = argv[++i]; }
         else if (arg == "--db" && i + 1 < argc) { db_file = argv[++i]; }
         else if (arg == "--fresh") { fresh_start = true; }
+        else if (arg == "--max-nodes" && i + 1 < argc) { max_nodes_arg = atoll(argv[++i]); }
         else { unrecognized.push_back(arg); }
     }
 
@@ -3706,7 +3722,7 @@ int main(int argc, char* argv[]) {
         cerr << "ERROR: unrecognized argument(s):";
         for (auto& u : unrecognized) cerr << " " << u;
         cerr << "\nKnown flags: --debug/-d, --batch/-b, --full-dag/-g, "
-                "--positions <file>, --db <file>, --fresh\n";
+                "--positions <file>, --db <file>, --fresh, --max-nodes <N> (PIECE_GENERAL only)\n";
         return 1;
     }
 
@@ -3757,7 +3773,7 @@ int main(int argc, char* argv[]) {
         cerr << "ERROR: No root positions loaded from " << positions_file << "\n";
         return 1;
     }
-    run_general_sweep(roots, db_file);
+    run_general_sweep(roots, db_file, max_nodes_arg);
 #else
     SolvedPositionDatabase db(db_file);
 

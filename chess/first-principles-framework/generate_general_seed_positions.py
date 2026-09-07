@@ -92,15 +92,32 @@ def is_legal_placement(squares):
     return True
 
 
-def build_seed(white_letters, anchor):
+def square_color(pos):
+    """DARK if (file+rank) is even (a1 = file 0, rank 0 = DARK, matching
+    real chess), LIGHT if odd. A bishop's square color is conserved by
+    every legal bishop move -- diagonal steps change file and rank by the
+    same amount, so file+rank always changes by an even number. This means
+    a light-squared-bishop position and a dark-squared-bishop position are
+    NEVER reachable from one another: the full landscape for any material
+    including a bishop is (at least) two structurally disconnected
+    components, one per bishop color, not one connected whole."""
+    return 'dark' if (pos.file + pos.rank) % 2 == 0 else 'light'
+
+
+def build_seed(white_letters, anchor, force_bishop_color=None):
     """Constructs one valid seed position anchored near a given corner/region
     of the board, so successive seeds are genuinely spread out rather than
     clustered -- see the module docstring for why this is only a defensive
-    margin, not something correctness depends on."""
+    margin, not something correctness depends on.
+
+    force_bishop_color ('light', 'dark', or None): if set and 'B' is among
+    white_letters, the bishop is placed ONLY on a square of that color --
+    see square_color's docstring for why this matters. Used to generate
+    seeds for exactly one bishop-color component at a time, so each half
+    can be discovered and classified separately (roughly halving peak
+    memory for any material with exactly one bishop) instead of needing
+    both colors' full reachable graphs in memory simultaneously."""
     af, ar = anchor
-    # Order candidate squares by distance from the anchor, so placement
-    # naturally stays near that region instead of drifting back to a1-ish
-    # squares every time.
     all_squares = [Position(f, r) for r in range(8) for f in range(8)]
     pool = sorted(all_squares, key=lambda p: (abs(p.file - af) + abs(p.rank - ar), p.file, p.rank))
 
@@ -122,8 +139,6 @@ def build_seed(white_letters, anchor):
 
     for i, letter in enumerate(white_letters):
         if letter == 'P':
-            # MUST be rank 2 (index 1) -- see module docstring. Pick the
-            # free rank-2 square closest to the anchor file.
             candidates = sorted((Position(f, 1) for f in range(8)), key=lambda p: abs(p.file - af))
             placed = False
             for cand in candidates:
@@ -134,6 +149,8 @@ def build_seed(white_letters, anchor):
                     break
             if not placed:
                 raise RuntimeError("could not place pawn on rank 2 -- board too crowded")
+        elif letter == 'B' and force_bishop_color is not None:
+            squares[f'W{i}'] = take_next(lambda p: square_color(p) == force_bishop_color)
         else:
             squares[f'W{i}'] = take_next()
 
@@ -159,14 +176,38 @@ def main():
     ap.add_argument('--num-seeds', type=int, default=8,
                      help="How many diverse seed positions to generate (default 8; more costs nothing "
                           "at discovery time, since already-known positions are skipped instantly)")
+    ap.add_argument('--bishop-color', choices=['light', 'dark'], default=None,
+                     help="Constrain the bishop to only light- or dark-squared placements -- "
+                          "generates seeds for exactly one of the two structurally disconnected "
+                          "halves of the landscape (a bishop's square color never changes under "
+                          "any legal move). Use this to discover/classify each half separately, "
+                          "roughly halving peak memory for material with one bishop.")
     args = ap.parse_args()
 
     white_letters = parse_white_pieces(args.white)
     has_pawn = 'P' in white_letters
     if has_pawn and white_letters.count('P') > 1:
         raise SystemExit("ERROR: this script and the current engine scope support at most one pawn")
+    has_bishop = 'B' in white_letters
+
+    if args.bishop_color and not has_bishop:
+        raise SystemExit("ERROR: --bishop-color only makes sense when --white includes 'B'")
 
     print(f"White pieces: {white_letters}" + (" (pawn -> all seeds forced to rank 2)" if has_pawn else ""))
+    if has_bishop:
+        if args.bishop_color:
+            print(f"  Bishop constrained to {args.bishop_color}-squared placements only -- "
+                  f"see module docstring: a bishop's square color never changes under any "
+                  f"legal move, so this generates seeds for exactly ONE of the two "
+                  f"structurally disconnected halves of the full landscape.")
+        else:
+            print("  NOTE: material includes a bishop, whose square color is conserved for the "
+                  "whole game -- the full landscape is two disconnected halves (light-squared "
+                  "and dark-squared bishop), not one. This run's seeds are NOT explicitly "
+                  "balanced between them; use --bishop-color light / --bishop-color dark to "
+                  "generate each half separately and deliberately (recommended for memory-"
+                  "constrained machines), or verify after the fact that your seed set actually "
+                  "included both colors before trusting a combined run as complete.")
 
     # Genuinely spread anchor points -- corners, edge midpoints, center --
     # rather than a linear rotation that ends up clustering everything in
@@ -178,7 +219,7 @@ def main():
     for i in range(args.num_seeds):
         anchor = anchors[i % len(anchors)]
         try:
-            seeds.append(build_seed(white_letters, anchor))
+            seeds.append(build_seed(white_letters, anchor, force_bishop_color=args.bishop_color))
         except RuntimeError as e:
             print(f"  (skipped one candidate seed: {e})")
 
@@ -190,8 +231,8 @@ def main():
         for letters, squares in seeds:
             f.write(format_seed(letters, squares) + "\n")
 
-    print(f"Wrote {len(seeds)} seed positions to {args.out}")
-    print("\nPreview:")
+    print(f"\nWrote {len(seeds)} seed positions to {args.out}")
+    print("Preview:")
     for letters, squares in seeds[:5]:
         print(f"  {format_seed(letters, squares)}")
     if len(seeds) > 5:

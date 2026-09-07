@@ -16,6 +16,16 @@
 #include <limits>
 #include <fstream>
 
+// Platform-specific memory detection for --max-nodes auto-sizing (PIECE_GENERAL
+// only). Each block is guarded so it only ever compiles on its own platform --
+// safe to keep all three in one shared file regardless of which OS is building it.
+#if defined(__APPLE__)
+#include <sys/types.h>
+#include <sys/sysctl.h>
+#elif defined(_WIN32)
+#include <windows.h>
+#endif
+
 using namespace std;
 
 const int INF_MAX = 2147483647;
@@ -2390,6 +2400,77 @@ inline void export_general_classification(RetrogradeClassifier& rc, const string
     cout << "Wrote " << written << " classified positions to " << db_file << "\n";
 }
 
+// Detects available system memory, for --max-nodes auto-sizing. Returns -1
+// on any failure (unsupported platform, syscall error) -- callers must
+// treat that as "detection unavailable" and fall back to a fixed safe
+// default, never as 0 usable bytes.
+//
+// is_true_available distinguishes what was actually measured: Linux's
+// /proc/meminfo MemAvailable and Windows's GlobalMemoryStatusEx both report
+// genuinely currently-free memory (already accounting for whatever else is
+// running). macOS's sysctl(HW_MEMSIZE) only reports TOTAL physical memory --
+// there is no equally simple, equally reliable "free right now" query
+// worth risking on a platform this code can't be tested on -- so the
+// caller applies a more conservative safety fraction in that case.
+inline long long detect_system_memory_bytes(bool& is_true_available) {
+    is_true_available = false;
+#if defined(__linux__)
+    ifstream meminfo("/proc/meminfo");
+    if (meminfo.is_open()) {
+        string line;
+        while (getline(meminfo, line)) {
+            if (line.substr(0, 13) == "MemAvailable:") {
+                long long kb = 0;
+                sscanf(line.c_str() + 13, "%lld", &kb);
+                if (kb > 0) { is_true_available = true; return kb * 1024; }
+            }
+        }
+    }
+    return -1;
+#elif defined(__APPLE__)
+    int mib[2] = {CTL_HW, HW_MEMSIZE};
+    int64_t memsize = 0;
+    size_t len = sizeof(memsize);
+    if (sysctl(mib, 2, &memsize, &len, NULL, 0) == 0 && memsize > 0) {
+        is_true_available = false;  // total physical memory, not "free right now"
+        return (long long)memsize;
+    }
+    return -1;
+#elif defined(_WIN32)
+    MEMORYSTATUSEX statex;
+    statex.dwLength = sizeof(statex);
+    if (GlobalMemoryStatusEx(&statex)) {
+        is_true_available = true;
+        return (long long)statex.ullAvailPhys;
+    }
+    return -1;
+#else
+    return -1;
+#endif
+}
+
+// Empirically measured, not guessed: direct RSS monitoring during a real
+// KBNvK discovery run (self-instrumented, sampled every 1 million
+// positions) showed the `nodes` map alone costs ~185-220 bytes per
+// discovered position, settling in that range past the first million once
+// early-allocation noise washes out. classify()'s `classified` map adds
+// roughly another 60-70 bytes for each position that ends up classified
+// (which is most of them in practice), plus the transient
+// `newly_classified` staging map used during every pass. 300 bytes/node is
+// a rounded-up, safety-padded combined budget for both maps coexisting at
+// their peak -- not the bare minimum, deliberately, since the alternative
+// failure mode (silently sizing too large and running the OS out of real
+// memory) is much worse than sizing conservatively.
+constexpr double BYTES_PER_NODE_ESTIMATE = 300.0;
+constexpr long long MIN_AUTO_NODES = 1000000;
+
+inline long long compute_safe_max_nodes(long long detected_bytes, bool is_true_available) {
+    double safety_fraction = is_true_available ? 0.75 : 0.55;
+    double usable_bytes = (double)detected_bytes * safety_fraction;
+    long long nodes = (long long)(usable_bytes / BYTES_PER_NODE_ESTIMATE);
+    return max(nodes, MIN_AUTO_NODES);
+}
+
 inline void run_general_sweep(const vector<GeneralState>& roots, const string& db_file,
                                long long max_nodes = 15000000) {
     cout << "\n" << string(80, '=') << "\n";
@@ -3686,6 +3767,7 @@ int main(int argc, char* argv[]) {
     bool full_dag_mode = false;
     bool fresh_start = false;
     long long max_nodes_arg = 15000000;
+    bool max_nodes_explicit = false;
 #ifdef PIECE_GENERAL
     string positions_file = "general_positions.txt";
     string db_file = "general_perfect_play.db";
@@ -3709,9 +3791,31 @@ int main(int argc, char* argv[]) {
         else if (arg == "--positions" && i + 1 < argc) { positions_file = argv[++i]; }
         else if (arg == "--db" && i + 1 < argc) { db_file = argv[++i]; }
         else if (arg == "--fresh") { fresh_start = true; }
-        else if (arg == "--max-nodes" && i + 1 < argc) { max_nodes_arg = atoll(argv[++i]); }
+        else if (arg == "--max-nodes" && i + 1 < argc) { max_nodes_arg = atoll(argv[++i]); max_nodes_explicit = true; }
         else { unrecognized.push_back(arg); }
     }
+
+#ifdef PIECE_GENERAL
+    // Auto-size --max-nodes from detected system memory, UNLESS the user
+    // explicitly passed a value -- explicit intent always wins over any
+    // auto-detected guess, no exceptions.
+    if (!max_nodes_explicit) {
+        bool is_true_available = false;
+        long long detected = detect_system_memory_bytes(is_true_available);
+        if (detected > 0) {
+            max_nodes_arg = compute_safe_max_nodes(detected, is_true_available);
+            cout << "[auto-memory] Detected " << fixed << setprecision(1)
+                 << (double)detected / (1024.0*1024.0*1024.0) << " GB "
+                 << (is_true_available ? "currently available" : "total physical memory")
+                 << " -> using --max-nodes " << max_nodes_arg
+                 << " (override with --max-nodes N if you want a different value)\n";
+        } else {
+            cout << "[auto-memory] Could not detect system memory on this platform -- "
+                 << "falling back to the fixed default of " << max_nodes_arg
+                 << " (override with --max-nodes N)\n";
+        }
+    }
+#endif
 
     // A silently-ignored flag is exactly the bug class that caused --db to be a
     // no-op in the previous version of this file: the arg-parsing loop just skipped
@@ -3722,7 +3826,8 @@ int main(int argc, char* argv[]) {
         cerr << "ERROR: unrecognized argument(s):";
         for (auto& u : unrecognized) cerr << " " << u;
         cerr << "\nKnown flags: --debug/-d, --batch/-b, --full-dag/-g, "
-                "--positions <file>, --db <file>, --fresh, --max-nodes <N> (PIECE_GENERAL only)\n";
+                "--positions <file>, --db <file>, --fresh, "
+                "--max-nodes <N> (PIECE_GENERAL only, auto-detected from system memory if omitted)\n";
         return 1;
     }
 

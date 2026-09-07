@@ -89,6 +89,31 @@ def main():
         print(f"ERROR: solver binary not found at {args.solver}", file=sys.stderr)
         sys.exit(1)
 
+    # --fresh unconditionally deletes an existing database, with no memory
+    # of what was in it -- and the most natural way to trigger this by
+    # ACCIDENT is simply re-running the same command line to resume after
+    # stopping a sweep, if that line still has --fresh in it from the
+    # original launch. Confirmed directly: re-running with --fresh still
+    # present reports "Discovery: 372076 positions" (full rediscovery) on
+    # a database that already had everything proven; the identical command
+    # without --fresh reports "Discovery: 0 positions" (correctly resumed).
+    # This check exists specifically so that mistake costs a keypress, not
+    # hours of already-completed work.
+    if args.fresh and os.path.isfile(args.db):
+        existing_lines = sum(1 for _ in open(args.db)) - 1  # minus header
+        if existing_lines > 0:
+            print(f"\n{'!'*70}")
+            print(f"WARNING: --fresh will DELETE {args.db}, which already contains")
+            print(f"{existing_lines} proven positions. This cannot be undone.")
+            print(f"{'!'*70}")
+            print(f"If you're resuming a sweep you already started, you almost")
+            print(f"certainly do NOT want --fresh -- just remove it and re-run.")
+            answer = input(f"\nType 'delete' to actually wipe {args.db} and start over, "
+                            f"or anything else to abort: ")
+            if answer.strip() != 'delete':
+                print("Aborted -- database left untouched.")
+                sys.exit(1)
+
     header, all_seeds = read_all_lines(args.positions_file)
     total = len(all_seeds)
     if total == 0:

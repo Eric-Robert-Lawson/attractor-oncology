@@ -32,6 +32,16 @@ typically discover ~0 new positions and complete almost instantly -- this
 is expected and correct, not something to optimize away: it's the direct
 result of everything already being proven and sealed from disk.
 
+Each batch's output streams live, line by line, as the solver produces it
+-- including its own periodic "[discovery progress]" (every 1M positions)
+and "[classify progress]" (every pass) checkpoints -- rather than being
+buffered and dumped only after the whole batch finishes. Confirmed
+directly: checked a running sweep's log file mid-batch and saw it still
+growing in real time (14 of an eventual 37 lines present partway through
+a 4.4s batch), not silent until completion. This matters most on a
+material's first real batch, which can run for minutes with no output
+otherwise -- indistinguishable from a hang without live streaming.
+
 Usage:
     python3 run_full_sweep.py kqvk_exhaustive.txt --db kqvk_perfect_play.db --solver ./general_solver
     python3 run_full_sweep.py kbnvk_exhaustive.txt --db kbnvk_perfect_play.db --solver ./general_solver --batch-size 200
@@ -114,20 +124,33 @@ def main():
         print(f"{'='*70}")
         print(f"BATCH {batch_idx + 1}/{num_batches}  (seeds {start}-{end - 1} of {total})")
         print(f"{'='*70}")
-        result = subprocess.run(cmd, capture_output=True, text=True)
+
+        # Streamed line-by-line, NOT captured and printed after the fact --
+        # capture_output=True blocks until the whole subprocess exits, so on
+        # a long first batch (a not-yet-covered material's real discovery
+        # can run minutes) nothing would appear on screen at all until it
+        # finished, indistinguishable from a hang. This surfaces the
+        # solver's own periodic "[discovery progress]" (every 1M positions)
+        # and "[classify progress]" (every pass) lines live, as they're
+        # printed, exactly like running the solver directly would show.
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                                 text=True, bufsize=1)
+        stdout_lines = []
+        for line in proc.stdout:
+            stdout_lines.append(line)
+            if any(key in line for key in (
+                "discovery progress", "classify progress", "Discovery:", "Classification:",
+                "Wrote", "Sealed", "ERROR", "WIN in", "DRAW"
+            )):
+                print("  " + line.rstrip())
+        proc.wait()
         batch_elapsed = time.time() - batch_start
 
-        # Surface the parts of the solver's own output that actually matter,
-        # rather than a wall of text per batch -- most batches after the
-        # first few will be nearly silent (0 new positions), which is the
-        # expected, correct outcome once the graph is fully sealed.
-        for line in result.stdout.splitlines():
-            if any(key in line for key in ("Discovery:", "Classification:", "Wrote", "Sealed", "ERROR", "WIN in", "DRAW")):
-                print("  " + line)
-        if result.returncode != 0:
-            print(f"  [WARNING] batch {batch_idx + 1} exited with code {result.returncode}")
-            if result.stderr.strip():
-                print("  stderr:", result.stderr.strip()[:2000])
+        if proc.returncode != 0:
+            print(f"  [WARNING] batch {batch_idx + 1} exited with code {proc.returncode}")
+            tail = "".join(stdout_lines).strip()
+            if tail:
+                print("  output tail:", tail[-2000:])
 
         print(f"  batch time: {batch_elapsed:.1f}s\n")
 

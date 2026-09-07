@@ -74,6 +74,7 @@ import argparse
 import csv
 import os
 import sys
+import time
 from collections import defaultdict
 
 FILES = "abcdefgh"
@@ -523,6 +524,22 @@ def run_categorization(db, min_plies=0, max_positions=None):
     ambiguous_counter = [0]
     results = []
     checked = 0
+
+    # Total positions actually needing classify_position (has a multi-way
+    # tie AND passes min_plies) isn't known up front without a separate
+    # pass, so it's counted here first -- cheap relative to the actual
+    # per-position work below, and gives an honest denominator for
+    # progress/ETA instead of an unlabeled, possibly-stuck-looking loop.
+    to_process = sum(1 for (position, turn), entry in db.items()
+                      if entry['distance'] >= min_plies and len(entry['tied']) > 1)
+    print(f"  {to_process} positions actually need classification (multi-way tie, "
+          f"distance >= {min_plies}) -- this is the slow step, each one can involve "
+          f"reachable-set searches, not just a lookup")
+
+    start = time.time()
+    last_print = start
+    independent_found = 0
+
     for (position, turn), entry in db.items():
         if entry['distance'] < min_plies:
             continue
@@ -531,12 +548,34 @@ def run_categorization(db, min_plies=0, max_positions=None):
         checked += 1
         if max_positions and checked > max_positions:
             break
+
         result = classify_position(position, turn, entry, db, reach_memo, warned, ambiguous_counter)
         if result:
             result['position'] = position
             result['turn'] = turn
             result['total_plies'] = entry['distance']
             results.append(result)
+            if result['category'] == 'INDEPENDENT':
+                independent_found += 1
+
+        # Time-based, not count-based: per-position cost varies enormously
+        # here (some resolve via the cheap union-find pass alone, others
+        # trigger reachable_set's own up-to-5000-node search), so a fixed
+        # "every N positions" interval would either print constantly during
+        # the fast stretches or go silent for a long time during a run of
+        # slow ones -- exactly the kind of gap that looks indistinguishable
+        # from a hang.
+        now = time.time()
+        if now - last_print >= 10:
+            last_print = now
+            elapsed = now - start
+            rate = checked / elapsed if elapsed > 0 else 0
+            remaining = (to_process - checked) / rate if rate > 0 else float('inf')
+            print(f"  [progress] {checked}/{to_process} classified ({100*checked/to_process:.1f}%), "
+                  f"{independent_found} INDEPENDENT so far, elapsed={elapsed:.0f}s, "
+                  f"~{remaining:.0f}s remaining at current rate", flush=True)
+
+    print(f"  [progress] done: {checked}/{to_process} classified in {time.time()-start:.0f}s")
     if ambiguous_counter[0]:
         print(f"  NOTE: {ambiguous_counter[0]} branch(es) hit the same-kind-piece move ambiguity "
               f"(see module docstring point 4) and were treated as unverified rather than guessed.")
@@ -835,17 +874,35 @@ def find_families(findings):
                 fixed_val = finding[role]
             key = (role, fixed_val, finding['turn'], finding['tied_moves'])
             groups[key].append(finding)
-        for (fixed_role, fixed_val, turn, tied_moves), members in groups.items():
+
+        print(f"  [role={role}] {len(groups)} distinct groups to check")
+        group_start = time.time()
+        last_print = group_start
+
+        for gi, ((fixed_role, fixed_val, turn, tied_moves), members) in enumerate(groups.items()):
             distinct_positions = {(m['position'], m['turn']): m for m in members}
             if len(distinct_positions) < 2:
                 continue
             member_list = list(distinct_positions.values())
+            # The only part of this whole function with worse-than-linear
+            # cost: pairwise across one group's members. Groups are
+            # typically small, but nothing guarantees that, so this is
+            # where a genuinely slow group would actually show up.
             symmetric_pairs = []
-            for i in range(len(member_list)):
-                for j in range(i + 1, len(member_list)):
+            n = len(member_list)
+            pair_count = 0
+            for i in range(n):
+                for j in range(i + 1, n):
+                    pair_count += 1
                     t_idx = is_symmetric_general(member_list[i]['position'], member_list[j]['position'])
                     if t_idx is not None and t_idx != 0:
                         symmetric_pairs.append((member_list[i]['position'], member_list[j]['position'], t_idx))
+                    now = time.time()
+                    if now - last_print >= 10:
+                        last_print = now
+                        print(f"    [role={role}] group {gi+1}/{len(groups)} ({n} members, "
+                              f"{n*(n-1)//2} pairs): {pair_count}/{n*(n-1)//2} pairs checked, "
+                              f"elapsed={now-group_start:.0f}s", flush=True)
             families.append({
                 'fixed_piece': fixed_role, 'fixed_value': fixed_val, 'turn': turn,
                 'tied_moves': tied_moves, 'members': member_list,
@@ -853,6 +910,7 @@ def find_families(findings):
             })
             for m in member_list:
                 seen_in_a_family.add((m['position'], m['turn']))
+        print(f"  [role={role}] done in {time.time()-group_start:.0f}s")
     unique_findings = [f for f in findings if (f['position'], f['turn']) not in seen_in_a_family]
     return families, unique_findings
 

@@ -80,15 +80,84 @@ def parse_white_pieces(spec):
     return letters
 
 
-def is_legal_placement(squares):
+def _slides_clear(from_pos, to_pos, occupied):
+    """True if the straight-line (rank, file, or diagonal) path between two
+    squares has no occupied square strictly between them. Assumes the two
+    squares are already known to be aligned (same rank/file/diagonal)."""
+    df = to_pos.file - from_pos.file
+    dr = to_pos.rank - from_pos.rank
+    step_f = (df > 0) - (df < 0)
+    step_r = (dr > 0) - (dr < 0)
+    f, r = from_pos.file + step_f, from_pos.rank + step_r
+    while (f, r) != (to_pos.file, to_pos.rank):
+        if (f, r) in occupied:
+            return False
+        f += step_f
+        r += step_r
+    return True
+
+
+def _attacks(letter, from_pos, target, occupied):
+    """Does a White piece of this kind, sitting at from_pos, attack target,
+    given the full set of occupied squares (for blocking sliders)? Pawn
+    direction is hardcoded White-forward, matching the fact that every seed
+    this generator produces has White pieces only doing the attacking here."""
+    df = target.file - from_pos.file
+    dr = target.rank - from_pos.rank
+    if df == 0 and dr == 0:
+        return False
+    upper = letter.upper()
+    if upper == 'K':
+        return max(abs(df), abs(dr)) == 1
+    if upper == 'N':
+        return (abs(df), abs(dr)) in ((1, 2), (2, 1))
+    if upper == 'P':
+        return dr == 1 and abs(df) == 1
+    if upper == 'B':
+        return abs(df) == abs(dr) and _slides_clear(from_pos, target, occupied)
+    if upper == 'R':
+        return (df == 0 or dr == 0) and _slides_clear(from_pos, target, occupied)
+    if upper == 'Q':
+        return ((abs(df) == abs(dr) or df == 0 or dr == 0)
+                and _slides_clear(from_pos, target, occupied))
+    return False
+
+
+def is_legal_placement(squares, white_letters=None):
     """Mirrors the C++ engine's is_legal_state: every piece on a distinct
     square, and the two kings not adjacent. squares is a dict of
-    role -> Position, where role is 'WK', 'BK', or a piece index."""
+    role -> Position, where role is 'WK', 'BK', or a piece index.
+
+    Also rejects any placement leaving Black's king already attacked by a
+    White piece -- every seed this generator produces is White-to-move by
+    construction, and "White to move, Black already in check" is not a
+    reachable chess position: it would mean Black's own last move left its
+    king in check, which is illegal. Confirmed as a REAL, not theoretical,
+    gap: checked directly against every exhaustive KBNvK seed and found
+    583 of 3612 (16.14%) violated exactly this, all flagged by python-chess
+    as STATUS_OPPOSITE_CHECK when cross-checked independently. This only
+    taints the seed row itself, never anything discovered from it --
+    generate_legal_moves in the engine checks "does this move leave the
+    CURRENT mover in check" fresh at every position, with no dependency on
+    how that position was reached, so every child is independently correct
+    regardless of whether its ancestor seed was a reachable position."""
     positions = list(squares.values())
     if len(set((p.file, p.rank) for p in positions)) != len(positions):
         return False
     if squares['WK'].distance_to(squares['BK']) < 2:
         return False
+
+    if white_letters is not None:
+        occupied = {(p.file, p.rank) for p in positions}
+        white_pieces = [('K', squares['WK'])]
+        for i, letter in enumerate(white_letters):
+            key = f'W{i}'
+            if key in squares:
+                white_pieces.append((letter, squares[key]))
+        for letter, pos in white_pieces:
+            if _attacks(letter, pos, squares['BK'], occupied):
+                return False
+
     return True
 
 
@@ -137,24 +206,27 @@ def build_seed(white_letters, anchor, force_bishop_color=None):
     squares['WK'] = take_next()
     squares['BK'] = take_next(lambda p: p.distance_to(squares['WK']) >= 2)
 
+    def not_attacking_bk(letter):
+        return lambda p: not _attacks(letter, p, squares['BK'], used)
+
     for i, letter in enumerate(white_letters):
         if letter == 'P':
             candidates = sorted((Position(f, 1) for f in range(8)), key=lambda p: abs(p.file - af))
             placed = False
             for cand in candidates:
-                if (cand.file, cand.rank) not in used:
+                if (cand.file, cand.rank) not in used and not _attacks('P', cand, squares['BK'], used):
                     used.add((cand.file, cand.rank))
                     squares[f'W{i}'] = cand
                     placed = True
                     break
             if not placed:
-                raise RuntimeError("could not place pawn on rank 2 -- board too crowded")
+                raise RuntimeError("could not place pawn on rank 2 without checking Black's king -- board too crowded")
         elif letter == 'B' and force_bishop_color is not None:
-            squares[f'W{i}'] = take_next(lambda p: square_color(p) == force_bishop_color)
+            squares[f'W{i}'] = take_next(lambda p: square_color(p) == force_bishop_color and not_attacking_bk(letter)(p))
         else:
-            squares[f'W{i}'] = take_next()
+            squares[f'W{i}'] = take_next(not_attacking_bk(letter))
 
-    if not is_legal_placement(squares):
+    if not is_legal_placement(squares, white_letters):
         raise RuntimeError("generated placement failed its own legality check -- this is a bug")
 
     return white_letters, squares

@@ -39,7 +39,7 @@ import argparse
 import sys
 
 from generate_general_seed_positions import (
-    Position, parse_white_pieces, is_legal_placement, square_color, format_seed, PIECE_LETTERS
+    Position, parse_white_pieces, is_legal_placement, square_color, format_seed, PIECE_LETTERS, _attacks
 )
 
 
@@ -64,24 +64,27 @@ def build_seed_for_king_pair(white_letters, wk, bk, force_bishop_color=None):
             return p
         raise RuntimeError("ran out of candidate squares")
 
+    def not_attacking_bk(letter):
+        return lambda p: not _attacks(letter, p, bk, used)
+
     for i, letter in enumerate(white_letters):
         if letter == 'P':
             candidates = sorted((Position(f, 1) for f in range(8)), key=lambda p: abs(p.file - wk.file))
             placed = False
             for cand in candidates:
-                if (cand.file, cand.rank) not in used:
+                if (cand.file, cand.rank) not in used and not _attacks('P', cand, bk, used):
                     used.add((cand.file, cand.rank))
                     squares[f'W{i}'] = cand
                     placed = True
                     break
             if not placed:
-                raise RuntimeError("could not place pawn on rank 2")
+                raise RuntimeError("could not place pawn on rank 2 without checking Black's king")
         elif letter == 'B' and force_bishop_color is not None:
-            squares[f'W{i}'] = take_next(lambda p: square_color(p) == force_bishop_color)
+            squares[f'W{i}'] = take_next(lambda p: square_color(p) == force_bishop_color and not_attacking_bk(letter)(p))
         else:
-            squares[f'W{i}'] = take_next()
+            squares[f'W{i}'] = take_next(not_attacking_bk(letter))
 
-    if not is_legal_placement(squares):
+    if not is_legal_placement(squares, white_letters):
         raise RuntimeError("generated placement failed its own legality check")
 
     return white_letters, squares

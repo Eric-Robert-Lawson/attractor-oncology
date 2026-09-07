@@ -43,6 +43,17 @@ struct SolvedPosition {
                                  // position from here through to mate, under the recorded
                                  // best_move and every move after it
 
+    // For pawn endgames only: which piece currently occupies the "WQ:" square --
+    // 'P' (still a pawn), 'Q' (promoted to queen), or 'N' (promoted to knight).
+    // Necessary because the position STRING alone is ambiguous: "WK:e2 WQ:e4
+    // BK:e8" could be either a pawn on e4 or an already-promoted queen that
+    // later moved there -- these are genuinely different game states requiring
+    // different move rules, and the string can't distinguish them on its own.
+    // Defaults to 'Q' so every EXISTING KQvK/KRvK row (which never had this
+    // column) loads with a value that's simply never consulted by non-pawn
+    // engines -- see load_from_file's backward-compatible parsing below.
+    char attacker_kind = 'Q';
+
     // Every move at THIS position that achieves the exact same M_value (i.e. every move
     // provably tied for game-theoretically optimal), each paired with its own cumulative
     // black-escape count. best_move is always one entry of this list -- kept as a separate
@@ -80,13 +91,14 @@ struct SolvedPosition {
             if (i > 0) ss << ";";
             ss << tied_moves[i].first << ":" << tied_moves[i].second;
         }
+        ss << "|" << attacker_kind;
         ss << "\n";
         return ss.str();
     }
     
     static string csv_header() {
         return "Position|Turn|BestMove|M|Plies|WhiteMoves|BlackMoves|NodesEval|Time|CumulativeBN|"
-               "BN_Trajectory|TiedMoves\n";
+               "BN_Trajectory|TiedMoves|AttackerKind\n";
     }
 };
 
@@ -109,8 +121,33 @@ class SolvedPositionDatabase {
             load_from_file();
         }
         
-        // Add a solved position to the database
-        void add_position(const SolvedPosition& pos) {
+        // Add a solved position to the database.
+        //
+        // full_symmetry controls how many of the 8 D4 board symmetries get used
+        // to generate derived positions. Default true preserves EXACT existing
+        // behavior (all 8) for every piece used so far (King, Queen, Rook --
+        // Bishop/Knight below too): their movement rules depend only on
+        // relative file/rank displacement, which every one of the 8 D4
+        // transforms preserves (rotations and reflections permute "same file",
+        // "same rank", and "same diagonal" among themselves, but never turn
+        // one into something that isn't a line-of-movement relation at all).
+        //
+        // Pass full_symmetry=false whenever a PAWN is on the board. A pawn's
+        // legality depends on an ABSOLUTE direction (forward = toward higher
+        // rank for White, lower rank for Black) and ABSOLUTE ranks (promotion
+        // on rank 8, double-step only from rank 2) -- properties tied to a
+        // fixed axis, not to relative displacement. Every D4 transform except
+        // identity and flip_horizontal either swaps the file/rank axes
+        // (turning "forward" into "sideways": both rotations of 90/270, and
+        // both diagonal flips) or reverses the rank axis outright (turning a
+        // forward pawn push into a backward one: rotate_180 and flip_vertical).
+        // flip_horizontal is the sole nontrivial survivor because it only ever
+        // touches file, leaving rank -- and therefore "forward" and every
+        // absolute-rank rule -- completely untouched. Verified directly: a
+        // White d2-d4 push transforms to a legal e2-e4 push under
+        // flip_horizontal, but to illegal or backward moves under every other
+        // one of the remaining 6 transforms.
+        void add_position(const SolvedPosition& pos, bool full_symmetry = true) {
             if (is_solved(pos.position_key, pos.turn)) {
                 return;
             }
@@ -207,43 +244,54 @@ class SolvedPositionDatabase {
                 }
             };
             
-            // Generate 4 rotations
+            // Generate 4 rotations -- ONLY when full_symmetry, since a rotation
+            // swaps the file/rank axes and is never valid with a pawn present
+            // (see the comment on add_position's signature above).
             string current_pos = pos.position_key;
             string current_move = pos.best_move;
             vector<pair<string,int>> current_tied = pos.tied_moves;
-            
-            for (int rot = 1; rot < 4; rot++) {
-                add_transformed(rotate_square, current_pos, current_move, current_tied);
-                
-                // Update current for next rotation
-                size_t wk_pos = current_pos.find("WK:") + 3;
-                size_t wq_pos = current_pos.find("WQ:") + 3;
-                size_t bk_pos = current_pos.find("BK:") + 3;
-                
-                string wk_sq = current_pos.substr(wk_pos, 2);
-                string wq_sq = current_pos.substr(wq_pos, 2);
-                string bk_sq = current_pos.substr(bk_pos, 2);
-                
-                string new_wk = rotate_square(wk_sq);
-                string new_wq = rotate_square(wq_sq);
-                string new_bk = rotate_square(bk_sq);
-                
-                current_pos = "WK:" + new_wk + " WQ:" + new_wq + " BK:" + new_bk;
-                current_move = transform_move(rotate_square, current_move);
 
-                vector<pair<string,int>> next_tied;
-                next_tied.reserve(current_tied.size());
-                for (auto& [mv, bncum] : current_tied) {
-                    next_tied.emplace_back(transform_move(rotate_square, mv), bncum);
+            if (full_symmetry) {
+                for (int rot = 1; rot < 4; rot++) {
+                    add_transformed(rotate_square, current_pos, current_move, current_tied);
+
+                    // Update current for next rotation
+                    size_t wk_pos = current_pos.find("WK:") + 3;
+                    size_t wq_pos = current_pos.find("WQ:") + 3;
+                    size_t bk_pos = current_pos.find("BK:") + 3;
+
+                    string wk_sq = current_pos.substr(wk_pos, 2);
+                    string wq_sq = current_pos.substr(wq_pos, 2);
+                    string bk_sq = current_pos.substr(bk_pos, 2);
+
+                    string new_wk = rotate_square(wk_sq);
+                    string new_wq = rotate_square(wq_sq);
+                    string new_bk = rotate_square(bk_sq);
+
+                    current_pos = "WK:" + new_wk + " WQ:" + new_wq + " BK:" + new_bk;
+                    current_move = transform_move(rotate_square, current_move);
+
+                    vector<pair<string,int>> next_tied;
+                    next_tied.reserve(current_tied.size());
+                    for (auto& [mv, bncum] : current_tied) {
+                        next_tied.emplace_back(transform_move(rotate_square, mv), bncum);
+                    }
+                    current_tied = next_tied;
                 }
-                current_tied = next_tied;
             }
-            
-            // Generate 4 reflections from original
-            add_transformed(flip_vertical, pos.position_key, pos.best_move, pos.tied_moves);
+
+            // flip_horizontal (mirror left-right, rank UNCHANGED) is valid
+            // regardless of pawns -- always applied.
             add_transformed(flip_horizontal, pos.position_key, pos.best_move, pos.tied_moves);
-            add_transformed(flip_diagonal_a1h8, pos.position_key, pos.best_move, pos.tied_moves);
-            add_transformed(flip_diagonal_a8h1, pos.position_key, pos.best_move, pos.tied_moves);
+
+            // flip_vertical (reverses rank -- turns forward into backward) and
+            // both diagonal flips (swap file/rank axes, same problem as
+            // rotation) are only valid without a pawn on the board.
+            if (full_symmetry) {
+                add_transformed(flip_vertical, pos.position_key, pos.best_move, pos.tied_moves);
+                add_transformed(flip_diagonal_a1h8, pos.position_key, pos.best_move, pos.tied_moves);
+                add_transformed(flip_diagonal_a8h1, pos.position_key, pos.best_move, pos.tied_moves);
+            }
         }
     
     // Check if position is already solved
@@ -423,6 +471,15 @@ class SolvedPositionDatabase {
                             }
                         }
                     }
+
+                    // AttackerKind: 13th column, added for pawn-endgame support. Older
+                    // database files (written before this existed) simply won't have it --
+                    // parts.size() <= 12 leaves the struct's default ('Q') in place, which
+                    // is exactly correct for every pre-existing KQvK/KRvK row: it's never
+                    // consulted by anything except the pawn engine.
+                    if (parts.size() > 12 && !parts[12].empty()) {
+                        pos.attacker_kind = parts[12][0];
+                    }
                     
                     solved[{pos.position_key, pos.turn}] = pos;
                     loaded_count++;
@@ -564,6 +621,10 @@ public:
 
 struct QueenRules {
     static constexpr char letter = 'Q';
+    // All 8 D4 board symmetries are valid for a queen -- its legality depends
+    // only on relative file/rank displacement (same file, same rank, same
+    // diagonal), and every D4 transform preserves that set of relations.
+    static constexpr bool full_board_symmetry = true;
 
     static vector<Position> generate_moves(const Position& pos) {
         vector<Position> moves;
@@ -628,6 +689,7 @@ struct QueenRules {
 // into BaseEngine/CompositionalEngine is identical to the queen case.
 struct RookRules {
     static constexpr char letter = 'R';
+    static constexpr bool full_board_symmetry = true;  // same reasoning as QueenRules
 
     static vector<Position> generate_moves(const Position& pos) {
         vector<Position> moves;
@@ -675,9 +737,579 @@ struct RookRules {
     }
 };
 
+// BishopRules and KnightRules -- genuinely modular in the same sense Rook was:
+// both pieces' legality depends only on relative file/rank displacement, so
+// all 8 D4 symmetries apply cleanly, and neither needs anything beyond the
+// existing AttackerRules interface (pseudo-legal move generation + an attacks
+// check). Cross-validated against hand-computed geometry before delivery.
+//
+// IMPORTANT, not a caveat to skip: a LONE bishop or LONE knight can NEVER
+// force checkmate against a lone king, under any circumstance, from any
+// starting position -- this is elementary, universal chess theory (the
+// "insufficient material" rule), not a limitation of this engine. Running
+// --full-dag or --batch with either of these instantiated as the sole
+// attacker will find precisely nothing: every position is an unconditional
+// draw, so there is no winning technique to compare and no tied-move
+// structure to analyze at all. They're included here because the geometry
+// itself is correct and reusable -- e.g. as one of several pieces in a
+// future multi-attacker endgame (KBNvK, which unlike either piece alone CAN
+// force mate, being the classic hard case; or as a supporting piece in
+// KQBvK, KRNvK, etc.) -- not because KBvK or KNvK are meaningful targets to
+// run standalone.
+
+struct BishopRules {
+    static constexpr char letter = 'B';
+    static constexpr bool full_board_symmetry = true;
+
+    static vector<Position> generate_moves(const Position& pos) {
+        vector<Position> moves;
+        int dirs[][2] = {{1,1},{1,-1},{-1,1},{-1,-1}};  // diagonals only
+
+        for (auto& d : dirs) {
+            for (int dist = 1; dist <= 7; dist++) {
+                int nf = pos.file + d[0] * dist;
+                int nr = pos.rank + d[1] * dist;
+                if (nf >= 0 && nf <= 7 && nr >= 0 && nr <= 7) {
+                    moves.push_back(Position(nf, nr));
+                } else break;
+            }
+        }
+        return moves;
+    }
+
+    static bool attacks(const Position& pos, const Position& bp,
+                         const Position& wk, const Position& wb) {
+        if (pos == bp) return false;
+
+        // Diagonal only -- no file/rank branches at all, unlike Queen/Rook.
+        if (abs(pos.file - bp.file) == abs(pos.rank - bp.rank)) {
+            int df = (pos.file > bp.file) ? 1 : -1;
+            int dr = (pos.rank > bp.rank) ? 1 : -1;
+            int f = bp.file + df;
+            int r = bp.rank + dr;
+            while (f != pos.file) {
+                if (Position(f, r) == wk || Position(f, r) == wb) return false;
+                f += df;
+                r += dr;
+            }
+            return true;
+        }
+        return false;
+    }
+};
+
+struct KnightRules {
+    static constexpr char letter = 'N';
+    static constexpr bool full_board_symmetry = true;
+
+    static vector<Position> generate_moves(const Position& pos) {
+        vector<Position> moves;
+        int offsets[][2] = {{1,2},{2,1},{2,-1},{1,-2},{-1,-2},{-2,-1},{-2,1},{-1,2}};
+        for (auto& o : offsets) {
+            int nf = pos.file + o[0];
+            int nr = pos.rank + o[1];
+            if (nf >= 0 && nf <= 7 && nr >= 0 && nr <= 7) {
+                moves.push_back(Position(nf, nr));
+            }
+        }
+        return moves;
+    }
+
+    static bool attacks(const Position& pos, const Position& np,
+                         const Position& /*wk*/, const Position& /*wn*/) {
+        if (pos == np) return false;
+        // A knight jumps over pieces -- no blocking check at all, unlike
+        // every sliding piece above. The two unused blocker parameters are
+        // still required to satisfy the shared AttackerRules signature.
+        int df = abs(pos.file - np.file);
+        int dr = abs(pos.rank - np.rank);
+        return (df == 1 && dr == 2) || (df == 2 && dr == 1);
+    }
+};
+
 // ============================================================================
-// BaseEngine
+// PawnState / PawnEngine -- a genuinely separate, parallel implementation
+// for pawn endgames (KPvK). Deliberately NOT built on GameState/AttackerRules.
 // ============================================================================
+//
+// Every piece above (King, Queen, Rook, Bishop, Knight) shares two properties
+// GameState and CompositionalEngine<AttackerRules> were designed around:
+// (1) a piece's move squares and attack squares are the SAME set, and (2) a
+// piece's type never changes during a game. A pawn breaks both -- it moves
+// straight but attacks diagonally, and it can promote into a different piece
+// mid-game. Rather than retrofit those two assumptions into the
+// already-verified KQvK/KRvK machinery (real risk of disturbing something
+// carefully proven correct), this is a self-contained parallel engine. It
+// reuses everything that genuinely IS piece-agnostic already: Position,
+// SolvedPosition (including the new AttackerKind column), SolvedPositionDatabase,
+// and the symmetry-restriction logic from add_position's full_symmetry flag.
+// QueenRules::generate_moves/attacks and KnightRules::generate_moves/attacks
+// are reused directly for the post-promotion case -- no need to reimplement
+// them a second time.
+
+enum class PieceKind : uint8_t { PAWN = 0, QUEEN = 1, KNIGHT = 2 };
+
+inline char kind_letter(PieceKind k) {
+    switch (k) {
+        case PieceKind::PAWN:   return 'P';
+        case PieceKind::QUEEN:  return 'Q';
+        case PieceKind::KNIGHT: return 'N';
+    }
+    return '?';
+}
+
+inline PieceKind kind_from_letter(char c) {
+    if (c == 'Q') return PieceKind::QUEEN;
+    if (c == 'N') return PieceKind::KNIGHT;
+    return PieceKind::PAWN;
+}
+
+class PawnState {
+public:
+    Position wk, wp, bk;
+    PieceKind wp_kind;
+    char to_move;
+
+    PawnState() : wp_kind(PieceKind::PAWN), to_move('W') {}
+    PawnState(Position wk_, Position wp_, PieceKind kind_, Position bk_, char to_move_)
+        : wk(wk_), wp(wp_), bk(bk_), wp_kind(kind_), to_move(to_move_) {}
+
+    // Label stays "WQ:" regardless of current piece kind, matching every
+    // other endgame's convention -- SolvedPosition's separate AttackerKind
+    // column (not this string) is the source of truth for what's actually
+    // there, since the string alone can't distinguish a pawn on e4 from an
+    // already-promoted queen that later moved to e4.
+    string str() const {
+        return "WK:" + wk.str() + " WQ:" + wp.str() + " BK:" + bk.str();
+    }
+
+    bool operator==(const PawnState& other) const {
+        return wk == other.wk && wp == other.wp && wp_kind == other.wp_kind
+            && bk == other.bk && to_move == other.to_move;
+    }
+};
+
+struct PawnMove {
+    Position dest;
+    bool is_promotion;
+};
+
+// White pawn only -- the only case KPvK needs. Attacks the two
+// diagonally-forward squares regardless of occupancy, exactly like every
+// other piece's attacks(): occupancy determines whether a MOVE there is
+// legal, not whether the square is under attack.
+inline vector<Position> pawn_attack_squares(const Position& p) {
+    vector<Position> squares;
+    if (p.rank + 1 > 7) return squares;  // already on the back rank -- shouldn't occur mid-game
+    for (int df : {-1, 1}) {
+        int nf = p.file + df;
+        if (nf >= 0 && nf <= 7) squares.push_back(Position(nf, p.rank + 1));
+    }
+    return squares;
+}
+
+// Quiet (non-capturing) forward moves only. Diagonal CAPTURE moves are
+// deliberately not generated: in KPvK, Black's only piece is its king, and a
+// king can never legally be captured (checkmate ends the game before that
+// could happen), so a pawn's diagonal capture has no legal target in this
+// material and would be dead, untested code if added now. pawn_attack_squares
+// above still matters independently -- it determines which squares near
+// Black's king are unsafe to move into, which has nothing to do with whether
+// a capture move exists to make.
+inline vector<PawnMove> generate_pawn_quiet_moves(const Position& p, const Position& wk, const Position& bk) {
+    vector<PawnMove> moves;
+    if (p.rank + 1 > 7) return moves;
+    Position one_step(p.file, p.rank + 1);
+    if (one_step == wk || one_step == bk) return moves;  // blocked -- no double-step possible either
+
+    bool promotes = (one_step.rank == 7);
+    moves.push_back({one_step, promotes});
+
+    if (!promotes && p.rank == 1) {  // starting rank (index 1 = rank 2) -- double-step allowed
+        Position two_step(p.file, p.rank + 2);
+        if (!(two_step == wk) && !(two_step == bk)) {
+            moves.push_back({two_step, false});
+        }
+    }
+    return moves;
+}
+
+// Dispatches to the correct attacks() check based on whichever piece
+// currently occupies the wp slot. The one place genuine runtime branching
+// happens in this engine -- a plain 3-way switch, not a general N-piece scan,
+// so the cost is negligible even though every AttackerRules piece above
+// resolves this at compile time instead. piece_square is passed as both the
+// "attacker position" and the "second blocker" argument to Queen/KnightRules,
+// matching the exact calling convention used throughout the rest of this file
+// (e.g. is_attacked_by_queen(m, st.wq, st.wk, st.wq)).
+inline bool wp_attacks(PieceKind kind, const Position& target, const Position& piece_square, const Position& wk) {
+    switch (kind) {
+        case PieceKind::PAWN: {
+            for (auto& s : pawn_attack_squares(piece_square)) if (s == target) return true;
+            return false;
+        }
+        case PieceKind::QUEEN:
+            return QueenRules::attacks(target, piece_square, wk, piece_square);
+        case PieceKind::KNIGHT:
+            return KnightRules::attacks(target, piece_square, wk, piece_square);
+    }
+    return false;
+}
+
+struct PawnSearchResult {
+    optional<int> val;
+    optional<int> bn_cum;
+    optional<PawnState> mv;
+    vector<pair<PawnState, int>> tied;
+};
+
+class PawnEngine {
+public:
+    int nodes_evaluated = 0;
+
+    vector<Position> generate_all_king_moves(const Position& pos) const {
+        vector<Position> moves;
+        for (int df = -1; df <= 1; df++) {
+            for (int dr = -1; dr <= 1; dr++) {
+                if (df == 0 && dr == 0) continue;
+                int nf = pos.file + df, nr = pos.rank + dr;
+                if (nf >= 0 && nf <= 7 && nr >= 0 && nr <= 7) moves.push_back(Position(nf, nr));
+            }
+        }
+        return moves;
+    }
+
+    bool is_legal_state(const PawnState& st) const {
+        set<pair<int,int>> pos;
+        pos.insert({st.wk.file, st.wk.rank});
+        pos.insert({st.wp.file, st.wp.rank});
+        pos.insert({st.bk.file, st.bk.rank});
+        if (pos.size() != 3) return false;
+        if (st.wk.distance_to(st.bk) < 2) return false;
+        return true;
+    }
+
+    bool is_checkmate(const PawnState& st) const {
+        if (st.to_move != 'B') return false;
+        if (!wp_attacks(st.wp_kind, st.bk, st.wp, st.wk)) return false;
+        for (auto& m : generate_all_king_moves(st.bk)) {
+            if (wp_attacks(st.wp_kind, m, st.wp, st.wk)) continue;
+            if (m.distance_to(st.wk) <= 1) continue;
+            return false;
+        }
+        return true;
+    }
+
+    bool is_stalemate(const PawnState& st) const {
+        if (st.to_move != 'B') return false;
+        if (wp_attacks(st.wp_kind, st.bk, st.wp, st.wk)) return false;
+        for (auto& m : generate_all_king_moves(st.bk)) {
+            if (wp_attacks(st.wp_kind, m, st.wp, st.wk)) continue;
+            if (m.distance_to(st.wk) <= 1) continue;
+            return false;
+        }
+        return true;
+    }
+
+    string get_move_notation(const PawnState& from, const PawnState& to) const {
+        if (from.wk != to.wk) return "K" + to.wk.str();
+        if (from.wp != to.wp || from.wp_kind != to.wp_kind) {
+            string mv(1, kind_letter(from.wp_kind));
+            mv += to.wp.str();
+            if (from.wp_kind != to.wp_kind) {
+                mv += "=";
+                mv += kind_letter(to.wp_kind);
+            }
+            return mv;
+        }
+        if (from.bk != to.bk) return "k" + to.bk.str();
+        return "??";
+    }
+
+    // Inverse of get_move_notation. Handles a trailing "=Q"/"=N" promotion
+    // suffix by updating wp_kind in addition to the destination square.
+    PawnState apply_move_notation(const PawnState& from, const string& mv) const {
+        PawnState result = from;
+        if (mv.length() < 2) return result;
+        char piece = mv[0];
+        size_t eq = mv.find('=');
+        string dest_str = (eq == string::npos) ? mv.substr(1) : mv.substr(1, eq - 1);
+        Position dest = Position::from_str(dest_str);
+        if (piece == 'K') {
+            result.wk = dest; result.to_move = 'B';
+        } else if (piece == 'k') {
+            result.bk = dest; result.to_move = 'W';
+        } else {
+            result.wp = dest;
+            if (eq != string::npos && eq + 1 < mv.length()) {
+                result.wp_kind = kind_from_letter(mv[eq + 1]);
+            }
+            result.to_move = 'B';
+        }
+        return result;
+    }
+
+    // Only ever called with to_move=='B' throughout this file (mirroring
+    // exactly how the existing engine's count_legal_moves is only ever
+    // invoked for Black) -- Black's own escape-square count at this position.
+    int count_legal_moves(const PawnState& st) const {
+        int cnt = 0;
+        for (auto& bk_n : generate_all_king_moves(st.bk)) {
+            if (wp_attacks(st.wp_kind, bk_n, st.wp, st.wk)) continue;
+            if (bk_n.distance_to(st.wk) <= 1) continue;
+            PawnState ns = st; ns.bk = bk_n; ns.to_move = 'W';
+            if (is_legal_state(ns)) cnt++;
+        }
+        return cnt;
+    }
+
+    vector<PawnState> generate_candidates(const PawnState& st) const {
+        vector<PawnState> cands;
+        cands.reserve(16);
+        if (st.to_move == 'W') {
+            for (auto& wk_n : generate_all_king_moves(st.wk)) {
+                PawnState ns = st; ns.wk = wk_n; ns.to_move = 'B';
+                if (is_legal_state(ns) && !is_stalemate(ns)) cands.push_back(ns);
+            }
+
+            if (st.wp_kind == PieceKind::PAWN) {
+                for (auto& pm : generate_pawn_quiet_moves(st.wp, st.wk, st.bk)) {
+                    // "Don't hang the piece" gate -- same reasoning as the
+                    // existing engine, and now doubly load-bearing: per the
+                    // fix from two runs back, hanging this piece is a
+                    // provable permanent draw, so generating it here would
+                    // hand White a candidate that's always strictly worse
+                    // than avoiding it, for zero benefit.
+                    if (pm.dest.distance_to(st.bk) < 2 && pm.dest.distance_to(st.wk) > 1) continue;
+
+                    if (pm.is_promotion) {
+                        // Only Queen and Knight are ever correct promotion
+                        // choices. Any line achievable by promoting to Rook
+                        // or Bishop is also achievable by promoting to Queen
+                        // and simply choosing to only ever play the moves
+                        // the Rook/Bishop would have played -- Queen weakly
+                        // dominates both, for every possible continuation,
+                        // under both stages of this engine's optimality
+                        // criterion. Knight is NOT dominated (it reaches
+                        // squares in one move a Queen cannot), so it's the
+                        // only other real candidate worth searching.
+                        for (PieceKind k : {PieceKind::QUEEN, PieceKind::KNIGHT}) {
+                            PawnState ns = st; ns.wp = pm.dest; ns.wp_kind = k; ns.to_move = 'B';
+                            if (is_legal_state(ns) && !is_stalemate(ns)) cands.push_back(ns);
+                        }
+                    } else {
+                        PawnState ns = st; ns.wp = pm.dest; ns.to_move = 'B';
+                        if (is_legal_state(ns) && !is_stalemate(ns)) cands.push_back(ns);
+                    }
+                }
+            } else {
+                vector<Position> piece_moves = (st.wp_kind == PieceKind::QUEEN)
+                    ? QueenRules::generate_moves(st.wp)
+                    : KnightRules::generate_moves(st.wp);
+                for (auto& p_n : piece_moves) {
+                    if (p_n.distance_to(st.bk) < 2 && p_n.distance_to(st.wk) > 1) continue;
+
+                    if (st.wp_kind == PieceKind::QUEEN) {
+                        bool blocked = false;
+                        if (p_n.file == st.wp.file) {
+                            int lo = min(st.wp.rank, p_n.rank) + 1, hi = max(st.wp.rank, p_n.rank);
+                            for (int r = lo; r < hi; r++) if (Position(p_n.file, r) == st.wk) { blocked = true; break; }
+                        } else if (p_n.rank == st.wp.rank) {
+                            int lo = min(st.wp.file, p_n.file) + 1, hi = max(st.wp.file, p_n.file);
+                            for (int f = lo; f < hi; f++) if (Position(f, p_n.rank) == st.wk) { blocked = true; break; }
+                        } else if (abs(p_n.file - st.wp.file) == abs(p_n.rank - st.wp.rank)) {
+                            int df = (p_n.file > st.wp.file) ? 1 : -1, dr = (p_n.rank > st.wp.rank) ? 1 : -1;
+                            int f = st.wp.file + df, r = st.wp.rank + dr;
+                            while (f != p_n.file) { if (Position(f, r) == st.wk) { blocked = true; break; } f += df; r += dr; }
+                        }
+                        if (blocked) continue;
+                    }
+                    // Knight never needs a blocking check -- it jumps over pieces.
+
+                    PawnState ns = st; ns.wp = p_n; ns.to_move = 'B';
+                    if (is_legal_state(ns) && !is_stalemate(ns)) cands.push_back(ns);
+                }
+            }
+        } else {
+            for (auto& bk_n : generate_all_king_moves(st.bk)) {
+                if (wp_attacks(st.wp_kind, bk_n, st.wp, st.wk)) continue;
+                if (bk_n.distance_to(st.wk) <= 1) continue;
+                PawnState ns = st; ns.bk = bk_n; ns.to_move = 'W';
+                if (!is_legal_state(ns)) continue;
+                cands.push_back(ns);
+            }
+        }
+        return cands;
+    }
+
+    uint64_t make_cache_key(const PawnState& st, int depth) const {
+        uint64_t key = 0;
+        key |= ((uint64_t)st.wk.file << 60);
+        key |= ((uint64_t)st.wk.rank << 56);
+        key |= ((uint64_t)st.wp.file << 52);
+        key |= ((uint64_t)st.wp.rank << 48);
+        key |= ((uint64_t)st.bk.file << 44);
+        key |= ((uint64_t)st.bk.rank << 40);
+        // wp_kind needs its own bits now that the piece's square alone no
+        // longer determines what it is (see PawnState's comment on str()).
+        // Placed at bit 10: comfortably above depth's realistic range
+        // (bits 0-9, i.e. up to 1023 -- depth never remotely approaches
+        // that in practice) and comfortably below the coordinate fields
+        // starting at bit 40, so neither can collide with it.
+        key |= ((uint64_t)static_cast<uint8_t>(st.wp_kind) << 10);
+        key |= (uint64_t)depth;
+        return key;
+    }
+
+    PawnSearchResult compositional_search_impl(
+        const PawnState& st, int depth, int ply,
+        unordered_map<uint64_t, PawnSearchResult>& memo
+    ) {
+        uint64_t cache_key = make_cache_key(st, depth);
+        auto it = memo.find(cache_key);
+        if (it != memo.end()) return it->second;
+
+        if (is_checkmate(st)) {
+            PawnSearchResult res{0, 0, nullopt, {}};
+            memo[cache_key] = res;
+            return res;
+        }
+
+        // Same fix as the existing engine, generalized to whichever piece
+        // currently occupies wp: if Black's king is adjacent to it and
+        // White's king doesn't defend it, capturing it is a completely
+        // legal move, and for a lone-attacker endgame that always means
+        // "White now has a bare king" -- an unconditional draw. Reported
+        // unresolved exactly like running out of search depth, so a parent
+        // that has this available never gets to claim a false fast mate
+        // through it.
+        if (st.to_move == 'B' && st.bk.distance_to(st.wp) <= 1 && st.wk.distance_to(st.wp) > 1) {
+            PawnSearchResult res{nullopt, nullopt, nullopt, {}};
+            memo[cache_key] = res;
+            return res;
+        }
+
+        if (depth == 0) {
+            PawnSearchResult res{nullopt, nullopt, nullopt, {}};
+            memo[cache_key] = res;
+            return res;
+        }
+
+        vector<PawnState> cands = generate_candidates(st);
+        if (cands.empty()) {
+            PawnSearchResult res{nullopt, nullopt, nullopt, {}};
+            memo[cache_key] = res;
+            return res;
+        }
+
+        string dir = (st.to_move == 'W') ? "minimize" : "maximize";
+        optional<int> best_val, best_bn_cum;
+        optional<PawnState> best_mv;
+        bool all_candidates_resolved = true;
+        vector<pair<int, pair<optional<int>, PawnState>>> resolved_candidates;
+        resolved_candidates.reserve(cands.size());
+
+        for (auto& c : cands) {
+            PawnSearchResult rec = compositional_search_impl(c, depth - 1, ply + 1, memo);
+            nodes_evaluated++;
+            optional<int> val = rec.val;
+            optional<int> child_bn_cum = rec.bn_cum;
+
+            if (!val) {
+                all_candidates_resolved = false;
+                continue;
+            }
+
+            int v = *val + 1;
+            int own_contribution = 0;
+            if (c.to_move == 'B') own_contribution = count_legal_moves(c);
+            optional<int> this_bn_cum;
+            if (child_bn_cum) this_bn_cum = own_contribution + *child_bn_cum;
+
+            resolved_candidates.push_back({v, {this_bn_cum, c}});
+
+            if (!best_val) {
+                best_val = v; best_bn_cum = this_bn_cum; best_mv = c;
+            } else if (dir == "minimize" && v < *best_val) {
+                best_val = v; best_bn_cum = this_bn_cum; best_mv = c;
+            } else if (dir == "minimize" && v == *best_val) {
+                if (this_bn_cum && best_bn_cum && *this_bn_cum < *best_bn_cum) {
+                    best_val = v; best_bn_cum = this_bn_cum; best_mv = c;
+                }
+            } else if (dir == "maximize" && v > *best_val) {
+                best_val = v; best_bn_cum = this_bn_cum; best_mv = c;
+            } else if (dir == "maximize" && v == *best_val) {
+                if (this_bn_cum && best_bn_cum && *this_bn_cum > *best_bn_cum) {
+                    best_val = v; best_bn_cum = this_bn_cum; best_mv = c;
+                }
+            }
+        }
+
+        if (dir == "maximize" && !all_candidates_resolved) {
+            PawnSearchResult res{nullopt, nullopt, nullopt, {}};
+            memo[cache_key] = res;
+            return res;
+        }
+
+        vector<pair<PawnState, int>> m_tied;
+        if (best_val) {
+            for (auto& [v, rest] : resolved_candidates) {
+                if (v != *best_val) continue;
+                auto& [bncum_opt, state] = rest;
+                int bncum_val = bncum_opt ? *bncum_opt : -1;
+                m_tied.emplace_back(state, bncum_val);
+            }
+        }
+        vector<pair<PawnState, int>> tied;
+        if (!m_tied.empty()) {
+            int extremal = m_tied[0].second;
+            for (auto& [state, bn] : m_tied) {
+                extremal = (dir == "minimize") ? min(extremal, bn) : max(extremal, bn);
+            }
+            for (auto& [state, bn] : m_tied) {
+                if (bn == extremal) tied.emplace_back(state, bn);
+            }
+        }
+
+        PawnSearchResult res{best_val, best_bn_cum, best_mv, tied};
+        memo[cache_key] = res;
+        return res;
+    }
+
+    tuple<optional<PawnState>, optional<int>, vector<pair<PawnState, int>>> find_best_move(
+        const PawnState& st, int max_depth = 30
+    ) {
+        nodes_evaluated = 0;
+        unordered_map<uint64_t, PawnSearchResult> memo;
+        optional<PawnState> best_move;
+        optional<int> best_value;
+        vector<pair<PawnState, int>> tied;
+
+        for (int depth = 2; depth <= max_depth + 1; depth += 2) {
+            PawnSearchResult r = compositional_search_impl(st, depth, 0, memo);
+            if (r.val) {
+                best_value = r.val; best_move = r.mv; tied = r.tied;
+                break;
+            }
+        }
+        return make_tuple(best_move, best_value, tied);
+    }
+
+    tuple<vector<string>, int, bool> play_complete_game(
+        const PawnState& first, int max_moves = 50, int game_search_depth = 20
+    ) {
+        vector<string> mvs;
+        PawnState curr = first;
+        for (int move_num = 0; move_num < max_moves; move_num++) {
+            if (is_checkmate(curr)) return make_tuple(mvs, (int)mvs.size(), true);
+            auto [ns, val, tied] = find_best_move(curr, 2 * game_search_depth);
+            if (!ns) return make_tuple(mvs, (int)mvs.size(), false);
+            mvs.push_back(get_move_notation(curr, *ns));
+            curr = *ns;
+        }
+        return make_tuple(mvs, (int)mvs.size(), false);
+    }
+};
 
 template<typename AttackerRules>
 class BaseEngine {
@@ -1514,7 +2146,7 @@ void explore_full_attractor_dag(
             solution.cumulative_bn = best_move_bncum;
             solution.tied_moves = tied_notation;
 
-            db.add_position(solution);
+            db.add_position(solution, AttackerRules::full_board_symmetry);
             newly_solved++;
             processed++;
         }
@@ -1558,6 +2190,201 @@ void explore_full_attractor_dag(
     cout << "Newly solved this run:  " << newly_solved << "\n";
     cout << "Reused from DB cache:   " << cache_reused << "\n";
     cout << "Backfilled (legacy):    " << backfilled << "\n";
+    cout << "Failed to resolve:      " << failed << "\n";
+    cout << "Total time:             " << fixed << setprecision(1) << total_time << "s\n\n";
+}
+
+// ============================================================================
+// Pawn-specific driver functions -- mirror explore_full_attractor_dag's
+// structure exactly, adapted for PawnState/PawnEngine. Kept as free
+// (non-templated) functions since PawnEngine has no AttackerRules parameter
+// to be generic over.
+// ============================================================================
+
+vector<PawnState> load_positions_from_file_pawn(const string& filename) {
+    vector<PawnState> positions;
+    ifstream file(filename);
+    if (!file.is_open()) {
+        cerr << "ERROR: Cannot open file: " << filename << "\n";
+        return positions;
+    }
+    string line;
+    bool is_header = true;
+    int line_num = 0;
+    while (getline(file, line)) {
+        line_num++;
+        if (is_header) { is_header = false; continue; }
+        if (line.empty()) continue;
+        size_t comma_pos = line.find(',');
+        if (comma_pos == string::npos) {
+            cerr << "  Line " << line_num << " has no comma\n";
+            continue;
+        }
+        string position_str = line.substr(comma_pos + 1);
+        size_t wk_pos = position_str.find("WK:") + 3;
+        size_t wq_pos = position_str.find("WQ:") + 3;
+        size_t bk_pos = position_str.find("BK:") + 3;
+        try {
+            Position wk = parse_position_from_string(position_str.substr(wk_pos, 2));
+            Position wp = parse_position_from_string(position_str.substr(wq_pos, 2));
+            Position bk = parse_position_from_string(position_str.substr(bk_pos, 2));
+            // Root/seed positions for a pawn endgame always start as an actual
+            // pawn -- promotion is something that happens DURING the game,
+            // never something a starting position begins as.
+            positions.push_back(PawnState(wk, wp, PieceKind::PAWN, bk, 'W'));
+        } catch (const exception& e) {
+            cerr << "  Line " << line_num << " parse error: " << e.what() << "\n";
+        }
+    }
+    file.close();
+    cout << "  Loaded " << positions.size() << " positions from " << filename << "\n";
+    return positions;
+}
+
+// 3 bits per coordinate x 6 coordinates + 1 bit turn + 2 bits piece kind = 21
+// bits, comfortably fits uint64_t. Kind needs its own bits here for the same
+// reason as make_cache_key above: once a pawn can promote, (square, turn)
+// alone no longer uniquely identifies a node -- a pawn and an already-
+// promoted piece can occupy the identical square as genuinely different
+// states.
+uint64_t pack_pawn_state_key(const PawnState& st) {
+    uint64_t key = 0;
+    key |= ((uint64_t)st.wk.file << 20);
+    key |= ((uint64_t)st.wk.rank << 17);
+    key |= ((uint64_t)st.wp.file << 14);
+    key |= ((uint64_t)st.wp.rank << 11);
+    key |= ((uint64_t)st.bk.file << 8);
+    key |= ((uint64_t)st.bk.rank << 5);
+    key |= (st.to_move == 'W' ? 1ull : 0ull) << 4;
+    key |= (uint64_t)static_cast<uint8_t>(st.wp_kind) << 2;
+    return key;
+}
+
+void explore_full_attractor_dag_pawn(
+    PawnEngine& eng, SolvedPositionDatabase& db,
+    const vector<PawnState>& roots, int max_depth = 30,
+    int checkpoint_every = 100
+) {
+    cout << "\n" << string(80, '=') << "\n";
+    cout << "FULL ATTRACTOR-DAG EXPLORATION (PAWN)\n";
+    cout << string(80, '=') << "\n\n";
+
+    unordered_set<uint64_t> visited_this_run;
+    deque<PawnState> frontier;
+
+    for (auto& r : roots) {
+        if (!eng.is_checkmate(r)) frontier.push_back(r);
+    }
+    cout << "Seeded frontier with " << frontier.size() << " root positions\n\n";
+
+    long long processed = 0, newly_solved = 0, cache_reused = 0, failed = 0;
+    auto run_start = chrono::high_resolution_clock::now();
+
+    while (!frontier.empty()) {
+        PawnState st = frontier.back();
+        frontier.pop_back();
+
+        uint64_t key = pack_pawn_state_key(st);
+        if (visited_this_run.count(key)) continue;
+        visited_this_run.insert(key);
+
+        if (eng.is_checkmate(st)) continue;
+
+        vector<pair<string,int>> tied_notation;
+
+        // AttackerKind must be part of the DB lookup key too -- reuse the
+        // existing (position_string, turn) lookup, but the resulting cached
+        // row's own AttackerKind column must match st.wp_kind, or this is a
+        // DIFFERENT state that happens to share a position string with an
+        // already-solved one (a pawn and an already-promoted piece on the
+        // same square). Mismatched kind is treated as "not actually cached"
+        // and solved fresh, exactly like a genuinely new position.
+        auto cached = db.get_solution(st.str(), st.to_move);
+        bool cache_valid = cached && kind_from_letter(cached->attacker_kind) == st.wp_kind;
+
+        if (cache_valid && !cached->tied_moves.empty()) {
+            tied_notation = cached->tied_moves;
+            cache_reused++;
+            processed++;
+        } else {
+            auto search_start = chrono::high_resolution_clock::now();
+            auto [ns, fval, tied] = eng.find_best_move(st, 2 * max_depth);
+            auto search_end = chrono::high_resolution_clock::now();
+            double search_time = chrono::duration<double>(search_end - search_start).count();
+
+            if (!fval) {
+                failed++;
+                cout << "  [FAILED] " << st.str() << " kind=" << kind_letter(st.wp_kind)
+                     << " (to_move=" << st.to_move << ") -- unresolved within depth budget "
+                     << (2 * max_depth) << "\n";
+                continue;
+            }
+
+            for (auto& [tstate, tbncum] : tied) {
+                tied_notation.emplace_back(eng.get_move_notation(st, tstate), tbncum);
+            }
+
+            string best_move_str = eng.get_move_notation(st, *ns);
+            int best_move_bncum = 0;
+            for (auto& [mv_str, bncum] : tied_notation) {
+                if (mv_str == best_move_str) { best_move_bncum = bncum; break; }
+            }
+
+            int val = *fval;
+            SolvedPosition solution;
+            solution.position_key = st.str();
+            solution.turn = st.to_move;
+            solution.best_move = best_move_str;
+            solution.white_moves = (val + 1) / 2;
+            solution.black_moves = val / 2;
+            solution.M_value = solution.white_moves;
+            solution.total_plies = val;
+            solution.nodes_evaluated = eng.nodes_evaluated;
+            solution.computation_time = search_time;
+            solution.cumulative_bn = best_move_bncum;
+            solution.tied_moves = tied_notation;
+            solution.attacker_kind = kind_letter(st.wp_kind);
+
+            // Pawn positions never use full board symmetry (see add_position's
+            // comment) -- only identity + horizontal-mirror are valid.
+            db.add_position(solution, false);
+            newly_solved++;
+            processed++;
+        }
+
+        for (auto& [mv_str, bncum] : tied_notation) {
+            (void)bncum;
+            PawnState child = eng.apply_move_notation(st, mv_str);
+            uint64_t ckey = pack_pawn_state_key(child);
+            if (!visited_this_run.count(ckey)) {
+                frontier.push_back(child);
+            }
+        }
+
+        if (processed % checkpoint_every == 0) {
+            db.append_new_to_file();
+            double elapsed = chrono::duration<double>(
+                chrono::high_resolution_clock::now() - run_start).count();
+            cout << "[CHECKPOINT] processed=" << processed
+                 << " newly_solved=" << newly_solved
+                 << " cache_reused=" << cache_reused
+                 << " failed=" << failed
+                 << " frontier=" << frontier.size()
+                 << " visited=" << visited_this_run.size()
+                 << " elapsed=" << fixed << setprecision(1) << elapsed << "s\n";
+        }
+    }
+
+    db.export_to_file();
+    double total_time = chrono::duration<double>(
+        chrono::high_resolution_clock::now() - run_start).count();
+
+    cout << "\n" << string(80, '=') << "\n";
+    cout << "FULL ATTRACTOR-DAG EXPLORATION (PAWN) COMPLETE\n";
+    cout << string(80, '=') << "\n";
+    cout << "Distinct nodes visited: " << visited_this_run.size() << "\n";
+    cout << "Newly solved this run:  " << newly_solved << "\n";
+    cout << "Reused from DB cache:   " << cache_reused << "\n";
     cout << "Failed to resolve:      " << failed << "\n";
     cout << "Total time:             " << fixed << setprecision(1) << total_time << "s\n\n";
 }
@@ -1646,7 +2473,7 @@ void batch_solve_all_kqvk_positions(CompositionalEngine<AttackerRules>& eng, Sol
                 solution.tied_moves = tied_per_ply[i];
             }
 
-            db.add_position(solution);
+            db.add_position(solution, AttackerRules::full_board_symmetry);
             solved_count++;
             recorded_count++;
 
@@ -1711,11 +2538,19 @@ void batch_solve_all_kqvk_positions(CompositionalEngine<AttackerRules>& eng, Sol
 // Which endgame this binary is built for. Default (no flag) is KQvK. Compile
 // with -DPIECE_ROOK to build KRvK instead -- same source file, same search
 // and DAG-exploration logic, just a different AttackerRules instantiation.
+//
+// -DPIECE_PAWN builds KPvK, and takes a genuinely different path through
+// main() below: PawnState/PawnEngine are a separate, parallel implementation
+// (see the large comment where they're defined), not another AttackerRules
+// instantiation of Engine/GameState, so they need their own driver logic
+// rather than slotting into the existing Engine alias.
 // ============================================================================
+#ifndef PIECE_PAWN
 #ifdef PIECE_ROOK
 using Engine = CompositionalEngine<RookRules>;
 #else
 using Engine = CompositionalEngine<QueenRules>;
+#endif
 #endif
 
 int main(int argc, char* argv[]) {
@@ -1723,7 +2558,10 @@ int main(int argc, char* argv[]) {
     bool batch_mode = false;
     bool full_dag_mode = false;
     bool fresh_start = false;
-#ifdef PIECE_ROOK
+#ifdef PIECE_PAWN
+    string positions_file = "kpvk_positions_by_dtz.txt";
+    string db_file = "kpvk_perfect_play.db";
+#elif defined(PIECE_ROOK)
     string positions_file = "krvk_positions_by_dtz.txt";
     string db_file = "krvk_perfect_play.db";
 #else
@@ -1786,9 +2624,25 @@ int main(int argc, char* argv[]) {
     else cout << "Mode: single-path batch solve\n";
 
     auto root_t_start = chrono::high_resolution_clock::now();
-    Engine eng;
     SolvedPositionDatabase db(db_file);
 
+#ifdef PIECE_PAWN
+    PawnEngine eng;
+    if (!full_dag_mode) {
+        // batch_solve_all_kqvk_positions has no pawn-aware equivalent yet --
+        // refusing to silently do the wrong thing is safer than pretending
+        // to support a mode that was never built for this piece.
+        cerr << "ERROR: --batch is not implemented for KPvK yet; use --full-dag.\n";
+        return 1;
+    }
+    vector<PawnState> roots = load_positions_from_file_pawn(positions_file);
+    if (roots.empty()) {
+        cerr << "ERROR: No root positions loaded from " << positions_file << "\n";
+        return 1;
+    }
+    explore_full_attractor_dag_pawn(eng, db, roots, 30);
+#else
+    Engine eng;
     if (full_dag_mode) {
         // Full perfect-play attractor DAG: every branch tied for optimal, not just
         // one canonical line per root. See explore_full_attractor_dag's comment
@@ -1802,5 +2656,6 @@ int main(int argc, char* argv[]) {
     } else {
         batch_solve_all_kqvk_positions(eng, db, 25);
     }
+#endif
     return 0;
 }

@@ -1,7 +1,6 @@
 // KQVK: g++ -std=c++17 -O2 -o kqvk_solver compositional_trajectory_solver.cpp
 // KRVK: g++ -std=c++17 -O2 -DPIECE_ROOK -o krvk_solver compositional_trajectory_solver.cpp
 
-
 #include <iostream>
 #include <vector>
 #include <map>
@@ -989,6 +988,36 @@ public:
             return res;
         }
 
+        // PRE-EXISTING REPRESENTATIONAL GAP, now actually closed: GameState has no
+        // way to represent "White's second piece is gone" (wq is always some real
+        // square), which is why the original code could only guard against WHITE
+        // ever voluntarily hanging it (the "hang the piece" comment in
+        // generate_candidates). What that comment didn't cover: if it's Black's
+        // move and Black's king is already adjacent to an undefended wq (whether
+        // because White hung it or simply because Black's king walked there over
+        // several prior moves -- the very common case in KRvK's standard box/ladder
+        // technique, where the rook sits still on a file/rank for many plies),
+        // capturing it is a completely legal chess move. generate_candidates'
+        // Black branch builds GameState(wk, wq, bk_n=wq, 'W') for that candidate --
+        // two pieces on one square -- and is_legal_state correctly rejects it as an
+        // invalid STATE, for the wrong reason: it's not an illegal state, it's a
+        // legal capture the data structure can't express, so the candidate silently
+        // vanished instead of being resolved as "White now has a bare king, which
+        // can never force mate." Confirmed empirically: WK:f3 WQ:c2 BK:d1 (Black to
+        // move) has Black's king adjacent to an undefended rook on c2, and this gap
+        // caused the position -- and everything above it in the search -- to be
+        // scored as a sound mate-in-9 when Black actually had a permanent escape.
+        // Once White has only a king, KvK is an unconditional draw, so this is
+        // reported unresolved exactly like running out of search depth: Black
+        // (maximizing) correctly treats an unresolved option as at least as good as
+        // anything resolved, so a parent that has this available never gets to
+        // claim a fast forced mate through it.
+        if (st.to_move == 'B' && st.bk.distance_to(st.wq) <= 1 && st.wk.distance_to(st.wq) > 1) {
+            SearchResult res{nullopt, nullopt, nullopt};
+            memo[cache_key] = res;
+            return res;
+        }
+
         // DB shortcuts (both "check st itself" and per-candidate, further below) have been
         // REMOVED from this comparison path entirely -- not just re-gated. The gate this
         // engine used (cached->total_plies <= depth) checks whether the ANSWER fits in the
@@ -1693,6 +1722,7 @@ int main(int argc, char* argv[]) {
     bool debug_en = false;
     bool batch_mode = false;
     bool full_dag_mode = false;
+    bool fresh_start = false;
 #ifdef PIECE_ROOK
     string positions_file = "krvk_positions_by_dtz.txt";
     string db_file = "krvk_perfect_play.db";
@@ -1709,6 +1739,7 @@ int main(int argc, char* argv[]) {
         else if (arg == "--full-dag" || arg == "-g") { full_dag_mode = true; }
         else if (arg == "--positions" && i + 1 < argc) { positions_file = argv[++i]; }
         else if (arg == "--db" && i + 1 < argc) { db_file = argv[++i]; }
+        else if (arg == "--fresh") { fresh_start = true; }
         else { unrecognized.push_back(arg); }
     }
 
@@ -1721,8 +1752,27 @@ int main(int argc, char* argv[]) {
         cerr << "ERROR: unrecognized argument(s):";
         for (auto& u : unrecognized) cerr << " " << u;
         cerr << "\nKnown flags: --debug/-d, --batch/-b, --full-dag/-g, "
-                "--positions <file>, --db <file>\n";
+                "--positions <file>, --db <file>, --fresh\n";
         return 1;
+    }
+
+    // --fresh exists because of a real, demonstrated failure mode: if db_file
+    // already contains an entry for a position, is_solved() treats it as
+    // already-decided and reuses it directly (see explore_full_attractor_dag's
+    // cache_reused path) -- it is NEVER recomputed, even after a search-logic
+    // fix that would have produced a different, correct answer for it. That
+    // makes "delete the old database before rerunning with a fixed binary" a
+    // manual step easy to forget and expensive to forget silently: the run
+    // completes normally, checkpoints normally, and just quietly carries every
+    // stale answer forward unchanged. --fresh removes the file first so a
+    // clean start is guaranteed by the tool rather than by remembering to `rm`/
+    // `del` it yourself.
+    if (fresh_start) {
+        if (remove(db_file.c_str()) == 0) {
+            cout << "--fresh: removed existing " << db_file << " before starting\n";
+        } else {
+            cout << "--fresh: no existing " << db_file << " to remove (starting fresh anyway)\n";
+        }
     }
     
     double root_t = 0;

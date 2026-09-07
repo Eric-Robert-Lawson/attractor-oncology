@@ -220,7 +220,7 @@ def main():
     # than batch_size genuinely new seeds, once the seed list is exhausted)
     # still gets run rather than silently dropped -- that's the explicit
     # "last batch" exception.
-    def run_batch(seed_group, batch_num):
+    def run_batch(seed_group, batch_num, scan_pos, scan_pruned):
         nonlocal known_keys
         batch_file = os.path.join(args.tmp_dir, f"batch_{batch_num:06d}.txt")
         with open(batch_file, 'w') as f:
@@ -235,8 +235,11 @@ def main():
             cmd += ["--fresh"]
 
         batch_start = time.time()
+        pct = 100.0 * scan_pos / total if total else 100.0
         print(f"{'='*70}")
-        print(f"BATCH {batch_num}  ({len(seed_group)} genuinely new seeds)")
+        print(f"BATCH {batch_num}  ({len(seed_group)} genuinely new seeds) -- "
+              f"scanned {scan_pos}/{total} of the full list so far ({pct:.1f}%), "
+              f"{scan_pruned} of those already resolved, {total - scan_pos} not yet examined")
         print(f"{'='*70}")
 
         # Streamed line-by-line, NOT captured and printed after the fact --
@@ -276,8 +279,10 @@ def main():
     batches_run = 0
     seeds_pruned = 0
     pending = []
+    last_scanned_idx = 0  # how many seeds (1-indexed) have been examined so far
 
-    for seed in all_seeds:
+    for i, seed in enumerate(all_seeds):
+        last_scanned_idx = i + 1
         key = canonical_position_key(seed, 'W')
         if key in known_keys:
             seeds_pruned += 1
@@ -285,7 +290,7 @@ def main():
         pending.append(seed)
         if len(pending) >= args.batch_size:
             batches_run += 1
-            run_batch(pending, batches_run)
+            run_batch(pending, batches_run, last_scanned_idx, seeds_pruned)
             pending = []
 
     # Flush any leftover genuinely-new seeds after the scan completes -- NOT
@@ -299,7 +304,7 @@ def main():
     # 3 seeds that should have been processed, with no error at all.
     if pending:
         batches_run += 1
-        run_batch(pending, batches_run)
+        run_batch(pending, batches_run, last_scanned_idx, seeds_pruned)
 
     total_elapsed = time.time() - sweep_start
     print(f"{'='*70}")

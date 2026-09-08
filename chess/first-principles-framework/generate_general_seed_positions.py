@@ -200,8 +200,46 @@ def enumerate_fully_exhaustive(white_letters, bishop_color=None):
     Black-to-move seeds need no such filter in this scope, since Black
     has no piece capable of attacking White's king (a bare king only
     attacks adjacent squares, already excluded by the king-distance
-    check)."""
+    check).
+
+    bishop_color: 'light' or 'dark' constrains EVERY bishop in
+    white_letters to that one color (same-colored pair, for two bishops --
+    a real but practically rare configuration requiring an underpromotion
+    to reach). 'opposite' is specifically for exactly two bishops: assigns
+    the first bishop encountered in white_letters to light and the second
+    to dark -- a bishop's own square color is conserved by every legal
+    move it makes, independently of any other piece including a second
+    bishop, so opposite-colored and same-colored bishop pairs are
+    genuinely disconnected components of the state graph, never
+    reachable from one another via legal play. For two bishops this means
+    there are three distinct cases needing separate coverage (opposite,
+    both-light, both-dark), not two."""
     ALL = all_squares_list()
+
+    # Compute each index's required bishop color ONCE, directly from
+    # white_letters -- not via a mutable counter mutated as a side effect
+    # inside candidates_for, which would be fragile if that function were
+    # ever called more than once per index for any reason. bishop_index_color[i]
+    # is None for a non-bishop slot or an unconstrained bishop.
+    bishop_index_color = [None] * len(white_letters)
+    if bishop_color == 'opposite':
+        bishop_positions = [i for i, l in enumerate(white_letters) if l == 'B']
+        if len(bishop_positions) != 2:
+            raise ValueError("bishop_color='opposite' requires exactly two bishops in white_letters")
+        bishop_index_color[bishop_positions[0]] = 'light'
+        bishop_index_color[bishop_positions[1]] = 'dark'
+    elif bishop_color is not None:
+        for i, l in enumerate(white_letters):
+            if l == 'B':
+                bishop_index_color[i] = bishop_color
+
+    def candidates_for(index, used):
+        letter = white_letters[index]
+        if letter == 'P':
+            return [p for p in ALL if p.rank == 1 and (p.file, p.rank) not in used]
+        if letter == 'B' and bishop_index_color[index] is not None:
+            return [p for p in ALL if square_color(p) == bishop_index_color[index] and (p.file, p.rank) not in used]
+        return [p for p in ALL if (p.file, p.rank) not in used]
 
     for wk in ALL:
         wk_key = (wk.file, wk.rank)
@@ -211,22 +249,15 @@ def enumerate_fully_exhaustive(white_letters, bishop_color=None):
             bk_key = (bk.file, bk.rank)
             base_used = {wk_key, bk_key}
 
-            def candidates_for(letter, used):
-                if letter == 'P':
-                    return [p for p in ALL if p.rank == 1 and (p.file, p.rank) not in used]
-                if letter == 'B' and bishop_color is not None:
-                    return [p for p in ALL if square_color(p) == bishop_color and (p.file, p.rank) not in used]
-                return [p for p in ALL if (p.file, p.rank) not in used]
-
             if len(white_letters) == 0:
                 combos = [()]
             elif len(white_letters) == 1:
-                combos = [(p,) for p in candidates_for(white_letters[0], base_used)]
+                combos = [(p,) for p in candidates_for(0, base_used)]
             elif len(white_letters) == 2:
                 combos = []
-                for p0 in candidates_for(white_letters[0], base_used):
+                for p0 in candidates_for(0, base_used):
                     used1 = base_used | {(p0.file, p0.rank)}
-                    for p1 in candidates_for(white_letters[1], used1):
+                    for p1 in candidates_for(1, used1):
                         combos.append((p0, p1))
             else:
                 raise ValueError("only 0, 1, or 2 non-king White pieces are supported by this engine")
@@ -284,6 +315,22 @@ def build_seed(white_letters, anchor, force_bishop_color=None):
     def not_attacking_bk(letter):
         return lambda p: not _attacks(letter, p, squares['BK'], used)
 
+    # Per-index bishop color assignment, computed once -- same approach as
+    # enumerate_fully_exhaustive, and for the same reason: 'opposite' isn't
+    # a single color to match against, it's "first bishop light, second
+    # bishop dark", which needs to be resolved per-index, not per-letter.
+    bishop_index_color = [None] * len(white_letters)
+    if force_bishop_color == 'opposite':
+        bishop_positions = [i for i, l in enumerate(white_letters) if l == 'B']
+        if len(bishop_positions) != 2:
+            raise ValueError("force_bishop_color='opposite' requires exactly two bishops")
+        bishop_index_color[bishop_positions[0]] = 'light'
+        bishop_index_color[bishop_positions[1]] = 'dark'
+    elif force_bishop_color is not None:
+        for i, l in enumerate(white_letters):
+            if l == 'B':
+                bishop_index_color[i] = force_bishop_color
+
     for i, letter in enumerate(white_letters):
         if letter == 'P':
             candidates = sorted((Position(f, 1) for f in range(8)), key=lambda p: abs(p.file - af))
@@ -296,8 +343,9 @@ def build_seed(white_letters, anchor, force_bishop_color=None):
                     break
             if not placed:
                 raise RuntimeError("could not place pawn on rank 2 without checking Black's king -- board too crowded")
-        elif letter == 'B' and force_bishop_color is not None:
-            squares[f'W{i}'] = take_next(lambda p: square_color(p) == force_bishop_color and not_attacking_bk(letter)(p))
+        elif letter == 'B' and bishop_index_color[i] is not None:
+            required_color = bishop_index_color[i]
+            squares[f'W{i}'] = take_next(lambda p: square_color(p) == required_color and not_attacking_bk(letter)(p))
         else:
             squares[f'W{i}'] = take_next(not_attacking_bk(letter))
 
@@ -325,12 +373,16 @@ def main():
     ap.add_argument('--num-seeds', type=int, default=8,
                      help="How many diverse seed positions to generate (default 8; more costs nothing "
                           "at discovery time, since already-known positions are skipped instantly)")
-    ap.add_argument('--bishop-color', choices=['light', 'dark'], default=None,
-                     help="Constrain the bishop to only light- or dark-squared placements -- "
+    ap.add_argument('--bishop-color', choices=['light', 'dark', 'opposite'], default=None,
+                     help="For one bishop: constrain it to light- or dark-squared placements -- "
                           "generates seeds for exactly one of the two structurally disconnected "
-                          "halves of the landscape (a bishop's square color never changes under "
-                          "any legal move). Use this to discover/classify each half separately, "
-                          "roughly halving peak memory for material with one bishop.")
+                          "halves of the landscape. For two bishops: 'light'/'dark' forces BOTH to "
+                          "that color (same-colored pair -- real, but requires an underpromotion "
+                          "to reach in an actual game); 'opposite' assigns one bishop to each color "
+                          "(the practically common configuration). A bishop's square color never "
+                          "changes under any legal move, so these are genuinely disconnected "
+                          "components of the state graph, not a stylistic choice -- two bishops "
+                          "means THREE distinct cases needing separate coverage, not two.")
     args = ap.parse_args()
 
     white_letters = parse_white_pieces(args.white)
@@ -338,25 +390,36 @@ def main():
     if has_pawn and white_letters.count('P') > 1:
         raise SystemExit("ERROR: this script and the current engine scope support at most one pawn")
     has_bishop = 'B' in white_letters
+    num_bishops = white_letters.count('B')
 
     if args.bishop_color and not has_bishop:
         raise SystemExit("ERROR: --bishop-color only makes sense when --white includes 'B'")
+    if args.bishop_color == 'opposite' and num_bishops != 2:
+        raise SystemExit("ERROR: --bishop-color opposite requires exactly two bishops in --white")
 
     print(f"White pieces: {white_letters}" + (" (pawn -> all seeds forced to rank 2)" if has_pawn else ""))
     if has_bishop:
-        if args.bishop_color:
-            print(f"  Bishop constrained to {args.bishop_color}-squared placements only -- "
+        if args.bishop_color == 'opposite':
+            print("  Bishops constrained to OPPOSITE colors (one light, one dark) -- see module "
+                  "docstring: for two bishops this is one of THREE structurally disconnected "
+                  "cases (opposite / both-light / both-dark), not a default assumption.")
+        elif args.bishop_color:
+            color_note = "BOTH bishops" if num_bishops == 2 else "the bishop"
+            print(f"  {color_note} constrained to {args.bishop_color}-squared placements only -- "
                   f"see module docstring: a bishop's square color never changes under any "
-                  f"legal move, so this generates seeds for exactly ONE of the two "
-                  f"structurally disconnected halves of the full landscape.")
+                  f"legal move, so this generates seeds for exactly ONE of the structurally "
+                  f"disconnected pieces of the full landscape.")
         else:
+            extra = (" For two bishops there are actually THREE disconnected cases (opposite / "
+                     "both-light / both-dark) -- use --bishop-color opposite / light / dark to "
+                     "cover each deliberately.") if num_bishops == 2 else ""
             print("  NOTE: material includes a bishop, whose square color is conserved for the "
-                  "whole game -- the full landscape is two disconnected halves (light-squared "
-                  "and dark-squared bishop), not one. This run's seeds are NOT explicitly "
-                  "balanced between them; use --bishop-color light / --bishop-color dark to "
-                  "generate each half separately and deliberately (recommended for memory-"
-                  "constrained machines), or verify after the fact that your seed set actually "
-                  "included both colors before trusting a combined run as complete.")
+                  "whole game -- the full landscape is structurally disconnected by color, not "
+                  "one connected whole. This run's seeds are NOT explicitly balanced between "
+                  "colors; use --bishop-color to generate each piece deliberately (recommended "
+                  "for memory-constrained machines), or verify after the fact that your seed set "
+                  "actually covered every color case before trusting a combined run as complete."
+                  + extra)
 
     # Genuinely spread anchor points -- corners, edge midpoints, center --
     # rather than a linear rotation that ends up clustering everything in

@@ -102,9 +102,13 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('--white', required=True, help="Comma-separated White piece letters, e.g. 'Q' or 'B,N'")
     ap.add_argument('--out', required=True, help="Output positions file")
-    ap.add_argument('--bishop-color', choices=['light', 'dark'], default=None,
-                     help="Constrain the bishop to one color -- see generate_general_seed_positions.py's "
-                          "flag of the same name for why this matters")
+    ap.add_argument('--bishop-color', choices=['light', 'dark', 'opposite'], default=None,
+                     help="For one bishop: constrain it to one color. For two bishops: 'light'/'dark' "
+                          "forces both to that color (same-colored pair, requires an underpromotion "
+                          "to reach in a real game); 'opposite' assigns one to each (the practically "
+                          "common configuration). See generate_general_seed_positions.py's flag of "
+                          "the same name for the full reasoning on why this is three distinct, "
+                          "genuinely disconnected cases for two bishops, not two.")
     args = ap.parse_args()
 
     white_letters = parse_white_pieces(args.white)
@@ -113,14 +117,25 @@ def main():
         raise SystemExit("ERROR: at most one pawn is supported")
     if len(white_letters) > 2:
         raise SystemExit("ERROR: only 0, 1, or 2 non-king White pieces are supported by this engine")
-    if args.bishop_color and 'B' not in white_letters:
+    num_bishops = white_letters.count('B')
+    if args.bishop_color and num_bishops == 0:
         raise SystemExit("ERROR: --bishop-color only makes sense when --white includes 'B'")
+    if args.bishop_color == 'opposite' and num_bishops != 2:
+        raise SystemExit("ERROR: --bishop-color opposite requires exactly two bishops in --white")
 
     print(f"White pieces: {white_letters}")
     if has_pawn:
         print("  (pawn -> every seed forced to rank 2, for forward-reachability -- see the other generator's docstring)")
-    if args.bishop_color:
-        print(f"  Bishop constrained to {args.bishop_color}-squared placements only")
+    if args.bishop_color == 'opposite':
+        print("  Bishops constrained to OPPOSITE colors (one light, one dark)")
+    elif args.bishop_color:
+        color_note = "Both bishops" if num_bishops == 2 else "Bishop"
+        print(f"  {color_note} constrained to {args.bishop_color}-squared placements only")
+    elif num_bishops == 2:
+        print("  NOTE: two bishops -- the full landscape has THREE structurally disconnected cases "
+              "(opposite / both-light / both-dark), not one. Use --bishop-color opposite / light / "
+              "dark to cover each deliberately, or verify after the fact that an unconstrained run "
+              "actually covered all three before trusting it as complete.")
 
     if len(white_letters) == 2:
         print("  NOTE: two non-king White pieces -- true exhaustive enumeration is ~30 million raw "

@@ -75,7 +75,7 @@ import csv
 import os
 import sys
 import time
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 
 FILES = "abcdefgh"
 KIND_ORDER = {'P': 0, 'Q': 1, 'N': 2, 'K': 3, 'R': 4, 'B': 5}  # matches the C++ PieceKind enum exactly
@@ -407,6 +407,45 @@ class UnionFind:
         return list(groups.values())
 
 
+class BoundedLRUCache:
+    """Dict-like memoization cache with a hard cap on entry count, evicting
+    the least-recently-used entry once full. Purely a performance cache --
+    evicting and later recomputing an entry always produces the same,
+    correct result, just slower; this can never affect correctness, only
+    how much memory a long run holds onto at once.
+
+    This exists because an unbounded reach_memo is the actual, sufficient
+    explanation for large memory growth on a long classify run, not
+    speculation: measured directly, a single reachable_set entry that hits
+    the 5000-node cap, with realistic KBNvK-scale position strings, is
+    itself over 1MB (frozenset of 5000 distinct (position, turn) tuples,
+    each carrying real string content -- not shared/interned, since each
+    is a genuinely different board position). An unbounded cache
+    accumulating tens of thousands of such entries over a long run directly
+    explains tens of gigabytes of growth and the swapping that follows."""
+    def __init__(self, max_entries=3000):
+        self.max_entries = max_entries
+        self._data = OrderedDict()
+
+    def __contains__(self, key):
+        return key in self._data
+
+    def __getitem__(self, key):
+        value = self._data.pop(key)
+        self._data[key] = value  # move to end: most recently used
+        return value
+
+    def __setitem__(self, key, value):
+        if key in self._data:
+            self._data.pop(key)
+        elif len(self._data) >= self.max_entries:
+            self._data.popitem(last=False)  # evict least recently used
+        self._data[key] = value
+
+    def __len__(self):
+        return len(self._data)
+
+
 def reachable_set(state, db, memo, max_nodes=5000, warned=None, ambiguous_counter=None):
     if state in memo:
         return memo[state]
@@ -474,8 +513,25 @@ def classify_position(position, turn, entry, db, reach_memo, warned, ambiguous_c
             if is_symmetric_general(triples_for_symmetry[i], triples_for_symmetry[j]) not in (None, 0):
                 uf.union(i, j)
 
-    branch_results = [reachable_set(c, db, reach_memo, warned=warned, ambiguous_counter=ambiguous_counter)
-                       for c in children]
+    # The actual O(n^2) cost of this whole function lives here and in the
+    # transform-check pass below -- n reachable_set searches (each up to
+    # 5000 nodes), then up to n^2/2 pairwise transform-and-intersect checks
+    # against them. A position with a large tied-move count can legitimately
+    # take minutes on this alone, with the per-position progress print in
+    # run_categorization unable to show anything until the WHOLE position
+    # finishes -- this is what actually explains a long silent stretch, not
+    # a hang. Printed here, before starting, rather than discovered only
+    # after the fact.
+    if n >= 10:
+        print(f"  [slow position] {position} ({turn}) has {n} tied moves -- "
+              f"this needs {n} reachable-set searches and up to {n*(n-1)//2} pairwise "
+              f"checks, expect this one position alone to take a while", flush=True)
+    branch_start = time.time()
+    branch_results = []
+    for bi, c in enumerate(children):
+        branch_results.append(reachable_set(c, db, reach_memo, warned=warned, ambiguous_counter=ambiguous_counter))
+        if n >= 10 and time.time() - branch_start >= 10:
+            print(f"    [slow position] {position} ({turn}): reachable-set {bi+1}/{n} done", flush=True)
     branch_sets = [r[0] for r in branch_results]
     branch_truncated = [r[1] for r in branch_results]
     any_truncated = any(branch_truncated)
@@ -495,6 +551,7 @@ def classify_position(position, turn, entry, db, reach_memo, warned, ambiguous_c
             transformed_cache[key] = {transform_state(s, t_idx) for s in branch_sets[idx]}
         return transformed_cache[key]
 
+    transform_start = time.time()
     for i in range(n):
         for j in range(n):
             if i == j or uf.find(i) == uf.find(j):
@@ -506,6 +563,8 @@ def classify_position(position, turn, entry, db, reach_memo, warned, ambiguous_c
                 if get_transformed(i, t_idx) & branch_sets[j]:
                     uf.union(i, j)
                     break
+        if n >= 10 and time.time() - transform_start >= 10:
+            print(f"    [slow position] {position} ({turn}): transform-check pass {i+1}/{n} done", flush=True)
 
     components = uf.components()
     if len(components) == 1:
@@ -518,18 +577,27 @@ def classify_position(position, turn, entry, db, reach_memo, warned, ambiguous_c
             'tied': tied, 'children': children, 'any_truncated': any_truncated}
 
 
-def run_categorization(db, min_plies=0, max_positions=None):
-    reach_memo = {}
+def run_categorization(db, min_plies=0, max_positions=None, checkpoint_path=None, memo_cache_size=3000):
+    reach_memo = BoundedLRUCache(max_entries=memo_cache_size)
     warned = set()
     ambiguous_counter = [0]
     results = []
-    checked = 0
+    already_done = set()
 
-    # Total positions actually needing classify_position (has a multi-way
-    # tie AND passes min_plies) isn't known up front without a separate
-    # pass, so it's counted here first -- cheap relative to the actual
-    # per-position work below, and gives an honest denominator for
-    # progress/ETA instead of an unlabeled, possibly-stuck-looking loop.
+    # Resume from a prior partial run, if a checkpoint exists. reach_memo
+    # itself is NOT persisted -- it's a pure cache with no effect on
+    # correctness either way, only speed, so starting it empty on resume
+    # just means some reachable-set work gets naturally redone rather than
+    # reused, exactly as a fresh run would build it up from nothing anyway.
+    if checkpoint_path and os.path.exists(checkpoint_path):
+        import pickle
+        with open(checkpoint_path, 'rb') as f:
+            results = pickle.load(f)
+        already_done = {(r['position'], r['turn']) for r in results}
+        print(f"  Resumed {len(results)} already-classified positions from {checkpoint_path}")
+
+    checked = len(results)
+
     to_process = sum(1 for (position, turn), entry in db.items()
                       if entry['distance'] >= min_plies and len(entry['tied']) > 1)
     print(f"  {to_process} positions actually need classification (multi-way tie, "
@@ -538,12 +606,15 @@ def run_categorization(db, min_plies=0, max_positions=None):
 
     start = time.time()
     last_print = start
-    independent_found = 0
+    last_checkpoint = start
+    independent_found = sum(1 for r in results if r['category'] == 'INDEPENDENT')
 
     for (position, turn), entry in db.items():
         if entry['distance'] < min_plies:
             continue
         if len(entry['tied']) <= 1:
+            continue
+        if (position, turn) in already_done:
             continue
         checked += 1
         if max_positions and checked > max_positions:
@@ -574,6 +645,21 @@ def run_categorization(db, min_plies=0, max_positions=None):
             print(f"  [progress] {checked}/{to_process} classified ({100*checked/to_process:.1f}%), "
                   f"{independent_found} INDEPENDENT so far, elapsed={elapsed:.0f}s, "
                   f"~{remaining:.0f}s remaining at current rate", flush=True)
+
+        # Checkpointed every 60s, not more often -- pickling the whole
+        # results list has a real cost too, and there's no reason to pay
+        # it on every single position. Written to a temp file then renamed
+        # over the real checkpoint path, so a crash or kill mid-write never
+        # leaves a corrupt, half-written checkpoint that resume would then
+        # fail to load.
+        if checkpoint_path and now - last_checkpoint >= 60:
+            last_checkpoint = now
+            import pickle
+            tmp_path = checkpoint_path + '.tmp'
+            with open(tmp_path, 'wb') as f:
+                pickle.dump(results, f)
+            os.replace(tmp_path, checkpoint_path)
+            print(f"  [checkpoint] saved {len(results)} results to {checkpoint_path}", flush=True)
 
     print(f"  [progress] done: {checked}/{to_process} classified in {time.time()-start:.0f}s")
     if ambiguous_counter[0]:
@@ -652,8 +738,16 @@ def cmd_classify(args):
     multi_count = sum(1 for e in db.values() if len(e['tied']) > 1)
     print(f"  Positions with a multi-way tie: {multi_count}")
 
-    results = run_categorization(db, min_plies=args.min_plies, max_positions=args.max_positions)
+    checkpoint_path = args.db_path + '.classify_checkpoint.pkl'
+    results = run_categorization(db, min_plies=args.min_plies, max_positions=args.max_positions,
+                                  checkpoint_path=checkpoint_path, memo_cache_size=args.memo_cache_size)
     summarize_classify(results, args.out_dir)
+
+    # Only removed after a full, successful run -- if this line is never
+    # reached (killed, crashed, interrupted), the checkpoint stays on disk
+    # exactly so the next run can resume from it instead of starting over.
+    if os.path.exists(checkpoint_path):
+        os.remove(checkpoint_path)
 
 
 # ============================================================================
@@ -993,6 +1087,12 @@ def main():
     p1.add_argument('db_path')
     p1.add_argument('--min-plies', type=int, default=0)
     p1.add_argument('--max-positions', type=int, default=None)
+    p1.add_argument('--memo-cache-size', type=int, default=3000,
+                     help="Max entries in the reachable-set memoization cache (default 3000). "
+                          "Each entry can be over 1MB at scale, so this bounds a large classify "
+                          "run's memory instead of letting it grow unbounded for the whole run. "
+                          "Lower it if you're still seeing high memory/swap; raising it trades "
+                          "more memory for fewer recomputed cache misses.")
     p1.add_argument('--out-dir', default='general_tie_analysis')
 
     p2 = sub.add_parser('families', help="Compile families vs unique findings from classify's output")

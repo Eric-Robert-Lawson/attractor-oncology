@@ -955,7 +955,9 @@ def find_families(findings):
     "fix WQ" implicitly was for krvk_analyzer.py's single-piece case."""
     seen_in_a_family = set()
     families = []
-    roles = ['WK', 'BK'] + [f'white_other_{i}' for i in range(2)]
+    roles = ['WK', 'BK'] + [f'white_other_{i}' for i in range(5)]  # 5 = MAX_WHITE_NON_KING, matching
+                                                                    # the C++ engine's own limit -- see
+                                                                    # compositional_trajectory_solver_modular.cpp
     for role in roles:
         groups = defaultdict(list)
         for finding in findings:

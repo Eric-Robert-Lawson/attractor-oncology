@@ -185,6 +185,11 @@ def all_squares_list():
     return [Position(f, r) for r in range(8) for f in range(8)]
 
 
+MAX_WHITE_NON_KING = 5  # matches the C++ engine's own limit exactly -- see
+                        # compositional_trajectory_solver_modular.cpp's
+                        # MAX_WHITE_NON_KING and its bit-budget derivation.
+
+
 def enumerate_fully_exhaustive(white_letters, bishop_color=None):
     """Yields (white_letters, squares_dict, turn) for EVERY legal position
     of this material -- true combinatorial enumeration over every piece's
@@ -193,27 +198,36 @@ def enumerate_fully_exhaustive(white_letters, bishop_color=None):
     real, Syzygy-style completeness guarantee: nothing is skipped because
     of how some OTHER piece happens to be placed for a given king pair.
 
-    Supports 0, 1, or 2 non-king White pieces (the engine's current
-    scope). Yields both White-to-move and Black-to-move positions --
-    White-to-move seeds are filtered to exclude Black already being in
-    check (illegal/unreachable, per is_legal_placement's own docstring);
+    Supports 0 through MAX_WHITE_NON_KING non-king White pieces (matching
+    the C++ engine's own packed-state limit exactly -- 5, derived from a
+    64-bit key's actual bit budget, giving 7 total pieces on the board
+    including both kings, the same convention Syzygy tablebases use).
+    Yields both White-to-move and Black-to-move positions -- White-to-move
+    seeds are filtered to exclude Black already being in check
+    (illegal/unreachable, per is_legal_placement's own docstring);
     Black-to-move seeds need no such filter in this scope, since Black
     has no piece capable of attacking White's king (a bare king only
     attacks adjacent squares, already excluded by the king-distance
     check).
 
     bishop_color: 'light' or 'dark' constrains EVERY bishop in
-    white_letters to that one color (same-colored pair, for two bishops --
-    a real but practically rare configuration requiring an underpromotion
-    to reach). 'opposite' is specifically for exactly two bishops: assigns
-    the first bishop encountered in white_letters to light and the second
-    to dark -- a bishop's own square color is conserved by every legal
-    move it makes, independently of any other piece including a second
-    bishop, so opposite-colored and same-colored bishop pairs are
-    genuinely disconnected components of the state graph, never
-    reachable from one another via legal play. For two bishops this means
-    there are three distinct cases needing separate coverage (opposite,
-    both-light, both-dark), not two."""
+    white_letters to that one color (same-colored, for two or more
+    bishops -- a real but practically rare configuration requiring an
+    underpromotion to reach). 'opposite' is specifically for exactly two
+    bishops: assigns the first bishop encountered in white_letters to
+    light and the second to dark -- a bishop's own square color is
+    conserved by every legal move it makes, independently of any other
+    piece including a second bishop, so opposite-colored and same-colored
+    bishop pairs are genuinely disconnected components of the state
+    graph, never reachable from one another via legal play. For two
+    bishops this means there are three distinct cases needing separate
+    coverage (opposite, both-light, both-dark), not two."""
+    if len(white_letters) > MAX_WHITE_NON_KING:
+        raise ValueError(f"only 0 through {MAX_WHITE_NON_KING} non-king White pieces are "
+                          f"supported by this engine, got {len(white_letters)}")
+    if white_letters.count('P') > 1:
+        raise ValueError("at most one pawn is supported")
+
     ALL = all_squares_list()
 
     # Compute each index's required bishop color ONCE, directly from
@@ -241,6 +255,20 @@ def enumerate_fully_exhaustive(white_letters, bishop_color=None):
             return [p for p in ALL if square_color(p) == bishop_index_color[index] and (p.file, p.rank) not in used]
         return [p for p in ALL if (p.file, p.rank) not in used]
 
+    def build_combos(index, used):
+        # Recursive, not a fixed chain of nested loops -- generalizes
+        # cleanly to any piece count instead of needing a new hardcoded
+        # branch every time the engine's own limit changes. Confirmed
+        # directly to reproduce the exact same combination COUNTS the old
+        # hardcoded 0/1/2-piece branches produced, for 0, 1, and 2 pieces,
+        # before being trusted for 3+.
+        if index == len(white_letters):
+            yield ()
+            return
+        for p in candidates_for(index, used):
+            for rest in build_combos(index + 1, used | {(p.file, p.rank)}):
+                yield (p,) + rest
+
     for wk in ALL:
         wk_key = (wk.file, wk.rank)
         for bk in ALL:
@@ -249,20 +277,7 @@ def enumerate_fully_exhaustive(white_letters, bishop_color=None):
             bk_key = (bk.file, bk.rank)
             base_used = {wk_key, bk_key}
 
-            if len(white_letters) == 0:
-                combos = [()]
-            elif len(white_letters) == 1:
-                combos = [(p,) for p in candidates_for(0, base_used)]
-            elif len(white_letters) == 2:
-                combos = []
-                for p0 in candidates_for(0, base_used):
-                    used1 = base_used | {(p0.file, p0.rank)}
-                    for p1 in candidates_for(1, used1):
-                        combos.append((p0, p1))
-            else:
-                raise ValueError("only 0, 1, or 2 non-king White pieces are supported by this engine")
-
-            for combo in combos:
+            for combo in build_combos(0, base_used):
                 squares = {'WK': wk, 'BK': bk}
                 for i, p in enumerate(combo):
                     squares[f'W{i}'] = p
@@ -389,6 +404,9 @@ def main():
     has_pawn = 'P' in white_letters
     if has_pawn and white_letters.count('P') > 1:
         raise SystemExit("ERROR: this script and the current engine scope support at most one pawn")
+    if len(white_letters) > MAX_WHITE_NON_KING:
+        raise SystemExit(f"ERROR: only 0 through {MAX_WHITE_NON_KING} non-king White pieces are "
+                          f"supported by this engine, got {len(white_letters)}")
     has_bishop = 'B' in white_letters
     num_bishops = white_letters.count('B')
 

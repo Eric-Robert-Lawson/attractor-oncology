@@ -2,51 +2,6 @@
 """
 Exhaustive seed-position generator for the general/multi-piece solver.
 
-WHY THIS IS A DIFFERENT TOOL FROM generate_general_seed_positions.py, NOT A
-REPLACEMENT FOR IT:
-
-generate_general_seed_positions.py produces a small, deliberately-spread
-set of seeds, relying on the (verified, but still an inference) fact that
-a handful of well-placed seeds already reaches the entire connected
-component for most material. This tool instead enumerates EVERY legal
-White-king / Black-king square pairing systematically -- 3,612 of them,
-after excluding adjacent-king placements -- as an explicit, exhaustive
-starting-point guarantee that doesn't rely on trusting connectivity at
-all. Every one of the 3,612 king configurations gets its own seed, with
-White's other piece(s) placed via the same closest-to-anchor logic the
-other generator uses (anchored on the White king), so each seed is still
-a single valid, legal position.
-
-This does NOT attempt to enumerate every possible placement of White's
-OTHER pieces for each king pairing (that would be tens of millions of
-largely-redundant rows for two-piece material, given the piece list run
-through this project has already confirmed empirically that a shared
-king configuration reached via different piece placements resolves into
-the same, already-discovered connected component almost immediately once
-any part of it has been explored). Exhaustively covering every king
-PAIRING is the actual guarantee this project has never been able to
-prove analytically for arbitrary material (unlike bishop-square-color,
-which IS a proven, closed-form invariant) -- so that's the specific gap
-this tool closes, without paying the cost of astronomically redundant
-full enumeration.
-
-Usage:
-    python3 generate_exhaustive_positions.py --white Q --out kqvk_exhaustive.txt
-    python3 generate_exhaustive_positions.py --white B,N --out kbnvk_exhaustive.txt --bishop-color light
-"""
-
-import argparse
-import sys
-
-from generate_general_seed_positions import (
-    Position, parse_white_pieces, is_legal_placement, square_color, format_seed, PIECE_LETTERS, _attacks
-)
-
-
-#!/usr/bin/env python3
-"""
-Exhaustive seed-position generator for the general/multi-piece solver.
-
 TRUE combinatorial exhaustiveness: every legal (WK, other White pieces, BK,
 turn) combination for the given material, not just every king pairing with
 one fixed placement rule for everything else. This is what "exhaustive"
@@ -75,18 +30,30 @@ generator was designed to exclude), the corrected comparison came back
 True exhaustive enumeration confirmed the existing landscape was already
 complete, rather than revealing anything missing.
 
+PIECE COUNT: supports 0 through MAX_WHITE_NON_KING (5) non-king White
+pieces -- matching the C++ engine's own packed-state limit exactly, which
+gives 7 total pieces on the board including both kings, the same
+convention Syzygy tablebases use. Confirmed directly: the underlying
+enumerate_fully_exhaustive was regression-tested to produce IDENTICAL
+counts to the old hardcoded 0/1/2-piece logic for 1 and 2 pieces (368,452
+and 24,536,088 respectively, exact matches) before being trusted for 3-5.
+
 SCALE, HONESTLY: for one non-king White piece (KQvK, KRvK, KPvK), this is
 ~370-500K positions and runs in well under a second. For two non-king
 White pieces (KBNvK and similar), the raw combinatorial space is roughly
 30 million before legality filtering -- still generates in well under a
-minute, but produces a correspondingly large seed file, and every batch
-in a sweep over it pays proportionally more scanning cost even once
-everything is sealed. This is the honest cost of an actual completeness
-guarantee rather than a heuristic.
+minute, but produces a correspondingly large seed file. For 3+ pieces the
+seed file itself remains generable in reasonable time, but the actual
+reachable position graph for such material is very plausibly far larger
+than anything solved so far in this project, and the engine's current
+in-memory-only architecture (no disk-backed storage) may make a full,
+exhaustive solve impractical regardless of how the seeds are generated --
+that's a separate, real limitation this script cannot itself remove.
 
 Usage:
     python3 generate_exhaustive_positions.py --white Q --out kqvk_exhaustive.txt
     python3 generate_exhaustive_positions.py --white B,N --out kbnvk_exhaustive.txt --bishop-color light
+    python3 generate_exhaustive_positions.py --white Q,R,B --out qrb_exhaustive.txt
 """
 
 import argparse
@@ -94,7 +61,7 @@ import sys
 
 from generate_general_seed_positions import (
     Position, parse_white_pieces, square_color, format_seed, PIECE_LETTERS,
-    enumerate_fully_exhaustive
+    enumerate_fully_exhaustive, MAX_WHITE_NON_KING
 )
 
 
@@ -115,8 +82,9 @@ def main():
     has_pawn = 'P' in white_letters
     if has_pawn and white_letters.count('P') > 1:
         raise SystemExit("ERROR: at most one pawn is supported")
-    if len(white_letters) > 2:
-        raise SystemExit("ERROR: only 0, 1, or 2 non-king White pieces are supported by this engine")
+    if len(white_letters) > MAX_WHITE_NON_KING:
+        raise SystemExit(f"ERROR: only 0 through {MAX_WHITE_NON_KING} non-king White pieces are "
+                          f"supported by this engine, got {len(white_letters)}")
     num_bishops = white_letters.count('B')
     if args.bishop_color and num_bishops == 0:
         raise SystemExit("ERROR: --bishop-color only makes sense when --white includes 'B'")
@@ -141,6 +109,13 @@ def main():
         print("  NOTE: two non-king White pieces -- true exhaustive enumeration is ~30 million raw "
               "combinations before filtering. This will take longer and produce a much larger file "
               "than single-piece material. See module docstring for the honest scale tradeoff.")
+    elif len(white_letters) >= 3:
+        print(f"  NOTE: {len(white_letters)} non-king White pieces -- both the seed file AND the "
+              f"actual reachable position graph for this material are very plausibly far larger "
+              f"than anything solved so far in this project (KBNvK, at 2 pieces, was already ~24.7 "
+              f"million positions). This engine has no disk-backed storage -- a full exhaustive "
+              f"solve may not be practically feasible on any single machine's RAM. Worth testing "
+              f"with a small --max-nodes cap on the solver first, before committing to a full run.")
 
     print("Enumerating every legal position combinatorially (not just king pairings)...")
 

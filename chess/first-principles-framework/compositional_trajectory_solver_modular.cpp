@@ -2060,13 +2060,31 @@ public:
 
 constexpr uint8_t GSTATE_NO_PIECE_SENTINEL = 7;
 
-// Packs WK + up to 2 additional White pieces + BK + turn into a uint64_t:
-// 10 bits/piece (3 kind, 6 square, 1 spare) x 4 slots + 1 turn bit = 41 bits.
+// Confirmed by direct bit-budget arithmetic before this was written, not
+// assumed: WK (9 bits) + BK (9 bits) + turn (1 bit) = 19 bits fixed
+// overhead, leaving 45 bits, and 45 / 9 = exactly 5 additional 9-bit
+// slots -- no partial slot, no wasted bits, no need to widen past a
+// single uint64_t. 5 non-king pieces + 2 kings = 7 total pieces on the
+// board, matching Syzygy's own convention exactly. This is also the
+// correct ceiling for a LATER redesign that lets Black have real pieces
+// too (each slot would then need a color bit, but kings would no longer
+// need to waste bits on kind, since it's implied by which two roles are
+// fixed -- 2*6 + 1 + 5*10 = 63 bits, still fitting): the piece BUDGET
+// (5) is stable across both the current White-only scope and the future
+// flexible-distribution scope, only how those 5 slots are allocated
+// changes later.
+constexpr int MAX_WHITE_NON_KING = 5;
+
+// Packs WK + up to MAX_WHITE_NON_KING additional White pieces + BK + turn
+// into a uint64_t: 9 bits/piece (3 kind, 6 square) x (2 kings + up to 5
+// non-king pieces) + 1 turn bit = 64 bits exactly at full occupancy.
 // Reversible -- states are reconstructed on demand, never stored directly,
 // which is most of where the memory savings over a string key come from.
-// Currently scoped to White having 0-2 non-king pieces and Black having
+// Currently scoped to White having 0-5 non-king pieces and Black having
 // only a king, matching this project's current explicit scope (multiple
-// White pieces first, multiple Black pieces as a later, separate step).
+// White pieces first, multiple Black pieces as a later, separate step
+// requiring its own classification-model changes -- see
+// loser_count_and_multipiece_black_refactor.md).
 inline uint64_t pack_general_state(const GeneralState& st) {
     Position wk{}, bk{};
     vector<GPiece> white_others;
@@ -2079,19 +2097,20 @@ inline uint64_t pack_general_state(const GeneralState& st) {
         if (a.kind != b.kind) return (int)a.kind < (int)b.kind;
         return (a.square.file * 8 + a.square.rank) < (b.square.file * 8 + b.square.rank);
     });
-    if (white_others.size() > 2) {
-        // This packing reserves exactly 2 slots for White's non-king pieces
-        // -- silently packing only the first 2 and dropping the rest would
-        // be a real, silent data-corruption bug (two different game states
-        // collapsing onto the same key). Failing loudly here is deliberate:
-        // this project's whole history says a silent wrong answer is far
-        // worse than a crash pointing at exactly what's unsupported.
+    if ((int)white_others.size() > MAX_WHITE_NON_KING) {
+        // This packing reserves exactly MAX_WHITE_NON_KING slots for
+        // White's non-king pieces -- silently packing only the first N and
+        // dropping the rest would be a real, silent data-corruption bug
+        // (two different game states collapsing onto the same key).
+        // Failing loudly here is deliberate: this project's whole history
+        // says a silent wrong answer is far worse than a crash pointing at
+        // exactly what's unsupported.
         cerr << "FATAL: pack_general_state received " << white_others.size()
-             << " non-king White pieces, but only 2 are supported by this "
-             << "packed representation. State: " << st.str() << "\n";
+             << " non-king White pieces, but only " << MAX_WHITE_NON_KING
+             << " are supported by this packed representation. State: " << st.str() << "\n";
         abort();
     }
-    while (white_others.size() < 2) {
+    while ((int)white_others.size() < MAX_WHITE_NON_KING) {
         white_others.push_back({(PieceKind)GSTATE_NO_PIECE_SENTINEL, Color::WHITE, Position(0, 0)});
     }
     uint64_t key = 0;
@@ -2100,10 +2119,12 @@ inline uint64_t pack_general_state(const GeneralState& st) {
         key |= ((uint64_t)(sq.file * 8 + sq.rank) << (shift + 3));
     };
     pack_piece(0, 0, wk);
-    pack_piece(9, (uint8_t)white_others[0].kind, white_others[0].square);
-    pack_piece(18, (uint8_t)white_others[1].kind, white_others[1].square);
-    pack_piece(27, 0, bk);
-    key |= ((uint64_t)(st.to_move == 'W' ? 1 : 0) << 36);
+    for (int i = 0; i < MAX_WHITE_NON_KING; i++) {
+        pack_piece(9 * (i + 1), (uint8_t)white_others[i].kind, white_others[i].square);
+    }
+    int bk_shift = 9 * (MAX_WHITE_NON_KING + 1);
+    pack_piece(bk_shift, 0, bk);
+    key |= ((uint64_t)(st.to_move == 'W' ? 1 : 0) << (bk_shift + 9));
     return key;
 }
 
@@ -2115,14 +2136,15 @@ inline GeneralState unpack_general_state(uint64_t key) {
         return {kind, Position(sq / 8, sq % 8)};
     };
     auto [wk_kind, wk_sq] = unpack_piece(0); (void)wk_kind;
-    auto [p1_kind, p1_sq] = unpack_piece(9);
-    auto [p2_kind, p2_sq] = unpack_piece(18);
-    auto [bk_kind, bk_sq] = unpack_piece(27); (void)bk_kind;
     st.pieces.push_back({PieceKind::KING, Color::WHITE, wk_sq});
-    if (p1_kind != GSTATE_NO_PIECE_SENTINEL) st.pieces.push_back({(PieceKind)p1_kind, Color::WHITE, p1_sq});
-    if (p2_kind != GSTATE_NO_PIECE_SENTINEL) st.pieces.push_back({(PieceKind)p2_kind, Color::WHITE, p2_sq});
+    for (int i = 0; i < MAX_WHITE_NON_KING; i++) {
+        auto [p_kind, p_sq] = unpack_piece(9 * (i + 1));
+        if (p_kind != GSTATE_NO_PIECE_SENTINEL) st.pieces.push_back({(PieceKind)p_kind, Color::WHITE, p_sq});
+    }
+    int bk_shift = 9 * (MAX_WHITE_NON_KING + 1);
+    auto [bk_kind, bk_sq] = unpack_piece(bk_shift); (void)bk_kind;
     st.pieces.push_back({PieceKind::KING, Color::BLACK, bk_sq});
-    st.to_move = ((key >> 36) & 1) ? 'W' : 'B';
+    st.to_move = ((key >> (bk_shift + 9)) & 1) ? 'W' : 'B';
     return st;
 }
 
@@ -2445,12 +2467,12 @@ inline optional<GeneralState> parse_general_position(const string& line) {
     if (!st.find_king(Color::WHITE) || !st.find_king(Color::BLACK)) return nullopt;
     int white_non_king = 0;
     for (auto& p : st.pieces) if (p.color == Color::WHITE && p.kind != PieceKind::KING) white_non_king++;
-    if (white_non_king > 2) {
+    if (white_non_king > MAX_WHITE_NON_KING) {
         // Caught here, at parse time, rather than only in pack_general_state's
         // hard abort() deep inside a run -- a malformed input file should
         // fail with a clear, immediate message pointing at the exact line,
         // not crash the process after minutes of discovery work.
-        cerr << "  Rejected (only up to 2 non-king White pieces are supported): " << line << "\n";
+        cerr << "  Rejected (only up to " << MAX_WHITE_NON_KING << " non-king White pieces are supported): " << line << "\n";
         return nullopt;
     }
     return st;

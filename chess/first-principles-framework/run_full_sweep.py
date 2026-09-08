@@ -186,6 +186,22 @@ def main():
                 print("Aborted -- database left untouched.")
                 sys.exit(1)
 
+    # The actual deletion happens HERE, in this script, immediately --
+    # NOT left for a later batch's --fresh flag on the C++ solver to
+    # perform. That was a real, confirmed bug: known_keys gets loaded from
+    # disk below, BEFORE any batch ever runs, so if the (supposedly about
+    # to be deleted) database still exists at that point, every seed
+    # matches it and gets pruned -- meaning zero batches ever dispatch,
+    # meaning the solver's own --fresh handling never fires at all. Typing
+    # "delete" would silently do nothing whenever every seed was already
+    # known from the old file. Deleting directly here removes the
+    # ordering dependency entirely.
+    if args.fresh:
+        for path in (args.db, args.db + '.draws'):
+            if os.path.isfile(path):
+                os.remove(path)
+                print(f"  Deleted {path}")
+
     header, all_seeds = read_all_lines(args.positions_file)
     total = len(all_seeds)
     if total == 0:

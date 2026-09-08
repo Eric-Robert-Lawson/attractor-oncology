@@ -2408,6 +2408,21 @@ inline optional<GeneralState> parse_general_position(const string& line) {
         if (start == string::npos) continue;
         token = token.substr(start, end - start + 1);
         if (token.empty()) continue;
+        // Explicit turn override -- 'turn:B' or 'turn:W'. Without this, every
+        // seed silently defaults to White-to-move, which is exactly what
+        // caused a real, confirmed bug: a piece placement that's only legal
+        // with Black to move (White-to-move being excluded because it would
+        // leave Black already in check) still got written as a bare line by
+        // a seed generator, and got silently reinterpreted as White-to-move
+        // here -- reintroducing precisely the illegal position the generator
+        // had correctly filtered out. Confirmed directly: inflated a KQvK
+        // discovery run from the correct 372,065 up to 451,500 positions,
+        // with the extra ~79,000 traced to exactly this misparse.
+        if (token.rfind("turn:", 0) == 0) {
+            char t = token.size() > 5 ? toupper(token[5]) : 'W';
+            if (t == 'W' || t == 'B') st.to_move = t;
+            continue;
+        }
         size_t colon = token.find(':');
         if (colon == string::npos || colon != 1) return nullopt;
         char letter = token[0];

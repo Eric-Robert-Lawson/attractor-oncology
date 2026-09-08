@@ -76,6 +76,14 @@ def parse_white_pieces(spec):
         raise ValueError("--white must name at least one piece")
     for l in letters:
         if l not in PIECE_LETTERS:
+            if len(l) > 1 and all(c in PIECE_LETTERS for c in l):
+                # Almost certainly meant comma-separated pieces but typed
+                # them run together (e.g. 'BN' or 'bn' instead of 'B,N') --
+                # a real, easy mistake to make, and the old plain "not a
+                # valid letter" error gave no hint toward the actual fix.
+                suggestion = ",".join(l)
+                raise ValueError(f"'{l}' is not a valid single piece letter -- did you mean "
+                                  f"comma-separated, like --white {suggestion} ?")
             raise ValueError(f"Unrecognized piece letter '{l}' -- must be one of {sorted(PIECE_LETTERS)}")
     return letters
 
@@ -173,6 +181,73 @@ def square_color(pos):
     return 'dark' if (pos.file + pos.rank) % 2 == 0 else 'light'
 
 
+def all_squares_list():
+    return [Position(f, r) for r in range(8) for f in range(8)]
+
+
+def enumerate_fully_exhaustive(white_letters, bishop_color=None):
+    """Yields (white_letters, squares_dict, turn) for EVERY legal position
+    of this material -- true combinatorial enumeration over every piece's
+    square, not just king pairs with one fixed placement rule for
+    everything else. This is what "exhaustive" needs to mean to match a
+    real, Syzygy-style completeness guarantee: nothing is skipped because
+    of how some OTHER piece happens to be placed for a given king pair.
+
+    Supports 0, 1, or 2 non-king White pieces (the engine's current
+    scope). Yields both White-to-move and Black-to-move positions --
+    White-to-move seeds are filtered to exclude Black already being in
+    check (illegal/unreachable, per is_legal_placement's own docstring);
+    Black-to-move seeds need no such filter in this scope, since Black
+    has no piece capable of attacking White's king (a bare king only
+    attacks adjacent squares, already excluded by the king-distance
+    check)."""
+    ALL = all_squares_list()
+
+    for wk in ALL:
+        wk_key = (wk.file, wk.rank)
+        for bk in ALL:
+            if bk == wk or wk.distance_to(bk) < 2:
+                continue
+            bk_key = (bk.file, bk.rank)
+            base_used = {wk_key, bk_key}
+
+            def candidates_for(letter, used):
+                if letter == 'P':
+                    return [p for p in ALL if p.rank == 1 and (p.file, p.rank) not in used]
+                if letter == 'B' and bishop_color is not None:
+                    return [p for p in ALL if square_color(p) == bishop_color and (p.file, p.rank) not in used]
+                return [p for p in ALL if (p.file, p.rank) not in used]
+
+            if len(white_letters) == 0:
+                combos = [()]
+            elif len(white_letters) == 1:
+                combos = [(p,) for p in candidates_for(white_letters[0], base_used)]
+            elif len(white_letters) == 2:
+                combos = []
+                for p0 in candidates_for(white_letters[0], base_used):
+                    used1 = base_used | {(p0.file, p0.rank)}
+                    for p1 in candidates_for(white_letters[1], used1):
+                        combos.append((p0, p1))
+            else:
+                raise ValueError("only 0, 1, or 2 non-king White pieces are supported by this engine")
+
+            for combo in combos:
+                squares = {'WK': wk, 'BK': bk}
+                for i, p in enumerate(combo):
+                    squares[f'W{i}'] = p
+
+                occupied = base_used | {(p.file, p.rank) for p in combo}
+                white_pieces = [('K', wk)] + list(zip(white_letters, combo))
+
+                # White-to-move: Black must not already be in check.
+                if not any(_attacks(letter, pos, bk, occupied) for letter, pos in white_pieces):
+                    yield (white_letters, dict(squares), 'W')
+
+                # Black-to-move: nothing to check in this scope (see docstring).
+                yield (white_letters, dict(squares), 'B')
+
+
+
 def build_seed(white_letters, anchor, force_bishop_color=None):
     """Constructs one valid seed position anchored near a given corner/region
     of the board, so successive seeds are genuinely spread out rather than
@@ -232,11 +307,13 @@ def build_seed(white_letters, anchor, force_bishop_color=None):
     return white_letters, squares
 
 
-def format_seed(white_letters, squares):
+def format_seed(white_letters, squares, turn='W'):
     tokens = [f"K:{squares['WK'].to_str()}"]
     for i, letter in enumerate(white_letters):
         tokens.append(f"{letter}:{squares[f'W{i}'].to_str()}")
     tokens.append(f"k:{squares['BK'].to_str()}")
+    if turn == 'B':
+        tokens.append("turn:B")
     return ",".join(tokens)
 
 

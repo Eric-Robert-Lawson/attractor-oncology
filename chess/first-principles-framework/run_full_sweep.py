@@ -91,17 +91,34 @@ def canonical_position_key(seed_line, turn='W'):
     """Converts one comma-separated seed line ('K:a1,B:a2,N:b1,k:a3') into
     the exact (position_string, turn) key that would appear as this
     position's row in the database, if it's ever been solved -- i.e. the
-    same string GeneralState::str() would produce for it."""
+    same string GeneralState::str() would produce for it.
+
+    The `turn` PARAMETER IS ONLY A FALLBACK, used when the seed line itself
+    doesn't specify one. An explicit 'turn:B' token in the line (the format
+    generate_exhaustive_positions.py's true combinatorial enumeration
+    actually emits, to represent Black-to-move positions unambiguously
+    rather than silently defaulting everything to White) always overrides
+    it. This was a real, confirmed bug the first time exhaustive
+    Black-to-move seeds were actually fed through this script: 'turn:B'
+    was misparsed as a piece token ('turn' as the letter, 'B' as the
+    square), raising a KeyError against _KIND_ORDER rather than being
+    recognized as the turn override it actually is."""
     pieces = []
+    actual_turn = turn
     for tok in seed_line.split(','):
         tok = tok.strip()
         if not tok:
+            continue
+        if tok.lower().startswith('turn:'):
+            t = tok.split(':', 1)[1].strip().upper()
+            if t in ('W', 'B'):
+                actual_turn = t
             continue
         letter, sq = tok.split(':')
         color = 0 if letter.isupper() else 1  # White=0, Black=1
         pieces.append((color, _KIND_ORDER[letter.upper()], sq, letter, ))
     pieces.sort(key=lambda p: (p[0], p[1], (ord(p[2][0]) - ord('a')) * 8 + (int(p[2][1]) - 1)))
-    return " ".join(f"{letter}:{sq}" for _, _, sq, letter in pieces), turn
+    return " ".join(f"{letter}:{sq}" for _, _, sq, letter in pieces), actual_turn
 
 
 def load_known_keys(db_file):

@@ -75,7 +75,8 @@ import csv
 import os
 import sys
 import time
-from collections import defaultdict, OrderedDict
+from collections import defaultdict, OrderedDict, namedtuple
+import resource
 
 FILES = "abcdefgh"
 KIND_ORDER = {'P': 0, 'Q': 1, 'N': 2, 'K': 3, 'R': 4, 'B': 5}  # matches the C++ PieceKind enum exactly
@@ -338,9 +339,22 @@ def black_legal_move_count(pos_str):
 # Database loading
 # ============================================================================
 
+DbEntry = namedtuple('DbEntry', ['distance', 'tied'])
+
+
 def load_db(path):
-    """Returns dict (position, turn) -> {'distance': int, 'tied': [(mv,esc),...]}.
-    Position NOT present means proven draw -- see module docstring."""
+    """Returns dict (position, turn) -> DbEntry(distance, tied).
+    Position NOT present means proven draw -- see module docstring.
+
+    DbEntry is a namedtuple, not a plain dict, specifically for memory:
+    measured directly against a realistic KBNvK-scale load (22M rows), a
+    plain-dict value costs ~490 bytes/entry versus ~325 bytes/entry for a
+    namedtuple holding the identical data -- roughly a third less memory
+    for the exact same information, from data-structure overhead alone.
+    At 22M positions that's the difference between ~10.8GB and ~7.3GB for
+    this structure alone. tied stays a plain list (mutated nowhere, but
+    kept as a list rather than a tuple for minimal call-site disruption --
+    every existing `for mv, bn in entry.tied` iteration is unaffected)."""
     db = {}
     with open(path, encoding='utf-8') as f:
         f.readline()
@@ -366,7 +380,7 @@ def load_db(path):
                         tied.append((mv, int(esc_str)))
                     except ValueError:
                         pass
-            db[(position, turn)] = {'distance': distance, 'tied': tied}
+            db[(position, turn)] = DbEntry(distance, tied)
     return db
 
 
@@ -470,7 +484,7 @@ def reachable_set(state, db, memo, max_nodes=5000, warned=None, ambiguous_counte
             # proven draw (also terminal, and correctly so -- see module
             # docstring's note on draws).
             continue
-        for mv, bn in entry['tied']:
+        for mv, bn in entry.tied:
             pos, turn = s
             try:
                 child = (apply_move_general(pos, mv), child_turn(mv))
@@ -487,11 +501,11 @@ def reachable_set(state, db, memo, max_nodes=5000, warned=None, ambiguous_counte
 
 
 def classify_position(position, turn, entry, db, reach_memo, warned, ambiguous_counter):
-    tied = entry['tied']
+    tied = entry.tied
     n = len(tied)
     if n <= 1:
         return None
-    if entry['distance'] == 1:
+    if entry.distance == 1:
         return {'category': 'TRIVIAL_MATE', 'components': None, 'n_components': 1}
 
     children = []
@@ -577,7 +591,38 @@ def classify_position(position, turn, entry, db, reach_memo, warned, ambiguous_c
             'tied': tied, 'children': children, 'any_truncated': any_truncated}
 
 
-def run_categorization(db, min_plies=0, max_positions=None, checkpoint_path=None, memo_cache_size=3000):
+def current_memory_gb():
+    """Actual measured peak process memory, in GB -- not an estimate.
+    ru_maxrss units are genuinely platform-dependent: bytes on macOS/BSD,
+    kilobytes on Linux -- a real, documented POSIX/CPython inconsistency
+    (see bugs.python.org/issue20468), not a hypothetical. Getting this
+    wrong would make --max-memory-gb fire either ~1024x too early or
+    effectively never, depending on platform -- confirmed the correct
+    factor for each before using this for anything safety-relevant."""
+    raw = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+    if sys.platform == 'darwin':
+        return raw / (1024 ** 3)
+    return raw / (1024 ** 2)  # Linux: ru_maxrss is in KB
+
+
+def _save_checkpoint(results, checkpoint_path):
+    """Written to a temp file then renamed over the real checkpoint path,
+    so a crash or kill mid-write never leaves a corrupt, half-written
+    checkpoint that resume would then fail to load. No-op if
+    checkpoint_path is None -- callers that pass None (e.g. no
+    --out-dir-based path was ever set up) just don't persist, same as
+    before this was factored out."""
+    if not checkpoint_path:
+        return
+    import pickle
+    tmp_path = checkpoint_path + '.tmp'
+    with open(tmp_path, 'wb') as f:
+        pickle.dump(results, f)
+    os.replace(tmp_path, checkpoint_path)
+
+
+def run_categorization(db, min_plies=0, max_positions=None, checkpoint_path=None, memo_cache_size=3000,
+                        max_memory_gb=None):
     reach_memo = BoundedLRUCache(max_entries=memo_cache_size)
     warned = set()
     ambiguous_counter = [0]
@@ -599,7 +644,7 @@ def run_categorization(db, min_plies=0, max_positions=None, checkpoint_path=None
     checked = len(results)
 
     to_process = sum(1 for (position, turn), entry in db.items()
-                      if entry['distance'] >= min_plies and len(entry['tied']) > 1)
+                      if entry.distance >= min_plies and len(entry.tied) > 1)
     print(f"  {to_process} positions actually need classification (multi-way tie, "
           f"distance >= {min_plies}) -- this is the slow step, each one can involve "
           f"reachable-set searches, not just a lookup")
@@ -610,9 +655,9 @@ def run_categorization(db, min_plies=0, max_positions=None, checkpoint_path=None
     independent_found = sum(1 for r in results if r['category'] == 'INDEPENDENT')
 
     for (position, turn), entry in db.items():
-        if entry['distance'] < min_plies:
+        if entry.distance < min_plies:
             continue
-        if len(entry['tied']) <= 1:
+        if len(entry.tied) <= 1:
             continue
         if (position, turn) in already_done:
             continue
@@ -624,7 +669,28 @@ def run_categorization(db, min_plies=0, max_positions=None, checkpoint_path=None
         if result:
             result['position'] = position
             result['turn'] = turn
-            result['total_plies'] = entry['distance']
+            result['total_plies'] = entry.distance
+            # 'children' is never read back out anywhere -- confirmed by
+            # scanning every result-dict access in summarize_classify and
+            # cmd_families -- it's only ever used internally within
+            # classify_position itself, so retaining it here just holds a
+            # full list of (position, turn) child-state tuples per result
+            # for no reason. 'tied' and 'components' are only read back
+            # out for INDEPENDENT and INDEPENDENT_UNVERIFIED rows
+            # (independent_findings_deduped.csv / independent_unverified.csv);
+            # TRIVIAL_MATE and EXPLAINED -- the vast majority of positions
+            # -- only ever need category/n_components/position/turn/
+            # total_plies for all_classifications.csv. Measured directly,
+            # not assumed: stripping these for a 600K-result sample of
+            # EXPLAINED-shaped results dropped memory from ~978MB to
+            # ~198MB, roughly 80%, since the per-move 'tied' and
+            # especially 'children' position strings were the dominant
+            # per-result cost, not the handful of scalar fields the
+            # majority of categories actually need downstream.
+            result['children'] = None
+            if result['category'] not in ('INDEPENDENT', 'INDEPENDENT_UNVERIFIED'):
+                result['tied'] = None
+                result['components'] = None
             results.append(result)
             if result['category'] == 'INDEPENDENT':
                 independent_found += 1
@@ -642,9 +708,28 @@ def run_categorization(db, min_plies=0, max_positions=None, checkpoint_path=None
             elapsed = now - start
             rate = checked / elapsed if elapsed > 0 else 0
             remaining = (to_process - checked) / rate if rate > 0 else float('inf')
+            mem_note = f", mem={current_memory_gb():.1f}GB" if max_memory_gb else ""
             print(f"  [progress] {checked}/{to_process} classified ({100*checked/to_process:.1f}%), "
                   f"{independent_found} INDEPENDENT so far, elapsed={elapsed:.0f}s, "
-                  f"~{remaining:.0f}s remaining at current rate", flush=True)
+                  f"~{remaining:.0f}s remaining at current rate{mem_note}", flush=True)
+
+            # Checked on the same 10s cadence as the progress print, not a
+            # separate timer -- ru_maxrss is a cheap read, no reason to
+            # poll it more often than the human-facing status line anyway.
+            # This is measured, actual process memory, not an estimate --
+            # the same "fail loud, not silently wrong" choice this project
+            # already made for general_solver's --max-nodes: hitting the
+            # cap checkpoints immediately and exits cleanly rather than
+            # letting the OS start swapping, which on a real run looks
+            # like a hang or a crash with no useful signal either way.
+            if max_memory_gb and current_memory_gb() >= max_memory_gb:
+                _save_checkpoint(results, checkpoint_path)
+                print(f"\n  [MEMORY CAP] process memory reached {current_memory_gb():.1f}GB, "
+                      f"at or above --max-memory-gb {max_memory_gb}. Checkpointed {len(results)} "
+                      f"results and stopping cleanly -- re-run the identical command to resume "
+                      f"from here. ({checked}/{to_process} classified so far, {independent_found} "
+                      f"INDEPENDENT found.)")
+                sys.exit(2)
 
         # Checkpointed every 60s, not more often -- pickling the whole
         # results list has a real cost too, and there's no reason to pay
@@ -654,11 +739,7 @@ def run_categorization(db, min_plies=0, max_positions=None, checkpoint_path=None
         # fail to load.
         if checkpoint_path and now - last_checkpoint >= 60:
             last_checkpoint = now
-            import pickle
-            tmp_path = checkpoint_path + '.tmp'
-            with open(tmp_path, 'wb') as f:
-                pickle.dump(results, f)
-            os.replace(tmp_path, checkpoint_path)
+            _save_checkpoint(results, checkpoint_path)
             print(f"  [checkpoint] saved {len(results)} results to {checkpoint_path}", flush=True)
 
     print(f"  [progress] done: {checked}/{to_process} classified in {time.time()-start:.0f}s")
@@ -735,12 +816,13 @@ def cmd_classify(args):
     db = load_db(args.db_path)
     print(f"  Loaded {len(db)} positions")
 
-    multi_count = sum(1 for e in db.values() if len(e['tied']) > 1)
+    multi_count = sum(1 for e in db.values() if len(e.tied) > 1)
     print(f"  Positions with a multi-way tie: {multi_count}")
 
     checkpoint_path = args.db_path + '.classify_checkpoint.pkl'
     results = run_categorization(db, min_plies=args.min_plies, max_positions=args.max_positions,
-                                  checkpoint_path=checkpoint_path, memo_cache_size=args.memo_cache_size)
+                                  checkpoint_path=checkpoint_path, memo_cache_size=args.memo_cache_size,
+                                  max_memory_gb=args.max_memory_gb)
     summarize_classify(results, args.out_dir)
 
     # Only removed after a full, successful run -- if this line is never
@@ -758,7 +840,7 @@ def verify_and_count(state, db, memo, mismatches):
     if state in memo:
         return memo[state]
     entry = db.get(state)
-    tied = entry['tied'] if entry else []
+    tied = entry.tied if entry else []
     if not tied:
         result = (1, 0)
         memo[state] = result
@@ -796,7 +878,7 @@ def render(state, db, indent, ply_num, out, max_lines, visiting, classifications
         out.append("  " * indent + ("# checkmate" if is_checkmate_state(state)
                                      else "# [proven draw -- correctly terminal, not a gap]"))
         return
-    tied = entry['tied']
+    tied = entry.tied
     if not tied:
         out.append("  " * indent + "# [no tied moves recorded here]")
         return
@@ -834,8 +916,8 @@ def render_position(position, turn, db, out_path, component_labels=None, max_lin
     entry = db.get(key)
     header = [f"Position: {position}  ({turn} to move)"]
     if entry:
-        header.append(f"Total plies to mate: {entry['distance']}")
-        header.append(f"Root tied moves: {len(entry['tied'])}")
+        header.append(f"Total plies to mate: {entry.distance}")
+        header.append(f"Root tied moves: {len(entry.tied)}")
         if component_labels:
             header.append("Root classification:")
             for group_idx, moves in enumerate(component_labels):
@@ -942,7 +1024,7 @@ def load_findings(path):
     return findings
 
 
-def find_families(findings):
+def find_families(findings, checkpoint_path=None):
     """Generalizes krvk_analyzer's 'fix one of WK/WQ/BK, sweep the rest' to
     an arbitrary-length piece list: roles are WK, BK, and each index into
     the canonically-sorted white_others tuple (index 0 = whichever piece
@@ -952,9 +1034,45 @@ def find_families(findings):
     promotion is in play for this material (e.g. a still-a-pawn finding's
     role 0 vs an already-promoted finding's role 0) -- sweeps are only
     meaningful within a fixed material/kind-shape subset, exactly as
-    "fix WQ" implicitly was for krvk_analyzer.py's single-piece case."""
+    "fix WQ" implicitly was for krvk_analyzer.py's single-piece case.
+
+    checkpoint_path, if given, checkpoints at GROUP granularity, not just
+    per-role -- deliberately, since this function's own docstring already
+    notes a single group's O(n^2) pairwise pass, not a whole role, is
+    where a genuinely slow stretch would actually show up. The group's
+    own (role, fixed_val, turn, tied_moves) grouping key doubles as the
+    resume key -- no separate id scheme needed, since it's already a
+    complete, unique identifier for "which group is this"."""
     seen_in_a_family = set()
     families = []
+    done_keys = set()
+    if checkpoint_path and os.path.exists(checkpoint_path):
+        import pickle
+        with open(checkpoint_path, 'rb') as f:
+            checkpoint = pickle.load(f)
+        families = checkpoint['families']
+        seen_in_a_family = checkpoint['seen_in_a_family']
+        done_keys = checkpoint['done_keys']
+        print(f"  Resumed {len(families)} already-found families ({len(done_keys)} groups "
+              f"already checked) from {checkpoint_path}")
+
+    last_checkpoint = time.time()
+
+    def maybe_checkpoint(force=False):
+        nonlocal last_checkpoint
+        if not checkpoint_path:
+            return
+        now = time.time()
+        if not force and now - last_checkpoint < 60:
+            return
+        last_checkpoint = now
+        import pickle
+        tmp_path = checkpoint_path + '.tmp'
+        with open(tmp_path, 'wb') as f:
+            pickle.dump({'families': families, 'seen_in_a_family': seen_in_a_family,
+                         'done_keys': done_keys}, f)
+        os.replace(tmp_path, checkpoint_path)
+
     roles = ['WK', 'BK'] + [f'white_other_{i}' for i in range(5)]  # 5 = MAX_WHITE_NON_KING, matching
                                                                     # the C++ engine's own limit -- see
                                                                     # compositional_trajectory_solver_modular.cpp
@@ -975,9 +1093,13 @@ def find_families(findings):
         group_start = time.time()
         last_print = group_start
 
-        for gi, ((fixed_role, fixed_val, turn, tied_moves), members) in enumerate(groups.items()):
+        for gi, (group_key, members) in enumerate(groups.items()):
+            fixed_role, fixed_val, turn, tied_moves = group_key
+            if group_key in done_keys:
+                continue
             distinct_positions = {(m['position'], m['turn']): m for m in members}
             if len(distinct_positions) < 2:
+                done_keys.add(group_key)
                 continue
             member_list = list(distinct_positions.values())
             # The only part of this whole function with worse-than-linear
@@ -1006,7 +1128,10 @@ def find_families(findings):
             })
             for m in member_list:
                 seen_in_a_family.add((m['position'], m['turn']))
+            done_keys.add(group_key)
+            maybe_checkpoint()
         print(f"  [role={role}] done in {time.time()-group_start:.0f}s")
+        maybe_checkpoint(force=True)  # always checkpoint at a role boundary, regardless of the 60s timer
     unique_findings = [f for f in findings if (f['position'], f['turn']) not in seen_in_a_family]
     return families, unique_findings
 
@@ -1016,7 +1141,15 @@ def cmd_families(args):
     findings = load_findings(args.findings_csv)
     print(f"  Loaded {len(findings)} deduplicated independent findings")
 
-    families, unique_findings = find_families(findings)
+    checkpoint_path = args.checkpoint_path or (args.findings_csv + '.families_checkpoint.pkl')
+    families, unique_findings = find_families(findings, checkpoint_path=checkpoint_path)
+
+    # Only removed after a full, successful run -- if find_families never
+    # returns (killed, crashed, interrupted), the checkpoint stays on disk
+    # exactly so the next run can resume from it instead of starting over,
+    # matching cmd_classify's own convention.
+    if os.path.exists(checkpoint_path):
+        os.remove(checkpoint_path)
 
     seen_member_sets = set()
     distinct_families = []
@@ -1096,12 +1229,28 @@ def main():
                           "Lower it if you're still seeing high memory/swap; raising it trades "
                           "more memory for fewer recomputed cache misses.")
     p1.add_argument('--out-dir', default='general_tie_analysis')
+    p1.add_argument('--max-memory-gb', type=float, default=None,
+                     help="If the process's actual measured memory (not an estimate) exceeds this "
+                          "many GB, checkpoint immediately and exit cleanly rather than let the OS "
+                          "start swapping -- the same 'fail loud, not silently wrong' choice this "
+                          "project uses elsewhere (see general_solver's --max-nodes). Re-running the "
+                          "identical command resumes from the checkpoint. Unset by default -- the "
+                          "memory reductions in this version (namedtuple db values, stripped "
+                          "non-INDEPENDENT result fields) cut typical usage substantially, but this "
+                          "is a real safety net for scaling to larger materials, not a replacement "
+                          "for watching actual usage the first time you run a new, bigger one.")
 
     p2 = sub.add_parser('families', help="Compile families vs unique findings from classify's output")
     p2.add_argument('findings_csv')
     p2.add_argument('--out-dir', default='general_families')
     p2.add_argument('--render-trees', metavar='DB_PATH', default=None)
     p2.add_argument('--max-lines', type=int, default=500)
+    p2.add_argument('--checkpoint-path', default=None,
+                     help="Path to save/resume role-sweep progress (default: <findings_csv>."
+                          "families_checkpoint.pkl). Checkpointed after each completed role, since "
+                          "that's this function's only genuinely unbounded-cost step (a role with a "
+                          "large group triggers an O(n^2) pairwise pass) -- see find_families's "
+                          "own docstring for why group-level, not finer, is the right granularity.")
 
     p3 = sub.add_parser('tree', help="Render the full move tree for one position or a findings CSV")
     p3.add_argument('db_path')

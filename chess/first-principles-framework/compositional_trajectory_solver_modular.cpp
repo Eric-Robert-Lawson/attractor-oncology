@@ -1623,6 +1623,39 @@ inline vector<pair<Position,bool>> piece_destinations(const GeneralState& gs, co
 // candidates (Queen and Knight only, per the dominance argument already
 // established: Rook/Bishop promotions are never better than Queen under
 // this engine's exact optimality criterion, for either color).
+// Defaults to false -- every existing sweep (KQvK, KRvK, KBNvK, KBBvK, and
+// this material's own original KBPvK run) was built and validated with
+// Queen/Knight-only promotion, and that restriction is PROVEN correct
+// whenever the game continues normally after promotion (a Queen can always
+// restrict itself to rook-like or bishop-like moves from then on, so it
+// can never be strictly worse than Rook or Bishop for distance OR
+// escape-count in that case). The one case that argument doesn't cover:
+// promotion itself immediately ending the game via stalemate, where
+// there's no "afterward" for a Queen to restrict itself in. Confirmed as a
+// REAL, non-hypothetical gap, not just a theoretical concern -- a direct
+// audit of a completed KBPvK database found 55 positions classified as
+// draws where Queen-promotion stalemates but Rook-promotion would not,
+// each independently hand-verified against the underlying attack geometry
+// before being trusted (see audit_promotion_completeness.py). Rook is
+// unconditionally sufficient mating material paired with anything already
+// on the board (well-established endgame theory: a lone Rook alone always
+// forces mate against a bare king from any legal, non-terminal position);
+// Bishop is included too for full rigor despite not sharing that
+// unconditional guarantee (a same-colored bishop pair is insufficient
+// mating material) -- a minimizing search discards a genuinely useless
+// candidate for free, so there's no correctness cost to including it, only
+// a small, bounded search-cost one exactly at promotion nodes.
+//
+// Gated behind this flag, not made the unconditional default, specifically
+// so the cost (roughly double the branching at every promotion node,
+// mostly spent proving Rook/Bishop are NOT optimal in the overwhelming
+// majority of positions where the gap doesn't apply) is only ever paid on
+// a deliberate, full re-sweep of pawn-containing material -- never
+// silently slowing down or changing behavior for material without a pawn
+// at all, or for anyone re-running this binary against already-completed,
+// already-validated work.
+bool g_full_promotion = false;
+
 inline vector<GeneralState> generate_pseudo_legal_moves(const GeneralState& gs) {
     vector<GeneralState> out;
     Color mover = (gs.to_move == 'W') ? Color::WHITE : Color::BLACK;
@@ -1663,6 +1696,10 @@ inline vector<GeneralState> generate_pseudo_legal_moves(const GeneralState& gs) 
             if (is_promo) {
                 make_child(PieceKind::QUEEN);
                 make_child(PieceKind::KNIGHT);
+                if (g_full_promotion) {
+                    make_child(PieceKind::ROOK);
+                    make_child(PieceKind::BISHOP);
+                }
             } else {
                 make_child(gs.pieces[i].kind);
             }
@@ -4095,7 +4132,17 @@ int main(int argc, char* argv[]) {
         else if (arg == "--db" && i + 1 < argc) { db_file = argv[++i]; }
         else if (arg == "--fresh") { fresh_start = true; }
         else if (arg == "--max-nodes" && i + 1 < argc) { max_nodes_arg = atoll(argv[++i]); max_nodes_explicit = true; }
+        else if (arg == "--full-promotion") { g_full_promotion = true; }
         else { unrecognized.push_back(arg); }
+    }
+
+    if (g_full_promotion) {
+        cout << "[full-promotion] Rook and Bishop promotion candidates are ALSO being explored, "
+             << "not just Queen/Knight. This is slower (roughly double branching at every "
+             << "promotion node) and only needed for a deliberate re-sweep of pawn-containing "
+             << "material to close the documented Queen-promotion-stalemate gap -- see the "
+             << "comment on g_full_promotion. Omit --full-promotion for the default, faster, "
+             << "already-validated Queen/Knight-only search.\n";
     }
 
 #ifdef PIECE_GENERAL
@@ -4130,7 +4177,9 @@ int main(int argc, char* argv[]) {
         for (auto& u : unrecognized) cerr << " " << u;
         cerr << "\nKnown flags: --debug/-d, --batch/-b, --full-dag/-g, "
                 "--positions <file>, --db <file>, --fresh, "
-                "--max-nodes <N> (PIECE_GENERAL only, auto-detected from system memory if omitted)\n";
+                "--max-nodes <N> (PIECE_GENERAL only, auto-detected from system memory if omitted)\n"
+                "--full-promotion (PIECE_GENERAL only, also explores Rook/Bishop pawn promotion -- "
+                "slower, only needed for a deliberate repair re-sweep of pawn-containing material)\n";
         return 1;
     }
 

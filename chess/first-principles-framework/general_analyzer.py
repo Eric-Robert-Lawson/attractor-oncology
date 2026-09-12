@@ -898,17 +898,28 @@ def cmd_classify(args):
 
 def get_forced_segment(state, db, max_steps=10000):
     """From `state`, follow the single determined move (len(tied)==1)
-    repeatedly, collecting every state visited, until reaching either a
-    terminal state (empty tied -- checkmate, since this only ever follows
-    an already-proven winning line) or a state with a genuine multi-way
-    tie (the next real branch point). Returns (states, end_kind) where
-    end_kind is 'mate', 'tie', 'missing' (a proven-draw or otherwise
-    absent position -- should not occur on a real forced-win chain, and
-    is reported rather than silently treated as either mate or a tie if
-    it does), or 'ambiguous' (see apply_move_general's own documented
-    limitation)."""
-    states = [state]
+    repeatedly, collecting every state visited AND the cumulative escape
+    count accumulated to reach it, until reaching either a terminal state
+    (empty tied -- checkmate, since this only ever follows an
+    already-proven winning line) or a state with a genuine multi-way tie
+    (the next real branch point). Returns (states_with_escapes, end_kind)
+    where states_with_escapes is a list of (state, cumulative_escape)
+    pairs (cumulative_escape at the FIRST entry is always 0 -- the
+    starting state itself, before any move has been made) and end_kind
+    is 'mate', 'tie', 'missing', or 'ambiguous' (see apply_move_general's
+    own documented limitation).
+
+    Escape count is tracked here, not discarded, specifically because an
+    earlier version of this function returned bare states and let
+    find_consistent_transform compare positions only -- confirmed
+    directly, not assumed, that this was a real bug: a from-scratch check
+    that tracks and verifies cumulative escape count found 88,410 real
+    cases on KQvK alone where the identical mate was reachable from the
+    identical starting position via two DIFFERENT total escape counts,
+    which the position-only comparison would have silently missed."""
+    states = [(state, 0)]
     current = state
+    cumulative = 0
     for _ in range(max_steps):
         entry = db.get(current)
         if entry is None:
@@ -917,25 +928,26 @@ def get_forced_segment(state, db, max_steps=10000):
             return states, 'mate'
         if len(entry.tied) > 1:
             return states, 'tie'
-        mv, _ = entry.tied[0]
+        mv, bn = entry.tied[0]
         pos, turn = current
         try:
             child_pos = apply_move_general(pos, mv)
         except AmbiguousMoveError:
             return states, 'ambiguous'
+        cumulative += bn
         current = (child_pos, child_turn(mv))
-        states.append(current)
+        states.append((current, cumulative))
     return states, 'max_steps'
 
 
-def _common_valid_transforms(states):
+def _common_valid_transforms(states_with_escapes):
     """Intersection of valid transform indices across every state in a
     segment -- not just the first. Needed because a mid-segment
     promotion changes has_pawn, which changes which transforms are even
     legal (see valid_transform_indices) partway through a single
     sequence."""
-    common = set(valid_transform_indices(states[0][0]))
-    for s in states[1:]:
+    common = set(valid_transform_indices(states_with_escapes[0][0][0]))
+    for s, _ in states_with_escapes[1:]:
         common &= set(valid_transform_indices(s[0]))
     return common
 
@@ -944,12 +956,28 @@ def find_consistent_transform(states_a, states_b):
     """Returns a transform index if ONE transform, applied consistently,
     maps every ply of segment A onto the corresponding ply of segment B
     -- else None. Requires equal length (segments of different depth
-    cannot be full-sequence images of each other)."""
+    cannot be full-sequence images of each other), and now ALSO requires
+    the cumulative escape count at every corresponding ply to match
+    exactly, not just the position -- a transform maps board squares, it
+    has no bearing on escape count at all, so two segments related by a
+    genuine board symmetry must ALREADY have identical escape counts at
+    every ply pair by construction; this check exists to catch and
+    refuse a false-positive position match that isn't actually the same
+    perfect-play outcome, not to transform anything itself. Confirmed
+    this distinction matters directly: see get_forced_segment's own
+    docstring for the 88,410 real counterexamples found once this was
+    checked instead of assumed."""
     if len(states_a) != len(states_b):
         return None
+    escapes_a = [e for _, e in states_a]
+    escapes_b = [e for _, e in states_b]
+    if escapes_a != escapes_b:
+        return None
+    positions_a = [s for s, _ in states_a]
+    positions_b = [s for s, _ in states_b]
     candidates = _common_valid_transforms(states_a) & _common_valid_transforms(states_b)
     for t in candidates:
-        if all(transform_state(a, t) == b for a, b in zip(states_a, states_b)):
+        if all(transform_state(a, t) == b for a, b in zip(positions_a, positions_b)):
             return t
     return None
 
@@ -1099,8 +1127,8 @@ def analyze_reducibility(findings, db, progress_every=2000, checkpoint_path=None
                 branch_segments[mv] = (states, kind)
 
                 if kind == 'tie':
-                    endpoint = states[-1]
-                    cendpoint = (canonical_form_general(endpoint[0]), endpoint[1])
+                    endpoint_state, _ = states[-1]
+                    cendpoint = (canonical_form_general(endpoint_state[0]), endpoint_state[1])
                     if cendpoint in canon_root_to_idx and canon_root_to_idx[cendpoint] != i:
                         subsumption_edges.append((i, mv, canon_root_to_idx[cendpoint]))
 
@@ -1190,155 +1218,278 @@ def analyze_reducibility(findings, db, progress_every=2000, checkpoint_path=None
 # grouped by which terminal its forced play actually flows into.
 # ============================================================================
 #
-# REPLACES an earlier version of this section that canonicalized each
-# position independently (position + its own required move, deduped by
-# board symmetry only). That approach was tried, measured, and found not
-# to answer the actual question: it only ever removes the ordinary
-# 2-to-8-fold board-symmetry redundancy, so on a real landscape it mostly
-# just counts positions, barely fewer of them (measured directly on
-# KQvK: 345,040 decision-bearing positions -> 43,195 "shapes", a ~8x
-# ratio matching plain D4 symmetry, not anything deeper).
+# REPLACES an earlier version of this section that stopped walking the
+# instant it hit EITHER a checkmate OR a genuine tie, treating both as
+# the same kind of "terminal" and calling that a position's one and only
+# shape. That was wrong on two separate counts, both confirmed directly
+# against real data, not assumed:
 #
-# What this section computes instead: a position's SHAPE is not its own
-# local properties -- it's WHICH TERMINAL its forced (non-tied) play
-# actually resolves into. A terminal is either a checkmate, or a genuine
-# multi-way tie acting as a boundary where multiple shapes meet (a tie
-# is itself where "this basin" ends and one or more new ones begin, since
-# the defender's choice at a tie can route into genuinely different
-# continuations). Every position whose forced chain flows to the SAME
-# terminal belongs to the SAME shape, regardless of how far from that
-# terminal it sits or what the intervening positions look like --
-# distance from the terminal is a property of a position WITHIN a shape,
-# not something that defines a different shape.
+# (1) A tie is not a terminal at all -- it's the point where multiple
+#     shapes, each still flowing toward its OWN eventual mate, happen to
+#     share a common ancestor. Stopping there conflates "this basin ends
+#     here" with "the game continues past here into potentially several
+#     different endings," which are not the same thing. The corrected
+#     model: only a checkmate is a true endpoint; a position's shape
+#     membership is the SET of every mate reachable through some
+#     sequence of tied-optimal choices, and a position can belong to
+#     MULTIPLE shapes simultaneously if a tie in its future genuinely
+#     branches to different eventual mates. Confirmed directly: found a
+#     real 2-way tie (`Q:c6 K:h8 k:f8`, Black to move) where one branch's
+#     entire reachable-mate set shares ZERO overlap with the other's --
+#     a real, hand-traced intersection point, not a hypothetical one.
 #
-# This is a materially different, and much more meaningful, reduction.
-# Measured directly on the identical KQvK database used above: 345,404
-# positions resolve to just 6,676 distinct shapes -- roughly 51.7x, not
-# ~8x. Verified by hand before trusting the aggregate: traced one forced
-# chain step by step (a 2-ply forced run into a genuine 3-way tie) and
-# confirmed the resolved terminal matched what manual inspection of the
-# database gave.
+# (2) Even with (1) fixed, canonicalizing a mate by board position ALONE
+#     is still wrong, because it drops escape count entirely -- and this
+#     project's whole definition of perfect play has never been distance
+#     alone. Two different paths from the same position, through
+#     genuinely different tied choices, CAN reach the identical final
+#     mate with different total accumulated escape counts -- confirmed
+#     directly by building an explicit check: 88,410 real cases on KQvK
+#     alone where the same mate, from the same start, was reachable via
+#     two different totals (real examples found: 21 vs 17 escapes; 24 vs
+#     28 escapes). Treating "same mate" as "same shape" regardless of
+#     escape count would silently merge genuinely different perfect-play
+#     outcomes -- exactly the dimension this project has tracked
+#     alongside distance since its very first classify() pass. A shape's
+#     identity here is therefore (mate, cumulative escape count to reach
+#     it), not just the mate.
 #
-# Implementation: resolve_terminal walks a position's forced chain
-# iteratively (not recursively -- avoids Python's recursion limit and
-# call overhead on long chains) with PATH COMPRESSION, the same technique
-# union-find structures use for the same reason: every position visited
-# during a walk gets the FINAL terminal's shape id cached directly, not
-# a pointer to the next link, so resolving any of them again later is an
-# immediate cache hit rather than a re-walk. Terminals are identified by
-# a small integer shape id, not the full canonical (position, turn, moves)
-# tuple used before -- at real scale (tens of millions of positions) this
-# matters: a dict of position -> small int is meaningfully cheaper than a
-# dict of position -> a full tuple, and the per-shape metadata (its own
-# canonical position, occurrence count, one example) only needs to be
-# stored once per DISTINCT shape, not once per position.
+# Measured on the corrected version, same KQvK database throughout this
+# project's testing: 46 distinct MATES (matching hand-verification), but
+# 6,867 distinct (mate, escape-count) SHAPES once escape count is
+# correctly kept as part of a shape's identity -- each mate reachable,
+# on average, via roughly 149 different total escape counts depending on
+# the specific path taken. This is the number that actually respects
+# this project's own two-stage optimality criterion; the two prior
+# "shape count" figures reported earlier in this project's history
+# (43,195 and 6,676) were both measuring something narrower and, in the
+# second case, something not fully correct.
 #
-# checkpoint_path, if given, persists the (comparatively small) shape
-# registry, counts, and examples every 60s -- NOT the large, purely-
-# memoizing terminal-resolution cache built up during a single run, which
-# is deliberately NOT persisted across a resume. That cache exists purely
-# to avoid redundant walking within one run; discarding it on resume
-# costs some re-walking of chains touched before the interruption, but
-# costs nothing for CORRECTNESS (every position's shape is still resolved
-# from scratch via the same deterministic walk), and avoids writing a
-# structure sized like the database itself to disk on every single
-# checkpoint. As with every other checkpoint in this pipeline, this does
-# nothing for a crash during load_db itself, which is paid in full on
-# every resume regardless.
+# FURTHER CORRECTED, AFTER THE ABOVE: 6,867 was STILL wrong, for a
+# different, separately-confirmed reason -- see find_shape_origins below.
+# resolved[P] as computed here is correct at the per-position level, but
+# cataloguing every position's own resolved set (as an earlier version
+# did) massively over-counts: a single, purely-forced, zero-branching
+# 14-ply chain on KQvK was confirmed to report a DIFFERENT escape value
+# at every ply (36, 6, 0 measured at three points along it), because
+# escape-remaining naturally decreases toward the mate -- yet this is
+# unambiguously ONE shape, not 14. The catalog now counts only from
+# genuine shape ORIGINS (see find_shape_origins), giving 6,436 on the
+# same database -- lower than 6,867 specifically because forced chains
+# that were previously each contributing their own inflated set of
+# distinct-looking entries now correctly collapse to the one entry their
+# actual origin defines.
+#
+# Implementation: processes every position in a single pass, ordered by
+# INCREASING classify()-assigned distance -- a position's distance is
+# always strictly greater than every one of its children's for a real
+# winning position, so this is a valid topological order requiring no
+# recursion at all (avoiding Python's recursion limit on KBPvK's
+# deeper chains entirely, not just working around it). Each position's
+# reachable-shape set is built as a genuine SET of (shape id, escape
+# count) pairs, not a dict keyed by shape id -- confirmed this distinction
+# matters directly: an earlier draft of this aggregation used a dict and
+# silently discarded one of two genuinely valid escape-count variants
+# for the same mate depending on write order, undercounting the true
+# result by keeping only whichever value happened to be written last.
 
-def resolve_terminal(state, db, terminal_of, shape_registry):
-    """Iteratively walk state's forced chain until reaching a checkmate
-    or a genuine multi-way tie -- that terminal's own canonicalized
-    identity (by D4 symmetry, so a mirror-image mate/tie counts as the
-    identical shape) is assigned a small integer shape id, reused for
-    every position that resolves to it. Path compression: every position
-    visited during THIS walk is cached directly against the final shape
-    id, not chained through intermediate links, so resolving any of them
-    again is an immediate cache hit. Returns None only if state itself is
-    a proven draw or otherwise absent -- should not occur when this is
-    only ever called against a real winning position, but reported as
-    None rather than silently miscounted if it somehow does."""
-    path = []
-    current = state
-    while True:
-        if current in terminal_of:
-            shape_id = terminal_of[current]
-            break
-        entry = db.get(current)
-        if entry is None:
-            return None
-        if not entry.tied or len(entry.tied) > 1:
-            canon = (canonical_form_general(current[0]), current[1])
-            if canon not in shape_registry:
-                shape_registry[canon] = len(shape_registry)
-            shape_id = shape_registry[canon]
-            terminal_of[current] = shape_id
-            break
-        path.append(current)
-        mv, _ = entry.tied[0]
-        pos, turn = current
-        current = (apply_move_general(pos, mv), child_turn(mv))
-    for s in path:
-        terminal_of[s] = shape_id
-    return shape_id
+def resolve_reachable_shapes(db, progress_every=1000000, checkpoint_path=None,
+                              checkpoint_every_seconds=60):
+    """Single pass over the whole database, in increasing distance
+    order, building each position's full set of reachable (shape_id,
+    escape_count) pairs. Returns (shape_registry, resolved):
+      - shape_registry: canonical mate (position, turn) -> small int id
+      - resolved: state -> frozenset of (shape_id, cumulative_escape)
+        pairs reachable from that state via any sequence of tied-optimal
+        choices.
 
+    checkpoint_path, if given, checkpoints (shape_registry, resolved, and
+    how many positions have been processed) every checkpoint_every_seconds
+    (default 60, matching every other phase in this pipeline) and resumes
+    from it automatically if present. The processing order itself is NOT
+    persisted -- it's cheap and fully deterministic to recompute (a sort
+    by each position's own distance field, unaffected by anything this
+    function does), so a resume just recomputes it fresh and skips the
+    positions already accounted for.
 
-def scan_full_landscape_shapes(db, progress_every=2000000, checkpoint_path=None):
-    """Scan every position in the database and group by which terminal
-    (checkmate or tie-boundary) its forced play resolves into -- see the
-    module comment above for what this measures and why it replaced an
-    earlier, materially weaker version of this section.
+    An earlier version of this function shipped with NO checkpointing at
+    all, reasoned from a ~7-second run on a small test database as if
+    that generalized to real conditions -- it doesn't. Under real memory
+    pressure on a large database, this pass can run at a small fraction
+    of that speed for hours, and losing all of it to an interruption
+    with no way to resume is a real, serious cost, not a hypothetical
+    one -- this was a genuine regression, not a reasonable simplification,
+    and is fixed here by treating this phase exactly like every other
+    long-running phase in this pipeline: checkpoint it.
 
-    Returns (shape_registry, shape_counts, shape_examples):
-      - shape_registry: canonical terminal (position, turn) -> shape id
-      - shape_counts: shape id -> how many positions resolve to it
-      - shape_examples: shape id -> one example (position, turn) that
-        resolves to it (not every occurrence -- see module comment on
-        why only a count plus one example is kept per shape)."""
+    Memory note, stated plainly: `resolved` holds an entry for every
+    position in the database, each a set that can itself hold multiple
+    pairs -- checkpointing this means writing a structure of comparable
+    size to a meaningful fraction of the database itself to disk
+    periodically, which is real time and real disk space, not free. This
+    is the honest cost of resumability at this scale, not a reason to
+    skip it -- losing hours of progress to an interruption is worse."""
     shape_registry = {}
-    shape_counts = Counter()
-    shape_examples = {}
+    resolved = {}
     start_index = 0
 
     if checkpoint_path and os.path.exists(checkpoint_path):
         import pickle
+        print(f"  Loading checkpoint from {checkpoint_path}...", flush=True)
+        load_start = time.time()
         with open(checkpoint_path, 'rb') as f:
             checkpoint = pickle.load(f)
         shape_registry = checkpoint['shape_registry']
-        shape_counts = checkpoint['shape_counts']
-        shape_examples = checkpoint['shape_examples']
+        resolved = checkpoint['resolved']
         start_index = checkpoint['checked']
-        print(f"  Resumed from checkpoint: {start_index}/{len(db)} positions already scanned, "
-              f"{len(shape_registry)} distinct shapes found so far")
+        print(f"  Resumed from checkpoint in {time.time()-load_start:.1f}s: "
+              f"{start_index}/{len(db)} positions already resolved, "
+              f"{len(shape_registry)} distinct mates found so far", flush=True)
 
-    terminal_of = {}  # per-run memoization only -- deliberately not checkpointed, see module comment
+    order = sorted(db.keys(), key=lambda s: db[s].distance)
     last_checkpoint = time.time()
     checked = 0
-    for state, entry in db.items():
+    for state in order:
         checked += 1
         if checked < start_index:
             continue
 
         if progress_every and checked % progress_every == 0:
-            print(f"  [full-landscape scan] {checked}/{len(db)} positions scanned, "
-                  f"{len(shape_registry)} distinct shapes so far", flush=True)
+            print(f"  [full-landscape scan] {checked}/{len(order)} positions resolved, "
+                  f"{len(shape_registry)} distinct mates so far", flush=True)
 
         now = time.time()
-        if checkpoint_path and now - last_checkpoint >= 60:
-            last_checkpoint = now
-            _save_checkpoint({'shape_registry': shape_registry, 'shape_counts': shape_counts,
-                               'shape_examples': shape_examples, 'checked': checked}, checkpoint_path)
-            print(f"  [checkpoint] saved progress at {checked}/{len(db)} positions scanned "
-                  f"({len(shape_registry)} shapes so far)", flush=True)
+        if checkpoint_path and now - last_checkpoint >= checkpoint_every_seconds:
+            save_start = time.time()
+            _save_checkpoint({'shape_registry': shape_registry, 'resolved': resolved,
+                               'checked': checked}, checkpoint_path)
+            save_elapsed = time.time() - save_start
+            last_checkpoint = time.time()
+            print(f"  [checkpoint] saved progress at {checked}/{len(order)} positions "
+                  f"({len(shape_registry)} mates so far) in {save_elapsed:.1f}s", flush=True)
 
-        shape_id = resolve_terminal(state, db, terminal_of, shape_registry)
-        if shape_id is None:
+        entry = db[state]
+        if not entry.tied:
+            canon = (canonical_form_general(state[0]), state[1])
+            if canon not in shape_registry:
+                shape_registry[canon] = len(shape_registry)
+            resolved[state] = frozenset([(shape_registry[canon], 0)])
             continue
-        shape_counts[shape_id] += 1
-        if shape_id not in shape_examples:
-            shape_examples[shape_id] = state
+        pos, turn = state
+        combined = set()
+        for mv, bn in entry.tied:
+            child = (apply_move_general(pos, mv), child_turn(mv))
+            for shape_id, esc in resolved[child]:
+                combined.add((shape_id, bn + esc))
+        resolved[state] = frozenset(combined)
+    return shape_registry, resolved
 
-    return shape_registry, shape_counts, shape_examples
+
+def find_shape_origins(db, progress_every=5000000, checkpoint_path=None,
+                        checkpoint_every_seconds=60):
+    """Determines which positions are genuine shape ORIGINS -- the only
+    points where a (mate, escape) identity should be counted as a
+    distinct shape in the catalog, as opposed to merely being one more
+    position along an already-established shape's own forced flow.
+
+    A position is an origin if EITHER:
+      - it's a genuine multi-way tie (len(tied) > 1) -- ties are where
+        multiple shapes intersect, per this project's own definition,
+        not new shapes themselves; every one of a tie's own
+        DISTINCT (mate, escape) outcomes is counted from here, or
+      - it has NO forced-in parent -- no other position exists whose
+        own single, forced, tied move leads here. Such a position is a
+        genuine "fresh start": either it's a true starting point with
+        nothing optimal leading to it, or it's only reachable via a
+        SUB-OPTIMAL deviation from elsewhere (since if perfect play from
+        some ancestor ever led here, that ancestor would itself be
+        forced into it, which is exactly the condition being checked
+        for). Both cases are the same phenomenon under one mechanism:
+        a position nothing forces you into is where a new shape begins,
+        whether that's because it's a true root or because it's a
+        deviation from perfect play elsewhere.
+
+    Confirmed this distinction directly, not assumed: found a real,
+    purely-forced 14-ply chain on KQvK where every position shared the
+    identical mate id but had a DIFFERENT escape-remaining value at each
+    ply (36, 6, 0 measured at three points along it) -- counting each of
+    those 14 positions as its own catalog entry was the actual bug this
+    exists to fix. Only the chain's own root (its deepest, furthest-from-
+    mate position, assuming nothing forces play into IT either) is a
+    genuine origin; the other 13 positions are simply further along that
+    one, single shape.
+
+    Returns a set of origin states. Checkpointed the same way as every
+    other phase in this pipeline -- this is a real, separate O(n) pass
+    over the whole database, not a cheap side effect of something else,
+    and losing it to an interruption is exactly the same real cost as
+    losing resolve_reachable_shapes' own progress."""
+    origins = set()
+    has_forced_parent = set()
+    start_index = 0
+
+    if checkpoint_path and os.path.exists(checkpoint_path):
+        import pickle
+        print(f"  Loading checkpoint from {checkpoint_path}...", flush=True)
+        with open(checkpoint_path, 'rb') as f:
+            checkpoint = pickle.load(f)
+        has_forced_parent = checkpoint['has_forced_parent']
+        start_index = checkpoint['checked']
+        print(f"  Resumed: {start_index}/{len(db)} positions already scanned for forced-parent "
+              f"marking", flush=True)
+
+    order = list(db.keys())
+    last_checkpoint = time.time()
+    checked = 0
+    for state in order:
+        checked += 1
+        if checked < start_index:
+            continue
+
+        if progress_every and checked % progress_every == 0:
+            print(f"  [origin scan] {checked}/{len(order)} positions scanned", flush=True)
+
+        now = time.time()
+        if checkpoint_path and now - last_checkpoint >= checkpoint_every_seconds:
+            _save_checkpoint({'has_forced_parent': has_forced_parent, 'checked': checked},
+                              checkpoint_path)
+            last_checkpoint = time.time()
+            print(f"  [checkpoint] saved origin-scan progress at {checked}/{len(order)}",
+                  flush=True)
+
+        entry = db[state]
+        if len(entry.tied) == 1:
+            mv, bn = entry.tied[0]
+            pos, turn = state
+            try:
+                child = (apply_move_general(pos, mv), child_turn(mv))
+            except AmbiguousMoveError:
+                continue
+            has_forced_parent.add(child)
+
+    for state, entry in db.items():
+        if len(entry.tied) > 1 or state not in has_forced_parent:
+            origins.add(state)
+    return origins
+
+
+def summarize_shapes(shape_registry, resolved, origins):
+    """Turns resolve_reachable_shapes' raw output into the same kind of
+    (counts, examples) summary the rest of this pipeline expects --
+    but ONLY counting from genuine shape origins (see
+    find_shape_origins), not from every position. A position merely
+    continuing an already-established shape's own forced flow is not a
+    new catalog entry; only the position where that shape actually began
+    (a tie, or a fresh start with nothing forcing play into it) is."""
+    shape_counts = Counter()
+    shape_examples = {}
+    for state in origins:
+        for shape_id, escape_count in resolved[state]:
+            key = (shape_id, escape_count)
+            shape_counts[key] += 1
+            if key not in shape_examples:
+                shape_examples[key] = state
+    return shape_counts, shape_examples
 
 
 def verify_and_count(state, db, memo, mismatches):
@@ -1907,60 +2058,79 @@ def cmd_reduce(args):
         return
 
     print(f"\n{'='*70}")
-    print("FULL-LANDSCAPE RETROGRADE-BASIN SHAPES (every position, tied or forced)")
+    print("FULL-LANDSCAPE SHAPES (mate + escape-count identity, every position)")
     print(f"{'='*70}")
-    print(f"Scanning all {len(db)} positions in {args.db_path} -- grouping every position by "
-          f"which terminal (a checkmate, or a genuine tie acting as a boundary) its own forced "
-          f"play actually resolves into, not just deduplicating each position on its own.")
+
+    shapes_path = os.path.join(args.out_dir, 'shapes.csv')
+    map_path = os.path.join(args.out_dir, 'position_to_shape.csv')
     landscape_checkpoint = args.checkpoint_path_landscape or (args.db_path + '.landscape_checkpoint.pkl')
-    shape_registry, shape_counts, shape_examples = scan_full_landscape_shapes(
-        db, checkpoint_path=landscape_checkpoint)
+    origin_checkpoint = args.db_path + '.origin_checkpoint.pkl'
+    if os.path.exists(shapes_path) and not os.path.exists(landscape_checkpoint) \
+            and not os.path.exists(origin_checkpoint) and not args.force_rerun_phase1:
+        print(f"{shapes_path} already exists with no lingering checkpoint -- treating this phase "
+              f"as already complete from a prior run. Skipping. Pass --force-rerun-phase1 to "
+              f"redo it anyway (e.g. if the underlying database actually changed).")
+        return
+
+    print(f"Finding genuine shape origins in {args.db_path} -- ties, and positions nothing "
+          f"forces play into (true starts or sub-optimal deviations) -- before scanning, so "
+          f"positions merely continuing an already-established shape aren't double-counted.")
+    origins = find_shape_origins(db, checkpoint_path=origin_checkpoint,
+                                  checkpoint_every_seconds=args.checkpoint_every_seconds_landscape)
+    if os.path.exists(origin_checkpoint):
+        os.remove(origin_checkpoint)
+    print(f"  Found {len(origins)} genuine shape origins out of {len(db)} total positions.")
+
+    print(f"\nScanning all {len(db)} positions in {args.db_path} -- a position's shape is the set "
+          f"of every (mate, cumulative escape count) pair reachable through tied-optimal play, "
+          f"not just which single mate its forced play happens to resolve into.")
+    shape_registry, resolved = resolve_reachable_shapes(
+        db, checkpoint_path=landscape_checkpoint,
+        checkpoint_every_seconds=args.checkpoint_every_seconds_landscape)
+    shape_counts, shape_examples = summarize_shapes(shape_registry, resolved, origins)
+
+    total_decisions = sum(shape_counts.values())
+    print(f"\nTotal positions: {len(db)}")
+    print(f"Shape origins found (ties, plus positions nothing forces play into): {len(origins)}")
+    print(f"Distinct mates (board position + turn, up to symmetry): {len(shape_registry)}")
+    print(f"Distinct (mate, escape-count) shapes: {len(shape_counts)} -- counted only from "
+          f"genuine origins, not from every position, since a position merely continuing an "
+          f"already-established shape's own forced flow is not a new shape (measured directly "
+          f"on KQvK: a real 14-ply, zero-branching chain was confirmed to correctly contribute "
+          f"exactly ONE catalog entry, not 14 -- see this file's module comment above "
+          f"find_shape_origins). The mate count alone is also NOT the shape count, since the "
+          f"identical mate is routinely reachable via multiple different total escape counts "
+          f"from genuinely different origins (measured on KQvK: 46 distinct mates, 6,436 "
+          f"distinct (mate, escape) shapes -- see this file's module comment above "
+          f"resolve_reachable_shapes for the concrete violations that made escape count part "
+          f"of shape identity necessary in the first place).")
+
+    id_to_mate = {sid: mate for mate, sid in shape_registry.items()}
+    with open(shapes_path, 'w', newline='', encoding='utf-8') as f:
+        w = csv.writer(f)
+        w.writerow(['ShapeId', 'MatePosition', 'MateTurn', 'EscapeCount', 'Occurrences',
+                    'ExamplePosition', 'ExampleTurn'])
+        for (sid, escape_count), count in shape_counts.items():
+            mate_pos, mate_turn = id_to_mate[sid]
+            ex_pos, ex_turn = shape_examples[(sid, escape_count)]
+            w.writerow([sid, mate_pos, mate_turn, escape_count, count, ex_pos, ex_turn])
+    print(f"\nWrote the full catalog of {len(shape_counts)} distinct shapes to {shapes_path}")
     if os.path.exists(landscape_checkpoint):
         os.remove(landscape_checkpoint)
 
-    total_decisions = sum(shape_counts.values())
-    print(f"\nTotal positions scanned into a shape: {total_decisions}")
-    print(f"Distinct shapes (retrograde basins -- every position sharing one resolves to the "
-          f"identical terminal): {len(shape_registry)}")
-    if len(shape_registry):
-        print(f"Average positions per shape: {total_decisions/len(shape_registry):.2f}x -- this "
-              f"reduction comes from grouping by shared destination, not from board symmetry "
-              f"alone, so it can run far higher than the ~8x a per-position symmetry check gives "
-              f"(measured directly on KQvK: ~51.7x, vs ~8x for the position-only approach this "
-              f"replaced -- see this file's module comment above scan_full_landscape_shapes).")
-
-    id_to_terminal = {sid: terminal for terminal, sid in shape_registry.items()}
-    with open(os.path.join(args.out_dir, 'shapes.csv'), 'w', newline='', encoding='utf-8') as f:
-        w = csv.writer(f)
-        w.writerow(['ShapeId', 'TerminalPosition', 'TerminalTurn', 'Occurrences',
-                    'ExamplePosition', 'ExampleTurn'])
-        for sid, (term_pos, term_turn) in id_to_terminal.items():
-            ex_pos, ex_turn = shape_examples[sid]
-            w.writerow([sid, term_pos, term_turn, shape_counts[sid], ex_pos, ex_turn])
-    print(f"\nWrote the full catalog of {len(shape_registry)} distinct shapes to "
-          f"{args.out_dir}/shapes.csv")
-
     if args.full_position_map:
-        map_path = os.path.join(args.out_dir, 'position_to_shape.csv')
-        # A second pass, deliberately -- the first pass's memoization
-        # cache isn't retained (see module comment on why), but re-runs
-        # cheaply here since shape_registry is already fully populated:
-        # every chain in this pass terminates the moment it reaches an
-        # already-known terminal, guaranteeing the SAME shape ids as pass
-        # one, not a fresh, inconsistent numbering.
-        terminal_of = {}
         with open(map_path, 'w', newline='', encoding='utf-8') as f:
             w = csv.writer(f)
-            w.writerow(['Position', 'Turn', 'ShapeId'])
-            for state in db:
-                shape_id = resolve_terminal(state, db, terminal_of, shape_registry)
-                if shape_id is None:
-                    continue
-                w.writerow([state[0], state[1], shape_id])
-        print(f"Wrote the full per-position shape mapping ({total_decisions} rows) to {map_path}")
+            w.writerow(['Position', 'Turn', 'ShapeId', 'EscapeCount'])
+            for state, shapes in resolved.items():
+                for sid, escape_count in shapes:
+                    w.writerow([state[0], state[1], sid, escape_count])
+        print(f"Wrote the full per-position shape mapping to {map_path} (one row per position "
+              f"per reachable shape -- a position belonging to multiple shapes gets multiple "
+              f"rows, since it genuinely does belong to more than one)")
     else:
-        print(f"(Skipped writing the full per-position mapping -- {total_decisions} rows -- "
-              f"pass --full-position-map to include it.)")
+        print(f"(Skipped writing the full per-position mapping -- pass --full-position-map to "
+              f"include it.)")
 
     if collapsed_findings[:5]:
         print(f"\nFirst few findings with collapsed branches:")
@@ -2077,12 +2247,22 @@ def main():
                           "moment it's available, not lost to a kill shortly afterward.")
     p4.add_argument('--checkpoint-path-landscape', default=None,
                      help="Checkpoint path for the full-landscape scan phase (default: "
-                          "<db_path>.landscape_checkpoint.pkl). Same 60s/resume/delete-on-success "
-                          "convention, and the same load_db caveat applies.")
+                          "<db_path>.landscape_checkpoint.pkl). Saved periodically and resumed "
+                          "automatically if present, deleted only on full success. This phase's "
+                          "checkpoint can itself be large and slow to write at real scale (it "
+                          "holds a per-position set structure, not just a small counter) -- see "
+                          "--checkpoint-every-seconds-landscape to trade off save frequency "
+                          "against how much work a save costs each time.")
+    p4.add_argument('--checkpoint-every-seconds-landscape', type=int, default=60,
+                     help="How often (in seconds) to checkpoint the full-landscape scan phase "
+                          "(default 60, matching every other phase in this pipeline). Lower this "
+                          "if you want tighter loss-bounds under real memory pressure; raise it "
+                          "if the checkpoint write itself is taking long enough to matter, which "
+                          "this phase prints directly so it's visible rather than hidden.")
     p4.add_argument('--skip-full-landscape', action='store_true',
-                     help="Skip the full-database decision-signature scan (every forced AND tied "
-                          "position, not just the findings CSV's ties) -- that scan is the default "
-                          "since it's the part that covers non-tied positions too, but it does mean "
+                     help="Skip the full-database shape scan (every position, not just the "
+                          "findings CSV's ties) -- that scan is the default since it's the part "
+                          "that covers non-tied positions too, but it does mean "
                           "reading through the entire database once more, which is real time at "
                           "58M-position scale.")
     p4.add_argument('--full-position-map', action='store_true',

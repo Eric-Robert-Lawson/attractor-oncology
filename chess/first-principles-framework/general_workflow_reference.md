@@ -118,6 +118,40 @@ python3 general_analyzer.py families material_analysis/independent_findings_dedu
 - `--max-lines N` (default 500) — caps how much tree output gets rendered per finding.
 - **`--checkpoint-path FILE`** — new: this stage now checkpoints and resumes automatically too (previously it didn't, and an interruption meant starting over). Defaults to `<findings_csv>.families_checkpoint.pkl` if not given. Checkpointing happens at the granularity of one fully-completed group within a role-sweep, since a single large group's pairwise symmetry check — not a whole role — is where a genuinely slow stretch actually shows up. Just re-run the identical command to resume after an interruption.
 
+### Step 6 — Reduce: finding genuinely irreducible perfect-play structure
+
+```bash
+python3 general_analyzer.py reduce material_analysis/independent_findings_deduped.csv material_perfect_play.db --out-dir material_reduction
+```
+
+This asks a different question than families' role-sweep, and doesn't depend on families having run at all — it reads classify's output directly. Where families asks "which findings recur under a fixed-role sweep," reduce asks whether a finding's own tied branches are actually as independent as they look, and whether the exhaustive landscape as a whole reduces to a compact catalog of genuinely distinct decisions.
+
+**What this catalog does and doesn't claim, stated precisely because the distinction matters:** it is complete and exact for every position reachable via legal play from this material's own starting configurations — every sub-optimal branch, every promotion outcome, every capture-simplified descendant, not just the optimal-play skeleton. It is not an approximation of that reachability closure; it *is* that closure, deduplicated. It does **not** generalize beyond that closure to an unrelated material, and it does not yet recognize the same relative arrangement of pieces shifted to a different part of the board as the same shape — the symmetry check is literal board rotation/reflection (the same 8-fold group used everywhere else in this pipeline), not translation-invariant pattern matching. A genuinely portable catalog of principles — one that would recognize "this is the same kind of situation" in a position never literally searched — is a real, substantial next step past what's built here, not something that falls out automatically.
+
+Two phases, run in sequence by a single invocation:
+
+**Phase 1 — tie-branch reduction** (over classify's tied findings only):
+- For every finding's own tied root branches, checks whether ONE consistent transform maps one branch's entire forced continuation onto another's, ply for ply — not just whether they eventually land on the same square configuration. This single test correctly catches three things that look different on the surface: literal downstream convergence, a root position whose own self-symmetry pairs up two of its tied moves, and two branches that never touch again but run in exact mirrored parallel toward two different mates. A genuine match gets collapsed into one branch-group — a real duplicate, safe to discard.
+- Separately, checks whether each branch's forced continuation eventually reaches (up to symmetry) *another* finding's own root elsewhere in the same findings file. This is recorded as a subsumption edge, not collapsed away — the root-level tie that led there is still a real, distinct decision even if it isn't the final word; deleting it would erase exactly the thing worth preserving.
+- `--max-seconds-per-finding N` (default 60, `0` disables) — a hard, per-finding wall-clock budget enforced via SIGALRM. Cost here is not uniform the way classify's is: a 2-way tie sitting at the front of a 70+-ply forced line can cost far more than a wide tie that resolves in a few plies, and this compounds badly under real memory pressure on a large database. A finding that hits the budget is recorded as genuinely unanalyzed, not silently guessed at — see `skipped_findings.csv`.
+- `--retry-skipped SKIPPED_CSV` — re-analyze only the findings listed in a prior run's `skipped_findings.csv`, against the *same* findings_csv they came from. Pairs naturally with a much larger (or disabled) time budget, once a handful of genuinely hard findings aren't also blocking hundreds of thousands of ordinary ones.
+
+**Phase 2 — full-landscape decision-shape catalog** (over the *entire* database, tied or not):
+- Scans every position, canonicalizing each one's required move(s) under board symmetry. This is the part that covers the vast majority of any real landscape classify/families never touch at all, since only genuine multi-way ties ever made it into their output — a forced, single-answer position is just as much a real principle of perfect play as a tied one, it's the identical question with a tie-count of one.
+- Produces `decision_shapes.csv` — one row per genuinely distinct shape, with its recurrence count and one example position. `--full-position-map` additionally writes the full `Position,Turn -> ShapeId` mapping for every position (real size at scale — off by default).
+- `--skip-full-landscape` — run Phase 1 only.
+
+**Checkpoint/resume, and a real bug this fixed:** an earlier version of this command deleted Phase 1's checkpoint immediately after the analysis finished but *before* its output files were actually written — an interruption anytime afterward, including mid-Phase-2, left no record Phase 1 had ever completed, so a re-run redid it from scratch every time. Confirmed directly and fixed: `reduce` now checks, before doing any work, whether Phase 1's three output files already exist with no lingering checkpoint — if so, it loads that data back instead of re-running potentially hours of analysis. `--force-rerun-phase1` overrides this if the underlying findings_csv or database genuinely changed since.
+
+Phase 1 checkpoints after every finding's processing *fully* completes (never mid-finding, never before), on whichever of three triggers fires first:
+- 60 seconds elapsed (`--checkpoint-path`, default `<findings_csv>.reduce_checkpoint.pkl`)
+- `--checkpoint-every-findings` findings completed since the last save (default 200 — guarantees a predictable cadence even if every single finding finishes just under the time threshold, which the time trigger alone could never catch)
+- the finding just completed alone took at least `--slow-finding-checkpoint-seconds` (default 5.0) — securing a hard-won result immediately rather than risking it to a kill shortly afterward
+
+Live progress printing (every ~10s) names the actual finding currently in progress — its position and tie-width — specifically so "is this stuck, or grinding through one genuinely hard item" is answerable from the terminal, not something to guess at from a bare count. Phase 2 checkpoints the same way (time-based only, since it has no natural per-item boundary to trigger on) to `--checkpoint-path-landscape`, default `<db_path>.landscape_checkpoint.pkl`.
+
+As with classify/families, checkpointing here only helps once the process is far enough along to be inside the relevant loop — it does nothing for an interruption during the initial database load itself, which is paid in full on every single resume regardless of any checkpoint. At real scale (tens of millions of positions), that load alone can be the dominant memory cost — see §5.
+
 ---
 
 ## 2. Quick reference — direct solver invocation (no sweep wrapper)
@@ -148,6 +182,13 @@ python3 generate_general_seed_positions.py --white Q --out quick_seeds.txt --num
 | `material_analysis/independent_unverified.csv` | Positions where verification was incomplete (not findings — gaps, worth investigating if nonzero) |
 | `material_analysis/all_classifications.csv` | Every classified position, all categories |
 | `material_families/` | Families vs. genuinely unique findings, post-`classify` |
+| `<findings_csv>.reduce_checkpoint.pkl` | In-progress `reduce` Phase 1 (tie-branch) state — auto-deleted only after its output files below are fully written |
+| `<db_path>.landscape_checkpoint.pkl` | In-progress `reduce` Phase 2 (full-landscape) state — auto-deleted on successful completion |
+| `material_reduction/branch_reduction.csv` | Per-finding raw vs. irreducible tied-branch counts, and which moves collapsed together |
+| `material_reduction/skipped_findings.csv` | Findings that hit `--max-seconds-per-finding` — genuinely unanalyzed, not a zero result |
+| `material_reduction/subsumption_edges.csv` | Which findings' branches lead into which other findings' roots, up to symmetry |
+| `material_reduction/decision_shapes.csv` | The full-landscape catalog: every genuinely distinct decision-shape, tied or forced, with recurrence counts |
+| `material_reduction/position_to_shape.csv` | Full per-position shape mapping — only written with `--full-position-map` (real size at scale) |
 
 ---
 
@@ -174,6 +215,9 @@ python3 generate_general_seed_positions.py --white Q --out quick_seeds.txt --num
 **`general_analyzer.py families`**
 `findings_csv` (positional) · `--out-dir DIR` (default `general_families`) · `--render-trees DB_PATH` · `--max-lines N` (default 500) · `--checkpoint-path FILE` (new)
 
+**`general_analyzer.py reduce`**
+`findings_csv` (positional) · `db_path` (positional) · `--out-dir DIR` (default `general_reduction`) · `--force-rerun-phase1` · `--retry-skipped SKIPPED_CSV` · `--max-seconds-per-finding N` (default 60) · `--checkpoint-path FILE` · `--checkpoint-every-findings N` (default 200) · `--slow-finding-checkpoint-seconds N` (default 5.0) · `--checkpoint-path-landscape FILE` · `--skip-full-landscape` · `--full-position-map`
+
 **`general_analyzer.py tree`**
 `db_path` (positional) · `--position POS` · `--turn {W,B}` · `--out FILE` · `--findings-csv FILE` · `--top N` (default 10) · `--out-dir DIR` (default `general_trees`) · `--max-lines N` (default 500) · `--classifications FILE`
 
@@ -198,6 +242,7 @@ That ceiling is about what the *data structure* can represent, not what's practi
 - **Memory on a long `classify` run** — meaningfully reduced by default now (namedtuple positions, stripped unused result fields), and `--max-memory-gb` gives an explicit, measured safety net on top for large materials. `--memo-cache-size` remains available to lower further if still tight.
 - **`run_full_sweep.py` changed its interface** (§1 Step 2) — if a command that used to work now errors on `--batch-size`, that's stale documentation or a stale file copy, not a regression. The older interface still works correctly if that's what you have; it's just less efficient at scale.
 - **A single hard seed can silently discard an entire batch/chunk's worth of otherwise-easy progress** — confirmed directly, not assumed (§1 Step 2). Start small on any unfamiliar material and escalate batch/chunk size only once the "already resolved" ratio is consistently high, rather than guessing a large size up front.
+- **`reduce` used to redo Phase 1 from scratch if interrupted anywhere during Phase 2** — a real, now-fixed bug: its checkpoint was deleted the moment Phase 1 finished, before Phase 1's own output files were written, so an interruption afterward left no record it had ever completed. Fixed directly: `reduce` now checks for Phase 1's already-complete output before doing any work, and loads it back instead of re-running. If a version predating this fix is still in use, an interruption during Phase 2 means Phase 1 silently reruns in full on the next invocation.
 
 ---
 

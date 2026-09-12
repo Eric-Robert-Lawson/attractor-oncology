@@ -1713,6 +1713,45 @@ def cmd_families(args):
         print(f"  Wrote {len(distinct_families)} family-representative trees to {tree_dir}/")
 
 
+def _load_phase1_results(branch_reduction_path, skipped_path, subsumption_edges_path, findings):
+    """Reconstruct (results, subsumption_edges, skipped) from Phase 1's
+    own already-written output files -- used when cmd_reduce detects
+    Phase 1 fully completed in a prior run of this command, so there's
+    no reason to redo potentially hours of analysis just because a LATER
+    phase (or a later invocation) was interrupted afterward."""
+    pos_to_idx = {(f['position'], f['turn']): i for i, f in enumerate(findings)}
+
+    results = []
+    with open(branch_reduction_path, encoding='utf-8') as f:
+        for row in csv.DictReader(f):
+            if row['IrreducibleBranchCount'] == 'TIMED_OUT':
+                results.append({'position': row['Position'], 'turn': row['Turn'],
+                                 'raw_branch_count': int(row['RawBranchCount']),
+                                 'irreducible_branch_count': None, 'branch_groups': None})
+            else:
+                groups = [g.split(';') for g in row['BranchGroups'].split('|')] if row['BranchGroups'] else []
+                results.append({'position': row['Position'], 'turn': row['Turn'],
+                                 'raw_branch_count': int(row['RawBranchCount']),
+                                 'irreducible_branch_count': int(row['IrreducibleBranchCount']),
+                                 'branch_groups': groups})
+
+    subsumption_edges = []
+    with open(subsumption_edges_path, encoding='utf-8') as f:
+        for row in csv.DictReader(f):
+            i = pos_to_idx.get((row['FromPosition'], row['FromTurn']))
+            j = pos_to_idx.get((row['ToPosition'], row['ToTurn']))
+            if i is None or j is None:
+                continue  # shouldn't happen against the same findings_csv -- skip rather than crash
+            subsumption_edges.append((i, row['ViaMove'], j))
+
+    skipped = []
+    with open(skipped_path, encoding='utf-8') as f:
+        for row in csv.DictReader(f):
+            skipped.append((int(row['Index']), row['Position'], row['Turn']))
+
+    return results, subsumption_edges, skipped
+
+
 def cmd_reduce(args):
     print(f"Loading {args.findings_csv}...")
     findings = load_findings(args.findings_csv)
@@ -1736,15 +1775,79 @@ def cmd_reduce(args):
     db = load_db(args.db_path)
     print(f"  Loaded {len(db)} positions")
 
+    os.makedirs(args.out_dir, exist_ok=True)
+    branch_reduction_path = os.path.join(args.out_dir, 'branch_reduction.csv')
+    skipped_path = os.path.join(args.out_dir, 'skipped_findings.csv')
+    subsumption_edges_path = os.path.join(args.out_dir, 'subsumption_edges.csv')
+
     default_checkpoint_suffix = '.retry_checkpoint.pkl' if args.retry_skipped else '.reduce_checkpoint.pkl'
     branch_checkpoint = args.checkpoint_path or (args.findings_csv + default_checkpoint_suffix)
-    results, subsumption_edges, skipped = analyze_reducibility(
-        findings, db, checkpoint_path=branch_checkpoint,
-        max_seconds_per_finding=args.max_seconds_per_finding,
-        checkpoint_every_findings=args.checkpoint_every_findings,
-        slow_finding_checkpoint_seconds=args.slow_finding_checkpoint_seconds)
-    if os.path.exists(branch_checkpoint):
-        os.remove(branch_checkpoint)
+
+    # If all three of Phase 1's own output files already exist AND there's
+    # no lingering checkpoint, Phase 1 genuinely finished in a prior run of
+    # this command -- load its results back instead of redoing potentially
+    # hours of analysis just because something LATER (Phase 2, or a later
+    # invocation entirely) got interrupted afterward. This is the direct
+    # fix for a real, confirmed bug: the checkpoint used to get deleted
+    # immediately after analyze_reducibility returned, BEFORE these three
+    # files were even written -- so an interruption anytime after Phase 1
+    # finished (including during Phase 2) left no record Phase 1 had ever
+    # completed, and a rerun would redo it from scratch every time.
+    phase1_done_already = (
+        os.path.exists(branch_reduction_path) and os.path.exists(subsumption_edges_path)
+        and os.path.exists(skipped_path) and not os.path.exists(branch_checkpoint)
+    )
+
+    if phase1_done_already and not args.force_rerun_phase1:
+        print(f"\nPhase 1 output already exists in {args.out_dir}/ with no lingering checkpoint -- "
+              f"treating it as already complete from a prior run and loading it back rather than "
+              f"re-running the analysis. Pass --force-rerun-phase1 if the underlying findings_csv "
+              f"or database actually changed and this needs to be redone for real.")
+        results, subsumption_edges, skipped = _load_phase1_results(
+            branch_reduction_path, skipped_path, subsumption_edges_path, findings)
+        phase1_freshly_computed = False
+    else:
+        phase1_freshly_computed = True
+        results, subsumption_edges, skipped = analyze_reducibility(
+            findings, db, checkpoint_path=branch_checkpoint,
+            max_seconds_per_finding=args.max_seconds_per_finding,
+            checkpoint_every_findings=args.checkpoint_every_findings,
+            slow_finding_checkpoint_seconds=args.slow_finding_checkpoint_seconds)
+
+        with open(branch_reduction_path, 'w', newline='', encoding='utf-8') as f:
+            w = csv.writer(f)
+            w.writerow(['Position', 'Turn', 'RawBranchCount', 'IrreducibleBranchCount', 'BranchGroups'])
+            for r in results:
+                if r['irreducible_branch_count'] is None:
+                    w.writerow([r['position'], r['turn'], r['raw_branch_count'], 'TIMED_OUT', ''])
+                    continue
+                groups_str = "|".join(";".join(sorted(g)) for g in r['branch_groups'])
+                w.writerow([r['position'], r['turn'], r['raw_branch_count'],
+                            r['irreducible_branch_count'], groups_str])
+
+        with open(skipped_path, 'w', newline='', encoding='utf-8') as f:
+            w = csv.writer(f)
+            w.writerow(['Index', 'Position', 'Turn'])
+            for i, pos, turn in skipped:
+                w.writerow([i, pos, turn])
+
+        with open(subsumption_edges_path, 'w', newline='', encoding='utf-8') as f:
+            w = csv.writer(f)
+            w.writerow(['FromPosition', 'FromTurn', 'ViaMove', 'ToPosition', 'ToTurn'])
+            for i, mv, j in subsumption_edges:
+                w.writerow([findings[i]['position'], findings[i]['turn'], mv,
+                            findings[j]['position'], findings[j]['turn']])
+
+        # Deleted only now, AFTER all three output files are confirmed
+        # written -- if the process dies between analyze_reducibility
+        # returning and this point, the checkpoint survives, so the next
+        # run's phase1_done_already check above correctly stays False
+        # (the CSVs don't exist yet either) and resumes analyze_reducibility
+        # from ITS OWN checkpoint, rather than either redoing everything
+        # from scratch or wrongly believing Phase 1 already finished with
+        # nothing on disk to prove it.
+        if os.path.exists(branch_checkpoint):
+            os.remove(branch_checkpoint)
 
     # Timed-out findings have irreducible_branch_count=None -- excluded
     # from the numeric aggregates below rather than crashing on them or
@@ -1754,32 +1857,6 @@ def cmd_reduce(args):
     total_raw = sum(r['raw_branch_count'] for r in analyzed)
     total_irreducible = sum(r['irreducible_branch_count'] for r in analyzed)
     collapsed_findings = [r for r in analyzed if r['irreducible_branch_count'] < r['raw_branch_count']]
-
-    os.makedirs(args.out_dir, exist_ok=True)
-
-    with open(os.path.join(args.out_dir, 'branch_reduction.csv'), 'w', newline='', encoding='utf-8') as f:
-        w = csv.writer(f)
-        w.writerow(['Position', 'Turn', 'RawBranchCount', 'IrreducibleBranchCount', 'BranchGroups'])
-        for r in results:
-            if r['irreducible_branch_count'] is None:
-                w.writerow([r['position'], r['turn'], r['raw_branch_count'], 'TIMED_OUT', ''])
-                continue
-            groups_str = "|".join(";".join(sorted(g)) for g in r['branch_groups'])
-            w.writerow([r['position'], r['turn'], r['raw_branch_count'],
-                        r['irreducible_branch_count'], groups_str])
-
-    with open(os.path.join(args.out_dir, 'skipped_findings.csv'), 'w', newline='', encoding='utf-8') as f:
-        w = csv.writer(f)
-        w.writerow(['Index', 'Position', 'Turn'])
-        for i, pos, turn in skipped:
-            w.writerow([i, pos, turn])
-
-    with open(os.path.join(args.out_dir, 'subsumption_edges.csv'), 'w', newline='', encoding='utf-8') as f:
-        w = csv.writer(f)
-        w.writerow(['FromPosition', 'FromTurn', 'ViaMove', 'ToPosition', 'ToTurn'])
-        for i, mv, j in subsumption_edges:
-            w.writerow([findings[i]['position'], findings[i]['turn'], mv,
-                        findings[j]['position'], findings[j]['turn']])
 
     reached = {j for _, _, j in subsumption_edges}
     root_findings = [i for i in range(len(findings)) if i not in reached]
@@ -1797,9 +1874,12 @@ def cmd_reduce(args):
           f"up to symmetry): {len(subsumption_edges)}")
     print(f"Findings never reached by another finding's branch (roots of their own subsumption "
           f"chain): {len(root_findings)} / {len(findings)}")
-    print(f"\nWrote per-finding branch reduction to {args.out_dir}/branch_reduction.csv")
-    print(f"Wrote skipped/timed-out findings to {args.out_dir}/skipped_findings.csv")
-    print(f"Wrote subsumption chain edges to {args.out_dir}/subsumption_edges.csv")
+    if phase1_freshly_computed:
+        print(f"\nWrote per-finding branch reduction to {args.out_dir}/branch_reduction.csv")
+        print(f"Wrote skipped/timed-out findings to {args.out_dir}/skipped_findings.csv")
+        print(f"Wrote subsumption chain edges to {args.out_dir}/subsumption_edges.csv")
+    else:
+        print(f"\n(Phase 1 files in {args.out_dir}/ are from the prior run loaded above, unchanged.)")
     print(f"\nNOTE: subsumption edges are reported, not collapsed away -- a finding whose "
           f"continuation leads into another already-listed finding is still a real, distinct "
           f"root-level decision; only genuine mirror-image duplicates WITHIN a single finding's "
@@ -1928,6 +2008,13 @@ def main():
                                           "(or families-stage unique_findings.csv)")
     p4.add_argument('db_path', help="The completed database this findings CSV was derived from")
     p4.add_argument('--out-dir', default='general_reduction')
+    p4.add_argument('--force-rerun-phase1', action='store_true',
+                     help="Redo the tie-branch reduction phase even if its three output files "
+                          "already exist in --out-dir from a prior run. By default, if all three "
+                          "are present and there's no lingering checkpoint, that phase is assumed "
+                          "complete and its results are loaded back instead of re-running -- pass "
+                          "this if the underlying findings_csv or database actually changed since "
+                          "then and it genuinely needs to be redone.")
     p4.add_argument('--retry-skipped', metavar='SKIPPED_CSV', default=None,
                      help="Re-analyze ONLY the findings listed in a previous run's "
                           "skipped_findings.csv, instead of the full findings_csv. Intended to be "

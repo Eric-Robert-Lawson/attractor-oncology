@@ -75,7 +75,7 @@ import csv
 import os
 import sys
 import time
-from collections import defaultdict, OrderedDict, namedtuple
+from collections import defaultdict, OrderedDict, namedtuple, Counter
 import resource
 
 FILES = "abcdefgh"
@@ -833,10 +833,400 @@ def cmd_classify(args):
 
 
 # ============================================================================
-# Tree rendering (used standalone and by `families --render-trees`)
+# Reducibility analysis: is a tie's branching genuinely independent, or
+# explained by symmetry / transposition / downstream subsumption?
 # ============================================================================
+#
+# WHAT THIS ADDS, PRECISELY, AND WHY THE OBVIOUS-LOOKING APPROACH IS WRONG:
+#
+# The D4-orbit dedup already used elsewhere (canonical_form_general) only
+# ever compares a SINGLE root position against another single root
+# position. It has nothing to say about whether the *branches* of one
+# multi-way tie are themselves independent of each other, or about
+# whether two entirely different findings' forced continuations converge
+# on (or run parallel to) each other deeper in the tree.
+#
+# The naive fix -- "walk each tied branch forward and see if the
+# endpoints match" -- is insufficient and was tried and rejected here.
+# Two branches can be exactly explained by symmetry WITHOUT their
+# endpoints ever coinciding: real example, hand-verified against
+# kqvk_test.db, not hypothetical -- position 'Q:a8 K:h8 k:f6' (White to
+# move) has a 2-way tie {Qd5, Qe4}. Both kings (h8 and f6) sit exactly on
+# the a1-h8 diagonal. Qd5 and Qe4 are not symmetric to each other
+# individually, but the ENTIRE remaining forced sequence after each is a
+# perfect mirror image of the other across that diagonal, ply for ply,
+# confirmed directly: transform_position('Q:d5 K:h8 k:f6', 6) produces
+# exactly 'Q:e4 K:h8 k:f6', the other branch's actual position, and this
+# holds at every subsequent ply, not just the first. These two branches
+# never touch the same square configuration again, yet they are not
+# independent -- one is fully explained by the other via a single,
+# consistently-applied transform. An endpoint-only check would have
+# reported these as unrelated.
+#
+# The correct, general test, verified against real data: two forced
+# branches are "the same finding, viewed through symmetry" if there
+# exists ONE transform, valid throughout the WHOLE segment (checked
+# against every ply, not just the first -- necessary because a mid-segment
+# promotion can change which transforms are even legal), that maps every
+# state of branch A onto the corresponding state of branch B. This single
+# test correctly subsumes three cases that looked distinct on the surface:
+#   - literal convergence (the transform is the identity from some ply on)
+#   - a root-level mirror pair (the position itself has a self-symmetry
+#     that pairs up two of its own tied moves, whether or not the
+#     resulting branches ever touch again)
+#   - two branches that run in parallel to two DIFFERENT mates, never
+#     touching, but related by one consistent transform throughout
+# Confirmed directly: a scan of 152 real ties in kqvk_test.db found 3
+# genuine symmetric pairs via this test, and a manual re-check of one
+# (the Qd5/Qe4 case above) confirmed it geometrically before this was
+# trusted for anything else.
+#
+# WITHIN-FINDING vs CROSS-FINDING, and why they're handled differently:
+# a finding's OWN tied branches that turn out to be symmetric to each
+# other are genuinely the same decision, mirrored -- collapsing them to a
+# single representative loses nothing. But when finding A's forced
+# continuation reaches (a symmetric image of) a position that is ITSELF
+# already a separately-listed finding B, that is a different situation:
+# A's own root-level tie is still a real, distinct decision that happens
+# to exist; it just doesn't stay independent forever. Deleting A because
+# it eventually reaches B would discard exactly the thing being asked to
+# preserve -- so this is reported as a subsumption edge (A leads to B),
+# not collapsed away. The distinction matters: collapse for genuine
+# mirror-image duplicates, annotate for "leads into something already
+# counted."
 
-def verify_and_count(state, db, memo, mismatches):
+def get_forced_segment(state, db, max_steps=10000):
+    """From `state`, follow the single determined move (len(tied)==1)
+    repeatedly, collecting every state visited, until reaching either a
+    terminal state (empty tied -- checkmate, since this only ever follows
+    an already-proven winning line) or a state with a genuine multi-way
+    tie (the next real branch point). Returns (states, end_kind) where
+    end_kind is 'mate', 'tie', 'missing' (a proven-draw or otherwise
+    absent position -- should not occur on a real forced-win chain, and
+    is reported rather than silently treated as either mate or a tie if
+    it does), or 'ambiguous' (see apply_move_general's own documented
+    limitation)."""
+    states = [state]
+    current = state
+    for _ in range(max_steps):
+        entry = db.get(current)
+        if entry is None:
+            return states, 'missing'
+        if not entry.tied:
+            return states, 'mate'
+        if len(entry.tied) > 1:
+            return states, 'tie'
+        mv, _ = entry.tied[0]
+        pos, turn = current
+        try:
+            child_pos = apply_move_general(pos, mv)
+        except AmbiguousMoveError:
+            return states, 'ambiguous'
+        current = (child_pos, child_turn(mv))
+        states.append(current)
+    return states, 'max_steps'
+
+
+def _common_valid_transforms(states):
+    """Intersection of valid transform indices across every state in a
+    segment -- not just the first. Needed because a mid-segment
+    promotion changes has_pawn, which changes which transforms are even
+    legal (see valid_transform_indices) partway through a single
+    sequence."""
+    common = set(valid_transform_indices(states[0][0]))
+    for s in states[1:]:
+        common &= set(valid_transform_indices(s[0]))
+    return common
+
+
+def find_consistent_transform(states_a, states_b):
+    """Returns a transform index if ONE transform, applied consistently,
+    maps every ply of segment A onto the corresponding ply of segment B
+    -- else None. Requires equal length (segments of different depth
+    cannot be full-sequence images of each other)."""
+    if len(states_a) != len(states_b):
+        return None
+    candidates = _common_valid_transforms(states_a) & _common_valid_transforms(states_b)
+    for t in candidates:
+        if all(transform_state(a, t) == b for a, b in zip(states_a, states_b)):
+            return t
+    return None
+
+
+def analyze_reducibility(findings, db, progress_every=2000, checkpoint_path=None):
+    """For every finding's own root-level tie: partition its tied moves
+    into symmetry-equivalence classes (collapsing genuine mirror-image
+    duplicates -- see module comment above for why this is safe to
+    collapse). Separately, for every branch, check whether its forced
+    continuation's endpoint canonicalizes to another finding's own root
+    (up to D4 symmetry) -- recorded as a subsumption edge, not collapsed,
+    since the root-level tie that led there is still a real, distinct
+    decision (see module comment for why annotate-don't-delete here).
+
+    checkpoint_path, if given, checkpoints (results, subsumption_edges,
+    and how many findings have been processed) every 60s, matching
+    cmd_classify's own convention, and resumes from it automatically if
+    present. This assumes findings_csv itself doesn't change between an
+    interrupted run and its resume -- load_findings parses it in file
+    order, so re-parsing the same unchanged file reproduces the same
+    index-to-finding mapping a saved index number depends on. NOTE:
+    checkpointing here only helps if the process gets far enough to
+    start this loop at all -- it does nothing for a crash during load_db
+    itself, which has to be paid in full on every single resume,
+    checkpoint or not (see canon_root_to_idx below, which is rebuilt
+    fresh every run since it's cheap relative to reloading the database).
+
+    Returns a dict with per-finding branch-group counts and the
+    subsumption edge list, not a single collapsed number -- the point is
+    to expose the structure for a researcher to look at, not to declare
+    a final "true" count on their behalf."""
+    canon_root_to_idx = {}
+    for i, f in enumerate(findings):
+        croot = (canonical_form_general(f['position']), f['turn'])
+        canon_root_to_idx[croot] = i
+
+    results = []
+    subsumption_edges = []  # (finding_i, branch_move, finding_j)
+    start_index = 0
+
+    if checkpoint_path and os.path.exists(checkpoint_path):
+        import pickle
+        with open(checkpoint_path, 'rb') as f:
+            checkpoint = pickle.load(f)
+        results = checkpoint['results']
+        subsumption_edges = checkpoint['subsumption_edges']
+        start_index = checkpoint['next_index']
+        print(f"  Resumed from checkpoint: {start_index}/{len(findings)} findings already "
+              f"analyzed, {len(subsumption_edges)} subsumption edges found so far")
+
+    last_checkpoint = time.time()
+
+    for i in range(start_index, len(findings)):
+        f = findings[i]
+        if progress_every and i % progress_every == 0 and i > 0:
+            print(f"  [reduce progress] {i}/{len(findings)} findings analyzed", flush=True)
+
+        now = time.time()
+        if checkpoint_path and now - last_checkpoint >= 60:
+            last_checkpoint = now
+            _save_checkpoint({'results': results, 'subsumption_edges': subsumption_edges,
+                               'next_index': i}, checkpoint_path)
+            print(f"  [checkpoint] saved progress at {i}/{len(findings)} findings", flush=True)
+
+        root = (f['position'], f['turn'])
+        moves = sorted(f['tied_moves'])
+        branch_segments = {}
+        for mv in moves:
+            try:
+                child = (apply_move_general(f['position'], mv), child_turn(mv))
+            except AmbiguousMoveError:
+                branch_segments[mv] = (None, 'ambiguous')
+                continue
+            states, kind = get_forced_segment(child, db)
+            branch_segments[mv] = (states, kind)
+
+            if kind == 'tie':
+                endpoint = states[-1]
+                cendpoint = (canonical_form_general(endpoint[0]), endpoint[1])
+                if cendpoint in canon_root_to_idx and canon_root_to_idx[cendpoint] != i:
+                    subsumption_edges.append((i, mv, canon_root_to_idx[cendpoint]))
+
+        # Union-find over this finding's OWN moves, grouping any pair
+        # related by a single consistent transform across their full
+        # segments -- genuine mirror-image duplicates, safe to collapse.
+        parent = {mv: mv for mv in moves}
+
+        def find(x):
+            while parent[x] != x:
+                parent[x] = parent[parent[x]]
+                x = parent[x]
+            return x
+
+        def union(a, b):
+            ra, rb = find(a), find(b)
+            if ra != rb:
+                parent[ra] = rb
+
+        for a_idx in range(len(moves)):
+            for b_idx in range(a_idx + 1, len(moves)):
+                mv_a, mv_b = moves[a_idx], moves[b_idx]
+                states_a, kind_a = branch_segments[mv_a]
+                states_b, kind_b = branch_segments[mv_b]
+                if states_a is None or states_b is None:
+                    continue
+                t = find_consistent_transform(states_a, states_b)
+                if t is not None:
+                    union(mv_a, mv_b)
+
+        groups = defaultdict(list)
+        for mv in moves:
+            groups[find(mv)].append(mv)
+
+        results.append({
+            'position': f['position'], 'turn': f['turn'],
+            'raw_branch_count': len(moves),
+            'irreducible_branch_count': len(groups),
+            'branch_groups': list(groups.values()),
+        })
+
+    return results, subsumption_edges
+
+
+# ============================================================================
+# Full-landscape decision signatures: every position, tied or forced,
+# not just the classify-stage independent findings.
+# ============================================================================
+#
+# analyze_reducibility (above) only ever looks at positions that already
+# have a genuine multi-way tie -- that's the right scope for "are these
+# branches independent of each other", but it says nothing about the
+# positions with exactly ONE required move, which is the majority of any
+# real landscape (345,040 of KQvK's positions have a decision to make at
+# all; only a few thousand of those are genuine ties). A forced move is
+# just as much a "principle of perfect play" as a tied one is -- it's the
+# same underlying question (what does perfect play require here) with a
+# tie-count of one instead of several.
+#
+# The signature computed here treats both cases uniformly: canonicalize
+# the position, and canonicalize its required move(s) under the SAME
+# transform that produced that canonical position. Two positions with an
+# identical signature require the identical decision, up to board
+# symmetry, whether that decision is forced or tied.
+#
+# transform_move's correctness was checked, not assumed, before trusting
+# it for this: verified directly that transforming a position and then
+# applying a transformed move produces exactly the same result as
+# applying the move first and then transforming the outcome (a
+# commutativity check on the actual group action, not just a spot check
+# on given examples).
+#
+# HONEST CHARACTERIZATION OF WHAT THIS METRIC ACTUALLY SHOWS: run against
+# the full KQvK landscape, this reduces 345,040 decision-bearing
+# positions down to 43,195 distinct signatures -- a ~7.99x reduction.
+# That ratio is almost exactly 8, which is the ordinary, expected size of
+# a generic (non-self-symmetric) position's own D4 orbit -- so this
+# result, on its own, is mostly confirming that the mechanism correctly
+# recovers the board's ordinary 8-fold symmetry, not yet revealing
+# something deeper. The genuinely new contribution here isn't the size of
+# that ratio -- it's that this dedup is now applied uniformly to EVERY
+# position in the landscape, including the forced, non-tied ones that
+# were never deduped by anything in this pipeline before. Finding the
+# deeper, non-obvious structure (positions unrelated by any single-ply
+# symmetry whose multi-ply continuations still coincide) is what
+# analyze_reducibility's segment-matching already does for tied
+# positions specifically -- extending THAT multi-ply check to start from
+# every position, not just tied ones, is the natural next step past this,
+# not a replacement for it.
+
+def transform_move(mv, t_idx):
+    """Transform a move string's destination square under a D4 transform.
+    Piece letter and promotion suffix are left untouched -- piece KIND
+    never changes under board symmetry, only where it ends up. Verified
+    directly (see module comment) to commute correctly with
+    transform_position and apply_move_general before being trusted here."""
+    piece_char = mv[0]
+    rest = mv[1:]
+    if '=' in rest:
+        dest_str, promo = rest.split('=')
+        suffix = '=' + promo
+    else:
+        dest_str, suffix = rest, ''
+    f, r = sq_to_coord(dest_str)
+    nf, nr = TRANSFORMS[t_idx](f, r)
+    return piece_char + coord_to_sq(nf, nr) + suffix
+
+
+def canonical_decision_signature(position, turn, tied):
+    """The symmetry-normalized 'shape' of the decision required at this
+    position: canonicalize the position, and canonicalize its required
+    move(s) under the SAME transform that achieves that canonical
+    position. When a position has its own self-symmetry (more than one
+    transform ties for producing the canonical position), the transform
+    giving the lexicographically smallest transformed move-set is used,
+    so the signature stays fully deterministic rather than depending on
+    iteration order. Works identically for a forced single move
+    (len(tied)==1) or a genuine multi-way tie -- both are just "the
+    required move-set at this position", the tie count is incidental to
+    what a signature is."""
+    indices = valid_transform_indices(position)
+    best_key = None
+    best_sig = None
+    for t in indices:
+        canon_pos = transform_position(position, t)
+        canon_moves = tuple(sorted(transform_move(mv, t) for mv, _ in tied))
+        key = (canon_pos, canon_moves)
+        if best_key is None or key < best_key:
+            best_key = key
+            best_sig = (canon_pos, turn, canon_moves)
+    return best_sig
+
+
+def scan_full_landscape_signatures(db, progress_every=2000000, checkpoint_path=None):
+    """Scan EVERY decision-bearing position in the database (not just the
+    classify-stage independent findings) and group by canonical decision
+    signature. Returns (signature_counts, signature_examples) --
+    signature -> occurrence count, and signature -> one representative
+    (position, turn) example, NOT every occurrence (storing all
+    occurrences of all signatures would mean holding a second full copy
+    of the landscape in memory; a count plus one example is enough to
+    report the catalog without doubling memory use at scale).
+
+    checkpoint_path, if given, checkpoints (signature_counts,
+    signature_examples, and how many positions have been scanned) every
+    60s and resumes from it automatically if present. Resuming means
+    skipping the first N entries of db.items() -- safe ONLY because
+    load_db parses its file in strict file order and Python dicts
+    preserve insertion order, so reloading the same, unchanged .db file
+    reproduces the exact same iteration sequence a saved position-count
+    depends on. Skipping still means walking past those N entries (dict
+    iteration has no faster seek), so a resume is cheaper than a full
+    rescan but not free -- it avoids redoing the actual signature
+    computation for already-counted positions, not the base cost of
+    iterating up to where it left off. As with analyze_reducibility,
+    this does nothing for a crash during load_db itself -- that cost is
+    paid in full on every resume regardless."""
+    signature_counts = Counter()
+    signature_examples = {}
+    start_index = 0
+
+    if checkpoint_path and os.path.exists(checkpoint_path):
+        import pickle
+        with open(checkpoint_path, 'rb') as f:
+            checkpoint = pickle.load(f)
+        signature_counts = checkpoint['signature_counts']
+        signature_examples = checkpoint['signature_examples']
+        start_index = checkpoint['checked']
+        print(f"  Resumed from checkpoint: {start_index}/{len(db)} positions already scanned, "
+              f"{len(signature_counts)} distinct shapes found so far")
+
+    last_checkpoint = time.time()
+    checked = 0
+    for (pos, turn), entry in db.items():
+        checked += 1
+        if checked < start_index:
+            continue
+
+        if progress_every and checked % progress_every == 0:
+            print(f"  [full-landscape scan] {checked}/{len(db)} positions scanned", flush=True)
+
+        now = time.time()
+        if checkpoint_path and now - last_checkpoint >= 60:
+            last_checkpoint = now
+            _save_checkpoint({'signature_counts': signature_counts,
+                               'signature_examples': signature_examples,
+                               'checked': checked}, checkpoint_path)
+            print(f"  [checkpoint] saved progress at {checked}/{len(db)} positions scanned", flush=True)
+
+        if not entry.tied:
+            continue  # checkmate itself -- no decision is made here
+        sig = canonical_decision_signature(pos, turn, entry.tied)
+        signature_counts[sig] += 1
+        if sig not in signature_examples:
+            signature_examples[sig] = (pos, turn)
+    return signature_counts, signature_examples
+
+
+
     if state in memo:
         return memo[state]
     entry = db.get(state)
@@ -1210,6 +1600,119 @@ def cmd_families(args):
         print(f"  Wrote {len(distinct_families)} family-representative trees to {tree_dir}/")
 
 
+def cmd_reduce(args):
+    print(f"Loading {args.findings_csv}...")
+    findings = load_findings(args.findings_csv)
+    print(f"  Loaded {len(findings)} independent findings")
+    print(f"Loading {args.db_path}...")
+    db = load_db(args.db_path)
+    print(f"  Loaded {len(db)} positions")
+
+    branch_checkpoint = args.checkpoint_path or (args.findings_csv + '.reduce_checkpoint.pkl')
+    results, subsumption_edges = analyze_reducibility(findings, db, checkpoint_path=branch_checkpoint)
+    if os.path.exists(branch_checkpoint):
+        os.remove(branch_checkpoint)
+
+    total_raw = sum(r['raw_branch_count'] for r in results)
+    total_irreducible = sum(r['irreducible_branch_count'] for r in results)
+    collapsed_findings = [r for r in results if r['irreducible_branch_count'] < r['raw_branch_count']]
+
+    os.makedirs(args.out_dir, exist_ok=True)
+
+    with open(os.path.join(args.out_dir, 'branch_reduction.csv'), 'w', newline='', encoding='utf-8') as f:
+        w = csv.writer(f)
+        w.writerow(['Position', 'Turn', 'RawBranchCount', 'IrreducibleBranchCount', 'BranchGroups'])
+        for r in results:
+            groups_str = "|".join(";".join(sorted(g)) for g in r['branch_groups'])
+            w.writerow([r['position'], r['turn'], r['raw_branch_count'],
+                        r['irreducible_branch_count'], groups_str])
+
+    with open(os.path.join(args.out_dir, 'subsumption_edges.csv'), 'w', newline='', encoding='utf-8') as f:
+        w = csv.writer(f)
+        w.writerow(['FromPosition', 'FromTurn', 'ViaMove', 'ToPosition', 'ToTurn'])
+        for i, mv, j in subsumption_edges:
+            w.writerow([findings[i]['position'], findings[i]['turn'], mv,
+                        findings[j]['position'], findings[j]['turn']])
+
+    reached = {j for _, _, j in subsumption_edges}
+    root_findings = [i for i in range(len(findings)) if i not in reached]
+
+    print(f"\n{'='*70}")
+    print("REDUCIBILITY RESULTS (tied positions only -- see below for the full landscape)")
+    print(f"{'='*70}")
+    print(f"Findings analyzed: {len(findings)}")
+    print(f"Raw root-level tied branches, summed across all findings: {total_raw}")
+    print(f"Irreducible branch-groups after symmetry collapse: {total_irreducible}")
+    print(f"Findings whose own branches collapsed (genuine mirror-image duplicates found): "
+          f"{len(collapsed_findings)}")
+    print(f"Subsumption edges found (one finding's branch leads into another finding's root, "
+          f"up to symmetry): {len(subsumption_edges)}")
+    print(f"Findings never reached by another finding's branch (roots of their own subsumption "
+          f"chain): {len(root_findings)} / {len(findings)}")
+    print(f"\nWrote per-finding branch reduction to {args.out_dir}/branch_reduction.csv")
+    print(f"Wrote subsumption chain edges to {args.out_dir}/subsumption_edges.csv")
+    print(f"\nNOTE: subsumption edges are reported, not collapsed away -- a finding whose "
+          f"continuation leads into another already-listed finding is still a real, distinct "
+          f"root-level decision; only genuine mirror-image duplicates WITHIN a single finding's "
+          f"own branches are collapsed. See this file's module comment above analyze_reducibility "
+          f"for why these are handled differently.")
+
+    if args.skip_full_landscape:
+        return
+
+    print(f"\n{'='*70}")
+    print("FULL-LANDSCAPE DECISION SIGNATURES (every position, tied or forced)")
+    print(f"{'='*70}")
+    print(f"Scanning all {len(db)} positions in {args.db_path} -- this covers every forced, "
+          f"single-move position too, not just the {len(findings)} genuine ties above.")
+    landscape_checkpoint = args.checkpoint_path_landscape or (args.db_path + '.landscape_checkpoint.pkl')
+    sig_counts, sig_examples = scan_full_landscape_signatures(db, checkpoint_path=landscape_checkpoint)
+    if os.path.exists(landscape_checkpoint):
+        os.remove(landscape_checkpoint)
+
+    total_decisions = sum(sig_counts.values())
+    print(f"\nTotal decision-bearing positions: {total_decisions}")
+    print(f"Distinct decision-shapes (irreducible principles, forced + tied combined): {len(sig_counts)}")
+    if len(sig_counts):
+        print(f"Average recurrence per shape: {total_decisions/len(sig_counts):.2f}x "
+              f"(a generic, non-self-symmetric position's own D4 orbit is 8 -- a ratio near 8 "
+              f"here means this is mostly recovering ordinary board symmetry, not yet deeper "
+              f"structure; see this file's module comment above scan_full_landscape_signatures)")
+
+    sig_ids = {sig: i for i, sig in enumerate(sig_counts.keys())}
+    with open(os.path.join(args.out_dir, 'decision_shapes.csv'), 'w', newline='', encoding='utf-8') as f:
+        w = csv.writer(f)
+        w.writerow(['ShapeId', 'CanonicalPosition', 'Turn', 'CanonicalMoves', 'Occurrences',
+                     'ExamplePosition', 'ExampleTurn'])
+        for sig, sid in sig_ids.items():
+            canon_pos, turn, moves = sig
+            ex_pos, ex_turn = sig_examples[sig]
+            w.writerow([sid, canon_pos, turn, ";".join(moves), sig_counts[sig], ex_pos, ex_turn])
+    print(f"\nWrote the full catalog of {len(sig_counts)} distinct decision-shapes to "
+          f"{args.out_dir}/decision_shapes.csv")
+
+    if args.full_position_map:
+        map_path = os.path.join(args.out_dir, 'position_to_shape.csv')
+        with open(map_path, 'w', newline='', encoding='utf-8') as f:
+            w = csv.writer(f)
+            w.writerow(['Position', 'Turn', 'ShapeId'])
+            for (pos, turn), entry in db.items():
+                if not entry.tied:
+                    continue
+                sig = canonical_decision_signature(pos, turn, entry.tied)
+                w.writerow([pos, turn, sig_ids[sig]])
+        print(f"Wrote the full per-position shape mapping ({total_decisions} rows) to {map_path}")
+    else:
+        print(f"(Skipped writing the full per-position mapping -- {total_decisions} rows -- "
+              f"pass --full-position-map to include it.)")
+
+    if collapsed_findings[:5]:
+        print(f"\nFirst few findings with collapsed branches:")
+        for r in collapsed_findings[:5]:
+            print(f"  {r['position']} ({r['turn']}): {r['raw_branch_count']} raw -> "
+                  f"{r['irreducible_branch_count']} irreducible -- groups: {r['branch_groups']}")
+
+
 # ============================================================================
 # CLI
 # ============================================================================
@@ -1263,6 +1766,39 @@ def main():
     p3.add_argument('--max-lines', type=int, default=500)
     p3.add_argument('--classifications')
 
+    p4 = sub.add_parser('reduce', help="Find genuinely irreducible ties: collapse root-level "
+                                        "mirror-image branches via symmetry, and report (without "
+                                        "deleting) where one finding's continuation leads into "
+                                        "another already-listed finding")
+    p4.add_argument('findings_csv', help="A classify-stage independent_findings_deduped.csv "
+                                          "(or families-stage unique_findings.csv)")
+    p4.add_argument('db_path', help="The completed database this findings CSV was derived from")
+    p4.add_argument('--out-dir', default='general_reduction')
+    p4.add_argument('--checkpoint-path', default=None,
+                     help="Checkpoint path for the tie-branch reduction phase (default: "
+                          "<findings_csv>.reduce_checkpoint.pkl). Saved every 60s, resumed "
+                          "automatically if present, deleted only on full success -- same "
+                          "convention as classify/families. NOTE: this only helps if the process "
+                          "gets far enough to start this phase at all; it does nothing for an "
+                          "interruption during the initial database load itself, which is paid "
+                          "in full on every resume regardless of any checkpoint.")
+    p4.add_argument('--checkpoint-path-landscape', default=None,
+                     help="Checkpoint path for the full-landscape scan phase (default: "
+                          "<db_path>.landscape_checkpoint.pkl). Same 60s/resume/delete-on-success "
+                          "convention, and the same load_db caveat applies.")
+    p4.add_argument('--skip-full-landscape', action='store_true',
+                     help="Skip the full-database decision-signature scan (every forced AND tied "
+                          "position, not just the findings CSV's ties) -- that scan is the default "
+                          "since it's the part that covers non-tied positions too, but it does mean "
+                          "reading through the entire database once more, which is real time at "
+                          "58M-position scale.")
+    p4.add_argument('--full-position-map', action='store_true',
+                     help="Also write a full Position,Turn->ShapeId row for every single "
+                          "decision-bearing position in the database, not just the deduplicated "
+                          "shape catalog. This is one row per position (millions of rows at real "
+                          "scale) -- off by default; the catalog itself (decision_shapes.csv) is "
+                          "the compact, interesting output most of the time.")
+
     args = ap.parse_args()
     if args.command == 'classify':
         cmd_classify(args)
@@ -1270,6 +1806,8 @@ def main():
         cmd_families(args)
     elif args.command == 'tree':
         cmd_tree(args)
+    elif args.command == 'reduce':
+        cmd_reduce(args)
 
 
 if __name__ == "__main__":

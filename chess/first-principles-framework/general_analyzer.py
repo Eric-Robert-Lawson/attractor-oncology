@@ -75,6 +75,7 @@ import csv
 import os
 import sys
 import time
+import signal
 from collections import defaultdict, OrderedDict, namedtuple, Counter
 import resource
 
@@ -953,7 +954,17 @@ def find_consistent_transform(states_a, states_b):
     return None
 
 
-def analyze_reducibility(findings, db, progress_every=2000, checkpoint_path=None):
+class _FindingTimeout(Exception):
+    pass
+
+
+def _raise_finding_timeout(signum, frame):
+    raise _FindingTimeout()
+
+
+def analyze_reducibility(findings, db, progress_every=2000, checkpoint_path=None,
+                          max_seconds_per_finding=60, checkpoint_every_findings=200,
+                          slow_finding_checkpoint_seconds=5.0):
     """For every finding's own root-level tie: partition its tied moves
     into symmetry-equivalence classes (collapsing genuine mirror-image
     duplicates -- see module comment above for why this is safe to
@@ -963,10 +974,60 @@ def analyze_reducibility(findings, db, progress_every=2000, checkpoint_path=None
     since the root-level tie that led there is still a real, distinct
     decision (see module comment for why annotate-don't-delete here).
 
-    checkpoint_path, if given, checkpoints (results, subsumption_edges,
-    and how many findings have been processed) every 60s, matching
-    cmd_classify's own convention, and resumes from it automatically if
-    present. This assumes findings_csv itself doesn't change between an
+    max_seconds_per_finding (default 60, 0/None disables): a hard,
+    wall-clock budget for a SINGLE finding's own analysis, enforced with
+    SIGALRM so it fires even if the process is stuck deep inside a slow
+    dict lookup, not just between loop iterations -- a plain time.time()
+    check between findings would never fire if one finding itself is
+    what's taking too long. This exists because per-finding cost here is
+    NOT uniform the way classify's is: it's driven by BOTH how many
+    branches a tie has (O(k^2) pairwise comparisons) AND how deep each
+    branch's forced segment runs before the next tie or mate -- a real,
+    2-way tie sitting at the start of a 70+-ply forced line (confirmed to
+    exist in this project's own KBPvK data) can cost far more than a
+    wide tie whose branches resolve in a few plies. Under real memory
+    pressure (large database, swapping), every db lookup along a deep
+    segment gets slower too, compounding this further. A finding that
+    times out is recorded as genuinely unanalyzed (irreducible_branch_count
+    = None), not silently guessed at, and the run continues past it
+    rather than blocking on it indefinitely. SIGALRM is POSIX-only (this
+    will not work on Windows) -- fine for this project's own environment,
+    but worth knowing if this is ever run somewhere else.
+
+    checkpoint_path, if given, is written to after every finding's
+    processing FULLY completes (including the timeout path above, if it
+    fired) -- never before, and never mid-finding. That single, consistent
+    call site is deliberate: an earlier version of this function
+    checkpointed BEFORE processing each finding, which was safe on its
+    own (re-verified directly) but became unsafe once a second,
+    post-completion checkpoint site was added for the slow-finding
+    trigger below -- redoing an already-completed finding on resume
+    would have double-counted its subsumption edges. Consolidating to
+    one after-the-fact call site removes that risk entirely: next_index
+    is always i+1, always meaning "everything up to and including finding
+    i is already reflected in the saved results," so resuming never
+    reprocesses anything already accounted for.
+
+    Three independent, real triggers decide when that save actually
+    happens, addressing three different failure shapes:
+      - 60 seconds since the last checkpoint (time-based, catches slow,
+        fairly uniform grinding across many findings -- the original
+        behavior, unchanged)
+      - checkpoint_every_findings findings completed since the last
+        checkpoint (count-based, default 200 -- guarantees a predictable
+        save cadence even if per-finding cost stays just under the time
+        threshold every single time, which the time-only version could
+        never catch)
+      - THIS finding alone took longer than slow_finding_checkpoint_seconds
+        (default 5.0) to process (immediate -- so a single expensive
+        finding's hard-won result, once it finally completes, is secured
+        right away rather than risking loss to a kill shortly after)
+    Live progress printing (every ~10s) now also names the actual finding
+    currently in progress -- its position and tie-width -- specifically
+    so "is it stuck, or grinding through one hard item" is answerable by
+    watching the terminal, not something to guess at from a bare count.
+
+    This assumes findings_csv itself doesn't change between an
     interrupted run and its resume -- load_findings parses it in file
     order, so re-parsing the same unchanged file reproduces the same
     index-to-finding mapping a saved index number depends on. NOTE:
@@ -974,12 +1035,14 @@ def analyze_reducibility(findings, db, progress_every=2000, checkpoint_path=None
     start this loop at all -- it does nothing for a crash during load_db
     itself, which has to be paid in full on every single resume,
     checkpoint or not (see canon_root_to_idx below, which is rebuilt
-    fresh every run since it's cheap relative to reloading the database).
+    fresh every run since it's cheap relative to reloading the
+    database).
 
-    Returns a dict with per-finding branch-group counts and the
-    subsumption edge list, not a single collapsed number -- the point is
-    to expose the structure for a researcher to look at, not to declare
-    a final "true" count on their behalf."""
+    Returns (results, subsumption_edges, skipped) -- skipped is the list
+    of (index, position, turn) findings that hit the time budget. Not a
+    single collapsed number -- the point is to expose the structure for
+    a researcher to look at, not to declare a final "true" count on
+    their behalf."""
     canon_root_to_idx = {}
     for i, f in enumerate(findings):
         croot = (canonical_form_general(f['position']), f['turn'])
@@ -987,6 +1050,7 @@ def analyze_reducibility(findings, db, progress_every=2000, checkpoint_path=None
 
     results = []
     subsumption_edges = []  # (finding_i, branch_move, finding_j)
+    skipped = []  # (index, position, turn) that hit the time budget
     start_index = 0
 
     if checkpoint_path and os.path.exists(checkpoint_path):
@@ -995,81 +1059,130 @@ def analyze_reducibility(findings, db, progress_every=2000, checkpoint_path=None
             checkpoint = pickle.load(f)
         results = checkpoint['results']
         subsumption_edges = checkpoint['subsumption_edges']
+        skipped = checkpoint.get('skipped', [])
         start_index = checkpoint['next_index']
         print(f"  Resumed from checkpoint: {start_index}/{len(findings)} findings already "
-              f"analyzed, {len(subsumption_edges)} subsumption edges found so far")
+              f"analyzed, {len(subsumption_edges)} subsumption edges found so far, "
+              f"{len(skipped)} previously skipped on timeout")
 
-    last_checkpoint = time.time()
+    last_checkpoint_time = time.time()
+    last_checkpoint_count = start_index
+    last_progress_print = time.time()
+    if max_seconds_per_finding:
+        signal.signal(signal.SIGALRM, _raise_finding_timeout)
 
     for i in range(start_index, len(findings)):
         f = findings[i]
-        if progress_every and i % progress_every == 0 and i > 0:
-            print(f"  [reduce progress] {i}/{len(findings)} findings analyzed", flush=True)
 
         now = time.time()
-        if checkpoint_path and now - last_checkpoint >= 60:
-            last_checkpoint = now
-            _save_checkpoint({'results': results, 'subsumption_edges': subsumption_edges,
-                               'next_index': i}, checkpoint_path)
-            print(f"  [checkpoint] saved progress at {i}/{len(findings)} findings", flush=True)
+        if now - last_progress_print >= 10:
+            last_progress_print = now
+            print(f"  [reduce progress] at finding {i}/{len(findings)}: {f['position']} "
+                  f"({f['turn']}), {len(f['tied_moves'])}-way tie "
+                  f"({len(skipped)} skipped on timeout so far)", flush=True)
 
-        root = (f['position'], f['turn'])
-        moves = sorted(f['tied_moves'])
-        branch_segments = {}
-        for mv in moves:
-            try:
-                child = (apply_move_general(f['position'], mv), child_turn(mv))
-            except AmbiguousMoveError:
-                branch_segments[mv] = (None, 'ambiguous')
-                continue
-            states, kind = get_forced_segment(child, db)
-            branch_segments[mv] = (states, kind)
+        finding_start = time.time()
 
-            if kind == 'tie':
-                endpoint = states[-1]
-                cendpoint = (canonical_form_general(endpoint[0]), endpoint[1])
-                if cendpoint in canon_root_to_idx and canon_root_to_idx[cendpoint] != i:
-                    subsumption_edges.append((i, mv, canon_root_to_idx[cendpoint]))
-
-        # Union-find over this finding's OWN moves, grouping any pair
-        # related by a single consistent transform across their full
-        # segments -- genuine mirror-image duplicates, safe to collapse.
-        parent = {mv: mv for mv in moves}
-
-        def find(x):
-            while parent[x] != x:
-                parent[x] = parent[parent[x]]
-                x = parent[x]
-            return x
-
-        def union(a, b):
-            ra, rb = find(a), find(b)
-            if ra != rb:
-                parent[ra] = rb
-
-        for a_idx in range(len(moves)):
-            for b_idx in range(a_idx + 1, len(moves)):
-                mv_a, mv_b = moves[a_idx], moves[b_idx]
-                states_a, kind_a = branch_segments[mv_a]
-                states_b, kind_b = branch_segments[mv_b]
-                if states_a is None or states_b is None:
+        if max_seconds_per_finding:
+            signal.alarm(max_seconds_per_finding)
+        try:
+            root = (f['position'], f['turn'])
+            moves = sorted(f['tied_moves'])
+            branch_segments = {}
+            for mv in moves:
+                try:
+                    child = (apply_move_general(f['position'], mv), child_turn(mv))
+                except AmbiguousMoveError:
+                    branch_segments[mv] = (None, 'ambiguous')
                     continue
-                t = find_consistent_transform(states_a, states_b)
-                if t is not None:
-                    union(mv_a, mv_b)
+                states, kind = get_forced_segment(child, db)
+                branch_segments[mv] = (states, kind)
 
-        groups = defaultdict(list)
-        for mv in moves:
-            groups[find(mv)].append(mv)
+                if kind == 'tie':
+                    endpoint = states[-1]
+                    cendpoint = (canonical_form_general(endpoint[0]), endpoint[1])
+                    if cendpoint in canon_root_to_idx and canon_root_to_idx[cendpoint] != i:
+                        subsumption_edges.append((i, mv, canon_root_to_idx[cendpoint]))
 
-        results.append({
-            'position': f['position'], 'turn': f['turn'],
-            'raw_branch_count': len(moves),
-            'irreducible_branch_count': len(groups),
-            'branch_groups': list(groups.values()),
-        })
+            # Union-find over this finding's OWN moves, grouping any pair
+            # related by a single consistent transform across their full
+            # segments -- genuine mirror-image duplicates, safe to collapse.
+            parent = {mv: mv for mv in moves}
 
-    return results, subsumption_edges
+            def find(x):
+                while parent[x] != x:
+                    parent[x] = parent[parent[x]]
+                    x = parent[x]
+                return x
+
+            def union(a, b):
+                ra, rb = find(a), find(b)
+                if ra != rb:
+                    parent[ra] = rb
+
+            for a_idx in range(len(moves)):
+                for b_idx in range(a_idx + 1, len(moves)):
+                    mv_a, mv_b = moves[a_idx], moves[b_idx]
+                    states_a, kind_a = branch_segments[mv_a]
+                    states_b, kind_b = branch_segments[mv_b]
+                    if states_a is None or states_b is None:
+                        continue
+                    t = find_consistent_transform(states_a, states_b)
+                    if t is not None:
+                        union(mv_a, mv_b)
+
+            groups = defaultdict(list)
+            for mv in moves:
+                groups[find(mv)].append(mv)
+
+            results.append({
+                'position': f['position'], 'turn': f['turn'],
+                'raw_branch_count': len(moves),
+                'irreducible_branch_count': len(groups),
+                'branch_groups': list(groups.values()),
+            })
+        except _FindingTimeout:
+            print(f"  [TIMEOUT] finding {i} ({f['position']}, {f['turn']}, "
+                  f"{len(f['tied_moves'])} branches) exceeded {max_seconds_per_finding}s -- "
+                  f"skipped, not fully analyzed", flush=True)
+            skipped.append((i, f['position'], f['turn']))
+            results.append({
+                'position': f['position'], 'turn': f['turn'],
+                'raw_branch_count': len(f['tied_moves']),
+                'irreducible_branch_count': None,
+                'branch_groups': None,
+            })
+        finally:
+            if max_seconds_per_finding:
+                signal.alarm(0)
+
+        finding_elapsed = time.time() - finding_start
+
+        # Checkpointed here, after finding i's processing has fully
+        # completed either way (including the timeout path above) --
+        # next_index is always i+1, so a resume never redoes a finding
+        # already reflected in results/subsumption_edges. See docstring
+        # for why this single call site replaced the earlier
+        # before-processing one once a second trigger was added.
+        checkpoint_reason = None
+        if checkpoint_path:
+            now = time.time()
+            if now - last_checkpoint_time >= 60:
+                checkpoint_reason = "60s since last checkpoint"
+            elif (i + 1) - last_checkpoint_count >= checkpoint_every_findings:
+                checkpoint_reason = f"{checkpoint_every_findings} findings completed"
+            elif finding_elapsed >= slow_finding_checkpoint_seconds:
+                checkpoint_reason = f"this finding alone took {finding_elapsed:.1f}s"
+
+        if checkpoint_reason:
+            last_checkpoint_time = time.time()
+            last_checkpoint_count = i + 1
+            _save_checkpoint({'results': results, 'subsumption_edges': subsumption_edges,
+                               'skipped': skipped, 'next_index': i + 1}, checkpoint_path)
+            print(f"  [checkpoint] saved after finding {i + 1}/{len(findings)} "
+                  f"({checkpoint_reason})", flush=True)
+
+    return results, subsumption_edges, skipped
 
 
 # ============================================================================
@@ -1604,18 +1717,43 @@ def cmd_reduce(args):
     print(f"Loading {args.findings_csv}...")
     findings = load_findings(args.findings_csv)
     print(f"  Loaded {len(findings)} independent findings")
+
+    if args.retry_skipped:
+        print(f"Filtering to only the findings listed in {args.retry_skipped}...")
+        retry_keys = set()
+        with open(args.retry_skipped, encoding='utf-8') as f:
+            for row in csv.DictReader(f):
+                retry_keys.add((row['Position'], row['Turn']))
+        findings = [f for f in findings if (f['position'], f['turn']) in retry_keys]
+        print(f"  Filtered down to {len(findings)} findings (of {len(retry_keys)} listed -- "
+              f"a mismatch here would mean --retry-skipped came from a different findings_csv "
+              f"than the one just loaded)")
+        if len(findings) != len(retry_keys):
+            print(f"  WARNING: {len(retry_keys) - len(findings)} listed positions were not found "
+                  f"in this findings_csv -- double-check both files came from the same run.")
+
     print(f"Loading {args.db_path}...")
     db = load_db(args.db_path)
     print(f"  Loaded {len(db)} positions")
 
-    branch_checkpoint = args.checkpoint_path or (args.findings_csv + '.reduce_checkpoint.pkl')
-    results, subsumption_edges = analyze_reducibility(findings, db, checkpoint_path=branch_checkpoint)
+    default_checkpoint_suffix = '.retry_checkpoint.pkl' if args.retry_skipped else '.reduce_checkpoint.pkl'
+    branch_checkpoint = args.checkpoint_path or (args.findings_csv + default_checkpoint_suffix)
+    results, subsumption_edges, skipped = analyze_reducibility(
+        findings, db, checkpoint_path=branch_checkpoint,
+        max_seconds_per_finding=args.max_seconds_per_finding,
+        checkpoint_every_findings=args.checkpoint_every_findings,
+        slow_finding_checkpoint_seconds=args.slow_finding_checkpoint_seconds)
     if os.path.exists(branch_checkpoint):
         os.remove(branch_checkpoint)
 
-    total_raw = sum(r['raw_branch_count'] for r in results)
-    total_irreducible = sum(r['irreducible_branch_count'] for r in results)
-    collapsed_findings = [r for r in results if r['irreducible_branch_count'] < r['raw_branch_count']]
+    # Timed-out findings have irreducible_branch_count=None -- excluded
+    # from the numeric aggregates below rather than crashing on them or
+    # silently treating None as 0, since neither would be honest about
+    # what "not fully analyzed" actually means.
+    analyzed = [r for r in results if r['irreducible_branch_count'] is not None]
+    total_raw = sum(r['raw_branch_count'] for r in analyzed)
+    total_irreducible = sum(r['irreducible_branch_count'] for r in analyzed)
+    collapsed_findings = [r for r in analyzed if r['irreducible_branch_count'] < r['raw_branch_count']]
 
     os.makedirs(args.out_dir, exist_ok=True)
 
@@ -1623,9 +1761,18 @@ def cmd_reduce(args):
         w = csv.writer(f)
         w.writerow(['Position', 'Turn', 'RawBranchCount', 'IrreducibleBranchCount', 'BranchGroups'])
         for r in results:
+            if r['irreducible_branch_count'] is None:
+                w.writerow([r['position'], r['turn'], r['raw_branch_count'], 'TIMED_OUT', ''])
+                continue
             groups_str = "|".join(";".join(sorted(g)) for g in r['branch_groups'])
             w.writerow([r['position'], r['turn'], r['raw_branch_count'],
                         r['irreducible_branch_count'], groups_str])
+
+    with open(os.path.join(args.out_dir, 'skipped_findings.csv'), 'w', newline='', encoding='utf-8') as f:
+        w = csv.writer(f)
+        w.writerow(['Index', 'Position', 'Turn'])
+        for i, pos, turn in skipped:
+            w.writerow([i, pos, turn])
 
     with open(os.path.join(args.out_dir, 'subsumption_edges.csv'), 'w', newline='', encoding='utf-8') as f:
         w = csv.writer(f)
@@ -1640,8 +1787,9 @@ def cmd_reduce(args):
     print(f"\n{'='*70}")
     print("REDUCIBILITY RESULTS (tied positions only -- see below for the full landscape)")
     print(f"{'='*70}")
-    print(f"Findings analyzed: {len(findings)}")
-    print(f"Raw root-level tied branches, summed across all findings: {total_raw}")
+    print(f"Findings analyzed: {len(analyzed)} / {len(findings)} "
+          f"({len(skipped)} skipped on time budget -- see skipped_findings.csv)")
+    print(f"Raw root-level tied branches, summed across analyzed findings: {total_raw}")
     print(f"Irreducible branch-groups after symmetry collapse: {total_irreducible}")
     print(f"Findings whose own branches collapsed (genuine mirror-image duplicates found): "
           f"{len(collapsed_findings)}")
@@ -1650,6 +1798,7 @@ def cmd_reduce(args):
     print(f"Findings never reached by another finding's branch (roots of their own subsumption "
           f"chain): {len(root_findings)} / {len(findings)}")
     print(f"\nWrote per-finding branch reduction to {args.out_dir}/branch_reduction.csv")
+    print(f"Wrote skipped/timed-out findings to {args.out_dir}/skipped_findings.csv")
     print(f"Wrote subsumption chain edges to {args.out_dir}/subsumption_edges.csv")
     print(f"\nNOTE: subsumption edges are reported, not collapsed away -- a finding whose "
           f"continuation leads into another already-listed finding is still a real, distinct "
@@ -1657,7 +1806,12 @@ def cmd_reduce(args):
           f"own branches are collapsed. See this file's module comment above analyze_reducibility "
           f"for why these are handled differently.")
 
-    if args.skip_full_landscape:
+    if args.skip_full_landscape or args.retry_skipped:
+        if args.retry_skipped and not args.skip_full_landscape:
+            print(f"\n(Skipping the full-landscape scan automatically -- it covers the whole "
+                  f"database regardless of which findings were passed in, so it has nothing "
+                  f"specific to do with a --retry-skipped subset. Run it as its own, separate "
+                  f"invocation if you want it.)")
         return
 
     print(f"\n{'='*70}")
@@ -1774,14 +1928,44 @@ def main():
                                           "(or families-stage unique_findings.csv)")
     p4.add_argument('db_path', help="The completed database this findings CSV was derived from")
     p4.add_argument('--out-dir', default='general_reduction')
+    p4.add_argument('--retry-skipped', metavar='SKIPPED_CSV', default=None,
+                     help="Re-analyze ONLY the findings listed in a previous run's "
+                          "skipped_findings.csv, instead of the full findings_csv. Intended to be "
+                          "combined with --max-seconds-per-finding 0 (or a much larger number) -- "
+                          "a handful of genuinely slow findings can be given as much time as they "
+                          "actually need once they're not also blocking the other few hundred "
+                          "thousand ordinary ones. Must be run against the SAME findings_csv the "
+                          "skipped list came from.")
+    p4.add_argument('--max-seconds-per-finding', type=int, default=60,
+                     help="Hard wall-clock budget (seconds) for analyzing any single finding's "
+                          "own branches (default 60; 0 disables entirely). Per-finding cost here "
+                          "isn't uniform the way classify's is -- a 2-way tie sitting at the start "
+                          "of a very long forced line can cost far more than a wide tie that "
+                          "resolves quickly, and this compounds badly under real memory pressure "
+                          "on a large database. A finding that hits the budget is recorded as "
+                          "genuinely unanalyzed (see skipped_findings.csv), not silently guessed "
+                          "at, and the run continues past it rather than blocking indefinitely.")
     p4.add_argument('--checkpoint-path', default=None,
                      help="Checkpoint path for the tie-branch reduction phase (default: "
-                          "<findings_csv>.reduce_checkpoint.pkl). Saved every 60s, resumed "
-                          "automatically if present, deleted only on full success -- same "
-                          "convention as classify/families. NOTE: this only helps if the process "
-                          "gets far enough to start this phase at all; it does nothing for an "
-                          "interruption during the initial database load itself, which is paid "
-                          "in full on every resume regardless of any checkpoint.")
+                          "<findings_csv>.reduce_checkpoint.pkl). Written after every finding's "
+                          "processing fully completes, resumed automatically if present, deleted "
+                          "only on full success -- same convention as classify/families. NOTE: "
+                          "this only helps if the process gets far enough to start this phase at "
+                          "all; it does nothing for an interruption during the initial database "
+                          "load itself, which is paid in full on every resume regardless of any "
+                          "checkpoint.")
+    p4.add_argument('--checkpoint-every-findings', type=int, default=200,
+                     help="Force a checkpoint save after this many findings have completed, "
+                          "regardless of elapsed time (default 200). Guarantees a predictable "
+                          "save cadence even if every single finding happens to finish just under "
+                          "the 60s time-based trigger -- something the time trigger alone could "
+                          "never catch, since it would just keep resetting.")
+    p4.add_argument('--slow-finding-checkpoint-seconds', type=float, default=5.0,
+                     help="If a single finding's own processing takes at least this many seconds "
+                          "(default 5.0), checkpoint immediately right after it completes, rather "
+                          "than waiting for the next scheduled time- or count-based save. Exists "
+                          "specifically so an expensive finding's hard-won result is secured the "
+                          "moment it's available, not lost to a kill shortly afterward.")
     p4.add_argument('--checkpoint-path-landscape', default=None,
                      help="Checkpoint path for the full-landscape scan phase (default: "
                           "<db_path>.landscape_checkpoint.pkl). Same 60s/resume/delete-on-success "

@@ -81,6 +81,12 @@ python3 run_full_sweep.py material_dark.txt --db material_perfect_play.db --solv
 
 **This can be safely stopped (Ctrl+C) and resumed at any time** by re-running the exact same command (minus `--fresh`) — already-proven work (both wins and confirmed draws) is never redone.
 
+**New: `--preload-from <file>` (repeatable, solver flag, not yet wired into `run_full_sweep.py`) seeds a run with an already-completed, separately-solved *material's* database** — not the same material's own resume file, a genuinely different one. Sound whenever the material being swept can reduce, via capture or promotion, into that other material's position space: e.g. `general_solver --full-dag --positions kbpvk_seeds.txt --db kbpvk_perfect_play.db --fresh --preload-from kqvk_perfect_play.db --preload-from kbnvk_perfect_play.db --preload-from kbqvk_perfect_play.db` (repeat once per reduced material — for KBPvK specifically, that's KQvK, KBvK, KPvK, KBQvK, KBNvK, KNvK, and KBRvK under `--full-promotion`). Every position the sweep's own discovery reaches that's already proven in one of those files is trusted and sealed immediately, never re-expanded — built on the exact same underlying mechanism as same-material resume, just applied across materials instead of across runs of one.
+
+Verified directly, not just argued sound: feeding a single already-solved KQvK position back in as a fresh run's own root, with `--preload-from` pointing at that material's completed database, sealed it immediately and found zero new positions to discover, versus a full 372,064-position rediscovery and 21 classification passes without the flag. Also includes a hard safety check — if two preload sources disagree on a shared position's value, the run refuses with the exact mismatched values shown, rather than silently trusting whichever was loaded last; tested directly with a deliberately corrupted second source, confirmed to trigger correctly. That check can only ever catch a genuine disagreement *between* sources, though — a single, uncontested wrong source has nothing to conflict with and will be accepted; a real, honest limit, not a gap in the check.
+
+**Not yet usable through `run_full_sweep.py`**: checked directly against this project's current sweep wrapper — it builds its solver command explicitly (`--full-dag`, `--positions`, `--db`, optionally `--max-nodes`/`--fresh`) with no passthrough for other flags, so `--preload-from` currently only works via direct `general_solver` invocation (§2 below), not a full, multi-batch sweep. Adding passthrough support to the wrapper is a small, separate task, not done as part of this.
+
 ### Step 3 — (Optional but recommended) Validate against Syzygy
 
 ```bash
@@ -221,7 +227,7 @@ python3 generate_general_seed_positions.py --white Q --out quick_seeds.txt --num
 `positions_file` (positional) · `--db FILE` (required) · `--solver PATH` (required) · `--chunk-size N` (default 200,000) · `--max-nodes N` · `--tmp-dir DIR` (default `.sweep_batches`) · `--fresh`
 
 **`general_solver`** (the compiled C++ binary)
-`--full-dag` · `--positions FILE` · `--db FILE` · `--fresh` · `--max-nodes N`
+`--full-dag` · `--positions FILE` · `--db FILE` · `--fresh` · `--max-nodes N` · `--full-promotion` · `--preload-from FILE` (repeatable, new — see §1 Step 2)
 
 **`validate_general_syzygy.py`**
 `db_path` (positional) · `--syzygy-dir DIR` (required) · `--sample N` · `--out-mismatches FILE` (default `syzygy_mismatches.csv`)
@@ -264,6 +270,7 @@ That ceiling is about what the *data structure* can represent, not what's practi
 - **A checkpointing regression happened on Phase 2, was caught, and is now fixed** — an earlier version shipped this phase with no checkpointing at all, reasoned from a fast run on a small test database that didn't generalize to real, memory-constrained conditions. Both of Phase 2's passes now checkpoint properly (§1 Step 6), verified with genuine abrupt-kill tests. If a version predating this fix is in use, there is no way to resume this phase after an interruption — upgrade before running it at real scale.
 - **The exact same checkpoint-resume off-by-one was found and fixed three separate times** across different functions in this file, worth knowing if extending any of this code further: a checkpoint saved at position K (before K's own work for that position completes) must be resumed with a strictly-less-than comparison, not less-than-or-equal — otherwise position K's own contribution is silently skipped forever on resume. Each occurrence was caught by an abrupt-kill test comparing the full resumed result against a fresh, uninterrupted run — a fresh-run comparison alone was not enough to catch it once out of three times, since simply letting an interrupted run continue past its own checkpoint save masks the bug entirely.
 - **`families --render-trees` used to crash outright** — a real, separate, now-fixed bug found while replacing Phase 2: `verify_and_count`, the function producing the "EXHAUSTIVE complete perfect-play paths... verified" line in every rendered tree, was missing its own function definition entirely, sitting as unreachable code after an unrelated function's `return`. Any attempt to render a tree would have hit a `NameError`. Restored and confirmed directly by actually running `--render-trees` and checking the output matches the expected format, not just checking the file parses.
+- **New `--preload-from` is a solver flag only, not a sweep-wrapper one** — `run_full_sweep.py` builds its solver command explicitly with no passthrough for extra flags (checked directly, not assumed), so cross-material preloading currently only works via direct `general_solver` invocation, not through a full batch sweep. Don't expect it to be picked up by adding it to a `run_full_sweep.py` command line — it will just be silently absent from what actually gets passed to the solver.
 
 ---
 

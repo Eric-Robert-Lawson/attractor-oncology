@@ -98,9 +98,9 @@ currently unknown, not merely unstated.
 
 ---
 
-## 4. Scoped generation — three genuinely different things worth naming separately
+## 4. Scoped generation — four genuinely different things worth naming separately
 
-The phrase "generate only what you need" covers three distinct mechanisms
+The phrase "generate only what you need" covers four distinct mechanisms
 with very different levels of readiness. Conflating them would overstate
 what's currently possible.
 
@@ -113,7 +113,7 @@ an existing capability of the current pipeline (`generate_general_seed_positions
 for a small, targeted seed set, vs. `generate_exhaustive_positions.py` for
 full combinatorial coverage).
 
-### 4b. Scoped querying of an already-solved landscape (proposed, buildable, not built)
+### 4b. Scoped querying of an already-solved landscape (proposed, buildable, not built — but ordinary engineering, not an open research question)
 Once a landscape has been *fully* solved once — on hardware that can afford
 it — and its origins' sequences have been extracted and stored (§3), a
 resource-constrained machine could answer "what's the perfect-play
@@ -121,27 +121,169 @@ continuation from this specific position" by looking up which origin it
 belongs to and replaying only that origin's stored sequence, without ever
 loading the full per-position database. This is analogous to how real
 tablebase implementations load and decompress only the relevant on-disk
-chunk for a query rather than the whole table. This requires building: the
-origin-sequence storage format, and a lookup mechanism mapping an arbitrary
-query position to its origin. Neither exists yet.
+chunk for a query rather than the whole table.
 
-### 4c. Using shape/origin knowledge to prune a *new* landscape's construction (proposed, genuinely unresolved)
-The most ambitious version: using an already-known catalog to decide, during
-a *fresh* construction, which branches don't need to be discovered or
-classified at all because they're already known not to matter. This is
-meaningfully different from 4a and 4b, and has a real, unresolved tension at
-its core worth stating plainly rather than glossing over: `classify()`'s own
-fixed-point process is what *determines* a position's true value and hence
-which shape it belongs to — knowing "which shape a position will turn out
-to belong to" *before* running that process is close to circular. Making
-this work would require some independent way to predict shape-relevance
-ahead of full classification, which is not solved by anything built so far.
-This is the part of the idea that is genuinely novel and genuinely
-unresolved, not merely unimplemented.
+Worth being precise about what's trivial here versus what actually needs
+building, since these were conflated in an earlier version of this
+document. Determining *which material* an arbitrary position belongs to is
+not a problem at all — it's read directly off the piece list on the board,
+no computation required. What does need building is a `position →
+(origin_id, ply_offset)` index for that material, constructed once, directly
+from its own already-computed classify() output — `resolve_reachable_shapes`
+already produces almost exactly this data during its own pass; recording it
+keyed for direct lookup rather than iterated during aggregation is a
+straightforward extension, not a new capability. One real wrinkle: a
+non-origin position can in principle have more than one forced-in parent,
+so it may belong to more than one origin's chain simultaneously — the index
+needs to account for a set of (origin, offset) pairs per position, not
+assume a clean one-to-one mapping.
+
+The actual open question, once this index exists, is empirical, not
+"how": is a `(origin_id, offset)` pair per position, plus each origin's
+sequence stored once, meaningfully smaller in total than the raw
+per-position table it replaces? That's measurable directly and hasn't been
+measured yet — it isn't an unsolved design problem.
+
+### 4c. Reusing already-solved, reduced materials during a larger material's construction (built and verified, not just grounded in theory)
+
+This is different from 4a and 4b in kind, not just degree — it is about a
+*larger* material's own construction reusing *already-independently-solved,
+smaller* materials that its own tree provably reduces into via capture or
+promotion. It does **not** involve predicting anything about an unrelated
+material, and it is **not** circular — the smaller material is solved
+completely on its own, with no dependency on the larger one, before the
+larger one ever needs it.
+
+**This is not an open question — the dependency is already known.** This
+project already identified, when discussing Syzygy validation, exactly
+which reduced materials KBPvK's own exhaustive tree touches: KBQvK and
+KBNvK (and KBRvK under `--full-promotion`) when the pawn promotes with the
+bishop still on the board; KQvK, KNvK, and KRvK when the bishop is captured
+either before or after promotion; KBvK and KPvK when one attacking piece is
+captured before the other does anything. Every one of these is a strictly
+smaller, independently solvable material — solving KBPvK never requires
+knowing anything about KBPvK to solve any of them first.
+
+**No longer just a theoretical mechanism — a real, working, tested CLI
+flag.** `general_solver` now takes `--preload-from <file>` (repeatable),
+seeding a run with an already-completed, separately-solved material's
+`.db` file, in addition to (not instead of) the normal same-material
+resume. Built directly on `pack_general_state`'s confirmed material-
+agnostic packing and `seed_from_preloaded`'s existing soundness — a proven
+fact's truth never depends on which run discovered it.
+
+Verified with a real, concrete, dramatic result, not just a design
+argument: fed a single already-solved KQvK position back in as a root for
+a fresh run. Without `--preload-from`, the run rediscovers the entire
+372,064-position graph and runs all 21 classification passes again. With
+`--preload-from` pointing at that same material's own completed database,
+the root is sealed immediately, discovery finds **zero** new positions,
+and classification completes in a single trivial pass, reporting exactly
+how many facts came pre-proven and how many re-verification passes were
+spent on them (zero). Same starting position, same engine, only the flag
+differs.
+
+Also built and verified: a hard safety check. `seed_from_preloaded`
+unconditionally overwrites on a matching key, which is fine if multiple
+preload sources agree and dangerous if they silently don't — so before
+trusting any cross-material file, its facts are checked against whatever
+this run already knows, and a genuine disagreement between two sources
+aborts the run with the exact mismatched values shown, rather than
+silently picking one. Tested both ways: a single, uncontested (deliberately
+corrupted) source was accepted, since there is nothing to disagree with — a
+real, honest limit of what this check can catch, not a bug — while feeding
+that same corrupted file *alongside* the correct one triggered the fatal
+error exactly as intended.
+
+**Not yet built: this flag isn't wired into `run_full_sweep.py`.** Checked
+directly — the sweep wrapper constructs its solver command explicitly
+(`--full-dag`, `--positions`, `--db`, optionally `--max-nodes`/`--fresh`)
+with no passthrough for arbitrary extra flags, so `--preload-from` is
+currently only usable by invoking `general_solver` directly (§2 of the
+workflow reference), not through a full, multi-batch sweep. Adding
+explicit `--preload-from` support to the sweep script is a small, separate
+piece of work, not done here.
+
+**Where shapes specifically would add value on top of what's built now,
+and where the real open work remains:** feeding the *entire* exported
+database of a reduced material works today, with nothing further needed,
+but the reduced material's own full database can itself be large — that's
+the real memory cost `--preload-from` pays today, holding each preloaded
+material's complete table in memory during the larger material's own run.
+The open, genuinely useful extension is using that reduced material's own
+*shape/origin catalog* — not its raw per-position table — to import only
+the origins actually reachable given the larger material's specific
+context (e.g., only the KBQvK shapes whose governing bishop square is
+consistent with wherever KBPvK's own bishop can actually be when a given
+promotion occurs), reconstructing exactly those via §3's origin-sequence
+mechanism rather than loading the reduced material's full table into
+memory at all. That filtering-and-reconstruction step is not built yet;
+feeding the full reduced-material database directly, which now works, is
+the version available today.
+
+### 4d. The recursive, whole-hierarchy version of 4c — the actual scale of what's being proposed
+
+4c described reusing *one* already-solved reduced material during *one*
+larger material's construction. The fuller claim is recursive, and worth
+stating at its actual scope rather than one level at a time: **no material
+anywhere in a dependency chain needs its full, raw per-position table
+stored, ever — only each material's own *complementary* set, the shapes and
+origins that are genuinely unique to it and not already covered by
+something simpler it reduces into.**
+
+Concretely for KBPvK: its own landscape splits into (a) positions where the
+pawn is still a pawn and the bishop is still present — genuinely new
+territory no simpler material has — and (b) positions that are *already,
+literally* KQvK, KBNvK, KBQvK, KNvK, KRvK, KBvK, or KPvK positions, reached
+via a capture or promotion. Category (b) is not KBPvK data at all — it's a
+reference into a simpler material's own, separately-stored catalog. The
+genuinely-new-to-KBPvK complementary set is necessarily smaller than the
+origin fraction measured on KQvK alone (§1), because a real portion of what
+a naive, undifferentiated computation would count as "KBPvK's own origins"
+actually belong to one of those simpler materials' catalogs instead.
+
+Applied recursively down the entire dependency graph — KBPvK's own
+complement, plus KBQvK's own complement (everything in KBQvK not already
+covered by KQvK), plus KQvK's own complement (its base case), and so on for
+every branch — the **total** storage across the whole hierarchy is the sum
+of each material's own non-reducible remainder, not the sum of everyone's
+complete table. This is a materially different shape of solution than
+storing each material's table whole and cross-referencing only at probe
+time, which is closer to how Syzygy appears to operate, to the best
+understanding here — worth restating as a real, acknowledged uncertainty
+about Syzygy's exact internals rather than a confirmed comparison.
+
+**Why this should matter more, not less, at larger scale, and this is a
+real, checkable prediction rather than a hope:** as material complexity
+grows toward 7-piece territory, there are more distinct ways to capture or
+promote into some simpler, already-solved material, and the "still
+combining every piece at once" territory should shrink as a *proportion* of
+each material's own exponentially-growing position count. If that holds,
+the complementary-set approach doesn't just save a fixed amount of
+storage — its relative advantage over storing full tables at every level
+should *grow* with scale, which is exactly the regime where Syzygy's own
+storage costs already become the binding constraint. This is stated as a
+prediction to verify, not an established result — nothing here has measured
+whether the complementary fraction actually shrinks this way in practice.
+
+**The piece this entire recursive scheme depends on, restated precisely
+after an earlier version of this document overstated it:** every step
+above requires a `position → (origin, offset)` index for each simpler
+material, built once from that material's own already-computed classify()
+output (§4b). This is ordinary engineering, not an unsolved problem —
+identifying which material a position belongs to is trivial from its piece
+list, and building the index itself is a straightforward extension of data
+this pipeline already produces during `resolve_reachable_shapes`. What
+actually remains open is measurement, not method: is the resulting index,
+plus each origin's sequence stored once, meaningfully smaller in total than
+the raw per-position table it replaces — for KQvK, for KBQvK, and at
+whatever scale this gets pushed toward. That's the number nothing here has
+measured yet, and it's the one the whole recursive storage argument in this
+section actually rests on.
 
 ---
 
-## 5. What's genuinely novel here, and what has real precedent
+
 
 Stated honestly, since the distinction matters for evaluating this work
 correctly:
@@ -156,10 +298,26 @@ correctly:
   alone. This is the lens that surfaced real, non-obvious structure a
   distance-only analysis would never have found (the 88,410 escape-count
   violations; the shape/origin distinction itself).
-- Using a solved landscape's own derived structure to scope or prune the
-  *construction* of a related landscape (§4c): **appears genuinely
-  open** — not confirmed as prior art, but also not yet demonstrated
-  working here.
+- Reusing an already-solved, smaller material's results when constructing a
+  larger material that reduces into it (§4c): **has strong precedent** —
+  this is exactly how tablebase construction is normally done, building up
+  from smaller materials since captures only ever reduce material. Not a
+  novel idea on its own, though now actually built and verified here (the
+  `--preload-from` flag), not just argued to be sound by analogy.
+- Using that smaller material's *shape/origin catalog* specifically, rather
+  than its full per-position table, to import only the reachable-in-context
+  subset during that reuse (§4c's open extension): **appears genuinely
+  open** — not confirmed as prior art, and not yet built here either.
+- The recursive, whole-hierarchy version of this — no material anywhere in
+  a dependency chain needing its full table stored, only each one's own
+  non-reducible complement (§4d): **appears genuinely open, and is a
+  materially different shape of solution than storing each material's
+  table whole**, to the best understanding here of how Syzygy's own storage
+  operates — stated with real, acknowledged uncertainty about Syzygy's
+  exact internals, not as a confirmed comparison. The index each level
+  depends on (§4b) is ordinary engineering, not unsolved — what's actually
+  untested is whether it nets out smaller than the raw tables it would
+  replace, at any real scale.
 
 ---
 
@@ -188,6 +346,18 @@ is right:
 
 ## 7. Open questions, stated as questions
 
+- **The central one (§4d): once a `position → (origin, offset)` index is
+  built for a material — an ordinary engineering task, not an open one —
+  is it, plus each origin's sequence stored once, actually meaningfully
+  smaller than the raw per-position table it replaces?** This is
+  measurable directly and hasn't been measured yet for any material here;
+  every claim in §4b/4c/4d about real storage savings depends on this
+  coming back favorable, not on solving some unsolved mechanism.
+- Does the fraction of a material's landscape that's genuinely
+  non-reducible (§4d) actually shrink as a proportion of total size at
+  larger piece counts, as predicted, or does it stay roughly constant or
+  even grow? This determines whether the recursive storage scheme's
+  advantage genuinely compounds toward 7-piece scale or stays fixed.
 - What fraction of KBPvK's landscape is origins vs. non-origin? (KQvK's
   76.6% may not generalize — richer piece mobility could push this higher
   or lower; no confident prediction exists yet.)
@@ -195,10 +365,13 @@ is right:
   symmetry? This is the number that determines whether §3's proposed
   extension delivers meaningful compression on the hard core, or only on
   the non-origin fraction.
-- Is there a principled way to predict shape-relevance ahead of full
-  classification (§4c), or does scoped pruning of a *new* construction
-  remain fundamentally dependent on having solved the related landscape
-  first?
+- For §4c's open extension specifically: given a reduced material's shape
+  catalog, what's the actual mechanism for determining which of its origins
+  are reachable-in-context from the larger material (e.g., which KBQvK
+  bishop-square origins are even possible given KBPvK's own bishop's
+  reachable squares at the moment of promotion), and does filtering to that
+  subset before reconstruction meaningfully reduce memory versus `--preload-from`'s
+  now-built and verified full-database approach?
 - Does the escape-count-as-second-dimension lens generalize usefully to
   materials with more than one non-king attacking piece in ways not yet
   explored here, or does its value concentrate specifically in materials

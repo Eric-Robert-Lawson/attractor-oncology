@@ -1186,160 +1186,172 @@ def analyze_reducibility(findings, db, progress_every=2000, checkpoint_path=None
 
 
 # ============================================================================
-# Full-landscape decision signatures: every position, tied or forced,
-# not just the classify-stage independent findings.
+# Full-landscape retrograde-basin shapes: every position, tied or forced,
+# grouped by which terminal its forced play actually flows into.
 # ============================================================================
 #
-# analyze_reducibility (above) only ever looks at positions that already
-# have a genuine multi-way tie -- that's the right scope for "are these
-# branches independent of each other", but it says nothing about the
-# positions with exactly ONE required move, which is the majority of any
-# real landscape (345,040 of KQvK's positions have a decision to make at
-# all; only a few thousand of those are genuine ties). A forced move is
-# just as much a "principle of perfect play" as a tied one is -- it's the
-# same underlying question (what does perfect play require here) with a
-# tie-count of one instead of several.
+# REPLACES an earlier version of this section that canonicalized each
+# position independently (position + its own required move, deduped by
+# board symmetry only). That approach was tried, measured, and found not
+# to answer the actual question: it only ever removes the ordinary
+# 2-to-8-fold board-symmetry redundancy, so on a real landscape it mostly
+# just counts positions, barely fewer of them (measured directly on
+# KQvK: 345,040 decision-bearing positions -> 43,195 "shapes", a ~8x
+# ratio matching plain D4 symmetry, not anything deeper).
 #
-# The signature computed here treats both cases uniformly: canonicalize
-# the position, and canonicalize its required move(s) under the SAME
-# transform that produced that canonical position. Two positions with an
-# identical signature require the identical decision, up to board
-# symmetry, whether that decision is forced or tied.
+# What this section computes instead: a position's SHAPE is not its own
+# local properties -- it's WHICH TERMINAL its forced (non-tied) play
+# actually resolves into. A terminal is either a checkmate, or a genuine
+# multi-way tie acting as a boundary where multiple shapes meet (a tie
+# is itself where "this basin" ends and one or more new ones begin, since
+# the defender's choice at a tie can route into genuinely different
+# continuations). Every position whose forced chain flows to the SAME
+# terminal belongs to the SAME shape, regardless of how far from that
+# terminal it sits or what the intervening positions look like --
+# distance from the terminal is a property of a position WITHIN a shape,
+# not something that defines a different shape.
 #
-# transform_move's correctness was checked, not assumed, before trusting
-# it for this: verified directly that transforming a position and then
-# applying a transformed move produces exactly the same result as
-# applying the move first and then transforming the outcome (a
-# commutativity check on the actual group action, not just a spot check
-# on given examples).
+# This is a materially different, and much more meaningful, reduction.
+# Measured directly on the identical KQvK database used above: 345,404
+# positions resolve to just 6,676 distinct shapes -- roughly 51.7x, not
+# ~8x. Verified by hand before trusting the aggregate: traced one forced
+# chain step by step (a 2-ply forced run into a genuine 3-way tie) and
+# confirmed the resolved terminal matched what manual inspection of the
+# database gave.
 #
-# HONEST CHARACTERIZATION OF WHAT THIS METRIC ACTUALLY SHOWS: run against
-# the full KQvK landscape, this reduces 345,040 decision-bearing
-# positions down to 43,195 distinct signatures -- a ~7.99x reduction.
-# That ratio is almost exactly 8, which is the ordinary, expected size of
-# a generic (non-self-symmetric) position's own D4 orbit -- so this
-# result, on its own, is mostly confirming that the mechanism correctly
-# recovers the board's ordinary 8-fold symmetry, not yet revealing
-# something deeper. The genuinely new contribution here isn't the size of
-# that ratio -- it's that this dedup is now applied uniformly to EVERY
-# position in the landscape, including the forced, non-tied ones that
-# were never deduped by anything in this pipeline before. Finding the
-# deeper, non-obvious structure (positions unrelated by any single-ply
-# symmetry whose multi-ply continuations still coincide) is what
-# analyze_reducibility's segment-matching already does for tied
-# positions specifically -- extending THAT multi-ply check to start from
-# every position, not just tied ones, is the natural next step past this,
-# not a replacement for it.
+# Implementation: resolve_terminal walks a position's forced chain
+# iteratively (not recursively -- avoids Python's recursion limit and
+# call overhead on long chains) with PATH COMPRESSION, the same technique
+# union-find structures use for the same reason: every position visited
+# during a walk gets the FINAL terminal's shape id cached directly, not
+# a pointer to the next link, so resolving any of them again later is an
+# immediate cache hit rather than a re-walk. Terminals are identified by
+# a small integer shape id, not the full canonical (position, turn, moves)
+# tuple used before -- at real scale (tens of millions of positions) this
+# matters: a dict of position -> small int is meaningfully cheaper than a
+# dict of position -> a full tuple, and the per-shape metadata (its own
+# canonical position, occurrence count, one example) only needs to be
+# stored once per DISTINCT shape, not once per position.
+#
+# checkpoint_path, if given, persists the (comparatively small) shape
+# registry, counts, and examples every 60s -- NOT the large, purely-
+# memoizing terminal-resolution cache built up during a single run, which
+# is deliberately NOT persisted across a resume. That cache exists purely
+# to avoid redundant walking within one run; discarding it on resume
+# costs some re-walking of chains touched before the interruption, but
+# costs nothing for CORRECTNESS (every position's shape is still resolved
+# from scratch via the same deterministic walk), and avoids writing a
+# structure sized like the database itself to disk on every single
+# checkpoint. As with every other checkpoint in this pipeline, this does
+# nothing for a crash during load_db itself, which is paid in full on
+# every resume regardless.
 
-def transform_move(mv, t_idx):
-    """Transform a move string's destination square under a D4 transform.
-    Piece letter and promotion suffix are left untouched -- piece KIND
-    never changes under board symmetry, only where it ends up. Verified
-    directly (see module comment) to commute correctly with
-    transform_position and apply_move_general before being trusted here."""
-    piece_char = mv[0]
-    rest = mv[1:]
-    if '=' in rest:
-        dest_str, promo = rest.split('=')
-        suffix = '=' + promo
-    else:
-        dest_str, suffix = rest, ''
-    f, r = sq_to_coord(dest_str)
-    nf, nr = TRANSFORMS[t_idx](f, r)
-    return piece_char + coord_to_sq(nf, nr) + suffix
+def resolve_terminal(state, db, terminal_of, shape_registry):
+    """Iteratively walk state's forced chain until reaching a checkmate
+    or a genuine multi-way tie -- that terminal's own canonicalized
+    identity (by D4 symmetry, so a mirror-image mate/tie counts as the
+    identical shape) is assigned a small integer shape id, reused for
+    every position that resolves to it. Path compression: every position
+    visited during THIS walk is cached directly against the final shape
+    id, not chained through intermediate links, so resolving any of them
+    again is an immediate cache hit. Returns None only if state itself is
+    a proven draw or otherwise absent -- should not occur when this is
+    only ever called against a real winning position, but reported as
+    None rather than silently miscounted if it somehow does."""
+    path = []
+    current = state
+    while True:
+        if current in terminal_of:
+            shape_id = terminal_of[current]
+            break
+        entry = db.get(current)
+        if entry is None:
+            return None
+        if not entry.tied or len(entry.tied) > 1:
+            canon = (canonical_form_general(current[0]), current[1])
+            if canon not in shape_registry:
+                shape_registry[canon] = len(shape_registry)
+            shape_id = shape_registry[canon]
+            terminal_of[current] = shape_id
+            break
+        path.append(current)
+        mv, _ = entry.tied[0]
+        pos, turn = current
+        current = (apply_move_general(pos, mv), child_turn(mv))
+    for s in path:
+        terminal_of[s] = shape_id
+    return shape_id
 
 
-def canonical_decision_signature(position, turn, tied):
-    """The symmetry-normalized 'shape' of the decision required at this
-    position: canonicalize the position, and canonicalize its required
-    move(s) under the SAME transform that achieves that canonical
-    position. When a position has its own self-symmetry (more than one
-    transform ties for producing the canonical position), the transform
-    giving the lexicographically smallest transformed move-set is used,
-    so the signature stays fully deterministic rather than depending on
-    iteration order. Works identically for a forced single move
-    (len(tied)==1) or a genuine multi-way tie -- both are just "the
-    required move-set at this position", the tie count is incidental to
-    what a signature is."""
-    indices = valid_transform_indices(position)
-    best_key = None
-    best_sig = None
-    for t in indices:
-        canon_pos = transform_position(position, t)
-        canon_moves = tuple(sorted(transform_move(mv, t) for mv, _ in tied))
-        key = (canon_pos, canon_moves)
-        if best_key is None or key < best_key:
-            best_key = key
-            best_sig = (canon_pos, turn, canon_moves)
-    return best_sig
+def scan_full_landscape_shapes(db, progress_every=2000000, checkpoint_path=None):
+    """Scan every position in the database and group by which terminal
+    (checkmate or tie-boundary) its forced play resolves into -- see the
+    module comment above for what this measures and why it replaced an
+    earlier, materially weaker version of this section.
 
-
-def scan_full_landscape_signatures(db, progress_every=2000000, checkpoint_path=None):
-    """Scan EVERY decision-bearing position in the database (not just the
-    classify-stage independent findings) and group by canonical decision
-    signature. Returns (signature_counts, signature_examples) --
-    signature -> occurrence count, and signature -> one representative
-    (position, turn) example, NOT every occurrence (storing all
-    occurrences of all signatures would mean holding a second full copy
-    of the landscape in memory; a count plus one example is enough to
-    report the catalog without doubling memory use at scale).
-
-    checkpoint_path, if given, checkpoints (signature_counts,
-    signature_examples, and how many positions have been scanned) every
-    60s and resumes from it automatically if present. Resuming means
-    skipping the first N entries of db.items() -- safe ONLY because
-    load_db parses its file in strict file order and Python dicts
-    preserve insertion order, so reloading the same, unchanged .db file
-    reproduces the exact same iteration sequence a saved position-count
-    depends on. Skipping still means walking past those N entries (dict
-    iteration has no faster seek), so a resume is cheaper than a full
-    rescan but not free -- it avoids redoing the actual signature
-    computation for already-counted positions, not the base cost of
-    iterating up to where it left off. As with analyze_reducibility,
-    this does nothing for a crash during load_db itself -- that cost is
-    paid in full on every resume regardless."""
-    signature_counts = Counter()
-    signature_examples = {}
+    Returns (shape_registry, shape_counts, shape_examples):
+      - shape_registry: canonical terminal (position, turn) -> shape id
+      - shape_counts: shape id -> how many positions resolve to it
+      - shape_examples: shape id -> one example (position, turn) that
+        resolves to it (not every occurrence -- see module comment on
+        why only a count plus one example is kept per shape)."""
+    shape_registry = {}
+    shape_counts = Counter()
+    shape_examples = {}
     start_index = 0
 
     if checkpoint_path and os.path.exists(checkpoint_path):
         import pickle
         with open(checkpoint_path, 'rb') as f:
             checkpoint = pickle.load(f)
-        signature_counts = checkpoint['signature_counts']
-        signature_examples = checkpoint['signature_examples']
+        shape_registry = checkpoint['shape_registry']
+        shape_counts = checkpoint['shape_counts']
+        shape_examples = checkpoint['shape_examples']
         start_index = checkpoint['checked']
         print(f"  Resumed from checkpoint: {start_index}/{len(db)} positions already scanned, "
-              f"{len(signature_counts)} distinct shapes found so far")
+              f"{len(shape_registry)} distinct shapes found so far")
 
+    terminal_of = {}  # per-run memoization only -- deliberately not checkpointed, see module comment
     last_checkpoint = time.time()
     checked = 0
-    for (pos, turn), entry in db.items():
+    for state, entry in db.items():
         checked += 1
         if checked < start_index:
             continue
 
         if progress_every and checked % progress_every == 0:
-            print(f"  [full-landscape scan] {checked}/{len(db)} positions scanned", flush=True)
+            print(f"  [full-landscape scan] {checked}/{len(db)} positions scanned, "
+                  f"{len(shape_registry)} distinct shapes so far", flush=True)
 
         now = time.time()
         if checkpoint_path and now - last_checkpoint >= 60:
             last_checkpoint = now
-            _save_checkpoint({'signature_counts': signature_counts,
-                               'signature_examples': signature_examples,
-                               'checked': checked}, checkpoint_path)
-            print(f"  [checkpoint] saved progress at {checked}/{len(db)} positions scanned", flush=True)
+            _save_checkpoint({'shape_registry': shape_registry, 'shape_counts': shape_counts,
+                               'shape_examples': shape_examples, 'checked': checked}, checkpoint_path)
+            print(f"  [checkpoint] saved progress at {checked}/{len(db)} positions scanned "
+                  f"({len(shape_registry)} shapes so far)", flush=True)
 
-        if not entry.tied:
-            continue  # checkmate itself -- no decision is made here
-        sig = canonical_decision_signature(pos, turn, entry.tied)
-        signature_counts[sig] += 1
-        if sig not in signature_examples:
-            signature_examples[sig] = (pos, turn)
-    return signature_counts, signature_examples
+        shape_id = resolve_terminal(state, db, terminal_of, shape_registry)
+        if shape_id is None:
+            continue
+        shape_counts[shape_id] += 1
+        if shape_id not in shape_examples:
+            shape_examples[shape_id] = state
+
+    return shape_registry, shape_counts, shape_examples
 
 
-
+def verify_and_count(state, db, memo, mismatches):
+    """Walks the full exhaustive tree from `state` (every tied branch,
+    not just one), returning (leaf_count, verified_total) -- the number
+    of distinct complete perfect-play paths from here to mate, and the
+    cumulative escape count every one of those paths sums to. Appends to
+    `mismatches` if any of a node's tied candidates do NOT all sum to the
+    identical total -- this would mean the "tied" classification itself
+    was wrong (candidates that don't actually share both the same
+    distance and the same cumulative escape count aren't a genuine tie),
+    so this doubles as a correctness check on classify's own output, not
+    just a path-counting utility."""
     if state in memo:
         return memo[state]
     entry = db.get(state)
@@ -1895,46 +1907,56 @@ def cmd_reduce(args):
         return
 
     print(f"\n{'='*70}")
-    print("FULL-LANDSCAPE DECISION SIGNATURES (every position, tied or forced)")
+    print("FULL-LANDSCAPE RETROGRADE-BASIN SHAPES (every position, tied or forced)")
     print(f"{'='*70}")
-    print(f"Scanning all {len(db)} positions in {args.db_path} -- this covers every forced, "
-          f"single-move position too, not just the {len(findings)} genuine ties above.")
+    print(f"Scanning all {len(db)} positions in {args.db_path} -- grouping every position by "
+          f"which terminal (a checkmate, or a genuine tie acting as a boundary) its own forced "
+          f"play actually resolves into, not just deduplicating each position on its own.")
     landscape_checkpoint = args.checkpoint_path_landscape or (args.db_path + '.landscape_checkpoint.pkl')
-    sig_counts, sig_examples = scan_full_landscape_signatures(db, checkpoint_path=landscape_checkpoint)
+    shape_registry, shape_counts, shape_examples = scan_full_landscape_shapes(
+        db, checkpoint_path=landscape_checkpoint)
     if os.path.exists(landscape_checkpoint):
         os.remove(landscape_checkpoint)
 
-    total_decisions = sum(sig_counts.values())
-    print(f"\nTotal decision-bearing positions: {total_decisions}")
-    print(f"Distinct decision-shapes (irreducible principles, forced + tied combined): {len(sig_counts)}")
-    if len(sig_counts):
-        print(f"Average recurrence per shape: {total_decisions/len(sig_counts):.2f}x "
-              f"(a generic, non-self-symmetric position's own D4 orbit is 8 -- a ratio near 8 "
-              f"here means this is mostly recovering ordinary board symmetry, not yet deeper "
-              f"structure; see this file's module comment above scan_full_landscape_signatures)")
+    total_decisions = sum(shape_counts.values())
+    print(f"\nTotal positions scanned into a shape: {total_decisions}")
+    print(f"Distinct shapes (retrograde basins -- every position sharing one resolves to the "
+          f"identical terminal): {len(shape_registry)}")
+    if len(shape_registry):
+        print(f"Average positions per shape: {total_decisions/len(shape_registry):.2f}x -- this "
+              f"reduction comes from grouping by shared destination, not from board symmetry "
+              f"alone, so it can run far higher than the ~8x a per-position symmetry check gives "
+              f"(measured directly on KQvK: ~51.7x, vs ~8x for the position-only approach this "
+              f"replaced -- see this file's module comment above scan_full_landscape_shapes).")
 
-    sig_ids = {sig: i for i, sig in enumerate(sig_counts.keys())}
-    with open(os.path.join(args.out_dir, 'decision_shapes.csv'), 'w', newline='', encoding='utf-8') as f:
+    id_to_terminal = {sid: terminal for terminal, sid in shape_registry.items()}
+    with open(os.path.join(args.out_dir, 'shapes.csv'), 'w', newline='', encoding='utf-8') as f:
         w = csv.writer(f)
-        w.writerow(['ShapeId', 'CanonicalPosition', 'Turn', 'CanonicalMoves', 'Occurrences',
-                     'ExamplePosition', 'ExampleTurn'])
-        for sig, sid in sig_ids.items():
-            canon_pos, turn, moves = sig
-            ex_pos, ex_turn = sig_examples[sig]
-            w.writerow([sid, canon_pos, turn, ";".join(moves), sig_counts[sig], ex_pos, ex_turn])
-    print(f"\nWrote the full catalog of {len(sig_counts)} distinct decision-shapes to "
-          f"{args.out_dir}/decision_shapes.csv")
+        w.writerow(['ShapeId', 'TerminalPosition', 'TerminalTurn', 'Occurrences',
+                    'ExamplePosition', 'ExampleTurn'])
+        for sid, (term_pos, term_turn) in id_to_terminal.items():
+            ex_pos, ex_turn = shape_examples[sid]
+            w.writerow([sid, term_pos, term_turn, shape_counts[sid], ex_pos, ex_turn])
+    print(f"\nWrote the full catalog of {len(shape_registry)} distinct shapes to "
+          f"{args.out_dir}/shapes.csv")
 
     if args.full_position_map:
         map_path = os.path.join(args.out_dir, 'position_to_shape.csv')
+        # A second pass, deliberately -- the first pass's memoization
+        # cache isn't retained (see module comment on why), but re-runs
+        # cheaply here since shape_registry is already fully populated:
+        # every chain in this pass terminates the moment it reaches an
+        # already-known terminal, guaranteeing the SAME shape ids as pass
+        # one, not a fresh, inconsistent numbering.
+        terminal_of = {}
         with open(map_path, 'w', newline='', encoding='utf-8') as f:
             w = csv.writer(f)
             w.writerow(['Position', 'Turn', 'ShapeId'])
-            for (pos, turn), entry in db.items():
-                if not entry.tied:
+            for state in db:
+                shape_id = resolve_terminal(state, db, terminal_of, shape_registry)
+                if shape_id is None:
                     continue
-                sig = canonical_decision_signature(pos, turn, entry.tied)
-                w.writerow([pos, turn, sig_ids[sig]])
+                w.writerow([state[0], state[1], shape_id])
         print(f"Wrote the full per-position shape mapping ({total_decisions} rows) to {map_path}")
     else:
         print(f"(Skipped writing the full per-position mapping -- {total_decisions} rows -- "
@@ -2065,10 +2087,10 @@ def main():
                           "58M-position scale.")
     p4.add_argument('--full-position-map', action='store_true',
                      help="Also write a full Position,Turn->ShapeId row for every single "
-                          "decision-bearing position in the database, not just the deduplicated "
-                          "shape catalog. This is one row per position (millions of rows at real "
-                          "scale) -- off by default; the catalog itself (decision_shapes.csv) is "
-                          "the compact, interesting output most of the time.")
+                          "position in the database, not just the deduplicated shape catalog. "
+                          "This is one row per position (millions of rows at real scale) -- off "
+                          "by default; the catalog itself (shapes.csv) is the compact, "
+                          "interesting output most of the time.")
 
     args = ap.parse_args()
     if args.command == 'classify':

@@ -2321,23 +2321,45 @@ def cmd_reduce(args):
         print(f"  Loading cached shape origins from {origins_cache_path} instead of redoing "
               f"the full origin scan...")
         import pickle
-        with open(origins_cache_path, 'rb') as f:
-            cache = pickle.load(f)
-        db_mtime = os.path.getmtime(args.db_path)
-        if cache['db_len'] != len(db) or cache['db_mtime'] != db_mtime:
-            print(f"  WARNING: this cache was built against a database with {cache['db_len']} "
-                  f"positions last modified at {cache['db_mtime']}, but the database just loaded "
-                  f"has {len(db)} positions last modified at {db_mtime} -- these don't match, so "
-                  f"the database appears to have changed since this cache was built. This is a "
-                  f"lightweight sanity check (position count + file mtime), not a full content "
-                  f"hash, so it can't catch every possible way a database could change -- but a "
-                  f"real change should trip at least one of these two signals. Recomputing "
-                  f"origins from scratch to be safe.")
-        else:
-            origins = cache['origins']
-            parent_counts = cache['parent_counts']
-            print(f"  Loaded {len(origins)} genuine shape origins from cache -- skipped the full "
-                  f"scan entirely.")
+        try:
+            with open(origins_cache_path, 'rb') as f:
+                cache = pickle.load(f)
+        except (EOFError, pickle.UnpicklingError, KeyError) as e:
+            # A real, confirmed failure mode: the write below used to be
+            # a plain open(path, 'wb'), which is NOT atomic -- if the
+            # process died mid-write (crash, kill, or two invocations
+            # racing to write the same path -- all three genuinely
+            # happened in one real session), the file exists but is
+            # truncated or otherwise unparseable, and pickle.load raised
+            # here rather than returning something usable. Caught and
+            # treated as a cache miss rather than letting this crash the
+            # entire run -- the fix below (atomic write) prevents this
+            # going forward, but a file left over from before that fix
+            # existed needs this fallback to recover gracefully rather
+            # than requiring the person to notice and delete it by hand.
+            print(f"  WARNING: {origins_cache_path} exists but could not be read ({type(e).__name__}: "
+                  f"{e}) -- almost certainly a truncated or corrupted file left over from an "
+                  f"interrupted write (e.g. a killed process, or two invocations racing to write "
+                  f"the same path at once), not a sign anything is wrong with the database or "
+                  f"findings. Treating this as a cache miss and recomputing origins from scratch; "
+                  f"the corrupted file will be replaced once this completes.")
+            cache = None
+        if cache is not None:
+            db_mtime = os.path.getmtime(args.db_path)
+            if cache['db_len'] != len(db) or cache['db_mtime'] != db_mtime:
+                print(f"  WARNING: this cache was built against a database with {cache['db_len']} "
+                      f"positions last modified at {cache['db_mtime']}, but the database just loaded "
+                      f"has {len(db)} positions last modified at {db_mtime} -- these don't match, so "
+                      f"the database appears to have changed since this cache was built. This is a "
+                      f"lightweight sanity check (position count + file mtime), not a full content "
+                      f"hash, so it can't catch every possible way a database could change -- but a "
+                      f"real change should trip at least one of these two signals. Recomputing "
+                      f"origins from scratch to be safe.")
+            else:
+                origins = cache['origins']
+                parent_counts = cache['parent_counts']
+                print(f"  Loaded {len(origins)} genuine shape origins from cache -- skipped the full "
+                      f"scan entirely.")
 
     if origins is None:
         origins, parent_counts = find_shape_origins(
@@ -2348,9 +2370,19 @@ def cmd_reduce(args):
               f"database (e.g. resuming resolve_reachable_shapes after an interruption) don't "
               f"redo this pass -- pass --force-rerun-origins to bypass this cache directly.")
         import pickle
-        with open(origins_cache_path, 'wb') as f:
+        # Written to a temp file and atomically renamed into place --
+        # NOT the plain open(path, 'wb') this used to be. os.replace is
+        # atomic on POSIX: a crash or kill during the write leaves either
+        # the complete old cache (if one existed) or nothing at all, but
+        # never a half-written file masquerading as a valid one the way
+        # the direct-write version could. This is the actual fix for the
+        # corruption caught above, not just a softer failure message for
+        # the same underlying problem.
+        tmp_path = origins_cache_path + '.tmp'
+        with open(tmp_path, 'wb') as f:
             pickle.dump({'db_len': len(db), 'db_mtime': os.path.getmtime(args.db_path),
                          'origins': origins, 'parent_counts': parent_counts}, f)
+        os.replace(tmp_path, origins_cache_path)
     # NOT deleted here anymore -- a real, confirmed gap in an earlier
     # version: deleting this the instant find_shape_origins succeeds,
     # before resolve_reachable_shapes even starts, meant a crash anywhere

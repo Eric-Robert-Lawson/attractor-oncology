@@ -2289,9 +2289,55 @@ def cmd_reduce(args):
           f"This pass also counts every position's own parents, needed so the next pass can "
           f"free each position's data the instant nothing could still need it, rather than "
           f"holding the entire landscape's worth of results in memory for the whole run.")
-    origins, parent_counts = find_shape_origins(
-        db, checkpoint_path=origin_checkpoint,
-        checkpoint_every_seconds=args.checkpoint_every_seconds_landscape)
+
+    # origins/parent_counts are a pure function of db alone (see the note
+    # a few lines below on why that's safe to rely on) -- cached to disk
+    # so re-running this command to resume resolve_reachable_shapes from
+    # ITS OWN checkpoint never re-pays this pass's full cost again. This
+    # is a real, confirmed, separate problem from checkpointing: even a
+    # perfectly successful resume of resolve_reachable_shapes still had
+    # to first rebuild a 40-million-entry origins set and a
+    # tens-of-millions-entry parent_counts Counter from scratch, on
+    # EVERY invocation, before the resumed loop could even begin --
+    # measured directly to be the actual source of a real ~40GB peak on
+    # a genuine KBPvK-scale run that a resume of the second pass alone
+    # should never have required paying again.
+    origins_cache_path = args.db_path + '.origins_cache.pkl'
+    origins = parent_counts = None
+    if os.path.exists(origins_cache_path) and not args.force_rerun_origins:
+        print(f"  Loading cached shape origins from {origins_cache_path} instead of redoing "
+              f"the full origin scan...")
+        import pickle
+        with open(origins_cache_path, 'rb') as f:
+            cache = pickle.load(f)
+        db_mtime = os.path.getmtime(args.db_path)
+        if cache['db_len'] != len(db) or cache['db_mtime'] != db_mtime:
+            print(f"  WARNING: this cache was built against a database with {cache['db_len']} "
+                  f"positions last modified at {cache['db_mtime']}, but the database just loaded "
+                  f"has {len(db)} positions last modified at {db_mtime} -- these don't match, so "
+                  f"the database appears to have changed since this cache was built. This is a "
+                  f"lightweight sanity check (position count + file mtime), not a full content "
+                  f"hash, so it can't catch every possible way a database could change -- but a "
+                  f"real change should trip at least one of these two signals. Recomputing "
+                  f"origins from scratch to be safe.")
+        else:
+            origins = cache['origins']
+            parent_counts = cache['parent_counts']
+            print(f"  Loaded {len(origins)} genuine shape origins from cache -- skipped the full "
+                  f"scan entirely.")
+
+    if origins is None:
+        origins, parent_counts = find_shape_origins(
+            db, checkpoint_path=origin_checkpoint,
+            checkpoint_every_seconds=args.checkpoint_every_seconds_landscape)
+        print(f"  Found {len(origins)} genuine shape origins out of {len(db)} total positions. "
+              f"Caching to {origins_cache_path} so future invocations against this same "
+              f"database (e.g. resuming resolve_reachable_shapes after an interruption) don't "
+              f"redo this pass -- pass --force-rerun-origins to bypass this cache directly.")
+        import pickle
+        with open(origins_cache_path, 'wb') as f:
+            pickle.dump({'db_len': len(db), 'db_mtime': os.path.getmtime(args.db_path),
+                         'origins': origins, 'parent_counts': parent_counts}, f)
     # NOT deleted here anymore -- a real, confirmed gap in an earlier
     # version: deleting this the instant find_shape_origins succeeds,
     # before resolve_reachable_shapes even starts, meant a crash anywhere
@@ -2302,7 +2348,6 @@ def cmd_reduce(args):
     # for it either. Deleted only after shapes.csv is confirmed written,
     # below, alongside landscape_checkpoint -- both phases' checkpoints
     # now survive until the whole of Phase 2 has actually succeeded.
-    print(f"  Found {len(origins)} genuine shape origins out of {len(db)} total positions.")
 
     print(f"\nScanning all {len(db)} positions in {args.db_path} -- a position's shape is the set "
           f"of every (mate, cumulative escape count) pair reachable through tied-optimal play, "
@@ -2429,6 +2474,15 @@ def main():
                           "complete and its results are loaded back instead of re-running -- pass "
                           "this if the underlying findings_csv or database actually changed since "
                           "then and it genuinely needs to be redone.")
+    p4.add_argument('--force-rerun-origins', action='store_true',
+                     help="Redo the origin scan even if a valid, matching cache "
+                          "(<db_path>.origins_cache.pkl) already exists on disk. By default, a "
+                          "cache whose recorded position count and database file mtime both match "
+                          "the currently-loaded database is trusted and loaded directly, skipping "
+                          "the full scan -- pass this if the database's own content changed "
+                          "without its length or mtime changing (an edge case the lightweight "
+                          "cache check can't catch on its own), or to force a clean recomputation "
+                          "for any other reason.")
     p4.add_argument('--retry-skipped', metavar='SKIPPED_CSV', default=None,
                      help="Re-analyze ONLY the findings listed in a previous run's "
                           "skipped_findings.csv, instead of the full findings_csv. Intended to be "

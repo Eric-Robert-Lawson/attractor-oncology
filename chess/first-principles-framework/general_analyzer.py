@@ -1293,45 +1293,75 @@ def analyze_reducibility(findings, db, progress_every=2000, checkpoint_path=None
 # for the same mate depending on write order, undercounting the true
 # result by keeping only whichever value happened to be written last.
 
-def resolve_reachable_shapes(db, progress_every=1000000, checkpoint_path=None,
-                              checkpoint_every_seconds=60):
-    """Single pass over the whole database, in increasing distance
-    order, building each position's full set of reachable (shape_id,
-    escape_count) pairs. Returns (shape_registry, resolved):
-      - shape_registry: canonical mate (position, turn) -> small int id
-      - resolved: state -> frozenset of (shape_id, cumulative_escape)
-        pairs reachable from that state via any sequence of tied-optimal
-        choices.
+def resolve_reachable_shapes(db, origins, parent_counts, progress_every=1000000,
+                              checkpoint_path=None, checkpoint_every_seconds=60,
+                              full_position_map_path=None):
+    """Single pass over the whole database, in increasing distance order,
+    building each position's full set of reachable (shape_id,
+    escape_count) pairs and folding origin-summarization inline. Returns
+    (shape_registry, shape_counts, shape_examples) directly -- see
+    find_shape_origins for what origins/parent_counts are and why they're
+    needed here specifically.
 
-    checkpoint_path, if given, checkpoints (shape_registry, resolved, and
-    how many positions have been processed) every checkpoint_every_seconds
-    (default 60, matching every other phase in this pipeline) and resumes
-    from it automatically if present. The processing order itself is NOT
-    persisted -- it's cheap and fully deterministic to recompute (a sort
-    by each position's own distance field, unaffected by anything this
-    function does), so a resume just recomputes it fresh and skips the
-    positions already accounted for.
+    REPLACES an earlier version that kept every position's own resolved
+    entry in memory for the ENTIRE pass, then summarized only the origin
+    subset in a separate, final function afterward. That was a real,
+    confirmed problem at true scale, not a hypothetical one: on a real
+    ~58.7M-position KBPvK database, `resolved` was still growing without
+    bound after 15M+ positions, with checkpoint-save time more than
+    doubling between saves -- a direct, measured sign of a structure that
+    never releases anything, not a slow-but-steady process. The fix isn't
+    just "free non-origin entries" -- 69% of that same database's positions
+    turned out to be origins themselves (40,575,106 of 58,782,826), so
+    capping releases to the non-origin 31% would have left most of the
+    problem in place. The actual fix: fold origin-summarization directly
+    into this loop the instant a position's own value is computed, so
+    EVERY position -- origin or not -- becomes freeable the moment
+    nothing else could possibly still reference it, not just the
+    non-origin fraction.
 
-    An earlier version of this function shipped with NO checkpointing at
-    all, reasoned from a ~7-second run on a small test database as if
-    that generalized to real conditions -- it doesn't. Under real memory
-    pressure on a large database, this pass can run at a small fraction
-    of that speed for hours, and losing all of it to an interruption
-    with no way to resume is a real, serious cost, not a hypothetical
-    one -- this was a genuine regression, not a reasonable simplification,
-    and is fixed here by treating this phase exactly like every other
-    long-running phase in this pipeline: checkpoint it.
+    The mechanism: `parent_counts[state]` (from find_shape_origins, which
+    already scans the whole database once) says how many OTHER positions
+    reference `state` as a child via any move. Every time this loop
+    consumes a child's value, that child's count is decremented; the
+    instant it reaches zero, nothing still being processed (all at
+    strictly larger distance, since a parent's distance is always larger
+    than any of its children's -- confirmed by construction, not assumed)
+    could ever need it again, so it's deleted immediately rather than
+    held for the rest of the run. An origin's own value is folded into
+    shape_counts/shape_examples the moment it's computed, so it doesn't
+    need to be retained afterward just to be summarized later -- only
+    for as long as some other, not-yet-processed position might still
+    reference it as a child.
 
-    Memory note, stated plainly: `resolved` holds an entry for every
-    position in the database, each a set that can itself hold multiple
-    pairs -- checkpointing this means writing a structure of comparable
-    size to a meaningful fraction of the database itself to disk
-    periodically, which is real time and real disk space, not free. This
-    is the honest cost of resumability at this scale, not a reason to
-    skip it -- losing hours of progress to an interruption is worse."""
+    checkpoint_path, if given, checkpoints the full running state (shape
+    registry, counts, examples, the currently-still-referenced subset of
+    resolved, and the current parent-count state) every
+    checkpoint_every_seconds and resumes from it automatically.
+
+    full_position_map_path, if given, writes every position's own row
+    (Position, Turn, ShapeId, EscapeCount -- one row per (position,
+    shape) pair, since a position can belong to more than one shape)
+    directly as each position is processed, rather than requiring the
+    full resolved dict to still exist at the end to write it from."""
     shape_registry = {}
+    shape_counts = Counter()
+    shape_examples = {}
     resolved = {}
     start_index = 0
+    # Mutated (decremented) throughout this function -- copy so the
+    # caller's own dict (and whatever checkpoint produced it) isn't
+    # silently changed out from under it.
+    parent_counts = dict(parent_counts)
+
+    map_file = None
+    map_writer = None
+    if full_position_map_path:
+        import csv as _csv
+        map_file = open(full_position_map_path, 'a', newline='', encoding='utf-8')
+        map_writer = _csv.writer(map_file)
+        if map_file.tell() == 0:
+            map_writer.writerow(['Position', 'Turn', 'ShapeId', 'EscapeCount'])
 
     if checkpoint_path and os.path.exists(checkpoint_path):
         import pickle
@@ -1340,49 +1370,87 @@ def resolve_reachable_shapes(db, progress_every=1000000, checkpoint_path=None,
         with open(checkpoint_path, 'rb') as f:
             checkpoint = pickle.load(f)
         shape_registry = checkpoint['shape_registry']
+        shape_counts = checkpoint['shape_counts']
+        shape_examples = checkpoint['shape_examples']
         resolved = checkpoint['resolved']
+        parent_counts = checkpoint['parent_counts']
         start_index = checkpoint['checked']
         print(f"  Resumed from checkpoint in {time.time()-load_start:.1f}s: "
               f"{start_index}/{len(db)} positions already resolved, "
-              f"{len(shape_registry)} distinct mates found so far", flush=True)
+              f"{len(shape_registry)} distinct mates so far, "
+              f"{len(resolved)} entries still retained (in-flight references only, "
+              f"not the full {start_index})", flush=True)
 
     order = sorted(db.keys(), key=lambda s: db[s].distance)
     last_checkpoint = time.time()
     checked = 0
-    for state in order:
-        checked += 1
-        if checked < start_index:
-            continue
+    try:
+        for state in order:
+            checked += 1
+            if checked < start_index:
+                continue
 
-        if progress_every and checked % progress_every == 0:
-            print(f"  [full-landscape scan] {checked}/{len(order)} positions resolved, "
-                  f"{len(shape_registry)} distinct mates so far", flush=True)
+            if progress_every and checked % progress_every == 0:
+                print(f"  [full-landscape scan] {checked}/{len(order)} positions resolved, "
+                      f"{len(shape_registry)} distinct mates so far, "
+                      f"{len(resolved)} entries currently retained in memory", flush=True)
 
-        now = time.time()
-        if checkpoint_path and now - last_checkpoint >= checkpoint_every_seconds:
-            save_start = time.time()
-            _save_checkpoint({'shape_registry': shape_registry, 'resolved': resolved,
-                               'checked': checked}, checkpoint_path)
-            save_elapsed = time.time() - save_start
-            last_checkpoint = time.time()
-            print(f"  [checkpoint] saved progress at {checked}/{len(order)} positions "
-                  f"({len(shape_registry)} mates so far) in {save_elapsed:.1f}s", flush=True)
+            now = time.time()
+            if checkpoint_path and now - last_checkpoint >= checkpoint_every_seconds:
+                save_start = time.time()
+                _save_checkpoint({'shape_registry': shape_registry, 'shape_counts': shape_counts,
+                                   'shape_examples': shape_examples, 'resolved': resolved,
+                                   'parent_counts': parent_counts, 'checked': checked},
+                                  checkpoint_path)
+                save_elapsed = time.time() - save_start
+                last_checkpoint = time.time()
+                print(f"  [checkpoint] saved progress at {checked}/{len(order)} positions "
+                      f"({len(shape_registry)} mates, {len(resolved)} entries retained) "
+                      f"in {save_elapsed:.1f}s", flush=True)
 
-        entry = db[state]
-        if not entry.tied:
-            canon = (canonical_form_general(state[0]), state[1])
-            if canon not in shape_registry:
-                shape_registry[canon] = len(shape_registry)
-            resolved[state] = frozenset([(shape_registry[canon], 0)])
-            continue
-        pos, turn = state
-        combined = set()
-        for mv, bn in entry.tied:
-            child = (apply_move_general(pos, mv), child_turn(mv))
-            for shape_id, esc in resolved[child]:
-                combined.add((shape_id, bn + esc))
-        resolved[state] = frozenset(combined)
-    return shape_registry, resolved
+            entry = db[state]
+            if not entry.tied:
+                canon = (canonical_form_general(state[0]), state[1])
+                if canon not in shape_registry:
+                    shape_registry[canon] = len(shape_registry)
+                my_shapes = frozenset([(shape_registry[canon], 0)])
+            else:
+                pos, turn = state
+                combined = set()
+                for mv, bn in entry.tied:
+                    child = (apply_move_general(pos, mv), child_turn(mv))
+                    for shape_id, esc in resolved[child]:
+                        combined.add((shape_id, bn + esc))
+                    remaining = parent_counts.get(child, 0) - 1
+                    if remaining <= 0:
+                        resolved.pop(child, None)
+                        parent_counts.pop(child, None)
+                    else:
+                        parent_counts[child] = remaining
+                my_shapes = frozenset(combined)
+
+            if state in origins:
+                for shape_id, escape_count in my_shapes:
+                    key = (shape_id, escape_count)
+                    shape_counts[key] += 1
+                    if key not in shape_examples:
+                        shape_examples[key] = state
+
+            if map_writer:
+                for shape_id, escape_count in my_shapes:
+                    map_writer.writerow([state[0], state[1], shape_id, escape_count])
+
+            # Retained only if something not-yet-processed could still
+            # reference this position as a child -- an origin with no
+            # remaining parents has already been folded into
+            # shape_counts/shape_examples above and needs nothing further.
+            if parent_counts.get(state, 0) > 0:
+                resolved[state] = my_shapes
+    finally:
+        if map_file:
+            map_file.close()
+
+    return shape_registry, shape_counts, shape_examples
 
 
 def find_shape_origins(db, progress_every=5000000, checkpoint_path=None,
@@ -1419,13 +1487,32 @@ def find_shape_origins(db, progress_every=5000000, checkpoint_path=None,
     genuine origin; the other 13 positions are simply further along that
     one, single shape.
 
-    Returns a set of origin states. Checkpointed the same way as every
-    other phase in this pipeline -- this is a real, separate O(n) pass
-    over the whole database, not a cheap side effect of something else,
-    and losing it to an interruption is exactly the same real cost as
-    losing resolve_reachable_shapes' own progress."""
+    Returns (origins, parent_counts):
+      - origins: a set of origin states, as described above.
+      - parent_counts: position -> how many OTHER positions reference it
+        as a child via ANY move (forced or one of a tie's several
+        branches) -- a strict superset of what origin-determination
+        itself needs (which only cares about forced-parent existence,
+        not the full count, and not tie-branch references at all). This
+        is computed in the same pass specifically so resolve_reachable_shapes
+        can free a position's own resolved-shapes entry the instant its
+        count hits zero, instead of holding every position's entry for
+        the entire run -- see that function's own docstring for why this
+        matters: measured directly on a real ~58.7M-position KBPvK
+        database, resolve_reachable_shapes without this was still
+        growing without bound after resolving 15M+ positions, with
+        checkpoint-save time itself more than doubling between saves --
+        a direct, measured sign of a structure that never releases
+        anything growing without bound, not a slow-but-steady process.
+
+    Checkpointed the same way as every other phase in this pipeline --
+    this is a real, separate O(n) pass over the whole database, not a
+    cheap side effect of something else, and losing it to an
+    interruption is exactly the same real cost as losing
+    resolve_reachable_shapes' own progress."""
     origins = set()
     has_forced_parent = set()
+    parent_counts = Counter()
     start_index = 0
 
     if checkpoint_path and os.path.exists(checkpoint_path):
@@ -1434,6 +1521,7 @@ def find_shape_origins(db, progress_every=5000000, checkpoint_path=None,
         with open(checkpoint_path, 'rb') as f:
             checkpoint = pickle.load(f)
         has_forced_parent = checkpoint['has_forced_parent']
+        parent_counts = checkpoint['parent_counts']
         start_index = checkpoint['checked']
         print(f"  Resumed: {start_index}/{len(db)} positions already scanned for forced-parent "
               f"marking", flush=True)
@@ -1451,45 +1539,31 @@ def find_shape_origins(db, progress_every=5000000, checkpoint_path=None,
 
         now = time.time()
         if checkpoint_path and now - last_checkpoint >= checkpoint_every_seconds:
-            _save_checkpoint({'has_forced_parent': has_forced_parent, 'checked': checked},
+            _save_checkpoint({'has_forced_parent': has_forced_parent,
+                               'parent_counts': parent_counts, 'checked': checked},
                               checkpoint_path)
             last_checkpoint = time.time()
             print(f"  [checkpoint] saved origin-scan progress at {checked}/{len(order)}",
                   flush=True)
 
         entry = db[state]
-        if len(entry.tied) == 1:
-            mv, bn = entry.tied[0]
-            pos, turn = state
+        if not entry.tied:
+            continue
+        pos, turn = state
+        for mv, bn in entry.tied:
             try:
                 child = (apply_move_general(pos, mv), child_turn(mv))
             except AmbiguousMoveError:
                 continue
-            has_forced_parent.add(child)
+            parent_counts[child] += 1
+            if len(entry.tied) == 1:
+                has_forced_parent.add(child)
 
     for state, entry in db.items():
         if len(entry.tied) > 1 or state not in has_forced_parent:
             origins.add(state)
-    return origins
+    return origins, parent_counts
 
-
-def summarize_shapes(shape_registry, resolved, origins):
-    """Turns resolve_reachable_shapes' raw output into the same kind of
-    (counts, examples) summary the rest of this pipeline expects --
-    but ONLY counting from genuine shape origins (see
-    find_shape_origins), not from every position. A position merely
-    continuing an already-established shape's own forced flow is not a
-    new catalog entry; only the position where that shape actually began
-    (a tie, or a fresh start with nothing forcing play into it) is."""
-    shape_counts = Counter()
-    shape_examples = {}
-    for state in origins:
-        for shape_id, escape_count in resolved[state]:
-            key = (shape_id, escape_count)
-            shape_counts[key] += 1
-            if key not in shape_examples:
-                shape_examples[key] = state
-    return shape_counts, shape_examples
 
 
 def verify_and_count(state, db, memo, mismatches):
@@ -2057,6 +2131,17 @@ def cmd_reduce(args):
                   f"invocation if you want it.)")
         return
 
+    # Nothing below this point uses findings, results, subsumption_edges,
+    # or analyzed -- Phase 2 works purely off db. Freeing them explicitly
+    # here is a real, if modest, memory saving on top of the much larger
+    # fix inside resolve_reachable_shapes itself -- every bit matters when
+    # running close to a machine's actual memory limit, and there's no
+    # reason to hold data nothing downstream will ever read again.
+    collapsed_findings_small = collapsed_findings[:5]
+    del findings, results, subsumption_edges, analyzed, collapsed_findings, reached
+    import gc as _gc
+    _gc.collect()
+
     print(f"\n{'='*70}")
     print("FULL-LANDSCAPE SHAPES (mate + escape-count identity, every position)")
     print(f"{'='*70}")
@@ -2074,9 +2159,13 @@ def cmd_reduce(args):
 
     print(f"Finding genuine shape origins in {args.db_path} -- ties, and positions nothing "
           f"forces play into (true starts or sub-optimal deviations) -- before scanning, so "
-          f"positions merely continuing an already-established shape aren't double-counted.")
-    origins = find_shape_origins(db, checkpoint_path=origin_checkpoint,
-                                  checkpoint_every_seconds=args.checkpoint_every_seconds_landscape)
+          f"positions merely continuing an already-established shape aren't double-counted. "
+          f"This pass also counts every position's own parents, needed so the next pass can "
+          f"free each position's data the instant nothing could still need it, rather than "
+          f"holding the entire landscape's worth of results in memory for the whole run.")
+    origins, parent_counts = find_shape_origins(
+        db, checkpoint_path=origin_checkpoint,
+        checkpoint_every_seconds=args.checkpoint_every_seconds_landscape)
     if os.path.exists(origin_checkpoint):
         os.remove(origin_checkpoint)
     print(f"  Found {len(origins)} genuine shape origins out of {len(db)} total positions.")
@@ -2084,10 +2173,11 @@ def cmd_reduce(args):
     print(f"\nScanning all {len(db)} positions in {args.db_path} -- a position's shape is the set "
           f"of every (mate, cumulative escape count) pair reachable through tied-optimal play, "
           f"not just which single mate its forced play happens to resolve into.")
-    shape_registry, resolved = resolve_reachable_shapes(
-        db, checkpoint_path=landscape_checkpoint,
-        checkpoint_every_seconds=args.checkpoint_every_seconds_landscape)
-    shape_counts, shape_examples = summarize_shapes(shape_registry, resolved, origins)
+    map_path_arg = map_path if args.full_position_map else None
+    shape_registry, shape_counts, shape_examples = resolve_reachable_shapes(
+        db, origins, parent_counts, checkpoint_path=landscape_checkpoint,
+        checkpoint_every_seconds=args.checkpoint_every_seconds_landscape,
+        full_position_map_path=map_path_arg)
 
     total_decisions = sum(shape_counts.values())
     print(f"\nTotal positions: {len(db)}")
@@ -2119,22 +2209,18 @@ def cmd_reduce(args):
         os.remove(landscape_checkpoint)
 
     if args.full_position_map:
-        with open(map_path, 'w', newline='', encoding='utf-8') as f:
-            w = csv.writer(f)
-            w.writerow(['Position', 'Turn', 'ShapeId', 'EscapeCount'])
-            for state, shapes in resolved.items():
-                for sid, escape_count in shapes:
-                    w.writerow([state[0], state[1], sid, escape_count])
-        print(f"Wrote the full per-position shape mapping to {map_path} (one row per position "
-              f"per reachable shape -- a position belonging to multiple shapes gets multiple "
-              f"rows, since it genuinely does belong to more than one)")
+        print(f"Wrote the full per-position shape mapping to {map_path} directly during the scan "
+              f"above (one row per position per reachable shape -- a position belonging to "
+              f"multiple shapes gets multiple rows, since it genuinely does belong to more than "
+              f"one) -- not as a separate pass afterward, so it never required holding every "
+              f"position's data in memory at once either.")
     else:
         print(f"(Skipped writing the full per-position mapping -- pass --full-position-map to "
               f"include it.)")
 
-    if collapsed_findings[:5]:
+    if collapsed_findings_small:
         print(f"\nFirst few findings with collapsed branches:")
-        for r in collapsed_findings[:5]:
+        for r in collapsed_findings_small:
             print(f"  {r['position']} ({r['turn']}): {r['raw_branch_count']} raw -> "
                   f"{r['irreducible_branch_count']} irreducible -- groups: {r['branch_groups']}")
 

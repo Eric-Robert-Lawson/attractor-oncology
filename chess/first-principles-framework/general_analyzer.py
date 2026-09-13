@@ -153,7 +153,20 @@ def pieces_to_str(pieces):
     for letter, color, sq in ordered:
         tok_letter = letter if color == 'W' else letter.lower()
         tokens.append(f"{tok_letter}:{sq}")
-    return " ".join(tokens)
+    # Interned specifically because this is the ONE chokepoint every
+    # newly-computed position string passes through (apply_move_general's
+    # children, transform_position's canonicalizations) -- the same
+    # logical position gets reconstructed as a brand-new, separate string
+    # object every time some other position's move happens to reach it,
+    # even though an identical-content string may already exist as one
+    # of load_db's own keys (also interned, at its own single source
+    # point, for exactly this reason). Interning collapses these back to
+    # one shared object rather than leaving genuinely duplicate string
+    # data sitting in memory once per occurrence. Pure deduplication --
+    # does not change what any comparison, lookup, or output returns,
+    # since interned and non-interned strings of equal content already
+    # compare equal and hash identically; only object identity changes.
+    return sys.intern(" ".join(tokens))
 
 
 def transform_position(pos_str, t_idx):
@@ -366,7 +379,7 @@ def load_db(path):
             parts = line.split("|")
             if len(parts) < 6:
                 continue
-            position, turn = parts[0], parts[1]
+            position, turn = sys.intern(parts[0]), parts[1]
             try:
                 distance = int(parts[3])
             except ValueError:

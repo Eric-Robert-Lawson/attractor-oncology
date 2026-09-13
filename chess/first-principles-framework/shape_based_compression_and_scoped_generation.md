@@ -43,6 +43,13 @@ not a refinement of an earlier idea, it is the corrected foundation.
 - 46 distinct mates
 - 6,436 distinct (mate, escape) shapes
 
+**Measured on the real KBPvK database** (58,782,826 positions) — directly answers what was an open question in §7 of an earlier version of this document:
+- 40,575,106 origins (**69.0%** of the entire landscape) — confirmed directly from the origin-scan's own output, not estimated.
+- 7,761 distinct mates — reasoned to be the final, complete count (not a partial figure that would keep climbing): a mate only ever enters the catalog when a checkmate position is processed, and the scan's topological ordering means every checkmate in the database is processed before any non-checkmate position is touched at all, so the entire mate-discovering layer is done very early relative to the run's total position count. This reasoning wasn't independently re-verified against the specific database afterward, so it's stated as reasoned rather than confirmed.
+- The full distinct (mate, escape) shape count itself was not explicitly captured from a completed run's own summary output, unlike the two figures above — worth getting directly from a finished run's own printed total or from `wc -l shapes.csv` rather than assuming a number here.
+
+The origin fraction dropping from 76.6% (KQvK) to 69.0% (KBPvK) — a real, if small, move in the direction §4d's own scale-prediction expects — is worth noting as a genuine data point, not a confirmed trend: this is two materials, not enough to call a pattern, but it's the right direction to watch as more materials get measured.
+
 ---
 
 ## 2. What "shape count" does and does not tell you
@@ -81,7 +88,28 @@ costs the same two integers as a position 2 plies in.
 
 On KQvK, this directly compresses the 23.4% of the landscape that isn't an
 origin. The origins themselves — the 76.6% — are the genuine hard core this
-mechanism does not yet reduce.
+mechanism does not yet reduce. On the real KBPvK database (§1), the
+equivalent split is 31.0% non-origin / 69.0% origin — a larger compressible
+fraction than KQvK's, consistent with (though not proof of) the same
+scale-direction §4d predicts.
+
+**A real, practical finding worth recording here, not just in the workflow
+reference: computing the origin/shape catalog itself, before any
+compression scheme gets built on top of it, already needed a genuine
+memory fix at KBPvK's actual scale.** An early version of the scanning
+pass kept every position's own computed data in memory for the entire
+run; on the real ~58.7M-position database this grew without bound, with
+checkpoint-save time itself more than doubling between consecutive saves.
+Fixed by reference-counting each position's data and releasing it the
+instant nothing could still reference it — measured directly, same KQvK
+data both ways: 445.9 MB peak before the fix, 60.8 MB after, a 7.3x
+reduction, with identical final results confirmed both ways. This is
+worth keeping in view for the rest of this document: if merely *computing*
+the compact catalog once already strains memory at real scale without
+care, that's a concrete, practical reason the storage vision in §4d isn't
+a nice-to-have for reaching larger materials — it's addressing a cost
+that's already real at KBPvK's scale, before 7-piece territory is even
+reached.
 
 **Proposed, not yet built:** whether the hard core itself compresses
 further depends on whether origins sharing a shape *also* share a sequence
@@ -264,7 +292,16 @@ storage — its relative advantage over storing full tables at every level
 should *grow* with scale, which is exactly the regime where Syzygy's own
 storage costs already become the binding constraint. This is stated as a
 prediction to verify, not an established result — nothing here has measured
-whether the complementary fraction actually shrinks this way in practice.
+whether the complementary fraction actually shrinks this way in practice
+across enough materials to call it a trend.
+
+**One real data point now exists, though it's exactly one, not a trend:**
+KQvK's origin fraction was 76.6% (§1); KBPvK's, measured directly on the
+real database, came in at 69.0% — smaller, in the predicted direction,
+going from a materially simpler to a materially richer landscape. Two
+materials is not enough to confirm a scaling law, and this document isn't
+treating it as one — but it's the right direction, measured rather than
+assumed, and worth checking again as more materials get solved.
 
 **The piece this entire recursive scheme depends on, restated precisely
 after an earlier version of this document overstated it:** every step
@@ -358,9 +395,7 @@ is right:
   larger piece counts, as predicted, or does it stay roughly constant or
   even grow? This determines whether the recursive storage scheme's
   advantage genuinely compounds toward 7-piece scale or stays fixed.
-- What fraction of KBPvK's landscape is origins vs. non-origin? (KQvK's
-  76.6% may not generalize — richer piece mobility could push this higher
-  or lower; no confident prediction exists yet.)
+- KQvK's origin fraction was 76.6%; KBPvK's, now measured directly, is 69.0% (§1, §4d) — the right direction, but two materials. Does a third, structurally different material (richer or poorer in reduction pathways than KBPvK) continue the trend, stay flat, or reverse it? That's the number that would start turning "suggestive" into an actual scaling observation.
 - Of KBPvK's origins that share a shape, how many also share a sequence via
   symmetry? This is the number that determines whether §3's proposed
   extension delivers meaningful compression on the hard core, or only on

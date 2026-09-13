@@ -1404,7 +1404,15 @@ def resolve_reachable_shapes(db, origins, parent_counts, progress_every=1000000,
               f"{len(resolved)} entries still retained (in-flight references only, "
               f"not the full {start_index})", flush=True)
 
+    print(f"  Sorting {len(db)} positions by distance -- this step has no internal progress "
+          f"reporting of its own (a real gap this message exists to close), so a delay here "
+          f"specifically, with nothing printed yet, is expected at real scale, not a sign of "
+          f"being stuck. Check Activity Monitor / CPU usage for the actual working-vs-stuck "
+          f"signal during this specific step.", flush=True)
+    sort_start = time.time()
     order = sorted(db.keys(), key=lambda s: db[s].distance)
+    print(f"  Sort complete in {time.time()-sort_start:.1f}s -- entering the main scan now, "
+          f"which does report progress and checkpoint regularly.", flush=True)
     last_checkpoint = time.time()
     checked = 0
     try:
@@ -1552,35 +1560,47 @@ def find_shape_origins(db, progress_every=5000000, checkpoint_path=None,
     order = list(db.keys())
     last_checkpoint = time.time()
     checked = 0
-    for state in order:
-        checked += 1
-        if checked < start_index:
-            continue
-
-        if progress_every and checked % progress_every == 0:
-            print(f"  [origin scan] {checked}/{len(order)} positions scanned", flush=True)
-
-        now = time.time()
-        if checkpoint_path and now - last_checkpoint >= checkpoint_every_seconds:
-            _save_checkpoint({'has_forced_parent': has_forced_parent,
-                               'parent_counts': parent_counts, 'checked': checked},
-                              checkpoint_path)
-            last_checkpoint = time.time()
-            print(f"  [checkpoint] saved origin-scan progress at {checked}/{len(order)}",
-                  flush=True)
-
-        entry = db[state]
-        if not entry.tied:
-            continue
-        pos, turn = state
-        for mv, bn in entry.tied:
-            try:
-                child = (apply_move_general(pos, mv), child_turn(mv))
-            except AmbiguousMoveError:
+    if start_index >= len(order):
+        # The checkpoint already reflects a fully-completed scan --
+        # skip the walk entirely rather than paying for len(order) cheap
+        # no-op iterations just to confirm there's nothing left to do.
+        # This matters more now than it used to: this checkpoint is no
+        # longer deleted the instant this function succeeds (see
+        # cmd_reduce's own comment on why), so resuming into an
+        # already-finished scan is a real, expected case, not a rare edge.
+        print(f"  Checkpoint already reflects a fully-completed scan ({start_index}/{len(order)}) "
+              f"-- skipping the walk entirely.", flush=True)
+        checked = len(order)
+    else:
+        for state in order:
+            checked += 1
+            if checked < start_index:
                 continue
-            parent_counts[child] += 1
-            if len(entry.tied) == 1:
-                has_forced_parent.add(child)
+
+            if progress_every and checked % progress_every == 0:
+                print(f"  [origin scan] {checked}/{len(order)} positions scanned", flush=True)
+
+            now = time.time()
+            if checkpoint_path and now - last_checkpoint >= checkpoint_every_seconds:
+                _save_checkpoint({'has_forced_parent': has_forced_parent,
+                                   'parent_counts': parent_counts, 'checked': checked},
+                                  checkpoint_path)
+                last_checkpoint = time.time()
+                print(f"  [checkpoint] saved origin-scan progress at {checked}/{len(order)}",
+                      flush=True)
+
+            entry = db[state]
+            if not entry.tied:
+                continue
+            pos, turn = state
+            for mv, bn in entry.tied:
+                try:
+                    child = (apply_move_general(pos, mv), child_turn(mv))
+                except AmbiguousMoveError:
+                    continue
+                parent_counts[child] += 1
+                if len(entry.tied) == 1:
+                    has_forced_parent.add(child)
 
     for state, entry in db.items():
         if len(entry.tied) > 1 or state not in has_forced_parent:
@@ -2272,8 +2292,16 @@ def cmd_reduce(args):
     origins, parent_counts = find_shape_origins(
         db, checkpoint_path=origin_checkpoint,
         checkpoint_every_seconds=args.checkpoint_every_seconds_landscape)
-    if os.path.exists(origin_checkpoint):
-        os.remove(origin_checkpoint)
+    # NOT deleted here anymore -- a real, confirmed gap in an earlier
+    # version: deleting this the instant find_shape_origins succeeds,
+    # before resolve_reachable_shapes even starts, meant a crash anywhere
+    # between the two passes (including during resolve_reachable_shapes'
+    # own silent, unavoidable initial sort -- see that function's own
+    # progress messaging around it) lost the ENTIRE origin scan with
+    # nothing to resume from, since there was no longer a checkpoint file
+    # for it either. Deleted only after shapes.csv is confirmed written,
+    # below, alongside landscape_checkpoint -- both phases' checkpoints
+    # now survive until the whole of Phase 2 has actually succeeded.
     print(f"  Found {len(origins)} genuine shape origins out of {len(db)} total positions.")
 
     print(f"\nScanning all {len(db)} positions in {args.db_path} -- a position's shape is the set "
@@ -2313,6 +2341,8 @@ def cmd_reduce(args):
     print(f"\nWrote the full catalog of {len(shape_counts)} distinct shapes to {shapes_path}")
     if os.path.exists(landscape_checkpoint):
         os.remove(landscape_checkpoint)
+    if os.path.exists(origin_checkpoint):
+        os.remove(origin_checkpoint)
 
     if args.full_position_map:
         print(f"Wrote the full per-position shape mapping to {map_path} directly during the scan "

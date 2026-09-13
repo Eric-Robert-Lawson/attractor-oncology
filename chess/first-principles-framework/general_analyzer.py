@@ -992,7 +992,7 @@ def _raise_finding_timeout(signum, frame):
 
 def analyze_reducibility(findings, db, progress_every=2000, checkpoint_path=None,
                           max_seconds_per_finding=60, checkpoint_every_findings=200,
-                          slow_finding_checkpoint_seconds=5.0):
+                          slow_finding_checkpoint_seconds=5.0, only_indices=None):
     """For every finding's own root-level tie: partition its tied moves
     into symmetry-equivalence classes (collapsing genuine mirror-image
     duplicates -- see module comment above for why this is safe to
@@ -1001,6 +1001,23 @@ def analyze_reducibility(findings, db, progress_every=2000, checkpoint_path=None
     (up to D4 symmetry) -- recorded as a subsumption edge, not collapsed,
     since the root-level tie that led there is still a real, distinct
     decision (see module comment for why annotate-don't-delete here).
+
+    only_indices, if given, restricts which findings are actually
+    PROCESSED to this specific set of indices into `findings` -- used by
+    --retry-skipped to reanalyze specific findings without redoing every
+    other one. canon_root_to_idx is still built from the FULL findings
+    list regardless of this, so subsumption-edge detection against
+    findings NOT in only_indices still resolves correctly -- only the
+    outer loop's own iteration is restricted, not the target-matching it
+    performs against every other finding. When only_indices is None (the
+    default, ordinary case), processing order is simply every index in
+    findings, in order -- mathematically identical to this function's
+    behavior before only_indices existed, confirmed directly by
+    regression test, not just argued to be equivalent by inspection.
+    Checkpoint semantics adapt automatically: next_index becomes an
+    offset into the sorted processing order rather than a direct
+    findings-list index when only_indices narrows that order, since the
+    processed set is then no longer a contiguous prefix of the full list.
 
     max_seconds_per_finding (default 60, 0/None disables): a hard,
     wall-clock budget for a SINGLE finding's own analysis, enforced with
@@ -1081,6 +1098,8 @@ def analyze_reducibility(findings, db, progress_every=2000, checkpoint_path=None
     skipped = []  # (index, position, turn) that hit the time budget
     start_index = 0
 
+    process_order = sorted(only_indices) if only_indices is not None else list(range(len(findings)))
+
     if checkpoint_path and os.path.exists(checkpoint_path):
         import pickle
         with open(checkpoint_path, 'rb') as f:
@@ -1089,7 +1108,7 @@ def analyze_reducibility(findings, db, progress_every=2000, checkpoint_path=None
         subsumption_edges = checkpoint['subsumption_edges']
         skipped = checkpoint.get('skipped', [])
         start_index = checkpoint['next_index']
-        print(f"  Resumed from checkpoint: {start_index}/{len(findings)} findings already "
+        print(f"  Resumed from checkpoint: {start_index}/{len(process_order)} findings already "
               f"analyzed, {len(subsumption_edges)} subsumption edges found so far, "
               f"{len(skipped)} previously skipped on timeout")
 
@@ -1099,13 +1118,15 @@ def analyze_reducibility(findings, db, progress_every=2000, checkpoint_path=None
     if max_seconds_per_finding:
         signal.signal(signal.SIGALRM, _raise_finding_timeout)
 
-    for i in range(start_index, len(findings)):
+    for pos_in_order in range(start_index, len(process_order)):
+        i = process_order[pos_in_order]
         f = findings[i]
 
         now = time.time()
         if now - last_progress_print >= 10:
             last_progress_print = now
-            print(f"  [reduce progress] at finding {i}/{len(findings)}: {f['position']} "
+            print(f"  [reduce progress] at finding {pos_in_order}/{len(process_order)} "
+                  f"(findings-list index {i}): {f['position']} "
                   f"({f['turn']}), {len(f['tied_moves'])}-way tie "
                   f"({len(skipped)} skipped on timeout so far)", flush=True)
 
@@ -1188,7 +1209,9 @@ def analyze_reducibility(findings, db, progress_every=2000, checkpoint_path=None
 
         # Checkpointed here, after finding i's processing has fully
         # completed either way (including the timeout path above) --
-        # next_index is always i+1, so a resume never redoes a finding
+        # next_index is always pos_in_order+1 (an offset into
+        # process_order, identical to a direct findings-list index when
+        # only_indices is None), so a resume never redoes a finding
         # already reflected in results/subsumption_edges. See docstring
         # for why this single call site replaced the earlier
         # before-processing one once a second trigger was added.
@@ -1197,17 +1220,17 @@ def analyze_reducibility(findings, db, progress_every=2000, checkpoint_path=None
             now = time.time()
             if now - last_checkpoint_time >= 60:
                 checkpoint_reason = "60s since last checkpoint"
-            elif (i + 1) - last_checkpoint_count >= checkpoint_every_findings:
+            elif (pos_in_order + 1) - last_checkpoint_count >= checkpoint_every_findings:
                 checkpoint_reason = f"{checkpoint_every_findings} findings completed"
             elif finding_elapsed >= slow_finding_checkpoint_seconds:
                 checkpoint_reason = f"this finding alone took {finding_elapsed:.1f}s"
 
         if checkpoint_reason:
             last_checkpoint_time = time.time()
-            last_checkpoint_count = i + 1
+            last_checkpoint_count = pos_in_order + 1
             _save_checkpoint({'results': results, 'subsumption_edges': subsumption_edges,
-                               'skipped': skipped, 'next_index': i + 1}, checkpoint_path)
-            print(f"  [checkpoint] saved after finding {i + 1}/{len(findings)} "
+                               'skipped': skipped, 'next_index': pos_in_order + 1}, checkpoint_path)
+            print(f"  [checkpoint] saved after finding {pos_in_order + 1}/{len(process_order)} "
                   f"({checkpoint_reason})", flush=True)
 
     return results, subsumption_edges, skipped
@@ -1994,19 +2017,27 @@ def cmd_reduce(args):
     findings = load_findings(args.findings_csv)
     print(f"  Loaded {len(findings)} independent findings")
 
+    only_indices = None
     if args.retry_skipped:
-        print(f"Filtering to only the findings listed in {args.retry_skipped}...")
+        print(f"Loading retry targets from {args.retry_skipped}...")
         retry_keys = set()
         with open(args.retry_skipped, encoding='utf-8') as f:
             for row in csv.DictReader(f):
                 retry_keys.add((row['Position'], row['Turn']))
-        findings = [f for f in findings if (f['position'], f['turn']) in retry_keys]
-        print(f"  Filtered down to {len(findings)} findings (of {len(retry_keys)} listed -- "
-              f"a mismatch here would mean --retry-skipped came from a different findings_csv "
-              f"than the one just loaded)")
-        if len(findings) != len(retry_keys):
-            print(f"  WARNING: {len(retry_keys) - len(findings)} listed positions were not found "
-                  f"in this findings_csv -- double-check both files came from the same run.")
+        # findings itself is deliberately NOT filtered here (an earlier
+        # version of this did filter it down) -- doing so breaks
+        # subsumption-edge target resolution, since canon_root_to_idx
+        # inside analyze_reducibility would only ever contain the tiny
+        # retry set instead of every other finding a branch might
+        # genuinely lead into. only_indices restricts which findings get
+        # PROCESSED without shrinking the list itself.
+        only_indices = {i for i, f in enumerate(findings) if (f['position'], f['turn']) in retry_keys}
+        print(f"  Matched {len(only_indices)} of {len(retry_keys)} listed positions against "
+              f"the full findings list ({len(findings)} total) -- a mismatch here would mean "
+              f"--retry-skipped came from a different findings_csv than the one just loaded.")
+        if len(only_indices) != len(retry_keys):
+            print(f"  WARNING: {len(retry_keys) - len(only_indices)} listed positions were not "
+                  f"found in this findings_csv -- double-check both files came from the same run.")
 
     print(f"Loading {args.db_path}...")
     db = load_db(args.db_path)
@@ -2030,8 +2061,16 @@ def cmd_reduce(args):
     # files were even written -- so an interruption anytime after Phase 1
     # finished (including during Phase 2) left no record Phase 1 had ever
     # completed, and a rerun would redo it from scratch every time.
+    #
+    # This check is UNCONDITIONALLY False in --retry-skipped mode. A real,
+    # separate, confirmed bug: it used to apply regardless of
+    # --retry-skipped, meaning a retry silently reloaded the EXACT stale
+    # results it was meant to fix (including the very TIMED_OUT entries
+    # being retried) and never reprocessed anything at all -- the retry
+    # command would run to completion, print a summary, and change nothing.
     phase1_done_already = (
-        os.path.exists(branch_reduction_path) and os.path.exists(subsumption_edges_path)
+        not args.retry_skipped
+        and os.path.exists(branch_reduction_path) and os.path.exists(subsumption_edges_path)
         and os.path.exists(skipped_path) and not os.path.exists(branch_checkpoint)
     )
 
@@ -2043,6 +2082,73 @@ def cmd_reduce(args):
         results, subsumption_edges, skipped = _load_phase1_results(
             branch_reduction_path, skipped_path, subsumption_edges_path, findings)
         phase1_freshly_computed = False
+    elif args.retry_skipped:
+        phase1_freshly_computed = True
+        if not (os.path.exists(branch_reduction_path) and os.path.exists(subsumption_edges_path)
+                and os.path.exists(skipped_path)):
+            print(f"ERROR: --retry-skipped requires Phase 1's own output files to already exist "
+                  f"in {args.out_dir}/ -- there is nothing to merge a retry into. Run reduce "
+                  f"normally (without --retry-skipped) first.")
+            return
+
+        print(f"\n--retry-skipped: reanalyzing {len(only_indices)} specific finding(s), processed "
+              f"against the FULL findings list so subsumption-edge detection against every OTHER "
+              f"finding still resolves correctly, then merging the result back into the existing "
+              f"Phase 1 output rather than replacing it -- replacing it outright would silently "
+              f"destroy every other finding's already-computed result, a real, separate bug found "
+              f"and fixed alongside the skip-check one above.")
+        retry_results, retry_edges, retry_skipped_out = analyze_reducibility(
+            findings, db, checkpoint_path=branch_checkpoint,
+            max_seconds_per_finding=args.max_seconds_per_finding,
+            checkpoint_every_findings=args.checkpoint_every_findings,
+            slow_finding_checkpoint_seconds=args.slow_finding_checkpoint_seconds,
+            only_indices=only_indices)
+
+        base_results, base_edges, base_skipped = _load_phase1_results(
+            branch_reduction_path, skipped_path, subsumption_edges_path, findings)
+
+        retried_keys = {(r['position'], r['turn']) for r in retry_results}
+        results = ([r for r in base_results if (r['position'], r['turn']) not in retried_keys]
+                   + retry_results)
+        # Only edges ORIGINATING from a retried finding are replaced --
+        # edges TARGETING one (from some other, non-retried finding) are
+        # still valid, since that other finding's own branch-walk result
+        # doesn't depend on whether ITS target has itself been retried.
+        subsumption_edges = ([e for e in base_edges
+                               if (findings[e[0]]['position'], findings[e[0]]['turn']) not in retried_keys]
+                              + retry_edges)
+        skipped = [s for s in base_skipped if (s[1], s[2]) not in retried_keys] + retry_skipped_out
+
+        with open(branch_reduction_path, 'w', newline='', encoding='utf-8') as f:
+            w = csv.writer(f)
+            w.writerow(['Position', 'Turn', 'RawBranchCount', 'IrreducibleBranchCount', 'BranchGroups'])
+            for r in results:
+                if r['irreducible_branch_count'] is None:
+                    w.writerow([r['position'], r['turn'], r['raw_branch_count'], 'TIMED_OUT', ''])
+                    continue
+                groups_str = "|".join(";".join(sorted(g)) for g in r['branch_groups'])
+                w.writerow([r['position'], r['turn'], r['raw_branch_count'],
+                            r['irreducible_branch_count'], groups_str])
+
+        with open(skipped_path, 'w', newline='', encoding='utf-8') as f:
+            w = csv.writer(f)
+            w.writerow(['Index', 'Position', 'Turn'])
+            for i, pos, turn in skipped:
+                w.writerow([i, pos, turn])
+
+        with open(subsumption_edges_path, 'w', newline='', encoding='utf-8') as f:
+            w = csv.writer(f)
+            w.writerow(['FromPosition', 'FromTurn', 'ViaMove', 'ToPosition', 'ToTurn'])
+            for i, mv, j in subsumption_edges:
+                w.writerow([findings[i]['position'], findings[i]['turn'], mv,
+                            findings[j]['position'], findings[j]['turn']])
+
+        print(f"  Merged {len(retry_results)} retried finding(s) back into the existing Phase 1 "
+              f"output -- {len(retried_keys)} old entries replaced, "
+              f"{len(base_results) - len(retried_keys)} other findings left untouched.")
+
+        if os.path.exists(branch_checkpoint):
+            os.remove(branch_checkpoint)
     else:
         phase1_freshly_computed = True
         results, subsumption_edges, skipped = analyze_reducibility(

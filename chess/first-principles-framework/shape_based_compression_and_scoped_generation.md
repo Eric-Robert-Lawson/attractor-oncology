@@ -132,14 +132,20 @@ The phrase "generate only what you need" covers four distinct mechanisms
 with very different levels of readiness. Conflating them would overstate
 what's currently possible.
 
-### 4a. Scoped forward construction (already available, not shape-dependent)
-If only specific starting position(s) matter, `discover()` can already be
-seeded with just those position(s) instead of the full exhaustive seed
-list — this naturally scopes discovery to only what's reachable forward
-from the positions of interest. This requires no shape catalog at all; it's
-an existing capability of the current pipeline (`generate_general_seed_positions.py`
-for a small, targeted seed set, vs. `generate_exhaustive_positions.py` for
-full combinatorial coverage).
+### 4a. Scoped forward construction from a single seed (now rigorously verified, not just asserted — and one honest, important caveat discovered along the way)
+If only specific starting position(s) matter, `discover()` can be seeded with just those position(s) instead of the full exhaustive seed list, scoping discovery to only what's forward-reachable from them. This requires no shape catalog at all — it predates and is independent of everything else in this document.
+
+**This was previously stated here as an existing capability but never actually tested — it has now been verified exhaustively, and the verification also surfaced something worth knowing before relying on it.** Seeded `general_solver` with exactly one position from KQvK's landscape (a genuine mid-distance position, not a near-mate trivial case) and compared the result against the full, all-368K-seed exhaustive run, position by position: **zero missing positions, zero mismatched distances, zero mismatched tied moves, across all 345,404 positions.** This is the correctness guarantee this section always claimed, now actually confirmed rather than assumed.
+
+*Why it's true, mechanically, not just empirically*: a position's value (distance, tied moves) is a pure function of its own descendants — never its ancestors — and the downstream-reachable set from any starting position is closed under taking children by construction (every legal child of a position reachable from the seed is, trivially, also reachable from the seed). Nothing outside that closed set is ever needed to correctly value anything inside it.
+
+**The honest caveat this same test surfaced**: discovery from that single seed reached 372,064 positions — identical to the full exhaustive seed list's own discovery count. For KQvK specifically, one reasonably central position's downstream closure appears to *be* the entire landscape, not a smaller piece of it, very plausibly because a queen's mobility means White and Black can reach almost anywhere from almost anywhere under merely legal (not optimal) play. So this mechanism is exactly as sound as claimed, but the practical benefit — building a genuinely *smaller* sub-landscape — didn't materialize on the one material tested. Whether it materializes on material with real structural disconnection (the bishop-color split is the proven example already in this project) is untested and is now a concrete, worthwhile thing to check, not an assumption to keep building on.
+
+**Convergence across separately-built pieces is also sound, for the same underlying reason, and needs no new mechanism**: since a position's value depends only on its descendants, two independently-explored downstream trees that happen to converge on a shared position will compute the identical value for it either way — computing it once and reusing it rather than redoing it is exactly the "sealed positions" mechanism the C++ engine already uses for resumed runs and `--preload-from` (§4c), applied within a single material's own piece-wise construction instead of across materials.
+
+**What this does *not* require changing anywhere in `general_analyzer.py`, worth stating precisely rather than assuming**: `trace_shape_graph` and the rest of the `reduce` pipeline operate entirely on an already-built `db` — they read whatever entries exist and were never written to assume anything about how those entries were produced. A `db` built from a single seed and a `db` built from the full exhaustive seed list are, when they cover the same reachable component, identical inputs to everything downstream of them. No code changed as a result of this finding because none needed to; it's a property of the C++ solver's seeding stage, entirely upstream of and invisible to `general_analyzer.py`.
+
+**This finding, and what it implies for candidate comparison and cross-piece caching specifically, has its own dedicated document**: `piecewise_construction_and_trajectory_caching.md` covers what that document had to correct itself on directly — comparing candidates and keeping only the best isn't new, it's the engine's own existing `classify()` loop, confirmed by reading the actual code; what's genuinely new is that this same comparison was shown to decompose correctly across independently-built pieces (verified exactly on a real tie plus a non-tied alternative) — as well as the caching mechanism across pieces (`--preload-from`, confirmed correct but confirmed *not* currently memory-bounded), and the honest summary of what's validated versus still open at each layer. That level of detail belongs there rather than duplicated here.
 
 ### 4b. Scoped querying of an already-solved landscape (proposed, buildable, not built — but ordinary engineering, not an open research question)
 Once a landscape has been *fully* solved once — on hardware that can afford
@@ -171,6 +177,8 @@ The actual open question, once this index exists, is empirical, not
 sequence stored once, meaningfully smaller in total than the raw
 per-position table it replaces? That's measurable directly and hasn't been
 measured yet — it isn't an unsolved design problem.
+
+**A closely related version of this was measured directly, not on origin sequences specifically, but on the shape graph (§1's `--trace-shape-graph`), and the answer for per-shape working set was a clear yes.** A position→shape lookup table plus physically partitioning the graph's nodes/edges per shape was built as a working prototype (not yet a permanent feature of `general_analyzer.py`) against a real, full KQvK graph: one genuinely distinct (mate, escape-count) shape came out to 120 nodes, 4,465 bytes — against the full graph's 16.7MB nodes file, roughly a 3,700x reduction in what actually needs to be read to work with one shape. This doesn't directly answer §4b's own question about origin-sequence storage, but it's real, measured evidence that the underlying intuition — total storage size being the wrong metric, per-query working set being the right one — holds up on data from this project, not just in principle.
 
 ### 4c. Reusing already-solved, reduced materials during a larger material's construction (built and verified, not just grounded in theory)
 
@@ -383,6 +391,7 @@ is right:
 
 ## 7. Open questions, stated as questions
 
+- **New, concrete, and specifically raised by §4a's own verification**: does single-seed (or small-seed-set) forward construction produce a genuinely *smaller* sub-landscape on material with real structural disconnection — the proven bishop-color split, for instance — the way it did not on KQvK? KQvK's queen-mobility result (one seed reached the entire 345,404-position landscape) is one material's data point, not a general finding; this is now directly testable rather than theoretical.
 - **The central one (§4d): once a `position → (origin, offset)` index is
   built for a material — an ordinary engineering task, not an open one —
   is it, plus each origin's sequence stored once, actually meaningfully

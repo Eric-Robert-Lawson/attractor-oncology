@@ -1497,6 +1497,237 @@ def resolve_reachable_shapes(db, origins, parent_counts, progress_every=1000000,
     return shape_registry, shape_counts, shape_examples
 
 
+def trace_shape_graph(db, origins, shape_registry, nodes_out_path, edges_out_path,
+                       target_shape_ids=None, checkpoint_path=None,
+                       checkpoint_every_seconds=60):
+    """Exports the actual reachability structure behind one or more shapes
+    as a true graph -- deduplicated nodes and edges -- rather than a flat
+    table of repeated per-origin paths. This is a direct, structural fix
+    for a real defect in an earlier version of this function: that version
+    wrote one full path per (origin, shape) pair, which meant two origins
+    converging onto the same later position had that shared downstream
+    segment written out twice, redundantly, as if it were two separate
+    things, and never represented a tie's multiple branches as a first-
+    class graph fact -- only discoverable by noticing two traces happened
+    to start at the same position. Both are real problems with the
+    artifact, not the underlying computation.
+
+    The underlying computation was already correct, and is unchanged here:
+    reachable_shapes(state) is a pure function of state alone (escape count
+    is a value computed backward from the mate, like distance itself, not
+    accumulated forward from wherever a path started) -- which is exactly
+    why memoizing it by state alone is sound, and exactly why two origins
+    converging on the same position were ALREADY guaranteed to be treated
+    as flowing into the identical shape from that point on, before this
+    function existed. What changes here is making that fact visible in the
+    output rather than leaving it implicit.
+
+    Structure:
+    - A position with more than one tied move (always an origin, by this
+      project's own definition) gets one edge per branch that serves at
+      least one in-scope target shape -- explicit, first-class divergence,
+      not something to infer from separate traces sharing a start point.
+    - A position reached by more than one predecessor gets more than one
+      incoming edge, but appears as exactly one node -- explicit,
+      first-class convergence, with its own downstream never duplicated.
+
+    This does not call, modify, or share any state with
+    resolve_reachable_shapes -- a fully separate, standalone pass over the
+    already-completed database, so nothing about that already-verified,
+    production-critical pass changes or carries any added risk.
+
+    Not memory-optimized the way resolve_reachable_shapes is -- reach_memo
+    and visited below are plain, unbounded structures, not reference-
+    counted. Only exercised at KQvK's scale (345K positions) so far; at
+    KBPvK's scale (58.7M) this would need the same kind of memory
+    treatment resolve_reachable_shapes required before it would be safe to
+    run, and hasn't been built or tested for that.
+
+    target_shape_ids, if given, restricts the graph to edges/nodes that
+    serve at least one of these specific shapes -- exploration starts only
+    from origins that reach one of them, and a tie's branches that don't
+    serve any in-scope shape are omitted entirely, not just unexplored.
+
+    checkpoint_path, if given, checkpoints between origins -- never
+    mid-exploration of a single origin's own recursive walk, the same
+    granularity Phase 1 checkpoints at between findings, for the same
+    reason: a single origin's own explore() call is the natural atomic
+    unit of work here, and there's no need for anything finer. Checkpoints
+    every checkpoint_every_seconds (default 60) via the same atomic
+    temp-file-then-rename helper (_save_checkpoint) used by every other
+    checkpoint in this file, and is deleted only after both output files
+    are confirmed written -- the same pattern, for the same reason, as
+    everywhere else in this pipeline: a crash between "computation
+    finished" and "output written" should still leave something to resume
+    from, not silently look like nothing ever ran.
+
+    Writes two files:
+    - nodes_out_path: Position, Turn, IsOrigin, ShapeIds -- semicolon-joined
+      "ShapeId:EscapeCount" entries (the FULL shape identity, matching
+      shapes.csv's own (ShapeId, EscapeCount) definition exactly -- an
+      earlier version of this dropped EscapeCount and used ShapeId alone,
+      a real, confirmed bug: every one of KQvK's 46 mates has more than
+      one distinct escape count, so that version was silently merging
+      every escape-count variant of a mate under one label). An
+      origin/tie can list more than one entry, a non-branching node
+      inherits whichever its single forced continuation reaches, which
+      can also be more than one if its downstream itself leads to a
+      further tie.
+    - edges_out_path: Position, Turn, Move, ChildPosition, ChildTurn -- one
+      row per edge that's part of at least one in-scope shape's flow."""
+    print(f"Tracing the shape reachability graph -- deduplicated nodes and edges, not repeated "
+          f"per-origin paths -- for every origin (or every origin reaching a requested shape) -- "
+          f"a separate, standalone pass over the completed database; does not touch or modify "
+          f"resolve_reachable_shapes' own results in any way.")
+
+    reach_memo = {}
+
+    def reachable_shapes(state):
+        if state in reach_memo:
+            return reach_memo[state]
+        entry = db[state]
+        if not entry.tied:
+            canon = (canonical_form_general(state[0]), state[1])
+            result = frozenset([(canon, 0)])
+            reach_memo[state] = result
+            return result
+        pos, turn = state
+        combined = set()
+        for mv, bn in entry.tied:
+            try:
+                child = (apply_move_general(pos, mv), child_turn(mv))
+            except AmbiguousMoveError:
+                continue
+            for mate_canon, esc in reachable_shapes(child):
+                combined.add((mate_canon, bn + esc))
+        result = frozenset(combined)
+        reach_memo[state] = result
+        return result
+
+    id_to_mate_canon = {sid: canon for canon, sid in shape_registry.items()}
+    target_mate_canons = None
+    if target_shape_ids is not None:
+        target_mate_canons = {id_to_mate_canon[sid] for sid in target_shape_ids
+                               if sid in id_to_mate_canon}
+
+    def in_scope_shape_ids(state):
+        # Returns (shape_id, escape_count) pairs -- the FULL shape
+        # identity, matching shapes.csv's own (ShapeId, EscapeCount)
+        # definition exactly. A real, confirmed bug in an earlier version
+        # of this function returned shape_id alone, silently collapsing
+        # every distinct escape-count variant of the same mate into one
+        # label -- confirmed directly on real KQvK output: all 46 mates
+        # have more than one distinct escape count (one has 133), so the
+        # earlier version was merging up to 133 genuinely different
+        # shapes under a single ShapeIds entry. --trace-shape-ids still
+        # filters by mate alone (shape_id, not the full pair), since
+        # that's the granularity a person picks shapes at from shapes.csv;
+        # what changes here is that the graph's own node/edge labels now
+        # preserve the full, correct identity rather than discarding half
+        # of it.
+        ids = set()
+        for mate_canon, esc in reachable_shapes(state):
+            if mate_canon not in shape_registry:
+                continue
+            if target_mate_canons is not None and mate_canon not in target_mate_canons:
+                continue
+            ids.add((shape_registry[mate_canon], esc))
+        return ids
+
+    visited = set()
+    node_shape_ids = {}
+    edges = set()
+
+    def explore(state):
+        if state in visited:
+            return
+        visited.add(state)
+        node_shape_ids[state] = in_scope_shape_ids(state)
+        entry = db[state]
+        if not entry.tied:
+            return
+        pos, turn = state
+        for mv, bn in entry.tied:
+            try:
+                child = (apply_move_general(pos, mv), child_turn(mv))
+            except AmbiguousMoveError:
+                continue
+            if in_scope_shape_ids(child):
+                edges.add((pos, turn, mv, child[0], child[1]))
+                explore(child)
+
+    sorted_origins = sorted(origins)
+    started = 0
+    start_index = 0
+
+    if checkpoint_path and os.path.exists(checkpoint_path):
+        import pickle
+        load_start = time.time()
+        with open(checkpoint_path, 'rb') as f:
+            checkpoint = pickle.load(f)
+        visited = checkpoint['visited']
+        node_shape_ids = checkpoint['node_shape_ids']
+        edges = checkpoint['edges']
+        reach_memo.update(checkpoint['reach_memo'])
+        started = checkpoint['started']
+        start_index = checkpoint['next_index']
+        print(f"  Resumed from checkpoint in {time.time()-load_start:.1f}s: "
+              f"{start_index}/{len(sorted_origins)} origins already scanned, "
+              f"{started} explored, {len(visited)} distinct nodes, {len(edges)} distinct edges "
+              f"so far", flush=True)
+
+    last_checkpoint = time.time()
+
+    if start_index >= len(sorted_origins):
+        # The checkpoint already reflects a fully-completed scan -- skip
+        # the walk entirely rather than re-iterating every origin just to
+        # confirm there's nothing left to do (same short-circuit
+        # find_shape_origins uses, for the same reason).
+        print(f"  Checkpoint already reflects a fully-completed scan "
+              f"({start_index}/{len(sorted_origins)}) -- skipping the walk entirely.", flush=True)
+    else:
+        for i in range(start_index, len(sorted_origins)):
+            origin = sorted_origins[i]
+            if i % 10000 == 0 and i:
+                print(f"  [trace] {i}/{len(sorted_origins)} origins scanned, {started} explored, "
+                      f"{len(visited)} distinct nodes so far", flush=True)
+            if target_mate_canons is None or in_scope_shape_ids(origin):
+                started += 1
+                explore(origin)
+
+            now = time.time()
+            if checkpoint_path and now - last_checkpoint >= checkpoint_every_seconds:
+                _save_checkpoint({'visited': visited, 'node_shape_ids': node_shape_ids,
+                                   'edges': edges, 'reach_memo': reach_memo, 'started': started,
+                                   'next_index': i + 1}, checkpoint_path)
+                last_checkpoint = time.time()
+                print(f"  [checkpoint] saved trace progress at {i + 1}/{len(sorted_origins)} "
+                      f"origins scanned", flush=True)
+
+    with open(nodes_out_path, 'w', newline='', encoding='utf-8') as f:
+        w = csv.writer(f)
+        w.writerow(['Position', 'Turn', 'IsOrigin', 'ShapeIds'])
+        for state in sorted(node_shape_ids):
+            shape_id_str = ';'.join(f"{sid}:{esc}" for sid, esc in sorted(node_shape_ids[state]))
+            w.writerow([state[0], state[1], state in origins, shape_id_str])
+
+    with open(edges_out_path, 'w', newline='', encoding='utf-8') as f:
+        w = csv.writer(f)
+        w.writerow(['Position', 'Turn', 'Move', 'ChildPosition', 'ChildTurn'])
+        for pos, turn, mv, child_pos, c_turn in sorted(edges):
+            w.writerow([pos, turn, mv, child_pos, c_turn])
+
+    print(f"  Wrote {len(node_shape_ids)} distinct nodes to {nodes_out_path} and "
+          f"{len(edges)} distinct edges to {edges_out_path}, from {started} explored origins.")
+
+    # Deleted only now, after both output files are confirmed written --
+    # same reasoning as every other checkpoint in this pipeline: a crash
+    # between "computation finished" and "files written" should still
+    # leave something to resume from.
+    if checkpoint_path and os.path.exists(checkpoint_path):
+        os.remove(checkpoint_path)
+
+
 def find_shape_origins(db, progress_every=5000000, checkpoint_path=None,
                         checkpoint_every_seconds=60):
     """Determines which positions are genuine shape ORIGINS -- the only
@@ -2444,6 +2675,17 @@ def cmd_reduce(args):
         print(f"(Skipped writing the full per-position mapping -- pass --full-position-map to "
               f"include it.)")
 
+    if args.trace_shape_graph:
+        target_ids = None
+        if args.trace_shape_ids:
+            target_ids = {int(x.strip()) for x in args.trace_shape_ids.split(',') if x.strip()}
+        nodes_path = os.path.join(args.out_dir, 'shape_graph_nodes.csv')
+        edges_path = os.path.join(args.out_dir, 'shape_graph_edges.csv')
+        trace_checkpoint = os.path.join(args.out_dir, 'shape_graph.trace_checkpoint.pkl')
+        trace_shape_graph(db, origins, shape_registry, nodes_path, edges_path,
+                           target_shape_ids=target_ids, checkpoint_path=trace_checkpoint,
+                           checkpoint_every_seconds=args.checkpoint_every_seconds_landscape)
+
     if collapsed_findings_small:
         print(f"\nFirst few findings with collapsed branches:")
         for r in collapsed_findings_small:
@@ -2592,6 +2834,22 @@ def main():
                           "This is one row per position (millions of rows at real scale) -- off "
                           "by default; the catalog itself (shapes.csv) is the compact, "
                           "interesting output most of the time.")
+    p4.add_argument('--trace-shape-graph', action='store_true',
+                     help="Also write shape_graph_nodes.csv and shape_graph_edges.csv: the "
+                          "deduplicated reachability graph behind every origin's shape(s) -- "
+                          "each distinct position appears as exactly one node even if reached "
+                          "from multiple origins (convergence), and a tie's multiple branches "
+                          "appear as multiple explicit edges from the same node (divergence), "
+                          "rather than either being left implicit. A fully separate, standalone "
+                          "pass that never touches resolve_reachable_shapes itself -- see "
+                          "trace_shape_graph's own docstring for the full structure. Only "
+                          "exercised at KQvK's scale so far -- not yet memory-optimized for "
+                          "anything at KBPvK's scale.")
+    p4.add_argument('--trace-shape-ids', default=None,
+                     help="Comma-separated ShapeId values to scope --trace-shape-graph to (e.g. "
+                          "'18,15,34') -- includes only origins/edges/nodes serving at least one "
+                          "of these shapes, instead of the entire graph. Ignored without "
+                          "--trace-shape-graph.")
 
     args = ap.parse_args()
     if args.command == 'classify':

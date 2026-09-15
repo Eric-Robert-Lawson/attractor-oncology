@@ -1801,7 +1801,8 @@ class BoundedConnectionCache:
 def compute_mate_clusters(db, origins, shape_registry, parent_counts,
                            jaccard_threshold=0.3, max_group_size=10,
                            target_shape_ids=None, progress_every_seconds=10,
-                           checkpoint_path=None, checkpoint_every_seconds=60):
+                           checkpoint_path=None, checkpoint_every_seconds=60,
+                           slow_origin_seconds=1.0):
     """Pre-pass: walks the same reachable structure trace_shape_graph_segmented's
     write pass walks, but writes nothing -- instead measures real mate
     co-occurrence and uses it to cluster mates into groups, so a single
@@ -1905,7 +1906,19 @@ def compute_mate_clusters(db, origins, shape_registry, parent_counts,
     pipeline. Added directly in response to a real, confirmed cost: an
     interrupted run at real scale (KBNvK, ~7.4M origins) lost real,
     non-recoverable progress with no checkpoint to resume from -- this
-    closes that gap for this function specifically."""
+    closes that gap for this function specifically.
+
+    slow_origin_seconds (default 1.0, 0/None disables): prints a direct,
+    named warning the instant any single origin's own explore() call
+    takes at least this long -- including its position, how many
+    distinct mates it touched, and what that origin's own O(k^2) pairing
+    cost was. Added directly in response to a real, observed pattern
+    during a genuine KBNvK-scale run: progress-print intervals varied by
+    roughly 200x (some 10-second windows processed 200+ origins, one
+    processed exactly 1), with no way to tell which specific origin
+    caused a slow window or why. This closes that gap -- confirms or
+    rules out the O(k^2) hypothesis directly, by name, rather than
+    leaving it to be inferred from progress-print gaps after the fact."""
     print(f"Cluster pre-pass: walking the reachable structure once to measure real mate "
           f"co-occurrence (coverage-set overlap, not board geometry or a raw frequency count "
           f"-- see this function's own docstring for why) before any file writing begins. "
@@ -2014,7 +2027,25 @@ def compute_mate_clusters(db, origins, shape_registry, parent_counts,
                   f"{len(pair_count)} distinct co-occurring mate pairs found so far, "
                   f"{len(reach_memo)} reach_memo entries currently retained", flush=True)
         mates_this_origin = set()
+        origin_start = time.time()
         explore(origin, mates_this_origin)
+        origin_elapsed = time.time() - origin_start
+        if slow_origin_seconds and origin_elapsed >= slow_origin_seconds:
+            # A real, confirmed diagnostic gap this closes: without this,
+            # a slow stretch is visible in the progress prints (a much
+            # smaller origin-count delta between them) but there's no way
+            # to tell WHICH origin caused it or WHY -- whether its own
+            # distinct-mate count k is unusually large (the O(k^2)
+            # pairing cost this function's own docstring already flags
+            # as the main scaling risk) or something else entirely (a
+            # large/deep reachable subgraph, independent of k). Printed
+            # here, directly, rather than left to be inferred from
+            # progress-print gaps after the fact.
+            print(f"  [slow origin] {origin[0]} ({origin[1]}) took {origin_elapsed:.2f}s -- "
+                  f"touched {len(mates_this_origin)} distinct mates this origin "
+                  f"(pairing cost for this one origin alone: "
+                  f"{len(mates_this_origin)*(len(mates_this_origin)-1)//2} pair-increments)",
+                  flush=True)
         mates_sorted = sorted(mates_this_origin)
         for sid in mates_sorted:
             total_count[sid] += 1
@@ -2073,7 +2104,8 @@ def compute_mate_clusters(db, origins, shape_registry, parent_counts,
 def trace_shape_graph_segmented(db, origins, shape_registry, parent_counts,
                                  out_dir, routing_path, max_open_files=100,
                                  target_shape_ids=None, mate_to_group=None,
-                                 checkpoint_path=None, checkpoint_every_seconds=60):
+                                 checkpoint_path=None, checkpoint_every_seconds=60,
+                                 slow_origin_seconds=1.0):
     """Memory-bounded alternative to trace_shape_graph: writes directly to
     per-mate (or, with mate_to_group, per-GROUP -- see compute_mate_clusters)
     SQLite files as the walk proceeds, instead of accumulating the whole
@@ -2398,7 +2430,17 @@ def trace_shape_graph_segmented(db, origins, shape_registry, parent_counts,
         # that computation to happen only once, inside explore(), instead
         # of once outside it and then again inside.
         started += 1
+        origin_start = time.time()
+        nodes_before, edges_before = node_count, edge_count
         explore(origin)
+        origin_elapsed = time.time() - origin_start
+        if slow_origin_seconds and origin_elapsed >= slow_origin_seconds:
+            # Same diagnostic gap as compute_mate_clusters' own, closed
+            # the same way -- see that function's docstring for the real,
+            # observed 200x progress-rate variance that motivated this.
+            print(f"  [slow origin] {origin[0]} ({origin[1]}) took {origin_elapsed:.2f}s -- "
+                  f"wrote {node_count-nodes_before} nodes and {edge_count-edges_before} "
+                  f"edge-rows for this one origin", flush=True)
 
         now = time.time()
         if checkpoint_path and now - last_checkpoint >= checkpoint_every_seconds:
@@ -2994,6 +3036,111 @@ def _load_phase1_results(branch_reduction_path, skipped_path, subsumption_edges_
 
 
 def cmd_reduce(args):
+    if args.skip_phase1_and_landscape:
+        # A targeted fix for a real, measured cost, not a speculative one:
+        # --force-rerun-phase1 was the only way to reach the trace/cluster
+        # code path once shapes.csv already exists (see the "already
+        # complete, skipping" check below), but it ALSO forces the entire
+        # Phase 2 landscape scan -- every position in the database -- to
+        # redo from scratch, even when shapes.csv is already correct and
+        # complete. Confirmed directly to be a real, substantial,
+        # avoidable cost at real scale: KBNvK-class databases run to tens
+        # of millions of positions, and that scan's own checkpoint is
+        # deleted the moment it succeeds, so a later, unrelated
+        # interruption (e.g. during the cluster pre-pass, which only
+        # starts after Phase 2 has already finished) leaves nothing to
+        # resume Phase 2 from if it gets forced to rerun anyway.
+        #
+        # This flag skips Phase 1 and Phase 2 entirely, reconstructing
+        # exactly what compute_mate_clusters/trace_shape_graph_segmented
+        # actually need directly from already-written, trusted output:
+        # shape_registry from shapes.csv's own rows (a cheap CSV read, not
+        # a re-scan) and origins/parent_counts from the existing origins
+        # cache (already fast -- that's the whole point of that cache).
+        # Requires both to already exist from a prior, successful run --
+        # fails loudly, not silently, if either is missing, since this
+        # flag's entire premise is "these are already correct, trust them
+        # directly," not "compute them if absent."
+        shapes_path = os.path.join(args.out_dir, 'shapes.csv')
+        origins_cache_path = args.db_path + '.origins_cache.pkl'
+        if not os.path.exists(shapes_path):
+            print(f"ERROR: --skip-phase1-and-landscape requires {shapes_path} to already exist "
+                  f"from a prior, successful run -- it doesn't. Run reduce without this flag "
+                  f"first (Phase 1 and Phase 2 need to complete at least once).")
+            return
+        if not os.path.exists(origins_cache_path):
+            print(f"ERROR: --skip-phase1-and-landscape requires {origins_cache_path} to already "
+                  f"exist from a prior, successful run -- it doesn't. Run reduce without this "
+                  f"flag first.")
+            return
+
+        print(f"Loading {args.db_path}...")
+        db = load_db(args.db_path)
+        print(f"  Loaded {len(db)} positions")
+
+        print(f"  Loading cached shape origins from {origins_cache_path}...")
+        import pickle
+        with open(origins_cache_path, 'rb') as f:
+            cache = pickle.load(f)
+        db_mtime = os.path.getmtime(args.db_path)
+        if cache['db_len'] != len(db) or cache['db_mtime'] != db_mtime:
+            print(f"ERROR: {origins_cache_path} was built against a different database "
+                  f"({cache['db_len']} positions, mtime {cache['db_mtime']}) than the one just "
+                  f"loaded ({len(db)} positions, mtime {db_mtime}). Refusing to proceed with a "
+                  f"stale cache -- run without --skip-phase1-and-landscape to rebuild correctly.")
+            return
+        origins = cache['origins']
+        parent_counts = cache['parent_counts']
+        print(f"  Loaded {len(origins)} genuine shape origins from cache.")
+
+        print(f"  Reconstructing shape_registry directly from {shapes_path} "
+              f"(cheap CSV read, not a re-scan)...")
+        shape_registry = {}
+        with open(shapes_path, encoding='utf-8') as f:
+            for row in csv.DictReader(f):
+                shape_registry[(row['MatePosition'], row['MateTurn'])] = int(row['ShapeId'])
+        print(f"  Reconstructed {len(shape_registry)} distinct mates.")
+
+        # Identical to the normal path's own trace/cluster block below --
+        # see there for the full, documented behavior of each flag.
+        if args.trace_shape_graph:
+            target_ids = None
+            if args.trace_shape_ids:
+                target_ids = {int(x.strip()) for x in args.trace_shape_ids.split(',') if x.strip()}
+            nodes_path = os.path.join(args.out_dir, 'shape_graph_nodes.csv')
+            edges_path = os.path.join(args.out_dir, 'shape_graph_edges.csv')
+            trace_checkpoint = os.path.join(args.out_dir, 'shape_graph.trace_checkpoint.pkl')
+            trace_shape_graph(db, origins, shape_registry, nodes_path, edges_path,
+                               target_shape_ids=target_ids, checkpoint_path=trace_checkpoint,
+                               checkpoint_every_seconds=args.checkpoint_every_seconds_landscape)
+
+        if args.trace_shape_graph_segmented:
+            target_ids = None
+            if args.trace_shape_ids:
+                target_ids = {int(x.strip()) for x in args.trace_shape_ids.split(',') if x.strip()}
+            seg_out_dir = args.trace_shape_segmented_out_dir or os.path.join(args.out_dir, 'shape_graph_segmented')
+            routing_path = args.trace_shape_routing_path or os.path.join(args.out_dir, 'shape_graph_routing.sqlite')
+            cluster_checkpoint = os.path.join(args.out_dir, 'cluster_mates.trace_checkpoint.pkl')
+            segmented_checkpoint = os.path.join(args.out_dir, 'shape_graph_segmented.trace_checkpoint.pkl')
+            mate_to_group = None
+            if args.cluster_mates:
+                mate_to_group = compute_mate_clusters(
+                    db, origins, shape_registry, parent_counts,
+                    jaccard_threshold=args.cluster_jaccard_threshold,
+                    max_group_size=args.cluster_max_group_size,
+                    target_shape_ids=target_ids,
+                    checkpoint_path=cluster_checkpoint,
+                    checkpoint_every_seconds=args.checkpoint_every_seconds_landscape,
+                    slow_origin_seconds=args.slow_origin_seconds)
+            trace_shape_graph_segmented(db, origins, shape_registry, parent_counts,
+                                         seg_out_dir, routing_path,
+                                         max_open_files=args.max_open_files, target_shape_ids=target_ids,
+                                         mate_to_group=mate_to_group,
+                                         checkpoint_path=segmented_checkpoint,
+                                         checkpoint_every_seconds=args.checkpoint_every_seconds_landscape,
+                                         slow_origin_seconds=args.slow_origin_seconds)
+        return
+
     print(f"Loading {args.findings_csv}...")
     findings = load_findings(args.findings_csv)
     print(f"  Loaded {len(findings)} independent findings")
@@ -3419,13 +3566,15 @@ def cmd_reduce(args):
                 max_group_size=args.cluster_max_group_size,
                 target_shape_ids=target_ids,
                 checkpoint_path=cluster_checkpoint,
-                checkpoint_every_seconds=args.checkpoint_every_seconds_landscape)
+                checkpoint_every_seconds=args.checkpoint_every_seconds_landscape,
+                slow_origin_seconds=args.slow_origin_seconds)
         trace_shape_graph_segmented(db, origins, shape_registry, parent_counts,
                                      seg_out_dir, routing_path,
                                      max_open_files=args.max_open_files, target_shape_ids=target_ids,
                                      mate_to_group=mate_to_group,
                                      checkpoint_path=segmented_checkpoint,
-                                     checkpoint_every_seconds=args.checkpoint_every_seconds_landscape)
+                                     checkpoint_every_seconds=args.checkpoint_every_seconds_landscape,
+                                     slow_origin_seconds=args.slow_origin_seconds)
 
     if collapsed_findings_small:
         print(f"\nFirst few findings with collapsed branches:")
@@ -3502,6 +3651,20 @@ def main():
                           "complete and its results are loaded back instead of re-running -- pass "
                           "this if the underlying findings_csv or database actually changed since "
                           "then and it genuinely needs to be redone.")
+    p4.add_argument('--skip-phase1-and-landscape', action='store_true',
+                     help="Skip Phase 1 and Phase 2 entirely, going straight to "
+                          "--trace-shape-graph/--trace-shape-graph-segmented/--cluster-mates. "
+                          "Requires shapes.csv and <db_path>.origins_cache.pkl to already exist "
+                          "from a prior successful run -- reconstructs shape_registry directly "
+                          "from shapes.csv (a cheap CSV read) and origins/parent_counts from the "
+                          "cache, rather than recomputing either. The real problem this solves: "
+                          "--force-rerun-phase1 is the only way to reach the trace/cluster code "
+                          "once shapes.csv already exists, but it ALSO forces the entire Phase 2 "
+                          "landscape scan to redo from scratch even when shapes.csv is already "
+                          "correct -- a real, substantial, avoidable cost at real scale (tens of "
+                          "millions of positions for a KBNvK-class database). Mutually exclusive "
+                          "in practice with --force-rerun-phase1 and --retry-skipped, which both "
+                          "assume Phase 1/2 are actually being run.")
     p4.add_argument('--force-rerun-origins', action='store_true',
                      help="Redo the origin scan even if a valid, matching cache "
                           "(<db_path>.origins_cache.pkl) already exists on disk. By default, a "
@@ -3646,6 +3809,14 @@ def main():
                           "chaining problem plain transitive merging has (one group swallowed 21 "
                           "of 46 mates on real KQvK data before this cap existed). Ignored "
                           "without --cluster-mates.")
+    p4.add_argument('--slow-origin-seconds', type=float, default=1.0,
+                     help="For --cluster-mates and --trace-shape-graph-segmented: print a direct, "
+                          "named warning the instant any single origin's own exploration takes at "
+                          "least this many seconds (default 1.0; 0 disables). Added directly in "
+                          "response to a real, observed pattern at KBNvK scale -- progress-print "
+                          "intervals varying by roughly 200x with no way to tell which specific "
+                          "origin caused a slow window, or why. This names it directly rather than "
+                          "leaving it to be inferred from progress-print gaps.")
 
     args = ap.parse_args()
     if args.command == 'classify':

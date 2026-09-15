@@ -2225,6 +2225,41 @@ public:
     unordered_set<uint64_t> proven_draws;
     unordered_set<uint64_t> preloaded_draw_keys;
 
+    // A REAL, CONFIRMED BUG this exists to fix, found and traced through
+    // real data before this was written -- not a defensive measure against
+    // a hypothetical. seed_from_preloaded used to insert DIRECTLY into
+    // `classified`, before classify()'s fixed-point loop even starts.
+    // Without preloading, a position only ever enters `classified` in
+    // exactly the pass matching its own distance (distance D positions are
+    // added during pass D, since their own best child, distance D-1,
+    // only became available at the END of pass D-1) -- classify()'s own
+    // "lock in the moment any child is known" logic for White-to-move is
+    // ONLY safe because of this strict ordering: the first available
+    // child is guaranteed to be as good as any child ever will be, since
+    // nothing smaller could still be pending.
+    //
+    // Preloading broke that guarantee: a preloaded position's distance
+    // was injected immediately (effectively "pass 0"), regardless of its
+    // actual size. Confirmed directly on real data: a KPvK position with
+    // two candidate continuations -- one reaching an immediately-available
+    // preloaded KQvK position (distance 12), one reaching a native KPvK
+    // position that would eventually resolve to something better
+    // (distance 8, several passes later) -- locked in using the
+    // preloaded, WORSE option, before the native, better one had a
+    // chance to resolve. Once locked in, classify()'s own
+    // `if (classified.count(key)) continue;` never reconsiders it.
+    //
+    // Fixed by staging preloaded values here, bucketed by their own
+    // distance, and releasing each bucket into `classified` only at the
+    // start of the pass matching that distance -- restoring the exact
+    // same timing a natively-discovered position of that distance would
+    // have had. Correctness is unaffected either way (a preloaded value
+    // is always eventually released, never discarded) -- only the
+    // TIMING of when it becomes visible to the induction changes, which
+    // is exactly the fix: the bug was purely about premature visibility,
+    // not about the values themselves being wrong.
+    unordered_map<int, vector<pair<uint64_t, RetroResult>>> pending_preloaded;
+
     void seed_draws_from_preloaded(const unordered_set<uint64_t>& draws) {
         for (auto& key : draws) {
             proven_draws.insert(key);
@@ -2271,7 +2306,12 @@ public:
     // search in the first place.
     void seed_from_preloaded(const unordered_map<uint64_t, pair<int,int>>& preloaded) {
         for (auto& [key, val] : preloaded) {
-            classified[key] = {val.first, val.second, 0};
+            // val.first is this position's own, already-proven distance --
+            // staged here rather than inserted directly, so it becomes
+            // visible to classify()'s own induction at the correct pass,
+            // not immediately. See pending_preloaded's own comment for
+            // the real, confirmed bug this fixes.
+            pending_preloaded[val.first].push_back({key, {val.first, val.second, 0}});
             preloaded_keys.insert(key);
         }
     }
@@ -2310,7 +2350,13 @@ public:
             // positions" on a resumed run where 376,823 of those were
             // already fully proven on disk. Not expanding known positions'
             // children is what actually shrinks that number.
-            if (classified.count(key) || proven_draws.count(key)) { sealed_count++; continue; }
+            // Checks preloaded_keys too, not just classified/proven_draws --
+            // a preloaded position's own VALUE is now deliberately staged
+            // (see pending_preloaded's own comment, above), not inserted
+            // into `classified` immediately, but discover() still needs to
+            // know "this is already proven, don't expand it" regardless of
+            // when its value becomes visible to classify()'s own induction.
+            if (classified.count(key) || proven_draws.count(key) || preloaded_keys.count(key)) { sealed_count++; continue; }
             GeneralState st = unpack_general_state(key);
             RetroNode node;
             if (st.to_move == 'W') node.flags |= 4;
@@ -2324,7 +2370,7 @@ public:
             for (auto& c : cands) {
                 uint64_t ckey = pack_general_state(c);
                 node.children.push_back(ckey);
-                if (!nodes.count(ckey) && !classified.count(ckey) && !proven_draws.count(ckey)) queue.push_back(ckey);
+                if (!nodes.count(ckey) && !classified.count(ckey) && !proven_draws.count(ckey) && !preloaded_keys.count(ckey)) queue.push_back(ckey);
             }
             nodes[key] = node;
         }
@@ -2357,12 +2403,33 @@ public:
 
     void classify() {
         for (auto& [key, node] : nodes) if (node.flags & 1) classified[key] = {0, 0, 0};
+        // Release distance-0 preloaded entries now too, alongside native
+        // checkmates -- see pending_preloaded's own comment for why this
+        // staged-by-distance release exists.
+        if (pending_preloaded.count(0)) {
+            for (auto& [key, res] : pending_preloaded[0]) classified[key] = res;
+            pending_preloaded.erase(0);
+        }
         passes_run = 0;
         bool changed = true;
         auto classify_start = chrono::high_resolution_clock::now();
-        while (changed) {
+        // Loop condition also checks pending_preloaded directly, not just
+        // `changed` -- a pass that only releases a preloaded bucket (no
+        // NATIVE position newly classified in that same pass) must not
+        // let the loop stop early, or a preloaded entry staged at a
+        // larger distance than the native portion's own maximum would
+        // never get released at all.
+        while (changed || !pending_preloaded.empty()) {
             changed = false;
             passes_run++;
+            // Release this pass's own distance-bucket, BEFORE scanning --
+            // restores the same timing a natively-discovered position of
+            // this distance would have had. See pending_preloaded's own
+            // comment for the real, confirmed bug this fixes.
+            if (pending_preloaded.count(passes_run)) {
+                for (auto& [key, res] : pending_preloaded[passes_run]) classified[key] = res;
+                pending_preloaded.erase(passes_run);
+            }
             // Staged separately, merged only after the pass completes -- see
             // the large comment above this class for why this matters.
             unordered_map<uint64_t, RetroResult> newly_classified;

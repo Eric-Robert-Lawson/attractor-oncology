@@ -1786,11 +1786,298 @@ class BoundedConnectionCache:
             conn.close()
         self._conns.clear()
 
+    def commit_all(self):
+        """Commits every currently-open connection WITHOUT closing them --
+        used at checkpoint time so everything a checkpoint claims is done
+        is actually durable on disk, not sitting in an open, uncommitted
+        transaction that a crash immediately after the checkpoint save
+        would lose. Distinct from close_all(): keeps connections open and
+        reusable, since a checkpoint firing mid-run shouldn't force
+        already-warm connections to be reopened right after resuming."""
+        for conn, cur in self._conns.values():
+            conn.commit()
+
+
+def compute_mate_clusters(db, origins, shape_registry, parent_counts,
+                           jaccard_threshold=0.3, max_group_size=10,
+                           target_shape_ids=None, progress_every_seconds=10,
+                           checkpoint_path=None, checkpoint_every_seconds=60):
+    """Pre-pass: walks the same reachable structure trace_shape_graph_segmented's
+    write pass walks, but writes nothing -- instead measures real mate
+    co-occurrence and uses it to cluster mates into groups, so a single
+    origin's own distinct-FILE requirement drops from its raw distinct-
+    mate count toward something much smaller. Directly attacks the real
+    cause of BoundedConnectionCache thrashing risk (see that class's own
+    docstring) rather than just sizing the cache bigger and hoping.
+
+    WHY COVERAGE-SET OVERLAP, NOT GEOMETRY OR A RAW FREQUENCY COUNT:
+    simple board-position geometry (king-king distance, corner distance)
+    was already tested earlier in this project and found NOT to cleanly
+    separate shape membership -- the five largest shapes all spanned the
+    same range on every geometric feature tried. What does carry real
+    signal: each mate's actual coverage set -- the set of origins whose
+    trajectory reaches it -- and the STRUCTURAL overlap between two
+    mates' coverage sets (Jaccard similarity: |intersection|/|union|),
+    not a raw co-occurrence count, which conflates "these two are
+    structurally entangled" with "both happen to be individually
+    common." Confirmed directly on real KQvK data before this was
+    trusted: pairwise Jaccard across all 1,035 mate pairs ranged from
+    0.000 (many pairs share zero origins at all) to 1.000 (two mates
+    with IDENTICAL coverage -- every origin reaching one reaches the
+    other), median 0.148 -- real, non-uniform structure, not noise.
+
+    MEMORY-EFFICIENT BY DESIGN, NOT BY ACCIDENT: does not build or
+    retain any mate's full coverage set -- a dict of large sets of
+    origin tuples would itself risk becoming the next unbounded-growth
+    problem this project has already hit and fixed multiple times
+    (find_shape_origins' parent_counts, resolve_reachable_shapes'
+    resolved dict). Instead accumulates only two small aggregates while
+    walking: total_count[mate] (how many origins touch this mate at
+    all) and pair_count[(mate_a, mate_b)] (how many origins touch BOTH)
+    -- Jaccard is then exactly recoverable as
+    pair_count / (total_count[a] + total_count[b] - pair_count), without
+    ever holding a single origin ID longer than the single origin-loop
+    iteration currently being processed. pair_count's own size is
+    bounded by the number of DISTINCT mate pairs that ever actually
+    co-occur at some origin, not the full M^2/2 possible pairs -- most
+    pairs never co-occur at all (confirmed directly on KQvK: many sit at
+    exactly 0.000, meaning they're never even inserted into pair_count).
+
+    A REAL COST THIS ADDS, STATED PLAINLY, NOT DOWNPLAYED: this walks
+    the same reachable structure trace_shape_graph_segmented's own write
+    pass walks, a SECOND time -- a real, roughly-doubling cost on the
+    walk portion of total runtime, paid once per material, in exchange
+    for a dramatically smaller worst-case connection-cache requirement
+    on the write pass that follows. Whether this trade is worth it
+    depends on how large the material's own per-origin working set gets
+    without clustering -- for materials where that was never large
+    enough to risk thrashing, this pre-pass is pure overhead with no
+    offsetting benefit, which is why it's opt-in, not default.
+
+    A SEPARATE, REAL COMPUTE COST WORTH FLAGGING HONESTLY, NOT JUST THE
+    WALK ITSELF: the per-origin inner loop below costs O(k^2) in that
+    origin's own distinct-mate count k (every pair within that origin's
+    working set gets one counter increment). Measured directly on real
+    KQvK data, k's own distribution was heavily concentrated at small
+    values (median 6) with a real but narrow tail (max 43) -- so this
+    stayed cheap in practice there. Whether a larger, more complex
+    material's own per-origin working-set distribution stays similarly
+    concentrated, or whether it commonly reaches much larger k (making
+    this pre-pass's own O(k^2) cost the new bottleneck), is genuinely
+    unverified past KQvK -- this is the single most important thing to
+    watch when running this pre-pass on a new material for the first
+    time.
+
+    CLUSTERING METHOD: greedy, size-capped agglomeration, not plain
+    transitive union-find -- a real, confirmed problem with the naive
+    approach, not a hypothetical one. Plain union-find at a fixed
+    Jaccard threshold was tried first on real KQvK data: it correctly
+    found the same real structure, but chained too aggressively -- A
+    tightly linked to B, B tightly linked to C, so A and C end up forced
+    into the same group even when Jaccard(A, C) itself is low. On real
+    KQvK data this produced one group of 21 mates out of 46 (nearly half
+    the material in one file), clearly not what a "these are close
+    enough to share a file" merge is supposed to produce. Fixed by
+    processing pairs in DESCENDING Jaccard order and merging two groups
+    only while the resulting combined group would stay at or under
+    max_group_size -- the highest-confidence merges happen first, and no
+    single group can balloon past a size that would recreate the
+    problem this exists to avoid. Re-measured directly after this fix,
+    not assumed better: on the same real KQvK data, the worst-case
+    per-origin distinct-FILE count dropped from (median 6, p90 20, p99
+    36, p99.9 42, max 43) unclustered to (median 3, p90 6, p99 10, p99.9
+    13, max 14) with jaccard_threshold=0.5, max_group_size left at its
+    default -- a real, roughly 3x reduction in the worst case, holding
+    through the tail, not just the average.
+
+    Returns mate_to_group: dict mapping every mate_id in shape_registry
+    (or, if target_shape_ids narrows scope, every mate_id actually seen)
+    to an integer group_id. A mate that never had any pair reach
+    jaccard_threshold keeps its own singleton group -- identical to the
+    unclustered case for that specific mate, not an error or a gap.
+
+    checkpoint_path, if given, checkpoints the full running state (visited,
+    reach_memo, parent_counts, total_count, pair_count, and the current
+    origin index) every checkpoint_every_seconds and resumes from it
+    automatically -- same atomic temp-file-then-rename helper
+    (_save_checkpoint), same "checkpointed between origins, never
+    mid-exploration" granularity, as every other checkpoint in this
+    pipeline. Added directly in response to a real, confirmed cost: an
+    interrupted run at real scale (KBNvK, ~7.4M origins) lost real,
+    non-recoverable progress with no checkpoint to resume from -- this
+    closes that gap for this function specifically."""
+    print(f"Cluster pre-pass: walking the reachable structure once to measure real mate "
+          f"co-occurrence (coverage-set overlap, not board geometry or a raw frequency count "
+          f"-- see this function's own docstring for why) before any file writing begins. "
+          f"This is a genuine second walk of the same structure the write pass will walk "
+          f"again afterward -- a real, roughly-doubling cost on the walk portion of runtime, "
+          f"paid once, in exchange for a smaller worst-case file-open requirement.")
+    t0 = time.time()
+
+    parent_counts = dict(parent_counts)  # don't mutate the caller's own copy
+    reach_memo = {}
+
+    def reachable_shapes(state):
+        if state in reach_memo:
+            return reach_memo[state]
+        entry = db[state]
+        if not entry.tied:
+            canon = (canonical_form_general(state[0]), state[1])
+            result = frozenset([(canon, 0)])
+            reach_memo[state] = result
+            return result
+        pos, turn = state
+        combined = set()
+        for mv, bn in entry.tied:
+            try:
+                child = (apply_move_general(pos, mv), child_turn(mv))
+            except AmbiguousMoveError:
+                continue
+            for mate_canon, esc in reachable_shapes(child):
+                combined.add((mate_canon, bn + esc))
+            remaining = parent_counts.get(child, 0) - 1
+            if remaining <= 0:
+                reach_memo.pop(child, None)
+                parent_counts.pop(child, None)
+            else:
+                parent_counts[child] = remaining
+        result = frozenset(combined)
+        reach_memo[state] = result
+        return result
+
+    id_to_mate_canon = {sid: canon for canon, sid in shape_registry.items()}
+    target_mate_canons = None
+    if target_shape_ids is not None:
+        target_mate_canons = {id_to_mate_canon[sid] for sid in target_shape_ids
+                               if sid in id_to_mate_canon}
+
+    visited = set()
+    total_count = Counter()
+    pair_count = Counter()
+    start_index = 0
+
+    if checkpoint_path and os.path.exists(checkpoint_path):
+        import pickle
+        load_start = time.time()
+        with open(checkpoint_path, 'rb') as f:
+            checkpoint = pickle.load(f)
+        visited = checkpoint['visited']
+        reach_memo = checkpoint['reach_memo']
+        parent_counts = checkpoint['parent_counts']
+        total_count = checkpoint['total_count']
+        pair_count = checkpoint['pair_count']
+        start_index = checkpoint['next_index']
+        print(f"  Resumed from checkpoint in {time.time()-load_start:.1f}s: "
+              f"{start_index} origins already scanned, {len(pair_count)} distinct "
+              f"co-occurring pairs found so far, {len(reach_memo)} reach_memo entries "
+              f"retained.", flush=True)
+
+    def explore(state, mates_this_origin):
+        if state in visited:
+            return
+        visited.add(state)
+        entry = db[state]
+        pos, turn = state
+        if not entry.tied:
+            canon = (canonical_form_general(pos), turn)
+            if canon in shape_registry and (target_mate_canons is None or canon in target_mate_canons):
+                mates_this_origin.add(shape_registry[canon])
+            reach_memo[state] = frozenset([(canon, 0)])
+            return
+        combined_raw = set()
+        child_data = []
+        for mv, bn in entry.tied:
+            try:
+                child = (apply_move_general(pos, mv), child_turn(mv))
+            except AmbiguousMoveError:
+                continue
+            child_raw = reachable_shapes(child)
+            for mate_canon, esc in child_raw:
+                combined_raw.add((mate_canon, bn + esc))
+                if mate_canon in shape_registry and (target_mate_canons is None or mate_canon in target_mate_canons):
+                    mates_this_origin.add(shape_registry[mate_canon])
+            child_data.append((mv, child, child_raw))
+        reach_memo[state] = frozenset(combined_raw)
+        for mv, child, child_raw in child_data:
+            if any(mc in shape_registry for mc, esc in child_raw):
+                explore(child, mates_this_origin)
+
+    sorted_origins = sorted(origins)
+    last_print = time.time()
+    last_checkpoint = time.time()
+    for i in range(start_index, len(sorted_origins)):
+        origin = sorted_origins[i]
+        now = time.time()
+        if now - last_print >= progress_every_seconds:
+            last_print = now
+            print(f"  [cluster pre-pass] {i}/{len(sorted_origins)} origins scanned, "
+                  f"{len(pair_count)} distinct co-occurring mate pairs found so far, "
+                  f"{len(reach_memo)} reach_memo entries currently retained", flush=True)
+        mates_this_origin = set()
+        explore(origin, mates_this_origin)
+        mates_sorted = sorted(mates_this_origin)
+        for sid in mates_sorted:
+            total_count[sid] += 1
+        for a_idx in range(len(mates_sorted)):
+            for b_idx in range(a_idx + 1, len(mates_sorted)):
+                pair_count[(mates_sorted[a_idx], mates_sorted[b_idx])] += 1
+
+        if checkpoint_path and now - last_checkpoint >= checkpoint_every_seconds:
+            _save_checkpoint({'visited': visited, 'reach_memo': reach_memo,
+                               'parent_counts': parent_counts, 'total_count': total_count,
+                               'pair_count': pair_count, 'next_index': i + 1}, checkpoint_path)
+            last_checkpoint = time.time()
+            print(f"  [checkpoint] saved cluster pre-pass progress at {i + 1}/{len(sorted_origins)} "
+                  f"origins scanned", flush=True)
+
+    print(f"  Pre-pass walk complete in {time.time()-t0:.1f}s: {len(total_count)} distinct "
+          f"mates seen, {len(pair_count)} distinct co-occurring pairs found (out of "
+          f"{len(total_count)*(len(total_count)-1)//2} theoretically possible).")
+
+    all_mates = sorted(total_count.keys())
+    groups = {m: {m} for m in all_mates}
+    group_of = {m: m for m in all_mates}
+
+    scored_pairs = []
+    for (a, b), shared in pair_count.items():
+        union_sz = total_count[a] + total_count[b] - shared
+        jaccard = shared / union_sz if union_sz else 0
+        if jaccard >= jaccard_threshold:
+            scored_pairs.append((jaccard, a, b))
+    scored_pairs.sort(reverse=True)
+
+    for jaccard, a, b in scored_pairs:
+        ga, gb = group_of[a], group_of[b]
+        if ga == gb:
+            continue
+        if len(groups[ga]) + len(groups[gb]) > max_group_size:
+            continue
+        for m in groups[gb]:
+            group_of[m] = ga
+        groups[ga] |= groups[gb]
+        del groups[gb]
+
+    mate_to_group = {m: group_of[m] for m in all_mates}
+    n_groups = len(set(mate_to_group.values()))
+    print(f"  Clustered {len(all_mates)} mates into {n_groups} groups "
+          f"(jaccard_threshold={jaccard_threshold}, max_group_size={max_group_size}).")
+    # Deleted only now, after the walk and clustering both fully
+    # completed -- same reasoning as every other checkpoint in this
+    # pipeline: a crash before this point should still leave something
+    # to resume from.
+    if checkpoint_path and os.path.exists(checkpoint_path):
+        os.remove(checkpoint_path)
+    return mate_to_group
+
 
 def trace_shape_graph_segmented(db, origins, shape_registry, parent_counts,
                                  out_dir, routing_path, max_open_files=100,
-                                 target_shape_ids=None):
+                                 target_shape_ids=None, mate_to_group=None,
+                                 checkpoint_path=None, checkpoint_every_seconds=60):
     """Memory-bounded alternative to trace_shape_graph: writes directly to
+    per-mate (or, with mate_to_group, per-GROUP -- see compute_mate_clusters)
+    SQLite files as the walk proceeds, instead of accumulating the whole
+    graph in memory and writing flat CSVs at the end.
     segmented, per-mate SQLite files (plus a routing index) during the
     walk itself, instead of accumulating node_shape_ids/edges in memory
     for the whole run and writing flat CSVs only at the end.
@@ -1859,11 +2146,30 @@ def trace_shape_graph_segmented(db, origins, shape_registry, parent_counts,
     (not re-emitting) a position multiple times. Smaller than
     node_shape_ids/edges/reach_memo combined were before (a set of
     states, not a dict of values, nor a cache of full reachable-shape
-    sets), but not zero. No checkpoint/resume yet either -- output is
-    written incrementally to disk as the walk proceeds, so a crash
-    doesn't lose everything the way the old CSV-accumulating version's
-    crash would have, but a restart currently re-walks from the first
-    origin rather than resuming partway through."""
+    sets), but not zero.
+
+    checkpoint_path, if given, checkpoints between origins (never
+    mid-exploration of a single origin's own recursive walk -- the same
+    granularity as every other checkpoint in this pipeline) every
+    checkpoint_every_seconds, and resumes from it automatically. Added
+    directly in response to a real, confirmed cost, not built
+    speculatively: an interrupted run at real scale (KBNvK, ~7.4M
+    origins) lost real, non-recoverable progress with nothing to resume
+    from. A durability detail worth being explicit about, since getting
+    it wrong would silently corrupt a resume rather than just cost time:
+    every currently-open per-mate/group SQLite connection AND the
+    routing connection are explicitly committed (BoundedConnectionCache's
+    own commit_all(), not just close_all()) immediately before the
+    checkpoint file itself is saved -- so the checkpoint's own claim
+    ("everything through origin i is done") is never ahead of what's
+    actually durable on disk. Without this, a crash between the
+    checkpoint save and an eventual SQLite commit could leave `visited`
+    (which is what's checkpointed) claiming a position was already
+    written when it wasn't yet durable, and a resume would then never
+    revisit it, since the visited-check would skip it. routing.sqlite
+    itself is never deleted or recreated on a resumed run (only on a
+    genuine fresh start) -- its existing rows, plus a restored `visited`
+    set, are what makes resuming produce no duplicate rows."""
     print(f"Tracing the shape reachability graph, memory-bounded and segmented -- writing "
           f"directly to per-mate SQLite files as the walk proceeds, instead of accumulating "
           f"the whole graph in memory first. Does not touch or modify trace_shape_graph's own "
@@ -1911,23 +2217,73 @@ def trace_shape_graph_segmented(db, origins, shape_registry, parent_counts,
         target_mate_canons = {id_to_mate_canon[sid] for sid in target_shape_ids
                                if sid in id_to_mate_canon}
 
-    if os.path.exists(routing_path):
-        os.remove(routing_path)
-    rconn = sqlite3.connect(routing_path)
-    rcur = rconn.cursor()
-    rcur.execute("PRAGMA journal_mode=WAL")
-    rcur.execute("CREATE TABLE routing (position TEXT, turn TEXT, mate_id INTEGER)")
+    # Grouping is purely a storage/access decision -- it never changes
+    # what gets stored. Every row still records the TRUE, original
+    # mate_id and escape_count (see write_node below); only WHICH FILE a
+    # row lands in changes, via group_of(sid) instead of sid directly as
+    # the BoundedConnectionCache key. mate_to_group defaults to None
+    # (identity -- every mate is its own group), so passing nothing here
+    # reproduces the pre-clustering behavior exactly.
+    _mate_to_group = mate_to_group or {}
+
+    def group_of(sid):
+        return _mate_to_group.get(sid, sid)
+
+    resuming = bool(checkpoint_path and os.path.exists(checkpoint_path))
+
+    if resuming:
+        # routing.sqlite and its tables (routing, mate_groups) already
+        # exist from the interrupted run -- NOT deleted, NOT recreated,
+        # NOT re-inserted-into. mate_groups is a one-time, upfront write
+        # (already complete before the interrupted run's main loop ever
+        # started); routing's own rows are only ever written for states
+        # not yet in `visited`, which is restored from the checkpoint
+        # below, so resuming can't produce duplicate routing rows.
+        rconn = sqlite3.connect(routing_path)
+        rcur = rconn.cursor()
+        rcur.execute("PRAGMA journal_mode=WAL")
+    else:
+        if os.path.exists(routing_path):
+            os.remove(routing_path)
+        rconn = sqlite3.connect(routing_path)
+        rcur = rconn.cursor()
+        rcur.execute("PRAGMA journal_mode=WAL")
+        rcur.execute("CREATE TABLE routing (position TEXT, turn TEXT, mate_id INTEGER)")
+        # A tiny, separate lookup -- not the routing table itself, which
+        # stays position-keyed and unchanged -- so a downstream consumer who
+        # wants "shape X's data" directly (not via a specific position) can
+        # find which file it's actually in without scanning every file.
+        rcur.execute("CREATE TABLE mate_groups (mate_id INTEGER PRIMARY KEY, group_id INTEGER)")
+        if mate_to_group:
+            rcur.executemany("INSERT INTO mate_groups VALUES (?,?)", list(mate_to_group.items()))
 
     cache = BoundedConnectionCache(out_dir, max_open=max_open_files)
     visited = set()
     node_count = 0
     edge_count = 0
+    start_index = 0
+
+    if resuming:
+        import pickle
+        load_start = time.time()
+        with open(checkpoint_path, 'rb') as f:
+            checkpoint = pickle.load(f)
+        visited = checkpoint['visited']
+        reach_memo = checkpoint['reach_memo']
+        parent_counts = checkpoint['parent_counts']
+        node_count = checkpoint['node_count']
+        edge_count = checkpoint['edge_count']
+        start_index = checkpoint['next_index']
+        print(f"  Resumed from checkpoint in {time.time()-load_start:.1f}s: "
+              f"{start_index} origins already scanned, {node_count} nodes and {edge_count} "
+              f"edge-rows already written, {len(reach_memo)} reach_memo entries retained.",
+              flush=True)
 
     def write_node(state, is_origin, ids):
         pos, turn = state
         mates = set()
         for sid, esc in ids:
-            cur = cache.get(sid)
+            cur = cache.get(group_of(sid))
             cur.execute("INSERT OR IGNORE INTO nodes VALUES (?,?,?)", (pos, turn, is_origin))
             cur.execute("INSERT INTO node_shapes VALUES (?,?,?,?)", (pos, turn, sid, esc))
             if sid not in mates:
@@ -2000,9 +2356,13 @@ def trace_shape_graph_segmented(db, origins, shape_registry, parent_counts,
             if child_ids:
                 # Routed by the CHILD's own mates, not the FROM position's
                 # -- see docstring for the real, confirmed bug this fixes.
+                # Each mate's connection is looked up by its GROUP, not
+                # its raw id, when mate_to_group is in use -- the row
+                # written still names the true mate, only the file
+                # (and hence the open connection reused) is grouped.
                 child_mates = {sid for sid, esc in child_ids}
                 for sid in child_mates:
-                    cur = cache.get(sid)
+                    cur = cache.get(group_of(sid))
                     cur.execute("INSERT INTO edges VALUES (?,?,?,?,?)",
                                 (pos, turn, mv, child[0], child[1]))
                     edge_count += 1
@@ -2011,7 +2371,9 @@ def trace_shape_graph_segmented(db, origins, shape_registry, parent_counts,
     sorted_origins = sorted(origins)
     started = 0
     last_print = time.time()
-    for i, origin in enumerate(sorted_origins):
+    last_checkpoint = time.time()
+    for i in range(start_index, len(sorted_origins)):
+        origin = sorted_origins[i]
         if time.time() - last_print >= 10:
             last_print = time.time()
             print(f"  [trace-segmented] {i}/{len(sorted_origins)} origins scanned, "
@@ -2038,14 +2400,49 @@ def trace_shape_graph_segmented(db, origins, shape_registry, parent_counts,
         started += 1
         explore(origin)
 
+        now = time.time()
+        if checkpoint_path and now - last_checkpoint >= checkpoint_every_seconds:
+            # Commit every open per-mate/group connection AND the routing
+            # connection BEFORE saving the checkpoint -- not after, and
+            # not skipped -- so the checkpoint's own claim ("everything
+            # up through origin i is done") is never ahead of what's
+            # actually durable on disk. A checkpoint saved without this
+            # would be a real, silent corruption risk: a crash between
+            # the checkpoint write and an eventual SQLite commit could
+            # leave the checkpoint claiming rows exist that a resume
+            # would then never rewrite, since `visited` would already
+            # mark those positions as done.
+            cache.commit_all()
+            rconn.commit()
+            _save_checkpoint({'visited': visited, 'reach_memo': reach_memo,
+                               'parent_counts': parent_counts, 'node_count': node_count,
+                               'edge_count': edge_count, 'next_index': i + 1}, checkpoint_path)
+            last_checkpoint = time.time()
+            print(f"  [checkpoint] saved trace-segmented progress at {i + 1}/{len(sorted_origins)} "
+                  f"origins scanned ({node_count} nodes, {edge_count} edge-rows durably committed)",
+                  flush=True)
+
     cache.close_all()
     rcur.execute("CREATE INDEX idx_routing_pos ON routing(position, turn)")
     rconn.commit()
     rconn.close()
 
+    # Counts actual files on disk, not cache.opened_files -- on a resumed
+    # run, opened_files only reflects files touched THIS session, which
+    # would under-report the true total if some mate/group's file was
+    # already fully written during the interrupted run and never needed
+    # reopening during the remaining, resumed portion.
+    n_files = len([f for f in os.listdir(out_dir) if f.endswith('.sqlite')])
     print(f"  Wrote {node_count} nodes and {edge_count} edge-rows across "
-          f"{len(cache.opened_files)} mate files in {out_dir}/, from {started} explored "
+          f"{n_files} mate files in {out_dir}/, from {started} explored "
           f"origins. Routing index: {routing_path}.")
+
+    # Deleted only now, after everything is confirmed written and
+    # indexed -- same reasoning as every other checkpoint in this
+    # pipeline: a crash before this point should still leave something
+    # to resume from.
+    if checkpoint_path and os.path.exists(checkpoint_path):
+        os.remove(checkpoint_path)
 
 
 def find_shape_origins(db, progress_every=5000000, checkpoint_path=None,
@@ -3012,9 +3409,23 @@ def cmd_reduce(args):
             target_ids = {int(x.strip()) for x in args.trace_shape_ids.split(',') if x.strip()}
         seg_out_dir = args.trace_shape_segmented_out_dir or os.path.join(args.out_dir, 'shape_graph_segmented')
         routing_path = args.trace_shape_routing_path or os.path.join(args.out_dir, 'shape_graph_routing.sqlite')
+        cluster_checkpoint = os.path.join(args.out_dir, 'cluster_mates.trace_checkpoint.pkl')
+        segmented_checkpoint = os.path.join(args.out_dir, 'shape_graph_segmented.trace_checkpoint.pkl')
+        mate_to_group = None
+        if args.cluster_mates:
+            mate_to_group = compute_mate_clusters(
+                db, origins, shape_registry, parent_counts,
+                jaccard_threshold=args.cluster_jaccard_threshold,
+                max_group_size=args.cluster_max_group_size,
+                target_shape_ids=target_ids,
+                checkpoint_path=cluster_checkpoint,
+                checkpoint_every_seconds=args.checkpoint_every_seconds_landscape)
         trace_shape_graph_segmented(db, origins, shape_registry, parent_counts,
                                      seg_out_dir, routing_path,
-                                     max_open_files=args.max_open_files, target_shape_ids=target_ids)
+                                     max_open_files=args.max_open_files, target_shape_ids=target_ids,
+                                     mate_to_group=mate_to_group,
+                                     checkpoint_path=segmented_checkpoint,
+                                     checkpoint_every_seconds=args.checkpoint_every_seconds_landscape)
 
     if collapsed_findings_small:
         print(f"\nFirst few findings with collapsed branches:")
@@ -3147,11 +3558,16 @@ def main():
                           "--checkpoint-every-seconds-landscape to trade off save frequency "
                           "against how much work a save costs each time.")
     p4.add_argument('--checkpoint-every-seconds-landscape', type=int, default=60,
-                     help="How often (in seconds) to checkpoint the full-landscape scan phase "
-                          "(default 60, matching every other phase in this pipeline). Lower this "
-                          "if you want tighter loss-bounds under real memory pressure; raise it "
-                          "if the checkpoint write itself is taking long enough to matter, which "
-                          "this phase prints directly so it's visible rather than hidden.")
+                     help="How often (in seconds) to checkpoint the full-landscape scan phase, "
+                          "the --cluster-mates pre-pass, and --trace-shape-graph-segmented's "
+                          "write pass (default 60, matching every other phase in this pipeline; "
+                          "shared across all three rather than a separate flag per phase). Lower "
+                          "this if you want tighter loss-bounds under real memory pressure or on "
+                          "a very large material where an interruption is costly (confirmed "
+                          "directly: an uncheckpointed interruption at KBNvK's real scale, ~7.4M "
+                          "origins, lost real progress with nothing to resume from); raise it if "
+                          "the checkpoint write itself is taking long enough to matter, which "
+                          "each phase prints directly so it's visible rather than hidden.")
     p4.add_argument('--skip-full-landscape', action='store_true',
                      help="Skip the full-database shape scan (every position, not just the "
                           "findings CSV's ties) -- that scan is the default since it's the part "
@@ -3196,12 +3612,40 @@ def main():
                      help="Output path for --trace-shape-graph-segmented's routing index "
                           "(default: <out-dir>/shape_graph_routing.sqlite).")
     p4.add_argument('--max-open-files', type=int, default=100,
-                     help="Max simultaneously-open per-mate SQLite connections for "
-                          "--trace-shape-graph-segmented (default 100) -- must comfortably "
-                          "exceed the material's actual distinct-mate count or the bounded cache "
-                          "thrashes (confirmed directly: too-small a value dropped throughput by "
-                          "~70x on real KQvK data). Check shapes.csv's own distinct ShapeId count "
-                          "for an estimate before choosing this on a new material.")
+                     help="Max simultaneously-open per-mate (or per-GROUP, with --cluster-mates) "
+                          "SQLite connections for --trace-shape-graph-segmented (default 100) -- "
+                          "must comfortably exceed the material's actual distinct-mate (or "
+                          "distinct-group) count or the bounded cache thrashes (confirmed "
+                          "directly: too-small a value dropped throughput by ~70x on real KQvK "
+                          "data). Check shapes.csv's own distinct ShapeId count for an estimate "
+                          "before choosing this on a new material without clustering.")
+    p4.add_argument('--cluster-mates', action='store_true',
+                     help="Before --trace-shape-graph-segmented's write pass, run a real, "
+                          "separate pre-pass (compute_mate_clusters) that measures actual mate "
+                          "coverage-set overlap and groups tightly-related mates into shared "
+                          "files, directly shrinking the worst-case number of distinct files any "
+                          "single origin needs open at once -- confirmed on real KQvK data: "
+                          "worst case dropped from 43 to 14 (median 6 to 3), not just the "
+                          "average. Costs a genuine second walk of the same reachable structure "
+                          "(roughly doubling walk time) -- worth it specifically when the "
+                          "unclustered worst case is large enough to risk thrashing or to exceed "
+                          "a comfortable --max-open-files / OS file-descriptor budget, not a "
+                          "default-on optimization.")
+    p4.add_argument('--cluster-jaccard-threshold', type=float, default=0.5,
+                     help="Minimum coverage-set Jaccard similarity for two mates to be eligible "
+                          "for merging into the same group (default 0.5 -- the value actually "
+                          "verified end-to-end on real KQvK data; not claimed optimal for every "
+                          "material, just the known-good starting point). Higher = fewer, more "
+                          "conservative merges (closer to the unclustered case); lower = more "
+                          "aggressive merging (smaller worst-case file count, but larger, less "
+                          "tightly-related groups). Ignored without --cluster-mates.")
+    p4.add_argument('--cluster-max-group-size', type=int, default=10,
+                     help="Max mates allowed in a single merged group (default 10) -- caps how "
+                          "large any one group can grow regardless of how many pairs meet the "
+                          "Jaccard threshold, specifically to prevent the real, confirmed "
+                          "chaining problem plain transitive merging has (one group swallowed 21 "
+                          "of 46 mates on real KQvK data before this cap existed). Ignored "
+                          "without --cluster-mates.")
 
     args = ap.parse_args()
     if args.command == 'classify':

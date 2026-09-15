@@ -217,6 +217,23 @@ Rerunning `reduce` itself (the plain command, no `--retry-skipped`) is also a va
 
 **Not yet safe at KBPvK's scale.** This has only been exercised on KQvK (345K positions). It uses a plain, unbounded memoization dict, not the reference-counted approach `resolve_reachable_shapes` needed before it was safe to run at real scale (see above) — running this against a KBPvK-sized database as-is would need the same kind of memory treatment first, and that hasn't been built.
 
+**`build_shape_index.py` — turns `--trace-shape-graph`'s flat CSV output into an indexed, queryable database, so "which shape is this position in" is a real lookup instead of a linear scan.** A standalone script, separate from `general_analyzer.py`, taking `shape_graph_nodes.csv` and `shape_graph_edges.csv` as input:
+
+```bash
+python3 build_shape_index.py material_reduction/shape_graph_nodes.csv \
+    material_reduction/shape_graph_edges.csv --out material_shapes.sqlite
+```
+
+Builds a normalized SQLite database with three tables — `nodes(position, turn, is_origin)`, `node_shapes(position, turn, shape_id, escape_count)`, `edges(position, turn, move, child_position, child_turn)` — indexed on both `(position, turn)` and `(shape_id, escape_count)` in `node_shapes`, so both query directions (position→shape and shape→membership) are indexed, not just one.
+
+**Measured directly on a real KQvK graph, both query directions, correctness-verified against the source CSVs, not just fast**: position→shape lookups came back ~4,700x faster than a linear CSV scan (168ms/query → 0.04ms/query); shape→full-membership lookups ~4,400x faster (611ms → 0.1ms). The honest cost: the resulting index file is roughly 6.1x larger than its two source CSVs combined (285.8MB vs. 46.5MB in that same test) — real storage traded for a large, measured access-speed gain, not a free win. Re-confirmed live against a person's own independently-generated, uploaded database in normal use, not just the original test build — same result, sub-millisecond lookups on real data.
+
+**Produces `.sqlite-wal` and `.sqlite-shm` alongside the main file** — these are SQLite's own write-ahead-log artifacts from the build (the script enables WAL mode), not required for the database to be valid. If the `.sqlite-wal` file is empty, everything's already fully committed into the main file — confirmed this directly, not assumed — and the other two files can be deleted for a single, self-contained `.sqlite` file if preferred.
+
+**A stale-input gotcha worth knowing about directly, not just as a possibility**: a `shape_graph_nodes.csv` generated before the `--trace-shape-graph` escape-count fix (§6) has `ShapeIds` entries like `36;37` instead of the current, correct `36:74;37:74` — the script now detects this specific format mismatch and raises a clear, actionable error naming the likely cause and the fix (regenerate via `--trace-shape-graph`) rather than a raw Python traceback. This is a real trap that's already been hit in practice, not a hypothetical one guarded against preemptively.
+
+**Only exercised at KQvK's scale (136K-345K nodes depending on scoping) so far.** Whether build time, the index-to-source size ratio, and the query speedup all hold up at real, multi-million-or-larger scale is untested.
+
 ---
 
 ## 2. Quick reference — direct solver invocation (no sweep wrapper)
@@ -262,6 +279,7 @@ python3 generate_general_seed_positions.py --white Q --out quick_seeds.txt --num
 | `material_reduction/position_to_shape.csv` | Full per-position shape mapping (every position, not just origins) — only written with `--full-position-map` (real size at scale) |
 | `material_reduction/shape_graph_nodes.csv` / `shape_graph_edges.csv` | The deduplicated upstream/downstream reachability graph behind one or more shapes — only written with `--trace-shape-graph` (KQvK-scale only so far) |
 | `material_reduction/shape_graph.trace_checkpoint.pkl` | In-progress `--trace-shape-graph` state — auto-deleted on successful completion |
+| `<name>.sqlite` (+ `-wal` / `-shm`) | Indexed, queryable version of the shape graph — written by `build_shape_index.py`, a separate script (not part of `general_analyzer.py`). The `-wal`/`-shm` files are build artifacts, not required if `-wal` is empty (fully committed already) |
 
 ---
 
@@ -293,6 +311,9 @@ python3 generate_general_seed_positions.py --white Q --out quick_seeds.txt --num
 
 **`general_analyzer.py tree`**
 `db_path` (positional) · `--position POS` · `--turn {W,B}` · `--out FILE` · `--findings-csv FILE` · `--top N` (default 10) · `--out-dir DIR` (default `general_trees`) · `--max-lines N` (default 500) · `--classifications FILE`
+
+**`build_shape_index.py`** (new, standalone — not part of `general_analyzer.py`)
+`nodes_csv` (positional) · `edges_csv` (positional) · `--out FILE` (required)
 
 ---
 

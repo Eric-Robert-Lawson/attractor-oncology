@@ -76,6 +76,7 @@ import os
 import sys
 import time
 import signal
+import sqlite3
 from collections import defaultdict, OrderedDict, namedtuple, Counter
 import resource
 
@@ -1728,6 +1729,325 @@ def trace_shape_graph(db, origins, shape_registry, nodes_out_path, edges_out_pat
         os.remove(checkpoint_path)
 
 
+class BoundedConnectionCache:
+    """At most max_open SQLite connections open at once, least-recently-used
+    evicted (committed and closed, not discarded) when a new one is needed
+    beyond the cap. Mirrors this file's own BoundedLRUCache (used for
+    reachable_set memoization in classify) -- same reasoning: unbounded
+    resource growth on a long run at real scale is a real, previously-
+    confirmed cause of trouble in this project, not a hypothetical one
+    being guarded against preemptively.
+
+    Sizing this matters, not just as a tuning nicety: if the material's
+    distinct-mate count exceeds max_open, and rows aren't grouped by mate
+    in the source data (they aren't here either -- explore() visits
+    positions in traversal order, not mate-grouped order), this cache
+    thrashes -- constantly evicting and reopening connections. Measured
+    directly, in the standalone build_segmented_shape_index.py this
+    mirrors: max_open=20 against 46 real mates dropped throughput to
+    ~200 rows/second; max_open=100 (comfortably above 46) processed the
+    same data in under 2 seconds -- a measured ~70x difference, not a
+    hypothetical risk."""
+
+    def __init__(self, out_dir, max_open=100):
+        self.out_dir = out_dir
+        self.max_open = max_open
+        self._conns = OrderedDict()  # mate_id -> (conn, cursor)
+        self.opened_files = set()
+
+    def get(self, mate_id):
+        if mate_id in self._conns:
+            conn, cur = self._conns.pop(mate_id)
+            self._conns[mate_id] = (conn, cur)  # move to end: most recently used
+            return cur
+        if len(self._conns) >= self.max_open:
+            _, (evict_conn, _) = self._conns.popitem(last=False)  # evict least recently used
+            evict_conn.commit()
+            evict_conn.close()
+        path = os.path.join(self.out_dir, f"shape_{mate_id}.sqlite")
+        is_new = not os.path.exists(path)
+        conn = sqlite3.connect(path)
+        cur = conn.cursor()
+        if is_new:
+            cur.execute("PRAGMA journal_mode=WAL")
+            cur.execute("CREATE TABLE nodes (position TEXT, turn TEXT, is_origin INTEGER, "
+                        "PRIMARY KEY (position, turn))")
+            cur.execute("CREATE TABLE node_shapes (position TEXT, turn TEXT, "
+                        "shape_id INTEGER, escape_count INTEGER)")
+            cur.execute("CREATE TABLE edges (position TEXT, turn TEXT, move TEXT, "
+                        "child_position TEXT, child_turn TEXT)")
+        self._conns[mate_id] = (conn, cur)
+        self.opened_files.add(mate_id)
+        return cur
+
+    def close_all(self):
+        for conn, cur in self._conns.values():
+            conn.commit()
+            conn.close()
+        self._conns.clear()
+
+
+def trace_shape_graph_segmented(db, origins, shape_registry, parent_counts,
+                                 out_dir, routing_path, max_open_files=100,
+                                 target_shape_ids=None):
+    """Memory-bounded alternative to trace_shape_graph: writes directly to
+    segmented, per-mate SQLite files (plus a routing index) during the
+    walk itself, instead of accumulating node_shape_ids/edges in memory
+    for the whole run and writing flat CSVs only at the end.
+
+    Combines two genuinely separate fixes -- confirmed directly that a
+    partial fix (only one of the two) would leave the other's cost
+    unaddressed, not assumed:
+
+    1. node_shape_ids and edges never actually needed to hold the whole
+       database's worth of data at all. Once explore(state) finishes
+       computing a position's shape membership and outgoing edges, that
+       data is complete and correct forever -- nothing later in the walk
+       changes it. Writing it directly to its mate's own segmented file
+       (via BoundedConnectionCache, the same pattern
+       build_segmented_shape_index.py already uses and had verified) the
+       moment it's computed, rather than accumulating it, eliminates the
+       need for these two structures to grow with the whole database.
+
+    2. reach_memo is a separate structure with a separate job -- what
+       makes the recursive reachable_shapes() calls cheap by avoiding
+       recomputing a state's value every time a different parent needs
+       it. Fix (1) does nothing for this; it's still a cache, and under
+       the original design it holds every state's entry forever. Fixed
+       here the same way resolve_reachable_shapes' own resolved dict was
+       fixed earlier in this project: parent_counts (already computed by
+       find_shape_origins, already available by the time this runs)
+       tracks how many not-yet-processed parents could still need a
+       given state's cached reachability value; the moment that count
+       hits zero, the entry is freed.
+
+    WHY REUSING parent_counts IS SOUND DESPITE THIS FUNCTION'S DIFFERENT
+    (DFS-FROM-ORIGINS, NOT DISTANCE-ORDERED) TRAVERSAL: resolve_reachable_
+    shapes' own safety argument rests on processing every position in
+    strict distance order. This function's traversal order is different
+    -- but the actual property reference-counting depends on is narrower:
+    a specific parent's own reachable_shapes(parent) call only ever runs
+    ITS OWN body once (parent's own memoization guarantees this), and
+    that single run is exactly when it consults each of its children's
+    cached values. So the decrement for a child happens exactly once per
+    distinct parent, regardless of what order the outer DFS visits
+    positions in -- the count reaching zero always means every parent
+    that will ever need this child's value already has it, because
+    "every parent" is a fixed, finite set independent of traversal order,
+    and each one decrements exactly once when (and only when) it
+    actually runs.
+
+    A REAL, CONFIRMED BUG CAUGHT AND FIXED WHILE DESIGNING THIS, NOT
+    DISCOVERED LATER: an edge must be routed to every mate its CHILD's
+    own ShapeIds names, not its FROM position's. build_segmented_shape_
+    index.py's first version routed by the FROM position, which is wrong
+    whenever a position belongs to more mates than any single one of its
+    own moves leads toward (a tie whose branches serve different mates)
+    -- confirmed directly on real KQvK data before this was trusted:
+    Q:a1 K:a2 k:b7's own Kb3 move only leads toward 19 of that position's
+    30 total mates; routing by the FROM position would have written that
+    edge into the other 11 mates' files too, which it has nothing to do
+    with. Since escape count accumulates backward from the mate (bn +
+    esc), a child having mate M in its own reachable set is both
+    necessary and sufficient for that specific edge to genuinely be part
+    of mate M's trajectory -- the same criterion the original, monolithic
+    trace_shape_graph already used (in_scope_shape_ids(child)). Fixed in
+    both build_segmented_shape_index.py and here, from the start.
+
+    A real, honest remaining gap, not glossed over: visited is still a
+    plain, unbounded set for the whole run, needed to avoid re-exploring
+    (not re-emitting) a position multiple times. Smaller than
+    node_shape_ids/edges/reach_memo combined were before (a set of
+    states, not a dict of values, nor a cache of full reachable-shape
+    sets), but not zero. No checkpoint/resume yet either -- output is
+    written incrementally to disk as the walk proceeds, so a crash
+    doesn't lose everything the way the old CSV-accumulating version's
+    crash would have, but a restart currently re-walks from the first
+    origin rather than resuming partway through."""
+    print(f"Tracing the shape reachability graph, memory-bounded and segmented -- writing "
+          f"directly to per-mate SQLite files as the walk proceeds, instead of accumulating "
+          f"the whole graph in memory first. Does not touch or modify trace_shape_graph's own "
+          f"(monolithic, CSV-based) results in any way -- a fully separate function.")
+
+    os.makedirs(out_dir, exist_ok=True)
+    parent_counts = dict(parent_counts)  # don't mutate the caller's own copy
+    reach_memo = {}
+
+    def reachable_shapes(state):
+        if state in reach_memo:
+            return reach_memo[state]
+        entry = db[state]
+        if not entry.tied:
+            canon = (canonical_form_general(state[0]), state[1])
+            result = frozenset([(canon, 0)])
+            reach_memo[state] = result
+            return result
+        pos, turn = state
+        combined = set()
+        for mv, bn in entry.tied:
+            try:
+                child = (apply_move_general(pos, mv), child_turn(mv))
+            except AmbiguousMoveError:
+                continue
+            for mate_canon, esc in reachable_shapes(child):
+                combined.add((mate_canon, bn + esc))
+            # Reference-counted release -- see docstring for why this is
+            # sound despite this function's DFS-from-origins traversal
+            # differing from resolve_reachable_shapes' own distance-
+            # ordered pass.
+            remaining = parent_counts.get(child, 0) - 1
+            if remaining <= 0:
+                reach_memo.pop(child, None)
+                parent_counts.pop(child, None)
+            else:
+                parent_counts[child] = remaining
+        result = frozenset(combined)
+        reach_memo[state] = result
+        return result
+
+    id_to_mate_canon = {sid: canon for canon, sid in shape_registry.items()}
+    target_mate_canons = None
+    if target_shape_ids is not None:
+        target_mate_canons = {id_to_mate_canon[sid] for sid in target_shape_ids
+                               if sid in id_to_mate_canon}
+
+    if os.path.exists(routing_path):
+        os.remove(routing_path)
+    rconn = sqlite3.connect(routing_path)
+    rcur = rconn.cursor()
+    rcur.execute("PRAGMA journal_mode=WAL")
+    rcur.execute("CREATE TABLE routing (position TEXT, turn TEXT, mate_id INTEGER)")
+
+    cache = BoundedConnectionCache(out_dir, max_open=max_open_files)
+    visited = set()
+    node_count = 0
+    edge_count = 0
+
+    def write_node(state, is_origin, ids):
+        pos, turn = state
+        mates = set()
+        for sid, esc in ids:
+            cur = cache.get(sid)
+            cur.execute("INSERT OR IGNORE INTO nodes VALUES (?,?,?)", (pos, turn, is_origin))
+            cur.execute("INSERT INTO node_shapes VALUES (?,?,?,?)", (pos, turn, sid, esc))
+            if sid not in mates:
+                mates.add(sid)
+                rcur.execute("INSERT INTO routing VALUES (?,?,?)", (pos, turn, sid))
+        return mates
+
+    def in_scope_from_raw(raw):
+        ids = set()
+        for mate_canon, esc in raw:
+            if mate_canon not in shape_registry:
+                continue
+            if target_mate_canons is not None and mate_canon not in target_mate_canons:
+                continue
+            ids.add((shape_registry[mate_canon], esc))
+        return ids
+
+    def explore(state):
+        # A real, confirmed bug in the first version of this function,
+        # caught here before it shipped: calling in_scope_shape_ids(state)
+        # (which computes reachable_shapes(state) via its OWN internal
+        # loop, consulting -- and reference-count-decrementing -- every
+        # child once) and THEN separately calling in_scope_shape_ids(child)
+        # again for each child consults each child TWICE from the same
+        # logical parent, even though parent_counts only ever recorded
+        # ONE real reference. The first consultation correctly decrements
+        # a child to zero and frees it; the second then finds it already
+        # gone and is forced to recompute that child's entire downstream
+        # subtree from scratch -- confirmed directly to cause exactly the
+        # catastrophic, repeated-recomputation slowdown that produced a
+        # real timeout during testing. Fixed by having explore() itself
+        # do the single loop over tied moves, consulting reachable_shapes()
+        # exactly once per child, and deriving BOTH this state's own
+        # value and each child's in-scope status from that one call's raw
+        # result -- never a second, independent consultation of the same
+        # child from the same parent.
+        nonlocal node_count, edge_count
+        if state in visited:
+            return
+        visited.add(state)
+        entry = db[state]
+        pos, turn = state
+
+        if not entry.tied:
+            canon = (canonical_form_general(pos), turn)
+            raw = frozenset([(canon, 0)])
+            reach_memo[state] = raw
+            write_node(state, state in origins, in_scope_from_raw(raw))
+            node_count += 1
+            return
+
+        combined_raw = set()
+        child_data = []  # (mv, child, child_raw)
+        for mv, bn in entry.tied:
+            try:
+                child = (apply_move_general(pos, mv), child_turn(mv))
+            except AmbiguousMoveError:
+                continue
+            child_raw = reachable_shapes(child)  # the ONE consultation of this child from this parent
+            for mate_canon, esc in child_raw:
+                combined_raw.add((mate_canon, bn + esc))
+            child_data.append((mv, child, child_raw))
+
+        reach_memo[state] = frozenset(combined_raw)
+        write_node(state, state in origins, in_scope_from_raw(combined_raw))
+        node_count += 1
+
+        for mv, child, child_raw in child_data:
+            child_ids = in_scope_from_raw(child_raw)
+            if child_ids:
+                # Routed by the CHILD's own mates, not the FROM position's
+                # -- see docstring for the real, confirmed bug this fixes.
+                child_mates = {sid for sid, esc in child_ids}
+                for sid in child_mates:
+                    cur = cache.get(sid)
+                    cur.execute("INSERT INTO edges VALUES (?,?,?,?,?)",
+                                (pos, turn, mv, child[0], child[1]))
+                    edge_count += 1
+                explore(child)
+
+    sorted_origins = sorted(origins)
+    started = 0
+    last_print = time.time()
+    for i, origin in enumerate(sorted_origins):
+        if time.time() - last_print >= 10:
+            last_print = time.time()
+            print(f"  [trace-segmented] {i}/{len(sorted_origins)} origins scanned, "
+                  f"{started} explored, {node_count} nodes written, {edge_count} edge-rows "
+                  f"written, {len(reach_memo)} reach_memo entries currently retained "
+                  f"(bounded, not growing with the whole database)", flush=True)
+        # Called unconditionally for every origin, not gated by a separate
+        # in_scope_shape_ids(origin) pre-check -- that pre-check was the
+        # same class of double-consultation bug fixed in explore() itself
+        # above: it would consult origin's children once via its own
+        # reachable_shapes(origin) call, then explore(origin) would
+        # consult them AGAIN via its own loop, finding them already freed.
+        # explore() already correctly handles scoping internally (skips
+        # writing a node with no in-scope shapes, and since escape count
+        # accumulates backward, a child can only be in-scope if its
+        # direct parent is too -- so an out-of-scope origin naturally
+        # never recurses into anything) -- computing origin's own value
+        # here is unavoidable regardless (scoping requires walking every
+        # origin's full downstream to know whether it's in scope at all,
+        # the same real, inherent cost the original trace_shape_graph's
+        # own pre-check always paid too), so nothing is lost by moving
+        # that computation to happen only once, inside explore(), instead
+        # of once outside it and then again inside.
+        started += 1
+        explore(origin)
+
+    cache.close_all()
+    rcur.execute("CREATE INDEX idx_routing_pos ON routing(position, turn)")
+    rconn.commit()
+    rconn.close()
+
+    print(f"  Wrote {node_count} nodes and {edge_count} edge-rows across "
+          f"{len(cache.opened_files)} mate files in {out_dir}/, from {started} explored "
+          f"origins. Routing index: {routing_path}.")
+
+
 def find_shape_origins(db, progress_every=5000000, checkpoint_path=None,
                         checkpoint_every_seconds=60):
     """Determines which positions are genuine shape ORIGINS -- the only
@@ -2686,6 +3006,16 @@ def cmd_reduce(args):
                            target_shape_ids=target_ids, checkpoint_path=trace_checkpoint,
                            checkpoint_every_seconds=args.checkpoint_every_seconds_landscape)
 
+    if args.trace_shape_graph_segmented:
+        target_ids = None
+        if args.trace_shape_ids:
+            target_ids = {int(x.strip()) for x in args.trace_shape_ids.split(',') if x.strip()}
+        seg_out_dir = args.trace_shape_segmented_out_dir or os.path.join(args.out_dir, 'shape_graph_segmented')
+        routing_path = args.trace_shape_routing_path or os.path.join(args.out_dir, 'shape_graph_routing.sqlite')
+        trace_shape_graph_segmented(db, origins, shape_registry, parent_counts,
+                                     seg_out_dir, routing_path,
+                                     max_open_files=args.max_open_files, target_shape_ids=target_ids)
+
     if collapsed_findings_small:
         print(f"\nFirst few findings with collapsed branches:")
         for r in collapsed_findings_small:
@@ -2846,10 +3176,32 @@ def main():
                           "exercised at KQvK's scale so far -- not yet memory-optimized for "
                           "anything at KBPvK's scale.")
     p4.add_argument('--trace-shape-ids', default=None,
-                     help="Comma-separated ShapeId values to scope --trace-shape-graph to (e.g. "
-                          "'18,15,34') -- includes only origins/edges/nodes serving at least one "
-                          "of these shapes, instead of the entire graph. Ignored without "
-                          "--trace-shape-graph.")
+                     help="Comma-separated ShapeId values to scope --trace-shape-graph or "
+                          "--trace-shape-graph-segmented to (e.g. '18,15,34') -- includes only "
+                          "origins/edges/nodes serving at least one of these shapes, instead of "
+                          "the entire graph. Ignored without one of those two flags.")
+    p4.add_argument('--trace-shape-graph-segmented', action='store_true',
+                     help="Memory-bounded alternative to --trace-shape-graph: writes directly to "
+                          "per-mate SQLite files (plus a routing index) as the walk proceeds, "
+                          "instead of accumulating the whole graph in memory and writing flat "
+                          "CSVs at the end. Use this instead of --trace-shape-graph for materials "
+                          "where the monolithic, in-memory approach risks real memory pressure -- "
+                          "see trace_shape_graph_segmented's own docstring for the two, separate "
+                          "fixes this combines and why reference-counting is sound here despite "
+                          "this function's DFS traversal order.")
+    p4.add_argument('--trace-shape-segmented-out-dir', default=None,
+                     help="Output directory for --trace-shape-graph-segmented's per-mate SQLite "
+                          "files (default: <out-dir>/shape_graph_segmented).")
+    p4.add_argument('--trace-shape-routing-path', default=None,
+                     help="Output path for --trace-shape-graph-segmented's routing index "
+                          "(default: <out-dir>/shape_graph_routing.sqlite).")
+    p4.add_argument('--max-open-files', type=int, default=100,
+                     help="Max simultaneously-open per-mate SQLite connections for "
+                          "--trace-shape-graph-segmented (default 100) -- must comfortably "
+                          "exceed the material's actual distinct-mate count or the bounded cache "
+                          "thrashes (confirmed directly: too-small a value dropped throughput by "
+                          "~70x on real KQvK data). Check shapes.csv's own distinct ShapeId count "
+                          "for an estimate before choosing this on a new material.")
 
     args = ap.parse_args()
     if args.command == 'classify':

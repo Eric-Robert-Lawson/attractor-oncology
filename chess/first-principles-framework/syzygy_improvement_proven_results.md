@@ -284,7 +284,16 @@ or C's own verified numbers as though it were evidence of the same kind.
   *whole-hierarchy* version, where no material anywhere in a chain stores
   its full table — has not been built or measured this way yet. This test
   is the first real, verified building block toward that, not the whole
-  thing.
+  thing. One mechanical piece of this gap has since closed, worth noting
+  precisely: `run_full_sweep.py` didn't pass `--preload-from` through to
+  its own batches, so this mechanism only worked via a single direct
+  `general_solver` call, not a real batch sweep of a large material's full
+  exhaustive position list. That passthrough is now wired in and verified
+  (see `shape_based_compression_and_scoped_generation.md` §4e and
+  `general_workflow_reference.md`). That's a mechanical fix, not a new
+  empirical result — it makes the next real test (KBNvK, now complete, as
+  a preload source for something built on top of it) runnable; it doesn't
+  constitute having run it.
 - **Does the origin/complement fraction actually shrink with complexity?**
   The project's own KQvK (76.6%) vs. KBPvK (69.0%) origin-fraction data
   point is suggestive, not confirmed as a trend — two materials, not enough

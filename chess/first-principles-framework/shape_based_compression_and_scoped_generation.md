@@ -326,6 +326,44 @@ whatever scale this gets pushed toward. That's the number nothing here has
 measured yet, and it's the one the whole recursive storage argument in this
 section actually rests on.
 
+### 4e. Where this actually stands now, concretely — not hypothetical anymore
+
+§4d described this recursive scheme in general terms. As of KBNvK's own
+completion, the next link in that chain has a real, complete, non-toy
+material sitting at the bottom of it, not a placeholder: 57 distinct mates,
+20,413 distinct (mate, escape-count) shapes, its own full landscape solved
+and verified (see `syzygy_improvement_proven_results.md` for what's
+verified about the mechanism this depends on, and this project's own
+working notes for KBNvK's specific numbers). That makes KBNvK a genuine,
+ready `--preload-from` source for the next tier up — KQBNvK, KQBNvQK, or
+any other material that reduces into it via a capture or promotion — not
+a future possibility.
+
+**The one real, mechanical gap standing between "this is possible" and
+"this is runnable at real batch-sweep scale" has been closed.**
+`run_full_sweep.py` previously built its solver command explicitly with no
+passthrough for `--preload-from` — confirmed directly, documented as a
+known gap in `general_workflow_reference.md` — meaning cross-material
+preloading only worked through a single direct `general_solver` call, not
+a full, multi-batch sweep of a larger material's real (potentially
+tens-of-millions-of-seed) exhaustive position list. That passthrough is
+now wired in: `--preload-from` is repeated on every batch the wrapper
+runs, not just the first, since each batch is its own subprocess with no
+memory of earlier ones. Verified with a fake-solver test harness forcing
+multiple real batches — confirmed present on every single batch's actual
+command line, not assumed from reading the code.
+
+**What this does and does not establish, stated with the same care as
+everywhere else in this document.** This closes the *mechanical* gap:
+there is no longer any reason a KQBNvQK sweep couldn't use KBNvK as a
+preload source. It does **not** mean this has been run — no material has
+yet been built on top of KBNvK this way, and until one is, the actual
+construction-time savings at this scale (as opposed to the small
+KPvK/KQvK/KNvK test already verified) remain a real, testable, but
+unmeasured prediction, exactly like the rest of §4d's whole-hierarchy
+claim. What changed today is that the prediction is now one command away
+from being checked, not that it has been checked.
+
 ---
 
 

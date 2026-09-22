@@ -81,11 +81,20 @@ python3 run_full_sweep.py material_dark.txt --db material_perfect_play.db --solv
 
 **This can be safely stopped (Ctrl+C) and resumed at any time** by re-running the exact same command (minus `--fresh`) — already-proven work (both wins and confirmed draws) is never redone.
 
-**New: `--preload-from <file>` (repeatable, solver flag, not yet wired into `run_full_sweep.py`) seeds a run with an already-completed, separately-solved *material's* database** — not the same material's own resume file, a genuinely different one. Sound whenever the material being swept can reduce, via capture or promotion, into that other material's position space: e.g. `general_solver --full-dag --positions kbpvk_seeds.txt --db kbpvk_perfect_play.db --fresh --preload-from kqvk_perfect_play.db --preload-from kbnvk_perfect_play.db --preload-from kbqvk_perfect_play.db` (repeat once per reduced material — for KBPvK specifically, that's KQvK, KBvK, KPvK, KBQvK, KBNvK, KNvK, and KBRvK under `--full-promotion`). Every position the sweep's own discovery reaches that's already proven in one of those files is trusted and sealed immediately, never re-expanded — built on the exact same underlying mechanism as same-material resume, just applied across materials instead of across runs of one.
+**New: `--preload-from <file>` (repeatable, now wired through both the direct solver AND `run_full_sweep.py`) seeds a run with an already-completed, separately-solved *material's* database** — not the same material's own resume file, a genuinely different one. Sound whenever the material being swept can reduce, via capture or promotion, into that other material's position space: e.g. `general_solver --full-dag --positions kbpvk_seeds.txt --db kbpvk_perfect_play.db --fresh --preload-from kqvk_perfect_play.db --preload-from kbnvk_perfect_play.db --preload-from kbqvk_perfect_play.db` (repeat once per reduced material — for KBPvK specifically, that's KQvK, KBvK, KPvK, KBQvK, KBNvK, KNvK, and KBRvK under `--full-promotion`). Every position the sweep's own discovery reaches that's already proven in one of those files is trusted and sealed immediately, never re-expanded — built on the exact same underlying mechanism as same-material resume, just applied across materials instead of across runs of one.
 
 Verified directly, not just argued sound: feeding a single already-solved KQvK position back in as a fresh run's own root, with `--preload-from` pointing at that material's completed database, sealed it immediately and found zero new positions to discover, versus a full 372,064-position rediscovery and 21 classification passes without the flag. Also includes a hard safety check — if two preload sources disagree on a shared position's value, the run refuses with the exact mismatched values shown, rather than silently trusting whichever was loaded last; tested directly with a deliberately corrupted second source, confirmed to trigger correctly. That check can only ever catch a genuine disagreement *between* sources, though — a single, uncontested wrong source has nothing to conflict with and will be accepted; a real, honest limit, not a gap in the check.
 
-**Not yet usable through `run_full_sweep.py`**: checked directly against this project's current sweep wrapper — it builds its solver command explicitly (`--full-dag`, `--positions`, `--db`, optionally `--max-nodes`/`--fresh`) with no passthrough for other flags, so `--preload-from` currently only works via direct `general_solver` invocation (§2 below), not a full, multi-batch sweep. Adding passthrough support to the wrapper is a small, separate task, not done as part of this.
+**Now usable through `run_full_sweep.py`, closing what was a real, documented gap.** The wrapper's own `--preload-from` (repeatable, same semantics as the solver's own flag) is passed through to **every batch**, not just the first — a deliberate difference from `--fresh`, which is a one-time action applied only to batch 1. This matters because each batch is its own subprocess with no memory of earlier ones (see the wrapper's own module docstring for why batches are separate processes at all): without repeating the flag on every invocation, only the first batch would ever seal anything against the preload source, and every batch after it would silently rediscover natively instead.
+
+```bash
+python3 run_full_sweep.py kqbnvqk_exhaustive.txt --db kqbnvqk_perfect_play.db --solver ./general_solver \
+    --preload-from kbnvk_perfect_play.db --preload-from kqvk_perfect_play.db
+```
+
+**Verified directly before being trusted, not just wired and assumed correct**: a fake-solver test harness with a small seed list and a tiny `--batch-size` (forcing multiple real batches) confirmed `--preload-from` appears, correctly, on the actual command line of every single batch — batch 1, 2, and 3 all received the identical `--preload-from` arguments, not just the first.
+
+This is the concrete, real mechanism behind the next tier of `shape_based_compression_and_scoped_generation.md`'s §4d recursive claim: a material like KQBNvQK that reduces into an already-completed KBNvK (e.g., via a queen trade) can now have that entire reducible portion sealed directly from KBNvK's own proven values during a real, full batch sweep — not just a single direct `general_solver` call. Whether this actually shrinks KQBNvQK's own real construction time, and by how much, is still unmeasured — this fix makes that test possible to run, it doesn't itself constitute having run it.
 
 ### Step 3 — (Optional but recommended) Validate against Syzygy
 
@@ -418,7 +427,7 @@ That ceiling is about what the *data structure* can represent, not what's practi
 - **A checkpointing regression happened on Phase 2, was caught, and is now fixed** — an earlier version shipped this phase with no checkpointing at all, reasoned from a fast run on a small test database that didn't generalize to real, memory-constrained conditions. Both of Phase 2's passes now checkpoint properly (§1 Step 6), verified with genuine abrupt-kill tests. If a version predating this fix is in use, there is no way to resume this phase after an interruption — upgrade before running it at real scale.
 - **The exact same checkpoint-resume off-by-one was found and fixed three separate times** across different functions in this file, worth knowing if extending any of this code further: a checkpoint saved at position K (before K's own work for that position completes) must be resumed with a strictly-less-than comparison, not less-than-or-equal — otherwise position K's own contribution is silently skipped forever on resume. Each occurrence was caught by an abrupt-kill test comparing the full resumed result against a fresh, uninterrupted run — a fresh-run comparison alone was not enough to catch it once out of three times, since simply letting an interrupted run continue past its own checkpoint save masks the bug entirely.
 - **`families --render-trees` used to crash outright** — a real, separate, now-fixed bug found while replacing Phase 2: `verify_and_count`, the function producing the "EXHAUSTIVE complete perfect-play paths... verified" line in every rendered tree, was missing its own function definition entirely, sitting as unreachable code after an unrelated function's `return`. Any attempt to render a tree would have hit a `NameError`. Restored and confirmed directly by actually running `--render-trees` and checking the output matches the expected format, not just checking the file parses.
-- **New `--preload-from` is a solver flag only, not a sweep-wrapper one** — `run_full_sweep.py` builds its solver command explicitly with no passthrough for extra flags (checked directly, not assumed), so cross-material preloading currently only works via direct `general_solver` invocation, not through a full batch sweep. Don't expect it to be picked up by adding it to a `run_full_sweep.py` command line — it will just be silently absent from what actually gets passed to the solver.
+- **`--preload-from` now works through `run_full_sweep.py` as well as direct `general_solver` calls** — this was a real, documented gap (the wrapper built its solver command explicitly with no passthrough for extra flags) and is now fixed: the wrapper repeats `--preload-from` on every batch, not just the first, since each batch is its own subprocess with no memory of earlier ones. Verified with a fake-solver harness forcing multiple real batches — confirmed present on every single batch's actual command line, not just the first.
 - **`reduce`'s Phase 2 hit a real, measured memory crisis at true KBPvK scale, and was rebuilt again to fix it** — not just tuned. A run on the real ~58.7M-position database showed `resolve_reachable_shapes` still growing without bound past 15M positions resolved, checkpoint-save time more than doubling between consecutive saves. The fix: reference-counted release, folding summarization directly into the main pass so every position (not just the ~31% that aren't shape origins) becomes freeable the instant nothing could still reference it — measured directly, same KQvK data both ways, 445.9 MB peak before vs. 60.8 MB after, a 7.3x reduction, with identical final results. `find_shape_origins` and `resolve_reachable_shapes`'s own signatures changed as part of this (the standalone `summarize_shapes` function was removed entirely, folded into the second pass) — if calling either directly from other code rather than through `reduce`, check the current signatures rather than assuming the old ones still apply.
 - **`--retry-skipped` silently did nothing at all for a real stretch, and separately would have destroyed other findings' data if the first bug hadn't been masking it** — both confirmed and fixed. Bug 1: the "Phase 1 already complete, skip and reload" check fired regardless of `--retry-skipped`, meaning a retry command ran to completion, printed a summary, and changed nothing — the exact stale, un-retried results got silently reloaded every time. Bug 2, which bug 1 was accidentally preventing from ever triggering: the findings list used to get filtered down to just the retry subset before processing, which would have both broken subsumption-edge detection against every other finding AND caused the retry's own output-writing code to overwrite `branch_reduction.csv` with only the retried finding's single row, discarding everything else. Both fixed together — retry mode now keeps the full findings list intact (restricting only which findings get processed) and merges results back rather than overwriting. Verified with a real corrupted-then-retried finding: output confirmed byte-for-byte identical to a fresh, uninterrupted run. `--retry-skipped` also always auto-skips Phase 2 now, even without `--skip-full-landscape` — see §1 Step 6 for why that's actually correct (Phase 2 depends on nothing from Phase 1).
 - **Recomputing origins on every invocation was a real, measured ~40GB memory driver, and pickle made caching it worse before it made it better** — see §1 Step 6 for the full account. Two lessons worth separating: (1) a value that's expensive to compute but never changes between invocations of the same command against the same data belongs in a cache, not recomputed defensively "just in case" — the actual cost here wasn't `resolve_reachable_shapes` itself, it was silently redoing `find_shape_origins` before ever reaching it. (2) pickle is not a neutral default for a large, flat, non-self-referential structure — its identity-tracking memo table is real, unavoidable overhead for data that has no shared-reference structure to preserve, and was severe enough on its own to tip a real run into unrecoverable swap-thrashing. A plain, line-oriented format fixed it outright.
@@ -430,7 +439,190 @@ That ceiling is about what the *data structure* can represent, not what's practi
 
 ---
 
-## 7. What this document does *not* cover
+## 8. Analysis tools — exploring a completed material's data
+
+Two standalone scripts, both material-agnostic (a `--material-name` flag
+for labeling output, nothing hardcoded to any one material), both built
+and verified the same way as everything else in this document: a small,
+hand-computed synthetic test checked byte-for-byte before either was
+trusted on real data.
+
+**`analyze_routing_cooccurrence.py`** — reads a completed `--trace-shape-
+graph-segmented` run's `routing.sqlite` and reports real mate
+co-occurrence structure: how many of a material's theoretically possible
+mate pairs (`C(n, 2)` for `n` distinct mates) actually co-occur in some
+position's own reachable-shape set, plus the real clustering result
+`--cluster-mates` already computed and stored (`mate_groups`), read
+directly rather than recomputed. Opens the database read-only.
+
+```bash
+python3 analyze_routing_cooccurrence.py material_reduction/shape_graph_routing.sqlite --material-name KBNvK
+```
+
+Add `--baseline-name`, `--baseline-mates`, and `--baseline-pairs` together
+to print a direct comparison against a previously-analyzed material's own
+numbers from an earlier run of this same script — all three are required
+together, or the comparison is skipped rather than silently assuming a
+default. Streams the routing table ordered by position, memory-bounded the
+same way `compute_mate_clusters` is, rather than loading the whole table
+at once — real KBNvK scale (57 mates, ~32.8M routing rows) completed in
+under 30 seconds.
+
+**A real, confirmed structural fact worth knowing before running this,
+not asserted from theory:** KQvK's 46 mates were densely interconnected —
+97.9% of all possible pairs actually co-occurred. KBNvK's 57 came back the
+opposite way — only 3.4% of possible pairs co-occurred, and `--cluster-
+mates` correspondingly barely did anything (57 mates → 52 groups, versus
+KQvK's 46 → 18). Whether that's specific to KBNvK or a real pattern across
+materials is an open question this tool exists to keep checking, not
+something to assume holds for the next material run through it.
+
+**`analyze_longest_line.py`** — finds the single longest (maximum-
+distance) position in a material's raw `classify()` database, walks the
+true canonical optimal line from it to mate via proper backward induction
+(alternating whose turn controls the escape-count tiebreak at each node —
+deliberately NOT the same recursion `reachable_shapes` uses, since that
+unions every tied branch regardless of who controls it and would silently
+produce a wrong line if used to pick one), and reports, at **every ply**,
+the **full menu of distance-tied alternatives** that were actually
+available there — not just the one move taken.
+
+```bash
+python3 analyze_longest_line.py material_perfect_play.db --out material_longest_line.csv --material-name KBNvK
+```
+
+**A real revision, kept in the record rather than smoothed over.** The
+first version of this script reported only the single winning move per
+ply, plus a distinct-*mate-destination* breadth count. Run against real
+KBNvK data (66 plies), that breadth count came back `[2,2,2,...,1,1,1]` —
+true, but nearly content-free, since a long forced line naturally funnels
+toward very few final mate positions regardless of how much real
+choice existed along the way. That's not what "why does this take 66
+plies, and what was Black actually doing" needs. The fix: every tied
+alternative at every ply is now kept and reported (this was already being
+computed internally while searching for the best one — the first version
+just discarded it), each with its own downstream cumulative-escape total
+had it been chosen instead, plus a genuine shape-level breadth (distinct
+`(mate, escape)` pairs, not just distinct mate positions) alongside the
+old mate-level one, since this project's own KBNvK data shows shape count
+(20,413) vastly exceeds mate count (57) — shape-level breadth is where
+the real ply-to-ply variation actually lives.
+
+**Output is now one row per tied alternative, not one row per ply** —
+`IsChosen` flags the actual line, `NumTiedAlternativesThisPly` tells you
+immediately whether a ply was a real decision point (>1) or completely
+forced (exactly 1), and `ThisAlternativeTotalFromHere` is each
+alternative's own cost, letting you see directly what each specific
+choice was worth. The script's own console summary lists every real
+decision point along the line by name, with the chosen move's total
+against the best runner-up's and the numeric gap between them.
+
+**Why "why can't White do better" doesn't need new computation to
+answer.** `distance` at a position is the proven, exact minimax value —
+`tied` is, by construction, the complete set of moves that achieve it. No
+move outside `tied` can equal or beat it, by definition of how classify()
+produced that value; this project has no full legal-move generator
+exposed in Python to independently re-derive that (move legality lives in
+the C++ engine), so this script states the structural reason rather than
+re-proving it by brute enumeration.
+
+Needs `general_analyzer.py` importable (`--general-analyzer-dir` if it's
+not in the current directory) — reuses that file's own move-application
+and canonicalization logic directly rather than reimplementing chess move
+rules. Loading the raw database is the same real, documented `load_db`
+cost as everywhere else in this project (~7.3GB measured directly at
+KBNvK's own ~22M-row scale) — the two recursions themselves only ever
+touch the specific subtree below the one chosen starting position, not the
+whole database, so they stay fast once loading finishes.
+
+**Verified before being trusted on real data, not just written and
+assumed correct**: a small hand-built test tree included a deliberate trap
+— a branch where the locally *bigger* immediate escape move is the *wrong*
+pick, because the locally *smaller* one leads to a much bigger downstream
+total. Confirmed directly, at the internal recursion level (not just the
+top-level answer, which could have come out right by coincidence), that
+the backward induction does real lookahead rather than greedily grabbing
+the larger immediate number. The redesigned decision-point summary was
+separately verified against two more hand-built cases — one with a real
+White-side choice, one with a real Black-side choice on the actual winning
+path — confirming both the correct alternative is flagged `IsChosen` and
+the reported runner-up/gap match the hand-computed values exactly in both
+directions.
+
+**A second real revision, added directly in response to real KBNvK
+output, not built speculatively.** Breadth alone — even the shape-level
+one — can sit at the same number for dozens of consecutive plies (real
+KBNvK data: 53 straight plies at breadth 2 before dropping to 1), which
+says *that* something stayed open but not *what*, or exactly *where* it
+closed. The script now traces this directly: every distinct mate
+destination reachable anywhere along the line gets a short label
+(`Mate1`, `Mate2`, ...), and `MatesEliminatedByThisMove` names, per row,
+exactly which destination(s) a specific move removes from what's still
+reachable.
+
+**A real, checkable structural fact this relies on, stated in the
+script's own docstring and verified against the script's own output, not
+just claimed:** a position with exactly one tied move cannot eliminate any
+mate destination, by construction — `reachable_shapes()` for a single-
+child node is a fixed-offset shift of the child's own set, which can
+relabel escape counts but cannot merge or drop a distinct mate. So
+elimination can only happen exactly at a genuine decision point (more
+than one tied move), never at a forced one. The script checks this
+directly against its own real output every time it runs, flagging
+`[UNEXPECTED]` loudly if a forced ply ever eliminates something it
+shouldn't — this isn't assumed correct, it's watched for.
+
+```bash
+python3 analyze_longest_line.py material_perfect_play.db --out material_longest_line.csv --material-name KBNvK
+```
+
+**Verified on the same hand-built three-mate test tree as the rest of
+this tool**: a root position with two tied moves whose combined reachable
+set spans 3 distinct mates was confirmed to eliminate exactly the 2 mates
+NOT reachable through the chosen branch, in one step, at the fork itself
+— zero `[UNEXPECTED]` violations, matching the structural claim exactly.
+
+**For the broader question of where different mate-family "basins"
+border each other *across the whole database*, not just along one single
+extremal line** — the single longest line is close to the worst place to
+look for this, since hitting the true maximum tends to force nearly
+everything into one rigid corridor with very few real branch points.
+`analyze_routing_cooccurrence.py` (above) is built for exactly the
+whole-database version of this question — real mate co-occurrence
+structure across every explored node, not one line's own subtree.
+
+**`analyze_distance_landscape.py`** — answers a different, genuinely open
+question than either tool above: is a material's own maximum distance a
+rare, isolated spike, or the edge of a real, well-populated neighborhood?
+"The defending side wants to stay in the high-distance region as long as
+possible" is mathematically identical to "the defending side maximizes
+distance" — already exactly what `classify()` computes, not new content.
+What's actually open is how *populated* that region is. This script
+answers it directly: a full distance histogram, the population of a
+configurable high-distance band compared against the same-width band
+below it, and — separately — how many of the positions sharing the exact
+maximum distance are truly distinct once D4/mirror symmetry is accounted
+for, rather than double-counted as separate when several are really the
+same shape seen from a different orientation.
+
+```bash
+python3 analyze_distance_landscape.py material_perfect_play.db --material-name KBNvK --band-width 20
+```
+
+Loads the raw database once and answers both questions from that single
+pass, rather than requiring two separate ~7GB loads for what would
+otherwise be two separate scripts.
+
+**Verified before being trusted on real data**: a small synthetic database
+with a known distance distribution and one deliberately-constructed
+geometric mirror pair among its maximal-distance positions (`K:a1 k:h8`
+and its left-right reflection `K:h1 k:a8`, first confirmed directly to
+canonicalize identically via this project's own `canonical_form_general`)
+came back exactly right — histogram counts matched by hand, and the 3 raw
+maximal-distance positions correctly reduced to 2 truly distinct ones,
+with the known mirror pair collapsing into a single group of size 2.
+
+## 9. What this document does *not* cover
 
 The multi-piece-Black refactor (letting Black have real material, and potentially win) is a separate, not-yet-built track — see `loser_count_and_multipiece_black_refactor.md` for the full plan, open questions, and what specifically needs to change in the engine before this workflow extends to that case. One concrete piece of groundwork from this project's White-side piece-count expansion (§0, §5) is now available to that track directly: the packed-state bit budget was confirmed to hold exactly 5 non-king pieces total *regardless* of how they end up distributed between White and Black in a future flexible-color redesign — so the piece-count ceiling itself won't need to move again once Black-side material is added, only how those 5 slots get allocated.
 

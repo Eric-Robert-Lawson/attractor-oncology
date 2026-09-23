@@ -64,21 +64,9 @@ a 4.4s batch), not silent until completion. This matters most on a
 material's first real batch, which can run for minutes with no output
 otherwise -- indistinguishable from a hang without live streaming.
 
---preload-from, NOW WIRED THROUGH (previously a real, documented gap): lets
-a sweep of a larger material seal any position reached via capture or
-promotion into an already-solved, SEPARATE material's database, instead of
-rediscovering it natively -- the same mechanism verified byte-for-byte
-correct in syzygy_improvement_proven_results.md (KPvK preloading from KQvK
-and KNvK simultaneously), now usable through this wrapper rather than only
-via a direct general_solver call. Passed to EVERY batch, not just the
-first -- see the flag's own --help text for why that's required, not
-optional, given this script's one-subprocess-per-batch design.
-
 Usage:
     python3 run_full_sweep.py kqvk_exhaustive.txt --db kqvk_perfect_play.db --solver ./general_solver
     python3 run_full_sweep.py kbnvk_exhaustive.txt --db kbnvk_perfect_play.db --solver ./general_solver --batch-size 200
-    python3 run_full_sweep.py kqbnvqk_exhaustive.txt --db kqbnvqk_perfect_play.db --solver ./general_solver \\
-        --preload-from kbnvk_perfect_play.db --preload-from kqvk_perfect_play.db
 """
 
 import argparse
@@ -184,38 +172,11 @@ def main():
                           "batch auto-detects from system memory, same as running general_solver directly")
     ap.add_argument('--tmp-dir', default='.sweep_batches', help="Where per-batch seed files are written")
     ap.add_argument('--fresh', action='store_true', help="Wipe --db before starting (passed to the FIRST batch only)")
-    ap.add_argument('--preload-from', action='append', default=None, dest='preload_from',
-                     help="Path to an already-solved, SEPARATE material's database (e.g. a completed "
-                          "KBNvK, to preload while sweeping KQBNvQK) -- passed through unchanged to "
-                          "general_solver's own flag of the same name. Repeatable, once per reduced "
-                          "material, exactly as when calling general_solver directly. THIS IS THE "
-                          "PASSTHROUGH THAT WAS MISSING: --preload-from previously only worked via a "
-                          "direct general_solver invocation, not through this sweep wrapper, because "
-                          "this script built its solver command explicitly with no passthrough for "
-                          "extra flags -- confirmed directly, not assumed, and documented as a real, "
-                          "known gap in general_workflow_reference.md before this fix. Unlike --fresh "
-                          "(a one-time action passed only to batch 1), this is passed to EVERY batch "
-                          "invocation -- each batch is its own subprocess (see this file's own module "
-                          "docstring for why), so every single one needs the preload source available "
-                          "to seed its own classify() run; there is no persistent state across batches "
-                          "for this to be loaded into just once.")
     args = ap.parse_args()
 
     if not os.path.isfile(args.solver):
         print(f"ERROR: solver binary not found at {args.solver}", file=sys.stderr)
         sys.exit(1)
-
-    if args.preload_from:
-        for p in args.preload_from:
-            if not os.path.isfile(p):
-                print(f"ERROR: --preload-from path not found: {p}", file=sys.stderr)
-                sys.exit(1)
-        print(f"Preloading from {len(args.preload_from)} already-solved material(s): "
-              f"{', '.join(args.preload_from)}")
-        print(f"  Every batch this sweep runs will seal any position reached via capture/promotion "
-              f"into one of these, sourced from that material's own already-proven values, rather "
-              f"than rediscovering it natively. See syzygy_improvement_proven_results.md for the "
-              f"verified, byte-for-byte-correct mechanism this relies on.\n")
 
     # --fresh unconditionally deletes an existing database, with no memory
     # of what was in it -- and the most natural way to trigger this by
@@ -305,14 +266,6 @@ def main():
             cmd += ["--max-nodes", str(args.max_nodes)]
         if args.fresh and batch_num == 1:
             cmd += ["--fresh"]
-        if args.preload_from:
-            # Every batch, not just the first -- unlike --fresh (a one-time
-            # action), each batch is its own subprocess with no memory of
-            # previous ones, so every single invocation needs this to seed
-            # its own classify() run. See the argparse help text above for
-            # the full reasoning.
-            for p in args.preload_from:
-                cmd += ["--preload-from", p]
 
         batch_start = time.time()
         pct = 100.0 * scan_pos / total if total else 100.0

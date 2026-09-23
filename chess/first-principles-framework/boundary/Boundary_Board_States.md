@@ -1,9 +1,19 @@
-# Boundary Board States: A Second Analytical Target Alongside Full-Landscape Classification
+# Boundary Board States: The Choice-Force Boundary of Perfect Play
+
+**This is recorded as the primary objective of this project, not a secondary
+analysis — stated explicitly and preserved as a fact about the project's own
+priorities, not something this document should soften.** A separate, honestly
+reasoned assessment of this idea's actual scope and limits — what it does and
+doesn't unlock relative to materials nobody has fully classified yet — is kept in
+§11, clearly labeled as a distinct, independently-argued position rather than
+folded into or diluting the objective stated here.
 
 A record of a concept developed across this project's own conversation history,
-preserved here precisely because it went through real revision — an initial framing
-that didn't hold up, a correction, and a final, sound version worth building toward
-with certainty rather than re-deriving from memory later. Kept separate from
+preserved here precisely because it went through real revision — an initial
+framing that didn't hold up, a correction, a genuine gap in an earlier draft of
+this very document (the candidate-list/incremental-verification workflow in §3,
+first flattened into "ruled out" when only one of its component claims actually
+was), and the corrected, complete version below. Kept separate from
 `syzygy_improvement_proven_results.md` and the other Claim A/B/C documents because
 this is a genuinely different kind of object: those are about distance and escape
 count; this is about win/draw/loss pattern-matching at the single precise point
@@ -11,122 +21,208 @@ where a losing side's last real choice exists.
 
 ---
 
-## 1. The concept, in its final, correct form
+## 1. The core concept, in the terms it was first stated
 
-A **boundary board state** is a position satisfying three conditions simultaneously:
+There is a boundary between "choices" made to *reach* a boundary board state, and
+the forced sequence that follows it if the drawing option isn't taken. Everything
+before this boundary is choice — a path being steered toward the boundary.
+Everything after, if the draw isn't taken, is forced toward mate. The boundary
+itself has a specific geometry: **discontinuous**, not continuous — continuity
+isn't a well-defined vector for this kind of transition. There is a discrete,
+localized upstream/downstream structure: certain board positions flow *toward*
+these draw positions, and if a forced win/loss exists downstream, there necessarily
+exists a point upstream where a choice could have been made to force a draw
+instead, wherever in the game that choice actually sits.
 
-1. **Both sides have sufficient material to theoretically force a win** — this is a
-   material-only ceiling check, not a position-specific one (see §4 for why this
-   distinction matters enormously).
-2. **The side to move has exactly one non-losing legal move.** Every other legal
-   move loses. The one non-losing move preserves a draw — however that draw is
-   ultimately realized (see §6 for the taxonomy of realization mechanisms, and why
-   this project has chosen not to care which one applies).
-3. **This is a genuine consequence of correct upstream play, not an artifact.**
-   If a forced win were available anywhere upstream, it would have been taken
-   instead of drifting toward this boundary — the boundary position is what
-   perfect play from an already-non-winning position necessarily produces, not a
-   special case requiring separate justification.
+**The three defining conditions, stated exactly as first given:**
 
-The set of all such positions, for a given material, is what this document calls
-the **boundary board state set** — proven members, proven non-members, and
-(for materials not yet fully resolved) a remaining candidate pool.
+1. White and Black can both still win based on piece combination alone, where
+   reduction from sacrificing will force a draw.
+2. Either Black or White is choosing a draw, and the other side has no options
+   available that don't immediately put them past a boundary state into a forced
+   sequence — or that also become a draw.
+3. Every other upstream position for both Black and White's choices will also
+   route into a draw or a loss — otherwise, if a forced win were possible, that
+   choice would have been made instead.
 
-**What a boundary board state is not, stated plainly because this was a real point
-of confusion worth recording**: it is not a property of *how* a position was
-reached, and it does not require the position to have arisen from optimal play
-upstream in some real game. A boundary board state is a pure, self-contained
-property of the position itself — exactly one non-losing move exists — the same
-way this project has always insisted a full landscape must be correct for every
-legal position, not just ones a perfect game would produce (see
-`general_workflow_reference.md`'s own scope statement). Condition 3 above describes
-*why* boundary states are the natural output of exhaustive backward induction, not
-a requirement that a boundary state only "counts" if reached via perfect play.
+**On which draws count.** Draws that emerge as stalemates arising from
+sub-optimal play are excluded — a choice could have been made upstream not to
+allow the stalemate, so these are not genuine boundary states. But a position
+validated (via Syzygy or full-landscape data) as a draw through **forced
+repetition**, not stalemate, is a mathematically proven boundary board position.
+The final board state reached after repetition sets in, for both sides, is itself
+the boundary position — the furthest downstream point, since everything before it
+was the approach toward it.
+
+**What a boundary board state is not**: it is not a property of *how* a position
+was reached, and it does not require the position to have arisen from optimal
+play upstream in some real game. It is a pure, self-contained property of the
+position itself — the same way this project has always insisted a full landscape
+must be correct for every legal position, not just ones a perfect game would
+produce.
 
 ---
 
-## 2. Relationship to this project's existing architecture — same mechanism, different organizing question
+## 2. The candidate-list construction and pruning strategy, in full
 
-This is not a new algorithm. `classify()`'s own fixed-point backward induction
-already computes, for every position, the exact value of every legal child. A
-boundary board state is simply a specific, checkable *pattern* over values already
-being computed — "exactly one child is non-losing" — the same shape of thing as
+This is the pragmatic, buildable core of the proposal.
+
+**The insight from parsing condition 2 directly**: for condition 2 to even be
+*possible* at a given position, the position must meet certain structural
+requirements first. Board positions that cannot possibly satisfy condition 2 can
+be excluded entirely, based on piece combination alone, and on specific
+arrangements within a piece combination that don't satisfy the constraint. This
+is explicitly **broader than plain insufficient material**: the necessary
+condition is *sufficient material to theoretically win* **and** *real check
+potential* — a position with sufficient material but literally no way to give or
+block a check is pruned from the candidate list on this basis, a genuine, distinct
+expansion beyond the already-recognized insufficient-material case.
+
+**What this produces**: not the exact boundary-state set directly, but a
+**candidate list guaranteed to contain the full, true set of boundary board
+states, plus some non-boundary "garbage."** The garbage gets eliminated by
+exhaustive verification, working through a finite list rather than the full
+landscape — explicitly framed as bounded by the same limitations Syzygy itself
+has (finite piece count, finite practical scale), not a way around that ceiling
+but a way to work more efficiently within it.
+
+**Incremental, partial construction**: because the candidate list is finite, it
+supports iterative refinement — work through it, prove or disprove entries, and
+the unresolved pool shrinks with each pass. A partial catalog, worked down from
+the full candidate set, is itself useful before the whole thing is complete.
+
+**Distributed, modular computation**: proposed as a further extension — a public,
+open-source contribution network, approached modularly, where individual
+candidate positions are computed to full exhaustion one at a time, potentially
+distributed across many independent contributors rather than one machine.
+
+**The batch-size-1 analogy, as originally offered in support of this**: in
+`run_full_sweep.py`, a batch size of 1 often resolves a large fraction of
+positions quickly, with larger batch sizes becoming safe only once the database's
+own accumulated knowledge starts doing most of the work. Offered as intuition for
+why incremental, candidate-by-candidate proving might behave similarly well. (§4c
+records where this specific analogy was directly challenged.)
+
+---
+
+## 3. The actual caching-architecture proposal, restored here at full precision
+
+An earlier draft of this document flattened this into a single rejected claim.
+It deserved better, because it's actually two separable claims with different
+soundness — restored here as the five-point workflow originally described:
+
+1. **Use §1's three conditions as necessary, not sufficient, filters** to build a
+   finite candidate pool for a given material — sufficient material on both
+   sides, plus whatever structural setup makes condition 2 possible at all. This
+   pool is guaranteed to contain every true boundary state, plus false positives
+   that fail full verification.
+2. **Fully, exhaustively verify each candidate individually** — no shortcut
+   inside this step. This is where the real cost lives.
+3. **Cache each candidate's proven verdict — boundary or not — permanently, once
+   resolved.** This is the crux, and it is a *different* claim from "avoid
+   caching the full landscape at all." The distinction, precisely: the original
+   proposal was read, in an earlier draft, as "don't build the full landscape's
+   memoized state, recompute subtrees on demand whenever revisited" — that
+   version genuinely fails (§4b). This version is the opposite shape: do the
+   full, normal, single memoized computation exactly as the existing pipeline
+   already does, and simply choose *not to persist* the non-boundary majority of
+   that computation to the long-term output file — write out only the small,
+   finished, permanently-true verdict for whichever positions turn out to be
+   boundary states.
+4. **The candidate pool shrinks monotonically as verification proceeds** — real,
+   visible, incremental progress, even though the total work to get there is
+   unchanged from full classification.
+5. **Each candidate's verification is largely independent of the others**,
+   making this naturally parallelizable, including as a genuinely distributed
+   effort — many contributors, each taking one candidate to full exhaustion, no
+   coordination needed beyond merging proven verdicts into a shared cache.
+
+**Why point 3 is actually consistent with how this project's own engine already
+works, not a departure from it — checked directly against the real code, not
+asserted**: `SolvedPositionDatabase` in `compositional_trajectory_solver_modular
+_shapes.cpp` already separates exactly these two concerns. The full computation
+state lives in one in-memory structure (`map<pair<string,char>, SolvedPosition>
+solved`) — this has to hold everything, the same way full classification always
+has to. But what gets *written to disk* is governed by a separate `pending_export`
+vector, tracking only keys added or mutated since the last write — the code's own
+comment states plainly this is "what makes frequent, cheap on-disk checkpointing
+possible," and `append_new_to_file()` costs "O(size of the delta), not O(total
+database size)." The existing architecture already treats "what's needed to
+compute" and "what's worth persisting long-term" as two different questions with
+two different costs. Point 3 above is a direct extension of that same pattern —
+persist only the small, permanently-useful boundary-state subset, not a
+contradiction of anything already built.
+
+---
+
+## 4. Assessment — kept clearly separate from the record in §§1-3
+
+### 4a. The candidate-list filter (§2's "sufficient material + check potential")
+
+Tested against a concrete counterexample: **king-and-pawn opposition and
+zugzwang.** One side's move loses, the other's doesn't, in positions with zero
+check activity anywhere nearby — opposition is a central, textbook concept in
+endgame theory precisely because the deciding factor is king geometry and tempo,
+not tactics. A "check potential" filter would discard exactly this class of
+positions. The sound version — "no check is *ever* possible under any
+continuation from here" — is a true global fact, but establishing it costs the
+same as the computation the filter was meant to avoid.
+
+### 4b. What genuinely doesn't work: recomputing unproven subtrees on demand
+
+This is the one part of the original proposal that does fail, and it's narrower
+than "the whole caching idea" — specifically, treating full-landscape memoization
+as avoidable *during* the search itself, re-deriving a subtree each time it's
+revisited rather than keeping it resident. This project already ran the closest
+real experiment to this exact tradeoff, in the opposite direction: caching *more*
+(`reachable_shapes` by canonical form, a shared cross-pass move-tuple cache, both
+in `general_analyzer.py`) to avoid recomputation was tested and came back **~6.5%
+slower, twice**, because `explore()` still walks the full subtree regardless of
+cache hits — traversal, not value storage, is the dominant cost. Discarding the
+in-memory computation early and re-deriving it later hits the identical wall from
+the other side: more re-traversal makes the already-dominant cost worse. This is
+exactly what §3's point 3 does *not* propose — it keeps the full in-memory
+computation intact for the single pass, and only economizes on what gets written
+out afterward, which is a different, and sound, question.
+
+### 4c. The batch-size-1 analogy
+
+A small batch covering a large fraction of positions quickly isn't caused by
+*what* gets cached — `discover()`'s frontier expands based on what's reachable
+from a seed, independent of batch size. The observation actually shows full
+exhaustive discovery already happens fast, with full caching, from very few
+seeds — evidence that the underlying graph traverses quickly once you're doing
+it, not evidence that persisting less of the result would help.
+
+### 4d. What survives, unambiguously real
+
+The insufficient-material ceiling exclusion (condition 1) is real, narrow, and
+already implemented in the engine's own per-position terminal checks (confirmed
+directly against the engine's own comments on unconditional-draw terminals) —
+though not yet as a pre-generation material-category skip; whether that's worth
+adding is a small, separate, real question. And once a material is already fully
+solved — by this project or by Syzygy — finding its boundary states is genuinely
+cheap (§6): a direct scan, no new tablebase construction. That part of the
+proposal's spirit is correct.
+
+---
+
+## 5. Relationship to this project's existing architecture
+
+A boundary board state is a specific, checkable pattern over values `classify()`
+already computes in full — "exactly one child is non-losing" — the same shape as
 `analyze_longest_line.py`'s `NumTiedAlternativesThisPly == 1` check for forced
-plies, just applied to the win/draw/loss dimension instead of the distance/escape
-dimension. Nothing here requires a new solving engine. It requires a new *scan*
-over data that either already exists (Syzygy, or a material this project has
-already solved) or will exist once full classification finishes (a material this
-project is solving for the first time).
+plies, applied to win/draw/loss instead of distance/escape. No new solving engine
+is required — a new *scan*, over data that either already exists (Syzygy, or a
+material this project has solved) or will exist once classification finishes.
 
 ---
 
-## 3. What was tried and ruled out — kept in the record, not smoothed over
+## 6. Where this gets easy — the corrected, sound version of the ambition
 
-Two ideas were proposed and tested against real argument before the version in §1
-was reached. Both are worth keeping, because the reasoning that ruled them out is
-reusable.
-
-### 3a. "Prune during construction using the boundary-state definition itself" — ruled out
-
-The first framing treated boundary-state identification as a way to *avoid* full
-exhaustive construction — skip branches that provably can't contain a boundary
-state, using only local or material-based checks. This does not hold, for a
-precise reason: whether a *specific arrangement* satisfies condition 2 depends on
-the true minimax value of every one of its children, which is exactly the
-expensive thing full classification computes. There is no local, position-level
-shortcut to that value — the same reason there's no way to verify a position is
-drawn without first knowing every reply doesn't lose, which was the original,
-correct objection raised early in this discussion and never actually overturned,
-only refined in what counts as "local."
-
-### 3b. "No check potential" as a sound local filter — ruled out, with a concrete counterexample
-
-A refined version proposed filtering out positions with no check activity as
-incapable of being boundary states. This fails on real chess theory, not just in
-principle: **king-and-pawn opposition and zugzwang** are exactly this shape —
-one side's move loses (forced to cede a key square), the other's doesn't — occurring
-in positions with zero check activity anywhere nearby. Opposition is a central,
-well-known organizing concept of endgame theory precisely because the deciding
-factor is tempo and king geometry, not tactics. A "no check potential" filter
-would discard some of the most textbook examples of boundary states that exist.
-The sound version of this filter — "no check is ever possible from this position
-under any continuation" — is a true global structural fact, but establishing it
-requires knowing the reachable future of the position, which costs exactly what
-the filter was meant to avoid.
-
-### 3c. "Cache less (boundary states only), recompute more" — ruled out by this project's own prior, directly relevant experiment
-
-A later framing accepted the real cost of full computation but proposed storing
-only the boundary states themselves, recomputing subtrees on demand rather than
-caching the full landscape, to keep the persistent file small. This runs directly
-into an experiment this project already ran and measured: caching *more*
-(`reachable_shapes` by canonical form, and a shared cross-pass cache of move
-tuples) to avoid recomputation was tested and came back **~6.5% slower, twice**,
-because `explore()` still walks the full subtree regardless of cache hits —
-**traversal, not value storage, is the dominant cost** in this codebase. Caching
-*less* is the same tradeoff run in the opposite direction, and hits the identical,
-already-diagnosed wall: a scheme that increases how much re-traversal is needed
-makes the already-dominant cost worse, not better.
-
-**What does survive from this whole line of thinking, real and narrow**: material
-that is provably insufficient to force a win *regardless of position* — KvK,
-KNvK, KBvK — is already recognized by this project's own engine
-(`compositional_trajectory_solver_modular_shapes.cpp`, confirmed directly by its
-own comments on unconditional-draw terminals). This is a genuine ceiling argument,
-not a floor argument about specific arrangements within a material that can
-support real wins — which is exactly the distinction that makes it sound where
-§3a and §3b were not.
-
----
-
-## 4. Where this actually gets easy — and it's easier than anyone in this conversation initially gave it credit for
-
-The corrected, sound version of this idea doesn't try to avoid computation. It
-recognizes that **for any material Syzygy already covers (up to 7 pieces), the
-computation has already been done, by someone else, in full.** Finding boundary
-states in Syzygy-covered material requires no tablebase construction at all —
-just legal move generation plus WDL probes, both standard, already-solved
-problems:
+For any material Syzygy already covers (up to 7 pieces), boundary-state
+identification needs no tablebase construction — legal move generation plus WDL
+probes, both standard, already-solved problems:
 
 ```python
 import chess
@@ -135,11 +231,11 @@ import chess.syzygy
 def is_boundary_state(board, tablebase):
     """
     Returns True if the side to move has exactly one non-losing legal move
-    and every other legal move loses -- the pattern this whole document is
-    about, checked directly against already-computed Syzygy WDL values.
+    and every other legal move loses -- checked directly against
+    already-computed Syzygy WDL values, no new computation.
 
-    See §5 for the collapse-cursed/blessed choice this makes, and §6 for
-    what "non-losing" is deliberately left agnostic about (mechanism).
+    See section 7 for the collapse-cursed/blessed choice this makes, and
+    section 8 for what "non-losing" is deliberately left agnostic about.
     """
     non_losing = []
     for move in board.legal_moves:
@@ -157,175 +253,161 @@ def is_boundary_state(board, tablebase):
     return len(non_losing) == 1
 ```
 
-The same logic applies, with zero conceptual change, to any material *this*
-project has already fully solved — a scan over the completed database, structurally
-identical to how `analyze_longest_line.py` already finds forced plies, just keyed
-on W/D/L pattern rather than tied-move count. The only place real, heavy
+The same logic applies to any material this project has already fully solved — a
+scan over the completed database, structurally identical to how
+`analyze_longest_line.py` already finds forced plies. The only place real, heavy
 computation is still required is a material neither Syzygy nor this project has
-solved yet — and that's not a new cost this idea introduces, it's the same cost
+solved yet, and that's not a new cost this idea introduces — it's the same cost
 already being paid for KRPvK right now, for entirely separate reasons.
 
 ---
 
-## 5. The 50-move rule — verified directly against Syzygy's own documented WDL semantics, not assumed
+## 7. The 50-move rule — the full reasoning, then what was verified
 
-This needed checking rather than guessing, and the real answer is more precise
-than either possibility considered before checking.
+**As originally worked through**: the 50-move rule implies a board position might,
+geometrically, appear to avoid a forced draw — but the specific sequence of moves
+required to *reach* that position might itself force a draw first, under the
+50-move rule, before the position is ever actually reached. If so, such a
+position is impossible to reach without violating the rule, and a
+board-geometry-only analysis wouldn't be the true exhaustive list. An alternative
+possibility was also raised: Syzygy might not track the 50-move rule at all, in
+which case the whole consideration is irrelevant. Stated resolution at the time:
+it doesn't matter which is true, since this project's own engine tracks no move
+history at all, and the rule "can be applied post-hoc regardless."
 
-**Syzygy's `probe_wdl` returns five values, not three**: `-2` (unconditional
-loss), `-1` (**blessed loss** — mate can be forced against the side to move, but
-the 50-move rule saves them), `0` (draw), `1` (**cursed win** — mate can be
-forced, but the 50-move rule would turn it into a draw), `2` (unconditional win).
-So Syzygy *does* account for the 50-move rule, structurally — the cursed-win and
-blessed-loss categories exist specifically to flag "this position's true DTM value
-exceeds what the 50-move rule allows."
+**What direct verification against Syzygy's own documentation found — more
+precise than either possibility above**: `probe_wdl` returns five values, not
+three — `-2` (unconditional loss), `-1` (**blessed loss**, mate forceable but the
+50-move rule saves the mover), `0` (draw), `1` (**cursed win**, mate forceable but
+the 50-move rule would turn it into a draw), `2` (unconditional win). Syzygy
+*does* structurally track the 50-move rule. But only relative to a hypothetically
+fresh clock at the probed position — the documentation states unconditional
+win/loss values hold "assuming 50-move counter is zero"; `probe_wdl` never reads
+a real game's actual current halfmove clock.
 
-**But it does so only relative to a hypothetically fresh clock at the probed
-position, confirmed directly from the documentation's own wording**: the
-unconditional win/loss values are stated as holding "assuming 50-move counter is
-zero." `probe_wdl` does not read the real game's actual current halfmove clock —
-it always evaluates as if the position were reached immediately after a capture
-or pawn push. So a "cursed win" reported by Syzygy means "if the clock reset here,
-forcing progress would still take too long" — not "given this exact real game's
-current clock value, is a draw actually guaranteed." Those are different
-questions, and Syzygy only answers the first one directly.
-
-**The reconciling fact, and it resolves the open question cleanly**: this
-project's own engine tracks no move history and no halfmove clock at all — it
-computes pure distance-to-mate, exactly matching Syzygy's "assume a fresh clock"
-semantics, not the real-game-clock-aware version. So for consistency with this
-project's own established classification (which has never modeled the 50-move
-rule, by explicit prior choice — see `general_workflow_reference.md`), the correct
-practice when bootstrapping from Syzygy is to **collapse cursed-win into
-unconditional win, and blessed-loss into unconditional loss** — treating `1` as
-`2` and `-1` as `-2` for the purposes of `is_boundary_state()` above. This is not
-a workaround; it's the direct, correct alignment between two systems that already
-agree on the underlying question and differ only in whether they separately flag
-the 50-move edge case. The `<= -1` / `>= 1` thresholds in the code above already
-implement this collapse.
-
-Whether the 50-move rule is "irrelevant" or "geometrically avoided" was the
-original open question — the precise answer is neither: it's a real, structurally
-tracked distinction in Syzygy's own data, and this project's deliberate choice not
-to model move history at all is what makes it safe to collapse away rather than
-something to reason further about.
+**The reconciling fact**: this project's own engine tracks no move history or
+halfmove clock at all — pure distance-to-mate, exactly matching Syzygy's
+"assume a fresh clock" semantics. So the correct practice when bootstrapping from
+Syzygy is to **collapse cursed-win into unconditional win, and blessed-loss into
+unconditional loss** — not a workaround, but the direct, correct alignment
+between two systems that already agree on the underlying question. §6's code
+already implements this collapse via its `<= -1` / implicit `>= 1` thresholds.
+Neither original possibility was quite right; the truth was more specific than
+either.
 
 ---
 
-## 6. Draw-mechanism taxonomy — what's in scope, what needs care, and why
+## 8. Draw-mechanism taxonomy
 
-Standard chess rules recognize exactly four ways a position resolves as a draw:
-**stalemate**, **insufficient material**, **repetition** (threefold, claimable, or
-fivefold, automatic), and the **50/75-move rule**. Nothing else exists under FIDE
-rules as a position-level drawing mechanism (draw by agreement is a human choice,
-not a property of any position, and irrelevant to this analysis).
-
-- **Repetition and the 50-move rule**: explicitly not distinguished in this
-  project's own boundary-state work, by deliberate choice — both represent "the
-  position is drawn," and which specific rule a real game would invoke to claim it
-  doesn't change whether the position qualifies as a boundary state.
-- **Insufficient material**: already the real, narrow ceiling exclusion from §3c —
-  a material-only fact, already recognized by this project's engine, not a
-  position-specific mechanism requiring case-by-case handling.
-- **Stalemate**: the one mechanism worth handling with actual care rather than
-  folding in automatically. Stalemate as the *realization* of a boundary state's
-  drawing branch — the non-losing move leaves the *opponent* stalemated on their
-  reply — is a real, legitimate defensive resource with genuine precedent in
-  endgame theory (well-known "stalemate tricks" in king-and-pawn endings), not
-  something to exclude by default. What *should* be flagged, not silently
-  conflated with genuine boundary states: a "boundary state" whose only
-  distinguishing feature is that literally no other legal move existed at all
-  (a heavily constrained position where the single legal move happens to be
-  drawing, rather than a genuine choice among multiple real alternatives where
-  all-but-one specifically lose). `is_boundary_state()` above doesn't yet
-  distinguish these two cases — a natural refinement is checking `board.legal_moves`
-  count independent of the non-losing count, and flagging (not necessarily
-  excluding) the degenerate case separately.
+Exactly four position-level drawing mechanisms exist under standard chess rules:
+**stalemate**, **insufficient material**, **repetition** (threefold, claimable,
+or fivefold, automatic), and the **50/75-move rule**. Repetition and the 50-move
+rule are treated as interchangeable for this project's purposes, by deliberate
+choice (§1) — both mean "the position is drawn," and which specific rule a real
+game would invoke to claim it doesn't change whether the position qualifies.
+Insufficient material is already the real, narrow ceiling exclusion (§4d).
+Stalemate is the one mechanism needing real care: stalemate as the *realization*
+of a boundary state's drawing branch (the non-losing move leaves the *opponent*
+stalemated on their reply) is a real, legitimate defensive resource with genuine
+precedent (well-known "stalemate tricks" in king-and-pawn endings), not something
+to exclude by default. What should be flagged, not silently conflated with
+genuine boundary states: a "boundary state" whose only distinguishing feature is
+that no other legal move existed at all, rather than a genuine choice among real
+alternatives where all-but-one specifically lose. `is_boundary_state()` above
+doesn't yet distinguish these — checking `board.legal_moves` count independent of
+the non-losing count is the natural refinement.
 
 ---
 
-## 7. Relationship to existing chess-computing literature — checked directly, not assumed
-
-This needed the same treatment as the KBNvK findings document's own literature
-check: verified against real sources before writing anything down, not asserted
-from a general sense that "zugzwang is probably related."
+## 9. Relationship to existing chess-computing literature
 
 **This sits inside a real, decades-old research tradition, and it already covers
-this project's own material.** Althöfer and Walter, *"Weak Zugzwang: Statistics on
-some Chess Endgames"*, ICCA Journal 17(2), 1994 — an exhaustive, tablebase-based
-statistical study across four endgames, one of which is **KBNK**, the exact
-material this project has real, verified data for. Guy Haworth's *"Mutual
-Zugzwangs in Chess"* (Computer Olympiad Workshop 6, 2001) goes further: a
-comprehensive, exhaustive enumeration of mutual zugzwang across essentially every
-2-to-5-man endgame, explicitly listing which materials have **zero** such
+this project's own material.** Althöfer and Walter, *"Weak Zugzwang: Statistics
+on some Chess Endgames"*, ICCA Journal 17(2), 1994 — an exhaustive,
+tablebase-based statistical study across four endgames, one of which is **KBNK**,
+the exact material this project has real, verified data for. Guy Haworth's
+*"Mutual Zugzwangs in Chess"* (Computer Olympiad Workshop 6, 2001) goes further:
+a comprehensive, exhaustive enumeration of mutual zugzwang across essentially
+every 2-to-5-man endgame, explicitly listing which materials have zero such
 positions — **KBNK is on that list, by name, confirmed exhaustively: zero mutual
-zugzwangs.**
+zugzwangs.** Both predate Syzygy (2013) by 19 and 12 years respectively — the
+real research window for this territory is closer to 45-50 years, not the 13
+implied by dating it from Syzygy alone.
 
-**The precise, important distinction — this project's own formalization is
-related to, but not identical to, any of the three established variants found:**
+**The precise distinction**: mutual zugzwang and weak zugzwang both require
+toggling which side is to move on a fixed arrangement and comparing the result —
+a two-position comparison. Traditional zugzwang (the older concept both papers
+build on) asks whether the value *category* changes under that same toggle —
+closest in spirit to this document's own concept, but still a comparison across
+a toggled pair. A **boundary board state (§1)** requires no toggle at all: fix
+the side to move as given, and count how many of *that side's own* legal moves
+stay non-losing. Related to, but not identical to, anything found published under
+the zugzwang name specifically.
 
-- **Mutual zugzwang (mZZ)**: fix an arrangement of pieces, toggle which side is to
-  move, and ask whether *neither* side wants to be the one on move. Requires
-  comparing two distinct positions (same pieces, opposite mover).
-- **Weak zugzwang** (Althöfer & Walter's own contribution): the same toggle, but
-  compares *distance-to-mate* rather than W/D/L category — a softer measure, still
-  a two-position comparison.
-- **Traditional zugzwang** (the older concept both papers build on, per Roycroft):
-  the same toggle, but asks whether the *value category itself* changes — closest
-  in spirit to this document's own concept, but still fundamentally a comparison
-  across a toggled pair, not a property of one position alone.
-- **Boundary board state (this document, §1)**: no toggle at all. Fix the side to
-  move as given, and count how many of *that side's own* legal moves stay
-  non-losing out of everything available to them. A single-position property, not
-  a comparison against a counterfactual mover-swap.
+**Honest verdict**: not operating in a vacuum, and not simply "zugzwang, already
+done" either — a genuinely adjacent question to a well-established one, built on
+the same real infrastructure that already proved workable at this exact
+material's scale. The overlap between which positions get flagged by either lens
+is presumably large but unmeasured — a real, open, directly checkable question.
 
-**Honest verdict, calibrated rather than rounded up or down**: this is not
-operating in a vacuum, and it is not simply "zugzwang, already done" either. It's
-a genuinely adjacent question to a well-established one, built on the same real
-infrastructure (exhaustive tablebase enumeration) that already proved workable at
-this exact material's scale. The overlap between which positions get flagged by
-either lens is presumably large but unmeasured — a real, open, directly checkable
-question once §8's build exists.
-
-**The concrete, grounded action this adds to §8's plan**: Haworth's KBNK-zero-mZZ
-result is a precise, already-published, external number to check this project's
-own boundary-state scan against, the moment it's run on the real KBNvK data
-already in hand. Since a boundary board state doesn't require the mutual property
-mZZ does, the expectation is that boundary-state count should come back
-*larger* than zero even where mutual-zugzwang count is exactly zero — a real,
-falsifiable prediction, not just a plausible-sounding one, and a natural first
-sanity check for the tool once built.
-
-## 8. Concrete next build, once this document's understanding is confirmed as correctly captured
-
-1. **Bootstrap from Syzygy** for any material already covered (up to 7 pieces),
-   using `is_boundary_state()` above (with the §5 collapse applied) — a pure scan,
-   no new tablebase construction, real boundary states out immediately.
-2. **Extend to this project's own solved materials** (KQvK, KBNvK, and KRPvK once
-   complete) the same way `analyze_longest_line.py` already scans a completed
-   database for forced plies — same shape, W/D/L pattern instead of distance/escape.
-3. **Compare the resulting KBNvK boundary-state count against Haworth's
-   already-published zero-mutual-zugzwang result for KBNK** (§7) as the first real
-   sanity check — a real, falsifiable prediction (boundary-state count should
-   come back larger than zero, since the property doesn't require mutuality),
-   checkable the moment step 2 produces real numbers, not just plausible-sounding.
-4. **Cache proven boundary states to a small, dedicated file**, separate from the
-   full landscape database — this is sound now, unlike §3c's version, because it's
-   caching an *output* of already-completed computation, not attempting to replace
-   the computation itself.
-5. **For a material neither Syzygy nor this project has solved**: no shortcut
-   exists past full classification — stated plainly, not glossed over, per §3a/§3b.
+**The concrete action this adds to §10's plan**: Haworth's KBNK-zero-mZZ result is
+a precise, already-published, external number to check this project's own
+boundary-state scan against, the moment it runs on real KBNvK data. Since a
+boundary board state doesn't require the mutual property mZZ does, boundary-state
+count should come back *larger* than zero even where mutual-zugzwang count is
+exactly zero — a real, falsifiable prediction, not just a plausible-sounding one.
 
 ---
 
-## 9. What remains open
+## 10. Concrete next build
 
-- Whether `board.legal_moves` count alone is a sufficient, sound way to separate
-  "genuine choice-point boundary state" from "only one legal move existed, and it
-  happens to draw" (§6) — proposed, not yet tested against real data.
-- Whether Syzygy's 7-piece ceiling itself becomes the limiting factor before this
+1. **Bootstrap from Syzygy** for any material already covered, using
+   `is_boundary_state()` (§6, with the §7 collapse applied) — a pure scan, no new
+   tablebase construction, real boundary states out immediately.
+2. **Extend to this project's own solved materials** (KQvK, KBNvK, KRPvK once
+   complete) the same way `analyze_longest_line.py` already scans for forced
+   plies.
+3. **Compare the resulting KBNvK boundary-state count against Haworth's
+   already-published zero-mutual-zugzwang result** (§9) — the first real,
+   falsifiable sanity check, checkable the moment step 2 produces real numbers.
+4. **Cache proven boundary-state verdicts to a small, dedicated file**, following
+   §3's point 3 exactly — a normal, full, single memoized pass, persisting only
+   the small proven-verdict subset, not the whole landscape. Sound because it
+   caches an *output* of already-completed computation, following the same
+   compute-fully/persist-selectively pattern the engine's own `pending_export`
+   mechanism already uses, not because it avoids the computation itself.
+5. **For a material neither Syzygy nor this project has solved**: no shortcut
+   past full classification exists, per §4b — but §3's five-point workflow is
+   exactly how that full classification gets organized and made tractable in
+   practice: build the candidate pool, verify each fully, cache proven verdicts
+   permanently, let the pool shrink incrementally rather than requiring one
+   monolithic run before any boundary state is known with certainty, and
+   parallelize verification across candidates or contributors.
+
+---
+
+## 11. What remains open
+
+**The separately-reasoned scope assessment referenced in the preamble**: for any
+material that is *already fully classified* — Syzygy-covered, or already solved
+by this project's own engine — a boundary-state catalog is a derived filter over
+data already completely known, not a new source of leverage on anything still
+unsolved. It doesn't reduce the cost of classifying a harder, not-yet-solved
+material, and it doesn't by itself constitute progress toward solving chess from
+its starting position — a categorically larger problem (roughly 10^43 to 10^47
+legal positions) that no tool in existence, this one included, is built to touch.
+This is a real, argued position, not a dismissal — it does not change whether
+building the catalog is worthwhile, which §1's preamble records as the project's
+own stated priority regardless.
+
+- Whether `board.legal_moves` count alone soundly separates "genuine choice-point
+  boundary state" from "only one legal move existed, and it happens to draw"
+  (§8) — proposed, not yet tested against real data.
+- Whether Syzygy's 7-piece ceiling becomes the limiting factor before this
   project's own engine does, for materials richer than KRPvK.
-- Whether a boundary-state catalog, once built for a real material, reveals its
-  own further structure (families, clustering, anything analogous to the shape
-  graph) — genuinely unexplored, and a natural question once real data exists to
-  ask it of.
+- Whether a boundary-state catalog, once built for a real material, reveals
+  further structure of its own (families, clustering, anything analogous to the
+  shape graph) — genuinely unexplored.
+- Whether the insufficient-material ceiling check (§4d) is worth adding as a
+  pre-generation material-category skip, rather than only the per-position
+  terminal check it already is.

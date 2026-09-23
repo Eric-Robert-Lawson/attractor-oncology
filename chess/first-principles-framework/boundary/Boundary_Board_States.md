@@ -244,7 +244,59 @@ not a property of any position, and irrelevant to this analysis).
 
 ---
 
-## 7. Concrete next build, once this document's understanding is confirmed as correctly captured
+## 7. Relationship to existing chess-computing literature — checked directly, not assumed
+
+This needed the same treatment as the KBNvK findings document's own literature
+check: verified against real sources before writing anything down, not asserted
+from a general sense that "zugzwang is probably related."
+
+**This sits inside a real, decades-old research tradition, and it already covers
+this project's own material.** Althöfer and Walter, *"Weak Zugzwang: Statistics on
+some Chess Endgames"*, ICCA Journal 17(2), 1994 — an exhaustive, tablebase-based
+statistical study across four endgames, one of which is **KBNK**, the exact
+material this project has real, verified data for. Guy Haworth's *"Mutual
+Zugzwangs in Chess"* (Computer Olympiad Workshop 6, 2001) goes further: a
+comprehensive, exhaustive enumeration of mutual zugzwang across essentially every
+2-to-5-man endgame, explicitly listing which materials have **zero** such
+positions — **KBNK is on that list, by name, confirmed exhaustively: zero mutual
+zugzwangs.**
+
+**The precise, important distinction — this project's own formalization is
+related to, but not identical to, any of the three established variants found:**
+
+- **Mutual zugzwang (mZZ)**: fix an arrangement of pieces, toggle which side is to
+  move, and ask whether *neither* side wants to be the one on move. Requires
+  comparing two distinct positions (same pieces, opposite mover).
+- **Weak zugzwang** (Althöfer & Walter's own contribution): the same toggle, but
+  compares *distance-to-mate* rather than W/D/L category — a softer measure, still
+  a two-position comparison.
+- **Traditional zugzwang** (the older concept both papers build on, per Roycroft):
+  the same toggle, but asks whether the *value category itself* changes — closest
+  in spirit to this document's own concept, but still fundamentally a comparison
+  across a toggled pair, not a property of one position alone.
+- **Boundary board state (this document, §1)**: no toggle at all. Fix the side to
+  move as given, and count how many of *that side's own* legal moves stay
+  non-losing out of everything available to them. A single-position property, not
+  a comparison against a counterfactual mover-swap.
+
+**Honest verdict, calibrated rather than rounded up or down**: this is not
+operating in a vacuum, and it is not simply "zugzwang, already done" either. It's
+a genuinely adjacent question to a well-established one, built on the same real
+infrastructure (exhaustive tablebase enumeration) that already proved workable at
+this exact material's scale. The overlap between which positions get flagged by
+either lens is presumably large but unmeasured — a real, open, directly checkable
+question once §8's build exists.
+
+**The concrete, grounded action this adds to §8's plan**: Haworth's KBNK-zero-mZZ
+result is a precise, already-published, external number to check this project's
+own boundary-state scan against, the moment it's run on the real KBNvK data
+already in hand. Since a boundary board state doesn't require the mutual property
+mZZ does, the expectation is that boundary-state count should come back
+*larger* than zero even where mutual-zugzwang count is exactly zero — a real,
+falsifiable prediction, not just a plausible-sounding one, and a natural first
+sanity check for the tool once built.
+
+## 8. Concrete next build, once this document's understanding is confirmed as correctly captured
 
 1. **Bootstrap from Syzygy** for any material already covered (up to 7 pieces),
    using `is_boundary_state()` above (with the §5 collapse applied) — a pure scan,
@@ -252,16 +304,21 @@ not a property of any position, and irrelevant to this analysis).
 2. **Extend to this project's own solved materials** (KQvK, KBNvK, and KRPvK once
    complete) the same way `analyze_longest_line.py` already scans a completed
    database for forced plies — same shape, W/D/L pattern instead of distance/escape.
-3. **Cache proven boundary states to a small, dedicated file**, separate from the
+3. **Compare the resulting KBNvK boundary-state count against Haworth's
+   already-published zero-mutual-zugzwang result for KBNK** (§7) as the first real
+   sanity check — a real, falsifiable prediction (boundary-state count should
+   come back larger than zero, since the property doesn't require mutuality),
+   checkable the moment step 2 produces real numbers, not just plausible-sounding.
+4. **Cache proven boundary states to a small, dedicated file**, separate from the
    full landscape database — this is sound now, unlike §3c's version, because it's
    caching an *output* of already-completed computation, not attempting to replace
    the computation itself.
-4. **For a material neither Syzygy nor this project has solved**: no shortcut
+5. **For a material neither Syzygy nor this project has solved**: no shortcut
    exists past full classification — stated plainly, not glossed over, per §3a/§3b.
 
 ---
 
-## 8. What remains open
+## 9. What remains open
 
 - Whether `board.legal_moves` count alone is a sufficient, sound way to separate
   "genuine choice-point boundary state" from "only one legal move existed, and it

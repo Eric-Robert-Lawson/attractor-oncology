@@ -348,10 +348,54 @@ applied directly to the boundary-state scaffold: build outward from certainty,
 tier by tier, letting each extension inform the next rather than attempting
 the whole span in one step.
 
+**Precedent, checked directly rather than assumed — and a major one, not an
+adjacent one.** This exact strategy — an exhaustively-solved floor, extended
+outward by forward search that terminates the instant it reconnects to that
+floor, each successful connection permanently expanding what's proven — is
+how checkers was weakly solved: retrograde-built endgame databases combined
+with proof-number search from the starting position, described directly in
+that literature as using the database "to raise the water level of where
+game play lines terminate." Eighteen years, a 3.9×10¹³-position database, the
+single most successful result in this entire research area — arrived at here
+independently, before this precedent was checked, not after.
+
+**A precise correction worth stating plainly rather than leaving the
+stronger claim standing uncorrected.** It is not that applying this strategy
+to chess has gone unconsidered. The checkers literature addresses it
+directly: even with the exact technique that solved checkers, chess's own
+scale — roughly 10^44 legal positions, against checkers' roughly 5×10^20 — is
+explicitly described as needing "a breakthrough such as quantum computing" to
+attempt the same way. The field has already looked at this strategy for
+chess, in its full, whole-game-solving form, and already identified the scale
+gap (§5) as the blocking obstacle.
+
+**Where the genuine contribution actually sits — and why this scoping is the
+sophisticated move, not a repeat of an already-rejected attempt.** What this
+section describes is not "run checkers' strategy on chess and hope it
+scales" — that is precisely the version already known to fail. It is
+narrower in a way that specifically avoids the objection that closed off the
+naive version: anchoring to narrow-margin, condition-2 transition points
+specifically rather than an undifferentiated exhaustive floor; explicitly
+tracking connectivity between multiple independently-discovered anchors as
+its own derived structure, rather than one forward line toward one database;
+and, critically, the goal is incremental topology-mapping (§5), not
+full-game solving — scoped explicitly to never require the whole chain in one
+step. That reframing is exactly what avoids needing the scale breakthrough
+the full version requires. As far as this document's own research effort can
+determine, that specific combination — narrow-margin anchoring, explicit
+cross-anchor connectivity tracking, and topology-mapping in place of full
+solving — has not been found published anywhere.
+
 ---
 
 ## 8. What remains open
 
+- **Whether the scoped, topology-mapping version of the checkers precedent
+  (§7) genuinely avoids chess's own scale wall, or merely hits the same wall
+  in a different guise once pursued far enough** — the reframing away from
+  full-game solving is real and precisely what sidesteps the objection already
+  on record against the naive version, but whether it stays tractable deep
+  into the game, rather than just near the already-solved floor, is untested.
 - **Whether real, currently-confirmed boundary states actually connect to each
   other within reach of the scaffolding strategy (§7), or whether the
   connected regions it produces stay small and isolated in practice** — the

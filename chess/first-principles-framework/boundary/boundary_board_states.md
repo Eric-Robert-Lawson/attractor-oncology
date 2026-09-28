@@ -20,11 +20,72 @@ method, also in §2), a fifth addition (the walk's termination guarantee, both
 its unconditional in-material form and its broader, conditional form tied to
 chess's own unproven start-position status, now also in §2), a sixth addition
 (open, distributed resolution as the practical path to scale, now its own
-section, §12), and the corrected, complete version below. Kept separate from
+section, §12), a seventh addition (a fifth generation method, construction
+from race-condition primitives — Method 5 in §2, recorded in full in
+`boundary_board_state_topology.md` §8 — together with caveats on Uri's rule's
+status and on wrong-colored versus opposite-colored bishops, in §2, §8 and §9),
+an eighth addition (locks generalized from frozen pawn walls to duty-based
+locks, composition as complete mutual interdependence, the scope of
+verification as an interference closure, and a proposed local/global
+distinction — recorded in `boundary_board_state_topology.md` §5a and §8f-§8j,
+with the definitional discrepancies noted in §14 here), a ninth addition
+(population-first primitive extraction as the methodology's own justification,
+§8m; composition identified as the specific mechanism that extends a
+checkers-style forward-search floor past Syzygy's own storage ceiling, §7a;
+Uri's rule checked against its own published formula and found to decompose
+into an already-catalogued race primitive composed with a color-lock fact,
+§8n; and the Možina et al. relation refined from a rejected claim of failed
+attempt into a structural-blindness claim that does hold, given their material
+and goal — all in `boundary_board_state_topology.md`), and the corrected,
+complete version below. Kept separate from
 `syzygy_improvement_proven_results.md` and the other Claim A/B/C documents because
 this is a genuinely different kind of object: those are about distance and escape
 count; this is about win/draw/loss pattern-matching at the single precise point
 where a losing side's last real choice exists.
+
+> **Where this stands, and how to resume (read this first).**
+>
+> - **Two files.** This one is the construction pipeline and the record of the
+>   idea. `boundary_board_state_topology.md` is the abstract layer: why a
+>   confirmed boundary state's status cannot be invalidated from upstream,
+>   start-reachability, the scaffolding strategy (§7 there), and the
+>   composition-from-primitives idea (§8 there).
+> - **The concept in one line.** A boundary state is a drawn position in which
+>   the side to move has exactly one non-losing move (§1, condition 2).
+> - **Four external anchors, each with its own honest status.** Checkers' weak
+>   solution — a tight structural match to the scaffolding strategy (§9 here,
+>   §7 there). Možina, Sadikov and Bratko's KBNK work — a looser family
+>   resemblance, for Method 3 (§9). The zugzwang statistics of Althöfer and
+>   Walter and of Haworth — related to, but a different definition from,
+>   boundary states (§9). Uri's rule — a real geometric proxy for a
+>   race-condition fact, but a heuristic with documented gaps, so it informs
+>   candidates and never supplies certainty (Method 4; topology §8d).
+> - **Standing rules.** Heuristics may order and propose candidates, never
+>   supply certainty. The record of an idea and the assessment of it are kept
+>   separate. What upstream discoveries can invalidate is a catalog's claim to
+>   be complete, never a confirmed boundary state.
+> - **The live thread.** Composition from race-condition primitives (Method 5):
+>   choose one concrete placement of frozen, color-locked material, write out
+>   the tempo timings for every route that breaks it, and decide whether the
+>   target is a proven wide fortress or an exactly-one boundary state (topology
+>   §8d, §9). The thread has since been generalized (topology §8f-§8j): a lock
+>   is a *duty*, of which a frozen pawn wall is only the degenerate case; a
+>   boundary state is a set of mutually dependent locks whose joint
+>   compatibility is a constraint system checked as a whole; and verification
+>   is scoped by an interference closure rather than run over the composed
+>   position. The immediate next step is to write one primitive (the rook-pawn
+>   edge race) as an assume-guarantee contract (topology §8i-§8j).
+> - **Open definitional decisions (read §14 before building).** Whether the
+>   definition of a boundary state is purely local or upstream-aware; what
+>   "local versus global" is meant to distinguish (topology §5a, including
+>   the later refinement in §5a-iii). A conflict between two predictions about
+>   KBNK/KQK-type materials was flagged and then resolved (§14 item 2, kept in
+>   the record with its correction). The first two are not settled, and
+>   construction targets depend on them.
+> - **Status of the work.** The only code in this document is the
+>   `is_boundary_state()` sketch in §6, checked for syntax but not yet run
+>   against real Syzygy or project data. A guarded revision is proposed in the
+>   §6 addendum (syntax-checked only). Everything else is design.
 
 ---
 
@@ -70,14 +131,19 @@ produce.
 
 ---
 
-## 2. Candidate generation — two methods, complementary, both feeding the same verification step
+## 2. Candidate generation — five methods, complementary, all feeding the same verification step
 
-This is the pragmatic, buildable core of the proposal. Two distinct ways to
+This is the pragmatic, buildable core of the proposal. Five distinct ways to
 generate boundary-state candidates are recorded here — a structural filter over
-a material's whole space, and a targeted, seeded search starting from positions
-already known to be decisive. Both produce the same thing: a candidate needing
-the same exactly-one-non-losing-move check (§1, condition 2) before it counts as
-a confirmed boundary state, not a replacement for that check.
+a material's whole space (Method 1); a targeted, seeded search starting from
+positions already known to be decisive (Method 2); structural pattern analysis
+over the population of states already confirmed (Method 3); and stratified
+ablation over defending material, deliberately varied one piece at a time
+(Method 4); and construction from race-condition primitives (Method 5). All
+five produce the same thing: a candidate needing the same
+exactly-one-non-losing-move check (§1, condition 2) before it counts as a
+confirmed boundary state, not a replacement for that check — though for
+Method 5 that check can take the form of a complete case-list argument.
 
 ### Method 1: the material-and-check-potential filter
 
@@ -240,6 +306,155 @@ within any material already in hand, always resolves to something well-defined
 rather than running unproductively — real architectural understanding, not a
 computational shortcut. Whether that understanding leads to an actual cost
 reduction remains open.
+
+### Method 3: geometric/topological population analysis over confirmed boundary states
+
+**Explicitly a candidate-*prioritization* method, not a certainty method** — the
+same standing distinction §1 of `boundary_board_state_topology.md` holds
+throughout applies here without exception. Nothing in this method ever confirms
+a boundary state; it only proposes which unverified candidates to try first,
+using structure discovered in the population already confirmed with certainty.
+
+**The idea, stated precisely.** Once the catalog holds enough confirmed
+boundary states to work with, treat that population as data: for each
+confirmed state, record structural features — king distance and coverage,
+whose move, piece mobility, material combination, distance from any material's
+own extremes — and look for what correlates with boundary-state-hood across
+the population. A useful extension beyond single-position features: treat each
+confirmed state as the root of its own local cone — its own upstream ancestry,
+out to wherever it connects via the scaffolding strategy
+(`boundary_board_state_topology.md` §7) — and compare the *shape* of many such
+cones to each other, not just static features of the states in isolation.
+
+**Why adding pieces to a confirmed boundary state cannot be assumed to
+preserve its status — a specific mechanism, not a general caution.** A single
+counterexample is enough to rule this out as a certainty method: take a
+confirmed boundary state realized through stalemate (§8), and add a piece for
+the opponent that blocks an existing line of attack, opening a previously
+covered escape square. The stalemate — and with it the entire drawing
+mechanism — can vanish, even though the added piece had no legal move of its
+own and threatened nothing. Blocking, discovered effects, and escape-square
+control are ordinary chess mechanics, not rare edge cases, so no category of
+"inconsequential" addition can be assumed safe. Every candidate generated this
+way still requires the full verification any other candidate does (§1
+condition 2, checked directly) — this method changes which candidates get
+tried first, never what counts as confirmed.
+
+**Real, if loose, precedent for mining tablebase-derived data this way** — see
+§9's discussion of Možina, Sadikov, and Bratko's KBNK research program, and
+the honest distinction drawn there between their specific technique (ABML rule
+induction, over the whole tablebase, toward human-readable strategic goals)
+and this narrower one (structural feature correlation, over the boundary-state
+population specifically, toward candidate prioritization). Family resemblance
+in the general approach — tablebases contain more structure than raw values,
+worth mining deliberately — not a claim that the specific method matches.
+
+### Method 4: stratified ablation over defender material, testing a geometric/topological distinction directly
+
+**A precondition this method depends on, stated first because it corrects
+something in this document's own earlier build plan (§11).** Whether a
+boundary state can exist in a material at all depends on that material having
+*genuine drawn territory* somewhere in it. A material that is a forced win
+*everywhere* against a bare king — KQvK, KRvK, KBNvK among them — has no
+drawn positions to sit at the edge of, aside from stalemate reachable only
+through a prior blunder, already excluded by §1's own definition. So these
+materials are not merely unlikely candidates for Method 2's seeding — they are
+**structurally empty of boundary states**, by the same logic that makes
+insufficient material an unconditional draw in the other direction. §11's
+build plan listed KQvK and KBNvK as Method 2 targets; that needs correcting,
+not just noting as a caveat. **This has a satisfying, independent check
+already sitting in §9**: Haworth's exhaustive enumeration found zero mutual
+zugzwangs in KBNK specifically. That's not a coincidence next to this
+document's own claim of zero boundary states there — both are the same
+underlying fact (a total forced win has no drawn-adjacent structure of any
+kind) observed from two independent directions, one already published, one
+derived here.
+
+**The distinction this method is actually built to test — named precisely,
+not left as an intuition.** A position's *geometric* properties — piece
+placement, king distance, coverage, material count — are computable directly
+from the board, with no search required. Whether that position is a boundary
+state is a *topological* property in the sense already established throughout
+this document: it depends on the full recursive value of every legal child,
+not on anything locally readable from the position alone (§4b, and the same
+argument that has ruled out every proposed geometric shortcut in this
+document's own record). The open, empirical question Method 4 targets: do
+geometrically different positions that are topologically the same kind of
+boundary state share any discoverable structural signature — not a shortcut
+around full verification, but a pattern worth testing for.
+
+**A real, independent, already-documented instance of exactly this
+distinction — checked directly, not asserted.** Wrong-colored-bishop-with-
+rook-pawn material is not unconditional insufficiency the way KB vs K or KN
+vs K is — it's won or drawn depending on a genuine race between the two
+kings for a specific corner, decided by tempo and distance, not by material
+alone. Confirmed directly: a defending king cut off from the safe corner
+loses; one that reaches it draws, and real analysis of such positions
+identifies single correct moves among alternatives that surrender the win —
+the same narrow-margin shape this whole document is built around. Chess
+programming literature states plainly that this exact ending "need[s] to be
+encoded in the evaluation function, as search would not evaluate [it]
+properly" — engines get it wrong without special-cased knowledge — and there
+is already a real, existing example of the kind of geometric proxy Method 4
+is looking for: "Uri's rule," a Chebyshev-distance formula comparing the
+defending king, the pawn, and the attacking king (with a tempo adjustment for
+whose move it is) that approximates this exact topological fact from cheap,
+purely geometric inputs. This is direct, human-verified, centuries-old
+precedent that the distinction Method 4 targets is real, and a genuine
+validation target once tooling exists: does a formal boundary-state scan
+correctly reproduce the already-known wrong-bishop-rook-pawn boundary.
+
+**A necessary caveat on that precedent's own status.** Uri's rule is a
+heuristic with documented gaps, not an exact boundary: the source that gives it
+lists a separate "too far" case where the stronger side wins, and notes the
+heuristic depends on recognizing the draw even after the stronger side
+sacrifices its bishop. It is a good informer of candidates and a good
+validation *target* only when checked against the exact tablebase boundary for
+that small material, not against the formula itself (see
+`boundary_board_state_topology.md` §8d).
+
+**The experimental design, stated precisely — a controlled, factorial
+ablation, not an unstructured search.** Hold the attacking material fixed and
+vary the defending side's material one component at a time — KQvK, then
+KQvNK, KQvBK, KQvBNK — each addition tested for whether it introduces genuine
+drawn territory, and if so, what boundary states emerge there. This isolates
+the effect of each added piece rather than conflating several at once, the
+same logic behind ablation studies generally. Each material in the sequence
+still requires full construction and verification (§2's Methods 1 and 2,
+unchanged) — this method decides *which materials are worth that full
+construction effort*, using structure discovered from what's already
+confirmed, exactly the same prioritization-not-certainty role Method 3 plays,
+applied one level up: not which candidate position to try next, but which
+*material* to build out next.
+
+### Method 5: construction from race-condition primitives
+
+**Generates candidates by construction, with a constructive argument as its
+certificate.** Compose small structures whose values are already established —
+the catalog in `boundary_board_state_topology.md` §8b — using frozen,
+zero-legal-move pieces treated as landscape because disturbing them provably
+loses, so that the composed position's value follows from the primitives' own
+race-condition arguments. The full record of the idea, the six-condition proof
+obligation, and the separate assessment live in that document's §8; they are
+kept there because the reasoning is structural rather than procedural.
+
+**How it differs from Methods 1-4.** The others propose candidates that a
+search or lookup then confirms. This one's confirmation can be a complete
+case-list argument, with a small obstacle-board solver as insurance rather than
+as a gate. That holds only if the case list is genuinely complete, and the
+standing rule is unchanged: nothing here is certain because it looks
+convincing, only because the argument closes every case.
+
+**Generalization recorded after Method 5 was first written** (full record in
+`boundary_board_state_topology.md` §8f-§8j). Frozen, zero-legal-move pieces
+are one special case of a wider class: a lock is a *duty* — a piece committed
+to a post, movable in principle, but any move that abandons the duty loses
+under a race condition. Composition then means several such duties held in
+mutual dependence, certified by a per-resource accounting and a
+non-interference argument rather than by search over the composed position.
+The certificate remains a proof; what changes is where the exhaustive work
+sits (exact derivation of each primitive from small material, and validation
+of the composition rules on small instances). The standing rule is unchanged.
 
 ---
 
@@ -405,6 +620,48 @@ def is_boundary_state(board, tablebase):
     return len(non_losing) == 1
 ```
 
+**Addendum (proposed revision, not yet run against real tables; syntax-checked
+only).** The sketch above counts moves that are non-losing for the mover
+without first checking that the position itself is drawn. As written it would
+also return True for a *won* position in which the mover has exactly one
+winning move and no drawing move — an "only move to win" position, which is a
+different object from the drawn positions §1 defines. A guard on the
+position's own WDL closes this, and `boundary_report()` returns the
+legal-move count alongside, which is the natural refinement §8 already asks
+for to separate a genuine choice-point from "only one legal move existed."
+
+```python
+def is_boundary_state(board, tablebase):
+    """
+    True if the position is DRAWN and the side to move has exactly one
+    non-losing legal move (every other legal move loses).
+    """
+    # Guard: the position itself must be a draw. After the cursed/blessed
+    # collapse (section 7), any nonzero WDL is decisive.
+    if tablebase.probe_wdl(board) != 0:
+        return False
+    non_losing = []
+    for move in board.legal_moves:
+        board.push(move)
+        wdl = tablebase.probe_wdl(board)   # from the opponent's perspective
+        board.pop()
+        if wdl <= 0:   # opponent loses/blessed-loses, or draw -> not a loss for us
+            non_losing.append(move)
+    return len(non_losing) == 1
+
+
+def boundary_report(board, tablebase):
+    """Boundary verdict plus legal-move count (section 8 refinement)."""
+    legal = board.legal_moves.count()
+    return is_boundary_state(board, tablebase), legal
+```
+
+In a drawn position no move can win (that would make the position itself a
+win), so the `wdl <= 0` branch there counts exactly the drawing moves. The
+`legal == 1` case is what §8 flags as "no genuine choice existed." A further
+guard — that both sides are materially live (condition 1) — is not yet in the
+sketch; §14 item 2 gives the proposed definition.
+
 The same logic applies to any material this project has already fully solved — a
 scan over the completed database, structurally identical to how
 `analyze_longest_line.py` already finds forced plies. The only place real, heavy
@@ -470,6 +727,33 @@ alternatives where all-but-one specifically lose. `is_boundary_state()` above
 doesn't yet distinguish these — checking `board.legal_moves` count independent of
 the non-losing count is the natural refinement.
 
+**Insufficient material itself splits into two genuinely different cases, and
+conflating them is a real mistake worth naming precisely, since it was
+actually made and corrected in this project's own record (§2, Method 4).**
+*Unconditional* insufficiency — KB vs K, KN vs K — is drawn everywhere,
+position-independent, with no possible boundary-adjacent structure of any
+kind; nothing about board configuration ever changes the result. *Position-
+dependent* fortress material looks similar at first glance but isn't the same
+category at all: wrong-colored-bishop-with-rook-pawn material is won in many
+positions and drawn in others, decided by a genuine race between the two
+kings for a specific corner — exactly the narrow-margin, tempo-dependent
+structure this whole document is built around, not a case falling outside
+it. The test that actually separates the two: does *every* position in the
+material share the same result regardless of configuration (unconditional),
+or does the result depend on the specific arrangement (position-dependent,
+and therefore a real source of boundary states, not an excluded category).
+
+**Wrong-colored bishop and opposite-colored bishops are different concepts, and
+only the first is the material this document's construction work is built on.**
+Wrong-colored means one bishop that is the wrong color for a rook pawn's
+promotion square. Opposite-colored means each side has a bishop, on opposite
+colors. The second is the far better-known drawish structure in opening and
+middlegame theory, but its draws are robust blockades, and the endgame
+literature states that zugzwang is less common there than with same-colored
+bishops. It should therefore be expected to produce wide fortresses, not
+exactly-one positions; the transition into the blockade is the more plausible
+place for a tempo-critical moment (`boundary_board_state_topology.md` §8d).
+
 ---
 
 ## 9. Relationship to existing chess-computing literature
@@ -509,6 +793,36 @@ boundary-state scan against, the moment it runs on real KBNvK data. Since a
 boundary board state doesn't require the mutual property mZZ does, boundary-state
 count should come back *larger* than zero even where mutual-zugzwang count is
 exactly zero — a real, falsifiable prediction, not just a plausible-sounding one.
+
+**A second precedent, for Method 3 specifically, with the distinction stated
+precisely rather than left loose.** Možina, Sadikov, and Bratko (University of
+Ljubljana, roughly 2005-2011) built a sustained research program mining the
+KBNK tablebase itself for human-understandable strategic knowledge — using
+argument-based machine learning combined with specialized minimax search to
+induce a goal hierarchy (restraining the defending king, driving it toward the
+correct corner), validated against real chess teachers and grandmasters. This
+is real, genuine precedent for "a tablebase contains more usable structure
+than its raw values alone" as a general approach. It is not a precedent for
+Method 3's specific technique: their target is the *entire* tablebase, their
+method is rule induction toward human-readable goals; Method 3's target is the
+*boundary-state population specifically* — a category that doesn't exist in
+their framework — and its method is structural feature correlation toward
+candidate prioritization, not strategic explanation. Family resemblance in the
+general instinct, not a mapping of the specific method — worth being exact
+about that distinction rather than letting the precedent's real strength imply
+more than it does.
+
+**A third precedent, for the scaffolding strategy in §10 and §11 step 10 —
+recorded in full in `boundary_board_state_topology.md` §7 and pointed to here so
+this section stands complete on its own.** Checkers was weakly solved by
+combining an exhaustively built retrograde endgame database with forward
+proof-number search from the starting position, terminating wherever the search
+reconnects to the database — described in that literature as raising the water
+level of where lines terminate. This is a tight structural match to the
+scaffolding strategy, unlike the looser family resemblances above. The same
+literature treats applying the technique to chess at full scale as blocked by
+the scale gap, which is why the narrower, topology-mapping version recorded here
+does not attempt whole-game solving.
 
 ---
 
@@ -590,12 +904,21 @@ and being able to ask that question on real data instead of in the abstract.
    then verify that transition point the same way step 1's candidates are
    verified. No new solving technique required, only a new way of directing the
    existing retrograde machinery.
-3. **Extend both methods to this project's own solved materials** (KQvK, KBNvK,
-   KRPvK once complete) the same way `analyze_longest_line.py` already scans for
-   forced plies.
-4. **Compare the resulting KBNvK boundary-state count against Haworth's
-   already-published zero-mutual-zugzwang result** (§9) — the first real,
-   falsifiable sanity check, checkable the moment steps 1-3 produce real numbers.
+3. **Extend both methods to this project's own solved materials with genuine
+   drawn territory** — KRPvK once complete, and the Method 4 ablation
+   sequence (KQvNK, KQvBK, KQvBNK) once built — the same way
+   `analyze_longest_line.py` already scans for forced plies. **Not** KQvK or
+   KBNvK directly: both are structurally empty of boundary states (§2, Method
+   4) — running this step against either is expected to return zero, and that
+   expected-empty result is itself the first real test of that claim, not a
+   wasted run.
+4. **Confirm the expected-zero result for KBNvK against Haworth's
+   already-published zero-mutual-zugzwang result** (§9) — not a comparison of
+   two independent numbers hoping to match, but two different arguments (this
+   document's structural one, Haworth's exhaustive enumeration) predicting
+   the same zero from two independent directions. A non-zero result here
+   would mean something in this document's own reasoning is wrong, not just
+   surprising.
 5. **Build the repurposed forward-search tool** (§10) — a new, dedicated
    pipeline, not the current `compositional_trajectory_solver_modular_shapes.cpp`
    or `run_full_sweep.py` run unmodified against a different output target.
@@ -626,6 +949,33 @@ and being able to ask that question on real data instead of in the abstract.
     larger materials mark the current frontier, using that frontier as the
     prioritized target for steps 8-9 rather than an arbitrary choice of what
     to solve next.
+11. **Build the primitives catalog** (`boundary_board_state_topology.md` §8b):
+    for each entry, record the deciding inequality and the locked-squares
+    signature, taking each small material's boundary states from its exact
+    tablebase, not from a heuristic formula.
+12. **Attempt one composition (Method 5) on paper**: choose a single concrete
+    placement — the 4-against-4 diagonal chain, or something simpler — write out
+    the tempo timings for every route that breaks the frozen structure, decide
+    wide fortress versus exactly-one, then run the small obstacle-board solver
+    as insurance (topology §8d).
+13. **Build a population of confirmed local boundary states before attempting
+    decomposition** (topology §8m, correcting this step's own earlier draft,
+    which proposed starting from rook-pawn KPvK alone). Scan every material
+    Syzygy or this project already covers for *local* boundary states — drawn,
+    exactly-one, failing the materially-live test on one side (topology
+    §5a-iii) — across as many distinct materials and entry families (topology
+    §8b) as the scan reaches, not only the rook-pawn corner draw. Depends on
+    the definitional decisions in §14.
+14. **Discover primitives from that population and generate candidates by
+    subtraction** (topology §8l, §8m). Decompose each population member by
+    minimization-by-ablation into fragments with explicit interfaces; catalog
+    them; look for what recurs across the population; remove one primitive
+    from an entry and solve for a structure that discharges the residual
+    assumptions. This requires the obstacle-board solver (walls as blocked
+    squares) as required infrastructure, not insurance — Syzygy cannot
+    evaluate positions with walls. If step 13's scan turns up too small a
+    population for recurrence to be meaningful, fall back to the single-example
+    path on rook-pawn KPvK alone (topology §8j, steps 5 onward).
 
 ---
 
@@ -750,3 +1100,117 @@ dismissal — it does not change whether building the catalog is worthwhile, whi
 - Whether the insufficient-material ceiling check (§4d) is worth adding as a
   pre-generation material-category skip, rather than only the per-position
   terminal check it already is.
+- **Whether Method 5 can produce any placement satisfying all of its conditions
+  at once, and whether that placement is an exactly-one boundary state or only
+  a proven wide fortress** — the discovery itself; the full list of conditions
+  and the related open questions are in `boundary_board_state_topology.md` §9.
+- **The items in §14 below**, which are definitional and need a decision before
+  construction targets can be chosen.
+
+---
+
+## 14. Discrepancies and definitional questions found during onboarding
+
+**Status of this section: assessment, not record.** Written when the
+documents were re-read from a fresh start (September 28, 2026) and set against
+the ideas developed in that session. Nothing here changes §§1-13; these are
+points where the record is internally inconsistent or underspecified, kept
+visible so that they are decided deliberately and not by drift. Every claim
+marked "untested" was reasoned, not run.
+
+**1. The definition of a boundary state exists in two versions that diverge.**
+The operational definition is purely local: the position is drawn and the side
+to move has exactly one non-losing move (§1 condition 2; the §6 sketch). The
+narrative definition adds upstream-flavored parts: condition 3, and the
+exclusion of stalemates that arise from sub-optimal play. §1 also says the
+concept is "a pure, self-contained property of the position itself," which
+sits uneasily with any exclusion justified by what could have been chosen
+upstream. The two versions agree on most positions and diverge on
+blunder-derived ones (item 2). Three tiers make the choice explicit:
+
+- **Tier 1 — locally exactly-one:** drawn, exactly one non-losing move.
+  Checkable from the position alone.
+- **Tier 2 — exactly-one and reachable within its material through non-losing
+  play:** Tier 1, plus a validated chain from some drawn position of the same
+  material in which neither side ever needed to have already erred.
+- **Tier 3 — start-reachable:** the definition in the topology document's §5.
+  Currently uncheckable at scale.
+
+Each tier contains the next. The methods in §2 and the build in §11 should
+name the tier they target. Until decided, "boundary state" in this project
+should be read as Tier 1. **Correction added afterwards (see item 2):** every
+tier also includes condition 1, that both sides are materially live. Tier 1 as
+first written omitted it; read Tier 1 as "drawn, exactly one non-losing move,
+both sides materially live."
+
+**2. Two predictions about total-win materials conflict — RESOLVED: the flag
+was mistaken; the original reasoning is kept below, and the resolution follows
+it.** §2 Method 4 and §11
+steps 3-4 state that KQvK, KRvK and KBNvK are "structurally empty of boundary
+states," and treat Haworth's zero mutual zugzwangs in KBNK as independent
+confirmation of an expected zero. §9 states the opposite prediction: that the
+boundary-state count should come back *larger* than zero even where the mutual
+zugzwang count is zero. They cannot both hold. Reasoning suggests the §9
+prediction is the one that survives at Tier 1 (untested): take black Ke5,
+white Qe4 undefended (white king far away, say a1), black to move. Kxe4
+reaches KvK, a draw; Kd6 and Kf6 are legal and lose to KQvK; the other king
+moves are illegal. Exactly one non-losing move among several legal ones, and
+the position is drawn — a Tier 1 boundary state in a material Method 4 calls
+empty. Analogous positions with a hanging rook, bishop or knight should exist
+in KRvK and KBNvK. This falls squarely under condition 1's "reduction from
+sacrificing will force a draw." It would be excluded only at Tier 2 or above
+(the position is reachable only after the winning side hangs a piece), by the
+same reasoning that excludes sub-optimal stalemates. This is checkable in
+minutes with a scan of KQvK, and doing so settles the question of which
+prediction to keep. Note that Haworth's zero is a statement about mutual
+zugzwang, which requires the toggle, and so does not by itself bear on
+Tier 1 counts either way.
+
+**Resolution (recorded after discussion with the project's author).** The flag
+above was mistaken, and the mistake is kept in the record. Condition 1
+requires that *both* sides can still win on piece combination alone. In a
+hanging-piece position in KQvK, KRvK or KBNvK one side is a bare king, which
+has no winning material, so the position fails condition 1 and is not a
+boundary state. The reading that let the example through took the operational
+test (drawn, exactly one non-losing move) as the whole definition, and read
+condition 1's "reduction from sacrificing will force a draw" as covering the
+case, without applying condition 1's first clause. §2 Method 4's claim that
+these materials are empty of boundary states therefore stands, as does the §11
+step 4 comparison with Haworth. What follows from it:
+
+- The §9 prediction (a nonzero boundary count in KBNK where the mutual-zugzwang
+  count is zero) is out of scope wherever a side is not materially live, and
+  should be read as restricted to materials where both sides are. It is not
+  edited in place; this note is the annotation.
+- Condition 1 belongs in the operational check. Proposed definition: a side is
+  *materially live* in a given material split if some legal position of that
+  split is a win for it under optimal play (a WDL win, after the §7 collapse).
+  A bare king, and a king with a single minor piece against a bare king, are
+  never live. It is computable once per material split. It is not yet in the
+  §6 sketch.
+- The example positions are still drawn, exactly-one positions in a material
+  where one side cannot win. Under the vocabulary of topology §5a-iii they are
+  candidates for *local* boundary states, alongside the rook-pawn KPvK draw.
+  Whether they count, given that they involve a reduction to insufficient
+  material and no locking mechanism, is a question recorded there.
+
+**3. The §6 sketch lacked a drawn-position guard.** See the §6 addendum. This
+one is small and mechanical.
+
+**4. "Local" and "global" now carry four meanings across the two documents.**
+Topology §3 (a status is local and unconditional), §5 (global as
+start-reachable), §6 (scoped versus global coverage), and the closure-
+contribution distinction proposed in topology §5a. The last is the least
+settled. It needs either a firm definition or a different pair of labels.
+
+**5. "Insufficient material" is being used loosely for the rook-pawn KPK
+draw.** That result depends on the king race and is not unconditional
+insufficiency in the §8 sense. The property being pointed at appears to be that
+the primitive cannot host additional material without breaking or being
+broken by it; "saturated primitive" or "closed primitive" would say that
+without overloading §8's taxonomy. Proposed, not adopted.
+
+**6. Higher-order constraints are not captured by pairwise compatibility.**
+See topology §8g. This is a design constraint on any future composition
+tooling and is recorded here so it is not lost when the build in §11 step 12
+is scoped.

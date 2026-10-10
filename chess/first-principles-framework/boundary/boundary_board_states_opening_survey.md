@@ -166,6 +166,18 @@ certificate type, and the upstream classification (structural, or emerged from a
 be established" is a deduction from the joint incompatibility of the primitives (topology §8x), and a failure to compose with the
 current catalog is first read as a residual interface, which may be a missing primitive and not an impossibility (topology §8p).
 
+**Joint compatibility and the end of the tree (the designer's statement).** The equilibrium measurement in the primitives comes from the
+primitives that lose in the other branches, and that is what informs the pruning. Joint compatibility emerges with the equilibrium
+measurement from the perturbation. When the pruning is complete, the furthest downstream positions of the tree are the boundary-state
+candidates, with nothing beyond them and the equilibrium cycling or resulting in a forced draw. If the tree does not end there, a
+branch from the position being evaluated leads directly to a forced favorable outcome.
+
+**This file's reading, offered for correction.** A conflict between invariants over a shared resource would show in the tree as a move
+that is neither inside the region nor a certified loss, so the closed structure tests joint compatibility, and the compatibility
+items of catalog §5 (4 and 5) are the account of why the structure closes. A tree that does not close has either an open edge, an
+unresolved move that is work remaining or a residual for the reduction rule, or a found branch to a forced favorable outcome, which
+refutes the candidate. The two are recorded separately.
+
 **Certification condition (this file's reading of the designer's statement, offered for correction).** The pruning certifies an
 equilibrium when the pruned structure is a closed system. At every position of the equilibrium region, which is the cycle together
 with each non-losing alternative that stays drawn, every legal move of both sides is accounted for: it either stays inside the

@@ -64,7 +64,7 @@ table below, and it is never added to the index.
 |---|---|---|
 | P-002 Race to a square | the tempo comparison. Race is what every primitive is, so it is a term and not a primitive. A pawn race is the promotion route of P-003 against obstruction | term TP of P-003 (§7.5), term TM of P-008 (§8.5), mechanism RT2 |
 | P-004 Edge restriction | the board edge as missing edges in the movement relation. It has no race condition: it is an input | the navigation graph of P-003 (§7.3) |
-| P-005 Repetition loop | the definition of a boundary state: the cycle sustained by both sides when the primitives are in equilibrium. It emerges from the primitives, so it is the hard core and not a primitive | §5 item 2; `boundary_board_states.md` §14 item 7 |
+| P-005 Repetition loop | the definition of a boundary state: the cycle sustained by both sides when the primitives are in equilibrium (a forced terminal draw with no choice to deviate is a second realization, `boundary_board_states.md` §14 item 10). It emerges from the primitives, so it is the hard core and not a primitive | §5 item 2; `boundary_board_states.md` §14 item 7 |
 | P-006 (retired) | merged into P-001 version 2 | §4 |
 | P-007 Activation | the result when a chain of enabling dependencies resolves (development, unlocking, castling, promotion). The race condition in it is the chain | P-003 (§7): terms RT, LK, OB, TP |
 | SUB-1 Substrate | the movement relation and the dependency graph, the structure on which the chain is read. A part of the chained-dependencies primitive, not a separate entry | P-003 (§7.3, §7.4, §7.7) |

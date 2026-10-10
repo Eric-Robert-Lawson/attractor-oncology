@@ -7,9 +7,9 @@ catalog: **SPEC** (defined, not tested), **INSTANCES** (checked on specific posi
 complete case-list certificate).
 
 Companion documents: `boundary_board_states.md` (the concept and methods; §1 the definition, §3 the caching architecture, §14
-items 4, 7, 8 and 9), `boundary_board_state_topology.md` (the record; §3 status is local and unconditional, §5 start-reachability,
-§8h footprints, §8p the guard rail on absent paths, §8r forward anchoring, §8x the proven entry, §8ac and §8ae the designer's statements
-behind this file), `boundary_board_state_primitive_catalog.md` (the three primitives, the admission rule),
+items 4 and 7 to 11), `boundary_board_state_topology.md` (the record; §3 status is local and unconditional, §5 start-reachability,
+§8h footprints, §8p the guard rail on absent paths, §8r forward anchoring, §8x the proven entry, §8ac, §8ad, §8ae and §8af the designer's
+statements behind this file), `boundary_board_state_primitive_catalog.md` (the three primitives, the admission rule),
 `boundary_board_states_case_study_otb.md` (the game).
 
 **How this file is organized.** What is the designer's statement is marked as such and kept apart from this file's organizational
@@ -216,7 +216,7 @@ reached by another route, or reached again, inherits the entry. It follows the a
 |---|---|---|
 | **C1 Forced region** | From this position every branch concludes in a forced sequential win for one side, and the only decisive moves are forced out of zugzwang-type situations, so the position is classified as forced up to the point where a non-forced deviation could occur. No boundary state exists downstream under optimal play. | Once any path reaches the position, the work below it is already done |
 | **C2 Boundary found** | A local candidate, or a verified local state, exists here. It may or may not be global, and the entry records which has been shown. Positions that can only be reached through it are not global. | A found boundary is not rediscovered, and later classification reuses it |
-| **C3 None can exist** | It was concluded exhaustively that no local candidate exists below this position. | No future work is spent proving it again |
+| **C3 None can exist** | It was concluded exhaustively that no local candidate exists below this position, on the closure of the non-losing moves and to the depth reached (scope below). | No future work is spent proving it again |
 
 **What an entry must carry.** The position key and side to move; the claim (C1, C2 or C3); the certificate that supports it (a
 complete case list, exhaustive search, or an assertion taken from theory, with its evidence tag); the scope of the claim (below);

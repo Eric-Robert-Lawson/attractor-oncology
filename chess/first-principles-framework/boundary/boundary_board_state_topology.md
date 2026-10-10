@@ -177,6 +177,8 @@ should be read as saying otherwise.
 
 ## 5. Start-reachability — anchoring "global" to a fixed point, not a relative one
 
+*Clarification (§8ac, `boundary_board_states.md` §14 item 9): "global" below is start-reachability. The designer's definition of a global boundary state adds that it is the first boundary between choice and force from the initial position across all paths that reach it, sound against all deviation replies, with many global states. The reading that start-reachability is the reachability part of that definition is recorded in `boundary_board_states_opening_survey.md` §2.*
+
 §4's necessity/redundancy is anchored to *some* ancestor, chosen arbitrarily —
 useful for prioritization, but relative. What's being described here is
 sharper: anchor "global" to one fixed, unique reference point — the game's

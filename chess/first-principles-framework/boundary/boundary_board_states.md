@@ -220,6 +220,8 @@ where a losing side's last real choice exists.
 >   catalog is reducible from the joint compatibility of the others (topology §8x); and draws
 >   by stalemate or insufficient material are not boundary states. What remains is
 >   construction: the primitives, the composition rules, and the cost model.
+>   *Correction (item 10): a draw by forced stalemate or forced capture into a dead position is a boundary state when it arises with no
+>   choice to deviate, so the exclusion applies to draws that could have been avoided.*
 > - **The primitive catalog now exists** (`boundary_board_state_primitive_catalog.md`):
 >   a specification with an entry template, an index of three primitives (earlier versions indexed eight, see the thirtieth addition) of which
 >   P-001 (the capture net, whose royal case is the mating net) is written, and the generalization rule by which it
@@ -259,6 +261,10 @@ where a losing side's last real choice exists.
 >   chosen opening line from the initial position to find a local boundary-state candidate. Local means a verified equilibrium with no
 >   claim about the path; global means the first boundary between choice and force from the initial position across all paths (item 9
 >   of §14). It has its own cache (forced region, boundary found, none can exist) keyed on the position. Specified, not run.
+>   Also recorded there and in §14 items 10 and 11: global boundary states are many, and avoidability is not a ground for non-global;
+>   a forced terminal draw with no choice to deviate is a boundary state; a pruned structure that is closed (every move inside the
+>   region or a certified loss) is itself the certificate for a local state; and the closure of the global boundary states is the
+>   hard core's one failure condition, with the premise that the initial position is a draw.
 
 ---
 
@@ -1644,6 +1650,8 @@ avoided, and is not an exclusion of a forced terminal draw that arises with no c
   for the reasons in §1 and §8, and item 7 records the reconciliation. The scan in
   topology §8t counted them because it applied only the exactly-one test, which is part
   of why that test was the wrong instrument.
+  *Correction (item 10): the exclusion applies to terminal draws that could have been avoided. A forced terminal draw with no choice to
+  deviate is a boundary state when the equilibrium holds.*
 - **Consequence for the starting position.** An argument made in discussion, that the
   starting position is not a boundary state because it has many non-losing first moves,
   rested on the exactly-one test and is withdrawn. The starting position is not ruled out

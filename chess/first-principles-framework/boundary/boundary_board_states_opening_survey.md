@@ -47,7 +47,8 @@ has already been passed. Those are consequences that may fall out of it (§5, §
 - **Local boundary board state.** A position where the equilibrium is verified: the catalog's primitives show it (the composition
   of `boundary_board_state_primitive_catalog.md` §5), and exhaustive verification shows that the primitives did their job. A local
   boundary state is not required to say how it was reached, and it is not required to be the first deviation point between choice
-  and force. It informs us of the viability of the primitives, and it is the point on which exhaustive verification is performed.
+  and force. It informs us of the viability of the primitives, and it is the point on which exhaustive verification is performed. The exhaustive pruning of §4a, closed and fully certified, is that
+  verification and is the certificate.
 - **Global boundary board state.** A boundary state that is the first boundary between choice and force from the initial game
   position. It is path-dependent by definition, because it closes the phase between choice and force from the start to itself.
   Classifying a state as global requires proof of two things: that it is a boundary state, and that no boundary state exists
@@ -138,9 +139,10 @@ The hard core therefore has one failure condition, which is also a result: a cer
 5. **Separate the forced outcomes.** A forced win ends the line as decisive and is recorded (§6, C1). A forced loss is not
    informative. A forced draw is a possible boundary state: check the cyclic definition and that both sides are live, then compose
    the primitives (catalog §5).
-6. **Enter and verify.** A candidate is entered in the candidate catalog with its composition. Its verification is the complete
-   case list of topology §8d with exhaustive insurance, scoped by the footprint of §8h. A verified candidate is a local boundary
-   state. Whether it is global is a separate question (§5).
+6. **Enter and verify.** A candidate is entered in the candidate catalog with its composition. Its verification is the pruned
+   structure itself, when it is a closed system with a certificate on every refutation (§4a): that structure is the complete case
+   list of topology §8d, scoped by the footprint of §8h, and no further step is needed to certify it. Exhaustive search is
+   insurance on the first entries. A verified candidate is a local boundary state. Whether it is global is a separate question (§5).
 7. **Cache** what was learned, whichever way the search ends (§6).
 
 ### 4a. Pruning as information (the designer's statement)
@@ -163,6 +165,15 @@ conditions, that is a boundary-state candidate anchored from the initial positio
 certificate type, and the upstream classification (structural, or emerged from a chain or an ordering of moves). "No equilibrium can
 be established" is a deduction from the joint incompatibility of the primitives (topology §8x), and a failure to compose with the
 current catalog is first read as a residual interface, which may be a missing primitive and not an impossibility (topology §8p).
+
+**Certification condition (this file's reading of the designer's statement, offered for correction).** The pruning certifies an
+equilibrium when the pruned structure is a closed system. At every position of the equilibrium region, which is the cycle together
+with each non-losing alternative that stays drawn, every legal move of both sides is accounted for: it either stays inside the
+region as a non-losing move, or it is a certified forced loss for the side that plays it. Then no side can improve by leaving the
+region, and the value of the region is the draw. The complete deviation map is the proof, and the primitives supply the reasons for
+the refutations. It needs: each forced loss certified (a verified forced mate, a tablebase result, or a complete case list, and not
+an engine assertion); closure under the non-losing moves; a losing deviation for each side, with the realization shown (the cycle,
+or a forced terminal draw with no choice to deviate); and, for a global classification, the separate proof of §5.
 
 ## 5. Local and global along the line
 

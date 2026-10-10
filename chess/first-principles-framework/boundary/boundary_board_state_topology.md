@@ -2839,7 +2839,7 @@ yet specified and nothing has been filled in beyond that.
 **Assessment — separate from the record above.**
 
 - **"No equilibrium can be established" has to be a deduction.** It follows from the joint incompatibility of the primitives (§8x). A failure to compose with the present catalog is a residual interface and may be a missing primitive (§8p).
-- **Certification is separate.** A found equilibrium is a candidate with its composition. It is a certified local state when the deviation map is complete with certificates and the complete case list is carried out within the footprint (§8d, §8h).
+- **The pruning is the certificate when it is closed.** A found equilibrium is a candidate until the pruned structure is a closed system with a certificate on every refutation. The complete deviation map over that closed region is the complete case list (§8d, §8h), and it certifies the local state. A first reading in discussion treated the case list as a further step after the deviation map. The designer corrected it: they are the same thing, and the reading was withdrawn.
 - **Not run.**
 
 ---

@@ -430,7 +430,8 @@ recursion between a net and its counter-nets. The tempo ledger over a whole game
 2. **Cyclic realization.** The drawing branch closes into a loop whose moves are
    available to both sides, and both sides are live (the definition is in
    `boundary_board_states.md` §14 item 7). This is the definition of a boundary state, the
-   emergent effect of the primitives being in equilibrium. It is not a primitive (§1).
+   emergent effect of the primitives being in equilibrium. It is not a primitive (§1). A forced terminal draw with no choice to
+   deviate is a second realization of the same equilibrium (`boundary_board_states.md` §14 item 10).
    Established by search.
 3. **Primitive accounting.** For each catalog primitive that engages, the status is
    DORMANT or an explicit set of held terms (P-001, §4.11). The accounting is recorded on the

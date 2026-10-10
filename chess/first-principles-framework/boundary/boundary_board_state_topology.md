@@ -2726,8 +2726,10 @@ perturbation process along it to find a boundary-state candidate. It is a survey
 
 How a state is reached matters for classifying it. A global boundary state is the first boundary between choice and force from
 the initial position, so it depends on how it is arrived at, across all paths; it requires proof both that it is a boundary state
-and that no boundary state lies between the initial position and it. A local boundary state is one where the equilibrium is
-verified (the primitives show it, and exhaustive verification shows they did their job) without requiring how it was reached or
+and that no boundary state lies between the initial position and it. A global state is sound holistically: reached by non-losing
+play and holding against all deviation replies. A deviation may lead to a different global boundary state, which still closes the
+phase between choice and force, so there are many global states and avoidability is not a ground for calling a state non-global. A
+local boundary state is one where the equilibrium is verified (the primitives show it, and exhaustive verification shows they did their job) without requiring how it was reached or
 that it is first. The survey's target is a local candidate anchored from the initial position by a chosen line, optimal or
 sub-optimal.
 
@@ -2761,6 +2763,7 @@ thirty-first addition, the resume box, and §14 item 9). The primitives, the har
   chains. `boundary_board_states.md` §14 item 4 asked for a firm definition of local and global, and this is offered as one. The
   record's "local" in §3 (a status that is local and unconditional) and this survey's "local boundary state" (verified, with no
   claim about arrival) agree.
+- **Avoidability is not the test (the designer's correction).** A reading proposed in discussion, that a candidate which a side can route around is for that reason non-global, was withdrawn. A detour leads to another global boundary state, which still closes the phase between choice and force; global states are many, and only a boundary state earlier on a non-losing path to the candidate makes it non-global.
 - **A scope point in the cache.** The forced-region entry is a claim under optimal play. A drawn position that the winning side
   could reach by an error is not on an optimal continuation and remains admissible as a local candidate. The entry says nothing
   about it. Whether the survey wants such candidates is left open in the survey document.
@@ -2770,6 +2773,62 @@ thirty-first addition, the resume box, and §14 item 9). The primitives, the har
   ground that a position's status is independent of how it is reached. The designer corrected it: the status is the position's, and
   the classification is path-dependent by definition, because global means first. The first reading was withdrawn.
 - **Not run.** No line has been surveyed. The calibration signals of the survey document are criteria and not results.
+
+### 8ad. Forced terminal draws as boundary states
+
+**The idea, as stated.** By the definition, a forced stalemate or a forced dead position, that is, a forced draw, is the same as a
+boundary state when it arises where there is no choice to deviate. The assumption that they are not boundary states comes from
+classifying them as sub-optimal relative to other potential branches. Under exhaustive confirmation of all branches, some branches may
+force stalemate or a dead position, and that is not evidence against the classification. The definition as stated should not exclude
+them. What it informs is that the boundary-state catalog is not to be spammed with stalemate positions treated as discoveries.
+
+**Followed, and integrated.** Recorded in `boundary_board_states.md` §14 item 10, with correction notes at the places that exclude
+these draws (§1, item 7, item 8), a sentence in catalog §5 item 2, and the survey document (the forced-draw node, §3, and §10). The
+equilibrium condition is unchanged: the position is drawn, each side has a losing deviation, both sides are live. What changes is
+the realization: the cycle of repetition is the paradigm and the forced terminal draw is a second.
+
+**Assessment — separate from the record above.**
+
+- **This closes the realization question** recorded when the closure claim was discussed: a route into a forced liquidation or a
+  forced stalemate with no avoiding move is covered by the closure, and the definition does not need a cycle on every route.
+- **The filter is by choice and not by terminal type.** A terminal draw that could have been avoided is not an equilibrium, so it is
+  not a boundary state. A terminal draw that cannot be avoided, with a losing deviation on each side, is. The 1,139 king-and-pawn
+  positions in which the saving move captures the pawn into a dead draw remain excluded, by the stronger side being unable to lose.
+- **A condition to check on each such candidate:** that the equilibrium holds upstream of the terminal position, that is, that both
+  sides have a losing deviation and no non-losing move avoids the termination. The terminal position itself is the end of the draw
+  and not the equilibrium.
+- **Not run.**
+
+### 8ae. The closure claim and the segmented progression
+
+**The idea, as stated.** The closure of the global boundary board states must be ensured, otherwise the programme fails. A viable
+deviation in the choice phase always reaches a boundary state: a route cannot pass from choice to force without hitting one, and if
+it is not the same boundary state it is a different global one, by definition. Otherwise a win could be forced from the initial
+position, by an opening in the closure that decides chess with no blunder possible. No such line is known to exist in chess theory,
+so the closure is predicated on its nonexistence, and enumerating the closure would be the proof. If the programme fails in this way,
+the result is a forced opening line, a discovery that reshapes chess. If it succeeds, the forward and backward trace is complete and
+at least a weak solution is viable. A missing primitive or a failed belt prediction is not a failure of the programme, because the
+catalog is incomplete and the reduction rule develops it. A failure of method is the admission of primitives that do not fit the
+architecture. The closure is expected to be achieved through the cyclical structure, or through zugzwang that forces eventual losing
+moves and classifies the branch upstream once found.
+
+On the segmented progression: the space between the initial position and the global boundary states is vast, and it is mitigated by
+choosing a depth that scopes the primitives. A segment may show that a local candidate was already passed, which is information (no
+boundary state exists below it on those paths), and it is cached as a checkpoint. Whether a local candidate is global, or provably
+not global, is settled upstream later by the progression of segments, the catalog and the cache. A file for the segmented progression
+is to be started.
+
+**Followed, and integrated.** The closure claim is §2a of `boundary_board_states_opening_survey.md` and §14 item 11 of
+`boundary_board_states.md`. The segmented progression is recorded in the survey as §7a with only what is stated; the process is not
+yet specified and nothing has been filled in beyond that.
+
+**Assessment — separate from the record above.**
+
+- **The relation to §3 and §5.** The existence of a transition on every route to a decisive position follows from a drawn start
+  (§5; the collective version is §3). The closure claim adds that each transition is a boundary state in the sense of item 10 and the
+  cyclic definition. That is the claim the enumeration tests.
+- **The premise is recorded as a premise.** The closure is conditional on the initial position being a draw, which is unproven.
+- **Not run.**
 
 ---
 

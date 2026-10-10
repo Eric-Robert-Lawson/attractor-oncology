@@ -8,7 +8,7 @@ complete case-list certificate).
 
 Companion documents: `boundary_board_states.md` (the concept and methods; §1 the definition, §3 the caching architecture, §14
 items 4, 7, 8 and 9), `boundary_board_state_topology.md` (the record; §3 status is local and unconditional, §5 start-reachability,
-§8h footprints, §8p the guard rail on absent paths, §8r forward anchoring, §8x the proven entry, §8ac the designer's statement
+§8h footprints, §8p the guard rail on absent paths, §8r forward anchoring, §8x the proven entry, §8ac and §8ae the designer's statements
 behind this file), `boundary_board_state_primitive_catalog.md` (the three primitives, the admission rule),
 `boundary_board_states_case_study_otb.md` (the game).
 
@@ -53,7 +53,13 @@ has already been passed. Those are consequences that may fall out of it (§5, §
   Classifying a state as global requires proof of two things: that it is a boundary state, and that no boundary state exists
   between the initial position and it. A state with the first proof and not the second is local.
 - **The paths are all paths.** The web of dependencies among candidates shows that the second proof concerns every way of arriving
-  at the position, not one line. "First" is across all paths from the initial position.
+  at the position, not one line. "First" is across all paths that reach the position from the initial position.
+- **Global is sound against every deviation, and there are many.** A global boundary state must hold holistically: it is reached by
+  non-losing play, and it holds against all deviation replies. A deviation from the path may lead to a different global boundary
+  state, a detour to another position that closes the phase between choice and force. That does not touch the first. Each global
+  state closes the phase for the routes that lead to it, so the global states form a list, and the space between the initial
+  position and that list is the enclosed phasing of choice and force. That a position can be avoided is therefore not a ground
+  for classifying it as non-global. The only ground is a boundary state that precedes it on a non-losing path that reaches it.
 - **The target of this survey.** A local boundary state candidate, anchored at the initial position through a chosen line with a
   viable path of arrival. The path may be optimal or sub-optimal.
 
@@ -70,6 +76,39 @@ non-losing play and the boundary is where it closes. A local candidate anchored 
 no start-reachability claim. `boundary_board_states.md` §14 item 4 noted that "local" and "global" carried four meanings and needed
 a firm definition. The definitions above are offered as that definition.
 
+## 2a. The closure claim
+
+**The designer's statement.** The closure of the global boundary board states must be ensured, otherwise the programme fails. A
+viable deviation, while the position is still in the choice phase, always reaches a boundary board state. A route cannot go from the
+choice phase to the forced phase without hitting one, and if it does not reach the same boundary state it reaches a different global
+one, by definition. If this were not true, a win could be forced from the initial position: an opening in the closure would be the
+forcing opening that decides chess from the moment it is taken, with no blunder possible. No such line is known to exist in all of
+chess theory, so the closure is predicated on the fact that one does not exist, and the enumeration of the closure would be the proof.
+
+The closure is expected to be achieved through the cyclical structure, or through zugzwang that forces eventual losing moves, which
+classifies the branch upstream once it is discovered. With the ruling of `boundary_board_states.md` §14 item 10, a forced terminal
+draw with no choice to deviate is also a realization.
+
+**What can happen, as the designer states it.**
+
+| Outcome | Reading |
+|---|---|
+| The closure holds on every route and is enumerated | the forward and backward trace is complete, and at least a weak solution is viable |
+| A route escapes the closure, with a certificate | a forced opening line from the initial position that decides the game; a discovery that reshapes chess |
+| A prediction of the belt fails, or a primitive is missing | not a failure of the programme: the catalog is incomplete, and the reduction rule develops it |
+| A primitive is admitted that does not fit the architecture of the solution | a methodological failure; the admission rule (catalog §1) guards against it |
+
+The hard core therefore has one failure condition, which is also a result: a certified route out of the closure.
+
+**Assessment — separate from the record above.**
+
+- **The relation to the record.** That a transition from choice to force exists on every route to a decisive position follows from a
+  drawn start (topology §5), and the collective version is topology §3. The closure claim adds that each such transition is a boundary
+  state in the sense of `boundary_board_states.md` §14 items 7, 8 and 10. That addition is the programme's claim, and the enumeration
+  tests it.
+- **The premise.** That the initial position is a draw is not proven. The closure is stated conditional on it, and enumerating the
+  closure would prove it.
+
 ## 3. The survey's objects
 
 | Object | Meaning |
@@ -80,7 +119,7 @@ a firm definition. The definitions above are offered as that definition.
 | Primitive status | for each side and each engaged primitive, COMPLETED, ENGAGED (with held terms) or DORMANT (catalog §4.4, §7.6, §8.6) |
 | Decisive node | a node where a side has a forced win: a net completed or completable against every reply |
 | Choice node | a node where both sides have non-losing alternatives, recorded with its width |
-| Forced-draw node | a node where the draw is held by forced replies against a forced loss, with a repetition cycle sustained by both sides, both sides live (`boundary_board_states.md` §14 item 7) |
+| Forced-draw node | a node where the draw is held by forced replies against a forced loss, with the equilibrium realized by a repetition cycle sustained by both sides or by a forced terminal draw with no choice to deviate, both sides live (`boundary_board_states.md` §14 items 7 and 10) |
 | Candidate | a forced-draw node whose primitive accounting is an equilibrium (catalog §5), entered in the candidate catalog |
 | Web | the set of candidates whose verification depends on one another (§7) |
 
@@ -110,6 +149,11 @@ A local candidate verified at depth d says nothing about whether an earlier boun
 must show that no boundary state exists in the positions that precede it on any path. That is the set of positions from which the
 candidate can be reached by legal play from the anchor, with transpositions included, so it is a web and not a tree. It can be
 large, and the choice of depth keeps it small enough to examine (§7).
+
+Avoidance is not the test. A side may have a non-losing detour that never reaches the candidate, and the detour leads to another
+boundary state or to a position of the same kind. The candidate still closes the phase for the paths that arrive at it. Only a
+boundary state earlier on a non-losing path to the candidate makes it non-global. (A reading that treated avoidability as a second
+ground for non-global was proposed in discussion and withdrawn on the designer's correction.)
 
 Two consequences are worth recording, both the designer's reading:
 
@@ -161,6 +205,22 @@ This is a calibration problem. The depth and the line are chosen so that the web
 When a signal fires, the line is changed or the depth is moved, and the result is recorded as a cache entry for the abandoned
 choice (a note that the web was too large at this depth, which is information and not a certificate).
 
+## 7a. The segmented progression (what is understood so far)
+
+This section records only what the designer has stated. The full process is not yet specified and is not written here.
+
+**The designer's statements.** The space from the initial position to the global boundary states is combinatorially vast. It is
+mitigated by choosing a depth from the initial position at which the primitives scope the pruning properly (§7). The survey
+proceeds in segments. A segment may show that a local candidate was already passed, which is information: it means that a boundary
+state exists on those paths and that nothing below it on them can be global. That is cached as a checkpoint, and the progression
+continues from it. The classification of a local candidate as global, or as provably not global, is settled upstream later, by
+the progress of the segments, the catalog and the cache. A file for the segmented progression, to enumerate the landscape in
+this way, is to be started.
+
+**Not yet specified.** The fields of the progression file; the order in which segments are taken; how the depth of a segment is
+chosen beyond the calibration signals of §7; how the boundary conditions of a segment at its depth limit are recorded; and how
+segments compose into the closure of §2a. These are not decided and are not filled in here.
+
 ## 8. The theory tree as material
 
 Opening theory is a tree of non-losing moves, with the deviations of each side annotated as losing. For the survey this has three
@@ -189,8 +249,9 @@ cache entries; and the primitives that the line shows to be missing, found by th
 - Whether C1 should also claim anything about positions reached by deviations from a forced win (§6).
 - How a cycle of interdependent candidates is verified when it is small enough to verify at all: whether the web is verified as
   one unit.
-- How the cache treats the repetition cycle that defines a candidate, since the draw is a property of a cycle of positions and not
-  of a single one.
+- How the cache treats the repetition cycle that realizes a candidate, since the draw is a property of a cycle of positions and not
+  of a single one. (The question of whether a forced terminal draw also realizes a candidate was ruled on by the designer and is closed:
+  `boundary_board_states.md` §14 item 10.)
 - Whether the width profile along a line tracks the choice-to-force boundary that the primitives locate. A prediction to be stated
   before it is run.
 - How a book's assertion enters the case list where the position is outside the book's lines.
@@ -198,13 +259,16 @@ cache entries; and the primitives that the line shows to be missing, found by th
 ## 11. Provenance
 
 **The designer's, and unchanged:** that the initial position is the anchoring point of every game; that a global boundary state
-is the first boundary between choice and force from it, and so depends on how it is reached, across all paths; that a local one
+is the first boundary between choice and force from it, and so depends on how it is reached, across all paths that reach it, and is
+sound against all deviation replies, there being many global states, each of which closes the phase for its own routes; that a local one
 is a verified equilibrium with no requirement on the path or on being first; that the survey's target is a local candidate
 anchored from the initial position by a chosen opening, optimal or not; that forced sequences are read as race conditions, that a
 forced win is pruned by adversarial play, that a forced loss is uninformative and a forced draw is the boundary-state behavior;
 that the theory tree and the perturbation process locate where choice becomes force; that the cache records, by position, that
 force is already deployable from there, that a boundary was found, or that none can exist, so the work is not repeated; that the
-depth is a calibration problem, and that a web of interdependent candidates marks a choice that is too far upstream; and that a
+depth is a calibration problem, and that a web of interdependent candidates marks a choice that is too far upstream; that
+the closure of the global boundary states must hold (§2a), with the outcomes and the premise as stated there; that the progression
+is segmented (§7a, as far as it is understood); and that a
 survey of Modern Chess Openings is the way to select the lines.
 
 **This file's organizational choices, offered for the designer to change:** the separation into definitions, objects, procedure,

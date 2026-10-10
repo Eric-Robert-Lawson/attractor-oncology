@@ -163,6 +163,8 @@ a twenty-eighth addition (topology §8z, catalog §7a, §7b and §7: segmented d
 a twenty-ninth addition (topology §8aa, catalog §7c, §7b and §6: a third primitive derived from two by the reduction rule. The composition of the capture net (P-001) and the chain structure (P-003) leaves a residual: the effect of a perturbation on the held terms of every engaged primitive at once, the support those terms share, and the race to open one before it is restored. P-008, the coverage race under disturbance, is the entry whose interface that is. It is built from the held terms, residual replies and mechanisms that the written entries define, so that every effect it reports is determined by the definitions of the primitive whose term is affected: a register of held terms with the support of each residual reply, an effect vector of a perturbation over the registers of both sides, opening sets and key elements, and joint support, which is coverage used once and overload with no special case. It is evaluated exactly at each position along a line of perturbations, and for both sides, with the feasibility term read off the same effect vector. The coverage is complete over the perturbations whose change meets the support closure that the primitives determine, a perturbation that misses it cannot change any held term, and where an effect is not yet determined by an entry the reduction rule returns the residual. A first version that defined the coverage through a supply-and-demand formalization was imported from outside the race semantics and was withdrawn. By the modularity rule that an overlap between primitives is a defect, the dissolution race that version 1 of P-003 had carried was moved to P-008, and P-003 is narrowed to the static structure; whether it stays a primitive or is classified as a substrate is left to the designer. Status SPEC; three predictions are stated in advance and not run; that additional primitives may reduce the closure is kept open),
 a thirtieth addition (topology §8ab, catalog §1, §7, §8 and §10.5: the catalog is reduced to three primitives, the mating and capture net (P-001), chained dependencies (P-003) and the coverage race (P-008), by the designer's correction. The earlier index had also carried P-002 (race to a square, which is the tempo comparison, a term), P-004 (edge restriction, an input), P-005 (repetition loop, which is the definition of a boundary state and the emergent effect of the primitives in equilibrium, so the hard core), P-006 (retired) and P-007 (activation, the result when a chain resolves), and had split chained dependencies into P-007, a substrate SUB-1 and a static P-003; none of these but the three is a race condition with terms. The activation, substrate and static-structure material was rebuilt as one entry, P-003 version 3, with every term, mechanism, derived form, instance and prediction kept; P-008 was renumbered with no change of definition; an admission rule for what a primitive is was added to the catalog and to the resume box below, so that later sessions test an entry against it before indexing it; the earlier files are kept in a backup folder; the reclassification is recorded in the topology file as §8ab; no definition of a boundary state changed and nothing was run),
 a thirty-first addition (topology §8ac and `boundary_board_states_opening_survey.md`: the anchored opening survey. Boundary states are classified by how they are reached: a local boundary state is a verified equilibrium with no claim about the path or about being first, and a global one is the first boundary between choice and force from the initial position, across all paths, which requires proof that no boundary state lies between. The survey's target is a local candidate anchored at the initial position by a chosen opening line, optimal or not, found by walking the line, perturbing up the tree, pruning lines on which a side has a forced win, and reading a forced draw as the boundary-state behavior. A position-keyed cache records forced regions, boundaries found, and the exhaustive result that none can exist, so the work is not repeated, and the choice of line and depth is a calibration problem. Written as its own document; §14 item 9 records the definition; the primitives and the definition of a boundary state are unchanged; nothing was run),
+a thirty-second addition (topology §8ad, §14 item 10: a draw realized by a forced stalemate or a forced capture into a dead position is the same as a boundary state when it arises with no choice to deviate. The earlier exclusion of such draws is a filter against positions whose draw could have been avoided and against cataloging them as discoveries. The cycle of repetition is the paradigm realization of the equilibrium and the forced terminal draw is a second. Correction notes were added where the exclusion was stated; the definition of the equilibrium is unchanged),
+a thirty-third addition (topology §8ae, §14 item 11, and `boundary_board_states_opening_survey.md` §2a and §7a: the closure claim as the designer stated it, with its outcomes (a closure that holds gives a weak solution, a certified route out of it is a forced opening line, a missing primitive is not a failure, the admission of a primitive that does not fit the architecture is), the premise that the initial position is a draw, and the segmented progression as far as it is understood. The full process is not specified. Nothing was run),
 and the corrected, complete version below. Kept separate from
 `syzygy_improvement_proven_results.md` and the other Claim A/B/C documents because
 this is a genuinely different kind of object: those are about distance and escape
@@ -291,6 +293,8 @@ repetition**, not stalemate, is a mathematically proven boundary board position.
 The final board state reached after repetition sets in, for both sides, is itself
 the boundary position — the furthest downstream point, since everything before it
 was the approach toward it.
+
+*Correction (§14 item 10): a draw realized by a forced stalemate or a forced capture into a dead position is the same as a boundary state when it arises with no choice to deviate, that is, when the equilibrium holds. The exclusion in this text is a filter against positions where the draw could have been avoided, and against cataloging such positions as discoveries. It is not an exclusion of the equilibrium case. Read "cycle" in the definition as the paradigm realization.*
 
 *The cyclic requirement is restated as a definition, and its fit with §8's treatment of
 forced stalemate is examined, in §14 item 7. That "exactly one non-losing move" is a
@@ -1567,6 +1571,9 @@ and was believed to be recorded already.
   sides live. Positions whose draw is realized by a
   forced stalemate or by a forced capture into a dead position are terminal draws of
   the local kind (Tier 1, topology §5a-iii), not global.
+  *Correction (item 10): this last sentence is withdrawn for the equilibrium case. A draw realized by a forced stalemate or a forced capture
+  into a dead position is a boundary state when no side has a choice that avoids it and each side has a losing deviation. It is a terminal
+  draw of the local kind only where the draw could have been avoided.*
 - **A consequence worth stating.** Both sides must be able to lose, since otherwise
   the stronger side's non-losing moves are all of its moves and there is no narrow
   constraint. Both being able to lose implies both being live, so this definition
@@ -1589,6 +1596,9 @@ boundary states, because they say nothing about an equilibrium of optimal play; 
 show a position forcing a draw from a place where it could have been avoided.
 Capturing a pawn the opponent leaves en prise is a blunder by the pawn's side, unless
 the race was already lost.
+
+*Correction (item 10): the exclusion of insufficient-material and stalemate draws in this text applies where the draw could have been
+avoided, and is not an exclusion of a forced terminal draw that arises with no choice to deviate.*
 
 *Assessment — separate from the record above.*
 
@@ -1649,11 +1659,35 @@ the race was already lost.
 unconditional (topology §3) and is the position's. Its *classification* depends on how it is reached. A **local** boundary state is a
 verified equilibrium (the primitives show it and exhaustive verification confirms it), with no requirement on the path and none that
 it be the first. A **global** boundary state is a boundary state that is the first boundary between choice and force from the initial
-position across all paths, so that no boundary state lies between the initial position and it. Global therefore needs two proofs, and
+position across all paths that reach it, so that no boundary state lies between the initial position and it on a non-losing path.
+A global state is sound against all deviation replies, and there are many of them: a deviation may lead to a different global state,
+which still closes the phase between choice and force, so avoidability is not a ground for calling a state non-global. Global therefore needs two proofs, and
 a state with the first only is local. This is offered as the firm definition that item 4 asked for. The record's start-reachability
 (topology §5, Tier 3 of item 1) is read as the reachability part of *global*, which is an open reading recorded in
 `boundary_board_states_opening_survey.md` §2. Earlier uses of "local candidate" in this file, for positions that satisfy only the
 local conditions of a material, are not changed. Nothing in this item changes the definition of a boundary state (items 7 and 8).
+
+**10. Forced terminal draws are boundary states when there is no choice to deviate (the designer's ruling; topology §8ad).** A forced draw
+by stalemate, or by a forced capture into a dead position, is the same as a boundary state by the definition when it arises with no
+choice to deviate: the position is drawn, each side has a losing deviation, and no side has a non-losing move that avoids the terminal
+draw. The classification of such draws as not boundary states rested on their being sub-optimal relative to other branches, so that
+the draw could have been avoided. Where exhaustive coverage of all branches shows that some branches force stalemate or a dead
+position, that is not evidence against the classification. The text of §1, item 7 and item 8 that excludes these draws is a filter
+with a purpose: the boundary-state catalog is not to be filled with stalemate positions that arise from sub-optimal play, and such
+positions are not to be treated as discoveries. The definition of a global boundary state in item 7 is read with the cycle of
+repetition as its paradigm realization, and with the forced terminal draw as a second realization of the same equilibrium. The case
+in the exact king-and-pawn data (item 7, the 1,139 positions in which the saving move captures the pawn into a dead draw) is excluded
+for a different reason, which stands: the stronger side cannot lose there, so there is no equilibrium between two sides. This closes
+the open realization question recorded in `boundary_board_states_opening_survey.md` §10.
+
+**11. The closure claim (the designer's statement; topology §8ae).** The closure of the global boundary board states must be ensured,
+otherwise the programme fails. A viable deviation in the choice phase reaches a boundary state, and a route does not pass from choice
+to force without hitting one. If it is not the same one, it is a different global boundary state, by definition. If this were not true,
+an opening would force a win from the initial position, and no such line is known to exist; the closure is predicated on its
+nonexistence, and enumerating it would be the proof. A route out of the closure, with a certificate, would be a forced opening line.
+A closure that holds makes the forward and backward trace complete and a weak solution viable. A missing primitive or a failed belt
+prediction is not a failure of the programme. The full statement, with its outcomes and the premise that the initial position is a
+draw, is in `boundary_board_states_opening_survey.md` §2a. The segmented progression is recorded there in §7a with only what is stated.
 
 ---
 

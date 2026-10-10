@@ -2717,6 +2717,60 @@ the historical sections of this record, which keep the names as recorded and car
 By the reduction rule it comes back as a residual interface if a proven boundary-state entry needs it, and it is admitted then only if it
 passes the admission rule.
 
+### 8ac. The anchored opening survey: local and global by path, and the position-keyed cache
+
+**The idea, as stated.** The methods so far looked from the far end, retrograde from mating positions and the mitigation of
+complexity. They ignored the anchoring point of every game, the initial position, and the navigation from it down a chosen
+opening line. The anchored survey takes a well-understood opening, chosen for a reason, and uses the primitive catalog and the
+perturbation process along it to find a boundary-state candidate. It is a survey for candidates and is not yet a tool.
+
+How a state is reached matters for classifying it. A global boundary state is the first boundary between choice and force from
+the initial position, so it depends on how it is arrived at, across all paths; it requires proof both that it is a boundary state
+and that no boundary state lies between the initial position and it. A local boundary state is one where the equilibrium is
+verified (the primitives show it, and exhaustive verification shows they did their job) without requiring how it was reached or
+that it is first. The survey's target is a local candidate anchored from the initial position by a chosen line, optimal or
+sub-optimal.
+
+Forcing sequences are read as race conditions. A forcing sequence is a decisive advantage to the side that forces it, and it may
+force a win, a draw or a loss. A forced loss is uninformative. A forced win marks a winning race condition, and adversarial play
+takes it, which prunes the lines that allow it. A forced draw is a possible boundary state, and a draw forced at each step to
+prevent a forced loss is boundary-state behavior. The theory tree and perturbation up it locate where choice becomes force.
+
+A cache keyed on the position records work done. If force is already deployable from a position, or a boundary state has been
+passed, so that every branch below is a forced sequential win and the only decisive moves are forced out of zugzwang-type
+situations, then any path that reaches the position inherits that, and the work below it need not be repeated. A found local
+candidate is cached, and it may or may not be global. If it is concluded exhaustively that no local candidate can exist below a
+position, that work is not repeated either. Where the candidates at a depth form a wall of boundary-state candidates in a cycle,
+with interdependencies that branch into a large combinatorial space, the choice of path is bad, because it is too far upstream to
+verify. Choosing a line and a depth is a calibration problem. The survey of lines is to be taken from a book of opening theory.
+
+**Followed, and integrated.** The method is written as its own document, `boundary_board_states_opening_survey.md`, with the
+definitions above, the procedure, the three cache entries (forced region, boundary found, none can exist), the calibration, and the
+use of the theory tree as material (deviation map, width, evidence tier). Pointers were added to `boundary_board_states.md` (the
+thirty-first addition, the resume box, and §14 item 9). The primitives, the hard core and the other definitions are unchanged.
+
+**Assessment — separate from the record above.**
+
+- **Part of this is already on record.** Forward anchoring and the discovery/certification split are in §8r, and start-reachability
+  is in §5 (Tier 3 of `boundary_board_states.md` §14). The survey elaborates §8r's "with a chosen opening line, each piece move's
+  effect on the primitives can be tracked" into a procedure. What is new is the path-dependent classification, the cache and the
+  calibration.
+- **This is consistent with §3.** A state's own status is local and unconditional there. The classification here is of how a
+  verified state is reached, and it does not touch the status.
+- **A reading offered for correction.** *Global* is read as start-reachable in the sense of §5 and also first across all such
+  chains. `boundary_board_states.md` §14 item 4 asked for a firm definition of local and global, and this is offered as one. The
+  record's "local" in §3 (a status that is local and unconditional) and this survey's "local boundary state" (verified, with no
+  claim about arrival) agree.
+- **A scope point in the cache.** The forced-region entry is a claim under optimal play. A drawn position that the winning side
+  could reach by an error is not on an optimal continuation and remains admissible as a local candidate. The entry says nothing
+  about it. Whether the survey wants such candidates is left open in the survey document.
+- **A guard rail from §8p applies.** A cache claim about everything below a position needs a certificate. A search that finds no
+  boundary state below a node has found absence of information, and an assertion in the theory tree is an assertion.
+- **A correction recorded.** In discussion, the global and local classification was first read as a scope tag on a verdict, on the
+  ground that a position's status is independent of how it is reached. The designer corrected it: the status is the position's, and
+  the classification is path-dependent by definition, because global means first. The first reading was withdrawn.
+- **Not run.** No line has been surveyed. The calibration signals of the survey document are criteria and not results.
+
 ---
 
 ## 9. What remains open
@@ -3006,3 +3060,4 @@ passes the admission rule.
 - **Whether the carrier is a term of the coverage race or an input it reads from P-001 (§8aa).** Open.
 - **Resolved (§8ab):** P-003 remains a primitive, as the single chained-dependencies primitive (catalog §7, §10.5).
 - **How the repetition cycle that defines a boundary state keeps every entry of both registers held across the cycle (catalog §8.14, §5 item 2).**
+- **The anchored survey (§8ac, `boundary_board_states_opening_survey.md` §10).** The meaning of "first" over all paths and its ancestor set; whether the forced-region cache claims anything about deviations from a forced win; how a web of interdependent candidates is verified; and how the cache treats the repetition cycle of a candidate. Not run.

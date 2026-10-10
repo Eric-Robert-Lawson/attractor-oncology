@@ -162,6 +162,7 @@ a twenty-seventh addition (catalog §9: the provenance of the catalog's organiza
 a twenty-eighth addition (topology §8z, catalog §7a, §7b and §7: segmented dependencies generalized. Chain structures, the dependency of one element on another's presence or removal, are recorded as a locking mechanism and specified as P-003, with a typed dependency graph whose edges are enabling and supporting and whose weak end is the unsupported end of a chain; the movement rule of any unit is specified as a relation, from which the orbit, the route-length parity, the dependency set of each edge, the permanence of coverage and the effect of union are computed without naming a piece, as the substrate SUB-1, which the activation primitive P-007 consumes for route existence, route distance, lock removal and obstruction. The catalog states no rule of any piece: the values of a relation's attributes for each unit kind are inputs supplied when a primitive is applied, and special cases are accounted for in composition. A first version that treated the color of one unit and the parity of another as separate piece notes was corrected. Status SPEC; two predictions are stated in advance and not run; whether the substrate is a primitive or part of P-007 is left to the designer),
 a twenty-ninth addition (topology §8aa, catalog §7c, §7b and §6: a third primitive derived from two by the reduction rule. The composition of the capture net (P-001) and the chain structure (P-003) leaves a residual: the effect of a perturbation on the held terms of every engaged primitive at once, the support those terms share, and the race to open one before it is restored. P-008, the coverage race under disturbance, is the entry whose interface that is. It is built from the held terms, residual replies and mechanisms that the written entries define, so that every effect it reports is determined by the definitions of the primitive whose term is affected: a register of held terms with the support of each residual reply, an effect vector of a perturbation over the registers of both sides, opening sets and key elements, and joint support, which is coverage used once and overload with no special case. It is evaluated exactly at each position along a line of perturbations, and for both sides, with the feasibility term read off the same effect vector. The coverage is complete over the perturbations whose change meets the support closure that the primitives determine, a perturbation that misses it cannot change any held term, and where an effect is not yet determined by an entry the reduction rule returns the residual. A first version that defined the coverage through a supply-and-demand formalization was imported from outside the race semantics and was withdrawn. By the modularity rule that an overlap between primitives is a defect, the dissolution race that version 1 of P-003 had carried was moved to P-008, and P-003 is narrowed to the static structure; whether it stays a primitive or is classified as a substrate is left to the designer. Status SPEC; three predictions are stated in advance and not run; that additional primitives may reduce the closure is kept open),
 a thirtieth addition (topology §8ab, catalog §1, §7, §8 and §10.5: the catalog is reduced to three primitives, the mating and capture net (P-001), chained dependencies (P-003) and the coverage race (P-008), by the designer's correction. The earlier index had also carried P-002 (race to a square, which is the tempo comparison, a term), P-004 (edge restriction, an input), P-005 (repetition loop, which is the definition of a boundary state and the emergent effect of the primitives in equilibrium, so the hard core), P-006 (retired) and P-007 (activation, the result when a chain resolves), and had split chained dependencies into P-007, a substrate SUB-1 and a static P-003; none of these but the three is a race condition with terms. The activation, substrate and static-structure material was rebuilt as one entry, P-003 version 3, with every term, mechanism, derived form, instance and prediction kept; P-008 was renumbered with no change of definition; an admission rule for what a primitive is was added to the catalog and to the resume box below, so that later sessions test an entry against it before indexing it; the earlier files are kept in a backup folder; the reclassification is recorded in the topology file as §8ab; no definition of a boundary state changed and nothing was run),
+a thirty-first addition (topology §8ac and `boundary_board_states_opening_survey.md`: the anchored opening survey. Boundary states are classified by how they are reached: a local boundary state is a verified equilibrium with no claim about the path or about being first, and a global one is the first boundary between choice and force from the initial position, across all paths, which requires proof that no boundary state lies between. The survey's target is a local candidate anchored at the initial position by a chosen opening line, optimal or not, found by walking the line, perturbing up the tree, pruning lines on which a side has a forced win, and reading a forced draw as the boundary-state behavior. A position-keyed cache records forced regions, boundaries found, and the exhaustive result that none can exist, so the work is not repeated, and the choice of line and depth is a calibration problem. Written as its own document; §14 item 9 records the definition; the primitives and the definition of a boundary state are unchanged; nothing was run),
 and the corrected, complete version below. Kept separate from
 `syzygy_improvement_proven_results.md` and the other Claim A/B/C documents because
 this is a genuinely different kind of object: those are about distance and escape
@@ -251,6 +252,10 @@ where a losing side's last real choice exists.
 >   perturbation; irreducible by the reduction rule; not a description of a result or of an emergent state; piece- and
 >   board-agnostic; modular, with no overlap). What fails the rule is classified as a definition, input, term, mechanism, derived
 >   form or instance, and recorded in the table of catalog §1. Zugzwang without capture is an open residual, not a fourth primitive.
+> - **The anchored opening survey (topology §8ac, `boundary_board_states_opening_survey.md`).** The method that uses the catalog along a
+>   chosen opening line from the initial position to find a local boundary-state candidate. Local means a verified equilibrium with no
+>   claim about the path; global means the first boundary between choice and force from the initial position across all paths (item 9
+>   of §14). It has its own cache (forced region, boundary found, none can exist) keyed on the position. Specified, not run.
 
 ---
 
@@ -1507,7 +1512,7 @@ one is small and mechanical.
 Topology §3 (a status is local and unconditional), §5 (global as
 start-reachable), §6 (scoped versus global coverage), and the closure-
 contribution distinction proposed in topology §5a. The last is the least
-settled. It needs either a firm definition or a different pair of labels.
+settled. It needs either a firm definition or a different pair of labels. *Update (item 9): the designer's statement of local and global by the path of arrival is recorded in item 9 as the firm definition.*
 
 **5. "Insufficient material" is being used loosely for the rook-pawn KPK
 draw.** That result depends on the king race and is not unconditional
@@ -1639,6 +1644,16 @@ the race was already lost.
   exactly-one holds at every node of the loop no longer arises. The scan in topology
   §8t measured the width of drawn positions in a material that, under this definition,
   holds only local candidates, and not a population of boundary states.
+
+**9. "Local" and "global" by the path of arrival (the designer's statement; topology §8ac).** A boundary state's own status is local and
+unconditional (topology §3) and is the position's. Its *classification* depends on how it is reached. A **local** boundary state is a
+verified equilibrium (the primitives show it and exhaustive verification confirms it), with no requirement on the path and none that
+it be the first. A **global** boundary state is a boundary state that is the first boundary between choice and force from the initial
+position across all paths, so that no boundary state lies between the initial position and it. Global therefore needs two proofs, and
+a state with the first only is local. This is offered as the firm definition that item 4 asked for. The record's start-reachability
+(topology §5, Tier 3 of item 1) is read as the reachability part of *global*, which is an open reading recorded in
+`boundary_board_states_opening_survey.md` §2. Earlier uses of "local candidate" in this file, for positions that satisfy only the
+local conditions of a material, are not changed. Nothing in this item changes the definition of a boundary state (items 7 and 8).
 
 ---
 

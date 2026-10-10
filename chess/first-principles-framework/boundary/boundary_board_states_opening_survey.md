@@ -187,6 +187,18 @@ continuation, so no boundary state can lie on one. A drawn position that the win
 optimal continuation, and under the target of §2 it is an admissible local candidate anchored through this line. C1 therefore says
 nothing about such positions. Whether the survey wants candidates reached by deviations from a forced win is open (§10).
 
+**Scope of C3 and the pruning of sub-optimal paths (the designer's statement).** Sub-optimal paths are excluded by the distinction
+between choice and force: a choice that leads to a forced loss is pruned. In a drawn region a move either preserves the value or
+loses, so the non-losing moves of both sides are all optimal in value, and a move that is only inferior in play stays in the net.
+The net the survey exhausts is therefore the closure of the non-losing moves, the chain of topology §5. C3 claims that no
+boundary state exists on that closure below the position, to the depth reached. It makes no claim about paths that leave the closure
+through a losing move. Each prune rests on a certified forced loss, and a claim that rests on an uncertified prune is conditional
+and is tagged as such.
+
+**Convergence.** Positions that recur or converge, by transposition or by a repetition cycle, are one entry in the cache. The
+region below a node is a graph and not a tree, and a position already resolved is not worked again. This reduces the work, and it is
+the reason the cache is keyed on the position.
+
 ## 7. Calibration: choosing a line and a depth
 
 The survey fails in a specific way: the candidates it finds are not independent. If the forced-draw nodes at a depth form a wall,

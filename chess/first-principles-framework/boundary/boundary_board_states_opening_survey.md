@@ -143,6 +143,27 @@ The hard core therefore has one failure condition, which is also a result: a cer
    state. Whether it is global is a separate question (§5).
 7. **Cache** what was learned, whichever way the search ends (§6).
 
+### 4a. Pruning as information (the designer's statement)
+
+Pruning is not only the removal of data. A forcing sequence that wins is a race condition that is won, and it is identifiable as a
+primitive. Perturbing upstream with that primitive in mind shows whether it is baked into the structure or emerged from a chained
+dependency or from the order of the move choices that made the race work. Tracing it upstream shows whether an equilibrium can be
+reached at all. Identifying the losing sequences and their primitives is therefore informative about the equilibrium of the
+potential boundary state, which requires the primitives to be jointly compatible.
+
+The pruned structure thus carries more than its layout. For each edge it carries why the edge is there, which is the race-condition
+primitive that refutes the alternative, and which moves activate a race condition and what the calculation on the primitives
+becomes under the perturbation. The balance of a position's equilibrium comes out of the pruning process.
+
+If the composition upstream shows that no equilibrium can be established, then no boundary state can exist in that branch. If one is
+found, with the pruning excluding branches on the basis of the primitives and the structure standing as an equilibrium of race
+conditions, that is a boundary-state candidate anchored from the initial position, for example from 1.f4 and a chosen reply.
+
+**This file's organization, offered for correction.** Each pruned edge is recorded with the primitive that refutes it, the
+certificate type, and the upstream classification (structural, or emerged from a chain or an ordering of moves). "No equilibrium can
+be established" is a deduction from the joint incompatibility of the primitives (topology §8x), and a failure to compose with the
+current catalog is first read as a residual interface, which may be a missing primitive and not an impossibility (topology §8p).
+
 ## 5. Local and global along the line
 
 A local candidate verified at depth d says nothing about whether an earlier boundary exists. To classify it as global, the survey

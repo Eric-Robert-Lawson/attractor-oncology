@@ -2830,6 +2830,18 @@ yet specified and nothing has been filled in beyond that.
 - **The premise is recorded as a premise.** The closure is conditional on the initial position being a draw, which is unproven.
 - **Not run.**
 
+### 8af. Pruning as information
+
+**The idea, as stated.** Pruning is informative and does not only remove data. A forcing sequence that wins is a won race condition and an identifiable primitive. Perturbing upstream shows whether it is baked into the structure or emerged from a chained dependency or an ordering of moves. Tracing it shows whether an equilibrium can be reached. The pruned structure carries why each edge exists (the primitive that refutes the alternative), and the balance of the position's equilibrium comes out of the pruning. If no equilibrium can be established upstream, the branch has no boundary state. If one is found, it is a candidate anchored from the initial position.
+
+**Followed, and integrated.** Survey §4a. Each pruned edge is recorded with its refuting primitive, its certificate type and its upstream classification.
+
+**Assessment — separate from the record above.**
+
+- **"No equilibrium can be established" has to be a deduction.** It follows from the joint incompatibility of the primitives (§8x). A failure to compose with the present catalog is a residual interface and may be a missing primitive (§8p).
+- **Certification is separate.** A found equilibrium is a candidate with its composition. It is a certified local state when the deviation map is complete with certificates and the complete case list is carried out within the footprint (§8d, §8h).
+- **Not run.**
+
 ---
 
 ## 9. What remains open

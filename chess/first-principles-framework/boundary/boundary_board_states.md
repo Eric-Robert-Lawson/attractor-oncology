@@ -161,6 +161,7 @@ a twenty-fourth addition (catalog §4, topology §8w: the mating net and the cap
 a twenty-seventh addition (catalog §9: the provenance of the catalog's organization, stating what is the designer's and unchanged and what is this file's organizational choice and open to change, and the mapping from the original primitives-catalog families of topology §8b to the generalized primitives; no entry written),
 a twenty-eighth addition (topology §8z, catalog §7a, §7b and §7: segmented dependencies generalized. Chain structures, the dependency of one element on another's presence or removal, are recorded as a locking mechanism and specified as P-003, with a typed dependency graph whose edges are enabling and supporting and whose weak end is the unsupported end of a chain; the movement rule of any unit is specified as a relation, from which the orbit, the route-length parity, the dependency set of each edge, the permanence of coverage and the effect of union are computed without naming a piece, as the substrate SUB-1, which the activation primitive P-007 consumes for route existence, route distance, lock removal and obstruction. The catalog states no rule of any piece: the values of a relation's attributes for each unit kind are inputs supplied when a primitive is applied, and special cases are accounted for in composition. A first version that treated the color of one unit and the parity of another as separate piece notes was corrected. Status SPEC; two predictions are stated in advance and not run; whether the substrate is a primitive or part of P-007 is left to the designer),
 a twenty-ninth addition (topology §8aa, catalog §7c, §7b and §6: a third primitive derived from two by the reduction rule. The composition of the capture net (P-001) and the chain structure (P-003) leaves a residual: the effect of a perturbation on the held terms of every engaged primitive at once, the support those terms share, and the race to open one before it is restored. P-008, the coverage race under disturbance, is the entry whose interface that is. It is built from the held terms, residual replies and mechanisms that the written entries define, so that every effect it reports is determined by the definitions of the primitive whose term is affected: a register of held terms with the support of each residual reply, an effect vector of a perturbation over the registers of both sides, opening sets and key elements, and joint support, which is coverage used once and overload with no special case. It is evaluated exactly at each position along a line of perturbations, and for both sides, with the feasibility term read off the same effect vector. The coverage is complete over the perturbations whose change meets the support closure that the primitives determine, a perturbation that misses it cannot change any held term, and where an effect is not yet determined by an entry the reduction rule returns the residual. A first version that defined the coverage through a supply-and-demand formalization was imported from outside the race semantics and was withdrawn. By the modularity rule that an overlap between primitives is a defect, the dissolution race that version 1 of P-003 had carried was moved to P-008, and P-003 is narrowed to the static structure; whether it stays a primitive or is classified as a substrate is left to the designer. Status SPEC; three predictions are stated in advance and not run; that additional primitives may reduce the closure is kept open),
+a thirtieth addition (topology §8ab, catalog §1, §7, §8 and §10.5: the catalog is reduced to three primitives, the mating and capture net (P-001), chained dependencies (P-003) and the coverage race (P-008), by the designer's correction. The earlier index had also carried P-002 (race to a square, which is the tempo comparison, a term), P-004 (edge restriction, an input), P-005 (repetition loop, which is the definition of a boundary state and the emergent effect of the primitives in equilibrium, so the hard core), P-006 (retired) and P-007 (activation, the result when a chain resolves), and had split chained dependencies into P-007, a substrate SUB-1 and a static P-003; none of these but the three is a race condition with terms. The activation, substrate and static-structure material was rebuilt as one entry, P-003 version 3, with every term, mechanism, derived form, instance and prediction kept; P-008 was renumbered with no change of definition; an admission rule for what a primitive is was added to the catalog and to the resume box below, so that later sessions test an entry against it before indexing it; the earlier files are kept in a backup folder; the reclassification is recorded in the topology file as §8ab; no definition of a boundary state changed and nothing was run),
 and the corrected, complete version below. Kept separate from
 `syzygy_improvement_proven_results.md` and the other Claim A/B/C documents because
 this is a genuinely different kind of object: those are about distance and escape
@@ -216,11 +217,11 @@ where a losing side's last real choice exists.
 >   by stalemate or insufficient material are not boundary states. What remains is
 >   construction: the primitives, the composition rules, and the cost model.
 > - **The primitive catalog now exists** (`boundary_board_state_primitive_catalog.md`):
->   a specification with an entry template, an index of five primitives of which
+>   a specification with an entry template, an index of three primitives (earlier versions indexed eight, see the thirtieth addition) of which
 >   P-001 (the capture net, whose royal case is the mating net) is written, and the generalization rule by which it
 >   covers the fool's mate and any other position. The definition of a global
 >   boundary state is restated in §14 item 7 (a cyclic equilibrium, both sides
->   live), and it makes P-005 (repetition loop) the next entry needed.
+>   live), and the loop it describes is the hard core and not a primitive (topology §8ab).
 > - **Status of the work.** The only code in this document is the
 >   `is_boundary_state()` sketch in §6, checked for syntax but not yet run
 >   against real Syzygy or project data. Everything else is design.
@@ -231,17 +232,25 @@ where a losing side's last real choice exists.
 >   states. `mating_net_report.py` checks the royal case of P-001 on four mates. The
 >   catalog (`boundary_board_state_primitive_catalog.md`) is a specification, and no
 >   proven boundary-state entry exists yet.
-> - **Segmented dependencies and the substrate (topology §8z, catalog §7a and §7b).** Chains, which are locks read as the
+> - **Chained dependencies (topology §8z, §8ab, catalog §7).** Chains, which are locks read as the
 >   dependency of one element on another, and the movement rule of every unit are specified at the level of primitives. P-003
->   is specified (SPEC). The substrate SUB-1 derives orbits, route parity, edge dependence and the permanence of coverage from a
->   unit's movement relation without naming a piece, and P-007 consumes it. Nothing has been run.
->   Two predictions are stated in advance and not run (catalog §7a.10).
-> - **The coverage race (topology §8aa, catalog §7c).** P-008 is derived from P-001 and P-003 by the reduction rule: the effect of a
+>   is specified (SPEC, version 3). It derives orbits, route parity, edge dependence and the permanence of coverage from a
+>   unit's movement relation without naming a piece, and its race terms cover the activation of a piece or pawn. Nothing has been run.
+>   Two predictions are stated in advance and not run (catalog §7.13).
+> - **The coverage race (topology §8aa, catalog §8).** P-008 is derived from P-001 and P-003 by the reduction rule: the effect of a
 >   perturbation on the held terms of every engaged primitive, evaluated exactly at each position along a line and for both sides
 >   from the definitions of those primitives, with the support that held terms share (coverage used once, overload) and the race to
 >   open one before it is restored. The coverage is complete over the perturbations whose change meets the support closure that
->   the primitives determine. P-003 is narrowed to the static structure. SPEC, not run; three predictions are stated in advance
->   (catalog §7c.13).
+>   the primitives determine. The dissolution race is in P-008 and not in P-003. SPEC, not run; three predictions are stated in advance
+>   (catalog §8.13).
+> - **The catalog has three primitives (topology §8ab, catalog §1 and §10.5).** The mating and capture net (P-001), chained dependencies
+>   (P-003, which includes the activation of a piece or pawn, the movement relation and the frozen structure) and the coverage race
+>   (P-008). Race to a square is a term, edge restriction is an input, the repetition loop is the definition of a boundary state, and
+>   activation is the result of a chain resolving; none of these is a primitive. **Guard: do not add a primitive, and do not index one,
+>   unless it passes the admission rule of catalog §1** (a conjunction of terms with mechanisms that decides a race under
+>   perturbation; irreducible by the reduction rule; not a description of a result or of an emergent state; piece- and
+>   board-agnostic; modular, with no overlap). What fails the rule is classified as a definition, input, term, mechanism, derived
+>   form or instance, and recorded in the table of catalog §1. Zugzwang without capture is an open residual, not a fourth primitive.
 
 ---
 
@@ -686,11 +695,11 @@ the definition of a boundary state. The residual interface fixes what the missin
 primitive must discharge. The distance from a state to equilibrium is the order in which this reduction is
 carried out, and it never changes what is true. A boundary state itself is proven by its composition as a
 complete case list, with exhaustive insurance on the first entries. It has not been run, because it needs
-the cost model of P-001 and the written entries P-002 and P-007.
+the cost model of P-001 and the written entries of the catalog (P-003 and P-008 are specified and not run).
 
-**Perturbation classes (added with the substrate; catalog §7a.7, topology §8z).** The enumeration over the finite geometry that this method relies on is made specific by the movement relation of each unit. A move perturbs the structure in one of five ways: a unit move (its node in the navigation graph changes, and under a grading the parity of its remaining route flips); a blocker move or capture (edges of line-travelling relations whose dependency sets contain the square appear or disappear); a change of coverage or a pin (edge exposure changes); a relation change (promotion); and the capture of a node of the dependency graph (a cascade along its supporting and enabling edges). ΔS is the sum of their effects. Not run.
+**Perturbation classes (added with the substrate; catalog §7.7, topology §8z).** The enumeration over the finite geometry that this method relies on is made specific by the movement relation of each unit. A move perturbs the structure in one of five ways: a unit move (its node in the navigation graph changes, and under a grading the parity of its remaining route flips); a blocker move or capture (edges of line-travelling relations whose dependency sets contain the square appear or disappear); a change of coverage or a pin (edge exposure changes); a relation change (promotion); and the capture of a node of the dependency graph (a cascade along its supporting and enabling edges). ΔS is the sum of their effects. Not run.
 
-**Two-sided evaluation (added with P-008; catalog §7c.8, topology §8aa).** S(P) and ΔS are computed for both sides with the colors swapped, and the candidate moves of each side perturb the other's evaluation: the disturbances that can reach a structure are generated from the other side's candidate moves inside the closure of the structure's key set, and a disturbance is available only if the disturbing side's own structure still holds afterwards. This keeps the search over the primitive state scoped and adversarial. Not run.
+**Two-sided evaluation (added with P-008; catalog §8.8, topology §8aa).** S(P) and ΔS are computed for both sides with the colors swapped, and the candidate moves of each side perturb the other's evaluation: the disturbances that can reach a structure are generated from the other side's candidate moves inside the closure of the structure's key set, and a disturbance is available only if the disturbing side's own structure still holds afterwards. This keeps the search over the primitive state scoped and adversarial. Not run.
 
 ---
 
@@ -1259,11 +1268,11 @@ incompleteness rather than a genuine absence of a drawing structure.
 18. **Define the primitive state S and the perturbation ΔS over the written
     primitives, and apply Method 7** (topology §8y). The per-ply tempo ledger of
     topology §8w is its first instance. It needs the cost model of P-001 and the
-    written entries P-002 and P-007.
-19. **Run the two predictions of topology §8z** (catalog §7a.10): that the load-bearing sets found by ablation (§8s) are
+    written entries of the catalog (P-003 and P-008 are specified and not run).
+19. **Run the two predictions of topology §8z** (catalog §7.13): that the load-bearing sets found by ablation (§8s) are
     the cut sets of the dependency graph read from the same position, and that orbit exclusion reproduces the known
     color-lock verdicts across the whole class. Nothing in this step has been run.
-20. **Run the three predictions of the coverage race** (topology §8aa, catalog §7c.13): that the key elements (the singleton
+20. **Run the three predictions of the coverage race** (topology §8aa, catalog §8.13): that the key elements (the singleton
     opening sets of the held terms) coincide with the load-bearing elements found by ablation (§8s); that the evaluation of the
     primitive under perturbation, composed over a line, reproduces the verdict of exhaustive search; and that every
     verdict-changing perturbation in the ablation and deviation data meets the support closure. Count the perturbations that must
@@ -1560,8 +1569,9 @@ and was believed to be recorded already.
 - **The open choice recorded earlier no longer arises.** Item 8 removes exactly-one
   as a requirement at any node, so a perpetual check with two interchangeable checks
   is not excluded.
-- **The catalog entry this depends on is P-005 (repetition loop) in
-  `boundary_board_state_primitive_catalog.md`, and it is not written.**
+- **This is the definition of a boundary state and not a catalog entry.** The repetition loop is the emergent effect of the
+  primitives in equilibrium, so it belongs to the hard core. An earlier version of this file named it as catalog entry P-005; that
+  was a misclassification, corrected in topology §8ab and catalog §1.
 
 **8. "Exactly one non-losing move" is a measure of width, not the definition.**
 
@@ -1741,14 +1751,14 @@ is close to the normal case.
 **Update — the substrate and the chain (topology §8z).** The movement-relation substrate and the chain primitive are
 developments of the protective belt, and they leave the definition of a boundary state, the hard core, untouched. By the
 stricter standard above they are not yet progressive. Nothing in them has been run. They make two predictions that can
-fail and have not been run (catalog §7a.10): that the load-bearing sets found by ablation are the cut sets of the dependency
+fail and have not been run (catalog §7.13): that the load-bearing sets found by ablation are the cut sets of the dependency
 graph, and that orbit exclusion reproduces the known color-lock verdicts across the whole class. Positive results would be
 novel facts in Lakatos's sense, and negative ones would be reported in the same way as the corrections already on record.
 
 **Update — the coverage race (topology §8aa).** P-008 was derived from P-001 and P-003 by the reduction rule, and it is a
 development of the protective belt that leaves the hard core untouched. It is not yet progressive by the stricter standard above.
 The derivation of one primitive from two others is made under the definitions and is not a novel fact, and nothing in it has been
-run. Three predictions can fail (catalog §7c.13): that the key elements coincide with the load-bearing elements found by ablation;
+run. Three predictions can fail (catalog §8.13): that the key elements coincide with the load-bearing elements found by ablation;
 that the evaluation of the primitive under perturbation, composed over a line, reproduces the verdict of exhaustive search, a
 disagreement being a residual interface that develops the catalog; and that every verdict-changing perturbation in the ablation
 and deviation data meets the support closure. The primitive is evaluated exactly at each position, so the saving is the

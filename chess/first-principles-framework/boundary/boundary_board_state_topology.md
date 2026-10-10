@@ -2210,6 +2210,8 @@ d4 knight and the a2 and b3 pawns are irrelevant to the final mate.
 
 ### 8v. Cataloging the mating net as a portable primitive
 
+*Correction (§8ab).* The names P-002, P-004, P-005, P-007 and SUB-1 below are kept as recorded. They are not primitives: the catalog has three, the mating and capture net (P-001), chained dependencies (P-003, which absorbs what this section calls P-007, SUB-1 and the frozen structure) and the coverage race (P-008). The classification of each name is in §8ab and in catalog §1. Catalog section numbers cited here (§7, §7a, §7b, §7c, §8, §9) are those of the catalog before that reduction; the map to the present numbers is catalog §10.5.*
+
 **The idea, as stated.** The discovery should be recorded in a scalable,
 generalized way: as a modular primitive that can be extracted and deployed in a
 catalog, depending on nothing but the base primitive and the way it expands to the
@@ -2253,6 +2255,8 @@ position has yet been evaluated with one.
   non-terminal positions (catalog §4.7) is a specification and has not been run.
 
 ### 8w. Applying the net to pieces other than the king
+
+*Correction (§8ab).* The "race primitive P-002" named below is the tempo comparison, which is a term (TP of P-003, TM of P-008) and not a primitive. See §8ab.
 
 **The idea, as stated.** The primitive should also apply to a piece other than the
 king, for example an early-developed queen: a net that captures the queen, joint
@@ -2411,6 +2415,8 @@ compatibility. This had been iterated in the past.
 
 ### 8y. Activation, the primitive state, and perturbation
 
+*Correction (§8ab).* The names P-002, P-004, P-005, P-007 and SUB-1 below are kept as recorded. They are not primitives: the catalog has three, the mating and capture net (P-001), chained dependencies (P-003, which absorbs what this section calls P-007, SUB-1 and the frozen structure) and the coverage race (P-008). The classification of each name is in §8ab and in catalog §1. Catalog section numbers cited here (§7, §7a, §7b, §7c, §8, §9) are those of the catalog before that reduction; the map to the present numbers is catalog §10.5.*
+
 **The idea, as stated.** Another primitive, identified from endgame logic, is pawn promotion. In
 king and pawn against king and pawn it is not a mating or capture net but a segmented process in
 which the net depends on a race condition for promotion. It is also directly related to piece
@@ -2479,6 +2485,8 @@ the composition of the primitives is moving closer to a boundary state.
   defined, so Method 7 has not been run.
 
 ### 8z. Segmented dependencies generalized: chains, the movement relation, and the substrate
+
+*Correction (§8ab).* The names P-002, P-004, P-005, P-007 and SUB-1 below are kept as recorded. They are not primitives: the catalog has three, the mating and capture net (P-001), chained dependencies (P-003, which absorbs what this section calls P-007, SUB-1 and the frozen structure) and the coverage race (P-008). The classification of each name is in §8ab and in catalog §1. Catalog section numbers cited here (§7, §7a, §7b, §7c, §8, §9) are those of the catalog before that reduction; the map to the present numbers is catalog §10.5.*
 
 **The idea, as stated.** Chain structures are a key structure of the locking mechanism. A passed pawn rests on a chain
 structure, the pawn wall, with the pawn passing unopposed. A knight outpost is a chain structure: taking the knight
@@ -2558,6 +2566,8 @@ general form. A note on one piece's color or parity alone does not meet that con
 
 
 ### 8aa. The coverage race: a third primitive derived from two, adversarial composition, and scoped coverage
+
+*Correction (§8ab).* The names P-002, P-004, P-005, P-007 and SUB-1 below are kept as recorded. They are not primitives: the catalog has three, the mating and capture net (P-001), chained dependencies (P-003, which absorbs what this section calls P-007, SUB-1 and the frozen structure) and the coverage race (P-008). The classification of each name is in §8ab and in catalog §1. Catalog section numbers cited here (§7, §7a, §7b, §7c, §8, §9) are those of the catalog before that reduction; the map to the present numbers is catalog §10.5.*
 
 **The idea, as stated.** With two primitives, the capture and mating net and the chain structures with their segmented
 dependencies, a third is derived under joint compatibility, and it demonstrates the complete graph of the primitives in a concrete
@@ -2664,6 +2674,48 @@ primitives under perturbation is integrated into the process, and that is what m
 - **What this does not change.** The definition of a boundary state, the architecture of the catalogs, the proof-and-insurance rule,
   and the status of P-002, P-004 and P-005 as not written. P-008 is SPEC.
 
+
+### 8ab. The reduction to three primitives
+
+**The idea, as stated.** There are three primitives: the mating and capture net, chained dependencies (the segmented dependencies,
+already detailed), and the coverage primitive. The repetition loop is the definition of a boundary state, the emergent effect of
+the primitives being in equilibrium, and it is not a primitive. Activation describes the result of unlocking a locked piece from a
+locked structure, which is the result of a primitive and not a primitive. Edge restriction has no race condition. The hard core is
+the boundary board state, the protective belt is the primitive catalog, and the requirements on an entry are that it be a race
+condition and that it be modular, generalizable and piece- and board-agnostic. Entries that are descriptors of primitives, that are not
+modular or that are surface-level are not primitives and spoil the programme.
+
+**Followed, and integrated.** The catalog is rebuilt on those three. The test an entry has to pass is written into the catalog as the
+admission rule (catalog §1): a conjunction of terms with mechanisms that decides a race under perturbation; irreducible by the
+reduction rule; not a description of a result or of an emergent state; piece- and board-agnostic; and modular, with no overlap. The
+classification of what the earlier index carried:
+
+| Earlier entry | Classification | Where its content lives |
+|---|---|---|
+| P-001 Capture net | primitive | catalog §4 |
+| P-003, with P-007 and SUB-1 | one primitive, chained dependencies: the activation entry, the substrate and the static structure were three pieces of it | catalog §7 (version 3) |
+| P-008 Coverage race | primitive | catalog §8 |
+| P-002 Race to a square | the tempo comparison: a term (TP, TM), since race is what every primitive is | catalog §7.5, §8.5 |
+| P-004 Edge restriction | an input: missing edges of the movement relation | catalog §7.3 |
+| P-005 Repetition loop | the definition of a boundary state; emergent, so the hard core | `boundary_board_states.md` §14 item 7; catalog §5 item 2 |
+| P-006 | retired; merged into P-001 version 2 | catalog §4 |
+| P-007 Activation | the result when a chain of enabling dependencies resolves | catalog §7 (terms RT, LK, OB, TP) |
+
+**What went wrong, recorded.** The first catalog indexed P-002 to P-005 as primitives to be written, from the families of §8b and the
+cyclic definition, and later sections added P-007, SUB-1 and the narrowed P-003 to that index without testing each against the
+requirement that a primitive is a race condition with terms. The chained-dependencies primitive, which the designer had described as
+one, was split into three entries by that growth. The index was then taken as given by later sessions. The correction restores the
+architecture the designer had stated at the start.
+
+**What is unchanged.** The hard core and the definition of a boundary state; the architecture of the catalogs; the reduction rule and
+the proof-and-insurance rule; every term, mechanism, derived form, instance, definition and prediction of the merged entries, which
+were moved and not discarded (catalog §10.5 maps each earlier section to its new place); P-008 (renumbered, no definition changed);
+the historical sections of this record, which keep the names as recorded and carry correction notes. The earlier index is kept in
+`backup_before_three_primitive_restructure/`.
+
+**Left open, and recorded as a residual and not as a fourth primitive.** Zugzwang without capture is not read by any of the three.
+By the reduction rule it comes back as a residual interface if a proven boundary-state entry needs it, and it is admitted then only if it
+passes the admission rule.
 
 ---
 
@@ -2895,15 +2947,14 @@ primitives under perturbation is integrated into the process, and that is what m
   mechanism, which is the unfinished part of the entry.
 - **Whether the evaluation procedure of catalog §4.7, applied to non-terminal
   positions, gives a usable DORMANT or ENGAGED signal.** A specification only; not run.
-- **The writing order of P-002 to P-005 (§8v).** P-005 (repetition loop) is required
-  by the cyclic definition; P-002 (race to a square) by the tempo accounting.
+- **The writing order of the primitives (§8v, §8ab).** P-001 is written; P-003 and P-008 are SPEC and not run. P-002, P-004, P-005 and P-007 are not primitives (§8ab), so they are not to be written. What the three leave unaccounted for, such as zugzwang without capture, is returned by the reduction rule as a residual if a proven entry needs it.
 - **Resolved:** exactly-one is not required at any node of the equilibrium loop
   (`boundary_board_states.md` §14 item 8).
 - **Which measure of an equilibrium is informative:** the width (non-losing moves at a
   node), the number of tied primitives, or the number of losing deviations available to
   each side. Width is cheap to compute; the others need the catalog. Not decided.
 - **What the catalog needs in order to derive the outcome clause and the counter-net comparison for
-  non-royal targets (§8w, catalog §4.3 and §4.10):** the cost model, the race primitive, the other
+  non-royal targets (§8w, catalog §4.3 and §4.10):** the cost model, the tempo comparison (terms TP and TM), the other
   primitives, and a well-founded ordering.
 - **Whether the tempo ledger of §8w can be built over a whole game** and whether its
   columns track the engine's evaluation changes, stated in advance as in §8r. Not run.
@@ -2926,35 +2977,32 @@ primitives under perturbation is integrated into the process, and that is what m
   constraints fix the missing primitive uniquely or a family, and how the proven entry and its
   neighbors select.
 - **The unit of the activation gain, and the definition of the primitive state S and the asymmetry
-  (§8y, catalog §7).** The measure of distance from a state to an equilibrium composition needs the
+  (§8y, catalog §7.6).** The measure of distance from a state to an equilibrium composition needs the
   cost model.
-- **Where the boundary between P-002 and P-007 is drawn (§8y).** This record reads a promotion as an
-  activation whose route is a P-002 race. The classification is open to the designer's correction.
-- **Whether castling is an activation or a separate lock removal (catalog §7.8).**
+- **Resolved (§8ab):** there is no boundary between P-002 and P-007 to draw. The tempo comparison is a term of the chained-dependencies primitive and of the coverage race, and a promotion is the resolution of a chain by the route RT2 (catalog §7).
+- **Whether castling is an activation or a separate lock removal (catalog §7.14).**
 - **Whether the dependency graph of §8z, read from a position by P-001's mechanisms, reproduces as its cut sets the load-bearing
-  sets that ablation finds (§8s).** Prediction 1 of catalog §7a.10, stated in advance. Not run.
+  sets that ablation finds (§8s).** Prediction P3-1 of catalog §7.13, stated in advance. Not run.
 - **Whether orbit exclusion (catalog RT3) reproduces the known color-lock verdicts across the whole class, and whether it is the
-  color-lock fact inside Uri's rule (§8n).** Prediction 2 of catalog §7a.10. Not run, and the identification with §8n is a reading
+  color-lock fact inside Uri's rule (§8n).** Prediction P3-2 of catalog §7.13. Not run, and the identification with §8n is a reading
   to be checked against that section.
-- **Whether the movement-relation substrate is a substrate or part of the activation primitive, and whether P-003 decides any
-  result of its own (§8z, catalog §7a, §7b.11).** The designer's decision; the definitions serve either placement.
-- **How permanence of coverage (§8z, catalog §7a.5) extends to the region where a relation changes**, since promotion adds
+- **Resolved (§8ab):** the movement relation and the dependency graph are part of the chained-dependencies primitive P-003 (catalog §7), not a substrate, and P-003 decides a result of its own: the race to resolve a chain.
+- **How permanence of coverage (§8z, catalog §7.4) extends to the region where a relation changes**, since promotion adds
   coverage, and how pins and x-rays enter the dependency sets of route edges.
 - **Whether the chain reading of the outcome clause (§8z, catalog O3) reproduces static exchange evaluation where that is exact
   and corrects it where a chain cuts across the exchange.** Not run.
 - **Whether the single move that discharges several duties (case study §7, §8u) is an identifiable pattern in the dependency
   graph (§8z):** a move that adds or satisfies two edges at once. Still undecided, and noted as a reading only.
-- **How the effect of nested nets under perturbation (§8aa, catalog §7c) combines with P-002 and the cost model to give the composed
+- **How the effect of nested nets under perturbation (§8aa, catalog §8) combines with the tempo comparison and the cost model to give the composed
   race map of the outcome clause (catalog §4.3, §4.13).** Until then P-001 evaluates the outcome clause as it defines it.
-- **Whether the key elements of the held terms (the singleton opening sets of catalog §7c.3) coincide with the load-bearing elements
+- **Whether the key elements of the held terms (the singleton opening sets of catalog §8.3) coincide with the load-bearing elements
   found by ablation (§8s).** Prediction P8-1, stated in advance. Not run.
 - **Whether the evaluation of the coverage race under perturbation, composed over a line, reproduces the verdict of exhaustive
   search (§8aa).** Prediction P8-2, stated in advance. A disagreement is a residual interface. Not run.
-- **Whether every verdict-changing perturbation in the ablation and deviation data (§8s) meets the support closure (catalog §7c.9).**
+- **Whether every verdict-changing perturbation in the ablation and deviation data (§8s) meets the support closure (catalog §8.9).**
   Prediction P8-3, stated in advance. A failure specifies by the reduction rule what the catalog lacks. Not run.
-- **How many perturbations must be branched (§8aa, catalog §7c.9), especially where kings are involved (§8h condition 3), and whether
+- **How many perturbations must be branched (§8aa, catalog §8.9), especially where kings are involved (§8h condition 3), and whether
   additional primitives reduce it.** Kept open by design.
 - **Whether the carrier is a term of the coverage race or an input it reads from P-001 (§8aa).** Open.
-- **Whether P-003 remains an indexed primitive after its narrowing to the static structure (§8aa, catalog §7b.11), or is classified
-  with SUB-1 as a substrate.** The designer's decision.
-- **How P-005 (the repetition loop) keeps every entry of both registers held across the cycle (catalog §7c.14).**
+- **Resolved (§8ab):** P-003 remains a primitive, as the single chained-dependencies primitive (catalog §7, §10.5).
+- **How the repetition cycle that defines a boundary state keeps every entry of both registers held across the cycle (catalog §8.14, §5 item 2).**

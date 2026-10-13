@@ -8,7 +8,7 @@ complete case-list certificate).
 
 Companion documents: `boundary_board_states.md` (the concept and methods; §1 the definition, §3 the caching architecture, §14
 items 4 and 7 to 11), `boundary_board_state_topology.md` (the record; §3 status is local and unconditional, §5 start-reachability,
-§8h footprints, §8p the guard rail on absent paths, §8r forward anchoring, §8x the proven entry, §8ac, §8ad, §8ae and §8af the designer's
+§8h footprints, §8p the guard rail on absent paths, §8r forward anchoring, §8x the proven entry, §8ac, §8ad, §8ae, §8af and §8ag the designer's
 statements behind this file), `boundary_board_state_primitive_catalog.md` (the three primitives, the admission rule),
 `boundary_board_states_case_study_otb.md` (the game).
 
@@ -187,6 +187,38 @@ the refutations. It needs: each forced loss certified (a verified forced mate, a
 an engine assertion); closure under the non-losing moves; a losing deviation for each side, with the realization shown (the cycle,
 or a forced terminal draw with no choice to deviate); and, for a global classification, the separate proof of §5.
 
+### 4b. Equilibrium maintained until the move pool narrows (the designer's statement)
+
+The initial position resides in the choice phase. There the primitive race conditions are in an equilibrium from which a forced draw
+can emerge, with no forced sequence to a decisive outcome. The assumption that it is a draw rests on two things: no forced win has
+been found, and no primitive race has yet committed moves to produce an opening, so that, with the symmetry of the starting
+position, any forced attempt can be mitigated by the moves available. The primitives available from the initial position have not
+committed enough to narrow the branches. Imbalance emerges from decisive moves that create the opportunity for a race to be won, so a
+primitive is reached only through the moves that enable it. The fool's-mate primitive in Bird's Opening is the example: it depends on
+White making the enabling moves, the g-pawn above all, and Black cannot make moves that force it open, so under optimal play it is
+not reached.
+
+Optimal play is then a matter of exhausting the moves that mitigate these primitives, until the move pool and the lack of other
+opportunities force an imbalance, in a mechanic similar to zugzwang. Finding the global boundary states is maintaining the primitive
+equilibrium until the move pool forces the imbalance.
+
+**The move pool.** The move pool is enumerated in the pruned structure. Its values are not given by heuristics: they come from the
+pruning, from the losing conditions of the primitives in the race conditions. A pool with a winning move is decisive for the mover. A
+pool of only losing moves is a zugzwang loss, decisive against the mover. A pool with drawing moves is drawn. The choice region is a
+drawn pool with many drawing moves, and the boundary is where the drawing moves hold the draw against deviations that decisively lose.
+
+The method follows. From the opening position and its theory, use the same perturbation and pruning to take the longest line along
+which the equilibrium is maintained, as the pruned structure shows. Further down the line, isolate when any move from the move pool
+enters decisive territory. Where the position can be forced to a draw, it is a boundary state if the moves in the pool that deviate
+from the forced draws decisively lose, for both sides. That is visible in the pruned structure. The boundary condition on the pool is
+that it offers only decisively losing options or forced draws. If a decisive forcing line exists in a side's favor, the opponent must
+be forced to a move that avoids that branch entirely. This interdependent composition narrows the pruned structure toward what is
+sought. How large the pruned structure is remains the question.
+
+**Recorded with it.** The drawn start is a premise (§2a), and the enumeration is what would prove it. Whether a given net stays
+uncompleted because no carrier compels the move that enables it is established for each position (catalog §8.7, D-CR, with the
+carriers K0 to K4 of catalog §4).
+
 ## 5. Local and global along the line
 
 A local candidate verified at depth d says nothing about whether an earlier boundary exists. To classify it as global, the survey
@@ -272,6 +304,15 @@ state exists on those paths and that nothing below it on them can be global. Tha
 continues from it. The classification of a local candidate as global, or as provably not global, is settled upstream later, by
 the progress of the segments, the catalog and the cache. A file for the segmented progression, to enumerate the landscape in
 this way, is to be started.
+
+**Segments are compared relativistically (the designer's statement).** The work is to reduce the move pool in the pruned structures by
+relativistic perturbation branching and by the primitive races, through how a move opens the door to a race imbalance against the side
+that makes it, done in parity for the opponent. This is more practical than enumerating full coverage until mate, because it reduces a
+branch structure. The branching structure is worked in segments. A segment added to the pruned structure either wins its race against
+another segment, or is pruned entirely because what already exists in the structure shows that the branch would never be taken.
+
+**This file's reading, offered for correction.** The comparison of segments is a comparison of values, and a branch is excluded when
+the side to move has an alternative of value at least as good. Each such exclusion carries a certificate like any other prune (§4a).
 
 **Not yet specified.** The fields of the progression file; the order in which segments are taken; how the depth of a segment is
 chosen beyond the calibration signals of §7; how the boundary conditions of a segment at its depth limit are recorded; and how

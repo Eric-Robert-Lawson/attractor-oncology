@@ -2844,6 +2844,29 @@ yet specified and nothing has been filled in beyond that.
 - **The pruning is the certificate when it is closed.** A found equilibrium is a candidate until the pruned structure is a closed system with a certificate on every refutation. The complete deviation map over that closed region is the complete case list (§8d, §8h), and it certifies the local state. A first reading in discussion treated the case list as a further step after the deviation map. The designer corrected it: they are the same thing, and the reading was withdrawn.
 - **Not run.**
 
+### 8ag. Equilibrium maintained until the move pool narrows
+
+**The idea, as stated.** The initial position resides in the choice phase, with the primitive race conditions in an equilibrium from
+which a forced draw can emerge and with no forced sequence to a decisive outcome. That it is a draw is assumed because no forced win
+has been found, and because no primitive race has committed moves to produce an opening: with the symmetry of the starting position,
+any forced attempt can be mitigated by the moves available. Imbalance emerges from decisive moves that create the opportunity for a
+race to be won, so a primitive is reached only through the moves that enable it. In Bird's Opening the fool's-mate primitive depends
+on White making the enabling moves, and Black cannot force it open, so under optimal play it is not reached. Optimal play exhausts
+the moves that mitigate the primitives until the move pool forces an imbalance, as in zugzwang. The move pool is enumerated in the
+pruned structure, and its values come from the pruning, from the losing conditions of the primitives, and not from heuristics. The
+global boundary states are found by maintaining the equilibrium until then: take the longest line along which the pruned structure
+shows the equilibrium maintained, isolate where any move of the pool enters decisive territory, and where the position can be forced
+to a draw it is a boundary state if the deviating moves of both sides decisively lose. A decisive forcing line in a side's favor
+forces the opponent to avoid the branch, and this interdependent composition narrows the pruned structure.
+
+**Followed, and integrated.** Survey §4b.
+
+**Assessment — separate from the record above.**
+
+- **The drawn start stays a premise** (survey §2a). The enumeration is what would prove it.
+- **Not run.**
+
+
 ---
 
 ## 9. What remains open

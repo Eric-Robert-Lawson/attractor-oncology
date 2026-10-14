@@ -2867,6 +2867,30 @@ forces the opponent to avoid the branch, and this interdependent composition nar
 - **Not run.**
 
 
+### 8ah. The process as a whole; temporal analytical relativistic measuring
+
+**The idea, as stated.** Build a pruned structure tree from the opening position onward, focused on a specific opening. Understand
+the primitives as they evolve through segmented exhaustive coverage, to map the branch structure and prune it, aiming to map the
+choice phase of the choice-force dichotomy, where the boundary board state is the boundary. Perturbation and mining map the pruned
+structure; the primitive race conditions are discovered by segmented exhaustive coverage; the structure is pruned on their
+certainties. A further pruning mechanism is the designer's coined *temporal analytical relativistic measuring*, which means
+something specific: a position A with White to move, known to be to Black's advantage, reached again down the line with Black to
+move, has its difference determined from that position and the downstream primitive calculations, including the impact on zugzwang
+situations; the same position with the same tempo is cached, as a routing to the structure already mapped, symmetrically the same
+because the downstream position is the same. A race condition closes either by a decisive move, which can be pruned, or because it
+is forced by the move pool decision; whichever it is informs how to proceed. Pruning a position because it is not a viable path to
+the equilibrium is a route. Where the closing rests on move pool reduction and forced calculations, relativistic comparison finds
+whether this is the actual equilibrium, or whether none exists, exhaustively. The designer's last sentence was left trailing, and it
+is recorded as given.
+
+**Followed, and integrated.** Survey §4c.
+
+**Assessment — separate from the record above.**
+
+- **Nothing in it is new to the classification.** The same-position, same-tempo cache is survey §6 (convergence). The cross-tempo
+  comparison is the new element, and how it is recorded is unspecified.
+- **Not run.**
+
 ---
 
 ## 9. What remains open

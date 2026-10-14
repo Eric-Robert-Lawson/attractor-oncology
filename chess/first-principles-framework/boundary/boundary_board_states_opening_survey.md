@@ -219,6 +219,35 @@ sought. How large the pruned structure is remains the question.
 uncompleted because no carrier compels the move that enables it is established for each position (catalog §8.7, D-CR, with the
 carriers K0 to K4 of catalog §4).
 
+### 4c. The process as a whole (the designer's statement)
+
+The approach is to build a pruned structure tree from the opening position onward, focused on a specific opening. The primitives are
+understood as they evolve, through segmented exhaustive coverage. That coverage maps the branch structure, and the structure is
+pruned on what it shows. The aim is to map the choice phase of the choice-force dichotomy, where the boundary board state is the
+boundary. This is determined through perturbation and mining, which map out the pruned structure, and through discovering the
+primitive race conditions by segmented exhaustive coverage. The structure is pruned on the certainties of those race conditions.
+
+**Temporal analytical relativistic measuring.** The designer's coined term. It is not jargon; it means something specific. Take a
+position A, within the pruned structure, with White to move, and suppose it is known that from this position Black has the
+advantage. If, down the line, the same position is reached with Black to move, then it can be determined from that position and the
+downstream primitive calculations what the difference in tempo does, including its impact on zugzwang situations. If it is the same
+position with the same tempo (the same side to move), caching can be applied: simply a routing to the structure that has been
+mapped out, which is symmetrically the same because the downstream position is the same.
+
+**Reading the structure as it is mapped.** The primitives are calculated and understood as the structure is mapped, and a race
+condition closes in one of two ways: by a decisive move, which can be pruned, or because it is forced by the move pool decision.
+Whichever it is, it is informative on how to move forward. Pruning a position because it is evidently not a viable path to the
+equilibrium is a route. If the closing rests on move pool reduction and essentially forced calculations, then relativistic
+comparison finds whether this is the actual equilibrium, or whether none exists, exhaustively.
+
+**As stated, unfinished.** The designer's last sentence on the third part was left trailing ("exhaustively....."). It is recorded as
+given, and no completion of it is supplied here.
+
+**This file's reading, offered for correction.** Same position with the same side to move is already one cache entry (§6,
+convergence). What §4c adds, as read here, is the comparison of the same position across a different side to move. How that
+comparison is recorded (a new cache key, or a relation between two entries) is not specified, and nothing is invented for it.
+Position A's "advantage" is read as a value from the pruning (§4b) and not as a heuristic.
+
 ## 5. Local and global along the line
 
 A local candidate verified at depth d says nothing about whether an earlier boundary exists. To classify it as global, the survey
@@ -313,6 +342,8 @@ another segment, or is pruned entirely because what already exists in the struct
 
 **This file's reading, offered for correction.** The comparison of segments is a comparison of values, and a branch is excluded when
 the side to move has an alternative of value at least as good. Each such exclusion carries a certificate like any other prune (§4a).
+
+The whole process as the designer has stated it is in §4c.
 
 **Not yet specified.** The fields of the progression file; the order in which segments are taken; how the depth of a segment is
 chosen beyond the calibration signals of §7; how the boundary conditions of a segment at its depth limit are recorded; and how

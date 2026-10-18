@@ -30,6 +30,38 @@ path, the mobility unlocked by d6, and a small pool of deviations that threaten.
 
 **What has not been looked at.** White's position as the constructor, other than Bird's Opening, which came from another plan.
 
+**White's side, begun: the worked example narrowed to the central pawns (a statement).** The operation and its first steps, down to pawn
+moves as the only first moves that force a deviation from the plan, are in the survey §4i. This continues that example.
+
+Within two moves, pawn moves on the a, b, c, f, g and h files are not as impactful as the e and d pawns in a way that would obstruct the
+development of the plan inside the window. The scope is therefore the combinations of e and d pawn moves: ee (e4, then e5), ed (e4,
+then d4), de (d4, then e4) and dd (d4, then d5).
+
+This is why d6 is in the plan: any e or d pawn push after g6 can be followed by d6. From there it is a combinatorial tree.
+
+- **dd.** Black completes the plan; the d pawn is blocked by the d6 pawn, and d6 covers a knight development square as a primitive
+  impact. White may build a wall of pawns, but the wall is on light squares, so the dark squares are vulnerable to the dark-squared
+  bishop on g7.
+- **ed and de.** After the bishop move to g7, White pushes either the e pawn or the d pawn. The d push is an extension of the dd branch.
+  The e push offers a trade that would advantage Black, one pawn up with no White central pawns. The move sequence of this line was
+  not given.
+- **ee.** e4, g6, e5, d6. Black may lose this race. If so, against the first move e4, d6 as Black's first move is forced. That makes
+  e5 an important square for Black to contest, as a coverage primitive to calculate in this instance.
+
+Deviation into back-rank piece moves or the other pawn pushes is, temporally, a combination of a different opening in which those
+move-order choices could have been switched with no impact on the plan. It is excluded in the same way as the back-rank moves and the
+a, b, c, f, g and h pawn pushes.
+
+If de or ed is played, with any deviation moves, Black can follow the Sicilian fianchetto variant: c5 opens the queen's diagonal, and
+the c pawn is pushed past the knight development point, which puts pressure on White's d pawn push and prevents that primitive
+development race. The sequence is d4, g6, e4, d6, a knight or bishop developing move (not Ba6 or Bb5), Bg7, another developing move
+that does not involve the e or d pawns, then c5, d5. The development of the bishop and the knight is then a matter of compositional
+management. It is a bottleneck that can be foreseen from the calculation alone of c5 followed by the d5 push with the bishop and knight
+undeveloped, where the non-committed moves of both allow a choice of the cadence of development, based on the occupancy of d7.
+
+The designer has already calculated this, and it is the primitive calculation that shows this plan to be optimal for Black once the
+purpose is understood and the points where deviation is forced are known.
+
 **How the certainty arises (a statement).** Much of what chess is at an optimal level is an invisible scoping mechanism, under the
 calibration of the optimality of one's opponent. In population-level play at a high level, the rules that govern optimality do not
 change with who plays; they converge, though perhaps with different perspectives and understandings of them. At the highest level,
@@ -71,7 +103,7 @@ document existed for it. This file is that document.
 |---|---|
 | Black's schematic (g6, Bg7, d6) scoped as a rich vein from the initial position | Scoped by the designer; detailed in survey §4e |
 | The deduction of why it is more optimal than many other Black plans | Stated by the designer; recorded here; not compared in the documents against any other plan |
-| White's choices as constructor against it | Not yet examined |
+| White's choices as constructor against it | Begun: the worked example narrows White's first move to the central pawns (§2); not complete |
 | Bird's Opening | From another plan, per the designer; the other documents still mention it and are not changed |
 | A pruned structure on any line | Not run |
 | The first certified local boundary board state, with its path from the initial position, primitive calculations, composition and certification | Not found; this is the first milestone |

@@ -62,6 +62,13 @@ undeveloped, where the non-committed moves of both allow a choice of the cadence
 The designer has already calculated this, and it is the primitive calculation that shows this plan to be optimal for Black once the
 purpose is understood and the points where deviation is forced are known.
 
+**The calculations in the example are primitive calculations (a statement).** The calculations in the example are literally a primitive
+calculation: the race of the chained dependencies primitive (catalog §7), focused on scoping Black's opening schematic for optimality
+analysis from the anchored opening starting position. Development is a segmented chained dependency, anchored to the initial position.
+It emerges as a primitive calculation and is not framed as a development primitive: it arises through the segmented chaining of
+dependencies, with the perturbation of committed moves as the pruning mechanism. White's development is calculated in parity from the
+same anchor.
+
 **How the certainty arises (a statement).** Much of what chess is at an optimal level is an invisible scoping mechanism, under the
 calibration of the optimality of one's opponent. In population-level play at a high level, the rules that govern optimality do not
 change with who plays; they converge, though perhaps with different perspectives and understandings of them. At the highest level,

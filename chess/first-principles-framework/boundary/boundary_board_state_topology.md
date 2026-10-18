@@ -406,6 +406,8 @@ practical question: not "can we prove start-reachability directly," but "can
 we make real, incremental, prioritized progress toward it, using exactly the
 machinery already built, without needing the whole chain at once."
 
+*Note (survey §4c and §4f): the route to the start position is now also the forward trace of a pruned structure from the opening position, scoped to a chosen opening (`boundary_board_states_opening_survey.md` §4c). The backward scaffolding of this section remains, and survey §4f states reachability from certified positions as a backward direction beside the forward trace. How the two meet is not specified. The statement here that the chain cannot be traced in one leap is unchanged.*
+
 **The strategy, stated precisely.** Take the full set of currently-confirmed
 boundary states — everything already validated via Syzygy or this project's
 own solved materials (`boundary_board_states.md` §2). From each one, extend
@@ -2939,6 +2941,26 @@ sequence can be mitigated through a forced draw under optimal conditions.
 
 - **Scope.** A prune by the tempo criterion, and the fixed Black schematic, find candidates and do not close the structure (survey §4e).
 - **Belt.** Not assessed against the admission rule (catalog §1). Not a catalog entry.
+- **Not run.**
+
+### 8ak. Composition, what is cheap, and reachability from certified positions
+
+**The idea, as stated.** Primitive calculation includes identifying properly how the primitives compose. They are piece agnostic and
+define race conditions for a goal; how the goals depend on each other in a segmented way, and how the primitives are composed into
+the calculation, is another matter entirely. The only cheap things are the board position, whose turn it is, the catalog, and the
+certified boundary board state positions. Closure from the initial position to the boundary board state positions gives the weak
+solution. Proving those positions is exhaustive coverage from mate, hopefully within the 7-piece Syzygy tablesets. From a certified
+position, a move before it must reside within the closure, so the work is determining where the closure is and the boundary line from
+the initial position to whatever boundary exists. As the catalog grows the reachability can be exploited, along with other emergent
+relationships, to optimize the pruning.
+
+**Followed, and integrated.** Survey §4f.
+
+**Assessment — separate from the record above.**
+
+- **Tablebase scope.** Direct certification applies to positions of seven pieces or fewer; larger states rest on the case list, with
+  tablebase leaves (survey §4f).
+- **Composition** beyond the three primitives is not specified.
 - **Not run.**
 
 ---

@@ -342,6 +342,49 @@ protective belt, something to use in the pruning process and to understand optim
   calculation. For positions further down the line, the definition makes tempo a result of the primitive calculations, so the
   criterion that prunes branches surrendering it is applied where that result is available.
 
+### 4f. Composition, what is cheap, and reachability from certified positions (the designer's statement)
+
+**Composition.** Primitive calculation is not just knowing the primitives and calculating them. It is how to identify properly how
+the primitives compose. The primitives are piece agnostic and define race conditions for a goal. How those goals depend on each
+other compositionally, in a segmented way, and how the primitives are composed to create the calculation, is another matter
+entirely.
+
+**What is cheap.** The only cheap things are: the board position; whose turn it is; the primitive catalog; and the boundary board
+state positions that have been validated and certified.
+
+**Closure and certification.** If closure is shown from the initial game position to the boundary board state positions, the weak
+solution is provided. Proving the boundary board state positions themselves is a matter of exhaustive coverage from mate, which
+hopefully resides in the known 7-piece Syzygy tablesets.
+
+**Reachability from certified positions.** Once a proven certified position, or set of positions, exists, work proceeds on optimal
+principles of reachability: a move before a certified position must reside within the closure. It is then a matter of determining
+where that closure is, and the boundary line that must exist from the initial position to whatever boundary exists. As the catalog
+grows, the reachability can be exploited, and other emergent relationships in the structure of the program can be used to optimize
+the pruning mechanism and the program as a whole.
+
+**This file's reading, offered for correction.**
+
+- **Tablebase scope.** A tablebase certifies a boundary state directly only if the position has seven pieces or fewer. For a state
+  with more pieces, the certificate is the complete case list of §4a, and the tablebase can certify the leaves of the refutation
+  lines where they reach seven pieces or fewer.
+- **Two directions.** Reachability from certified positions is a backward direction alongside the forward trace from the opening.
+  How the two are combined is not specified here.
+- **Composition is not specified.** The documents hold the joint compatibility of §4a and the catalog's composition rules for the
+  three primitives. How further primitives and goals are composed is the part the designer calls another matter entirely, and
+  nothing is filled in for it here.
+
+### 4g. The end-state test in one place (a summary of §2a, §4b and §4d)
+
+This is a summary and adds nothing to them; the statements are the designer's, in those sections.
+
+- The start is a premise: drawn, because no forced win has been found and no primitive race has committed moves (§4b, §2a).
+- The pruned structure is built from the opening position by segmented exhaustive coverage. Decisive forced positions are pruned,
+  each with its primitive and certificate (§4a, §4c).
+- What remains is tested (§4d): there are no forced win moves, a draw is available, and a deviation from the draw moves opens the door
+  to a forced sequence in the losing favor. The symmetry exists only when that holds, and it is the boundary board state (§4b).
+- If the entire structure is pruned, there is no equilibrium boundary board state. If something remains, it is analyzed (§4d).
+- A closure of the global boundary states from the initial position, given a drawn start, is the weak solution (§2a, §4f).
+
 ## 5. Local and global along the line
 
 A local candidate verified at depth d says nothing about whether an earlier boundary exists. To classify it as global, the survey
@@ -483,6 +526,7 @@ cache entries; and the primitives that the line shows to be missing, found by th
   earlier plan for Bird's is not withdrawn by the documents, and the choice between them is the designer's.
 - The sense of tempo in §4e: answered by the designer (§4e, "Tempo, as defined"). It is the explicit, calculable metric stated there,
   and not a sense or a heuristic. How its use as a scoping criterion is recorded on the pruned edges is not specified.
+- How primitives are composed to create the calculation (§4f): the designer says it is another matter entirely. Not specified.
 
 ## 11. Provenance
 

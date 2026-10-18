@@ -2981,6 +2981,16 @@ status. Everything except White's constructor path is, to the designer, resolved
   first one.
 - **Not run.**
 
+### 8am. Pruning by primitive race loss: which moves force a deviation
+
+**The idea, as stated.** Take a planned opening framed as an optimal opening for one side, and ask which moves by the other side force a deviation from it by making a move of the plan lose a primitive race condition. Look at what the plan's first move changes, ask which of the opponent's pieces can reach the contested line within the race's move count, and compare the result against the sum of the deviating responses. In the example (Black's g6, Bg7, d6), only pawn moves of the first move remain. The calculation runs from the anchor, which is a constant in every game, and one counter-example beating a race of a plan invalidates it as optimal play.
+
+**Followed, and integrated.** Survey §4i.
+
+**Assessment — separate from the record above.**
+
+- **Not run.**
+
 ---
 
 ## 9. What remains open

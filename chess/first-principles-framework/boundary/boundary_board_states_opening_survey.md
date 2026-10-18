@@ -430,6 +430,28 @@ the set Black response) is, to the designer, resolved.
 - **"Scoping the difference"** is read as the positions the forward trace reaches that Syzygy does not resolve, where exhaustive
   coverage is then done from the known Syzygy solutions. If it means something else, this reading is wrong.
 
+### 4i. Pruning by primitive race loss: which moves force a deviation (the designer's statement)
+
+*"Schematic" is the designer's word for an opening framed as an optimal opening for one side. It is not defined elsewhere in the record,
+and no definition is added here.*
+
+The operation: take a planned opening (here Black's g6, then Bg7 or d6 depending on White's move, then the remaining move) and ask
+which moves by the other side invalidate it and force a deviation, by making a move of the plan lose a primitive race condition. Why
+such a move works is informative for the pruning and for how segmented race condition dependencies compose.
+
+Stepwise: look at what the plan's first move changes. g6 opens the dark-squared diagonal across the board to the rook, the ray Bg7 is
+meant to occupy, and the plan's race needs two moves for it. Ask which of the opponent's pieces can reach that line within the race's
+move count: the queen, knights and rooks cannot in time; pawn structure can; the dark-squared bishop can after a b-pawn move. Two
+against two, with White moving first, Black loses the race. This is also compared against the sum of Black's responses that deviate
+from the plan: if g6 is not yet committed, Black can abandon it. So the optimality of the disrupting move must itself be compared
+against the other moves. This eliminates the impact of any piece move besides pawn moves for the first move that deviates Black from
+the plan.
+
+**The protocol it follows.** The anchor is the initial position, whose piece structure and race conditions are a constant in every
+game. Committed moves decisively change race conditions, and the calculation runs continuously from the anchor, picking up after each
+perturbation. One counter-example beating a race of a plan invalidates it as optimal play. The designer states this generalizes far
+beyond the example.
+
 ## 5. Local and global along the line
 
 A local candidate verified at depth d says nothing about whether an earlier boundary exists. To classify it as global, the survey

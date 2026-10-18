@@ -319,6 +319,8 @@ that pawn. The general schematic of Black's opening is: White moves, b6; White m
 The designer reads this as informative because of the dichotomy: Black is reactive to White and White is the constructor, at the
 highest level and under optimal settings.
 
+How the designer's certainty arises from this observation is in `boundary_board_states_start_selection.md` §2.
+
 **Why, from the primitives.** The combination g6, Bg7, d6 makes progress on the development race primitives in a particular way,
 anchored on the initial position. g6 is a bishop development, Bg7 is the bishop development move, and d6 is a development move that
 unlocks the mobility of several pieces at once: it opens the potential of the c pawn push, with the queen ray and Black's bishop

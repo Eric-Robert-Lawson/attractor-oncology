@@ -30,6 +30,26 @@ path, the mobility unlocked by d6, and a small pool of deviations that threaten.
 
 **What has not been looked at.** White's position as the constructor, other than Bird's Opening, which came from another plan.
 
+**How the certainty arises (a statement).** Much of what chess is at an optimal level is an invisible scoping mechanism, under the
+calibration of the optimality of one's opponent. In population-level play at a high level, the rules that govern optimality do not
+change with who plays; they converge, though perhaps with different perspectives and understandings of them. At the highest level,
+the program will be able to aid in understanding and identifying why a move was made: whether by deliberate calculation of the
+primitives, or because the position looks good and is memorable to the player from a branch with good outcomes. Whatever the
+mechanism of arriving at optimal play, optimal play is optimal play. The designer's certainty of Black's schematic is not that experts
+play it and so it must be optimal. It comes from a population-level observation of a pattern: a common invariant opening structure
+for Black, commonly played in speed chess across many players, in which each of the three moves has a direct, explainable impact on
+the primitive race conditions, especially relative to the initial start position and to development, and relative to other moves and
+their potential developmental cost. The deduction was made from the principles of the program, and it is seen to align with what is
+observed in optimal play.
+
+*Correction recorded: an earlier remark by this assistant treated agreement with expert play as the designer's evidence and called it
+weak. That misread the statement above. The evidence is the deduction from the primitives, and the observation is what directed it.*
+
+**The comparison against alternatives (a statement).** The alternatives are alternative moves, measured on the primitive catalog. If the
+primitive catalog is exhaustive, the three moves can be evaluated on it, relative to the relativistic perturbations of the
+alternative moves, to measure explicitly the opportunity cost of each move relative to its alternatives. The designer's sentence
+was left trailing, and it is recorded as given.
+
 **The claim made of the deduction.** Even an incomplete program can inform optimal understanding and over-the-board decisions. Using
 the primitives already in the catalog and the program built to this point, the deduction identifies and explains why this
 schematic is more optimal, in a generalized sense, than many other Black opening plans. The designer offers the deduction as an
@@ -62,6 +82,12 @@ document existed for it. This file is that document.
 - **The deduction is a prediction the structure can test.** Its properties (progress on the development race primitives, no negative
   effect on the others, no commitment to a branch) can each be checked move by move in the catalog's terms. The same check on other
   Black plans would give the comparison the designer describes. Neither check is recorded as done.
+- **The comparison in the record's terms.** The perturbation of a move is its change in the primitive state (topology §8y, ΔS). The
+  comparison is of the perturbation of each of the three moves with that of each alternative move at the same point. Where one
+  move's perturbation is at least as good in every component, no weighting is needed. Where components trade against each other, the
+  record's own position is that values come from the pruning and the losing conditions of the primitives, not from a score, so the
+  ordering would come from there. The catalog has three primitives at present, so a comparison now would carry a stated residual
+  for what the missing primitives would add. This is a reading, and it is not yet specified how the comparison is recorded.
 - **Over-the-board use is separate from the closure claim.** Using the catalog to explain or choose moves in play does not require
   the closure of survey §2a, and it does not test it either.
 - **A fixed Black schematic fixes Black's pool.** What the survey finds against it is a candidate line. The closure still requires the

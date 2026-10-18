@@ -91,6 +91,14 @@ The closure is expected to be achieved through the cyclical structure, or throug
 classifies the branch upstream once it is discovered. With the ruling of `boundary_board_states.md` §14 item 10, a forced terminal
 draw with no choice to deviate is also a realization.
 
+**The existence of the boundary (the designer's statement).** A decisive position is pruned. If the pruning goes all the way up to the
+initial position, chess is solved by force from the initial position. If it does not, there is an explicit boundary, either the
+initial position or positions downstream of it. This is trivial logic and does not wait on an enumeration: given that the initial
+position is not won by force, the boundary exists and cannot not exist. Whether it is the initial position or a closure more distant
+from it is yet to be calculated. The boundary board state is the equilibrium of the primitives under joint compatibility: the
+ability to force a draw down a line that would otherwise be decisively losing, so that the position would be a decisive loss if not
+for the ability to force the draw.
+
 **What can happen, as the designer states it.**
 
 | Outcome | Reading |
@@ -105,9 +113,11 @@ The hard core therefore has one failure condition, which is also a result: a cer
 **Assessment — separate from the record above.**
 
 - **The relation to the record.** That a transition from choice to force exists on every route to a decisive position follows from a
-  drawn start (topology §5), and the collective version is topology §3. The closure claim adds that each such transition is a boundary
-  state in the sense of `boundary_board_states.md` §14 items 7, 8 and 10. That addition is the programme's claim, and the enumeration
-  tests it.
+  drawn start (topology §5), and the collective version is topology §3. The designer states that the existence of the boundary
+  follows with certainty from this, and the enumeration does not test it. What the enumeration does is locate the boundary and
+  certify it, and it would show a certified forcing line if the premise below failed. The closure claim states that the boundary is
+  a boundary state in the sense of `boundary_board_states.md` §14 items 7, 8 and 10, which the designer holds to follow from the
+  definition. No argument for or against that is recorded here beyond the designer's statement.
 - **The premise.** That the initial position is a draw is not proven. The closure is stated conditional on it, and enumerating the
   closure would prove it.
 
@@ -363,13 +373,21 @@ where that closure is, and the boundary line that must exist from the initial po
 grows, the reachability can be exploited, and other emergent relationships in the structure of the program can be used to optimize
 the pruning mechanism and the program as a whole.
 
+**Where the two directions meet, and where the work stands (the designer's statement).** The problem is scoped as a compositional
+application of known primitives, and then the calculations are made with the known certified boundary board state positions, to
+scope from the boundary positions when the closure of the boundary catalog is complete. Until then the work is to enumerate that
+catalog and certify its positions, to prove the closure; then the tempo can be calculated explicitly. From that point the
+Syzygy forward and backward trace and scope are reduced, from the boundary line of the catalog to the mating positions, and forward
+trace from that boundary may help solve the backtrace. The two directions therefore meet at the boundary line of the catalog.
+
 **This file's reading, offered for correction.**
 
 - **Tablebase scope.** A tablebase certifies a boundary state directly only if the position has seven pieces or fewer. For a state
   with more pieces, the certificate is the complete case list of §4a, and the tablebase can certify the leaves of the refutation
   lines where they reach seven pieces or fewer.
-- **Two directions.** Reachability from certified positions is a backward direction alongside the forward trace from the opening.
-  How the two are combined is not specified here.
+- **Two directions.** Reachability from certified positions is a backward direction alongside the forward trace from the opening. They
+  meet at the boundary line of the catalog, as the designer states above. An earlier version of this note called the combination
+  unspecified; that was a misreading.
 - **Composition is not specified.** The documents hold the joint compatibility of §4a and the catalog's composition rules for the
   three primitives. How further primitives and goals are composed is the part the designer calls another matter entirely, and
   nothing is filled in for it here.

@@ -406,7 +406,7 @@ practical question: not "can we prove start-reachability directly," but "can
 we make real, incremental, prioritized progress toward it, using exactly the
 machinery already built, without needing the whole chain at once."
 
-*Note (survey §4c and §4f): the route to the start position is now also the forward trace of a pruned structure from the opening position, scoped to a chosen opening (`boundary_board_states_opening_survey.md` §4c). The backward scaffolding of this section remains, and survey §4f states reachability from certified positions as a backward direction beside the forward trace. How the two meet is not specified. The statement here that the chain cannot be traced in one leap is unchanged.*
+*Note (survey §4c and §4f): the route to the start position is now also the forward trace of a pruned structure from the opening position, scoped to a chosen opening (`boundary_board_states_opening_survey.md` §4c). The backward scaffolding of this section remains, and survey §4f states reachability from certified positions as a backward direction beside the forward trace. The two meet at the boundary line of the catalog (survey §4f). The statement here that the chain cannot be traced in one leap is unchanged.*
 
 **The strategy, stated precisely.** Take the full set of currently-confirmed
 boundary states — everything already validated via Syzygy or this project's

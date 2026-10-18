@@ -261,59 +261,86 @@ something remains, it can be analyzed.
 exist when the following holds: there are no forced win moves, a draw is available, and a deviation from the draw moves opens the
 door to a forced sequence in the losing favor.
 
-### 4e. Constructor and reactor; the tempo of the initial position (the designer's statement)
+### 4e. The roles of the two sides and the tempo of the initial position (the designer's statement)
 
-The designer offers this as a perspective that came independently, from watching high-level play, and says it may already exist in
-theory under some name (the designer is not formally read in chess theory).
+This is grounded in the two-phase dichotomy of choice and force and in the boundary board state barrier, and not in particular
+players, styles or techniques. It comes from the designer's own observation, independent of chess theory, and whether it already
+exists in theory under a name (a specific opening, say) is to be noted if it does.
 
-**The tempo of the initial position.** The work is the forward trace element of a weak solution, as for checkers, applied to chess,
-anchored at the initial start position. A subtlety under the development of pieces from that position is the tempo of the initial
-position, with White having the tempo. It is a bounded structural fact about the initial position, and it is informative.
+**The tempo of the initial position.** The survey anchors at the initial position, as the forward trace of a weak solution. A
+subtlety beneath this is the tempo of the initial position: White has it. It is a bounded structural fact about the initial position
+of chess, and it is informative. Assuming the initial position cannot be won by force from the first move, the two phases exist.
 
-**Constructor and reactor.** Under optimal play, with the global boundary board state structure, the two sides have distinct roles.
-White is the constructor and Black is the reactor. White chooses which opening line to navigate, to arrive at the boundary board
-state position at which the game draws. Black reacts, choosing from a move pool that White has chosen. White makes the most choices,
-and Black makes choices within the structural composition White has started. White also has a choice to maintain tempo or to give
-Black tempo. Optimal play to arrive at the boundary board state may not depend on maintaining tempo, but it is a choice that Black
-cannot make and White makes. This is a criterion that can be used to scope the search.
+**Tempo, as defined (the designer's statement).** Tempo is not a loosely understood term here. It has a direct link to the program in
+explicit terms, and it is an emergent property of the whole structure. From the initial position White is first to move, and this is
+taken as a temporal advantage to White relative to Black, from the anchoring position of the initial game start. The calculation of
+tempo, without exhaustive coverage of the combinatorial branching, is unlikely to be well understood, if at all, and this is where
+the program can bring an explicit advantage. The balance between constructor and reactor has its anchoring point of equilibrium
+where both sides have the same tempo relative to the primitive race condition calculations. Those are the boundary board state
+positions, where the move pool is only draw moves or loss moves for each of White and Black. In a forced phase, the constructor (the
+side with the tempo) forces the outcome by winning on a race condition primitive. In the choice phase, the constructor is
+constructing the path toward the boundary board state position with the tempo, and Black is reacting to the constructed structure
+of White, toward a limited pool of boundary board state positions under optimal play. Tempo in this sense is who is in the
+driver's seat under optimal play, for both White and Black. Entire positions can be differentiated as win, draw or loss by whose
+turn it is, which is a temporal differentiation marker. Tempo can therefore be determined exhaustively, or from the board
+position, whose turn it is, and the exhaustive joint compatible primitive calculations, which show who has the tempo under optimal
+conditions. In the choice phase the reason is not that the joint compatible exhaustive primitive calculations are too
+combinatorially large. It is that any primitive race condition for a forcing sequence can be mitigated through a forced draw under
+optimal conditions. Tempo was always understood explicitly in this way. It is not a sense or a heuristic: it is a first-principles
+calculable metric that can be defined precisely with the program.
 
-**Tempo as a pruning criterion.** Under optimal play standards, maintaining the tempo when one has it is likely optimal in most
-situations for winning conditions such as forcing a sequential mate. So, for discovery purposes, branches that surrender tempo can be
-pruned, to find the boundary board state positions that maintain White's momentum from the beginning of the game. During the discovery
-mining this can be useful.
+**The roles under optimal play.** With the global boundary board state structure, White and Black have distinct roles. White is the
+constructor and Black is the reactor. White chooses which opening line to navigate, the direction in which to arrive at the
+boundary board state position where the game draws. Black reacts to those choices, from a pool of choices that White's choices have
+set. White makes all of the choice, and Black makes choices within the structural composition White has started. White also has a
+choice, under optimal play, to maintain the tempo or to give Black the tempo. Optimal play to arrive at a boundary board state
+position may not depend on maintaining the tempo, but it is a choice that Black cannot make and White makes.
 
-**The observation from play.** The fianchetto is seen more often with Black, unless White chooses a line in which it belongs through
-deep study and analysis. In speed chess Black appears to choose, almost as an automatic schematic, a fianchetto on the king side with
-a pawn push (typically the e-pawn), or a pawn push reactive to White's development. The general schematic of Black's opening is:
-White move, b6, White move, either Bb7 or a pawn push, White move, and so on.
+**A criterion to scope the search.** Maintaining the tempo when one has it is, under most situations, likely optimal for winning
+conditions such as forcing a sequential mate. So, for discovery, branches that surrender the tempo can be pruned. Boundary board
+state positions that maintain White's momentum from the beginning of the game are then found, and positions that give the tempo are
+entirely pruned out of the discovery mining.
 
-**Why it follows from the program, as stated.** With the initial position as the anchor, the moves b6 and Bb7 are bishop development
-(a development race condition), and e6 is a development move that unlocks the mobility of several pieces at once: the queen's ray
-and a bishop's ray, mobility for the king, and a fortress without really committing to a castling side. These moves are not
-negatively impactful on the other race condition primitives, and they do not commit down a particular branching path that would make
-any of them a blunder from the initial position anchor. White constructs while Black makes moves that directionally resolve the
-dependencies of the race condition primitives, reacting to White's construction, and the moves that deviate and threaten the position
-are in a small pool. So the structural result of the primitives, as the causality of optimal play, can be observed in actual play,
-and the program explains why this reactive schema is optimal and is observed often.
+**The observation of Black's schematic.** The fianchetto is seen more often played by Black, unless White chooses a line in which the
+fianchetto was part of deep study. In speed chess, Black appears to choose a fianchetto schematic almost as an automatic move
+scheme: a fianchetto on the king side with a pawn push (typically the e pawn), or a pawn push reactive to White's development of
+that pawn. The general schematic of Black's opening is: White moves, b6; White moves, either Bb7 or the pawn push; White moves.
+The designer reads this as informative because of the dichotomy: Black is reactive to White and White is the constructor, at the
+highest level and under optimal settings.
 
-**What it changes in the method.** The first line to survey is not Bird's Opening, which is obscure, but the richest vein of the
-branch network. White's move choices are made to construct against Black's known schematic, with the pruning methodology and
-potentially with the tempo constraint. The designer regards this as a missing piece of the protective belt, as something to use in the
-pruning process, and as a way to understand optimal chess when it is seen.
+**Why, from the primitives.** The combination g6, Bg7, d6 makes progress on the development race primitives in a particular way,
+anchored on the initial position. g6 is a bishop development, Bg7 is the bishop development move, and d6 is a development move that
+unlocks the mobility of several pieces at once: it opens the potential of the c pawn push, with the queen ray and Black's bishop
+ray, and gives the king mobility and a fortress without committing to the castling side. These moves also do not impact the other
+race condition primitives negatively, and do not commit to a branching path that would make any of them a blunder from the initial
+position anchor. This allows White to construct while Black makes moves that directionally resolve race condition primitive
+dependencies, in reaction to White's construction. Moves that deviate and threaten the position are in a small pool. The designer
+reads this as the structural result of the primitives on the causality of optimal play showing in actual play, with the program
+allowing us to understand why this reactive schema is optimal and observed often.
+
+**What it informs.** The place to start evaluating is not Bird's Opening, which is obscure, but the richest vein of the branch
+network. There the pruned structure is enumerated by making White's move choices to construct against the known Black schematic,
+with the pruning methodology, and possibly with the tempo constraint above. The designer regards this as a missing piece of the
+protective belt, something to use in the pruning process and to understand optimal chess when it is seen.
 
 **This file's reading, offered for correction.**
 
-- **Not a primitive under the admission rule** (catalog §1). The roles and the tempo of the initial position are read as an input fact
-  and a criterion for scoping the search, and not as a race condition with terms. Tempo is already a term in the catalog. The
-  catalog is unchanged.
-- **Tempo pruning is a scope choice and not a certificate.** It narrows discovery to the lines that keep White's momentum. A
-  boundary state found there is found. The absence of one there says nothing about the lines that were left out, which the closure
-  of §2a still includes. How "maintain" and "surrender" tempo are told apart in a given position is not specified.
-- **The Black schematic is a prediction until the pruning runs.** The structure should show these moves surviving and White's
-  attempts against them refuted by named races. It is an observation from play until then. Not run.
-- **One point to settle.** The statement says a king-side fianchetto, and the schematic given (b6, Bb7) is on the queen side. Which
-  is meant is not decided here.
-- **Not checked against opening theory.** The book in §8 is the place to check whether the schema carries a name.
+- **A prune by tempo is a prune for discovery.** The closed pruned structure of §4a requires every legal move to be inside the region
+  or a certified forced loss. A branch that surrenders the tempo and is pruned only by the criterion is therefore recorded as pruned
+  by scope, uncertified, and not as closed. The boundary states found under the criterion are candidates anchored on White's
+  momentum. Whether a boundary state exists that does not maintain it is left open by the criterion.
+- **The same holds for the fixed Black schematic.** Playing against a fixed Black schematic fixes Black's pool, so what it finds is
+  a candidate line, and the closure of §2a still requires the other Black replies.
+- **The names.** The setup g6, Bg7, d6 appears in opening theory in the Modern Defence, the Pirc Defence, the King's Indian Defence
+  and the Dragon variation of the Sicilian, among others; b6 with Bb7 appears in Owen's Defence and the Queen's Indian. This is
+  noted from memory and not checked here.
+- **The belt.** The designer's placing of this in the protective belt has not been assessed against the admission rule (catalog §1).
+  It is not a catalog entry. How the tempo of the initial position relates to the tempo terms of the catalog (§4, §8) is not
+  specified.
+- **Tempo and the earlier statements.** The definition above is the same marker as in §4c, where the same position with a different
+  side to move is compared. The tempo of the initial position (White to move) is the one tempo fact that is known before any
+  calculation. For positions further down the line, the definition makes tempo a result of the primitive calculations, so the
+  criterion that prunes branches surrendering it is applied where that result is available.
 
 ## 5. Local and global along the line
 
@@ -386,6 +413,8 @@ This is a calibration problem. The depth and the line are chosen so that the web
 - The ancestor set that a global classification would have to check is not enumerable.
 - The candidates at the depth chosen are interdependent, and no candidate's verification can be separated from the rest.
 
+The designer's statement on where to start (§4e) bears on the choice of line.
+
 When a signal fires, the line is changed or the depth is moved, and the result is recorded as a cache entry for the abandoned
 choice (a note that the web was too large at this depth, which is information and not a certificate).
 
@@ -411,8 +440,6 @@ another segment, or is pruned entirely because what already exists in the struct
 the side to move has an alternative of value at least as good. Each such exclusion carries a certificate like any other prune (§4a).
 
 The whole process as the designer has stated it is in §4c.
-
-The designer has since revised the first line to survey (§4e): the richest vein of the branch network in place of Bird's Opening.
 
 **Not yet specified.** The fields of the progression file; the order in which segments are taken; how the depth of a segment is
 chosen beyond the calibration signals of §7; how the boundary conditions of a segment at its depth limit are recorded; and how
@@ -452,6 +479,10 @@ cache entries; and the primitives that the line shows to be missing, found by th
 - Whether the width profile along a line tracks the choice-to-force boundary that the primitives locate. A prediction to be stated
   before it is run.
 - How a book's assertion enters the case list where the position is outside the book's lines.
+- Which line to start with, given §4e: the designer's statement is to start with the richest vein and not with Bird's Opening. The
+  earlier plan for Bird's is not withdrawn by the documents, and the choice between them is the designer's.
+- The sense of tempo in §4e: answered by the designer (§4e, "Tempo, as defined"). It is the explicit, calculable metric stated there,
+  and not a sense or a heuristic. How its use as a scoping criterion is recorded on the pruned edges is not specified.
 
 ## 11. Provenance
 

@@ -2891,6 +2891,25 @@ is recorded as given.
   comparison is the new element, and how it is recorded is unspecified.
 - **Not run.**
 
+### 8ai. Symmetry emerges from the pruned structure
+
+**The idea, as stated.** The symmetry emerges from the structure when it is pruned sufficiently. The pruned portions are decisive
+forced positions, in favor or not, with the primitives understood from the pruning. What remains are the positions that are not
+decisive, and within forced sequences those where draws are still possible, forced wins are not reachable, and there are only
+forced losses on deviation from the drawing choice. That is where the symmetry emerges. If the decisive and forced positions are all
+pruned, so that the entire structure is pruned, there is no equilibrium boundary board state position. If something remains, it can
+be analyzed.
+
+**Followed, and integrated.** Survey §4d.
+
+**The designer's clarification.** The symmetry is a measurable emergent property of existing at all after the pruning. It can only
+exist when there are no forced win moves, a draw is available, and a deviation from the draw moves opens the door to a forced
+sequence in the losing favor.
+
+**Assessment — separate from the record above.**
+
+- **Not run.**
+
 ---
 
 ## 9. What remains open

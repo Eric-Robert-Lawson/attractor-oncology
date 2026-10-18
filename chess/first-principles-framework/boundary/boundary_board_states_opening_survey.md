@@ -248,6 +248,19 @@ convergence). What §4c adds, as read here, is the comparison of the same positi
 comparison is recorded (a new cache key, or a relation between two entries) is not specified, and nothing is invented for it.
 Position A's "advantage" is read as a value from the pruning (§4b) and not as a heuristic.
 
+### 4d. Symmetry emerges from the pruned structure (the designer's statement)
+
+The symmetry emerges from the structure when it is pruned sufficiently. What is pruned are the decisive forced positions, whether
+in favor of the side or not, with the primitives understood from the pruning. What remains are the positions that are not
+decisive, and within forced sequences those where draws are still possible, where forced wins are not reachable, and where the
+only forced losses come from deviating from the drawing choice. That is where the symmetry emerges. If the decisive and forced
+positions are all pruned, so that the entire structure is pruned, there is no equilibrium boundary board state position. If
+something remains, it can be analyzed.
+
+**The designer's clarification.** The symmetry is a measurable emergent property of existing at all after the pruning. It can only
+exist when the following holds: there are no forced win moves, a draw is available, and a deviation from the draw moves opens the
+door to a forced sequence in the losing favor.
+
 ## 5. Local and global along the line
 
 A local candidate verified at depth d says nothing about whether an earlier boundary exists. To classify it as global, the survey

@@ -10,7 +10,8 @@ Companion documents: `boundary_board_states.md` (the concept and methods; §1 th
 items 4 and 7 to 11), `boundary_board_state_topology.md` (the record; §3 status is local and unconditional, §5 start-reachability,
 §8h footprints, §8p the guard rail on absent paths, §8r forward anchoring, §8x the proven entry, §8ac, §8ad, §8ae, §8af and §8ag the designer's
 statements behind this file), `boundary_board_state_primitive_catalog.md` (the three primitives, the admission rule),
-`boundary_board_states_case_study_otb.md` (the game).
+`boundary_board_states_case_study_otb.md` (the game), `boundary_board_states_start_selection.md` (where to start: the
+discovery of the first line to survey).
 
 **How this file is organized.** What is the designer's statement is marked as such and kept apart from this file's organizational
 choices (§11), in the manner of the catalog's §10. Where this file reads one of the designer's statements against an existing
@@ -456,7 +457,8 @@ This is a calibration problem. The depth and the line are chosen so that the web
 - The ancestor set that a global classification would have to check is not enumerable.
 - The candidates at the depth chosen are interdependent, and no candidate's verification can be separated from the rest.
 
-The designer's statement on where to start (§4e) bears on the choice of line.
+The designer's statement on where to start (§4e) bears on the choice of line. The progress of that discovery is recorded in
+`boundary_board_states_start_selection.md`.
 
 When a signal fires, the line is changed or the depth is moved, and the result is recorded as a cache entry for the abandoned
 choice (a note that the web was too large at this depth, which is information and not a certificate).

@@ -404,6 +404,30 @@ This is a summary and adds nothing to them; the statements are the designer's, i
 - If the entire structure is pruned, there is no equilibrium boundary board state. If something remains, it is analyzed (§4d).
 - A closure of the global boundary states from the initial position, given a drawn start, is the weak solution (§2a, §4f).
 
+### 4h. The order of work (the designer's statement)
+
+The combinatorial explosion is scoped by finding the furthest downstream branch and certifying its boundary board state status
+first, hopefully within Syzygy. Then the table is used with reachability to enumerate, from the forward trace, the other reachable
+positions that are enumerated in Syzygy. Then the difference is scoped, exhaustive coverage is done from the known Syzygy
+solutions, and the work builds up from there. Certified local boundary board state positions are cataloged first (§4f, and
+`boundary_board_states_start_selection.md`), and the classification as global is certified afterwards.
+
+This is a constructive process for the protective belt, so it cannot all be planned out in advance. The designer understands what is
+required and the steps needed to build out, and the steps beyond the above are not written here. Leveraging the structure of the
+program along the way to add to the protective belt is part of the process.
+
+The uncertainty, as the designer states it: whether downstream solutions can be arrived at and cataloged from the forward trace
+within the Syzygy limitations; whether only local boundary board state positions can be certified; and whether the work can go back
+from there to verifying global status eventually. Everything other than the starting position for White (a constructor path, against
+the set Black response) is, to the designer, resolved.
+
+**This file's reading, offered for correction.**
+
+- **It matches the scaffolding of topology §7,** which also starts from confirmed boundary states and extends upstream, recording
+  where it stops. What §4h adds is that the first confirmed state is sought by the forward trace from a chosen opening.
+- **"Scoping the difference"** is read as the positions the forward trace reaches that Syzygy does not resolve, where exhaustive
+  coverage is then done from the known Syzygy solutions. If it means something else, this reading is wrong.
+
 ## 5. Local and global along the line
 
 A local candidate verified at depth d says nothing about whether an earlier boundary exists. To classify it as global, the survey

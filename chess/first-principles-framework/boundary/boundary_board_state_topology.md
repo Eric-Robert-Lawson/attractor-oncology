@@ -2963,6 +2963,24 @@ relationships, to optimize the pruning.
 - **Composition** beyond the three primitives is not specified.
 - **Not run.**
 
+### 8al. The order of work
+
+**The idea, as stated.** Scope the combinatorial explosion by finding the furthest downstream branch and certifying its boundary
+board state status first, hopefully within Syzygy; then use the table with reachability to enumerate, from the forward trace, the other
+reachable positions that are enumerated in Syzygy; scope the difference, do exhaustive coverage from the known Syzygy solutions, and
+build up from there. Certified local positions are cataloged first, and global status is certified afterwards. It is a constructive
+process for the protective belt and cannot all be planned in advance. The uncertainty is whether downstream solutions can be reached
+and cataloged within the Syzygy limitations, whether only local states can be certified, and whether the work can return to global
+status. Everything except White's constructor path is, to the designer, resolved.
+
+**Followed, and integrated.** Survey §4h.
+
+**Assessment — separate from the record above.**
+
+- **Consistent with §7.** The scaffolding there starts from confirmed boundary states; §4h adds the forward trace as the source of the
+  first one.
+- **Not run.**
+
 ---
 
 ## 9. What remains open

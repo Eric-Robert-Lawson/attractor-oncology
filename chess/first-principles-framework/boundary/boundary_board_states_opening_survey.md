@@ -530,9 +530,11 @@ cache entries; and the primitives that the line shows to be missing, found by th
 
 ## 10. Open questions
 
-- The exact meaning of "first" over all paths: the ancestor set to be checked, and whether it is the set of positions reachable by
-  non-losing play only (the §5 chain) or by all legal play. The reading of §2 takes the former for *global* and leaves the latter
-  to local candidates.
+- The meaning of "first" over all paths: answered by the designer's own definitions in §2. A global boundary state is the first
+  boundary between choice and force from the initial position, across all paths that reach it, and the only ground for classifying a
+  verified state as non-global is a boundary state that precedes it on a non-losing path that reaches it. The ancestor set is
+  therefore the positions on non-losing paths to it. (An earlier version of this item asked whether it was non-losing play or all
+  legal play; the designer's statement already settles it.)
 - Whether C1 should also claim anything about positions reached by deviations from a forced win (§6).
 - How a cycle of interdependent candidates is verified when it is small enough to verify at all: whether the web is verified as
   one unit.
@@ -547,6 +549,12 @@ cache entries; and the primitives that the line shows to be missing, found by th
 - The sense of tempo in §4e: answered by the designer (§4e, "Tempo, as defined"). It is the explicit, calculable metric stated there,
   and not a sense or a heuristic. How its use as a scoping criterion is recorded on the pruned edges is not specified.
 - How primitives are composed to create the calculation (§4f): the designer says it is another matter entirely. Not specified.
+
+**The designer on what waits (a statement).** The comparison across tempo does not apply until there is enough exhaustive
+certainty from both the local and the global catalogs of boundary board state positions. The compositional question is a matter of
+finding a first example. The cache key for a repetition cycle is not something the designer recognizes, and is assumed to be
+discovered. Pruning relative to temporal decisions is a modular addition to the data, to be discovered once the prerequisites for
+making those decisions exist. These are therefore not prerequisites for the first certified local boundary board state.
 
 ## 11. Provenance
 

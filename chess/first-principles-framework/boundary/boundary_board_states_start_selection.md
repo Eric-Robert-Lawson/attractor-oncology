@@ -35,6 +35,13 @@ the primitives already in the catalog and the program built to this point, the d
 schematic is more optimal, in a generalized sense, than many other Black opening plans. The designer offers the deduction as an
 example of this, and asks that it be recorded.
 
+**The first milestone (a statement).** The first step is to catalog certified local boundary board state positions. Finding the optimal
+forward path to a candidate can be certified afterwards; the classification as global comes later. What is sought first is a path to
+a position where the primitives can be enumerated compositionally well enough to certify that it is in equilibrium. A first
+certified local boundary board state position would state how it is arrived at from the initial board position, the primitive
+calculations and the composition, and the exhaustive coverage certification. The protective belt then discovers and catalogs the
+emergent observable facts that arise from the population of boundary board state positions, if any exist. That is to be discovered.
+
 **The progress to be denoted.** The designer asked that progress on the discovery of where to start be denoted, and whether a
 document existed for it. This file is that document.
 
@@ -47,6 +54,7 @@ document existed for it. This file is that document.
 | White's choices as constructor against it | Not yet examined |
 | Bird's Opening | From another plan, per the designer; the other documents still mention it and are not changed |
 | A pruned structure on any line | Not run |
+| The first certified local boundary board state, with its path from the initial position, primitive calculations, composition and certification | Not found; this is the first milestone |
 | Tempo as a scoping criterion on this line | Stated (survey §4e); not applied |
 
 ## 4. This file's reading, offered for correction

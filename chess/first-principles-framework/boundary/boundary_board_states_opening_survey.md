@@ -261,6 +261,60 @@ something remains, it can be analyzed.
 exist when the following holds: there are no forced win moves, a draw is available, and a deviation from the draw moves opens the
 door to a forced sequence in the losing favor.
 
+### 4e. Constructor and reactor; the tempo of the initial position (the designer's statement)
+
+The designer offers this as a perspective that came independently, from watching high-level play, and says it may already exist in
+theory under some name (the designer is not formally read in chess theory).
+
+**The tempo of the initial position.** The work is the forward trace element of a weak solution, as for checkers, applied to chess,
+anchored at the initial start position. A subtlety under the development of pieces from that position is the tempo of the initial
+position, with White having the tempo. It is a bounded structural fact about the initial position, and it is informative.
+
+**Constructor and reactor.** Under optimal play, with the global boundary board state structure, the two sides have distinct roles.
+White is the constructor and Black is the reactor. White chooses which opening line to navigate, to arrive at the boundary board
+state position at which the game draws. Black reacts, choosing from a move pool that White has chosen. White makes the most choices,
+and Black makes choices within the structural composition White has started. White also has a choice to maintain tempo or to give
+Black tempo. Optimal play to arrive at the boundary board state may not depend on maintaining tempo, but it is a choice that Black
+cannot make and White makes. This is a criterion that can be used to scope the search.
+
+**Tempo as a pruning criterion.** Under optimal play standards, maintaining the tempo when one has it is likely optimal in most
+situations for winning conditions such as forcing a sequential mate. So, for discovery purposes, branches that surrender tempo can be
+pruned, to find the boundary board state positions that maintain White's momentum from the beginning of the game. During the discovery
+mining this can be useful.
+
+**The observation from play.** The fianchetto is seen more often with Black, unless White chooses a line in which it belongs through
+deep study and analysis. In speed chess Black appears to choose, almost as an automatic schematic, a fianchetto on the king side with
+a pawn push (typically the e-pawn), or a pawn push reactive to White's development. The general schematic of Black's opening is:
+White move, b6, White move, either Bb7 or a pawn push, White move, and so on.
+
+**Why it follows from the program, as stated.** With the initial position as the anchor, the moves b6 and Bb7 are bishop development
+(a development race condition), and e6 is a development move that unlocks the mobility of several pieces at once: the queen's ray
+and a bishop's ray, mobility for the king, and a fortress without really committing to a castling side. These moves are not
+negatively impactful on the other race condition primitives, and they do not commit down a particular branching path that would make
+any of them a blunder from the initial position anchor. White constructs while Black makes moves that directionally resolve the
+dependencies of the race condition primitives, reacting to White's construction, and the moves that deviate and threaten the position
+are in a small pool. So the structural result of the primitives, as the causality of optimal play, can be observed in actual play,
+and the program explains why this reactive schema is optimal and is observed often.
+
+**What it changes in the method.** The first line to survey is not Bird's Opening, which is obscure, but the richest vein of the
+branch network. White's move choices are made to construct against Black's known schematic, with the pruning methodology and
+potentially with the tempo constraint. The designer regards this as a missing piece of the protective belt, as something to use in the
+pruning process, and as a way to understand optimal chess when it is seen.
+
+**This file's reading, offered for correction.**
+
+- **Not a primitive under the admission rule** (catalog §1). The roles and the tempo of the initial position are read as an input fact
+  and a criterion for scoping the search, and not as a race condition with terms. Tempo is already a term in the catalog. The
+  catalog is unchanged.
+- **Tempo pruning is a scope choice and not a certificate.** It narrows discovery to the lines that keep White's momentum. A
+  boundary state found there is found. The absence of one there says nothing about the lines that were left out, which the closure
+  of §2a still includes. How "maintain" and "surrender" tempo are told apart in a given position is not specified.
+- **The Black schematic is a prediction until the pruning runs.** The structure should show these moves surviving and White's
+  attempts against them refuted by named races. It is an observation from play until then. Not run.
+- **One point to settle.** The statement says a king-side fianchetto, and the schematic given (b6, Bb7) is on the queen side. Which
+  is meant is not decided here.
+- **Not checked against opening theory.** The book in §8 is the place to check whether the schema carries a name.
+
 ## 5. Local and global along the line
 
 A local candidate verified at depth d says nothing about whether an earlier boundary exists. To classify it as global, the survey
@@ -357,6 +411,8 @@ another segment, or is pruned entirely because what already exists in the struct
 the side to move has an alternative of value at least as good. Each such exclusion carries a certificate like any other prune (§4a).
 
 The whole process as the designer has stated it is in §4c.
+
+The designer has since revised the first line to survey (§4e): the richest vein of the branch network in place of Bird's Opening.
 
 **Not yet specified.** The fields of the progression file; the order in which segments are taken; how the depth of a segment is
 chosen beyond the calibration signals of §7; how the boundary conditions of a segment at its depth limit are recorded; and how

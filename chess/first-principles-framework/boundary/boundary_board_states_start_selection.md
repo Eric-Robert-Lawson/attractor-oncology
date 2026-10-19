@@ -101,6 +101,21 @@ certified local boundary board state position would state how it is arrived at f
 calculations and the composition, and the exhaustive coverage certification. The protective belt then discovers and catalogs the
 emergent observable facts that arise from the population of boundary board state positions, if any exist. That is to be discovered.
 
+**The emphasis of the workflow: a population of certified local boundary board states (a statement).** A local boundary board state does
+not require optimal move choices on the forward trace. It requires a path understood to be reachable in a branch, with optimal
+understanding from that point forward, and the state certified. The only difference between a local and a global boundary board state
+is the exhaustive certification of the optimal move choices from the anchoring initial point that reach the state in equilibrium; a
+local state is just in equilibrium. Populating a catalog of certified local boundary board states allows a population of equilibrium
+positions to be analyzed, to understand the nature of these equilibria. If properties can be derived that are shared by a population of
+local boundary board states and by all boundary board states, then the boundary board states can be identified and understood more
+easily, and the modular certification of global versus local can be focused on afterwards. Therefore, when first deriving from the
+start, focusing on global constraints for exhaustive coverage is a huge mistake, without first discovering more information from a
+population of local boundary board states, which are more easily certified and may themselves lie within the Syzygy scope. If one
+boundary board state within the scope is certified, others can be deduced from the standpoint of reachability. The emphasis of the
+workflow hinges on the discoverability from certifying a population of local boundary board states: to see a true example of primitive
+joint compatibility with the race condition calculations in equilibrium. That is the designer's real goal from this point, the first
+certified local boundary board state.
+
 **The progress to be denoted.** The designer asked that progress on the discovery of where to start be denoted, and whether a
 document existed for it. This file is that document.
 

@@ -8,7 +8,7 @@ complete case-list certificate).
 
 Companion documents: `boundary_board_states.md` (the concept and methods; §1 the definition, §3 the caching architecture, §14
 items 4 and 7 to 11), `boundary_board_state_topology.md` (the record; §3 status is local and unconditional, §5 start-reachability,
-§8h footprints, §8p the guard rail on absent paths, §8r forward anchoring, §8x the proven entry, §8ac, §8ad, §8ae, §8af and §8ag the designer's
+§8h footprints, §8p the guard rail on absent paths, §8r forward anchoring, §8x the proven entry, §8ac, §8ad, §8ae, §8af and §8ag, and §8ah to §8aq, the designer's
 statements behind this file), `boundary_board_state_primitive_catalog.md` (the three primitives, the admission rule),
 `boundary_board_states_case_study_otb.md` (the game), `boundary_board_states_start_selection.md` (where to start: the
 discovery of the first line to survey).

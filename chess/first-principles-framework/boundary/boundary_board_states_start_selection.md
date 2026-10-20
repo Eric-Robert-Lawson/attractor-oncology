@@ -5,7 +5,7 @@ anchored opening survey (`boundary_board_states_opening_survey.md`) should start
 decides nothing. Nothing in it has been run on a pruned structure.
 
 **Companion documents.** `boundary_board_states_opening_survey.md` (the method; §4e is the statement this file expands, §7 is the
-calibration of a line and a depth), `boundary_board_state_topology.md` (§8aj, §8an), `boundary_board_states.md` (changelog entries 38, 39
+calibration of a line and a depth), `boundary_board_state_topology.md` (§8aj, §8al, §8an, §8ap, §8aq), `boundary_board_states.md` (changelog entries 38, 39
 and 42), `boundary_board_state_primitive_catalog.md` (the three primitives). The designer's statements are marked as such and kept
 apart from this file's readings, as in the catalog's §10.
 
@@ -202,6 +202,10 @@ document existed for it. This file is that document.
   in the survey and the pipeline document. The designer says it came from another plan. Whether it is dropped or kept as a dry
   run is not stated, and nothing is changed here.
 - **The illustration.** The position has ten pieces, outside Syzygy, so the tablebase cannot check it.
+- **The anchored and the unanchored route.** The first-milestone and workflow-emphasis statements above describe the anchored route,
+  where a state is reached by a path from the initial position. The construction route has no backtrace constraint at discovery; the
+  family composed from a discovered state is what links it to the initial position or concludes that it cannot (survey §5a, topology
+  §8aq). The two are read as covering different routes into the same catalog. Offered for correction.
 
 ## 5. Not yet specified
 

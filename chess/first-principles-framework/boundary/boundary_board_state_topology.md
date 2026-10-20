@@ -177,9 +177,7 @@ should be read as saying otherwise.
 
 ## 5. Start-reachability — anchoring "global" to a fixed point, not a relative one
 
-*Clarification (§8ac, `boundary_board_states.md` §14 item 9): "global" below is start-reachability. The designer's definition of a global boundary state adds that it is the first boundary between choice and force from the initial position across all paths that reach it, sound against all deviation replies, with many global states. The reading that start-reachability is the reachability part of that definition is recorded in `boundary_board_states_opening_survey.md` §2.*
-
-*Later statement (§8aq, `boundary_board_states_opening_survey.md` §5a): the first-boundary clause in this clarification is read as superseded by the designer's later statement that membership of a family reachable from the initial position under the optimal backtrace constraint makes a state global. Start-reachability is read as the reachability part of that. Kept as recorded; offered for correction.*
+*Clarification (§8ac, §8aq, `boundary_board_states.md` §14 item 9): "global" below is start-reachability. The designer's definition of a global boundary state is membership of a family reachable from the initial position under the optimal backtrace constraint (`boundary_board_states_opening_survey.md` §5a), sound against all deviation replies, with many global states. The reading that start-reachability is the reachability in that definition is recorded in the survey §2 and §5a.*
 
 §4's necessity/redundancy is anchored to *some* ancestor, chosen arbitrarily —
 useful for prioritization, but relative. What's being described here is
@@ -2730,16 +2728,14 @@ complexity. They ignored the anchoring point of every game, the initial position
 opening line. The anchored survey takes a well-understood opening, chosen for a reason, and uses the primitive catalog and the
 perturbation process along it to find a boundary-state candidate. It is a survey for candidates and is not yet a tool.
 
-How a state is reached matters for classifying it. A global boundary state is the first boundary between choice and force from
-the initial position, so it depends on how it is arrived at, across all paths; it requires proof both that it is a boundary state
-and that no boundary state lies between the initial position and it. A global state is sound holistically: reached by non-losing
+How a state is reached matters for classifying it. A global boundary state is a member of a reachable family that is reachable from
+the initial position under the optimal backtrace constraint (survey §5a), so it depends on how it is arrived at; it requires proof that it is a boundary state
+and that its family reaches the initial position. A global state is sound holistically: reached by non-losing
 play and holding against all deviation replies. A deviation may lead to a different global boundary state, which still closes the
 phase between choice and force, so there are many global states and avoidability is not a ground for calling a state non-global. A
 local boundary state is one where the equilibrium is verified (the primitives show it, and exhaustive verification shows they did their job) without requiring how it was reached or
-that it is first. The survey's target is a local candidate anchored from the initial position by a chosen line, optimal or
+that its family reaches the initial position. The survey's target is a local candidate anchored from the initial position by a chosen line, optimal or
 sub-optimal.
-
-*Later statement (§8aq): the first-boundary clause and the two-proof requirement in this paragraph are read as superseded by the designer's later statement on *global*; kept as recorded.*
 
 Forcing sequences are read as race conditions. A forcing sequence is a decisive advantage to the side that forces it, and it may
 force a win, a draw or a loss. A forced loss is uninformative. A forced win marks a winning race condition, and adversarial play
@@ -2767,11 +2763,10 @@ thirty-first addition, the resume box, and §14 item 9). The primitives, the har
   calibration.
 - **This is consistent with §3.** A state's own status is local and unconditional there. The classification here is of how a
   verified state is reached, and it does not touch the status.
-- **A reading offered for correction.** *Global* is read as start-reachable in the sense of §5 and also first across all such
-  chains. `boundary_board_states.md` §14 item 4 asked for a firm definition of local and global, and this is offered as one. The
+- **A reading offered for correction.** *Global* is read as start-reachable in the sense of §5, as membership of a family reachable from the initial position under the optimal backtrace constraint (survey §5a). `boundary_board_states.md` §14 item 4 asked for a firm definition of local and global, and this is offered as one. The
   record's "local" in §3 (a status that is local and unconditional) and this survey's "local boundary state" (verified, with no
   claim about arrival) agree.
-- **Avoidability is not the test (the designer's correction).** A reading proposed in discussion, that a candidate which a side can route around is for that reason non-global, was withdrawn. A detour leads to another global boundary state, which still closes the phase between choice and force; global states are many, and only a boundary state earlier on a non-losing path to the candidate makes it non-global.
+- **Avoidability is not the test (the designer's correction).** A reading proposed in discussion, that a candidate which a side can route around is for that reason non-global, was withdrawn. A detour leads to another global boundary state, which still closes the phase between choice and force; global states are many, and a detour does not make a candidate non-global.
 - **A scope point in the cache.** The forced-region entry is a claim under optimal play. A drawn position that the winning side
   could reach by an error is not on an optimal continuation and remains admissible as a local candidate. The entry says nothing
   about it. Whether the survey wants such candidates is left open in the survey document.
@@ -2779,7 +2774,7 @@ thirty-first addition, the resume box, and §14 item 9). The primitives, the har
   boundary state below a node has found absence of information, and an assertion in the theory tree is an assertion.
 - **A correction recorded.** In discussion, the global and local classification was first read as a scope tag on a verdict, on the
   ground that a position's status is independent of how it is reached. The designer corrected it: the status is the position's, and
-  the classification is path-dependent by definition, because global means first. The first reading was withdrawn.
+  the classification is path-dependent by definition. The first reading was withdrawn.
 - **Not run.** No line has been surveyed. The calibration signals of the survey document are criteria and not results.
 
 ### 8ad. Forced terminal draws as boundary states
@@ -3161,7 +3156,6 @@ optimality backtrace constraint, which is the requirement for any family created
 - **Composition** is the reduction rule (§8x) run on a confirmed state: the residual interface of the composed primitives is the
   specification of a missing one, admitted only under the admission rule (catalog §1).
 - **Families** are read with survey §5 and §7 here (survey §5a); the readings are offered for correction.
-- **Global.** The first-boundary clauses (the §5 clarification and §8ac) are read as superseded by the restated definition above, and are kept as recorded. Offered for correction.
 - **Not run.**
 
 ---
@@ -3453,4 +3447,4 @@ optimality backtrace constraint, which is the requirement for any family created
 - **Whether the carrier is a term of the coverage race or an input it reads from P-001 (§8aa).** Open.
 - **Resolved (§8ab):** P-003 remains a primitive, as the single chained-dependencies primitive (catalog §7, §10.5).
 - **How the repetition cycle that defines a boundary state keeps every entry of both registers held across the cycle (catalog §8.14, §5 item 2).**
-- **The anchored survey (§8ac, `boundary_board_states_opening_survey.md` §10).** The meaning of "first" over all paths and its ancestor set; whether the forced-region cache claims anything about deviations from a forced win; how a web of interdependent candidates is verified; and how the cache treats the repetition cycle of a candidate. Not run.
+- **The anchored survey (§8ac, `boundary_board_states_opening_survey.md` §10).** Whether the forced-region cache claims anything about deviations from a forced win; how a web of interdependent candidates is verified; and how the cache treats the repetition cycle of a candidate. Not run.

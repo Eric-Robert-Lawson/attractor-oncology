@@ -192,6 +192,7 @@ a fifty-seventh addition (survey §3, §4f, §5a and §10 and topology §8aq: tw
 a fifty-eighth addition (survey §5a and topology §8aq: from discovery to the initial position, as the designer stated it. Discovery by construction has no backtrace constraint to the initial position anchor; a reachable family is then composed under the optimal backtrace constraint and either reaches the initial game start, which proves global for the family, or concludes that it cannot. Nothing was run),
 a fifty-ninth addition (`boundary_board_states_start_selection.md` §4 and the companion lines of the survey and start-selection: a reading that the first-milestone and workflow-emphasis statements describe the anchored route while the construction route is unanchored, joined to the initial position by the family composed from a discovered state; and the companion lines now list the topology sections §8ah to §8aq that hold the designer's statements. Nothing was run),
 a sixtieth addition (survey §2, §5, §5a, §6, §10 and §11, topology §5, §8ac and §8aq, and item 9 of §14 here: the designer's later statement on what makes a boundary board state global. A family reachable from the initial start position under the optimal backtrace constraint is an optimally reachable boundary board state family, and every member is a global boundary board state position; upstream positions that lead to a boundary under optimal play share its equilibrium whether or not the boundary is realized; the initial game start position is itself a boundary board state position, being in the choice region with a move that can lose; and a distinction of choice region from boundary by the width of a position's drawing moves is not a classification criterion. The earlier first-boundary clause and its second proof are marked as superseded in each place and kept as recorded; this file's earlier reading that a member reachable only through an earlier boundary stays subject to the first-boundary test is removed. Nothing was run),
+a sixty-first addition (survey §2, §5, §5a, §6, §7, §7a, §10 and §11, topology §5, §8ac and its assessment, §8aq and the open items, and item 9 of §14 and the resume box here: the earlier first-boundary definition of global, the first boundary across all paths with a second proof that no boundary state lies between the initial position and it, and the material that rested on it were removed, the designer having stated that it does not correspond to their understanding and having given the replacement of entry 60. The superseded-notes added in entry 60 were removed with the text they marked. Changelog entries that record the earlier definition, such as entry 31, are unchanged as history. The survey's description of global states as a list with the space between the initial position and that list was not changed. Nothing was run),
 and the corrected, complete version below. Kept separate from
 `syzygy_improvement_proven_results.md` and the other Claim A/B/C documents because
 this is a genuinely different kind of object: those are about distance and escape
@@ -285,7 +286,7 @@ where a losing side's last real choice exists.
 >   form or instance, and recorded in the table of catalog §1. Zugzwang without capture is an open residual, not a fourth primitive.
 > - **The anchored opening survey (topology §8ac, `boundary_board_states_opening_survey.md`).** The method that uses the catalog along a
 >   chosen opening line from the initial position to find a local boundary-state candidate. Local means a verified equilibrium with no
->   claim about the path; global means the first boundary between choice and force from the initial position across all paths (item 9
+>   claim about the path; global means membership of a family reachable from the initial position under the optimal backtrace constraint (item 9
 >   of §14). It has its own cache (forced region, boundary found, none can exist) keyed on the position. Specified, not run.
 >   Also recorded there and in §14 items 10 and 11: global boundary states are many, and avoidability is not a ground for non-global;
 >   a forced terminal draw with no choice to deviate is a boundary state; a pruned structure that is closed (every move inside the
@@ -1693,16 +1694,13 @@ avoided, and is not an exclusion of a forced terminal draw that arises with no c
 **9. "Local" and "global" by the path of arrival (the designer's statement; topology §8ac).** A boundary state's own status is local and
 unconditional (topology §3) and is the position's. Its *classification* depends on how it is reached. A **local** boundary state is a
 verified equilibrium (the primitives show it and exhaustive verification confirms it), with no requirement on the path and none that
-it be the first. A **global** boundary state is a boundary state that is the first boundary between choice and force from the initial
-position across all paths that reach it, so that no boundary state lies between the initial position and it on a non-losing path.
+its family reach the initial position. A **global** boundary state is a boundary state that is a member of a reachable family that is reachable from the initial
+position under the optimal backtrace constraint (survey §5a).
 A global state is sound against all deviation replies, and there are many of them: a deviation may lead to a different global state,
-which still closes the phase between choice and force, so avoidability is not a ground for calling a state non-global. Global therefore needs two proofs, and
-a state with the first only is local. This is offered as the firm definition that item 4 asked for. The record's start-reachability
+which still closes the phase between choice and force, so avoidability is not a ground for calling a state non-global. A state not shown to be in such a family is local. This is offered as the firm definition that item 4 asked for. The record's start-reachability
 (topology §5, Tier 3 of item 1) is read as the reachability part of *global*, which is an open reading recorded in
 `boundary_board_states_opening_survey.md` §2. Earlier uses of "local candidate" in this file, for positions that satisfy only the
 local conditions of a material, are not changed. Nothing in this item changes the definition of a boundary state (items 7 and 8).
-
-*Later statement (topology §8aq, `boundary_board_states_opening_survey.md` §5a; the designer's): the first-boundary clause and the second proof in this item are read as superseded by the designer's later statement that membership of a family reachable from the initial position under the optimal backtrace constraint makes a state global, and that the initial position is itself a boundary board state position. The item is kept as recorded.*
 
 **10. Forced terminal draws are boundary states when there is no choice to deviate (the designer's ruling; topology §8ad).** A forced draw
 by stalemate, or by a forced capture into a dead position, is the same as a boundary state by the definition when it arises with no

@@ -50,22 +50,19 @@ has already been passed. Those are consequences that may fall out of it (§5, §
   boundary state is not required to say how it was reached, and it is not required to be the first deviation point between choice
   and force. It informs us of the viability of the primitives, and it is the point on which exhaustive verification is performed. The exhaustive pruning of §4a, closed and fully certified, is that
   verification and is the certificate.
-- **Global boundary board state.** A boundary state that is the first boundary between choice and force from the initial game
-  position. It is path-dependent by definition, because it closes the phase between choice and force from the start to itself.
-  Classifying a state as global requires proof of two things: that it is a boundary state, and that no boundary state exists
-  between the initial position and it. A state with the first proof and not the second is local.
-- **The paths are all paths.** The web of dependencies among candidates shows that the second proof concerns every way of arriving
-  at the position, not one line. "First" is across all paths that reach the position from the initial position.
+- **Global boundary board state.** A boundary board state that is a member of a reachable family that is reachable from the initial game
+  position under the optimal backtrace constraint (§5a). Every member of such a family is global, and the initial game position is itself
+  a boundary board state position. Whether a state is global therefore depends on how it is reached, by optimal play from the initial
+  position. A state not shown to be in such a family is local.
 - **Global is sound against every deviation, and there are many.** A global boundary state must hold holistically: it is reached by
   non-losing play, and it holds against all deviation replies. A deviation from the path may lead to a different global boundary
-  state, a detour to another position that closes the phase between choice and force. That does not touch the first. Each global
+  state, a detour to another position that closes the phase between choice and force. Each global
   state closes the phase for the routes that lead to it, so the global states form a list, and the space between the initial
   position and that list is the enclosed phasing of choice and force. That a position can be avoided is therefore not a ground
-  for classifying it as non-global. The only ground is a boundary state that precedes it on a non-losing path that reaches it.
+  for classifying it as non-global. A verified state not shown to be in a family reachable from the initial position under the optimal
+  backtrace constraint (§5a) is local.
 - **The target of this survey.** A local boundary state candidate, anchored at the initial position through a chosen line with a
   viable path of arrival. The path may be optimal or sub-optimal.
-
-**This file's reading of the later statement on *global* (§5a), offered for correction.** The clauses above that make *global* the first boundary between choice and force across all paths, the second proof that no boundary state lies between the initial position and it, and the ground in the last bullet (a boundary state that precedes it on a non-losing path) are read as superseded by the designer's later statement in §5a: a position is global as a member of a reachable family that is reachable from the initial start position under the optimal backtrace constraint, and the initial game start position is itself a boundary board state position. The phrase "the first place along the way" in the first bullet is read the same way. The earlier clauses are kept as recorded, and §5a governs where they differ.
 
 **What stays as recorded.** A boundary state's own status is local and unconditional (topology §3): it is evaluated from the
 position's legal moves and the values of its children, and nothing about its ancestors can change it. The concept is a property of
@@ -518,24 +515,20 @@ place. Perturbation is to be understood for what it is, a change of state, wheth
 
 ## 5. Local and global along the line
 
-A local candidate verified at depth d says nothing about whether an earlier boundary exists. To classify it as global, the survey
-must show that no boundary state exists in the positions that precede it on any path. That is the set of positions from which the
-candidate can be reached by legal play from the anchor, with transpositions included, so it is a web and not a tree. It can be
-large, and the choice of depth keeps it small enough to examine (§7).
+A local candidate verified at depth d is local until its family is shown to be reachable from the initial position under the
+optimal backtrace constraint (§5a). Showing that is a matter of the positions from which the candidate can be reached by optimal
+play from the anchor, with transpositions included, so it is a web and not a tree. It can be large, and the choice of depth keeps
+it small enough to examine (§7).
 
 Avoidance is not the test. A side may have a non-losing detour that never reaches the candidate, and the detour leads to another
-boundary state or to a position of the same kind. The candidate still closes the phase for the paths that arrive at it. Only a
-boundary state earlier on a non-losing path to the candidate makes it non-global. (A reading that treated avoidability as a second
-ground for non-global was proposed in discussion and withdrawn on the designer's correction.)
+boundary state or to a position of the same kind. The candidate still closes the phase for the paths that arrive at it, and the
+detour does not make it non-global. (A reading that treated avoidability as a ground for non-global was proposed in discussion and
+withdrawn on the designer's correction.)
 
-Two consequences are worth recording, both the designer's reading:
+A consequence is worth recording, the designer's reading:
 
-- If a local state is found at some depth, then no later state on a path through it is global, since it is not first. That is a
-  fact about every position that can only be reached through it. It is recorded as a cache entry (§6, C2).
 - If the survey concludes exhaustively that no local candidate can exist below a node, the work is done once and need not be
   repeated for any path that reaches that node (§6, C3).
-
-**This file's reading of the later statement (§5a), offered for correction.** The first consequence above, that no later state on a path through a local state is global because it is not first, rests on the first-boundary clause that §5a supersedes, and is read as superseded with it. The cache entry C2 (§6) carries the same clause. The test for *local* is unchanged: a state with a verified equilibrium is local.
 
 ## 5a. Reachability families and the classification of a family (the designer's statement)
 
@@ -555,7 +548,7 @@ optimality backtrace constraint, which is the requirement for any family created
 
 **This file's reading, offered for correction.**
 
-- **With §2 and §5.** The statement above is the definition of *global*: membership of a family that is reachable from the initial position under the optimal backtrace constraint. The first-boundary clause of §2, the second proof, and the first consequence of §5 are read as superseded by it, and are kept as recorded. An earlier version of this reading kept a member reachable only through an earlier boundary of its family subject to §5; that was a misreading and is removed. Offered for correction.
+- **With §2 and §5.** The statement above is the definition of *global* used in §2 and §5. Offered for correction.
 - **With topology §7.** The connected regions of resolved territory there, two confirmed states joined by a validated chain, are read
   as related to a reachability family. Whether they are the same is not stated.
 - **The flow.** Three stages, as read from the statement above. Discovery, by construction or otherwise, finds a certified local state
@@ -573,10 +566,8 @@ reached by another route, or reached again, inherits the entry. It follows the a
 | Entry | Content | What it saves |
 |---|---|---|
 | **C1 Forced region** | From this position every branch concludes in a forced sequential win for one side, and the only decisive moves are forced out of zugzwang-type situations, so the position is classified as forced up to the point where a non-forced deviation could occur. No boundary state exists downstream under optimal play. | Once any path reaches the position, the work below it is already done |
-| **C2 Boundary found** | A local candidate, or a verified local state, exists here. It may or may not be global, and the entry records which has been shown. Positions that can only be reached through it are not global. | A found boundary is not rediscovered, and later classification reuses it |
+| **C2 Boundary found** | A local candidate, or a verified local state, exists here. It may or may not be global, and the entry records which has been shown. | A found boundary is not rediscovered, and later classification reuses it |
 | **C3 None can exist** | It was concluded exhaustively that no local candidate exists below this position, on the closure of the non-losing moves and to the depth reached (scope below). | No future work is spent proving it again |
-
-*The last sentence of C2 (positions that can only be reached through a found boundary are not global) rests on the first-boundary clause superseded in §5a, and is read as superseded; offered for correction. The entry's other content is unchanged.*
 
 **What an entry must carry.** The position key and side to move; the claim (C1, C2 or C3); the certificate that supports it (a
 complete case list, exhaustive search, or an assertion taken from theory, with its evidence tag); the scope of the claim (below);
@@ -615,7 +606,7 @@ This is a calibration problem. The depth and the line are chosen so that the web
 §8h, four conditions) stay of a size that the complete case list can cover. Signals that the choice is wrong:
 
 - The footprint of the candidate's primitives grows to the board (kings as the global resource, §8h condition 3).
-- The ancestor set that a global classification would have to check is not enumerable.
+- The positions from which a global classification would have to link the candidate to the initial position (§5) are not enumerable.
 - The candidates at the depth chosen are interdependent, and no candidate's verification can be separated from the rest.
 
 The designer's statement on where to start (§4e) bears on the choice of line. The progress of that discovery is recorded in
@@ -631,7 +622,7 @@ This section records only what the designer has stated. The full process is not 
 **The designer's statements.** The space from the initial position to the global boundary states is combinatorially vast. It is
 mitigated by choosing a depth from the initial position at which the primitives scope the pruning properly (§7). The survey
 proceeds in segments. A segment may show that a local candidate was already passed, which is information: it means that a boundary
-state exists on those paths and that nothing below it on them can be global. That is cached as a checkpoint, and the progression
+state exists on those paths. That is cached as a checkpoint, and the progression
 continues from it. The classification of a local candidate as global, or as provably not global, is settled upstream later, by
 the progress of the segments, the catalog and the cache. A file for the segmented progression, to enumerate the landscape in
 this way, is to be started.
@@ -673,12 +664,7 @@ cache entries; and the primitives that the line shows to be missing, found by th
 
 ## 10. Open questions
 
-- The meaning of "first" over all paths: answered by the designer's own definitions in §2. A global boundary state is the first
-  boundary between choice and force from the initial position, across all paths that reach it, and the only ground for classifying a
-  verified state as non-global is a boundary state that precedes it on a non-losing path that reaches it. The ancestor set is
-  therefore the positions on non-losing paths to it. (An earlier version of this item asked whether it was non-losing play or all
-  legal play; the designer's statement already settles it.)
-  The designer's later statement (§5a) supersedes the first-boundary clause, so what "first" means no longer arises: a family reachable from the initial position under the optimal backtrace constraint is global throughout.
+- The meaning of "first" over all paths: retired. The designer's later statement (§5a) defines *global* by membership of a family reachable from the initial position under the optimal backtrace constraint, so the question no longer arises.
 - Whether C1 should also claim anything about positions reached by deviations from a forced win (§6).
 - How a cycle of interdependent candidates is verified when it is small enough to verify at all: whether the web is verified as
   one unit.
@@ -704,9 +690,9 @@ making those decisions exist. These are therefore not prerequisites for the firs
 ## 11. Provenance
 
 **The designer's, and unchanged:** that the initial position is the anchoring point of every game; that a global boundary state
-is the first boundary between choice and force from it, and so depends on how it is reached, across all paths that reach it, and is
+is defined by membership of a family reachable from it under the optimal backtrace constraint (§5a), and so depends on how it is reached, and is
 sound against all deviation replies, there being many global states, each of which closes the phase for its own routes; that a local one
-is a verified equilibrium with no requirement on the path or on being first; that the survey's target is a local candidate
+is a verified equilibrium with no requirement on the path or on its family reaching the initial position; that the survey's target is a local candidate
 anchored from the initial position by a chosen opening, optimal or not; that forced sequences are read as race conditions, that a
 forced win is pruned by adversarial play, that a forced loss is uninformative and a forced draw is the boundary-state behavior;
 that the theory tree and the perturbation process locate where choice becomes force; that the cache records, by position, that
@@ -723,7 +709,6 @@ names C1 to C3 are this file's); the reading of *global* against the start-reach
 
 **A correction recorded.** In discussion, the global and local classification was first read as a scope tag attached to a
 verdict, on the ground that a position's status does not depend on how it is reached. The designer corrected this: the status of a
-boundary state is the position's, and the classification as global or local is path-dependent by definition, because global means
-first. The first reading was withdrawn and none of it remains here.
+boundary state is the position's, and the classification as global or local is path-dependent by definition. The first reading was withdrawn and none of it remains here.
 
-**A later statement recorded.** The designer's later statement in §5a (global as membership of a family optimally reachable from the initial position, and the initial position as itself a boundary board state position) supersedes in part the first-boundary item listed above as unchanged. The earlier items are kept as recorded.
+**A later statement recorded.** The designer's later statement in §5a defines *global* by membership of a family reachable from the initial position under the optimal backtrace constraint, with the initial position itself a boundary board state position. It replaces the earlier first-boundary definition (global as the first boundary across all paths, with a second proof that no boundary state lies between the initial position and it), which the designer did not recognize as their understanding. That definition and the material resting on it were removed from this file. The history is in the pipeline file's changelog (entries 31 and 60 and 61).

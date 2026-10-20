@@ -2960,7 +2960,8 @@ relationships, to optimize the pruning.
 
 - **Tablebase scope.** Direct certification applies to positions of seven pieces or fewer; larger states rest on the case list, with
   tablebase leaves (survey §4f).
-- **Composition** beyond the three primitives is not specified.
+- **Composition** beyond the three primitives is answered by the designer in survey §4f: joint compatibility equilibrium analysis after
+  a boundary board state position is confirmed, adding the primitives that do not cover.
 - **Not run.**
 
 ### 8al. The order of work
@@ -3127,6 +3128,33 @@ catalog §6; `boundary_board_states_start_selection.md` §2 (the construction ro
 - **Reachability families** are added to the survey's objects (§3), in the designer's phrase.
 - **Dead pieces** are the pieces outside the load-bearing set and the footprint (§8s, §8h); the reading is in survey §4j.
 - **Tempo** terms are read as measured to a terminal anchor (survey §4e).
+- **Not run.**
+
+### 8aq. Composition beyond the three primitives, and reachability families
+
+**The idea, as stated.** *Composition beyond the three primitives.* Composition beyond the three primitives is understood through joint compatibility equilibrium analysis after the confirmation of a
+boundary board state position. Either the primitives cover all the primitives or they do not, and the ones that do not are primitives
+that need to be added. There is no uncertainty here.
+
+*Reachability families.* Reachability is simple: if a boundary board state can reach another one, then it is in the same reachable family. If that family is
+confirmed joint to the initial start position, that is an important certification, and it essentially classifies all of the reachable
+positions in that family as certified global boundary board state positions, when reaching the initial position under optimal
+backtrace constraints. This is what makes reachable families important: they are a classification methodology to resolve a family of
+reachable positions when that family is eventually anchored with the initial start position.
+
+*From discovery to the initial position.* When discovering a local boundary board state from construction, the constraint of backtrace does not apply: discovery has no
+constraint to the initial position anchor. Eventually a reachable family is composed that either concludes it cannot reach the initial
+position under the optimal reachability constraint, or concludes that it does. This covers the whole process from discovery to
+linking to the initial position. A family must reach the initial game start to prove global, if that family is composed under the
+optimality backtrace constraint, which is the requirement for any family created.
+
+**Followed, and integrated.** Survey §4f (composition), §3 and §5a (reachability families).
+
+**Assessment — separate from the record above.**
+
+- **Composition** is the reduction rule (§8x) run on a confirmed state: the residual interface of the composed primitives is the
+  specification of a missing one, admitted only under the admission rule (catalog §1).
+- **Families** are read with survey §5 and §7 here (survey §5a); the readings are offered for correction.
 - **Not run.**
 
 ---

@@ -134,7 +134,7 @@ The hard core therefore has one failure condition, which is also a result: a cer
 | Forced-draw node | a node where the draw is held by forced replies against a forced loss, with the equilibrium realized by a repetition cycle sustained by both sides or by a forced terminal draw with no choice to deviate, both sides live (`boundary_board_states.md` §14 items 7 and 10) |
 | Candidate | a forced-draw node whose primitive accounting is an equilibrium (catalog §5), entered in the candidate catalog |
 | Web | the set of candidates whose verification depends on one another (§7) |
-| Reachability family | the local boundary board states reachable from a certified one, found by applying the procedure of topology §8an to a certified seed, and recorded in the boundary board state certification catalog (§4j). The designer's phrase is "families of reachable local boundaries"; the wording of this row is this file's |
+| Reachability family | boundary board states that can reach one another: if a boundary board state can reach another one, it is in the same reachable family (§5a). The classification of a family when it is anchored to the initial position is in §5a. Recorded in the boundary board state certification catalog (§4j) |
 
 ## 4. The procedure
 
@@ -375,6 +375,10 @@ the primitives compose. The primitives are piece agnostic and define race condit
 other compositionally, in a segmented way, and how the primitives are composed to create the calculation, is another matter
 entirely.
 
+**Composition beyond the three primitives (the designer's statement).** Composition beyond the three primitives is understood through joint compatibility equilibrium analysis after the confirmation of a
+boundary board state position. Either the primitives cover all the primitives or they do not, and the ones that do not are primitives
+that need to be added. There is no uncertainty here.
+
 **What is cheap.** The only cheap things are: the board position; whose turn it is; the primitive catalog; and the boundary board
 state positions that have been validated and certified.
 
@@ -403,9 +407,9 @@ trace from that boundary may help solve the backtrace. The two directions theref
 - **Two directions.** Reachability from certified positions is a backward direction alongside the forward trace from the opening. They
   meet at the boundary line of the catalog, as the designer states above. An earlier version of this note called the combination
   unspecified; that was a misreading.
-- **Composition is not specified.** The documents hold the joint compatibility of §4a and the catalog's composition rules for the
-  three primitives. How further primitives and goals are composed is the part the designer calls another matter entirely, and
-  nothing is filled in for it here.
+- **Composition.** The composition beyond the three primitives is stated by the designer above. The documents hold the joint
+  compatibility of §4a and the catalog's composition rules for the three primitives; a primitive that the equilibrium analysis shows
+  to be missing is added by the reduction rule (topology §8x) under the admission rule (catalog §1).
 
 **The procedure that applies to any seed.** The discovery of new local states, and the reachability from certified ones, use one
 procedure that works on a decisive position or on a certified local boundary board state alike: topology §8an (the designer's
@@ -528,6 +532,33 @@ Two consequences are worth recording, both the designer's reading:
   fact about every position that can only be reached through it. It is recorded as a cache entry (§6, C2).
 - If the survey concludes exhaustively that no local candidate can exist below a node, the work is done once and need not be
   repeated for any path that reaches that node (§6, C3).
+
+## 5a. Reachability families and the classification of a family (the designer's statement)
+
+Reachability is simple: if a boundary board state can reach another one, then it is in the same reachable family. If that family is
+confirmed joint to the initial start position, that is an important certification, and it essentially classifies all of the reachable
+positions in that family as certified global boundary board state positions, when reaching the initial position under optimal
+backtrace constraints. This is what makes reachable families important: they are a classification methodology to resolve a family of
+reachable positions when that family is eventually anchored with the initial start position.
+
+**From discovery to the initial position (the designer's statement).** When discovering a local boundary board state from construction, the constraint of backtrace does not apply: discovery has no
+constraint to the initial position anchor. Eventually a reachable family is composed that either concludes it cannot reach the initial
+position under the optimal reachability constraint, or concludes that it does. This covers the whole process from discovery to
+linking to the initial position. A family must reach the initial game start to prove global, if that family is composed under the
+optimality backtrace constraint, which is the requirement for any family created.
+
+**This file's reading, offered for correction.**
+
+- **With §5.** A global boundary state is the first boundary from the initial position, across all paths (§2). The classification
+  above is read as applying under the optimal backtrace constraint to the initial position, so a member that can be reached only
+  through an earlier boundary of its family remains subject to §5.
+- **With topology §7.** The connected regions of resolved territory there, two confirmed states joined by a validated chain, are read
+  as related to a reachability family. Whether they are the same is not stated.
+- **The flow.** Three stages, as read from the statement above. Discovery, by construction or otherwise, finds a certified local state
+  with no backtrace constraint. A family is then composed from it under the optimal backtrace constraint. The family either reaches the
+  initial position, which classifies it as in §5a, or concludes that it cannot, in which case it is not global and its states stay
+  certified local. The final clause of the statement was put as a question; it is read as saying that the optimal backtrace constraint
+  applies to every family. Offered for correction.
 
 ## 6. The cache
 
@@ -654,7 +685,8 @@ cache entries; and the primitives that the line shows to be missing, found by th
   earlier plan for Bird's is not withdrawn by the documents, and the choice between them is the designer's.
 - The sense of tempo in §4e: answered by the designer (§4e, "Tempo, as defined"). It is the explicit, calculable metric stated there,
   and not a sense or a heuristic. How its use as a scoping criterion is recorded on the pruned edges is not specified.
-- How primitives are composed to create the calculation (§4f): the designer says it is another matter entirely. Not specified.
+- How primitives are composed to create the calculation (§4f): answered by the designer (§4f, "Composition beyond the three
+  primitives"). It is understood through joint compatibility equilibrium analysis after a boundary board state position is confirmed.
 
 **The designer on what waits (a statement).** The comparison across tempo does not apply until there is enough exhaustive
 certainty from both the local and the global catalogs of boundary board state positions. The compositional question is a matter of

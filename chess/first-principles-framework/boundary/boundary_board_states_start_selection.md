@@ -5,7 +5,7 @@ anchored opening survey (`boundary_board_states_opening_survey.md`) should start
 decides nothing. Nothing in it has been run on a pruned structure.
 
 **Companion documents.** `boundary_board_states_opening_survey.md` (the method; §4e is the statement this file expands, §7 is the
-calibration of a line and a depth), `boundary_board_state_topology.md` (§8aj), `boundary_board_states.md` (changelog entries 38, 39
+calibration of a line and a depth), `boundary_board_state_topology.md` (§8aj, §8an), `boundary_board_states.md` (changelog entries 38, 39
 and 42), `boundary_board_state_primitive_catalog.md` (the three primitives). The designer's statements are marked as such and kept
 apart from this file's readings, as in the catalog's §10.
 
@@ -116,6 +116,54 @@ workflow hinges on the discoverability from certifying a population of local bou
 joint compatibility with the race condition calculations in equilibrium. That is the designer's real goal from this point, the first
 certified local boundary board state.
 
+**A second route to the first certified local state: construction, decoupled from the forward trace (a statement).** In addition to
+the pruning mechanism recorded in the survey, the designer proposes populating the catalog of certified local boundary board states
+by constructing positions from piece combinations, isolating piece combinations and primitives to see what emerges, and analyzing the
+structures through logic from a constructed position. Endgames with pawns may trivialize the process enough to populate some of the
+catalog and construct a first local boundary board state position. This decouples the route from the initial-position anchor and
+from the forward trace. The designer's view is that it may help populate the catalog of certified local boundary board state
+positions, which may be beneficial in itself, and that keeping the pruning mechanism recorded as it is while populating the catalog
+through construction can be a worthwhile use of time. Endgame positions may be less complex and more calculable, and many can be
+reduced by dead pieces (dead pieces can also be added to expand the catalog, or removed to isolate the true primitive composition of a local state; topology §8an). With fewer than 8 pieces, Syzygy determines win, draw or loss and can be navigated for any of the steps;
+what the designer's machine can store (perhaps 5 pieces at most) is to be considered later.
+
+**A third path: opening theory branches that force draws (a statement).** The designer also has in mind analyzing opening theory
+branches to identify branches that result in forced draws, if possible and identified as optimal. Interesting results may come from
+this alone. Syzygy or opening theory may be searched to identify candidates for local boundary board state positions, or positions
+that are close.
+
+**The procedure on any seed (a statement).** Both routes, and the pruning route, use one procedure on any position: backtracing and
+reachability under optimality, perturbation, the nature of the primitive race, and joint compatibility. It is used on a decisively
+won position to discover local boundary board states, and on a certified one to determine the local boundary board states reachable
+from it. It is recorded in `boundary_board_state_topology.md` §8an. The example below is an illustration of it and not the method.
+
+**An illustration of the procedure on a decisive seed (the designer's example).** The position is from a daily puzzle: White: Ka1,
+pawns a2, b2, Bd4, pawn f6. Black: pawn b3, Qa4, Nc5, pawn h7, Kh8. White to move. It is a seed, not a candidate: White's race is
+decisive, and the point of the example is the perturbation that would be needed to move it toward an equilibrium.
+
+- **White's race.** f7+ and then f8, promoting to a queen, to mate. The Black king has only g7 and g8, since h7 is occupied; f7+ is a
+  discovered check from the bishop and leaves the king no viable move. No black move can obstruct, and no black piece prevents f7.
+  The only viable reply is the bishop capture, and then f8 follows with no obstruction possible. The bishop's discovered check and
+  the pawn position form the chain that enables the promotion. The only ways to obstruct would be a black piece on f7 or f8, or a
+  piece occupying coverage threats without modifying the race under optimality. Such a piece would also need to contribute to the
+  mating net to be placeable in an equilibrium that draws by a cycle of repeated moves, and not by stalemate or insufficient material.
+- **Black's race.** A back-rank mate race, made possible by the white pawn occupancy and the black pawn on b3; the white king needs 3
+  moves to escape that threat. As the designer counts it, White's forced mate and Black's back-rank mate take 2 moves each, so the
+  race is equal at 2.
+- **Dead pieces.** The black queen and knight are dead to White's mating net, except that the queen can capture the bishop. A knight,
+  a second bishop or a rook there would not matter.
+- **The one-move mate is set aside.** The mate in one in the corner where White's king stands is not considered, because it is not
+  jointly compatible: a race that close to the king cannot obstruct the race on the other side of the board. White's two-move race
+  beats it because of the forced nature of the race that delivers it. For the position to be viable it has to be navigated toward
+  obstructions in the middle of the board. The back-rank mate in 2 with an obstruction meeting the bishop, or an obstruction on f7 or
+  f8, is the only viable route.
+- **The perturbation and its directionality.** The directionality of the perturbation emerges from this. The race is to be composed
+  so that Black's back-rank mate is interdependent with obstructing White's race ("cannot be delivered due to dependency to black f7
+  pawn advancement", as the designer wrote it), so that maintaining the obstruction is the only winning condition and committing to the
+  mating race loses the race that is being obstructed. Making the moves to mate longer by perturbing the position is how the other
+  route toward obstruction is reached. The position is not jointly compatible as it stands, and it is used as an example to run the
+  four steps.
+
 **The progress to be denoted.** The designer asked that progress on the discovery of where to start be denoted, and whether a
 document existed for it. This file is that document.
 
@@ -130,6 +178,9 @@ document existed for it. This file is that document.
 | A pruned structure on any line | Not run |
 | The first certified local boundary board state, with its path from the initial position, primitive calculations, composition and certification | Not found; this is the first milestone |
 | Tempo as a scoping criterion on this line | Stated (survey §4e); not applied |
+| A second route: construction of endgame local boundary board states, decoupled from the forward trace | Stated by the designer (§2); not run |
+| A third path: opening theory branches that force draws | Stated by the designer (§2); not run |
+| The procedure on any seed (decisive position or certified state) | Stated by the designer; recorded in topology §8an; illustrated in §2; not run |
 
 ## 4. This file's reading, offered for correction
 
@@ -149,6 +200,7 @@ document existed for it. This file is that document.
 - **Bird's Opening.** The earlier plan (From's Gambit as the first real branch, the fool's mate subtree as the dry run) is described
   in the survey and the pipeline document. The designer says it came from another plan. Whether it is dropped or kept as a dry
   run is not stated, and nothing is changed here.
+- **The illustration.** The position has ten pieces, outside Syzygy, so the tablebase cannot check it.
 
 ## 5. Not yet specified
 
@@ -160,4 +212,4 @@ line.
 
 **The designer's:** the observation of the Black schematic in high-level play; the three moves and their uniqueness to the
 primitives; that the Black moves are scoped and White's side has not been examined; that the discovery is still in progress; and the
-claim made of the deduction. **This file's:** the table, the section order, and the readings in §4.
+claim made of the deduction; the second route, the third path, the procedure on any seed and the illustration (§2). **This file's:** the table, the section order, and the readings in §4.

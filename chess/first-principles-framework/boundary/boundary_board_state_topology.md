@@ -2991,6 +2991,86 @@ status. Everything except White's constructor path is, to the designer, resolved
 
 - **Not run.**
 
+### 8an. The discovery procedure on any seed position: backtrace, race, perturbation, joint compatibility
+
+**The idea, as stated.** There are four distinct, generalizable properties that can be made into a protocol to survey and discover
+local boundary board states, and to work upon them to see whether they can be worked retrograde upstream to fill out the catalog.
+
+1. **Backtracing and reachability under optimality.** If the position is a local boundary board state and is being backtraced, that
+   primitive is the focus of the reduction in the first place.
+2. **Perturbation.** A calibration change to a measurable primitive race, to see whether an equilibrium is established from an
+   imbalanced position, and whether the position arrives closer to an equilibrium position. Perturbation is required to navigate toward
+   discovering an equilibrium local boundary board state position.
+3. **The nature of the primitive race.** Its forced, sequential character and its segmented dependency, which show how obstruction can
+   be possible, and why a race whose delivery is forced beats one whose delivery is not.
+4. **Whether joint compatibility of the primitives is possible** (perturbation-related; the designer says it may be the same thing).
+   The compatibility must come from the obstruction of the other side's mating race. Maintaining that obstruction is then the only
+   winning condition, and committing to the mating race means losing the race that is being obstructed. A race that cannot be
+   obstructed without changing the race itself is composed so that it is interdependent with obstructing the other.
+   A race that is not jointly compatible with obstructing the other is set aside, and the direction of the perturbation emerges from
+   this: toward the obstructions the position needs to be viable (the designer's illustration, start-selection §2).
+
+**It works on any position.** The designer states that the process is generalized and can be done on any position:
+
+- **On a decisively won position** (a position that is won through already decisive primitives), it is used to discover new local
+  boundary board state positions: understand the race, perturb to change the race calculations, and work toward an equilibrium.
+- **On a certified local boundary board state**, the same mechanism determines the local boundary board states reachable from it. The
+  state is retrograde analyzed under optimality, to determine whether it navigates to another boundary state, or whether an upstream
+  position forces navigation to this equilibrium, and so on. This grows the catalog.
+
+**Dead pieces.** Pieces that cannot affect the primitive race to mate are dead to the mating net: if they did not exist, the mate is
+still as inevitable, and if they exist, the mate is still inevitable. The same can hold in a local boundary board state position,
+for pieces that do not impact the primitive race conditions that enforce the draw equilibrium, and positions can be reduced by them.
+
+**Dead pieces, further (the designer's statement).** Adding dead pieces to a position is like adding pieces to a forced sequential win
+that do not impact that primitive race: no additional calculation is needed unless they can obstruct the race. This is a feature in
+two directions. It expands the catalog, since a dead piece added to a certified local boundary board state gives another position. It
+also allows a local boundary board state to be reduced by taking out dead pieces, to find the true primitive of the state and to isolate
+the impactful primitive joint composition positions. The deviation lines need coverage only if they beat the race conditions. Where an
+obstruction is present, exhaustive coverage of it is required. Where the cost of not following the forced draw cycle is a forced loss
+on the primitive under analysis, the exhaustive coverage is scoped to that distance. The designer states that this is deliberately
+woven into the program, which is general and constructive.
+
+**With the tablebase.** With fewer than 8 pieces, Syzygy determines win, draw or loss, and the tablebase can be navigated using that
+understanding for any of the steps. What the designer's machine can store (perhaps 5 pieces at most) is to be considered later.
+Syzygy or opening theory may be searched to identify candidates, or positions close to a candidate. Endgame positions may be less
+complex and more calculable.
+
+**The bottleneck and the automation (the designer's statement).** The tablebase is a basis on which the catalog is built, and it only
+helps the program. It is limited (strict storage limits on exhaustive coverage, and no forward trace at all) and it does not address
+what this program does. The designer has used tablebases to navigate the full landscape before. The automated process depends on
+understanding and building the protective belt, and on understanding the process, with the structures being built out as the
+automation nodes. Race length (the primitive calculations), obstruction (something that impacts the race condition calculations by
+existing, understood through its change under perturbation) and dependency (the interdependent race primitives that compose into a
+goal, as in f7 then f8 with a discovered-check forced sequence beating a one-move mate by force, through the segmented dependency
+primitive) are understood. The real bottleneck is the classification and structure of how to compose the primitives properly, and
+understanding the generalizable principles well enough to construct a script that handles the structure properly, exhaustively and in
+general. It is difficult without a program with explicit considerations for it, and the designer states that it is not that it cannot
+be done.
+
+**What it does for the program.** The process benefits from a more extensive catalog: local boundary board states can be certified
+from local positions upstream, reliably, in a scoped manner. With a full enough catalog, reachability upstream to the initial board
+state position can eventually be confirmed. The designer regards this as an important addition to the program that changes how
+practical the entire program is.
+
+**Followed, and integrated.** The routes it opens for the first certified local state, and the designer's illustration of the
+procedure on a decisive seed, are in `boundary_board_states_start_selection.md` §2. The pointer from the survey is at §4f.
+
+**Assessment — separate from the record above.**
+
+- **Relation to §7.** The scaffolding there starts from confirmed boundary states and extends upstream. This procedure is read as the
+  operation that does the extending, and it takes a decisive position as a starting point as well as a confirmed state.
+- **Relation to the anchored survey.** The survey walks forward from the initial position. This procedure is seeded by a position,
+  not anchored at the initial position. A local boundary board state is decoupled from the initial position and the forward trace by
+  definition (survey §2), so a state found this way is local; a state certified as local is not thereby globally certified. The two
+  directions meet at the boundary line of the catalog (survey §4f).
+- **Dead pieces.** The reading that stood here, that the deviation lines are covered as well as the main line, was replaced by the
+  designer's rule above. How a reduced state is entered in the catalog, as its own entry or as a link to the original, is not specified.
+- **Composition.** The bottleneck stated above is the part survey §4f records as not specified, and the designer says it is found
+  through a first example.
+- **The catalog.** Nothing here is added to it. Perturbation and dead pieces are operations on a position and not primitives (catalog §1).
+- **Not run.**
+
 ---
 
 ## 9. What remains open

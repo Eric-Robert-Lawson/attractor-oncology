@@ -394,6 +394,12 @@ trace from that boundary may help solve the backtrace. The two directions theref
   three primitives. How further primitives and goals are composed is the part the designer calls another matter entirely, and
   nothing is filled in for it here.
 
+**The procedure that applies to any seed.** The discovery of new local states, and the reachability from certified ones, use one
+procedure that works on a decisive position or on a certified local boundary board state alike: topology §8an (the designer's
+statement). The routes it opens for the first certified state are recorded in `boundary_board_states_start_selection.md` §2. It is
+seeded by a position and is not anchored at the initial position. It meets the forward trace of this survey at the boundary line of
+the catalog, as stated above.
+
 ### 4g. The end-state test in one place (a summary of §2a, §4b and §4d)
 
 This is a summary and adds nothing to them; the statements are the designer's, in those sections.

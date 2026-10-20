@@ -134,6 +134,7 @@ The hard core therefore has one failure condition, which is also a result: a cer
 | Forced-draw node | a node where the draw is held by forced replies against a forced loss, with the equilibrium realized by a repetition cycle sustained by both sides or by a forced terminal draw with no choice to deviate, both sides live (`boundary_board_states.md` §14 items 7 and 10) |
 | Candidate | a forced-draw node whose primitive accounting is an equilibrium (catalog §5), entered in the candidate catalog |
 | Web | the set of candidates whose verification depends on one another (§7) |
+| Reachability family | the local boundary board states reachable from a certified one, found by applying the procedure of topology §8an to a certified seed, and recorded in the boundary board state certification catalog (§4j). The designer's phrase is "families of reachable local boundaries"; the wording of this row is this file's |
 
 ## 4. The procedure
 
@@ -300,6 +301,13 @@ combinatorially large. It is that any primitive race condition for a forcing seq
 optimal conditions. Tempo was always understood explicitly in this way. It is not a sense or a heuristic: it is a first-principles
 calculable metric that can be defined precisely with the program.
 
+**Tempo and its anchor (the designer's statement).** Tempo on a given position is definitionally coupled to the initial anchoring measurement point. If the tempo relation can be
+understood from arriving at the position from any route, that tempo is the same calculation regardless of route, by the definition of
+tempo. To discover tempo, the calculations of tempo to arrive from the initial position must be discovered. It is definitionally
+prohibited to understand tempo at all without this anchor, or without the anchor of the terminal game condition (the equilibrium, or
+the forced sequence, anchoring position), to understand the temporal relative value in the first place. The designer adds that the
+confusion about this is understandable and should be informed by the program itself.
+
 **The roles under optimal play.** With the global boundary board state structure, White and Black have distinct roles. White is the
 constructor and Black is the reactor. White chooses which opening line to navigate, the direction in which to arrive at the
 boundary board state position where the game draws. Black reacts to those choices, from a pool of choices that White's choices have
@@ -354,6 +362,11 @@ protective belt, something to use in the pruning process and to understand optim
   side to move is compared. The tempo of the initial position (White to move) is the one tempo fact that is known before any
   calculation. For positions further down the line, the definition makes tempo a result of the primitive calculations, so the
   criterion that prunes branches surrendering it is applied where that result is available.
+- **Tempo and its anchor.** The tempo terms of the catalog (TP of P-003, TM of P-008) compare the lengths of races. Read with the
+  statement above, a race length is measured to a terminal condition, the completion of a net or a promotion or the equilibrium, so
+  that is the second kind of anchor, and the initial position is the first. This partly answers the open relation noted under "The
+  belt" above. It is a reading, offered for correction. For a seed reached by construction (§4j), the initial-position anchor is not
+  used and the terminal anchor is.
 
 ### 4f. Composition, what is cheap, and reachability from certified positions (the designer's statement)
 
@@ -399,6 +412,19 @@ procedure that works on a decisive position or on a certified local boundary boa
 statement). The routes it opens for the first certified state are recorded in `boundary_board_states_start_selection.md` §2. It is
 seeded by a position and is not anchored at the initial position. It meets the forward trace of this survey at the boundary line of
 the catalog, as stated above.
+
+**The proof object of a local state, and of an upstream position (the designer's statement).** The cataloging of a locally certified
+boundary board state position is fairly simple and straightforward. The pruning structure already detailed is applied to the boundary
+board state position being certified, and that structure is the proof object. Any upstream boundary board state then only has to be the
+exhaustive coverage between the two proof objects.
+
+**This file's reading, offered for correction.** The proof object of a position is the closed pruned structure on it (§4 step 6, §4a).
+A certified entry in the catalog is a leaf for the structure of any position upstream of it, since a resolved position is not worked
+again (§6, convergence; topology §8p). The proof object of an upstream position is therefore the exhaustive coverage between that
+position and the certified entries its branches reach. The closure condition of §4a applies to it: for both sides, every branch ends
+at a certified forced loss, at a certified entry, or at a non-losing move that stays inside the region, and not only along the path.
+The pieces of this were in the record (§4 step 6, §4a, §6, topology §7 and §8p) and the statement itself was not; the gap was found in
+discussion and is closed here.
 
 ### 4g. The end-state test in one place (a summary of §2a, §4b and §4d)
 
@@ -457,6 +483,32 @@ the plan.
 game. Committed moves decisively change race conditions, and the calculation runs continuously from the anchor, picking up after each
 perturbation. One counter-example beating a race of a plan invalidates it as optimal play. The designer states this generalizes far
 beyond the example.
+
+### 4j. Two catalogs, and perturbation in both settings (the designer's statement)
+
+**The two catalogs.** There are two catalogs: the primitive catalog and a boundary board state certification catalog. Both are important. The primitive
+catalog is important for understanding primitive composition, which dictates the calculations. The catalog of boundary board state
+positions and reachability families is important to eventually enumerate the closure and to progress from local boundary board states
+to families of reachable local boundaries, building up from there.
+
+**Perturbation, in both settings.** Perturbation is the analysis of a board state via move changes, whether by changing piece position entirely or by movement up a
+branch through legal move requirements. The change in primitive state caused by a move applies to moving up the tree to find where a
+race was acted upon, through the constraint of legal moves. When surveying to discover local boundary board states through
+construction, the legal move constraint is not required, since how to arrive at the position is not a concern and there is no
+consideration of the initial game start anchor. Perturbation in that context allows a change in board state in piece position without
+legal move restriction.
+
+**The scope of a perturbation (the designer's statement).** The perturbation scope is dictated by the intended purpose of the perturbation and by whether it is anchored or not in the first
+place. Perturbation is to be understood for what it is, a change of state, whether in discovery or in following a branch.
+
+**This file's reading, offered for correction.**
+
+- **The names.** The candidate catalog of §3, and the candidate, proven and disproven catalogs of `boundary_board_states.md` §3, are
+  read as the stages of the boundary board state certification catalog. The reachability family is added to the objects of §3 in the
+  designer's phrase, with the wording of the row offered for correction.
+- **Dead pieces.** Pieces that can be removed without changing the race are the pieces outside the load-bearing set and the footprint
+  that the record already has: the ablation of topology §8s (catalog §4.12), the footprint (catalog §4.9, topology §8h), and the
+  predictions P3-1 and P8-1. "Unless they can obstruct" is the footprint's membership. This is a reading, offered for correction.
 
 ## 5. Local and global along the line
 

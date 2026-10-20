@@ -121,7 +121,8 @@ the pruning mechanism recorded in the survey, the designer proposes populating t
 by constructing positions from piece combinations, isolating piece combinations and primitives to see what emerges, and analyzing the
 structures through logic from a constructed position. Endgames with pawns may trivialize the process enough to populate some of the
 catalog and construct a first local boundary board state position. This decouples the route from the initial-position anchor and
-from the forward trace. The designer's view is that it may help populate the catalog of certified local boundary board state
+from the forward trace. In this setting perturbation changes piece positions without the legal move restriction (topology §8ap).
+The designer's view is that it may help populate the catalog of certified local boundary board state
 positions, which may be beneficial in itself, and that keeping the pruning mechanism recorded as it is while populating the catalog
 through construction can be a worthwhile use of time. Endgame positions may be less complex and more calculable, and many can be
 reduced by dead pieces (dead pieces can also be added to expand the catalog, or removed to isolate the true primitive composition of a local state; topology §8an). With fewer than 8 pieces, Syzygy determines win, draw or loss and can be navigated for any of the steps;

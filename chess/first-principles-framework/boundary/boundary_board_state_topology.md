@@ -3075,6 +3075,60 @@ procedure on a decisive seed, are in `boundary_board_states_start_selection.md` 
 - **The catalog.** Nothing here is added to it. Perturbation and dead pieces are operations on a position and not primitives (catalog §1).
 - **Not run.**
 
+### 8ao. The proof object of a local state, and the proof of an upstream position
+
+**The idea, as stated.** The cataloging of a locally certified boundary board state position is fairly simple and straightforward. The
+pruning structure already detailed is applied to the boundary board state position being certified, and that structure is the proof
+object. Any upstream boundary board state then only has to be the exhaustive coverage between the two proof objects.
+
+**Followed, and integrated.** Survey §4f.
+
+**Assessment — separate from the record above.**
+
+- **Where the pieces were.** The proof object is the closed pruned structure (survey §4 step 6, §4a). The reuse is the position-keyed
+  cache (survey §6) and the early-termination role of a certified entry (§8p). The upstream extension is §7 and survey §4f. The
+  statement that an upstream position's proof is the coverage between proof objects was not in one place, and the survey now has it.
+- **The condition.** For both sides, every branch of the upstream structure ends at a certified forced loss, a certified entry, or a
+  non-losing move that stays inside the region (survey §4a), and not only along the path.
+- **Not run.**
+
+### 8ap. Two catalogs, perturbation in both settings, and tempo and its anchor
+
+**The idea, as stated.** *Two catalogs.* There are two catalogs: the primitive catalog and a boundary board state certification catalog. Both are important. The primitive
+catalog is important for understanding primitive composition, which dictates the calculations. The catalog of boundary board state
+positions and reachability families is important to eventually enumerate the closure and to progress from local boundary board states
+to families of reachable local boundaries, building up from there.
+
+*Perturbation, in both settings.* Perturbation is the analysis of a board state via move changes, whether by changing piece position entirely or by movement up a
+branch through legal move requirements. The change in primitive state caused by a move applies to moving up the tree to find where a
+race was acted upon, through the constraint of legal moves. When surveying to discover local boundary board states through
+construction, the legal move constraint is not required, since how to arrive at the position is not a concern and there is no
+consideration of the initial game start anchor. Perturbation in that context allows a change in board state in piece position without
+legal move restriction.
+
+*The scope of a perturbation.* The perturbation scope is dictated by the intended purpose of the perturbation and by whether it is anchored or not in the first
+place. Perturbation is to be understood for what it is, a change of state, whether in discovery or in following a branch.
+
+*Tempo and its anchor.* Tempo on a given position is definitionally coupled to the initial anchoring measurement point. If the tempo relation can be
+understood from arriving at the position from any route, that tempo is the same calculation regardless of route, by the definition of
+tempo. To discover tempo, the calculations of tempo to arrive from the initial position must be discovered. It is definitionally
+prohibited to understand tempo at all without this anchor, or without the anchor of the terminal game condition (the equilibrium, or
+the forced sequence, anchoring position), to understand the temporal relative value in the first place. The designer adds that the
+confusion about this is understandable and should be informed by the program itself.
+
+**Followed, and integrated.** Survey §4j (the catalogs and perturbation) and §4e (tempo); the perturbation convention in the primitive
+catalog §6; `boundary_board_states_start_selection.md` §2 (the construction route).
+
+**Assessment — separate from the record above.**
+
+- **What the record held.** The catalog status names the separate catalog of candidate, proven and disproven entries. Perturbation was
+  defined by a move (catalog §1, §7.7, §8.4; Method 7, §8y), which is the legal-move setting. The initial-position tempo and the
+  tempo terms of the catalog were left unrelated (survey §4e, "The belt").
+- **Reachability families** are added to the survey's objects (§3), in the designer's phrase.
+- **Dead pieces** are the pieces outside the load-bearing set and the footprint (§8s, §8h); the reading is in survey §4j.
+- **Tempo** terms are read as measured to a terminal anchor (survey §4e).
+- **Not run.**
+
 ---
 
 ## 9. What remains open

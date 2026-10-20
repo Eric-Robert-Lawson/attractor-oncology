@@ -472,6 +472,12 @@ disturbances as their SPEC entries are.
 - A primitive is admitted only under the admission rule of §1. Something that names the result of a primitive, a state that
   emerges from primitives, an input, or a term shared by several primitives is classified as such and is not indexed. (Added
   with the reduction to three primitives, §10.5; designer's statement, topology §8ab.)
+- Perturbation has two settings (designer's statement, topology §8ap). In the legal-move setting, the change in primitive state caused
+  by a move is what moves up a branch to find where a race was acted upon. In the construction setting, where a position is surveyed
+  without regard to how it is reached and without the initial-position anchor, perturbation changes piece positions without the
+  legal move restriction. Its scope is set by its purpose and by whether it is anchored. The definitions above, which state
+  perturbation by a move, are unchanged. The boundary-state catalogs are one
+  separate catalog, the boundary board state certification catalog (survey §4j), kept apart from this one.
 
 ---
 

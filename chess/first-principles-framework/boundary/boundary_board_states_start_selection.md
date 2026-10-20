@@ -170,10 +170,10 @@ document existed for it. This file is that document.
 
 ## 2a. The Syzygy mining process (the designer's statements, and the procedure as worked through)
 
-**Status of this section.** The process below was run once as a test on a single small material. The designer chose not to record the
-results of that test, because the boundary board state understanding is first to be confirmed as covering a majority of the entire
-space. The process is recorded so that the work can be resumed. The designer also intends to explore a further angle that may change
-the process, and this section records it as it stood.
+**Status of this section.** The process below is a specification, recorded so that the work can be resumed. Nothing from any earlier
+test run is carried over: no data, results, scripts or database. The designer will run the process and verify the data on returning
+to it. The boundary board state understanding is first to be confirmed as covering a majority of the entire space. The designer also
+intends to explore a further angle that may change the process, and this section records it as it stood.
 
 **Mining the tablebases to begin the catalog (a statement).** The Syzygy tablebase solution set can be used to enumerate the draws of a
 material, giving a database of proven draws under optimal conditions. The catalog of boundary board state positions and its
@@ -225,7 +225,7 @@ Then the process is automated and the primitives are matched.
 4. **Take the tablebase value** of each representative by its sign: win, draw or loss for the side to move. Cursed and blessed values
    count as wins and losses, because the 50-move rule is ignored. Check coverage: every legal position has a value.
 5. **Check the table against an independent move generator.** Derive each position's value from the values of its children and compare
-   (checkmate and stalemate where there are no legal moves). No inconsistency is expected. One would mean an error in the move
+   (checkmate and stalemate where there are no legal moves). An inconsistency means an error in the move
    generator, the symmetry fold or the reading of the table. A sample is also compared with a second tablebase reader.
 6. **The drawn population** is the set of positions with value zero for the side to move.
 7. **Classify the moves of each drawn position** by the value of the resulting position for the mover: losing, or drawing (a winning
@@ -249,11 +249,8 @@ Then the process is automated and the primitives are matched.
     checked against the tables wherever a table exists.
 13. **Order of materials.** By piece count, up to what the machine can hold (the designer estimates perhaps five pieces).
 
-**What exists.** Steps 1 to 10 were run once as a test on one material with its leaves (a rook each, with the king and rook against king
-and king against king tables as leaves). The scripts, `sweep.cpp` (enumeration, move classification, components), `probe.py` (tablebase
-values), `build_db.py` (the database) and `verify.py` (independent checks), are in `krvkr_sweep_scripts.tar.gz`, and the database is
-`krvkr_draws.sqlite`, whose `meta` table describes its columns. Both are kept by the designer. Step 11's additional tables and step 12's
-backtrace are not built.
+**What is carried over.** Nothing from any earlier test run. The designer verifies the data on returning to the process. Step 11's
+additional tables and step 12's backtrace are not specified further than above.
 
 ## 3. Progress
 
@@ -269,8 +266,8 @@ backtrace are not built.
 | A second route: construction of endgame local boundary board states, decoupled from the forward trace | Stated by the designer (§2); not run |
 | A third path: opening theory branches that force draws | Stated by the designer (§2); not run |
 | The procedure on any seed (decisive position or certified state) | Stated by the designer; recorded in topology §8an; illustrated in §2; not run |
-| Syzygy mining of a material into a database of proven draws (§2a) | Process stated by the designer and run once as a test on one small material; results not recorded, by the designer's choice; the edges, losing moves and refutation distances are not built |
-| The boundary board state understanding confirmed as covering a majority of the whole space | Pending, per the designer, before the results of the test are integrated |
+| Syzygy mining of a material into a database of proven draws (§2a) | Process stated by the designer and recorded as a specification; nothing from any earlier test run is carried over; to be run and verified by the designer |
+| The boundary board state understanding confirmed as covering a majority of the whole space | Pending, per the designer, before any results are integrated |
 | The link from a mined family to the initial position | Stated (survey §5a); the backtrace procedure is not specified beyond the statements |
 
 ## 4. This file's reading, offered for correction
@@ -306,10 +303,6 @@ backtrace are not built.
   with every deviation out of it certified as a loss. The boundary is read as the rim of the choice space, which includes the initial
   position. The survey's sentence about global states forming a list, with the space between the initial position and that list, is
   unchanged. Offered for correction.
-- **What the test shows about the process.** Steps 1 to 10 of §2a can be carried out from the tablebase alone, and they are quick for
-  four pieces. The test does not exercise the primitives, which the designer places after the mining.
-- **Scale.** The number of positions grows by an estimated 40 to 60 times per added piece (an estimate, not measured). The tablebase
-  reader used in the test is too slow above four pieces, and the table of edges may have to be left out for large materials.
 
 ## 5. Not yet specified
 
@@ -317,8 +310,8 @@ White's candidate constructions against the schematic; the order in which Black'
 Black plans to compare; how the comparison is recorded; and how the schematic's variant with b6 and Bb7 is treated beside the g6
 line.
 
-The backtrace that links a mined family to the initial position, beyond the designer's statements; the order of materials; a faster
-tablebase reader for above four pieces; which of the edges, losing moves and refutation distances to build first; and whether interior
+The backtrace that links a mined family to the initial position, beyond the designer's statements; the order of materials; a tablebase
+reader suited to the size of the material; which of the edges, losing moves and refutation distances to build first; and whether interior
 positions are entered in the catalog.
 
 ## 6. Provenance

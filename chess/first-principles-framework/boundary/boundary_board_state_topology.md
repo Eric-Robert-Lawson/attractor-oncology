@@ -179,6 +179,8 @@ should be read as saying otherwise.
 
 *Clarification (§8ac, `boundary_board_states.md` §14 item 9): "global" below is start-reachability. The designer's definition of a global boundary state adds that it is the first boundary between choice and force from the initial position across all paths that reach it, sound against all deviation replies, with many global states. The reading that start-reachability is the reachability part of that definition is recorded in `boundary_board_states_opening_survey.md` §2.*
 
+*Later statement (§8aq, `boundary_board_states_opening_survey.md` §5a): the first-boundary clause in this clarification is read as superseded by the designer's later statement that membership of a family reachable from the initial position under the optimal backtrace constraint makes a state global. Start-reachability is read as the reachability part of that. Kept as recorded; offered for correction.*
+
 §4's necessity/redundancy is anchored to *some* ancestor, chosen arbitrarily —
 useful for prioritization, but relative. What's being described here is
 sharper: anchor "global" to one fixed, unique reference point — the game's
@@ -2737,6 +2739,8 @@ local boundary state is one where the equilibrium is verified (the primitives sh
 that it is first. The survey's target is a local candidate anchored from the initial position by a chosen line, optimal or
 sub-optimal.
 
+*Later statement (§8aq): the first-boundary clause and the two-proof requirement in this paragraph are read as superseded by the designer's later statement on *global*; kept as recorded.*
+
 Forcing sequences are read as race conditions. A forcing sequence is a decisive advantage to the side that forces it, and it may
 force a win, a draw or a loss. A forced loss is uninformative. A forced win marks a winning race condition, and adversarial play
 takes it, which prunes the lines that allow it. A forced draw is a possible boundary state, and a draw forced at each step to
@@ -3148,6 +3152,8 @@ position under the optimal reachability constraint, or concludes that it does. T
 linking to the initial position. A family must reach the initial game start to prove global, if that family is composed under the
 optimality backtrace constraint, which is the requirement for any family created.
 
+*Global, restated. Any upstream position that under optimal conditions leads to a boundary lies in the choice region, and the boundary actually being realized does not change the equilibrium that the boundary position and the upstream positions reside within, if they are part of a reachable family under the optimal backtrace constraint. A family that is reachable from the initial start position under that constraint is an optimally reachable boundary board state family, and every member of it is a global boundary board state position. The initial game start position is itself a boundary board state position: it resides in the choice region, and if it has a move that can lose, it is a boundary. The designer adds that a distinction between the choice region and the boundary drawn by how many drawing moves a position has is a meaningless classification criterion.*
+
 **Followed, and integrated.** Survey §4f (composition), §3 and §5a (reachability families).
 
 **Assessment — separate from the record above.**
@@ -3155,6 +3161,7 @@ optimality backtrace constraint, which is the requirement for any family created
 - **Composition** is the reduction rule (§8x) run on a confirmed state: the residual interface of the composed primitives is the
   specification of a missing one, admitted only under the admission rule (catalog §1).
 - **Families** are read with survey §5 and §7 here (survey §5a); the readings are offered for correction.
+- **Global.** The first-boundary clauses (the §5 clarification and §8ac) are read as superseded by the restated definition above, and are kept as recorded. Offered for correction.
 - **Not run.**
 
 ---

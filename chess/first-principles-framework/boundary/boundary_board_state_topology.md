@@ -3068,6 +3068,10 @@ procedure on a decisive seed, are in `boundary_board_states_start_selection.md` 
   designer's rule above. How a reduced state is entered in the catalog, as its own entry or as a link to the original, is not specified.
 - **Composition.** The bottleneck stated above is the part survey §4f records as not specified, and the designer says it is found
   through a first example.
+- **Relation to the closure.** The scope of the programme is unchanged: the closure of the global boundary board states from the
+  initial position, and the proof of that outcome (survey §2a). This procedure builds the certified catalog and its reachability that
+  the closure is proved against, and the population it produces can inform and optimize the rest of the programme. It is a means to the
+  closure and does not replace it.
 - **The catalog.** Nothing here is added to it. Perturbation and dead pieces are operations on a position and not primitives (catalog §1).
 - **Not run.**
 

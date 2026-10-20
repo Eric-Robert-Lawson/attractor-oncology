@@ -5,8 +5,8 @@ anchored opening survey (`boundary_board_states_opening_survey.md`) should start
 decides nothing. Nothing in it has been run on a pruned structure.
 
 **Companion documents.** `boundary_board_states_opening_survey.md` (the method; §4e is the statement this file expands, §7 is the
-calibration of a line and a depth), `boundary_board_state_topology.md` (§8aj, §8al, §8an, §8ap, §8aq), `boundary_board_states.md` (changelog entries 38, 39
-and 42), `boundary_board_state_primitive_catalog.md` (the three primitives). The designer's statements are marked as such and kept
+calibration of a line and a depth), `boundary_board_state_topology.md` (§8aj, §8al, §8an, §8ap, §8aq), `boundary_board_states.md` (changelog entries 38, 39,
+42 and 62), `boundary_board_state_primitive_catalog.md` (the three primitives). The designer's statements are marked as such and kept
 apart from this file's readings, as in the catalog's §10.
 
 ---
@@ -168,6 +168,93 @@ decisive, and the point of the example is the perturbation that would be needed 
 **The progress to be denoted.** The designer asked that progress on the discovery of where to start be denoted, and whether a
 document existed for it. This file is that document.
 
+## 2a. The Syzygy mining process (the designer's statements, and the procedure as worked through)
+
+**Status of this section.** The process below was run once as a test on a single small material. The designer chose not to record the
+results of that test, because the boundary board state understanding is first to be confirmed as covering a majority of the entire
+space. The process is recorded so that the work can be resumed. The designer also intends to explore a further angle that may change
+the process, and this section records it as it stood.
+
+**Mining the tablebases to begin the catalog (a statement).** The Syzygy tablebase solution set can be used to enumerate the draws of a
+material, giving a database of proven draws under optimal conditions. The catalog of boundary board state positions and its
+reachable families can be created from those proven results. The designer will mine all the Syzygy data the machine can handle,
+then automate off that basis, from the catalog, with the pruning mechanism. Eventually the size of the Syzygy set does not matter,
+because reachability under the methodology of the programme, backtracing and exhaustive enumeration from the cached database file,
+carries past it.
+
+**How a draw ends (a statement).** The draws are categorized by whether the paths draw from stalemate, from insufficient material, or
+from cyclical draws.
+
+**Branches under optimal constraints (a statement).** A branch is enumerated by taking the tablebase's win, draw or loss value and
+distance and mapping it to the actual branch with its legal move pool, to determine which branches align with the count. Branches
+are created under optimal constraints: the moves chosen are the optimal ones.
+
+**Reduction to insufficient material (a statement).** Where the tablebase verifies that the best move is a reduction to insufficient
+material, that is a provable equilibrium of reduction to insufficient material and not a choice of stalemate, since optimality is
+what matters here.
+
+**The 50-move rule (a statement).** It is ignored for now. It matters only for a reachable family once the anchor is reached, where
+it gives a cutoff from the number of moves.
+
+**The primitives afterwards (a statement).** The primitive compositional analysis is not part of the enumeration. It is done post hoc,
+from the population of certified local boundary board state positions obtained by exhaustive coverage of Syzygy, and by the designer
+when a draw position is verified.
+
+**The criterion (a statement).** A position in the choice region that has a move that can lose is a boundary board state position, and
+the initial game start position is one. Upstream positions that under optimal conditions lead to the boundary share its equilibrium.
+A distinction drawn by how many drawing moves a position has is a meaningless classification criterion. A family reachable from the
+initial start position under the optimal backtrace constraint has every member global (survey §5a).
+
+**The two spaces (a statement).** There is a choice space and a forced space that together encapsulate the entire space of chess, with
+the areas of sub-optimal play pruned. The boundary between them is literal. The pruned structure that emerges from the process is the
+full solution of chess.
+
+**The order (a statement).** Mine Syzygy. The catalog of boundary board states and the reachable families come out of that mining.
+Then the process is automated and the primitives are matched.
+
+**The procedure as worked through (this file's organization, offered for correction).**
+
+1. **Choose a material and find its leaves.** Every capture, and every promotion for a material with pawns, leads to another material,
+   whose table is then needed as a leaf. For two kings with a rook each, the leaves are a king and rook against a king, for either
+   colour, and king against king. A missing table makes the probes fail.
+2. **Enumerate every legal position**, with either side to move: distinct squares, kings not adjacent, and the side not to move not in
+   check.
+3. **Fold by symmetry.** Keep one canonical representative per class and its orbit size, so that counts over all positions can be
+   recovered. With no pawns the symmetries are the eight board symmetries and the swap of colours with the side to move swapped. With
+   pawns the direction of play limits them to the left-right mirror.
+4. **Take the tablebase value** of each representative by its sign: win, draw or loss for the side to move. Cursed and blessed values
+   count as wins and losses, because the 50-move rule is ignored. Check coverage: every legal position has a value.
+5. **Check the table against an independent move generator.** Derive each position's value from the values of its children and compare
+   (checkmate and stalemate where there are no legal moves). No inconsistency is expected. One would mean an error in the move
+   generator, the symmetry fold or the reading of the table. A sample is also compared with a second tablebase reader.
+6. **The drawn population** is the set of positions with value zero for the side to move.
+7. **Classify the moves of each drawn position** by the value of the resulting position for the mover: losing, or drawing (a winning
+   move cannot occur). Record counts and not a verdict: legal, losing and drawing moves; and of the drawing moves, those that stay in
+   the material, those that leave it by a capture into a terminal draw by stalemate or insufficient material, and those that reach a
+   stalemate position. Storing counts lets any criterion be applied later by query.
+8. **Build the graph of drawing moves** among the drawn classes. Compute the strongly connected components (positions that can reach one
+   another, which is where the cycles are) and the weakly connected components (the reachability families). Propagate flags: a cycle, a
+   stalemate or insufficient material is reachable by drawing moves. Label the realization as stalemate now, terminal only, cycle only
+   or mixed. A cycle in the symmetry quotient is a real cycle: a path from a position to its own symmetric image repeats after the
+   order of the symmetry.
+9. **Apply the criterion by query.** Drawn with a move that loses is a boundary board state position. Drawn with no losing move is
+   interior. Not drawn is forced space.
+10. **Verify the components** with a second implementation.
+11. **Store the result in a database.** For the post hoc composition analysis, also keep the edges of the graph, the losing moves with the
+    positions they lead to, and the refutation distance of each loss (the distance to zeroing from the distance tables, and true mate
+    distance only where a solver supplies it). These three are not built yet.
+12. **Link to the anchor.** A family reachable from the initial position under the optimal backtrace constraint makes every member global
+    (survey §5a). The catalog entries are certified entries, and act as leaves for any structure upstream of them (survey §4f). For
+    materials beyond what the machine can store, the segmented method builds upward from the cached entries, and the automated pruning is
+    checked against the tables wherever a table exists.
+13. **Order of materials.** By piece count, up to what the machine can hold (the designer estimates perhaps five pieces).
+
+**What exists.** Steps 1 to 10 were run once as a test on one material with its leaves (a rook each, with the king and rook against king
+and king against king tables as leaves). The scripts, `sweep.cpp` (enumeration, move classification, components), `probe.py` (tablebase
+values), `build_db.py` (the database) and `verify.py` (independent checks), are in `krvkr_sweep_scripts.tar.gz`, and the database is
+`krvkr_draws.sqlite`, whose `meta` table describes its columns. Both are kept by the designer. Step 11's additional tables and step 12's
+backtrace are not built.
+
 ## 3. Progress
 
 | Item | State |
@@ -182,6 +269,9 @@ document existed for it. This file is that document.
 | A second route: construction of endgame local boundary board states, decoupled from the forward trace | Stated by the designer (§2); not run |
 | A third path: opening theory branches that force draws | Stated by the designer (§2); not run |
 | The procedure on any seed (decisive position or certified state) | Stated by the designer; recorded in topology §8an; illustrated in §2; not run |
+| Syzygy mining of a material into a database of proven draws (§2a) | Process stated by the designer and run once as a test on one small material; results not recorded, by the designer's choice; the edges, losing moves and refutation distances are not built |
+| The boundary board state understanding confirmed as covering a majority of the whole space | Pending, per the designer, before the results of the test are integrated |
+| The link from a mined family to the initial position | Stated (survey §5a); the backtrace procedure is not specified beyond the statements |
 
 ## 4. This file's reading, offered for correction
 
@@ -206,6 +296,20 @@ document existed for it. This file is that document.
   where a state is reached by a path from the initial position. The construction route has no backtrace constraint at discovery; the
   family composed from a discovered state is what links it to the initial position or concludes that it cannot (survey §5a, topology
   §8aq). The two are read as covering different routes into the same catalog. Offered for correction.
+- **The criterion is applied to the side to move.** The mining applies the designer's criterion to the moves of the side to move at each
+  position. The opponent's deviations are seen at the positions reached by a drawing move. The survey's hard core asks for a losing
+  deviation for each side (survey §2, §4a). Offered for correction.
+- **Forced reduction.** The reduction to insufficient material is read as the positions where every drawing move is a capture that ends
+  in insufficient material, or where no cycle is reachable and every drawing line ends there. A table of values does not rank moves of
+  equal value, so "the best move" is read as the unique drawing move. Offered for correction.
+- **The two spaces and the weak solution.** The statement is read as the weak solution of survey §2a and §4g: the region of optimal play
+  with every deviation out of it certified as a loss. The boundary is read as the rim of the choice space, which includes the initial
+  position. The survey's sentence about global states forming a list, with the space between the initial position and that list, is
+  unchanged. Offered for correction.
+- **What the test shows about the process.** Steps 1 to 10 of §2a can be carried out from the tablebase alone, and they are quick for
+  four pieces. The test does not exercise the primitives, which the designer places after the mining.
+- **Scale.** The number of positions grows by an estimated 40 to 60 times per added piece (an estimate, not measured). The tablebase
+  reader used in the test is too slow above four pieces, and the table of edges may have to be left out for large materials.
 
 ## 5. Not yet specified
 
@@ -213,8 +317,12 @@ White's candidate constructions against the schematic; the order in which Black'
 Black plans to compare; how the comparison is recorded; and how the schematic's variant with b6 and Bb7 is treated beside the g6
 line.
 
+The backtrace that links a mined family to the initial position, beyond the designer's statements; the order of materials; a faster
+tablebase reader for above four pieces; which of the edges, losing moves and refutation distances to build first; and whether interior
+positions are entered in the catalog.
+
 ## 6. Provenance
 
 **The designer's:** the observation of the Black schematic in high-level play; the three moves and their uniqueness to the
 primitives; that the Black moves are scoped and White's side has not been examined; that the discovery is still in progress; and the
-claim made of the deduction; the second route, the third path, the procedure on any seed and the illustration (§2). **This file's:** the table, the section order, and the readings in §4.
+claim made of the deduction; the second route, the third path, the procedure on any seed and the illustration (§2); the statements of §2a. **This file's:** the table, the section order, the organization of the procedure in §2a, and the readings in §4.

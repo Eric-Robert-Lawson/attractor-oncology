@@ -3158,6 +3158,46 @@ optimality backtrace constraint, which is the requirement for any family created
 - **Families** are read with survey §5 and §7 here (survey §5a); the readings are offered for correction.
 - **Not run.**
 
+### 8ar. Mining the Syzygy tablebases for the certification catalog
+
+**The idea, as stated.** *The catalog from proven results.* The designer's aim is to begin the boundary board state certification catalog by creating it from
+the proven results of the Syzygy tablebase solution set, enumerating the boundary board states from it. The population of draws from
+Syzygy is important. A branch can be enumerated by taking the tablebase's win, draw or loss value and distance and mapping it onto the actual branch
+with its legal move pool.
+
+*Optimal play, and what is left to later.* Branches are created under optimal constraints. The primitive calculations are not part of the script; they are done when a
+drawn position is verified later, and primitive compositional analysis is done after the fact, from the population of certified local
+boundary board state positions obtained by exhaustive coverage from Syzygy. The 50-move rule is ignored for now: it matters only in a
+reachable family, when the anchor is reached, as a cutoff.
+
+*How a draw is realized.* The draws are categorized by stalemate, insufficient material, or cyclical. Where the verified best move is to reduce to insufficient
+material, that is a provable equilibrium of reduction to insufficient material rather than a stalemate choice, since optimality is the concern.
+
+*The boundary and the two spaces.* A position in the choice region that has a move that can lose is a boundary board state position, and the initial game start position is one.
+A distinction of the choice region from the boundary by how many drawing moves a position has is a meaningless classification
+criterion. There is a literal boundary between force and choice, and a choice space and a forced space that together encapsulate the
+entire space of chess, with sub-optimal areas pruned; the pruned structure is the full solution of chess. The designer wants to
+confirm that the boundary board state understanding covers a majority of the entire space.
+
+*The scale and the order.* The tablebase size does not matter eventually, for reachability, with the program's methodology of backtracing and exhaustive enumeration
+from the cached database. The work is to mine all the Syzygy data the machine can handle, and then to automate off that basis, from
+the catalog, with the pruning mechanism: mining first, then the catalog and reachable families from it, then the automation and the
+matching of primitives. The designer has said that another angle is under consideration which may change this; none is recorded.
+
+**Followed, and integrated.** The process is written as its own document, `boundary_board_states_syzygy_mining.md`. The statements are summarized in survey §4k, the
+classification of a family and the global definition are in survey §5a, and the later specification of the process is in
+`boundary_board_states_start_selection.md` §2a. Changelog entries 62 and 65 of `boundary_board_states.md`.
+
+**Assessment — separate from the record above.**
+
+- **The tablebase certifies the closure condition of survey §4a** for a drawn position of a held material: every legal move keeps the
+  draw or loses, with the value of each from the table. That is a reading, offered for correction. The test for a losing deviation of
+  each side at the same position is not fixed by the statements.
+- **The term *interior*** (drawn positions with no losing move) is this file's, used in the process document to name the remainder of the
+  choice space. The designer did not name it.
+- **Not run.** The process is a specification. Nothing in it is carried over from any earlier test, and the designer will run and verify the data on return. Primitives are placed after the fact, as the designer states.
+- **Scale.** The sizes of larger materials are estimates in the process document (§8), not measurements.
+
 ---
 
 ## 9. What remains open

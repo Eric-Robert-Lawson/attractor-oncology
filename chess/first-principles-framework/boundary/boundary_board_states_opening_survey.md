@@ -8,10 +8,11 @@ complete case-list certificate).
 
 Companion documents: `boundary_board_states.md` (the concept and methods; §1 the definition, §3 the caching architecture, §14
 items 4 and 7 to 11), `boundary_board_state_topology.md` (the record; §3 status is local and unconditional, §5 start-reachability,
-§8h footprints, §8p the guard rail on absent paths, §8r forward anchoring, §8x the proven entry, §8ac, §8ad, §8ae, §8af and §8ag, and §8ah to §8aq, the designer's
+§8h footprints, §8p the guard rail on absent paths, §8r forward anchoring, §8x the proven entry, §8ac, §8ad, §8ae, §8af and §8ag, and §8ah to §8ar, the designer's
 statements behind this file), `boundary_board_state_primitive_catalog.md` (the three primitives, the admission rule),
 `boundary_board_states_case_study_otb.md` (the game), `boundary_board_states_start_selection.md` (where to start: the
-discovery of the first line to survey).
+discovery of the first line to survey), `boundary_board_states_syzygy_mining.md` (the process of mining the Syzygy tablebases
+for the certification catalog).
 
 **How this file is organized.** What is the designer's statement is marked as such and kept apart from this file's organizational
 choices (§11), in the manner of the catalog's §10. Where this file reads one of the designer's statements against an existing
@@ -191,8 +192,8 @@ refutes the candidate. The two are recorded separately.
 
 **Certification condition (this file's reading of the designer's statement, offered for correction).** The pruning certifies an
 equilibrium when the pruned structure is a closed system. At every position of the equilibrium region, which is the cycle together
-with each non-losing alternative that stays drawn, every legal move of both sides is accounted for: it either stays inside the
-region as a non-losing move, or it is a certified forced loss for the side that plays it. Then no side can improve by leaving the
+with each non-losing alternative that stays drawn, every legal move of both sides is accounted for: it either leads to a
+position in the region, or it is a certified forced loss for the side that plays it. Then no side can improve by leaving the
 region, and the value of the region is the draw. The complete deviation map is the proof, and the primitives supply the reasons for
 the refutations. It needs: each forced loss certified (a verified forced mate, a tablebase result, or a complete case list, and not
 an engine assertion); closure under the non-losing moves; a losing deviation for each side, with the realization shown (the cycle,
@@ -425,7 +426,7 @@ exhaustive coverage between the two proof objects.
 A certified entry in the catalog is a leaf for the structure of any position upstream of it, since a resolved position is not worked
 again (§6, convergence; topology §8p). The proof object of an upstream position is therefore the exhaustive coverage between that
 position and the certified entries its branches reach. The closure condition of §4a applies to it: for both sides, every branch ends
-at a certified forced loss, at a certified entry, or at a non-losing move that stays inside the region, and not only along the path.
+at a certified forced loss, at a certified entry, or at a move that leads to a position in the region, and not only along the path.
 The pieces of this were in the record (§4 step 6, §4a, §6, topology §7 and §8p) and the statement itself was not; the gap was found in
 discussion and is closed here.
 
@@ -512,6 +513,39 @@ place. Perturbation is to be understood for what it is, a change of state, wheth
 - **Dead pieces.** Pieces that can be removed without changing the race are the pieces outside the load-bearing set and the footprint
   that the record already has: the ablation of topology §8s (catalog §4.12), the footprint (catalog §4.9, topology §8h), and the
   predictions P3-1 and P8-1. "Unless they can obstruct" is the footprint's membership. This is a reading, offered for correction.
+
+### 4k. Mining the Syzygy tablebases for the certification catalog (the designer's statements)
+
+The full statements and the process are in `boundary_board_states_syzygy_mining.md` §1 and §3; they are summarized here.
+
+- The aim is to begin the boundary board state certification catalog (§4j) by creating it from the proven results of the Syzygy
+  tablebases, enumerating the boundary board states from the solution set. A branch can be enumerated by mapping the tablebase value
+  (and distance) onto the branch with its legal move pool. Branches are created under optimal constraints.
+- Primitive calculations are not part of the script. They are done when a drawn position is verified later, and primitive
+  compositional analysis is done after the fact, from the population of certified local boundary board states obtained by
+  exhaustive coverage from Syzygy.
+- The 50-move rule is ignored for now. It matters only in a reachable family, as a cutoff, when the anchor is reached.
+- Draws are categorized by stalemate, insufficient material, or cyclical. Where the best move verified from the tablebase is to
+  reduce to insufficient material, that is a provable equilibrium of reduction rather than a stalemate choice, since optimality is
+  the concern.
+- A position in the choice region with a move that can lose is a boundary, and the initial position is one (§5a). The choice space
+  and the forced space together encapsulate the entire space of chess, with sub-optimal areas pruned, and the pruned structure is
+  the full solution. The designer wants to confirm that boundary board states are a majority of the space.
+- The tablebase size does not matter eventually, for reachability, with the program's methodology of backtracing and exhaustive
+  enumeration from the cached database. The work is to mine all the Syzygy data the machine can handle and then automate off that
+  basis with the pruning mechanism. The order is mining, then the catalog and families from it, then automation and the matching of
+  primitives.
+
+**This file's reading, offered for correction.**
+
+- **The tablebase as the certificate of §4a.** For a drawn position of a material held in the tablebase, every legal move either
+  keeps the draw or loses, and the table gives the value of each, so the closure condition of §4a (every legal move accounted for)
+  is met by the table. Whether each side has a losing deviation at the position, and what "both sides live" tests, is not settled by
+  the statements (mining document §9).
+- **The mined population as the entry stage of the catalog.** The proven draws of a mined material are read as entries of the
+  certification catalog at its entry stage (§4j), for the materials mined. No fields of an entry are proposed.
+- **The order of work.** This is §4h run on tablebase data: the furthest downstream certified entries first, and the families and the
+  upward link afterwards (§5a).
 
 ## 5. Local and global along the line
 

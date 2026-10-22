@@ -6,7 +6,7 @@ decides nothing. Nothing in it has been run on a pruned structure.
 
 **Companion documents.** `boundary_board_states_opening_survey.md` (the method; §4e is the statement this file expands, §7 is the
 calibration of a line and a depth), `boundary_board_state_topology.md` (§8aj, §8al, §8an, §8ap, §8aq), `boundary_board_states.md` (changelog entries 38, 39,
-42 and 62), `boundary_board_state_primitive_catalog.md` (the three primitives). The designer's statements are marked as such and kept
+42, 62, 63 and 64), `boundary_board_state_primitive_catalog.md` (the three primitives). The designer's statements are marked as such and kept
 apart from this file's readings, as in the catalog's §10.
 
 ---
@@ -252,6 +252,86 @@ Then the process is automated and the primitives are matched.
 **What is carried over.** Nothing from any earlier test run. The designer verifies the data on returning to the process. Step 11's
 additional tables and step 12's backtrace are not specified further than above.
 
+## 2b. The staged workflow from an anchor (the designer's statements)
+
+**Status of this section.** The designer describes this as a staged process of the pruning mechanism and as the sum of the programme so
+far, and expects it to be more automatable. Some rules are not fully resolved, as stated below. Nothing in it has been run.
+
+**From the initial position to a segment anchor (a statement).** The initial game start position is assumed to be in the equilibrium
+choice phase, and its legal move pool is vast, so branching on all of it is combinatorially explosive. The structure is treated as a
+sum. One move is chosen from the pool and worked down its branch, and the whole is composed from the branch segments. A preset opening
+path takes the work from the initial anchor to a pruned structure anchor, where the pruned structure begins. Segments are certified up to
+a specific point, composing them may be additive once they are certified, and the rules of composition are to be understood later,
+because they depend on what certifying the pruned structure involves.
+
+**Discovery at a segment anchor (a statement).** From a pruned structure anchor the work is discovery, not building from the catalog.
+The goal is to discover a local boundary board state, in order to create a reachable family segmented progression certificate. Since
+the target is local, optimality of the path is not the concern at this stage. The object is the full landscape from the pruned
+structure anchor to the terminal local boundary board state positions.
+
+**Enumeration (a statement).** All legal moves are covered exhaustively from the anchor, keeping only the pruned structure that
+maintains equilibrium, and keeping track of the coverage, so that the network of legal moves is built by brute force under a rule set
+that stops it trailing off into repeated moves. Because the structure is pruned for equilibrium and not for advantage, the designer
+expects the result to be much smaller than the decisive branches.
+
+**The pruning rules (a statement).** Decisive wins and losses are pruned. A position already in the pruned structure, arrived at again,
+is cached as work already done. The other pruning rules concern the optimality of reachability and opportunity cost against the other
+potential branches, using recurring board positions and the measurement of relativistic branches against the structure already
+enumerated, so the protocol is compositionally and relativistically interdependent. A self-referential procedure is to rule out a
+sub-optimal route: one that arrives at a position that could have been arrived at before by optimal pathing, which is evident from the
+pruned structure. The designer says the rule set for repeated positions and the self-referential procedure is not fully resolved, and
+that it may work itself out from running the process from the start.
+
+**Reversible and irreversible moves (a statement).** There are moves that can be reversed and moves that cannot. An irreversible move is
+a true moment of progression that reshapes everything. A reversible move can be reversed, and sometimes it is optimal to reverse a move
+or to return eventually to a position, so pruning such moves is trivially against the programme. The dancing is mitigated by referencing
+the keys, to know whether a move is within a cycle in a segmented boundary that is already resolved. Sometimes it is good to move within
+a segmented boundary for zugzwang purposes, if the opponent is forced to. A segmented boundary that is repeated to draw conditions is an
+important indication of a boundary board state position.
+
+**Mapping is not certification (a statement).** The above maps out the landscape. Local boundary board states are concerned with
+optimality, so the potential draw positions found in the structure must be certified through optimality, by referencing the other
+branches pruned for decisive reasons. At each pruned end the composition of the win and loss potential of each player is understood.
+This determines whether a draw position is reachable under optimal conditions: if there exists a branch that a player can choose that
+deviates into a forced win, that branch can be chosen instead of the draw under optimal conditions.
+
+**Which regions to enumerate (a statement).** This informs which regions are enumerated at all. If a point has been reached where both
+sides could already have forced a win, the work is already in the forced phase region, and the boundary between choice and force has
+been crossed. That boundary then resides behind the pruned structure's anchor point, or within the object being enumerated, or the
+initial position can be forced, which the designer considers most unlikely.
+
+**Certifying a draw by the path to the local boundary board state (a statement).** The optimality of pruning potential draws is analysed
+through the path between the proposed draw point and the ply of the local boundary board state position, under the optimal scoping of
+whatever equilibrium can be exhaustively verified, which needs to be within the Syzygy scope. This is where the programme aligns with
+exhaustive coverage: the scope of the forward trace needs to overlap with the backward trace to enumerate the local boundary board
+state catalog. This is how the local catalog is populated with Syzygy, and the purpose is to identify and certify the space between
+the forward and the back trace through the construction of the pruning structure.
+
+**The cost, and the worst case (a statement).** Some underlying pattern must be found in the local boundary board state catalog that
+can be enumerated, or the programme reaches the same limitations as Syzygy. Even then, the distance to a weak solution can be scoped,
+which the designer regards as massive progress. Perhaps the local boundary board states create local boundaries that are
+compositionally defined with the same structure and principles as the global ones, and that form their own informative decisive force
+and choice boundary, or display holes for decisive force sequences that make optimality obvious. In the worst case, too little can be
+enumerated within the Syzygy limitation to construct a population from which to develop an understanding of these structures at all.
+
+**Modularity and community effort (a statement).** Linking to initial anchored pruning positions and the game start position is a good
+way to approach the work in segments, and makes it approachable as a community effort if it can be shown to have a viable path at all.
+
+**On novelty (a statement, not checked by this assistant).** The designer's belief is that this is concrete and provable, and that from
+the designer's understanding and an earlier literature check it does not exist in the literature.
+
+**Where the regions are, and closure outside the anchored region (a statement).** A move that wins is decisive and lies outside the choice
+region. Choice phases and regions can exist that are disjoint from the initial start position, and they retain equilibriums and spaces
+that contain reachable families of local boundary board state positions. The process is mining for them, and the designer expects to
+find them eventually. Whether enough of them will be found to populate the catalog well enough to inform the composition of the global
+boundary board states is still uncertain. The aim is to populate as many of these sparse regions as possible, and, with luck, to find that
+the global boundary between choice and force already overlaps the back-trace region the Syzygy tables provide. The closure property for
+regions can also exist outside the global region anchored at the initial position. Not every local boundary board state region has it:
+some are unclosed, with decisive routing through the reachable family. A region that closes the branch graph network of a reachable
+family is to be remarked upon as significant, because it implies a lack of forcing sequences and a localized choice phase or region under
+optimality. It is a significant finding if ever found. A localized or global closed region will share the properties of the global
+choice phase or region if the programme's presupposition holds.
+
 ## 3. Progress
 
 | Item | State |
@@ -269,6 +349,8 @@ additional tables and step 12's backtrace are not specified further than above.
 | Syzygy mining of a material into a database of proven draws (§2a) | Process stated by the designer and recorded as a specification; nothing from any earlier test run is carried over; to be run and verified by the designer |
 | The boundary board state understanding confirmed as covering a majority of the whole space | Pending, per the designer, before any results are integrated |
 | The link from a mined family to the initial position | Stated (survey §5a); the backtrace procedure is not specified beyond the statements |
+| Closed local regions and sparse disjoint regions (§2b) | Stated by the designer; none found; whether enough regions exist to inform the global composition is uncertain |
+| The staged workflow from a segment anchor (§2b) | Stated by the designer; the self-referential prune and the repeated-position rules are not fully resolved; not run |
 
 ## 4. This file's reading, offered for correction
 
@@ -303,6 +385,34 @@ additional tables and step 12's backtrace are not specified further than above.
   with every deviation out of it certified as a loss. The boundary is read as the rim of the choice space, which includes the initial
   position. The survey's sentence about global states forming a list, with the space between the initial position and that list, is
   unchanged. Offered for correction.
+- **Keys and segments.** Nodes are read as keyed by the position and the side to move, so the structure is a finite graph and a repeat is a
+  cache hit. A cycle can only lie within a fixed material, pawn structure and castling rights, so the irreversible moves (captures,
+  pawn moves, loss of castling rights) are read as the boundaries between segments. Offered for correction.
+- **The region is a fixpoint.** A node is in the region only if no move wins for the side to move, and every move is either a certified
+  loss or leads to a node in the region. A branch found to be a forced win for the mover therefore removes the node from the region, and
+  that removal passes up to the parents whose moves led into it. So the region is final only when every move of every node has been
+  classified, and not when the forward enumeration stops. This is the designer's "if a player can choose a branch that deviates into a
+  forced win" put as a rule. The survey's certification condition (§4a) says each move "stays inside the region as a non-losing move";
+  it is read here as "leads to a node in the region", since a move into a position that wins for the mover is non-losing and is not in
+  the region. The survey is not changed. Offered for correction.
+- **The anchor is checked first.** The first test at a segment anchor is whether the anchor is itself in the region. An anchor that is
+  decisive lies past the boundary and has no region below it. Offered for correction.
+- **The tablebase end of the overlap.** The part of the forward structure that the tables reach is the part that descends, by captures
+  or promotions, to the material the tables hold. A boundary state that keeps more pieces than the tables hold closes by a cycle at a
+  fixed material and is not reached by the tables. The first population is therefore of low material, and whether its pattern carries
+  to higher material is the cost the designer names. Offered for correction.
+- **Precedent.** Forward search meeting backward databases is the structure of the checkers precedent already cited in topology §7. This
+  assistant has not checked the literature on the programme's own claims (primitives, the boundary as the rim of the choice space,
+  reachability families, a catalog of boundary states), and the novelty statement in §2b is recorded as the designer's.
+- **A closed local region and the closure claim.** A reachable family is closed when every move of every member either leads to a member or
+  is a certified loss for the side that plays it, and no move wins for the mover. This is the region definition applied to a family
+  that need not lead to the initial position. The global closure claim (the programme's closure and its failure condition, a certified
+  route out) is about the region anchored at the initial position. A closed local region is a finding of its own, with no failure
+  condition attached, and an unclosed one is a family with a certified decisive route out. The two are kept apart in the record.
+  Offered for correction.
+- **Closure is a test, applied family by family.** It follows from the fixpoint reading above that a family is tested for closure by
+  classifying every move of its members, and an unclosed family is identified by finding one move into decisive territory. Offered for
+  correction.
 
 ## 5. Not yet specified
 
@@ -314,8 +424,14 @@ The backtrace that links a mined family to the initial position, beyond the desi
 reader suited to the size of the material; which of the edges, losing moves and refutation distances to build first; and whether interior
 positions are entered in the catalog.
 
+The self-referential prune and the rules for repeated positions in §2b; how a segment anchor is chosen and checked; the preset path from the
+initial position to the first segment anchor; and how certified segments are composed.
+
+How the closed local regions found are to be recorded and flagged in the catalog, and how an unclosed family is recorded with its decisive
+route; and the criterion for stopping the search for sparse regions.
+
 ## 6. Provenance
 
 **The designer's:** the observation of the Black schematic in high-level play; the three moves and their uniqueness to the
 primitives; that the Black moves are scoped and White's side has not been examined; that the discovery is still in progress; and the
-claim made of the deduction; the second route, the third path, the procedure on any seed and the illustration (§2); the statements of §2a. **This file's:** the table, the section order, the organization of the procedure in §2a, and the readings in §4.
+claim made of the deduction; the second route, the third path, the procedure on any seed and the illustration (§2); the statements of §2a and §2b. **This file's:** the table, the section order, the organization of the procedure in §2a, and the readings in §4.

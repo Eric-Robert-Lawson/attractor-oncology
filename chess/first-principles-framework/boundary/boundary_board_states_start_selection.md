@@ -410,6 +410,13 @@ choice phase or region if the programme's presupposition holds.
   route out) is about the region anchored at the initial position. A closed local region is a finding of its own, with no failure
   condition attached, and an unclosed one is a family with a certified decisive route out. The two are kept apart in the record.
   Offered for correction.
+- **What the 50-move rule can change, and what it cannot.** It can only turn a win into a draw, so a branch cached as decisive with the rule
+  ignored may be a draw on a route with a high move counter. The draw claim of a certified region is not affected, since everything in it
+  is a draw under the stricter reading. What can be affected is the extent of the region: a move labelled losing may be a drawing move on
+  such a route, so the region found may be smaller than the real one, and those routes remain to be enumerated once the anchor is
+  reached. The counter resets on a capture or a pawn move, which are read as the segment boundaries, so a verdict at a segment entry does
+  not depend on the route, and inside a segment a cached decisive verdict is exposed only where the distance to zeroing plus the counter
+  on arrival comes close to 100 plies. The certification of a region is valid up to where it is valid. Offered for correction.
 - **Closure is a test, applied family by family.** It follows from the fixpoint reading above that a family is tested for closure by
   classifying every move of its members, and an unclosed family is identified by finding one move into decisive territory. Offered for
   correction.

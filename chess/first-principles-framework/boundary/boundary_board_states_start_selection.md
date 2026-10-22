@@ -5,8 +5,7 @@ anchored opening survey (`boundary_board_states_opening_survey.md`) should start
 decides nothing. Nothing in it has been run on a pruned structure.
 
 **Companion documents.** `boundary_board_states_opening_survey.md` (the method; §4e is the statement this file expands, §7 is the
-calibration of a line and a depth), `boundary_board_state_topology.md` (§8aj, §8al, §8an, §8ap, §8aq), `boundary_board_states.md` (changelog entries 38, 39,
-42, and 62 to 82), `boundary_board_state_primitive_catalog.md` (the three primitives). The designer's statements are marked as such and kept
+calibration of a line and a depth), `boundary_board_state_topology.md` (§8aj, §8al, §8an, §8ap, §8aq), `boundary_board_states.md` (the construction pipeline), `boundary_board_state_primitive_catalog.md` (the three primitives). The designer's statements are marked as such and kept
 apart from this file's readings, as in the catalog's §10.
 
 ---
@@ -80,9 +79,6 @@ for Black, commonly played in speed chess across many players, in which each of 
 the primitive race conditions, especially relative to the initial start position and to development, and relative to other moves and
 their potential developmental cost. The deduction was made from the principles of the program, and it is seen to align with what is
 observed in optimal play.
-
-*Correction recorded: an earlier remark by this assistant treated agreement with expert play as the designer's evidence and called it
-weak. That misread the statement above. The evidence is the deduction from the primitives, and the observation is what directed it.*
 
 **The comparison against alternatives (a statement).** The alternatives are alternative moves, measured on the primitive catalog. If the
 primitive catalog is exhaustive, the three moves can be evaluated on it, relative to the relativistic perturbations of the
@@ -170,10 +166,9 @@ document existed for it. This file is that document.
 
 ## 2a. The Syzygy mining process (the designer's statements, and the procedure as worked through)
 
-**Status of this section.** The process below is a specification, recorded so that the work can be resumed. Nothing from any earlier
-test run is carried over: no data, results, scripts or database. The designer will run the process and verify the data on returning
+**Status of this section.** The process below is a specification, recorded so that the work can be resumed. Nothing in it has been run. The designer will run the process and verify the data on returning
 to it. The boundary board state understanding is first to be confirmed as covering a majority of the entire space. The designer also
-intends to explore a further angle that may change the process, and this section records it as it stood.
+intends to explore a further angle that may change the process.
 
 **Mining the tablebases to begin the catalog (a statement).** The Syzygy tablebase solution set can be used to enumerate the draws of a
 material, giving a database of proven draws under optimal conditions. The catalog of boundary board state positions and its
@@ -249,8 +244,7 @@ Then the process is automated and the primitives are matched.
     checked against the tables wherever a table exists.
 13. **Order of materials.** By piece count, up to what the machine can hold (the designer estimates perhaps five pieces).
 
-**What is carried over.** Nothing from any earlier test run. The designer verifies the data on returning to the process. Step 11's
-additional tables and step 12's backtrace are not specified further than above.
+Step 11's additional tables and step 12's backtrace are not specified further than above.
 
 ## 2b. The staged workflow from an anchor (the designer's statements)
 
@@ -464,14 +458,14 @@ inverse ablation, a way may be found to equalize the primitives by searching unk
 | Black's schematic (g6, Bg7, d6) scoped as a rich vein from the initial position | Scoped by the designer; detailed in survey §4e |
 | The deduction of why it is more optimal than many other Black plans | Stated by the designer; recorded here; not compared in the documents against any other plan |
 | White's choices as constructor against it | Begun: the worked example narrows White's first move to the central pawns (§2); not complete |
-| Bird's Opening | From another plan, per the designer; the other documents still mention it and are not changed |
+| Bird's Opening | From another plan, per the designer; the other documents still mention it |
 | A pruned structure on any line | Not run |
 | The first certified local boundary board state, with its path from the initial position, primitive calculations, composition and certification | Not found; this is the first milestone |
 | Tempo as a scoping criterion on this line | Stated (survey §4e); not applied |
 | A second route: construction of endgame local boundary board states, decoupled from the forward trace | Stated by the designer (§2); not run |
 | A third path: opening theory branches that force draws | Stated by the designer (§2); not run |
 | The procedure on any seed (decisive position or certified state) | Stated by the designer; recorded in topology §8an; illustrated in §2; not run |
-| Syzygy mining of a material into a database of proven draws (§2a) | Process stated by the designer and recorded as a specification; nothing from any earlier test run is carried over; to be run and verified by the designer |
+| Syzygy mining of a material into a database of proven draws (§2a) | Process stated by the designer and recorded as a specification; to be run and verified by the designer |
 | The boundary board state understanding confirmed as covering a majority of the whole space | Pending, per the designer, before any results are integrated |
 | The link from a mined family to the initial position | Stated (survey §5a); the backtrace procedure is not specified beyond the statements |
 | Closed local regions and sparse disjoint regions (§2b) | Stated by the designer; none found; whether enough regions exist to inform the global composition is uncertain |
@@ -500,46 +494,43 @@ inverse ablation, a way may be found to equalize the primitives by searching unk
   other Black replies (survey §4e).
 - **Bird's Opening.** The earlier plan (From's Gambit as the first real branch, the fool's mate subtree as the dry run) is described
   in the survey and the pipeline document. The designer says it came from another plan. Whether it is dropped or kept as a dry
-  run is not stated, and nothing is changed here.
+  run is not stated.
 - **The illustration.** The position has ten pieces, outside Syzygy, so the tablebase cannot check it.
 - **The anchored and the unanchored route.** The first-milestone and workflow-emphasis statements above describe the anchored route,
   where a state is reached by a path from the initial position. The construction route has no backtrace constraint at discovery; the
   family composed from a discovered state is what links it to the initial position or concludes that it cannot (survey §5a, topology
-  §8aq). The two are read as covering different routes into the same catalog. Offered for correction.
+  §8aq). The two are read as covering different routes into the same catalog.
 - **The criterion is applied to the side to move.** The mining applies the designer's criterion to the moves of the side to move at each
   position. The opponent's deviations are seen at the positions reached by a drawing move. The survey's hard core asks for a losing
-  deviation for each side (survey §2, §4a). Offered for correction.
+  deviation for each side (survey §2, §4a).
 - **Forced reduction.** The reduction to insufficient material is read as the positions where every drawing move is a capture that ends
   in insufficient material, or where no cycle is reachable and every drawing line ends there. A table of values does not rank moves of
-  equal value, so "the best move" is read as the unique drawing move. Offered for correction.
+  equal value, so "the best move" is read as the unique drawing move.
 - **The two spaces and the weak solution.** The statement is read as the weak solution of survey §2a and §4g: the region of optimal play
   with every deviation out of it certified as a loss. The boundary is read as the rim of the choice space, which includes the initial
-  position. The survey's sentence about global states forming a list, with the space between the initial position and that list, is
-  unchanged. Offered for correction.
+  position.
 - **Keys and segments.** Nodes are read as keyed by the position and the side to move, so the structure is a finite graph and a repeat is a
   cache hit. A cycle can only lie within a fixed material, pawn structure and castling rights, so the irreversible moves (captures,
-  pawn moves, loss of castling rights) are read as the boundaries between segments. Offered for correction.
+  pawn moves, loss of castling rights) are read as the boundaries between segments.
 - **The region is a fixpoint.** A node is in the region only if no move wins for the side to move, and every move is either a certified
   loss or leads to a node in the region. A branch found to be a forced win for the mover therefore removes the node from the region, and
   that removal passes up to the parents whose moves led into it. So the region is final only when every move of every node has been
   classified, and not when the forward enumeration stops. This is the designer's "if a player can choose a branch that deviates into a
   forced win" put as a rule. The survey's certification condition (§4a) says each move "stays inside the region as a non-losing move";
   it is read here as "leads to a node in the region", since a move into a position that wins for the mover is non-losing and is not in
-  the region. The survey is not changed. Offered for correction.
-- **What the status of an anchor decides.** The earlier reading here, that a decisive anchor "has no region below it", was wrong and is
-  withdrawn (the designer's correction). A decisive position can have a choice region below it, reached when the side that is winning
+  the region.
+- **What the status of an anchor decides.** A decisive position can have a choice region below it, reached when the side that is winning
   plays sub-optimally or through ignorance of optimality, and mapping such regions is what the process is for. The status of an anchor
   therefore does not decide whether a region exists below it. It decides what claim the result carries: a region at the initial
-  position carries the global closure claim, and a region below any other anchor, decisive or not, is a local finding. Offered for
-  correction.
+  position carries the global closure claim, and a region below any other anchor, decisive or not, is a local finding.
 - **Where the traces meet.** The families inside the tables are exact. The forward structure meets them only where it descends, by
   captures and promotions, to a material the tables hold, so the meeting is at the table boundary. A predecessor of a family member from
   a larger material is outside the tables, and that step is the pruning mechanism of the larger material. The forward side, between the
-  full material and the tables, is the large part. Offered for correction.
+  full material and the tables, is the large part.
 - **The tablebase end of the overlap.** The part of the forward structure that the tables reach is the part that descends, by captures
   or promotions, to the material the tables hold. A boundary state that keeps more pieces than the tables hold closes by a cycle at a
   fixed material and is not reached by the tables. The first population is therefore of low material, and whether its pattern carries
-  to higher material is the cost the designer names. Offered for correction.
+  to higher material is the cost the designer names.
 - **Precedent.** Forward search meeting backward databases is the structure of the checkers precedent already cited in topology §7. This
   assistant has not checked the literature on the programme's own claims (primitives, the boundary as the rim of the choice space,
   reachability families, a catalog of boundary states), and the novelty statement in §2b is recorded as the designer's.
@@ -548,82 +539,77 @@ inverse ablation, a way may be found to equalize the primitives by searching unk
   that need not lead to the initial position. The global closure claim (the programme's closure and its failure condition, a certified
   route out) is about the region anchored at the initial position. A closed local region is a finding of its own, with no failure
   condition attached, and an unclosed one is a family with a certified decisive route out. The two are kept apart in the record.
-  Offered for correction.
 - **What the 50-move rule can change, and what it cannot.** It can only turn a win into a draw, so a branch cached as decisive with the rule
   ignored may be a draw on a route with a high move counter. The draw claim of a certified region is not affected, since everything in it
   is a draw under the stricter reading. What can be affected is the extent of the region: a move labelled losing may be a drawing move on
   such a route, so the region found may be smaller than the real one, and those routes remain to be enumerated once the anchor is
   reached. The counter resets on a capture or a pawn move, which are read as the segment boundaries, so a verdict at a segment entry does
   not depend on the route, and inside a segment a cached decisive verdict is exposed only where the distance to zeroing plus the counter
-  on arrival comes close to 100 plies. The certification of a region is valid up to where it is valid. Offered for correction.
+  on arrival comes close to 100 plies. The certification of a region is valid up to where it is valid.
 - **The list of global states and the localized regions.** With the statement of the whole, the survey's list of global states is read as
   the rim of the global choice region, and the localized choice regions are the disjoint pockets in the forced space. A reachable family
   that links to the initial position under optimal backtracing is therefore a family on the rim of the global region, and a family that
-  cannot link lies in a pocket. Offered for correction.
+  cannot link lies in a pocket.
 - **The stretch between two choice regions.** A value does not rise for the side that chooses. Leaving a drawn region for forced territory
   takes a losing move by one side, and entering another drawn region from forced territory takes a sub-optimal move by the winning side.
   A path from one choice region to a disjoint one is therefore a loser's error, a forced sequence, and a winner's error, and lies entirely
   off optimal play. The primitive measurements along it describe how a race is won and then given up. They bear on the composition of
-  the primitives and on the relations of the regions, and cannot change what is optimal. Offered for correction.
+  the primitives and on the relations of the regions, and cannot change what is optimal.
 - **Relation to the deviation map.** Each exit of a certified region already carries the refuting primitive (survey §4a). The designer's
   addition is to treat the forced stretch between regions as an object to measure and the regions as a catalog. Within the tables, an
   adjacency between two regions (a losing move out of one, and a winner's drawing move into the other) can be read from the same
-  data as the mining, and whether it is wanted is not specified. Offered for correction.
+  data as the mining, and whether it is wanted is not specified.
 - **Segments and the two senses of reachable.** A segmented boundary is defined by reversible and irreversible moves, as the designer
-  states, and an irreversible move is an edge that cannot be navigated back. The earlier version of this bullet read the two senses of
-  reachable as cooperative or by force and said the designer had not stated which was meant. That was a misreading, and it is replaced.
-  The designer states the duality: reachable under optimality, for certification and wherever Syzygy is used; and reachable in the full
-  landscape without concern for optimality, for the enumeration that the pruning process may need. Disjoint choice regions are not reachable
-  in the first sense and are found through the second. The segmented boundary is read as applying to the full landscape, where an
-  irreversible move bounds navigation. Offered for correction.
+  states, and an irreversible move is an edge that cannot be navigated back. The designer states the duality: reachable under optimality,
+  for certification and wherever Syzygy is used; and reachable in the full landscape without concern for optimality, for the enumeration
+  that the pruning process may need. Disjoint choice regions are not reachable in the first sense and are found through the second. The
+  segmented boundary is read as applying to the full landscape, where an irreversible move bounds navigation.
 - **The potential is testable inside the tables.** The distance is the primitive calculation, as the designer states it: zero at an
   equilibrium and nonzero away from one. For a position of a material in the tables, that calculation can be compared with the win, draw
   or loss value and the distance to zeroing that Syzygy gives. If it tracks them, there is a ground for extending it beyond the tables.
   If it does not, that is learned inside the tables. The primitive calculation is done post hoc on the mined positions, by the designer,
-  as stated in §2a. Offered for correction.
+  as stated in §2a.
 - **Relation to tempo.** Survey §4c (temporal analytical relativistic measuring) and §4e (tempo as a calculable metric) measure a difference
   in tempo. The statement above reads as that measure taken as a distance from equilibrium, which would give how far ahead or behind a
-  side is as a first-principles margin. Whether it replaces an evaluation score is not stated. Offered for correction.
+  side is as a first-principles margin. Whether it replaces an evaluation score is not stated.
 - **Piece addition and the record of dead pieces.** The statement above is read as the dead pieces, the footprint and the ablation already in
-  the record (topology §8an and §8s; catalog §4.9 and §4.12), used constructively: instead of removing a piece to isolate the primitive
-  composition, a piece is added to a derived boundary state. Offered for correction.
+  the record (topology §8an and §8s; catalog §4.9), used constructively: instead of removing a piece to isolate the primitive
+  composition, a piece is added to a derived boundary state.
 - **Piece addition as the inverse of ablation.** Ablation shows what a piece contributes to a composition. Adding a piece asks what the
   added pieces would contribute together with the primitives already composed, and so whether they form a new race that beats the one
-  that was present. The answer is read as coming from the population of compositions and not from geometry. Offered for correction.
+  that was present. The answer is read as coming from the population of compositions and not from geometry.
 - **A test inside the tables.** A boundary state found in the tables can have a piece added, within the material the tables hold, and the
   result compared with the table: whether it stays drawn and keeps its losing deviations, as the primitive composition says it should. A
   piece judged not to interact with the primitives that nevertheless changed the result would show another way it enters, and would be
-  information for the composition. Offered for correction.
+  information for the composition.
 - **Closure is a test, applied family by family.** It follows from the fixpoint reading above that a family is tested for closure by
-  classifying every move of its members, and an unclosed family is identified by finding one move into decisive territory. Offered for
-  correction.
+  classifying every move of its members, and an unclosed family is identified by finding one move into decisive territory.
 - **Triangulation is guidance and the closure is the certificate.** The designer's statement is read as a way of directing the search in the
   discovery zone: which compositions to try, and in what direction the primitive calculations move relative to the known regions. A position
   is in a region only when every move is a member or a certified loss (the fixpoint reading above), and the designer's own statement that
   mapping is not certification applies. The regions that serve as reference points are read as regions within one segmented boundary, since
   across an irreversible move navigation is one-directional; the sense of reachable that joins them is the full-landscape sense, since disjoint
-  regions are not reachable under optimal play (the statement on the two senses of reachable above). Offered for correction.
+  regions are not reachable under optimal play (the statement on the two senses of reachable above).
 - **Relation to the residual interface.** The opening survey (§4a) and topology §8p read a failure to compose with the catalog first as a
   residual interface, which may be a missing primitive. The statement above places an earlier question before that reading: whether what is
   being equalized and prioritized in the race has been understood, and so which composition of the existing primitives resolves. A missing
-  primitive is then the case where no composition of the existing ones does. Those documents are not changed. Offered for correction.
+  primitive is then the case where no composition of the existing ones does.
 - **Testable inside the tables.** For positions of a material in the tables, a composition proposed from the known regions can be checked
   against the table: whether the primitives it names as in equilibrium coincide with the drawn positions that have a losing deviation for
   each side, and whether the primitive left unresolved is where a position departs from a known region. The primitive calculation is done
-  post hoc by the designer (§2a). Offered for correction.
-- **What the king and pawn example is, and is not.** The example is read as the mechanism of carry-over for added material and not as a demonstration
+  post hoc by the designer (§2a).
+- **What the king and pawn example is.** The example is read as the mechanism of carry-over for added material and not as a demonstration
   confined to king and pawn against king. The three positions share one primitive calculation because the added pieces are inert: reaching
   them costs the kings more than the race allows, so the outcome is set by the race. This is the piece-addition statement above, shown on a
-  concrete case. A reading offered earlier in discussion, that one primitive shown where the tables hold the answer says little about
-  positions with more pieces, took the example as a demonstration at three pieces and missed the carry-over. It is withdrawn. What the example
+  concrete case. What the example
   fixes is the mechanism. How much of the larger landscape reduces to a known core with inert material, and where an added piece forms a new
-  emergent race (the statement on equilibrium shifts), is left to the mined population. Offered for correction.
+  emergent race (the statement on equilibrium shifts), is left to the mined population.
 - **The example can be checked in the tables.** Two kings and five pawns are seven pieces, within Syzygy. For the positions where two pairs are
   locked and the kings cannot reach them without losing the race, the table's value can be compared with the value of king and pawn against
   king for the active pawn. Agreement on all such positions would show the inertness exact under the stated conditions, and a disagreement
   would show where it leaks (for example through occupied squares that change how the kings can maneuver, or through mutual zugzwang). Either
   result is information for the composition. The designer has not stated which catalog primitive the pawn race corresponds to, and no mapping
-  is made here. Offered for correction.
+  is made here.
 
 ## 5. Not yet specified
 

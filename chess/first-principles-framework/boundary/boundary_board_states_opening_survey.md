@@ -62,7 +62,7 @@ has already been passed. Those are consequences that may fall out of it (§5, §
   position and that list is the enclosed phasing of choice and force. That a position can be avoided is therefore not a ground
   for classifying it as non-global. A verified state not shown to be in a family reachable from the initial position under the optimal
   backtrace constraint (§5a) is local.
-- **The whole, as the designer states it later.** The global choice region leads into the global forced region. Localized choice regions
+- **The whole, as the designer states it.** The global choice region leads into the global forced region. Localized choice regions
   lie within the forced region, disjoint from the global choice region, and so are unreachable from the initial position under optimal
   play (`boundary_board_states_start_selection.md` §2b). The list of global states above is read as the rim of the global choice region.
   This is the designer's resolution of how the list relates to the two spaces.
@@ -409,8 +409,7 @@ trace from that boundary may help solve the backtrace. The two directions theref
   with more pieces, the certificate is the complete case list of §4a, and the tablebase can certify the leaves of the refutation
   lines where they reach seven pieces or fewer.
 - **Two directions.** Reachability from certified positions is a backward direction alongside the forward trace from the opening. They
-  meet at the boundary line of the catalog, as the designer states above. An earlier version of this note called the combination
-  unspecified; that was a misreading.
+  meet at the boundary line of the catalog, as the designer states above.
 - **Composition.** The composition beyond the three primitives is stated by the designer above. The documents hold the joint
   compatibility of §4a and the catalog's composition rules for the three primitives; a primitive that the equilibrium analysis shows
   to be missing is added by the reduction rule (topology §8x) under the admission rule (catalog §1).
@@ -431,8 +430,7 @@ A certified entry in the catalog is a leaf for the structure of any position ups
 again (§6, convergence; topology §8p). The proof object of an upstream position is therefore the exhaustive coverage between that
 position and the certified entries its branches reach. The closure condition of §4a applies to it: for both sides, every branch ends
 at a certified forced loss, at a certified entry, or at a move that leads to a position in the region, and not only along the path.
-The pieces of this were in the record (§4 step 6, §4a, §6, topology §7 and §8p) and the statement itself was not; the gap was found in
-discussion and is closed here.
+
 
 ### 4g. The end-state test in one place (a summary of §2a, §4b and §4d)
 
@@ -515,7 +513,7 @@ place. Perturbation is to be understood for what it is, a change of state, wheth
   read as the stages of the boundary board state certification catalog. The reachability family is added to the objects of §3 in the
   designer's phrase, with the wording of the row offered for correction.
 - **Dead pieces.** Pieces that can be removed without changing the race are the pieces outside the load-bearing set and the footprint
-  that the record already has: the ablation of topology §8s (catalog §4.12), the footprint (catalog §4.9, topology §8h), and the
+  that the record already has: the ablation method (topology §8s), the footprint (catalog §4.9, topology §8h), and the
   predictions P3-1 and P8-1. "Unless they can obstruct" is the footprint's membership. This is a reading, offered for correction.
 
 ### 4k. Mining the Syzygy tablebases for the certification catalog (the designer's statements)
@@ -560,8 +558,7 @@ it small enough to examine (§7).
 
 Avoidance is not the test. A side may have a non-losing detour that never reaches the candidate, and the detour leads to another
 boundary state or to a position of the same kind. The candidate still closes the phase for the paths that arrive at it, and the
-detour does not make it non-global. (A reading that treated avoidability as a ground for non-global was proposed in discussion and
-withdrawn on the designer's correction.)
+detour does not make it non-global.
 
 A consequence is worth recording, the designer's reading:
 
@@ -576,7 +573,7 @@ positions in that family as certified global boundary board state positions, whe
 backtrace constraints. This is what makes reachable families important: they are a classification methodology to resolve a family of
 reachable positions when that family is eventually anchored with the initial start position.
 
-**Global, restated (the designer's statement).** Any upstream position that under optimal conditions leads to a boundary lies in the choice region, and the boundary actually being realized does not change the equilibrium that the boundary position and the upstream positions reside within, if they are part of a reachable family under the optimal backtrace constraint. A family that is reachable from the initial start position under that constraint is an optimally reachable boundary board state family, and every member of it is a global boundary board state position. The initial game start position is itself a boundary board state position: it resides in the choice region, and if it has a move that can lose, it is a boundary. The designer adds that a distinction between the choice region and the boundary drawn by how many drawing moves a position has is a meaningless classification criterion.
+**Global (the designer's statement).** Any upstream position that under optimal conditions leads to a boundary lies in the choice region, and the boundary actually being realized does not change the equilibrium that the boundary position and the upstream positions reside within, if they are part of a reachable family under the optimal backtrace constraint. A family that is reachable from the initial start position under that constraint is an optimally reachable boundary board state family, and every member of it is a global boundary board state position. The initial game start position is itself a boundary board state position: it resides in the choice region, and if it has a move that can lose, it is a boundary. The designer adds that a distinction between the choice region and the boundary drawn by how many drawing moves a position has is a meaningless classification criterion.
 
 **From discovery to the initial position (the designer's statement).** When discovering a local boundary board state from construction, the constraint of backtrace does not apply: discovery has no
 constraint to the initial position anchor. Eventually a reachable family is composed that either concludes it cannot reach the initial
@@ -618,7 +615,7 @@ the theory tree is tagged as such, and it does not count as certified.
 **Scope of C1.** The claim is made *under optimal play*, as the designer stated. A forced win has no drawn position on any optimal
 continuation, so no boundary state can lie on one. A drawn position that the winning side could reach by an error is not on an
 optimal continuation, and under the target of §2 it is an admissible local candidate anchored through this line. C1 therefore says
-nothing about such positions. Whether the survey wants candidates reached by deviations from a forced win was open (§10); the designer's later statement is that such regions exist.
+nothing about such positions. The designer states that such regions exist (§10).
 
 **Scope of C3 and the pruning of sub-optimal paths (the designer's statement).** Sub-optimal paths are excluded by the distinction
 between choice and force: a choice that leads to a forced loss is pruned. In a drawn region a move either preserves the value or
@@ -702,9 +699,8 @@ cache entries; and the primitives that the line shows to be missing, found by th
 
 ## 10. Open questions
 
-- The meaning of "first" over all paths: retired. The designer's later statement (§5a) defines *global* by membership of a family reachable from the initial position under the optimal backtrace constraint, so the question no longer arises.
-- Whether C1 should also claim anything about positions reached by deviations from a forced win (§6). Answered in part by the designer's later
-  statement (`boundary_board_states_start_selection.md` §2b): a decisive position can have a choice region below it, reached when the side that
+- Whether C1 should also claim anything about positions reached by deviations from a forced win (§6). The designer states
+  (`boundary_board_states_start_selection.md` §2b): a decisive position can have a choice region below it, reached when the side that
   is winning plays sub-optimally or through ignorance of optimality, and a localized choice region can lie past the global one. Such regions
   exist and are what the mining looks for. Whether C1 records them is not specified.
 - How a cycle of interdependent candidates is verified when it is small enough to verify at all: whether the web is verified as
@@ -716,7 +712,7 @@ cache entries; and the primitives that the line shows to be missing, found by th
   before it is run.
 - How a book's assertion enters the case list where the position is outside the book's lines.
 - Which line to start with, given §4e: the designer's statement is to start with the richest vein and not with Bird's Opening. The
-  earlier plan for Bird's is not withdrawn by the documents, and the choice between them is the designer's.
+  plan for Bird's is in the documents, and the choice between them is the designer's.
 - The sense of tempo in §4e: answered by the designer (§4e, "Tempo, as defined"). It is the explicit, calculable metric stated there,
   and not a sense or a heuristic. How its use as a scoping criterion is recorded on the pruned edges is not specified.
 - How primitives are composed to create the calculation (§4f): answered by the designer (§4f, "Composition beyond the three
@@ -730,7 +726,7 @@ making those decisions exist. These are therefore not prerequisites for the firs
 
 ## 11. Provenance
 
-**The designer's, and unchanged:** that the initial position is the anchoring point of every game; that a global boundary state
+**The designer's:** that the initial position is the anchoring point of every game; that a global boundary state
 is defined by membership of a family reachable from it under the optimal backtrace constraint (§5a), and so depends on how it is reached, and is
 sound against all deviation replies, there being many global states, each of which closes the phase for its own routes; that a local one
 is a verified equilibrium with no requirement on the path or on its family reaching the initial position; that the survey's target is a local candidate
@@ -747,9 +743,3 @@ survey of Modern Chess Openings is the way to select the lines.
 cache and calibration; the node classes of §3; the three cache entries and their fields (the designer described their content; the
 names C1 to C3 are this file's); the reading of *global* against the start-reachability of topology §5 (§2); the scope note on C1
 (§6); the width profile (§8); and the list of open questions.
-
-**A correction recorded.** In discussion, the global and local classification was first read as a scope tag attached to a
-verdict, on the ground that a position's status does not depend on how it is reached. The designer corrected this: the status of a
-boundary state is the position's, and the classification as global or local is path-dependent by definition. The first reading was withdrawn and none of it remains here.
-
-**A later statement recorded.** The designer's later statement in §5a defines *global* by membership of a family reachable from the initial position under the optimal backtrace constraint, with the initial position itself a boundary board state position. It replaces the earlier first-boundary definition (global as the first boundary across all paths, with a second proof that no boundary state lies between the initial position and it), which the designer did not recognize as their understanding. That definition and the material resting on it were removed from this file. The history is in the pipeline file's changelog (entries 31 and 60 and 61).

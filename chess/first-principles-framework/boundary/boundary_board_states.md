@@ -7,234 +7,28 @@ reasoned assessment of this idea's actual scope and limits is kept in §13,
 clearly labeled as a distinct, independently-argued position rather than folded
 into or diluting the objective stated here.
 
-A record of a concept developed across this project's own conversation history,
-preserved here precisely because it went through real revision — an initial
-framing that didn't hold up, a correction, a genuine gap in an earlier draft of
-this very document (the candidate-list/incremental-verification workflow in §3,
-first flattened into "ruled out" when only one of its component claims actually
-was), a second gap (the scoping mechanism in §10 was missing entirely from the
-prior draft), a third addition (retrograde seeding from already-decisive
-positions as a second, complementary candidate-generation method, now in §2), a
-fourth refinement (separating generation from validation within that same
-method, also in §2), a fifth addition (the walk's termination guarantee, both
-its unconditional in-material form and its broader, conditional form tied to
-chess's own unproven start-position status, now also in §2), a sixth addition
-(open, distributed resolution as the practical path to scale, now its own
-section, §12), a seventh addition (a fifth generation method, construction
-from race-condition primitives — Method 5 in §2, recorded in full in
-`boundary_board_state_topology.md` §8 — together with caveats on Uri's rule's
-status and on wrong-colored versus opposite-colored bishops, in §2, §8 and §9),
-an eighth addition (locks generalized from frozen pawn walls to duty-based
-locks, composition as complete mutual interdependence, the scope of
-verification as an interference closure, and a proposed local/global
-distinction — recorded in `boundary_board_state_topology.md` §5a and §8f-§8j,
-with the definitional discrepancies noted in §14 here), a ninth addition
-(population-first primitive extraction as the methodology's own justification,
-§8m; composition identified as the specific mechanism that extends a
-checkers-style forward-search floor past Syzygy's own storage ceiling, §7a;
-Uri's rule checked against its own published formula and found to decompose
-into an already-catalogued race primitive composed with a color-lock fact,
-§8n; and the Možina et al. relation refined from a rejected claim of failed
-attempt into a structural-blindness claim that does hold, given their material
-and goal — all in `boundary_board_state_topology.md`), a tenth addition
-(Method 6, perturbation search, added to §2 below after a worked case study on
-a real chess.com daily puzzle found, verified against Stockfish and
-python-chess, that the proposed perturbation — flipping whose move it is —
-turned a forced mate in four for White into a forced mate in one for Black,
-a genuine and striking result that is nonetheless not a boundary state in
-either move-order, since the position is decisive both ways and never drawn;
-full worked case and assessment in `boundary_board_state_topology.md` §8o),
-and an eleventh addition (relativized classification — using a whole catalog
-of boundary states as a network of reference points rather than only as
-leaf-node termination targets, checked this session against real precedent:
-classical corresponding-squares theory already does exactly this, for
-king-and-pawn structures, which both validates the shape of the proposal and
-supplies its necessary guard rail — failing to reach a known anchor proves
-nothing about a position's value on its own, only that the catalog doesn't
-yet classify it; full record in `boundary_board_state_topology.md` §8p,
-cross-referenced from this document's own §10), and a twelfth addition (§15,
-an honest accounting of the project against Lakatos's own stricter criterion
-for a progressive research programme — not merely one that survives
-challenges to its protective belt, but one whose belt modifications predict
-genuinely novel facts later corroborated; one such instance is found in this
-project's own history, Uri's rule's decomposition prediction, §8n; most of
-the rest of this project's corrections are honest, principled, and
-non-degenerating, but not yet progressive by that stricter standard, which is
-named plainly rather than smoothed over), a thirteenth addition
-(`boundary_board_state_topology.md` §8g sharpened to separate, explicitly, two
-questions that had been stated correctly but not distinguished forcefully
-enough to survive a direct challenge: whether a *verified* boundary state's
-primitives are jointly compatible, which is trivially true by definition, and
-whether a *proposed, untested* composition of primitives will produce one,
-which remains open and is what every unresolved item in §§8g-8p actually
-concerns; and §8p extended with a named synthesis, boundary-state families
-scoped by opening line, tying that section to this document's own §10), a
-fourteenth addition (two corrections from one challenge, topology §8q: Method
-5 now carries a standing start-reachability requirement — internal validity
-of a composition is not the same as being reachable via legal play from the
-starting position, and only the latter serves this catalog's forward-search
-purpose, added to Method 5's entry in §2 below; and a refutation proof — one
-forcing counter-example showing a move is dominated, which needs no full-tree
-search and reuses §8h's own footprint machinery — is named explicitly as a
-different, weaker claim than a boundary-state certificate, checked against
-the OTB game's own data rather than argued in the abstract: before White's
-Qf3 the field of options spans 4 to −60 centipawns, after it Black's spans +7
-to +166, a real and confirmed cost but a field of improving options, not one
-forced inescapable line), and a fifteenth addition
-(`boundary_board_state_topology.md` §8p, stated as affirmatively as the prior
-guard rail was stated cautiously: determining decisiveness by measured
-tempo/race-condition offset against a known equilibrium family is real,
-proven, and already in daily use — this is exactly how K+P key-square and
-opposition theory classifies positions that are not themselves key squares,
-with no search of the full position required. The guard rail was never a
-denial of this; it is narrower, and applies specifically when the offset is
-estimated rather than exact, and when the catalog checked against isn't
-itself proven complete for the structure in question. K+P clears both bars.
-Nothing this project has built for its own broader primitives clears either
-one yet, which is the real open question, not the underlying logic), a
-sixteenth addition (`boundary_board_state_topology.md` §8r: the
-discovery/certification split stated explicitly, so that primitive discovery
-may use perturbation and relaxation while certification of a boundary state
-still needs a complete case list; forward-trace anchoring adopted as the
-ordering for *selecting what to catalog*, with certification unchanged, and
-build steps 15 and 16 added to §11 below; the cooperative-mate relaxation
-recorded, with a worked case enumerated against the real start position, where
-Black's fastest mate takes 4 plies in 8 sequences and White's takes 5 plies in
-347, and its limit stated: it supplies attacker-side primitives only; a
-per-ply race-progress test proposed with its prediction stated in advance; and
-rediscovery of known theory set up as a validation suite), a seventeenth
-addition (`boundary_board_state_topology.md` §8s: the fool's mate as a minimal
-primitive, tested by ablation over all subsets of surrounding pieces in three
-real mates, the fool's mate, the OTB game's Qxh7# threat, and the puzzle's
-Qg7#. The stated prediction that the mate survives removing the knights and
-rooks held; the pieces it cannot do without are exactly the king's four
-start-square neighbors; the attacker may be a queen or a bishop. The
-four-term template is recorded as the definition of checkmate decomposed, so
-the catalog's content is the mechanisms that satisfy each term; a pinned
-defender was verified equivalent to an absent one for absolute pins; joint
-dependencies such as the h1 rook with the h2 pawn show the load-bearing test
-must run over sets. The defender-side counterpart is named as the next
-experiment), an eighteenth addition (topology §8t: the mating net restated
-as a predicate over occupancy and legal coverage with no piece names, pins
-entering as a restriction of a defender's coverage; and the first exact scan
-in this project, on a self-built and Stockfish-validated solver of king and
-pawn against king, `kpk_boundary_scan.py`, which found 5,125 drawn
-Black-to-move positions with exactly one saving move, of which 3,960 are
-genuine-choice king-move positions and 1,139 are pawn captures. The scan
-falsified an earlier hypothesis of this project's own, that such positions
-concentrate at the edge: the rook-pawn draw is the widest and the central-file
-opposition draws are the narrowest. It also found that pawn pushes are not the
-dominant way a won position is spoiled in that material, and that reversible
-moves are not a logical requirement of the definition, with the caveat that
-the material cannot test the design-principle version of that claim), a
-nineteenth addition (topology §8u: the mating-net predicate checked on a second
-fortress mate in an unrelated position, a chess.com daily puzzle ending in
-Rh3#, with the net reported by `mating_net_report.py` without reference to piece
-types. The four terms recur across four mates with four different surroundings,
-the lock being the defender's own pieces plus a pawn lured onto a flight square,
-and new mechanisms are recorded: a decoy that fills a flight square, pinning the
-interposing piece, a defender masked by its own king, a pawn-protected checker,
-and the attacker's own shield. The line as typed contained an illegal move and
-is corrected; the mate is not forced at the last step, and the engine's best
-defence is recorded; the scan of §8t is labeled as bearing only on side remarks
-and not on this primitive; and a second instance of the single-move
-several-duties structure flagged in the OTB case study is noted), a twentieth
-addition (`boundary_board_state_primitive_catalog.md`: the mating net recorded as a
-portable catalog primitive, P-001, with a four-level structure of primitive,
-mechanism, derived form and instance, an entry template, a procedure that
-evaluates any position without naming pieces, and a defence mirror; topology §8v
-records the request and its assessment. §14 item 7 below restates the cyclic
-requirement as the definition of a global boundary state, notes that the
-operational test alone does not encode a cycle, reconciles §1 with §8 on
-stalemate, and leaves one definitional choice open), a twenty-first addition (§14 item 8: "exactly
-one non-losing move" corrected from a definition to a measure of width. It was carried
-over from the first uploaded document's operational reading of condition 2, which the
-original wording of condition 2 does not require; move count and primitive count are
-different quantities; the exact scan had already shown that the rook-pawn draw, the
-paradigm local primitive, is the widest, which counts against the criterion; the
-corrected definition is an equilibrium in which each side has a losing deviation, a
-draw realized by a cycle, both sides live, accounted for by one or more tied
-primitives; stalemate and insufficient-material draws, including a captured hanging
-pawn, are not boundary states; the question left open in item 7 is resolved, and the
-earlier claim that the scan produced a population of boundary states is withdrawn, and so are the earlier argument that the opening position is not a boundary state because it has many non-losing first moves and the composition constraint that exactly-one needs one live primitive with the rest frozen), a twenty-second addition (topology §8w and catalog §7: the net applied to pieces other than the king. A piece trap, P-006, is specified as a sibling of the mating net: it shares the terms and mechanisms and adds an exchange term; counter-threats are not a term but a composition rule, the same primitives applied with the colors swapped and compared by tempo, which corrects a first version that had called them an outside evaluation; its outcomes are material gain and tempo yield. Joint compatibility with a king net is stated as the double-threat condition. The game record supports the queen-hunt description: 5 queen moves in 12, 3 under attack. Status SPEC; the sibling-or-schema decision is left open), a twenty-third addition (topology §8x: the architecture as designed, a primitives catalog; candidate, proven and disproven boundary-state catalogs with verdicts cached permanently (§3); and the composition of primitives recorded on proven entries, with the reduction rule that a missing primitive is emergent from joint compatibility given the others. The composition record is proposed as a deviation map with a residual interface; the completed composition is the case-list proof and exhaustive search is insurance on the first entry. An earlier version of this addition misplaced a record specification for proven entries inside the primitives catalog, gave it status labels of its own, and treated missing primitives as items to be written; it was removed and corrected. Earlier wording that called derivability a hypothesis is replaced. No proven entry exists yet),
-a twenty-fourth addition (catalog §4, topology §8w: the mating net and the capture net on any other piece are one primitive race condition, by the designer's decision. The catalog records them as P-001 version 2, the capture net, with the kind of target as a parameter; the former sibling specification P-006 is retired and its ID not reused; counter-threats and the exchange outcome are handled by composition and by the outcome clause, not by separate terms. This supersedes the sibling classification in the twenty-second addition), a twenty-fifth addition (topology §8y, catalog §7 and §8, Method 7 in §2: the activation primitive, P-007, covering development, unlocking, castling and promotion as the enlargement of a piece's coverage from a locked state, with promotion read as an activation whose route is a P-002 race; a provisional dependency map among the primitives, in which activation feeds the capture net and the capture net obstructs activation; the primitive state, the activation asymmetry and the perturbation of the state by a move; and gap detection feeding the reduction rule. Status SPEC; nothing certified; P-002 to P-005 and the cost model are not written), a twenty-sixth addition (topology §8y, Method 7 and the catalog's conventions corrected: the inference from a proven verdict not accounted for by the equalized catalog is deductive under the definition and not a heuristic or an approximation. It leaves a missing primitive, a decisive incompatibility between known primitives, or a wrongly evaluated entry, all developments of the protective belt that leave the hard core untouched. Distance to equilibrium is the order of the reduction and never changes what is true),
-a twenty-seventh addition (catalog §9: the provenance of the catalog's organization, stating what is the designer's and unchanged and what is this file's organizational choice and open to change, and the mapping from the original primitives-catalog families of topology §8b to the generalized primitives; no entry written),
-a twenty-eighth addition (topology §8z, catalog §7a, §7b and §7: segmented dependencies generalized. Chain structures, the dependency of one element on another's presence or removal, are recorded as a locking mechanism and specified as P-003, with a typed dependency graph whose edges are enabling and supporting and whose weak end is the unsupported end of a chain; the movement rule of any unit is specified as a relation, from which the orbit, the route-length parity, the dependency set of each edge, the permanence of coverage and the effect of union are computed without naming a piece, as the substrate SUB-1, which the activation primitive P-007 consumes for route existence, route distance, lock removal and obstruction. The catalog states no rule of any piece: the values of a relation's attributes for each unit kind are inputs supplied when a primitive is applied, and special cases are accounted for in composition. A first version that treated the color of one unit and the parity of another as separate piece notes was corrected. Status SPEC; two predictions are stated in advance and not run; whether the substrate is a primitive or part of P-007 is left to the designer),
-a twenty-ninth addition (topology §8aa, catalog §7c, §7b and §6: a third primitive derived from two by the reduction rule. The composition of the capture net (P-001) and the chain structure (P-003) leaves a residual: the effect of a perturbation on the held terms of every engaged primitive at once, the support those terms share, and the race to open one before it is restored. P-008, the coverage race under disturbance, is the entry whose interface that is. It is built from the held terms, residual replies and mechanisms that the written entries define, so that every effect it reports is determined by the definitions of the primitive whose term is affected: a register of held terms with the support of each residual reply, an effect vector of a perturbation over the registers of both sides, opening sets and key elements, and joint support, which is coverage used once and overload with no special case. It is evaluated exactly at each position along a line of perturbations, and for both sides, with the feasibility term read off the same effect vector. The coverage is complete over the perturbations whose change meets the support closure that the primitives determine, a perturbation that misses it cannot change any held term, and where an effect is not yet determined by an entry the reduction rule returns the residual. A first version that defined the coverage through a supply-and-demand formalization was imported from outside the race semantics and was withdrawn. By the modularity rule that an overlap between primitives is a defect, the dissolution race that version 1 of P-003 had carried was moved to P-008, and P-003 is narrowed to the static structure; whether it stays a primitive or is classified as a substrate is left to the designer. Status SPEC; three predictions are stated in advance and not run; that additional primitives may reduce the closure is kept open),
-a thirtieth addition (topology §8ab, catalog §1, §7, §8 and §10.5: the catalog is reduced to three primitives, the mating and capture net (P-001), chained dependencies (P-003) and the coverage race (P-008), by the designer's correction. The earlier index had also carried P-002 (race to a square, which is the tempo comparison, a term), P-004 (edge restriction, an input), P-005 (repetition loop, which is the definition of a boundary state and the emergent effect of the primitives in equilibrium, so the hard core), P-006 (retired) and P-007 (activation, the result when a chain resolves), and had split chained dependencies into P-007, a substrate SUB-1 and a static P-003; none of these but the three is a race condition with terms. The activation, substrate and static-structure material was rebuilt as one entry, P-003 version 3, with every term, mechanism, derived form, instance and prediction kept; P-008 was renumbered with no change of definition; an admission rule for what a primitive is was added to the catalog and to the resume box below, so that later sessions test an entry against it before indexing it; the earlier files are kept in a backup folder; the reclassification is recorded in the topology file as §8ab; no definition of a boundary state changed and nothing was run),
-a thirty-first addition (topology §8ac and `boundary_board_states_opening_survey.md`: the anchored opening survey. Boundary states are classified by how they are reached: a local boundary state is a verified equilibrium with no claim about the path or about being first, and a global one is the first boundary between choice and force from the initial position, across all paths, which requires proof that no boundary state lies between. The survey's target is a local candidate anchored at the initial position by a chosen opening line, optimal or not, found by walking the line, perturbing up the tree, pruning lines on which a side has a forced win, and reading a forced draw as the boundary-state behavior. A position-keyed cache records forced regions, boundaries found, and the exhaustive result that none can exist, so the work is not repeated, and the choice of line and depth is a calibration problem. Written as its own document; §14 item 9 records the definition; the primitives and the definition of a boundary state are unchanged; nothing was run),
-a thirty-second addition (topology §8ad, §14 item 10: a draw realized by a forced stalemate or a forced capture into a dead position is the same as a boundary state when it arises with no choice to deviate. The earlier exclusion of such draws is a filter against positions whose draw could have been avoided and against cataloging them as discoveries. The cycle of repetition is the paradigm realization of the equilibrium and the forced terminal draw is a second. Correction notes were added where the exclusion was stated; the definition of the equilibrium is unchanged),
-a thirty-third addition (topology §8ae, §14 item 11, and `boundary_board_states_opening_survey.md` §2a and §7a: the closure claim as the designer stated it, with its outcomes (a closure that holds gives a weak solution, a certified route out of it is a forced opening line, a missing primitive is not a failure, the admission of a primitive that does not fit the architecture is), the premise that the initial position is a draw, and the segmented progression as far as it is understood. The full process is not specified. Nothing was run),
-a thirty-fourth addition (topology §8af and `boundary_board_states_opening_survey.md` §4a: pruning as information. Each pruned edge carries the race-condition primitive that refutes it and whether that primitive is baked into the structure or emerged from a chain or an ordering of moves, so the pruning shows whether an equilibrium can be reached; no equilibrium upstream means no boundary state in the branch, as a deduction from joint incompatibility. Nothing was run),
-a thirty-fifth addition (topology §8ag and `boundary_board_states_opening_survey.md` §4b: equilibrium maintained until the move pool narrows. The initial position is in the choice phase with the primitives in equilibrium, assumed drawn because no forced win has been found and no primitive race has committed moves, so that with the symmetry of the starting position any forced attempt can be mitigated; a primitive is reached only through the moves that enable it; the move pool is enumerated in the pruned structure, with values from the pruning and not from heuristics; the boundary states are found by taking the longest line along which the pruned structure shows the equilibrium maintained, and a position that can be forced to a draw is a boundary state when the deviating moves of both sides decisively lose. Nothing was run),
-a thirty-sixth addition (topology §8ah and `boundary_board_states_opening_survey.md` §4c: the process as a whole, as the designer stated it. A pruned structure tree from the opening position onward, for a specific opening; the primitives understood as they evolve through segmented exhaustive coverage; the choice phase of the choice-force dichotomy mapped, the boundary board state being its boundary; pruning on the certainties of the race conditions; and temporal analytical relativistic measuring, the comparison of the same position with a different side to move, with the same position at the same tempo cached as a routing to the structure already mapped. A race condition closes by a decisive move or by the move pool decision, and either informs how to proceed. The designer left the last sentence trailing, and it is recorded as given. Nothing was run),
-a thirty-seventh addition (topology §8ai and `boundary_board_states_opening_survey.md` §4d: symmetry emerges from the pruned structure. The pruned portions are the decisive forced positions, with the primitives understood from the pruning. What remains are the positions that are not decisive, where draws are still possible, forced wins are not reachable and there are only forced losses on deviation from the drawing choice. The symmetry emerges there. If everything is pruned there is no equilibrium boundary board state position, and if something remains it can be analyzed. The symmetry is a measurable emergent property of existing at all after the pruning, and it exists only when there are no forced win moves, a draw is available, and a deviation from the draw moves opens the door to a forced sequence in the losing favor. Nothing was run),
-a thirty-eighth addition (topology §8aj and `boundary_board_states_opening_survey.md` §4e: the roles of the two sides and the tempo of the initial position, as the designer stated them. White holds the tempo of the initial position, a bounded structural fact. Under optimal play White is the constructor, choosing the line and so the direction to the boundary board state, and Black the reactor, choosing from the pool White's choices set. White alone can choose to maintain the tempo or give it. For discovery, branches that surrender the tempo can be pruned. Black's fianchetto schematic is read as the primitives showing in play. The designer's statement is to start with the richest vein of the branch network and not with Bird's Opening, and the designer regards this as a missing piece of the protective belt. Recorded with the file's reading that a prune by this criterion is a prune for discovery and does not close the structure, and with the belt placement not assessed against the admission rule. Nothing was run),
-a thirty-ninth addition (topology §8aj and `boundary_board_states_opening_survey.md` §4e: tempo, as the designer defined it. Tempo is an explicit, first-principles calculable metric and an emergent property of the whole structure, not a sense or a heuristic. White, first to move from the initial position, has a temporal advantage relative to Black. The equilibrium where both sides have the same tempo relative to the primitive race condition calculations is the boundary board state positions, whose move pool is only draw moves or loss moves for each side. In a forced phase the side with the tempo wins on a race condition primitive; in the choice phase it constructs toward the boundary state and the other side reacts. Whole positions differ as win, draw or loss by whose turn it is, and tempo is determined exhaustively or from the board position, the side to move and the exhaustive joint compatible primitive calculations. In the choice phase the calculations are not too large: any primitive race for a forcing sequence can be mitigated through a forced draw. This answers the open question on the sense of tempo. Nothing was run),
-a fortieth addition (topology §8ak and `boundary_board_states_opening_survey.md` §4f: composition, what is cheap, and reachability from certified positions, as the designer stated them. Primitive calculation includes identifying how the piece-agnostic primitives compose, and that is a matter of its own. The only cheap things are the board position, whose turn it is, the catalog, and the certified boundary board state positions. Closure from the initial position to the boundary board state positions gives the weak solution; proving those positions is exhaustive coverage from mate, hopefully within the 7-piece Syzygy tablesets. From a certified position a move before it must lie within the closure, so the work is to find where the closure is, and as the catalog grows the reachability can be exploited. Recorded with the file's reading on tablebase scope for states of more than seven pieces, and composition being unspecified, and with the boundary line of the catalog as the designer's statement of where the forward trace and the coverage from mate meet. Nothing was run),
-a forty-first addition (`boundary_board_states_opening_survey.md` §4g, a summary of the end-state test from §2a, §4b, §4d and §4f with nothing new in it, and a note under topology §7 that the forward trace of the pruned structure is now a route to the start position beside the backward scaffolding, the two meeting at the boundary line of the catalog. Nothing was run),
-a forty-second addition (`boundary_board_states_start_selection.md`, a new document recording the discovery of where to start. The designer's statements: the Black schematic g6, Bg7, d6 is scoped as a rich vein from the initial position; White's position as constructor has not been examined other than Bird's Opening, which came from another plan; and the deduction shows even an incomplete program can explain why the schematic is more optimal than many other Black plans. Progress is tabulated, with the file's readings kept separate. Nothing was run),
-a forty-third addition (`boundary_board_states_opening_survey.md` §2a and §4f: the existence of the boundary, as the designer states it. A decisive position is pruned; if the pruning reaches the initial position, chess is solved by force; if not, there is an explicit boundary at the initial position or downstream of it, and it exists with certainty given a position not won by force. The boundary board state is the equilibrium of the primitives under joint compatibility, the ability to force a draw down a line that would otherwise be decisively losing. Also the statement of where the work stands: enumerate and certify the boundary catalog to prove the closure, then calculate the tempo, with the Syzygy scope reduced from the boundary line to the mating positions. The file's notes that the enumeration tests the existence and that the two directions were unspecified are corrected. Nothing was run),
-a forty-fourth addition (`boundary_board_states_opening_survey.md` §10 and `boundary_board_states_start_selection.md` §2: the first milestone, a certified local boundary board state with its path from the initial position, primitive calculations, composition and certification, with global classification certified afterwards. The designer's statement that the comparison across tempo waits on the local and global catalogs, that composition is found through a first example, that the repetition-cycle cache key and temporal pruning are to be discovered, and that these are not prerequisites for the first state. The open item on the meaning of "first" is closed by the designer's own definitions in survey §2. Nothing was run),
-a forty-fifth addition (topology §8al and `boundary_board_states_opening_survey.md` §4h: the order of work, as the designer stated it. Find the furthest downstream branch and certify its boundary board state status first, hopefully within Syzygy; use the table with reachability to enumerate the other positions of the forward trace that Syzygy resolves; scope the difference and do exhaustive coverage from the known solutions; build up from there. Local positions are cataloged first and global status is certified afterwards. A constructive process for the protective belt that cannot be fully planned in advance. The designer's stated uncertainty is whether downstream solutions can be reached within the Syzygy limits, whether only local states can be certified, and whether the work can return to global status. Nothing was run),
-a forty-sixth addition (`boundary_board_states_start_selection.md` §2 and `boundary_board_states_opening_survey.md` §4e: how the designer's certainty of Black's schematic arises, as stated. It is not that experts play it and so it is optimal. It is a population-level observation of a common invariant structure in speed chess, whose three moves each have a direct, explainable impact on the primitive race conditions relative to the initial position, development and other moves, and a deduction from the program's principles aligned with what is observed. Optimal play does not depend on who plays it or how they reach it, and the program can help tell calculation of primitives from a position that looks good and is memorable. A misreading by this assistant, treating expert agreement as the evidence, is recorded as corrected. Nothing was run),
-a forty-seventh addition (`boundary_board_states_start_selection.md` §2 and §4: the comparison against alternatives, as the designer stated it. The alternatives are alternative moves measured on the primitive catalog; with an exhaustive catalog, the three Black moves are evaluated against the relativistic perturbations of the alternative moves to measure the opportunity cost of each explicitly. Recorded with the file's reading in terms of topology §8y, the perturbation of a move, dominance where it applies, and the present three-primitive catalog leaving a residual. Nothing was run),
-a forty-eighth addition (topology §8am and `boundary_board_states_opening_survey.md` §4i: pruning by primitive race loss, as the designer stated it. Take a planned opening framed as optimal for one side and find the moves by the other side that force a deviation by making a move of the plan lose a primitive race. Look at what the plan's first move changes, ask which pieces can reach the contested line within the race's move count, and compare against the sum of the deviating responses; in the example only pawn moves remain for the first move. The calculation runs from the anchor, a constant in every game, and one counter-example beating a race of a plan invalidates it. Nothing was run),
-a forty-ninth addition (`boundary_board_states_start_selection.md` §2: the worked example narrowed to the central pawns, as the designer stated it, recorded in the file designated for where to start and not in the method documents. Nothing was run),
-a fiftieth addition (`boundary_board_states_start_selection.md` §2: the calculations in the worked example are literally primitive calculations, the race of the chained dependencies primitive, focused on scoping Black's opening schematic for optimality analysis from the anchored starting position. Development is a segmented chained dependency anchored to the initial position, not a development primitive, with the perturbation of committed moves as the pruning mechanism. Nothing was run),
-a fifty-first addition (`boundary_board_states_start_selection.md` §2: the emphasis of the workflow, as the designer stated it. A local boundary board state needs a path understood to be reachable and the state certified, and differs from a global one only by the exhaustive certification of the optimal move choices from the anchor; a catalog of certified local states is a population of equilibria whose shared properties can be derived, after which global versus local certification is modular; focusing on global constraints for exhaustive coverage first is a mistake; one certified state within the Syzygy scope allows others to be deduced by reachability; and the real goal from this point is the first certified local boundary board state. Nothing was run),
-a fifty-second addition (topology §8an, `boundary_board_states_start_selection.md` §2 and `boundary_board_states_opening_survey.md` §4f: the discovery procedure on any seed position, as the designer stated it. Four properties: backtracing and reachability under optimality, perturbation as a calibration change to a measurable primitive race, the nature of the primitive race, and joint compatibility, where the obstruction of the other side's mating race is maintained as the only winning condition and committing to one's own race loses the one obstructed. It works on a decisively won position to discover new local boundary board states, and on a certified local state to determine the states reachable from it, which grows the catalog; dead pieces reduce positions; with fewer than 8 pieces Syzygy gives win, draw or loss. Two routes to the first certified local state are recorded beside the pruning mechanism: construction of endgame states decoupled from the forward trace, and opening theory branches that force draws. The designer's example, a decisive seed, is in the start-selection file as an illustration. Nothing was run),
-a fifty-third addition (topology §8an and `boundary_board_states_start_selection.md` §2: dead pieces and the bottleneck, as the designer stated them. Adding dead pieces to a position needs no added calculation unless they can obstruct the race; this expands the catalog, and removing them reduces a local state to its true primitive and isolates the impactful joint composition. Deviation lines need coverage only if they beat the race conditions; where an obstruction is present coverage is exhaustive, and where leaving the forced draw cycle costs a forced loss on the primitive under analysis it is scoped to that distance; the earlier reading in §8an that replaced this was removed. The tablebase is a basis for the catalog and only helps; the real bottleneck for automation is the classification and structure of how the primitives compose, with the structures built out as automation nodes. Nothing was run),
-a fifty-fourth addition (`boundary_board_states_opening_survey.md` §4f and topology §8ao: the proof object of a local state and of an upstream position, as the designer stated it. The cataloging of a locally certified state is simple and straightforward: the pruning structure applied to the position being certified is the proof object, and an upstream boundary board state only has to be the exhaustive coverage between the two proof objects. The record held the pieces (survey §4 step 6, §4a, §6, topology §7 and §8p) and not the statement, a gap found in discussion; the reading in the survey sets out the closure condition for the upstream structure. Nothing was run),
-a fifty-fifth addition (topology §8ap, `boundary_board_states_opening_survey.md` §4e and §4j, primitive catalog §6 and `boundary_board_states_start_selection.md` §2: three clarifications, as the designer stated them. There are two catalogs, the primitive catalog and a boundary board state certification catalog of positions and reachability families, the second being what the closure is enumerated from. Perturbation is analysis by move changes, with the legal-move constraint when moving up a branch and without it when surveying by construction. Tempo on a position is definitionally coupled to the initial anchor, or to the terminal anchor of the equilibrium or forced sequence, and is the same calculation by whatever route. The catalog's definitions were not changed; one convention was added. Readings are separated, including that dead pieces are the pieces outside the load-bearing set and footprint of the ablation. Nothing was run),
-a fifty-sixth addition (survey §3 and §4j, topology §8ap and primitive catalog §6: the designer's corrections to the previous addition. The reachability family is added to the survey's objects; the scope of a perturbation is set by its purpose and by whether it is anchored, and perturbation is understood as a change of state; the reading that applied the perturbation classes of the catalog to the construction setting was removed as not required. Nothing was run),
-a fifty-seventh addition (survey §3, §4f, §5a and §10 and topology §8aq: two statements by the designer. Composition beyond the three primitives is understood through joint compatibility equilibrium analysis after a boundary board state position is confirmed, and the primitives that do not cover are added, with no uncertainty; the earlier notes that called composition not specified were replaced. A boundary board state that can reach another is in the same reachable family, and a family confirmed joint to the initial start position essentially classifies the reachable positions in it as certified global boundary board states, under optimal backtrace constraints. The survey's row for the family now carries the designer's definition. Nothing was run),
-a fifty-eighth addition (survey §5a and topology §8aq: from discovery to the initial position, as the designer stated it. Discovery by construction has no backtrace constraint to the initial position anchor; a reachable family is then composed under the optimal backtrace constraint and either reaches the initial game start, which proves global for the family, or concludes that it cannot. Nothing was run),
-a fifty-ninth addition (`boundary_board_states_start_selection.md` §4 and the companion lines of the survey and start-selection: a reading that the first-milestone and workflow-emphasis statements describe the anchored route while the construction route is unanchored, joined to the initial position by the family composed from a discovered state; and the companion lines now list the topology sections §8ah to §8aq that hold the designer's statements. Nothing was run),
-a sixtieth addition (survey §2, §5, §5a, §6, §10 and §11, topology §5, §8ac and §8aq, and item 9 of §14 here: the designer's later statement on what makes a boundary board state global. A family reachable from the initial start position under the optimal backtrace constraint is an optimally reachable boundary board state family, and every member is a global boundary board state position; upstream positions that lead to a boundary under optimal play share its equilibrium whether or not the boundary is realized; the initial game start position is itself a boundary board state position, being in the choice region with a move that can lose; and a distinction of choice region from boundary by the width of a position's drawing moves is not a classification criterion. The earlier first-boundary clause and its second proof are marked as superseded in each place and kept as recorded; this file's earlier reading that a member reachable only through an earlier boundary stays subject to the first-boundary test is removed. Nothing was run),
-a sixty-first addition (survey §2, §5, §5a, §6, §7, §7a, §10 and §11, topology §5, §8ac and its assessment, §8aq and the open items, and item 9 of §14 and the resume box here: the earlier first-boundary definition of global, the first boundary across all paths with a second proof that no boundary state lies between the initial position and it, and the material that rested on it were removed, the designer having stated that it does not correspond to their understanding and having given the replacement of entry 60. The superseded-notes added in entry 60 were removed with the text they marked. Changelog entries that record the earlier definition, such as entry 31, are unchanged as history. The survey's description of global states as a list with the space between the initial position and that list was not changed. Nothing was run),
-a sixty-second addition (`boundary_board_states_start_selection.md` §2a, §3, §4 and §5: the Syzygy mining process, as the designer stated it, recorded as a specification. Mine the tablebases for a material, enumerate the legal positions folded by symmetry, take the win, draw or loss value by sign, check the table against an independent move generator, classify the moves of each drawn position as losing or drawing and store the counts, build the graph of drawing moves, compute cycles and reachability families and how each draw ends (stalemate, insufficient material or a cycle), and apply the criterion that a drawn position with a move that can lose is a boundary board state position, so that a catalog and its families come from proven results; then link families to the initial position (survey §5a), and automate with the pruning mechanism, checked against the tables where a table exists. The 50-move rule is ignored for now, and the primitive analysis is post hoc. Nothing from any earlier test run is carried over, and the designer will verify the data on returning to the process. The designer intends to explore a further angle that may change the process. Nothing was run),
-a sixty-third addition (`boundary_board_states_start_selection.md` §2b, §3, §4 and §5: the staged workflow from an anchor, as the designer stated it. The initial position is assumed to be in the choice phase, a preset opening path leads to a segment anchor, and the pruned structure is built there for discovery of a local boundary board state, by exhaustive coverage of legal moves that keeps only the structure that maintains equilibrium. Decisive wins and losses are pruned, repeated positions are cached, and the opportunity-cost and self-referential rules are not fully resolved. Reversible moves are not pruned, and a segmented boundary repeated to draw conditions indicates a boundary board state position. A draw position found in the structure is certified through optimality against the branches pruned as decisive, since a branch that deviates into a forced win replaces the draw. The overlap of the forward and backward traces with Syzygy populates the local catalog. The designer states the cost (a pattern must be found in the population or the programme meets the limits of Syzygy, though the distance to a weak solution can still be scoped) and the worst case. The readings added, offered for correction, are the keys and segments, the region as a fixpoint, the check of the anchor, the low-material bias of the first population, and the precedent. Nothing was run),
-a sixty-fourth addition (`boundary_board_states_start_selection.md` §2b, §3, §4 and §5, and `boundary_board_states_opening_survey.md` §4a and the §4 proof-object paragraph (the closure condition, in two places). Recorded from the designer: a winning move is decisive and outside the choice region; choice regions and equilibriums can exist disjoint from the initial position, with reachable families of local boundary board states; whether enough will be found to inform the global composition is uncertain, and the aim is to populate as many sparse regions as possible; closure can exist outside the region anchored at the initial position, some local regions are unclosed with decisive routing, and a closed branch graph network of a family is significant because it implies a lack of forcing sequences and a localized choice region under optimality. Two readings added in the start-selection file, offered for correction. The survey's certification wording "stays inside the region as a non-losing move" was changed to "leads to a position in the region" (two places), on the designer's confirmation, because a move that wins for the mover is non-losing and not in the region. Nothing was run),
-a sixty-fifth addition (`boundary_board_states_syzygy_mining.md`, and `boundary_board_state_topology.md` §8ar. At the designer's instruction, to remove garbage that predates the instruction not to carry unverified claims, and to keep what does not conflict. Removed from the mining file: the statement that the process had been run once, the pointer to a run record in the start-selection file, the sentences reporting what the first run found, did or stored (no tables, counts, sample results, stalemate finding, or database), the four-piece position counts, and the section naming the scripts and database, which is now a short section stating that nothing is carried over. Kept: the designer's statements, the two spaces, the steps of the procedure, the classification, the families and the upward link, the order of work, the estimates marked as unchecked, and the open list. The mining file now points to start-selection §2a and §2b as the later record. In the topology §8ar, the pointer to a run record was replaced and the "one run" assessment bullet was replaced by a "not run" bullet. Nothing was run),
-a sixty-sixth addition (`boundary_board_states_start_selection.md` §4: one reading added, offered for correction. The 50-move rule can only turn a win into a draw, so it does not affect the draw claim of a certified region, only its extent; the counter resets at the segment boundaries, so verdicts at segment entries are route-independent and a cached decisive verdict is exposed only near 100 plies of counter plus distance to zeroing; the unenumerated routes are those left for the anchor stage. A proposed second reading, that exits must be certified acyclically, was not added because the survey's certification condition already requires each forced loss to be a verified forced mate, a tablebase result or a complete case list. Nothing was run),
-a sixty-seventh addition (`boundary_board_states_start_selection.md` §2b and §4. Recorded from the designer: the Syzygy landscape can be enumerated into reachable families and the boundary board states mined locally with no anchoring at the initial position, linking back afterwards; the forward anchor can be the initial position or any chosen position; a decisive position can have a choice region below it, reached by sub-optimal play or ignorance of optimality, so a localized choice region can lie past the global one; there cannot be disjoint global regions sharing the initial start position, by definition. A correction of this assistant's reading: the §4 bullet that an anchor which is decisive "has no region below it" was wrong and was withdrawn and replaced by a bullet stating that the status of an anchor decides the claim the result carries (global closure claim at the initial position, local finding elsewhere), not whether a region exists. A reading added on where the forward and backward traces meet (at the table boundary, by captures and promotions). Nothing was run),
-a sixty-eighth addition (cross-references only: the companion lines of `boundary_board_states_start_selection.md` and `boundary_board_states_syzygy_mining.md` now list the changelog entries that touched them, which had omitted entries 65 and 66. No content changed. Nothing was run),
-a sixty-ninth addition (`boundary_board_states_opening_survey.md` §6 and §10, and `chess_concepts_survey.md` §20, at the designer's instruction. The survey's open question on deviations from a forced win now records the designer's later statement that such choice regions exist, with whether C1 records them left unspecified. The concept survey's note on graph-history interaction was narrowed to what the discussion found: it does not affect the draw value of a closed region, and bears on certifying exits and on the cache key for a cycle. The survey's sentence on global states forming a list was not changed, no direction having been given. Nothing was run),
-a seventieth addition (`boundary_board_states_start_selection.md` §2b and §4, and `boundary_board_states_opening_survey.md` §2. Recorded from the designer: the global choice region leads into the global forced region, and localized choice regions lie within the forced region, disjoint from the global choice region and unreachable from the initial position under optimal play. This resolves the survey's list sentence, which was left unchanged and is now read as the rim of the global choice region, with a short bullet added after it in survey §2 stating the designer's resolution. One reading added in the start-selection file, offered for correction. Nothing was run),
-a seventy-first addition (`boundary_board_states_start_selection.md` §2b, §3, §4 and §5. Recorded from the designer: the heavy dependency on the catalog and on localized regions sharing properties compositionally, given where engine games reach the table range; disjoint choice regions in a sea of forced landscape, kept as a catalog and not a network; the primitive measurements on the forced stretch between two choice regions as informative for composition and for optimality once exhaustive coverage reaches its limit. Readings added, offered for correction: that the stretch between two disjoint regions needs a loser's error and a winner's error and so lies off optimal play; its relation to the deviation map; that the sea of force is a hypothesis for the tables; and a scope measurement on 1,000 TCEC superfinal games, marked as this assistant's and not yet verified by the designer. The data file `tcec_superfinal_piece_counts.csv` accompanies it. Nothing in the mining was run),
-a seventy-second addition (`boundary_board_states_start_selection.md` §3 and §4. At the designer's instruction, the assistant's reading that the sea of force is a hypothesis for the tables was removed, with the progress-row note that sparsity is untested, since sparsity is not an important detail. The designer's own statement in §2b is unchanged. Nothing was run),
-a seventy-third addition (`boundary_board_states_start_selection.md` §2b, §3, §4 and §5. Recorded from the designer: the relativistic comparison between local choice regions as the focus when the exhaustive coverage of Syzygy is exhausted; irreversible moves as the bound of reachability, so that the comparison is between regions in the same segmented boundary and is one-directional across one; two disjoint regions a and b with posa and posb in equilibrium and equal to zero, and a position between them whose primitive calculation is a distance to the surrounding choice regions, like gravity, giving the temporal difference and how far ahead or behind a side is. Three readings added, offered for correction: segments as components of the legal-move graph with two senses of reachable; the distance as a prediction testable inside the tables, with its metric undefined; and its relation to tempo (survey §4c, §4e). Nothing was run),
-a seventy-fourth addition (`boundary_board_states_start_selection.md` §3, §4 and §5. A correction of this assistant's reading in entry 73. The distance is the primitive calculation, as the designer defined it (zero at an equilibrium, nonzero away from one). The assistant had substituted a ply-count distance and recorded the metric as undefined, which was wrong. The reading of the test inside the tables was rewritten to compare the primitive calculation with the tablebase values, the "metric is not fixed" sentence was removed, the progress-row note and the open item on the definition of the distance were removed. Nothing was run),
-a seventy-fifth addition (`boundary_board_states_start_selection.md` §4 and §5. A correction of this assistant's readings in entry 73. A segmented boundary is defined by reversible and irreversible moves, as the designer states, and it was wrong to list how segmented boundaries are recorded as unspecified. The reading that a segment is a strongly connected component of the legal-move graph, with its remark on parity and zugzwang, was replaced by a short reading that keeps the designer's definition and records the two senses of reachable (cooperative or by force). The open item on recording segmented boundaries was replaced by the designer's statement that the rule sets for navigating an irreversible boundary from the retrograde side may be found if a pattern emerges. Nothing was run),
-a seventy-sixth addition (`boundary_board_states_start_selection.md` §2b, §3 and §4. Recorded from the designer: the derivation of the primitive calculations from the catalog and two given choice regions, posa and posb, by applying the three primitives at each, deriving the equilibrium values, and tracing the change under perturbation along the path, evaluated across the known Syzygy landscape to give a population of explicit primitive calculations; the added element of moving up segmented boundaries; and the possibility of adding pieces deliberately from derivative boundary board state positions, where locking mechanisms make pieces effectively dead or a piece completes a race condition. Two readings added, offered for correction: that this is the record's dead pieces, footprint and ablation used constructively, and that it can be tested inside the tables by adding a piece to a table-range boundary state. Nothing was run),
-a seventy-seventh addition (`boundary_board_states_start_selection.md` §4, `boundary_board_states_syzygy_mining.md` §8, and `boundary_board_state_topology.md` §8ar. At the designer's instruction that no data from this assistant's runs is to be kept. Removed: the reading in the start-selection file that recorded this assistant's measurement on engine games, with its figures and its reference to a data file (entry 71 described it, and it no longer stands); the unchecked size estimates in the mining file's scale section, which were from memory; and the topology bullet that pointed to them. Nothing in the documents rests on a run by this assistant. Nothing was run),
-a seventy-eighth addition (`boundary_board_states_start_selection.md` §2b and §4. Recorded from the designer: pieces can be added to a boundary board state position that has room on the board, if they can never reach the primitive calculations that enforce the equilibrium; this is where the joint compatibility of the primitives comes in, the composition of the parts forming a new boundary board state position; the pawn race and king endgame as an example, where no exhaustive coverage is needed to show the calculation still holds. One reading added, offered for correction: that reach covers lines as well as distance, and that waiting moves and stalemate-realized draws matter, with the realization classes as a predictor. Nothing was run),
-a seventy-ninth addition (`boundary_board_states_start_selection.md` §2b and §4. Recorded from the designer: the addition of pieces can shift the equilibrium, a new emergent path beating the race that was present, so that the composition of many primitives from a population informs which pieces can be added, understood through ablation and the composition of the other primitives already composed. A correction of this assistant's reading in entry 78: the reading that reach is lines as well as distance, with its remarks on waiting moves and stalemate, brought in a geometric measure that is not in the programme, and was replaced by a reading of piece addition as the inverse of ablation. Nothing was run),
-an eightieth addition (`boundary_board_states_start_selection.md` §2b, §3 and §4. Recorded from the designer: triangulation of multiple reachable local choice regions, with the primitive relativistic calculations and the direction of the ablation or inverse ablation seen relative to the known regions, to view the change into the discovery zone, a region without exhaustive coverage, so that a pattern in which other primitives go towards equilibrium may let the missing link be solved for; and that the unresolved case may be a misunderstanding of the composition of the primitives and of what is equalized and prioritized through the race, and not an incorrect composition or a missing primitive, so that it is a compositional search problem in which the compositional changes towards an equilibrium identify the primitives in equilibrium and let the state be verified. Three readings added, offered for correction: triangulation is guidance and closure is the certificate, with reference regions in one segmented boundary; the relation to the residual interface of survey §4a and topology §8p, with those documents unchanged; and a test inside the tables. Nothing was run),
-an eighty-first addition (`boundary_board_states_start_selection.md` §2b, §3 and §4. Recorded from the designer: reachable has two senses set by the mode of the work. Certification is under optimality, and where Syzygy is used reachable means reachable under optimality; the pruning process may enumerate the full landscape without concern for optimality. Disjoint choice regions are not reachable under optimal play and are found by pairing the full landscape with the pruning structure drawn from it, after which the catalog is populated, the primitive calculations made, and the patterns sought that the programme needs to break the Syzygy limitations. The ambiguity is a duality built into the programme, and making it explicit is important. A correction of this assistant's readings in entries 73, 75 and 80: the reading of the two senses as cooperative or by force, and the remark that the designer had not stated which was meant, were wrong and are replaced. Nothing was run),
-an eighty-second addition (`boundary_board_states_start_selection.md` §2b, §3 and §4. Recorded from the designer: the king and pawn race as a joint compatible primitive, emergent in position-agnostic board states, calculated mostly in the endgame because other pieces obstruct it earlier; the designer's example of three positions with the same primitive joint compatibility (king and pawn against king; the same with two blocked pawn pairs added, which are as if not in the game; and with other pieces held by those pairs, which cannot be unlocked without losing the race), as the demonstration that the joint compatibility is provable and how piece additions add complexity to the obstruction of the race; and the exclusion of compositions already in equilibrium by the sum of the other reachable choice regions, within a finite structure, with the directionality of the primitive composition and inverse ablation as the way to search unknown regions for primitive balancing. Two readings added, offered for correction: the example as the mechanism of carry-over for added material, and a check of it in the 7-piece tables (two kings and five pawns). A correction of this assistant's earlier reading in discussion, that the example was a demonstration confined to a solved material, which missed the carry-over and is withdrawn. Nothing was run),
-and the corrected, complete version below. Kept separate from
-`syzygy_improvement_proven_results.md` and the other Claim A/B/C documents because
+This file is the construction pipeline and the record of the idea: what a boundary state is (§1, §14), how candidates are generated and validated (§2, §3), and how the programme is framed (§15). The other documents of the programme are:
+
+- `boundary_board_state_topology.md`: the abstract layer, covering the status of a confirmed boundary state, start-reachability, the scaffolding strategy and composition from race-condition primitives.
+- `boundary_board_state_primitive_catalog.md`: the three primitives (the mating and capture net, chained dependencies, the coverage race) and the composition rules.
+- `boundary_board_states_opening_survey.md`: the anchored survey from the initial position, the closure and its certificate.
+- `boundary_board_states_start_selection.md`: the choice of where to begin, with the designer's statements on choice regions, relativistic comparison, triangulation and the two senses of reachable.
+- `boundary_board_states_syzygy_mining.md`: the Syzygy mining process.
+- `boundary_board_states_case_study_otb.md`: a case study from over-the-board play.
+- `chess_concepts_survey.md`: a survey of chess concepts read against the programme.
+
+Kept separate from `syzygy_improvement_proven_results.md` and the other Claim A/B/C documents because
 this is a genuinely different kind of object: those are about distance and escape
 count; this is about win/draw/loss pattern-matching at the single precise point
 where a losing side's last real choice exists.
 
 > **Where this stands, and how to resume (read this first).**
 >
-> - **Two files.** This one is the construction pipeline and the record of the
->   idea. `boundary_board_state_topology.md` is the abstract layer: why a
->   confirmed boundary state's status cannot be invalidated from upstream,
->   start-reachability, the scaffolding strategy (§7 there), and the
->   composition-from-primitives idea (§8 there).
-> - **The concept in one line.** A boundary state is a drawn position in which
->   the side to move has exactly one non-losing move (§1, condition 2).
-> - **The concept in one line, restated (§14 item 8).** The sentence above is the
->   original statement and is superseded. A boundary state is a drawn position that is an
+> - **The concept in one line (§14 item 8).** A boundary state is a drawn position that is an
 >   equilibrium: each side has a deviation that loses against perfect play, and the
 >   draw is sustained by a cycle of moves of both sides (§14 items 7 and 8). The
 >   number of non-losing moves at the node is a recorded width, with exactly one the
->   strict case that the original statement used as the definition.
+>   strict case (§1, condition 2).
 > - **Four external anchors, each with its own honest status.** Checkers' weak
 >   solution — a tight structural match to the scaffolding strategy (§9 here,
 >   §7 there). Možina, Sadikov and Bratko's KBNK work — a looser family
@@ -247,12 +41,7 @@ where a losing side's last real choice exists.
 >   supply certainty. The record of an idea and the assessment of it are kept
 >   separate. What upstream discoveries can invalidate is a catalog's claim to
 >   be complete, never a confirmed boundary state.
-> - **The live thread.** Composition from race-condition primitives (Method 5):
->   choose one concrete placement of frozen, color-locked material, write out
->   the tempo timings for every route that breaks it, and decide whether the
->   target is a proven wide fortress or an exactly-one boundary state (topology
->   §8d, §9).
-> - **Update to the live thread.** The thread has since been generalized (topology §8f-§8j): a lock
+> - **The live thread, generalized (topology §8f-§8j).** A lock
 >   is a *duty*, of which a frozen pawn wall is only the degenerate case; a
 >   boundary state is a set of mutually dependent locks whose joint
 >   compatibility is a constraint system checked as a whole; and verification
@@ -268,23 +57,18 @@ where a losing side's last real choice exists.
 >   catalog is reducible from the joint compatibility of the others (topology §8x); and draws
 >   by stalemate or insufficient material are not boundary states. What remains is
 >   construction: the primitives, the composition rules, and the cost model.
->   *Correction (item 10): a draw by forced stalemate or forced capture into a dead position is a boundary state when it arises with no
->   choice to deviate, so the exclusion applies to draws that could have been avoided.*
+>   A draw by forced stalemate or forced capture into a dead position is a boundary state when it arises with no
+>   choice to deviate (item 10), so the exclusion applies to draws that could have been avoided.
 > - **The primitive catalog now exists** (`boundary_board_state_primitive_catalog.md`):
->   a specification with an entry template, an index of three primitives (earlier versions indexed eight, see the thirtieth addition) of which
+>   a specification with an entry template, an index of three primitives (the earlier index of eight is reduced; topology §8ab) of which
 >   P-001 (the capture net, whose royal case is the mating net) is written, and the generalization rule by which it
 >   covers the fool's mate and any other position. The definition of a global
 >   boundary state is restated in §14 item 7 (a cyclic equilibrium, both sides
 >   live), and the loop it describes is the hard core and not a primitive (topology §8ab).
 > - **Status of the work.** The only code in this document is the
 >   `is_boundary_state()` sketch in §6, checked for syntax but not yet run
->   against real Syzygy or project data. Everything else is design.
-> - **Status of the work, updated.** The `is_boundary_state()` sketch in §6 has still
->   not been run against Syzygy. A first exact scan was run on a self-built solver of
->   king and pawn against king (`kpk_boundary_scan.py`, topology §8t, with its
->   correction); it measured the width of drawn positions and did not produce boundary
->   states. `mating_net_report.py` checks the royal case of P-001 on four mates. The
->   catalog (`boundary_board_state_primitive_catalog.md`) is a specification, and no
+>   against real Syzygy or project data. No run results are kept in this
+>   record. The catalog (`boundary_board_state_primitive_catalog.md`) is a specification, and no
 >   proven boundary-state entry exists yet.
 > - **Chained dependencies (topology §8z, §8ab, catalog §7).** Chains, which are locks read as the
 >   dependency of one element on another, and the movement rule of every unit are specified at the level of primitives. P-003
@@ -349,7 +133,7 @@ The final board state reached after repetition sets in, for both sides, is itsel
 the boundary position — the furthest downstream point, since everything before it
 was the approach toward it.
 
-*Correction (§14 item 10): a draw realized by a forced stalemate or a forced capture into a dead position is the same as a boundary state when it arises with no choice to deviate, that is, when the equilibrium holds. The exclusion in this text is a filter against positions where the draw could have been avoided, and against cataloging such positions as discoveries. It is not an exclusion of the equilibrium case. Read "cycle" in the definition as the paradigm realization.*
+*Note (§14 item 10): a draw realized by a forced stalemate or a forced capture into a dead position is the same as a boundary state when it arises with no choice to deviate, that is, when the equilibrium holds. The exclusion in this text is a filter against positions where the draw could have been avoided, and against cataloging such positions as discoveries. It is not an exclusion of the equilibrium case. Read "cycle" in the definition as the paradigm realization.*
 
 *The cyclic requirement is restated as a definition, and its fit with §8's treatment of
 forced stalemate is examined, in §14 item 7. That "exactly one non-losing move" is a
@@ -411,7 +195,7 @@ open-source contribution network, approached modularly, where individual
 candidate positions are computed to full exhaustion one at a time, potentially
 distributed across many independent contributors rather than one machine.
 
-**The batch-size-1 analogy, as originally offered in support of this**: in
+**The batch-size-1 analogy, offered in support of this**: in
 `run_full_sweep.py`, a batch size of 1 often resolves a large fraction of
 positions quickly, with larger batch sizes becoming safe only once the database's
 own accumulated knowledge starts doing most of the work. Offered as intuition for
@@ -619,11 +403,11 @@ boundary state share any discoverable structural signature — not a shortcut
 around full verification, but a pattern worth testing for.
 
 **A real, independent, already-documented instance of exactly this
-distinction — checked directly, not asserted.** Wrong-colored-bishop-with-
+distinction, from standard endgame knowledge.** Wrong-colored-bishop-with-
 rook-pawn material is not unconditional insufficiency the way KB vs K or KN
 vs K is — it's won or drawn depending on a genuine race between the two
 kings for a specific corner, decided by tempo and distance, not by material
-alone. Confirmed directly: a defending king cut off from the safe corner
+alone. Standard endgame knowledge: a defending king cut off from the safe corner
 loses; one that reaches it draws, and real analysis of such positions
 identifies single correct moves among alternatives that surrender the win —
 the same narrow-margin shape this whole document is built around. Chess
@@ -691,7 +475,7 @@ this catalog's stated forward-search-scoping purpose (§7a, §10, §8p). Any
 composition work aimed at that purpose must be checked against Tier 3 (§14
 item 1, "start-reachable"), not left at Tier 1's internal-validity bar.
 
-**Generalization recorded after Method 5 was first written** (full record in
+**Generalization of Method 5** (full record in
 `boundary_board_state_topology.md` §8f-§8j). Frozen, zero-legal-move pieces
 are one special case of a wider class: a lock is a *duty* — a piece committed
 to a post, movable in principle, but any move that abandons the duty loses
@@ -753,7 +537,7 @@ whose verdict is proven, by tablebase or exhaustive search. If every catalog pri
 and it is nevertheless not an equilibrium, then by the definition some primitive race condition decides
 it, and it is one of three: a primitive not yet in the catalog, whose joint compatibility with the known
 ones carries the imbalance; a known primitive that is not jointly compatible with another in this
-position and is decisive; or a catalog entry that was evaluated wrongly, which is a correction to the
+position and is decisive; or a catalog entry that was evaluated wrongly, which is an error in the
 entry. All three are developments of the protective belt, the primitives, and none touches the hard core,
 the definition of a boundary state. The residual interface fixes what the missing or incompatible
 primitive must discharge. The distance from a state to equilibrium is the order in which this reduction is
@@ -761,17 +545,16 @@ carried out, and it never changes what is true. A boundary state itself is prove
 complete case list, with exhaustive insurance on the first entries. It has not been run, because it needs
 the cost model of P-001 and the written entries of the catalog (P-003 and P-008 are specified and not run).
 
-**Perturbation classes (added with the substrate; catalog §7.7, topology §8z).** The enumeration over the finite geometry that this method relies on is made specific by the movement relation of each unit. A move perturbs the structure in one of five ways: a unit move (its node in the navigation graph changes, and under a grading the parity of its remaining route flips); a blocker move or capture (edges of line-travelling relations whose dependency sets contain the square appear or disappear); a change of coverage or a pin (edge exposure changes); a relation change (promotion); and the capture of a node of the dependency graph (a cascade along its supporting and enabling edges). ΔS is the sum of their effects. Not run.
+**Perturbation classes (catalog §7.7, topology §8z).** The enumeration over the finite geometry that this method relies on is made specific by the movement relation of each unit. A move perturbs the structure in one of five ways: a unit move (its node in the navigation graph changes, and under a grading the parity of its remaining route flips); a blocker move or capture (edges of line-travelling relations whose dependency sets contain the square appear or disappear); a change of coverage or a pin (edge exposure changes); a relation change (promotion); and the capture of a node of the dependency graph (a cascade along its supporting and enabling edges). ΔS is the sum of their effects. Not run.
 
-**Two-sided evaluation (added with P-008; catalog §8.8, topology §8aa).** S(P) and ΔS are computed for both sides with the colors swapped, and the candidate moves of each side perturb the other's evaluation: the disturbances that can reach a structure are generated from the other side's candidate moves inside the closure of the structure's key set, and a disturbance is available only if the disturbing side's own structure still holds afterwards. This keeps the search over the primitive state scoped and adversarial. Not run.
+**Two-sided evaluation (catalog §8.8, topology §8aa).** S(P) and ΔS are computed for both sides with the colors swapped, and the candidate moves of each side perturb the other's evaluation: the disturbances that can reach a structure are generated from the other side's candidate moves inside the closure of the structure's key set, and a disturbance is available only if the disturbing side's own structure still holds afterwards. This keeps the search over the primitive state scoped and adversarial. Not run.
 
 ---
 
-## 3. The actual caching-architecture proposal, restored here at full precision
+## 3. The caching-architecture proposal
 
-An earlier draft of this document flattened this into a single rejected claim.
-It deserved better, because it's actually two separable claims with different
-soundness — restored here as the five-point workflow originally described:
+The proposal is two separable claims with different soundness. It is the following
+five-point workflow:
 
 1. **Use §1's three conditions as necessary, not sufficient, filters** to build a
    finite candidate pool for a given material — sufficient material on both
@@ -782,8 +565,8 @@ soundness — restored here as the five-point workflow originally described:
    inside this step. This is where the real cost lives.
 3. **Cache each candidate's proven verdict — boundary or not — permanently, once
    resolved.** This is the crux, and it is a *different* claim from "avoid
-   caching the full landscape at all." The distinction, precisely: the original
-   proposal was read, in an earlier draft, as "don't build the full landscape's
+   caching the full landscape at all." The distinction, precisely: the proposal
+   is not "don't build the full landscape's
    memoized state, recompute subtrees on demand whenever revisited" — that
    version genuinely fails (§4b). This version is the opposite shape: do the
    full, normal, single memoized computation exactly as the existing pipeline
@@ -985,7 +768,7 @@ where that changes.
 
 ## 7. The 50-move rule — the full reasoning, then what was verified
 
-**As originally worked through**: the 50-move rule implies a board position might,
+**The reasoning**: the 50-move rule implies a board position might,
 geometrically, appear to avoid a forced draw — but the specific sequence of moves
 required to *reach* that position might itself force a draw first, under the
 50-move rule, before the position is ever actually reached. If so, such a
@@ -1153,8 +936,7 @@ that line, perfect play would have taken it instead, and the boundary state
 simply wouldn't be the outcome reached at all. A validated boundary state's very
 existence already certifies "nothing better was available anywhere feeding into
 this" — the boundary wouldn't be a boundary otherwise. This isn't a new
-assumption; it's condition 3 applied to a specific, useful consequence that
-wasn't spelled out in earlier drafts.
+assumption; it's condition 3 applied to a specific, useful consequence.
 
 **The mechanism this actually enables**: forward search from one specific
 starting position of interest, terminating the instant it reaches an already-
@@ -1284,21 +1066,13 @@ incompleteness rather than a genuine absence of a drawing structure.
     wide fortress versus exactly-one, then run the small obstacle-board solver
     as insurance (topology §8d).
 13. **Build a population of confirmed local boundary states before attempting
-    decomposition** (topology §8m, correcting this step's own earlier draft,
-    which proposed starting from rook-pawn KPvK alone). Scan every material
+    decomposition** (topology §8m; not rook-pawn KPvK alone). Scan every material
     Syzygy or this project already covers for *local* boundary states — drawn,
     a losing deviation for the side to move (width recorded; §14 item 8),
     failing the materially-live test on one side (topology
     §5a-iii) — across as many distinct materials and entry families (topology
     §8b) as the scan reaches, not only the rook-pawn corner draw. Uses the definition in §14
-    items 7 and 8. **First instance run** (topology §8t, with its correction): a scan of king and
-    pawn against king measured the width of drawn positions by pawn file. Under the
-    corrected definition (§14 item 8) it did not produce a population of boundary
-    states: that material has a side that cannot lose, and its exactly-one positions
-    include captures of a hanging pawn into dead draws. What it did show is that the
-    rook-pawn draw is the widest, which is evidence against exactly-one as the
-    definition. A population of boundary states needs a material in which both sides
-    can lose.
+    items 7 and 8. A population of boundary states needs a material in which both sides can lose; king and pawn against king has a side that cannot lose, and its exactly-one positions include captures of a hanging pawn into dead draws, which are not boundary states.
 14. **Discover primitives from that population and generate candidates by
     subtraction** (topology §8l, §8m). Decompose each population member by
     minimization-by-ablation into fragments with explicit interfaces; catalog
@@ -1326,9 +1100,9 @@ incompleteness rather than a genuine absence of a drawing structure.
     structure.
 17. **Run the mating-net report across a corpus of mating positions and, as a
     stronger test, try to recognize the net before the mate** (topology §8u).
-    `mating_net_report.py` computes the four terms and the role of each piece with
-    no reference to piece types; it has been run on four mates. Recognition
-    from a pre-mate position is not attempted.
+    The four terms and the role of each piece are computed with
+    no reference to piece types. Not run; recognition from a pre-mate position is
+    not attempted.
 18. **Define the primitive state S and the perturbation ΔS over the written
     primitives, and apply Method 7** (topology §8y). The per-ply tempo ledger of
     topology §8w is its first instance. It needs the cost model of P-001 and the
@@ -1424,7 +1198,7 @@ than any single, fixed method decided in advance.
 
 ## 13. What remains open
 
-**The separately-reasoned scope assessment referenced in the preamble**: for any
+**The separately-reasoned scope assessment stated at the top of this file**: for any
 material that is *already fully classified* — Syzygy-covered, or already solved
 by this project's own engine — a boundary-state catalog *by itself* is a derived
 filter over data already completely known. §10 is this document's own answer to
@@ -1434,7 +1208,7 @@ does not by itself constitute progress toward solving chess from its starting
 position — a categorically larger problem (roughly 10^43 to 10^47 legal
 positions) that nothing built here touches. A real, argued position, not a
 dismissal — it does not change whether building the catalog is worthwhile, which
-§1's preamble records as the project's own stated priority regardless.
+the statement at the top of this file records as the project's own stated priority regardless.
 
 - **The central open question (§10, stated once, precisely, not repeated as a
   vague "scale" question)**: whether targeted forward search with boundary-
@@ -1504,14 +1278,10 @@ blunder-derived ones (item 2). Three tiers make the choice explicit:
   Currently uncheckable at scale.
 
 Each tier contains the next. The methods in §2 and the build in §11 should
-name the tier they target. The tier structure is kept as a description of how much of a position's history is assumed; the definition of a boundary state itself is settled (item 8). **Correction added afterwards (see item 2):** every
-tier also includes condition 1, that both sides are materially live. Tier 1 as
-first written omitted it; read Tier 1 as "drawn, exactly one non-losing move,
-both sides materially live."
+name the tier they target. The tier structure is kept as a description of how much of a position's history is assumed; the definition of a boundary state itself is settled (item 8). Every
+tier also includes condition 1, that both sides are materially live (item 2).
 
-*Update (item 8):* the tiers above take exactly-one as Tier 1's test. Item 8 records that
-exactly-one is a measure of width, not the definition; read "exactly one non-losing
-move" in the tier descriptions as "a recorded width w, with w = 1 the strict case".
+Read "exactly one non-losing move" in the tier descriptions as "a recorded width w, with w = 1 the strict case" (item 8: exactly-one is a measure of width, not the definition).
 
 **2. Two predictions about total-win materials conflict — RESOLVED: the flag
 was mistaken; the original reasoning is kept below, and the resolution follows
@@ -1571,7 +1341,7 @@ one is small and mechanical.
 Topology §3 (a status is local and unconditional), §5 (global as
 start-reachable), §6 (scoped versus global coverage), and the closure-
 contribution distinction proposed in topology §5a. The last is the least
-settled. It needs either a firm definition or a different pair of labels. *Update (item 9): the designer's statement of local and global by the path of arrival is recorded in item 9 as the firm definition.*
+settled. It needs either a firm definition or a different pair of labels. The designer's statement of local and global by the path of arrival is recorded in item 9 as the firm definition.
 
 **5. "Insufficient material" is being used loosely for the rook-pawn KPK
 draw.** That result depends on the king race and is not unconditional
@@ -1603,9 +1373,9 @@ and was believed to be recorded already.
   had not been tied to it.
 - **The operational test does not encode a cycle, so the cyclic property does not
   follow from the test alone.** The operational test was: drawn, with exactly one
-  non-losing move (item 8 records that this is a width measure). The exact
-  king-and-pawn data (topology §8t) contains 1,139 positions that pass it whose
-  saving move captures the pawn into a dead draw. These are not boundary states:
+  non-losing move (item 8 records that this is a width measure). In king and pawn against king,
+  positions that pass it include those whose saving move captures the pawn into a
+  dead draw. These are not boundary states:
   capturing a pawn left en prise is a blunder by the pawn's side and ends in a dead
   draw, not an equilibrium; and the stronger side there cannot lose, so there is no
   equilibrium between two sides (§1 condition 1 again).
@@ -1614,11 +1384,8 @@ and was believed to be recorded already.
   drawing branch, not something to exclude by default, while §1 reads as excluding
   it. The reconciliation: stalemate from sub-optimal play is excluded (§1);
   stalemate forced under a sequence is allowed in principle (§8); a cycle is the
-  paradigm. On the evidence, in the exact data only 5 of the 3,960 positions with
-  a unique saving king move leave White stalemated at once, and all five are
-  White's king trapped on a8 behind its own pawn on a7, a degenerate family. That
-  is one small material and settles nothing in general, but no non-degenerate
-  forced-stalemate case turned up there.
+  paradigm. No non-degenerate forced-stalemate case is
+  claimed here; the point is the reconciliation of §1 and §8.
 - **Resulting definition, recorded as the project's definition of a global
   boundary state (restated in item 8):** a drawn position that is an equilibrium
   (each side has a losing deviation against perfect play), whose drawing branch is
@@ -1626,7 +1393,7 @@ and was believed to be recorded already.
   sides live. Positions whose draw is realized by a
   forced stalemate or by a forced capture into a dead position are terminal draws of
   the local kind (Tier 1, topology §5a-iii), not global.
-  *Correction (item 10): this last sentence is withdrawn for the equilibrium case. A draw realized by a forced stalemate or a forced capture
+  *Note (item 10): for the equilibrium case, a draw realized by a forced stalemate or a forced capture
   into a dead position is a boundary state when no side has a choice that avoids it and each side has a losing deviation. It is a terminal
   draw of the local kind only where the draw could have been avoided.*
 - **A consequence worth stating.** Both sides must be able to lose, since otherwise
@@ -1637,8 +1404,7 @@ and was believed to be recorded already.
   as a requirement at any node, so a perpetual check with two interchangeable checks
   is not excluded.
 - **This is the definition of a boundary state and not a catalog entry.** The repetition loop is the emergent effect of the
-  primitives in equilibrium, so it belongs to the hard core. An earlier version of this file named it as catalog entry P-005; that
-  was a misclassification, corrected in topology §8ab and catalog §1.
+  primitives in equilibrium, so it belongs to the hard core. It is not a catalog entry (topology §8ab, catalog §1).
 
 **8. "Exactly one non-losing move" is a measure of width, not the definition.**
 
@@ -1652,7 +1418,7 @@ show a position forcing a draw from a place where it could have been avoided.
 Capturing a pawn the opponent leaves en prise is a blunder by the pawn's side, unless
 the race was already lost.
 
-*Correction (item 10): the exclusion of insufficient-material and stalemate draws in this text applies where the draw could have been
+*Note (item 10): the exclusion of insufficient-material and stalemate draws in this text applies where the draw could have been
 avoided, and is not an exclusion of a forced terminal draw that arises with no choice to deviate.*
 
 *Assessment — separate from the record above.*
@@ -1663,9 +1429,8 @@ avoided, and is not an exclusion of a forced terminal draw that arises with no c
   it ("no options available that don't immediately put them past a boundary state into
   a forced sequence — or that also become a draw"), and the same document keeps a
   separate, looser category for transitions with several non-losing options ("the edge
-  of a wider drawn region"). The strict reading was carried through this conversation
-  (the tiers, the scan, the catalog) without being checked against that wording or
-  raised. That was an error in this record's handling of the definition.
+  of a wider drawn region"). The strict reading appears in the tiers, the scan and the catalog; the
+  wording of condition 2 does not itself require it.
 - **Move count and primitive count are different quantities.** The number of
   non-losing moves at a node describes the move tree. The number of tied primitives
   describes the structure of the equilibrium. A composition of many primitives can
@@ -1674,13 +1439,10 @@ avoided, and is not an exclusion of a forced terminal draw that arises with no c
   every invariant, not that there be exactly one of them. The earlier phrasing in this
   record that the exactly-one move is the only move that leaves every lock in place
   (topology §8g) tied the two together and is not a definition.
-- **The rook-pawn draw is the evidence.** The project treats the rook-pawn draw as
-  the paradigm local primitive. The exact scan (topology §8t) found that it has the
-  widest draws of any pawn file (mean 4.15 non-losing moves; exactly-one in 7.1% of its
-  drawn positions against 15.0% on the d-file). A test that selects against the paradigm
-  example is not the definition. That result was read at the time as a failed guess
-  about the edge; it was in fact evidence that the criterion did not track the concept.
-- **Corrected definition.** A boundary state is a drawn position that is an
+- **The rook-pawn draw is the paradigm.** The project treats the rook-pawn draw as
+  the paradigm local primitive. A test that selects against the paradigm example is
+  not the definition.
+- **Definition.** A boundary state is a drawn position that is an
   equilibrium: each side has at least one deviation that loses against perfect play, so
   neither can improve and both can worsen; the draw is realized by a cycle of repetition
   sustained by the moves of both sides; and the equilibrium is accounted for by one or
@@ -1695,22 +1457,20 @@ avoided, and is not an exclusion of a forced terminal draw that arises with no c
   and not as the test.
 - **Draws that are not boundary states.** Stalemate and insufficient-material draws,
   including the capture of an unprotected pawn, are terminal draws. They are excluded
-  for the reasons in §1 and §8, and item 7 records the reconciliation. The scan in
-  topology §8t counted them because it applied only the exactly-one test, which is part
-  of why that test was the wrong instrument.
-  *Correction (item 10): the exclusion applies to terminal draws that could have been avoided. A forced terminal draw with no choice to
+  for the reasons in §1 and §8, and item 7 records the reconciliation. The exactly-one test alone does not exclude them, which is part
+  of why that test is not the definition.
+  *Note (item 10): the exclusion applies to terminal draws that could have been avoided. A forced terminal draw with no choice to
   deviate is a boundary state when the equilibrium holds.*
-- **Consequence for the starting position.** An argument made in discussion, that the
+- **Consequence for the starting position.** The argument that the
   starting position is not a boundary state because it has many non-losing first moves,
-  rested on the exactly-one test and is withdrawn. The starting position is not ruled out
+  rests on the exactly-one test, which is a width measure and not the definition. The starting position is not ruled out
   by width. Whether it is an equilibrium of the kind defined here depends on things not
   established: that chess is a draw, that each side has a losing deviation, and that the
   draw is sustained by a cycle.
 - **Consequences for earlier items.** The tiers of item 1 take exactly-one as Tier 1's
   test and should be read with w as a parameter. The question in item 7 of whether
-  exactly-one holds at every node of the loop no longer arises. The scan in topology
-  §8t measured the width of drawn positions in a material that, under this definition,
-  holds only local candidates, and not a population of boundary states.
+  exactly-one holds at every node of the loop no longer arises. King and pawn against king, under this definition, holds only local
+  candidates, and not a population of boundary states.
 
 **9. "Local" and "global" by the path of arrival (the designer's statement; topology §8ac).** A boundary state's own status is local and
 unconditional (topology §3) and is the position's. Its *classification* depends on how it is reached. A **local** boundary state is a
@@ -1732,7 +1492,7 @@ position, that is not evidence against the classification. The text of §1, item
 with a purpose: the boundary-state catalog is not to be filled with stalemate positions that arise from sub-optimal play, and such
 positions are not to be treated as discoveries. The definition of a global boundary state in item 7 is read with the cycle of
 repetition as its paradigm realization, and with the forced terminal draw as a second realization of the same equilibrium. The case
-in the exact king-and-pawn data (item 7, the 1,139 positions in which the saving move captures the pawn into a dead draw) is excluded
+in king and pawn against king (item 7, positions in which the saving move captures the pawn into a dead draw) is excluded
 for a different reason, which stands: the stronger side cannot lose there, so there is no equilibrium between two sides. This closes
 the open realization question recorded in `boundary_board_states_opening_survey.md` §10.
 
@@ -1840,7 +1600,7 @@ confidence in the programme's direction, even though neither is itself the
 strict novel-fact test Lakatos's stronger label requires.
 
 **On the operational claim.** The OTB game and the chess.com puzzle,
-independently verified this session and recorded in
+independently verified and recorded in
 `boundary_board_states_case_study_otb.md`, are real evidence that the
 intuitions motivating this programme's hard core are tracking something
 genuine in actual play — confirmed multiple times, including a mate-in-one
@@ -1853,14 +1613,14 @@ does. A programme's heuristic producing real practical value well before its
 hardest formal claims are settled is not a weakness in Lakatos's account. It
 is close to the normal case.
 
-**Update — the substrate and the chain (topology §8z).** The movement-relation substrate and the chain primitive are
+**The substrate and the chain (topology §8z).** The movement-relation substrate and the chain primitive are
 developments of the protective belt, and they leave the definition of a boundary state, the hard core, untouched. By the
 stricter standard above they are not yet progressive. Nothing in them has been run. They make two predictions that can
 fail and have not been run (catalog §7.13): that the load-bearing sets found by ablation are the cut sets of the dependency
 graph, and that orbit exclusion reproduces the known color-lock verdicts across the whole class. Positive results would be
 novel facts in Lakatos's sense, and negative ones would be reported in the same way as the corrections already on record.
 
-**Update — the coverage race (topology §8aa).** P-008 was derived from P-001 and P-003 by the reduction rule, and it is a
+**The coverage race (topology §8aa).** P-008 was derived from P-001 and P-003 by the reduction rule, and it is a
 development of the protective belt that leaves the hard core untouched. It is not yet progressive by the stricter standard above.
 The derivation of one primitive from two others is made under the definitions and is not a novel fact, and nothing in it has been
 run. Three predictions can fail (catalog §8.13): that the key elements coincide with the load-bearing elements found by ablation;

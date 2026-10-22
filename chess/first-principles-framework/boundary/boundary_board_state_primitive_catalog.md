@@ -2,9 +2,9 @@
 
 **Status.** A specification, not a program. The catalog has exactly three primitives, and every entry is a race condition: a
 conjunction of terms with an explicit interface, written so that it can be applied to any position without naming pieces and so
-that it does not depend on any implementation. The three are **P-001**, the capture net (version 2), whose royal-target case is
+that it does not depend on any implementation. The three are **P-001**, the capture net, whose royal-target case is
 the mating net (§4, written); **P-003**, chained dependencies, the segmented process of a chain of dependencies and the race to
-resolve it (§7, SPEC, version 3); and **P-008**, the coverage race under disturbance (§8, SPEC, version 2). Nothing else is a
+resolve it (§7, SPEC); and **P-008**, the coverage race under disturbance (§8, SPEC). Nothing else is a
 primitive (§1, the admission rule). This file is the primitives catalog only. Boundary states belong to a separate catalog
 (candidate, proven and disproven; `boundary_board_states.md` §3), with the composition of primitives recorded on proven entries
 (topology §8x). Evidence tags used throughout: **SPEC** (defined, not tested), **INSTANCES** (checked on specific positions),
@@ -34,7 +34,7 @@ only through the admission rule below. Adding any of these rewrites nothing alre
 
 **Mechanisms are keyed by term.** A primitive that shares a term with another shares the mechanisms attached to it. Primitives
 differ in which terms they have and in what they output, so a mechanism found in one primitive is available to every primitive
-with that term. The merge of the mating net and the piece trap into one primitive (§4, version 2) is the first case: they share
+with that term. The merge of the mating net and the piece trap into one primitive (§4) is the first case: they share
 every term and mechanism and differ only in the target kind.
 
 **Admission rule: what a primitive is.** The catalog is the protective belt of the programme whose hard core is the boundary
@@ -58,21 +58,19 @@ Content that fails the rule is not discarded. It is classified as one of: a **de
 primitive), a **term** or **mechanism** (of an existing primitive), a **derived form** or an **instance**. It is recorded in the
 table below, and it is never added to the index.
 
-**Proposed and not primitives.** Entries that earlier versions of this catalog indexed as primitives, and what each one is:
+**Candidates that are not primitives.** Entries proposed as primitives that do not pass the admission rule, and what each one is:
 
-| Former ID and name | What it is | Where its content lives |
+| ID and name | What it is | Where its content lives |
 |---|---|---|
 | P-002 Race to a square | the tempo comparison. Race is what every primitive is, so it is a term and not a primitive. A pawn race is the promotion route of P-003 against obstruction | term TP of P-003 (§7.5), term TM of P-008 (§8.5), mechanism RT2 |
 | P-004 Edge restriction | the board edge as missing edges in the movement relation. It has no race condition: it is an input | the navigation graph of P-003 (§7.3) |
 | P-005 Repetition loop | the definition of a boundary state: the cycle sustained by both sides when the primitives are in equilibrium (a forced terminal draw with no choice to deviate is a second realization, `boundary_board_states.md` §14 item 10). It emerges from the primitives, so it is the hard core and not a primitive | §5 item 2; `boundary_board_states.md` §14 item 7 |
-| P-006 (retired) | merged into P-001 version 2 | §4 |
+| P-006 Piece trap | merged into P-001: the capture net on any target, of which the mating net is the royal case | §4 |
 | P-007 Activation | the result when a chain of enabling dependencies resolves (development, unlocking, castling, promotion). The race condition in it is the chain | P-003 (§7): terms RT, LK, OB, TP |
 | SUB-1 Substrate | the movement relation and the dependency graph, the structure on which the chain is read. A part of the chained-dependencies primitive, not a separate entry | P-003 (§7.3, §7.4, §7.7) |
-| P-003 version 2 Frozen structure | the chain read statically, without a side or a horizon | P-003 (§7.6, the structure record) |
+| P-003 Frozen structure | the chain read statically, without a side or a horizon | P-003 (§7.6, the structure record) |
 
-**IDs are stable labels and not a count.** IDs are never reused (§6). P-002, P-004, P-005, P-006, P-007 and SUB-1 keep their
-meaning in the historical text of `boundary_board_state_topology.md` and `boundary_board_states.md`, where they are marked as
-reclassified, and they are not reassigned. The catalog has three entries, P-001, P-003 and P-008.
+**IDs are stable labels and not a count.** IDs are never reused (§6). P-002, P-004, P-005, P-006, P-007 and SUB-1 are not reassigned. The catalog has three entries, P-001, P-003 and P-008.
 
 ## 2. Entry template
 
@@ -99,7 +97,7 @@ Every entry has these fields ("none" is allowed, blank is not). This implements 
 
 | ID | Name | Covers | State | Source in the record |
 |---|---|---|---|---|
-| P-001 | Capture net (royal target: the mating net) | capture of a target piece by an attacker: checkmate for the king, material or tempo yield for any other piece | **written** (§4, version 2) | topology §8s, §8t, §8u, §8w |
+| P-001 | Capture net (royal target: the mating net) | capture of a target piece by an attacker: checkmate for the king, material or tempo yield for any other piece | **written** (§4) | topology §8s, §8t, §8u, §8w |
 | P-003 | Chained dependencies | the segmented process through a chain of dependencies and the race to resolve it: a pawn chain, an outpost, a lock held by duty, and the bringing of a unit or pawn into play (development, unlocking, castling, promotion). The movement relation of each unit supplies the routes and the dependency sets | **specified, SPEC** (§7, version 3; was P-007, SUB-1 and P-003 version 2) | topology §8a, §8d, §8f, §8y, §8z, §8ab |
 | P-008 | Coverage race under disturbance | the effect of a perturbation on the held terms of every engaged primitive at once, the support those terms share, and the race to open one before it is restored, computed for both sides | **specified, SPEC** (§8, version 2; was §7c) | topology §8aa |
 
@@ -110,12 +108,10 @@ admitted only as the deduction of that residual under the admission rule of §1.
 
 ---
 
-## 4. P-001 Capture net (version 2)
+## 4. P-001 Capture net
 
-*Version 2 merges the former P-006 (piece trap) into P-001, following the designer's decision
-that the mating net and the capture net on any other piece are one primitive race condition.
-The kind of target is a parameter; the royal case is the mating net. The ID P-006 is retired
-and is not reused.*
+*The mating net and the capture net on any other piece are one primitive race condition (the designer's decision). The kind of
+target is a parameter; the royal case is the mating net. The ID P-006 is not reused.*
 
 ### 4.1 Scope
 
@@ -219,7 +215,7 @@ instances where it was observed. The instance codes are those of §4.6.
 | X1 | No defender: no D piece attacks the checker's square | I-1 |
 | X2 | Support: the checker is protected by an A piece | I-2 (Bd3 supports h7), I-3 (Rg1 supports g7), I-4 (g4 supports h3) |
 | X3 | Masking: a D piece that would capture is blocked by a piece of its own, the king included | I-1 (the h1 rook behind the h2 pawn), I-4 (the queen on d3 behind the king on g3) |
-| X4 | Pin: a D piece that would capture is absolutely pinned off the line | constructed position in topology §8s; I-4 (the interposing queen on f3 is pinned) |
+| X4 | Pin: a D piece that would capture is absolutely pinned off the line | I-4 (the interposing queen on f3 is pinned); by the legal-move rule for an absolute pin |
 
 **B: block**
 
@@ -227,7 +223,7 @@ instances where it was observed. The instance codes are those of §4.6.
 |---|---|---|
 | B1 | Adjacency or knight check: nothing to block | I-2, I-3, I-4 |
 | B2 | No interposer: no D piece can reach a between-square | I-1 |
-| B3 | Pinned interposer: the only D pieces that could interpose are pinned off the line | constructed position in topology §8s |
+| B3 | Pinned interposer: the only D pieces that could interpose are pinned off the line | by the legal-move rule for an absolute pin |
 
 **S: attacker safety**
 
@@ -392,12 +388,7 @@ primitive that engages, and until those entries exist the accounting is incomple
 
 | Claim | Status | Where |
 |---|---|---|
-| The terms reproduce checkmate on four unrelated mates | INSTANCES | topology §8s, §8u |
-| The fool's mate survives removing all four knights and rooks; the attacker may be a queen or a bishop, not a rook, knight or pawn | INSTANCES | topology §8s |
-| The pieces the fool's mate cannot do without are the king's four start-square neighbors | INSTANCES | topology §8s |
-| An absolutely pinned defender is equivalent to an absent one for the X and B terms | INSTANCES (one constructed position) | topology §8s |
-| Dependencies are joint (the h1 rook with the h2 pawn; the f7 with the g7 pawn) | INSTANCES | topology §8s |
-| The assembly in the second puzzle is forcing (2 and 3 legal replies at the key points) | INSTANCES | topology §8u |
+| The terms read checkmate on four unrelated mates, by reading the positions | INSTANCES (not machine-checked) | topology §8s, §8u |
 | Non-royal targets: the queen in the second puzzle (I-5) and the queen hunt in the game record (I-6) | INSTANCES | topology §8w |
 | Outcome clause O and the tempo yield, as defined | SPEC | not run |
 | The chain reading of the outcome clause (mechanism O3) | SPEC | §7, topology §8z; not run |
@@ -405,9 +396,6 @@ primitive that engages, and until those entries exist the accounting is incomple
 | Defence mirror, §4.5 | SPEC | follows from the conjunction |
 | Cost model, §4.8 | not defined | |
 | Use on a boundary-state candidate, §4.11 | not tested | no candidate has been evaluated with it |
-
-The checks behind the royal-target rows were run with `mating_net_report.py`, which is a reference
-implementation of the royal case only. This entry does not depend on it.
 
 ### 4.13 Open questions
 
@@ -483,16 +471,13 @@ disturbances as their SPEC entries are.
 
 ## 7. P-003 Chained dependencies (specification)
 
-**Status: SPEC. Version 3.** Not run. Specified from the designer's statements recorded in topology §8y (the segmented process of
+**Status: SPEC.** Not run. Specified from the designer's statements recorded in topology §8y (the segmented process of
 promotion, development and unlocking), §8f (locks as duties), §8z (chain structures and the movement rules of units) and §8ab (the
 three primitives).
 
-**Revision note.** Earlier versions of this catalog split this primitive into three pieces: an activation entry (P-007), a
-substrate for the movement relation and the dependency graph (SUB-1), and a static structure entry (P-003 version 2). The
-designer's reading, stated when the chain material was first raised, is that it is one primitive: chained dependencies, whose race
-condition is the segmented process through the chain. Activation (development, unlocking, castling, promotion) names the result when
-a chain resolves and is not a primitive. This version is that one entry, built from the terms, mechanisms and definitions of the
-three pieces. None of them was discarded (§10.5).
+**One primitive.** Chained dependencies is one primitive, whose race condition is the segmented process through the chain (the
+designer's statement). Activation (development, unlocking, castling, promotion) names the result when a chain resolves and is not a
+primitive. The movement relation, the dependency graph and the static reading of the structure are parts of this entry (§7.3, §7.4, §7.6).
 
 ### 7.1 Scope
 
@@ -728,14 +713,14 @@ these held terms (§5). The activation asymmetry (§7.6) is reported with them.
 |---|---|---|
 | The four terms, the mechanism table and the structure record | SPEC | not run |
 | Orbit, grading, dependency set, inclusion and permanence, as definitions | SPEC | §7.3, §7.4; not run |
-| The joint dependencies that G is to reproduce | INSTANCES (as data to be reproduced) | topology §8s |
+| The joint dependencies that G is to reproduce | to be established by ablation | not run |
 | The dependency graph reproduces those joint dependencies | not run | prediction P3-1 |
 | Orbit exclusion (RT3) reproduces the known orbit-confined verdicts | not run | prediction P3-2 |
 | The chain reading of the outcome clause (O3 of P-001) | SPEC | §4.5, topology §8z; not run |
 | The game record's activation events (I-A1) | INSTANCES | §7.9 |
 | Base-of-chain attack as P-001 with P-003 | mapping only | §10.2 |
 
-1. **P3-1. Cut sets and load-bearing sets coincide.** In the ablation of topology §8s, the sets of pieces whose removal changes the
+1. **P3-1. Cut sets and load-bearing sets coincide.** In an ablation of a position (topology §8s), the sets of pieces whose removal changes the
    verdict are the cut sets of the graph G read from the same position by the mechanisms of P-001. A position where the minimal
    load-bearing set is not a cut set of G refutes the construction of G.
 2. **P3-2. Orbit exclusion reproduces the known orbit-confined verdicts.** For the recorded structures whose draw rests on a unit
@@ -765,10 +750,8 @@ designer set out (topology §8aa). It is a race-condition primitive built from t
 the written entries already define, and it adds no evaluation of its own: every effect it reports is determined by the definitions
 of the primitive whose term is affected.
 
-**Revision note.** Version 1 defined the coverage condition through a supply-and-demand formalization, a Hall-form condition with
-a slack and a robustness. That formalization came from outside the race semantics of the primitives, and it is not the primitive
-architecture. The designer's correction is that the primitive is built from the primitives' own race conditions under perturbation.
-Version 1 was withdrawn, and none of its formalism remains in this entry (§10.4).
+**Basis.** The primitive is built from the primitives' own race conditions under perturbation (the designer's statement), not from a
+formalization imported from outside the race semantics.
 
 **How the calculation is read.** P-008 is a primitive race condition and is evaluated as one. Its condition is calculated exactly on a position, and again on the position after each perturbation (Method 7, topology §8y). Certainty about a line comes from those evaluations composed over a complete case list. Certainty about the catalog grows as mechanisms are added and as residual interfaces are discharged (topology §8y). Where this entry is silent about an effect, that is a gap in the catalog to be developed by the reduction rule, and it is not an uncertainty in the calculation.
 
@@ -956,30 +939,23 @@ case recorded in topology §8f, and it has not been checked.
 
 | Claim | Status | Where |
 |---|---|---|
-| (version 1) The Hall form of Holds, the slack and robustness, and the per-event bound | withdrawn with version 1 | §10.4 |
-| (version 1) The two-sided coupling is well-founded | argued, not proven; restated for version 2 in §8.8, which adds no ordering of its own | §8.8 |
-| (version 1) Static Holds agrees with the exchange verdict on the critical set | withdrawn with version 1 | prediction P8-2, restated |
-| (restated) The primitive's evaluation under perturbation, composed over a line, reproduces the exhaustive verdict | not run | prediction P8-2 |
-| (version 1) Key defenders coincide with the load-bearing coverers of the ablation | restated for version 2 as key elements | prediction P8-1 |
+| The two-sided coupling is well-founded | argued, not proven; §8.8 adds no ordering of its own | §8.8 |
+| The primitive's evaluation under perturbation, composed over a line, reproduces the exhaustive verdict | not run | prediction P8-2 |
 | A perturbation whose change misses the support of a condition leaves that condition unchanged | by definition | §8.3, §8.9 |
 | A held term is opened only by a perturbation whose change meets the support of every residual reply | by definition | §8.3 |
 | Held terms, support, opening sets, key elements, joint support and the support closure, as defined | SPEC | not run |
 
-1. **P8-1.** In the ablation of topology §8s, the elements whose removal changes the verdict are the key elements of the held
+1. **P8-1.** In an ablation of a position (topology §8s), the elements whose removal changes the verdict are the key elements of the held
    terms, that is, the singleton opening sets. Where a held term has no singleton opening set, the smallest removal set that changes
    the verdict is a minimal opening set. A smaller verdict-changing set refutes the support definition.
 2. **P8-2.** The evaluation of P-008 on the position after each perturbation, composed over a line, reproduces the verdict of
    exhaustive search for exchange-dependent structures. A disagreement is a residual interface, which is a missing mechanism, an
    incompatibility with another primitive, or a wrong entry (topology §8y), and it develops the catalog. The number of
    perturbations that must be branched, against the number that are legal in the footprint, measures the saving.
-3. **P8-3.** In the ablation and deviation data of topology §8s, every perturbation that changes the verdict of a composition has a
+3. **P8-3.** In ablation and deviation data on a composition, every perturbation that changes the verdict of a composition has a
    change that meets the support closure. A verdict-changing perturbation outside the closure refutes it: a support is missing, which
    means that a mechanism or an effect is absent from the catalog, and by the reduction rule it specifies what must be added.
 
-   *Withdrawn wording.* An earlier statement of P8-2 treated the condition as a first-level result, with a search as the check
-   and a rate of exceptions as the measure. That presented the primitive as an approximation to a search verdict, and it is
-   withdrawn (§10.4). The earlier statement of P8-1 referred to a tight set and a robustness of the supply-and-demand formulation,
-   which was withdrawn with version 1 (§10.4).
 
 ### 8.14 Open questions
 
@@ -991,7 +967,7 @@ the cycle. How large the support closure is on real compositions, which is recor
 of `boundary_board_states.md` §11. Where a perturbation class acts on a P-003 term that P-003's mechanisms leave undetermined, the
 reduction rule returns the residual.
 
-**Update.** Recaptures and discovered coverage are perturbations of the classes of §7.7 and are recomputed at each position
+**Recaptures and discovered coverage.** Recaptures and discovered coverage are perturbations of the classes of §7.7 and are recomputed at each position
 (§8.9). What remains open about them is whether the five perturbation classes are complete for this primitive. That is a claim of
 the catalog's completeness (topology §3, §8p), and a gap in it is a residual interface for the reduction rule.
 
@@ -1021,7 +997,7 @@ result of a chain resolving (§1).
 
 ### 10.1 What is the designer's and what is this file's organization
 
-The designer's, and unchanged: the architecture (a primitives catalog; candidate, proven and disproven
+The designer's: the architecture (a primitives catalog; candidate, proven and disproven
 boundary-state catalogs with verdicts cached permanently; composition of primitives recorded on proven
 entries; the reduction rule), the definition of a boundary state, the requirement that primitives be race
 conditions stated without piece names and without board features, and the three primitives: the mating and
@@ -1056,13 +1032,13 @@ mapping below is this file's reading, and no entry has been written.
 | Haworth's enumeration of mutual zugzwangs | not a primitive: raw material for candidate and proven entries, to be re-read against the definition of a boundary state (`boundary_board_states.md` §9) |
 
 The expectation recorded in §8b that the edge, opposition and spare-tempo entries are the narrow ones, and
-that fortress entries are wide, was stated in terms of the exactly-one reading. Under the corrected
+that fortress entries are wide, was stated in terms of the exactly-one reading. Under the
 definition the width of a position is a recorded parameter, and the expectation is not a classification
 (`boundary_board_states.md` §14 item 8).
 
 ### 10.3 Provenance of the movement relation and of P-003
 
-**The designer's, and unchanged:** that chain structures are a key structure of the locking mechanism, as the dependency of
+**The designer's:** that chain structures are a key structure of the locking mechanism, as the dependency of
 one element on another (the passed pawn as a chain of the pawn wall with the pawn passing unopposed; the outpost as a chain
 in which taking the occupant allows a recapture, with the chained end as the weak point); that the capture potential inside a
 chain alters the viability of the race condition it belongs to, so that it informs the segmented-dependency primitive
@@ -1078,20 +1054,18 @@ grading, union, edge exposure); the two edge types ENABLE and SUPPORT; the notio
 three terms and the mechanism codes of P-003; the mechanism codes RT3 to RT5, LK3, OB4, OB5 and O3; the five perturbation
 classes; and the two predictions of §7.13.
 
-**A correction recorded.** A first version of this addition, in the discussion, treated the color symmetry of one kind of
-unit and the parity of another as separate piece notes, and then stated piece-specific route claims. The designer corrected
-both. The movement relation is one construction, and the catalog states no rule of any piece. The
-piece-specific special cases are inputs supplied with each unit's relation when a primitive is applied to a position, and
-they are accounted for during composition and race calculation on that board structure. Recording them inside a primitive
-would turn the primitive into a subspace of piece composition and defeat its purpose.
+**Piece-specific rules (the designer's statement).** The movement relation is one construction, and the catalog states no rule of any
+piece. The piece-specific special cases are inputs supplied with each unit's relation when a primitive is applied to a position, and
+they are accounted for during composition and race calculation on that board structure. Recording them inside a primitive would turn
+the primitive into a subspace of piece composition and defeat its purpose.
 
 **A possible modular addition, not part of the protective belt.** A register of piece-specific special cases, kept apart from
 the primitives and consulted by them as an input during composition, is viable by the designer's statement. It is not
 started here, and it would hold no definition of a primitive.
 
-### 10.4 Provenance of P-008 and of the move of the dissolution race out of P-003
+### 10.4 Provenance of P-008
 
-**The designer's, and unchanged:** that two written primitives, the capture and mating net and the chained structures with their
+**The designer's:** that two written primitives, the capture and mating net and the chained structures with their
 segmented dependencies, are enough to derive a third under joint compatibility, as a demonstration of the reduction rule and of
 the complete graph of primitives; that the third is the coverage race of a chained structure after trades and the removal of key
 defenders, where a structure that is covered can lose its coverage when a covering piece is traded and the race on the trade is
@@ -1105,76 +1079,39 @@ race; and that where combinatorics reaches a limit, a hybrid that scopes exhaust
 needs only minimal combinatorial calculation, with further primitives possibly mitigating it more, which is kept open; and that the approach is race-condition primitives and not a heuristic approximation, so that what matters is making moves under perturbation and understanding the effects on the primitive race conditions under perturbation, with certainty derived from the growing catalog's account of those effects, and with the hybrid being exhaustive coverage formed by that understanding.
 
 **This file's organizational choices, offered for the designer to change:** the name and ID of P-008 and the placement of its
-section as §8 (§7c in earlier versions); the register of held terms with the support of their residual replies; the effect vector over both sides'
+section as §8; the register of held terms with the support of their residual replies; the effect vector over both sides'
 registers; the opening sets, key elements and joint support; the four terms OP, CR, FS and TM and the mechanism codes; the
 support closure and the evaluation under perturbation with complete coverage of §8.9; the treatment of the carrier as an input;
-the move of the dissolution race out of P-003 version 1, with the mapping of this section and the codes DF-H1 to DF-H3; the conventions bullet on
+the placement of the dissolution race in P-008 and not in P-003, with the codes DF-H1 to DF-H3; the conventions bullet on
 adversarial evaluation in §6; and the three predictions P8-1 to P8-3.
 
-**A correction recorded.** Version 1 of P-003 carried the dissolution race of a structure. That placed a primitive's worth of
-behavior inside a structural entry and overlapped the coverage race that the composition of P-001 with P-003 leaves as its
-residual. By the designer's rule the overlap was a defect in the entry, and it was fixed by moving the race to P-008. The question
-this left open, whether P-003 remains an indexed primitive or is classified with SUB-1 as a substrate, is settled in §10.5: P-003 is a
-primitive, the single chained-dependencies primitive, and SUB-1 is a part of it.
-
-**A second correction recorded.** The first version of §8.3, §8.9 and §8.13 described the Hall-form condition as a first-level
-condition that a scoped search confirms or overturns, with a rate of exceptions as a measure. That presented the primitive as an
-approximation to a search verdict, and it is not how the programme works. The race condition is evaluated exactly at each
-position, and again after each perturbation. The coverage of perturbations is complete over the effects that the mechanism tables
-enumerate. A disagreement with a proven verdict is a residual interface for the reduction rule (topology §8y). The text was
-restated, and the withdrawn wording is noted in §8.13.
-
-**A third correction recorded.** Version 1 of P-008 defined the coverage condition through a supply-and-demand formalization, a
-Hall-form condition with a slack, a robustness, a tight set and a per-event bound. That formalization was imported from outside the
-race semantics of the primitives. The designer's correction is that the primitive architecture is built from the primitives' own
-race conditions under perturbation: the held terms and residual replies that the written entries define, the support those replies
-read, the effect of a perturbation on them, and the race for them. Version 1 was withdrawn, and the entry, the dependency map, the
-mapping in §10.4, the topology record and the pipeline document were restated without it. The earlier corrections above
-and the exactness of the evaluation at every position are unchanged.
-
-**Mapping of the items that version 1 of P-003 carried (kept for the record).** Version 1 of P-003 held the dissolution race of a
-structure. It moved to P-008 in version 2, and the table is the map of that move. Nothing was discarded.
-
-| Version 1 item | Where it is now |
-|---|---|
-| AC1, AC2: nets on an unsupported end or a cut node | the access is a P-001 net carried by K1 to K4; the effect is P-008 OP1 |
-| AC3: decoy of a supporter | P-008 OP1 or OP6 with carrier K3 |
-| UN1: no supporter | static: a root (P-003 §7.3) |
-| UN2: supporter removed first | P-008 OP1, as a compelled sequence |
-| UN3: cheaper attacker | P-001 O2, which the owning primitive evaluates |
-| PR1: support loss | P-008 OP1 |
-| PR2: occupancy loss | P-008 OP3 and OP4 |
-| PR3: duty abandonment | P-008 OP2 (an element in the support of two held terms; overload needs no special case) |
-| PR4: ENABLE opening | P-003 LK3, supplied by a P-008 effect on an element |
-| the defence mirror D-AC, D-UN, D-PR | P-008's defence mirror (§8.7) |
-| DF-S1 base-of-chain attack | P-008 DF-H1 |
-| DF-S2 poisoned offer | P-008 DF-H2 |
+**Principles of construction (the designer's statements).** A primitive carries one behavior. Overlap between primitives is a defect,
+so the dissolution race of a structure is in P-008 and not in P-003. A race condition is evaluated exactly at each position, and again
+after each perturbation, and the coverage of perturbations is complete over the effects that the mechanism tables enumerate; a
+disagreement with a proven verdict is a residual interface for the reduction rule (topology §8y). The primitive architecture is built from
+the primitives' own race conditions under perturbation: the held terms and residual replies that the written entries define, the support
+those replies read, the effect of a perturbation on them, and the race for them. No formalization is imported from outside the race
+semantics. P-003 is the single chained-dependencies primitive.
 
 ### 10.5 The reduction to three primitives
 
-**What happened.** The index of earlier versions held eight entries: P-001, P-002, P-003, P-004, P-005, P-006 (retired),
-P-007 and P-008, with a substrate SUB-1 beside them. Only P-001, the chained-dependencies material and P-008 are race conditions
-under the definition of the programme. The designer's correction is that there are three primitives: the mating and capture net,
-chained dependencies, and the coverage race. The other entries were descriptors: a name for the state that emerges when primitives are in
-equilibrium (P-005), a name for the result of a chain resolving (P-007), an input with no race condition (P-004), the tempo
-comparison that every race contains (P-002), and a retired ID (P-006). The chained-dependencies primitive itself had been
-fragmented into P-007, SUB-1 and P-003 version 2. This version corrects both.
+Only P-001, chained dependencies and P-008 are race conditions under the definition of the programme. The designer's statement is that
+there are three primitives: the mating and capture net, chained dependencies, and the coverage race. The other candidates are
+descriptors: a name for the state that emerges when primitives are in equilibrium (P-005), a name for the result of a chain resolving
+(P-007), an input with no race condition (P-004), the tempo comparison that every race contains (P-002), and an ID merged into P-001
+(P-006). Their classification is in the table of §1. The admission rule of §1 tests every later addition.
 
-**What was done.** The five non-primitives were removed from the index and recorded in the table of §1 with what each one is and where
-its content lives. P-007, SUB-1 and P-003 version 2 were rebuilt as one entry, P-003 version 3 (§7), keeping every term, mechanism,
-derived form, instance, definition and prediction of the three. P-008 was renumbered from §7c to §8 with no change of definition.
-The admission rule of §1 was added so that later additions are tested against it. A copy of the catalog before this change is kept
-in `backup_before_three_primitive_restructure/`.
+Catalog sections cited in `boundary_board_state_topology.md` §8 before §8ab use the section numbers below. This is a lookup for those
+citations.
 
-| Earlier section | Now |
+| Cited section | Section now |
 |---|---|
 | §7 P-007 Activation | §7 P-003 (terms RT, LK, OB, TP; mechanisms RT1 to RT5, LK1 to LK3, OB1 to OB5, TP1; derived forms and instances) |
 | §7a SUB-1 | §7.3 (movement relation, dependency graph), §7.4 (invariants, permanence), §7.7 (attributes, perturbation classes), §7.13 (predictions) |
-| §7b P-003 version 2 | §7.6 (structure record) |
+| §7b P-003 | §7.6 (structure record) |
 | §7c P-008 | §8 |
-| §8 dependency map | §9 (three primitives) |
+| §8 dependency map | §9 |
 | §9 provenance | §10 |
 
-**This file's reading, offered for the designer to change:** the choice of P-003 as the ID of the merged entry, so that IDs are not
-renumbered; the reading that the tempo comparison is a term of P-003 and of P-008 and not an entry; the reading that zugzwang
+**This file's reading, offered for the designer to change:** the choice of P-003 as the ID of the chained-dependencies entry; the reading that the tempo comparison is a term of P-003 and of P-008 and not an entry; the reading that zugzwang
 without capture is a residual and not a fourth primitive.

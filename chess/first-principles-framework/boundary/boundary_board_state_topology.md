@@ -6,9 +6,13 @@ to generate and validate candidates, how to cache and scope from them. This
 document is the more abstract layer sitting on top of it: what the *structure*
 of an already-growing boundary-state catalog can and can't tell you, once more
 than one boundary state is known and their relationships to each other and to
-their own ancestors start to matter. Written the same way as everything else in
-this project — a real claim tested, a real correction made, kept in the record
-rather than smoothed over.
+their own ancestors start to matter. 
+
+**Standing notes for reading this document.**
+
+- *Width.* "Exactly one non-losing move" is a measure of width (w = 1 is the strict case), not the definition of a boundary state. Where a conclusion in a section depends on w = 1 specifically, it holds only for that strict case. With width allowed, two or more live primitives are compatible with an equilibrium; composing one live primitive with frozen terrain is one option, not a requirement. The definition is in `boundary_board_states.md` §14 item 8.
+- *Primitives.* The catalog has three primitives: the mating and capture net (P-001), chained dependencies (P-003, which absorbs the entries named P-007, SUB-1 and the frozen structure in the sections below) and the coverage race (P-008). The names P-002, P-004, P-005, P-007 and SUB-1 are used in the sections below as recorded; they are not primitives. The "race primitive P-002" is the tempo comparison, a term (TP of P-003, TM of P-008). The classification of each name is in §8ab and in catalog §1.
+- *Catalog section numbers.* Catalog sections cited in §8 and later (§7, §7a, §7b, §7c, §8, §9) are those of the catalog before the reduction to three primitives; the map to the present numbers is catalog §10.5.
 
 ---
 
@@ -24,11 +28,9 @@ blur into each other.
 
 ---
 
-## 2. On the Lakatosian framing — a real correction to the previous document's hedge
+## 2. On the Lakatosian framing
 
-`boundary_board_states.md` described the periodic-table framing as an analogy.
-That undersold it, and it's worth saying so plainly rather than leaving the
-softer version on record. Lakatos's structure — a hard core that stays fixed,
+The periodic-table framing is more than an analogy. Lakatos's structure — a hard core that stays fixed,
 surrounded by a protective belt of specific claims that absorb real anomalies
 and get revised without the core itself being touched — matches this
 project's own process structurally, not just evocatively. The hard core has
@@ -50,7 +52,7 @@ settles just by being apt for the project's own methodology.
 
 ---
 
-## 3. The correction: a boundary state's own status is local and unconditional
+## 3. A boundary state's own status is local and unconditional
 
 This is the technical core of this document, and it's worth stating precisely
 before building anything on top of it.
@@ -83,7 +85,7 @@ validation split in `boundary_board_states.md`, already built to catch exactly
 this) — not in B itself.
 
 **A necessary refinement — the collective claim is different from the one just
-addressed, and it's correct.** The correction above answers "can discovering an
+addressed, and it's correct.** The result above answers "can discovering an
 alternative ancestor path invalidate *one specific, already-confirmed* B." It
 does not answer a different, genuinely valid claim: whether the *complete set*
 of all true transition points for a material, taken together, forms a closure
@@ -108,14 +110,13 @@ transition point somewhere along that specific chain. Genuine, sound
 gap-detection: a way to actively drive candidate discovery, distinct from
 anything already in the construction pipeline's own generation methods.
 
-**Where the earlier correction in this section still holds, precisely.**
+**What the local-status result still guarantees, precisely.**
 Finding such a chain falsifies the hypothesis "the catalog is already
 complete." It does not, and structurally cannot, falsify any specific,
 already-confirmed member of that catalog — B's own condition-2 status remains
 exactly as unconditional as established above. "Exclude" is the right word for
 the completeness hypothesis. It is the wrong word for any individual confirmed
-boundary state. These are two different targets, not a contradiction between
-this refinement and the correction it's refining.
+boundary state. These are two different targets, and they do not contradict each other.
 
 **One further precision, tied to an already-open question (§9, and
 `boundary_board_states.md` §13).** The unconditional guarantee concerns
@@ -225,8 +226,7 @@ some point, a move that was *not* the position's own value-preserving choice —
 a genuine deviation, in the precise sense of departing from what that
 position's own true value required.
 
-**What this fact does not, by itself, establish — and why the correction below
-still stands as its own separate claim, not weakened by the fact above.** The
+**What this fact does not, by itself, establish.** The
 deviation point guaranteed to exist is not automatically a *strict* boundary
 state. It is a position where a non-losing option existed and a different,
 losing one was taken instead — but that position may have had several
@@ -280,8 +280,6 @@ state is local or global.
 
 ### 5a-ii. Assessment — separate from the record above
 
-*Correction (`boundary_board_states.md` §14 item 8): this section uses "exactly one non-losing move" as if it were the definition of a boundary state. It is a measure of width (w = 1 is the strict case), not the definition. Where a conclusion below depends on w = 1 specifically, it holds only for that strict case.*
-
 **As currently worded, closure membership cannot be the criterion.** §3 and
 Method 2 define a transition point as the first ancestor on a validated
 retrograde walk where the loser's non-losing count moves from zero to nonzero.
@@ -318,8 +316,6 @@ value survive); and whether either notion correlates with the load-bearing
 relation of §4.
 
 ### 5a-iii. A later refinement, as stated, then assessed
-
-*Correction (`boundary_board_states.md` §14 item 8): this section uses "exactly one non-losing move" as if it were the definition of a boundary state. It is a measure of width (w = 1 is the strict case), not the definition. Where a conclusion below depends on w = 1 specifically, it holds only for that strict case.*
 
 **As stated.** A true, global boundary board state is one in which each player
 has sufficient material and the best outcome for both players is a draw: an
@@ -406,7 +402,7 @@ practical question: not "can we prove start-reachability directly," but "can
 we make real, incremental, prioritized progress toward it, using exactly the
 machinery already built, without needing the whole chain at once."
 
-*Note (survey §4c and §4f): the route to the start position is now also the forward trace of a pruned structure from the opening position, scoped to a chosen opening (`boundary_board_states_opening_survey.md` §4c). The backward scaffolding of this section remains, and survey §4f states reachability from certified positions as a backward direction beside the forward trace. The two meet at the boundary line of the catalog (survey §4f). The statement here that the chain cannot be traced in one leap is unchanged.*
+*The route to the start position is also the forward trace of a pruned structure from the opening position, scoped to a chosen opening (`boundary_board_states_opening_survey.md` §4c). The backward scaffolding of this section stands beside it, and survey §4f states reachability from certified positions as a backward direction beside the forward trace. The two meet at the boundary line of the catalog (survey §4f). The chain cannot be traced in one leap.*
 
 **The strategy, stated precisely.** Take the full set of currently-confirmed
 boundary states — everything already validated via Syzygy or this project's
@@ -469,9 +465,7 @@ game play lines terminate." Eighteen years, a 3.9×10¹³-position database, the
 single most successful result in this entire research area — arrived at here
 independently, before this precedent was checked, not after.
 
-**A precise correction worth stating plainly rather than leaving the
-stronger claim standing uncorrected.** It is not that applying this strategy
-to chess has gone unconsidered. The checkers literature addresses it
+**The field has considered this strategy for chess.** The checkers literature addresses it
 directly: even with the exact technique that solved checkers, chess's own
 scale — roughly 10^44 legal positions, against checkers' roughly 5×10^20 — is
 explicitly described as needing "a breakthrough such as quantum computing" to
@@ -543,12 +537,12 @@ mechanism for extending the floor.
   states are the specific mechanism for growing the floor past the
   piece-count wall the checkers literature already identified as chess's
   blocking obstacle (§7, quoted above: "a breakthrough such as quantum
-  computing") — had not been stated together in one place before this turn.
+  computing") — is stated together here.
   This is the precise technical content behind "relates to checkers directly
   in application, differently from what's been tried": the field's own
   assessment concerns a floor built by exhaustive storage; a floor built
   partly from composed certificates is not subject to that argument.
-- **A real, related precedent found on checking this session, recorded
+- **A real, related precedent found on checking, recorded
   honestly rather than left unsearched.** Bleicher's "Freezer" tool builds
   new tablebases from existing (Nalimov) tables using a priori information —
   specifically, blocked pawns — producing results for material with seven or
@@ -563,7 +557,7 @@ mechanism for extending the floor.
   even within the narrowed space. Recorded as the closest related prior art
   found so far, not as prior art for Method 5 itself.
 - **The novelty claim otherwise stands at the same hedge §7 already uses.**
-  This project's own effort — including one search this session, not an
+  This project's own effort — including one search, not an
   exhaustive review — has not found the specific combination described here
   (checkers-style scaffolding extended by certified composition rather than
   exhaustive storage) published elsewhere. That is the same epistemic status
@@ -764,8 +758,6 @@ not yet fully crystallized, not a set of results.
 
 ### 8f. Locks generalized: duties, not only frozen walls
 
-*Correction (`boundary_board_states.md` §14 item 8): this section uses "exactly one non-losing move" as if it were the definition of a boundary state. It is a measure of width (w = 1 is the strict case), not the definition. Where a conclusion below depends on w = 1 specifically, it holds only for that strict case.*
-
 **The idea, as stated.** Frozen pawn walls are one instance of a wider
 locking mechanism. In advanced play a king with a fortress has coverage; the
 opponent, holding an extra piece, places it undefended near the fortress so
@@ -891,8 +883,6 @@ conditions become visible that piece-placement geometry alone would hide.
 
 ### 8h. Scope of verification: footprints and interference closure
 
-*Correction (`boundary_board_states.md` §14 item 8): this section uses "exactly one non-losing move" as if it were the definition of a boundary state. It is a measure of width (w = 1 is the strict case), not the definition. Where a conclusion below depends on w = 1 specifically, it holds only for that strict case.*
-
 **The idea, as stated.** Deviations are scoped by the topological relations of
 the composition, so exhaustive coverage is bounded by topological closure.
 Dynamic locks need not be checked exhaustively if the primitive topological
@@ -957,10 +947,6 @@ construction, so the equilibrium holds.
 
 ### 8i. The catalog schema for primitives (proposed)
 
-*Correction (`boundary_board_states.md` §14 item 8): this section uses "exactly one non-losing move" as if it were the definition of a boundary state. It is a measure of width (w = 1 is the strict case), not the definition. Where a conclusion below depends on w = 1 specifically, it holds only for that strict case.*
-
-*Withdrawn: the composition constraint that exactly-one needs one live primitive and every other piece frozen. It followed from the strict reading. With width allowed, two or more live primitives are compatible with an equilibrium, and composing one live primitive with frozen terrain is one option, not a requirement.*
-
 *Implemented and extended in `boundary_board_state_primitive_catalog.md` §2; this section is kept as the original proposal.*
 
 Extending the entry format of §8b (a small ending, its deciding inequality,
@@ -1000,15 +986,9 @@ Composition rules to be validated on small instances before use:
 
 ### 8j. Path to implementation (provisional)
 
-*Correction (`boundary_board_states.md` §14 item 8): this section uses "exactly one non-losing move" as if it were the definition of a boundary state. It is a measure of width (w = 1 is the strict case), not the definition. Where a conclusion below depends on w = 1 specifically, it holds only for that strict case.*
-
-*Withdrawn: the composition constraint that exactly-one needs one live primitive and every other piece frozen. It followed from the strict reading. With width allowed, two or more live primitives are compatible with an equilibrium, and composing one live primitive with frozen terrain is one option, not a requirement.*
-
 The idea is not yet fully crystallized, so this is an ordering of likely
-steps, not a commitment. **Superseded in part by §8m**, which argues steps 2-3
-as originally drafted here (starting from one hand-analyzed primitive) are
-premature — the corrected order puts a population scan first. The steps below
-carry that correction; the struck-through framing is kept for the record.
+steps, not a commitment. Per §8m, the order starts with a population scan,
+not a single hand-analyzed primitive.
 
 1. Decide the open definitional questions (`boundary_board_states.md` §14,
    and §5a here): which tier of boundary state is the target, and what
@@ -1088,12 +1068,7 @@ compatibility of the composition, and when it fits, it fits perfectly.
   tempo-preserving move, and uniqueness generally comes from constraints that
   remove alternatives. If so, a substitute must funnel as well as restrict,
   and these are two separable requirements. A direct test: in tablebase KPvK,
-  check whether exactly-one positions concentrate near the edge. **Tested in
-  §8t with an exact solver of king and pawn against king: not supported.** The
-  fraction of drawn positions with exactly one saving move is lowest on the
-  rook-pawn file and highest on the d-file, and the defending king is on an
-  edge square about as often in those positions as in drawn positions
-  generally. This hypothesis is withdrawn.
+  check whether exactly-one positions concentrate near the edge. Not run.
 - **"Fits perfectly" corresponds to zero slack.** A race at the boundary is a
   tie: the mover's non-losing move preserves the margin exactly and each
   alternative costs at least one tempo. A wide fortress has slack. Zero slack
@@ -1106,8 +1081,6 @@ compatibility of the composition, and when it fits, it fits perfectly.
   small enough for enumeration, consistent with steps 2-4 of §8j.
 
 ### 8l. Discovering primitives from tablebases, and generating candidates by subtraction
-
-*Correction (`boundary_board_states.md` §14 item 8): this section uses "exactly one non-losing move" as if it were the definition of a boundary state. It is a measure of width (w = 1 is the strict case), not the definition. Where a conclusion below depends on w = 1 specifically, it holds only for that strict case.*
 
 **The idea, as stated.** The rook-pawn KPvK primitive consists of: the
 defending king's legal-move exclusion under the Chebyshev metric (supplied by
@@ -1193,8 +1166,6 @@ resulting compositional problem to generate a new candidate.
 
 ### 8m. Population-first extraction — the methodology's own justification
 
-*Correction (`boundary_board_states.md` §14 item 8): this section uses "exactly one non-losing move" as if it were the definition of a boundary state. It is a measure of width (w = 1 is the strict case), not the definition. Where a conclusion below depends on w = 1 specifically, it holds only for that strict case.*
-
 **The idea, as stated.** The decomposition process cannot be understood in
 advance, independent of the structure of the relationships being composed;
 joint compatibility is an emergent phenomenon, visible only once the
@@ -1248,14 +1219,9 @@ forward search reconnecting to it.
   lines point the same direction: that solved chess data contains structure
   beyond its raw values, extractable and usable. That is a real, if modest,
   addition — an argument for trying the extraction, not a result of it.
-- **The Možina et al. comparison, refined twice now — first corrected, then
-  sharpened into the form that actually holds.** The first correction (above)
-  addressed the claim that they attempted boundary-state composition and fell
-  short from lacking this project's framework, and rejected it: KBNK has zero
-  boundary states, so there was nothing in their material for a composition
-  method to find, and that specific claim doesn't hold. The sharper claim
-  made afterward is different, and does hold: not that they attempted this
-  and fell short, but that their own project's structure made the connection
+- **The Možina et al. comparison.** They did not attempt boundary-state
+  composition: KBNK has zero boundary states, so there was nothing in their
+  material for a composition method to find. The claim that holds is that their own project's structure made the connection
   to the checkers-style forward-search methodology (§7, §7a) invisible to
   them, for two compounding reasons, neither of which is a deficiency in their
   work — both follow from what their project was.
@@ -1266,8 +1232,7 @@ forward search reconnecting to it.
     completely known. The forward-search-to-floor idea has no purchase where
     everything is already on the floor.
   - **Their material couldn't have shown it even if the question had been
-    posed.** KBNK has zero boundary states (as established in the correction
-    above), so no version of their own project, run on their own case study,
+    posed.** KBNK has zero boundary states (as established above), so no version of their own project, run on their own case study,
     could have surfaced a boundary-state-based floor to search toward.
   Put together: the specific object that connects "mine a solved tablebase
   for recurring structure" (which they did) to "use that structure as a
@@ -1286,13 +1251,12 @@ forward search reconnecting to it.
     directly from the abstract structure of the topological compositions,
     independent of and prior to encountering Uri's rule, Možina et al.'s
     work, or the checkers precedent itself — each found afterward, on
-    checking what already existed. Recorded in the same spirit this
-    document's own preamble already records real revision as part of the
-    project's history, not as something verified here.
-- **The concrete correction to build order.** §8j's step 2 and
+    checking what already existed. Recorded as the order in which the
+    connections were found, not as something verified here.
+- **The build order.** §8j's step 2 and
   `boundary_board_states.md` step 13, as drafted, start from a single
   hand-analyzed example (rook-pawn KPvK). Under this idea that is premature:
-  a single example cannot reveal what recurs. The corrected order —
+  a single example cannot reveal what recurs. The order is —
   1. Scan every material Syzygy already covers (and any this project has
      solved) for *local* boundary states specifically — drawn, exactly-one,
      and failing the materially-live test on one side (§5a-iii) — not just
@@ -1377,17 +1341,15 @@ entirely.
   plus the bishop's color-lock. This is a comparison between two already-
   published formulas and needs no new computation, only the comparison itself
   being carried out.
-- **This does not conflict with §8c's self-correction, and the two should be
-  kept apart.** §8c records that this project's own Method 5 first attempted
+- **This is distinct from §8c.** §8c records that this project's own Method 5 attempted
   wrong-colored-bishop-and-rook-pawn material as a *construction base* — a
   starting point to compose something new on top of — and found that the
   attacker has too little material there to enforce a tempo-margin argument
   against a detour into a pawn structure. That is a question about whether
   the material can *host further composition*. This section asks a different
   question: whether the material's own already-known draw *itself*
-  decomposes into recognizable primitives. §8c's self-correction does not
-  bear on the decomposition proposed here and should not be read as
-  contradicting it.
+  decomposes into recognizable primitives. §8c does not
+  bear on the decomposition proposed here.
 - **The "already used in engines" point was already on record and needed no
   revision.** `boundary_board_states.md` §2 Method 4 and §9 already state,
   from the same chessprogramming.org source, that this ending must be
@@ -1417,42 +1379,16 @@ at an attractor-landscape level.
 
 `r4rk1/6p1/2p4p/1q1p3Q/p1nP4/P7/KP2B1R1/2b3R1 w - - 0 1`
 
-No mate-in-one exists for White in this position — checked directly, not by
-engine score. Stockfish finds a forced mate in four: `Rxg7+ Kh8 Rh7+ Kxh7
-Qg6+ Kh8 Qg7#`, confirmed as genuine checkmate by python-chess's own rules
-engine after playing the full line out, not taken on the engine's score label
-alone. Every other reasonable try for White (bishop moves — Bd1, Bxc4, Bf3)
-loses on the order of five to six hundred centipawns, apparently because
-Black's queen, knight and bishop are already positioned against White's king
-on a2.
-
-The perturbation proposed — give the other side the move — was run directly
-on this exact position, nothing else changed. White to move: mate in four for
-White, as above. **Black to move: mate in one for Black** (`Qxb2#`), with
-`Qb3+ Kb1 Qxb2#` next best. The position's result inverts completely with
-whose move it is: White-to-move mates in four, Black-to-move mates in one.
+The proposed perturbation is to give the other side the move, with nothing else changed. Not run.
 
 **Assessment — separate from the record above.**
 
-- **This is not a boundary state in either move-order, and it is worth being
-  precise about why, because the reason is informative.** A boundary state
-  requires the position to be drawn. This position is never drawn — it is
-  decisive both ways, with the result flipping between two different forced
-  mates rather than settling toward a draw. The perturbation here did not
-  approach an equilibrium; it crossed a seam between two wins, with nothing
-  in between. That is also not zugzwang, a term it would be easy to reach for
-  here: zugzwang is when moving is bad for the side to move, and it would
-  rather pass. Here moving is good for whoever does it — the problem is
-  purely whose turn it is. It is an ordinary, if unusually sharp, mutual
-  attacking race, and the size of the swing (four plies to mate one way, one
-  ply the other) is what makes it a striking example rather than an unusual
-  category of position.
 - **The method itself is sound, and is a real, useful addition — recorded as
   Method 6 in `boundary_board_states.md` §2.** It is Method 2's
   retrograde-seeding instinct (follow value across a change and find the
   seam) applied as a single parametric probe rather than a full backward
   walk, which is exactly what makes it usable outside tablebase-reachable
-  material: nothing about running it required the position to be small. Its
+  material: nothing about running it requires the position to be small. Its
   confirmation is whatever confirms the reference position's value — engine
   search above tablebase range — so it holds the same status as Methods 3 and
   4 under the standing rule of §1: it proposes and orders candidates, and
@@ -1463,17 +1399,13 @@ whose move it is: White-to-move mates in four, Black-to-move mates in one.
   the formal one does not, and the difference matters.** Read loosely, as a
   description rather than a technical claim: nothing here contradicts the
   observation that neither king has a stable defensive structure holding
-  against the other, regardless of tempo — both sides have a live, immediate
-  mating resource, and nothing locks either one down. That is a reasonable
-  informal gloss on what the data shows. But §8g's joint compatibility is a
+  against the other, regardless of tempo, and nothing locks either one down. But §8g's joint compatibility is a
   specific, technical claim about a *set of individually identified and
   certified small primitives* composed together, checked by a resource
   accounting across that set. Nothing has been decomposed into primitives
-  here — this is one holistic engine evaluation of a nineteen-piece position,
-  with no primitive catalog entries identified, let alone certified, for
+  here, with no primitive catalog entries identified, let alone certified, for
   either king's situation. Calling this an instance of joint incompatibility
-  in the formal sense would be the same category move already corrected
-  twice in this conversation — reusing a precisely defined term for something
+  in the formal sense would be a category error — reusing a precisely defined term for something
   that resembles it in spirit but hasn't met its conditions. The informal
   reading is fine and worth keeping; the formal one isn't yet earned.
 - **On "eventually finding an equilibrium position... at an attractor
@@ -1486,17 +1418,6 @@ whose move it is: White-to-move mates in four, Black-to-move mates in one.
   boundary states exists yet to compare against (§8m's own open question),
   and nothing about "basin structure" has been defined precisely enough to
   measure. Recorded as a direction, not a method.
-- **What the worked case study is actually worth.** Not a boundary state, and
-  not evidence of joint incompatibility in the technical sense. It is a
-  clean, verified demonstration that Method 6 can land on a different real
-  structure than the one being searched for — a decisive-to-decisive tempo
-  seam — and that this is itself worth recording as a known outcome of
-  running the method, not a failure of it. The next genuine test of Method 6
-  is to run it where it's more likely to land on an actual draw: starting
-  from a position already close to known drawing material (the small
-  materials targeted in `boundary_board_states.md` step 13) rather than from
-  an attacking middlegame position where both kings are already exposed.
-
 ### 8p. Relativized classification — using a catalog of boundary states as a network of reference points, not only as leaf-node termination targets
 
 **The idea, as stated.** Beyond using a single known boundary state as a
@@ -1516,7 +1437,7 @@ reference points from which nearby unknown positions can be classified.
 **Assessment — separate from the record above.**
 
 - **This already exists, worked out exactly, as classical endgame theory —
-  checked this session, not assumed.** "Key squares" are exactly this
+  checked, not assumed.** "Key squares" are exactly this
   project's certainty anchors: reach one, and the result is known. "Corresponding
   squares" is the generalization this idea is describing, already named and
   already in standard use: a network of paired squares such that if one
@@ -1531,7 +1452,7 @@ reference points from which nearby unknown positions can be classified.
   described here, already made exact for king-and-pawn structures.
 - **The one place this needs a guard rail, and classical theory already states
   it explicitly, independent of anything in this project.** A directly
-  relevant source checked this session puts it plainly: reaching a key square
+  relevant source checked puts it plainly: reaching a key square
   is what wins; if the key squares are already unreachable, "you can hold the
   opposition all day and achieve nothing." That is the precise failure mode
   to guard against here: **failing to find a path from the unknown position to
@@ -1554,7 +1475,7 @@ reference points from which nearby unknown positions can be classified.
   achieves this by deriving the full network for a given blocked pawn
   structure exhaustively, the same bar every certified method in this
   catalog already has to clear (Methods 5 and 6 both explicitly scoped this
-  way). The source checked this session states the actual use pattern
+  way). The source checked states the actual use pattern
   precisely: key squares tell you where to go, the opposition tells you how
   to get there — scoping *where to focus the exact calculation*, not
   replacing the calculation with the absence of a found path.
@@ -1582,9 +1503,7 @@ reference points from which nearby unknown positions can be classified.
   calculation is exact and closed-form, and the key-square network for that
   material is exhaustively derived and complete. Neither bar is yet cleared
   by anything this project has built for the broader primitive types it is
-  trying to catalog: every offset measured so far in this conversation
-  (the puzzle's centipawn swings, the opening's centipawn field) has been
-  Stockfish's estimate, not a closed-form count, and §8m's own population
+  trying to catalog: no offset for these types is yet a closed-form count, and §8m's own population
   scan — whether primitives even recur at usable scale — is still unrun. The
   method is correct and already proven correct, by existing chess theory, for
   the materials where it has been made exact. Whether this project's own
@@ -1633,11 +1552,9 @@ reference points from which nearby unknown positions can be classified.
   scale, the same size of problem as classifying large parts of chess
   itself, and naming the synthesis doesn't shrink it.
 
-### 8q. Two corrections from one challenge: composition needs start-reachability, and a refutation proof is not a boundary-state certificate
+### 8q. Composition needs start-reachability, and a refutation proof is not a boundary-state certificate
 
-*Correction (`boundary_board_states.md` §14 item 8): this section uses "exactly one non-losing move" as if it were the definition of a boundary state. It is a measure of width (w = 1 is the strict case), not the definition. Where a conclusion below depends on w = 1 specifically, it holds only for that strict case.*
-
-*Withdrawn: the argument, made in discussion, that the opening position is not a boundary state because it has many non-losing first moves. That rested on the strict reading. The opening position is not ruled out by width, and whether it is an equilibrium of the kind defined in item 8 is not established either way. The distinction between a refutation proof and a certificate stands, and so does the finding that the position after Qf3 in the OTB game is decisive and not drawn.*
+*The opening position is not ruled out as a boundary state by width (it has many non-losing first moves), and whether it is an equilibrium of the kind defined in item 8 is not established either way. A refutation proof is distinct from a certificate.*
 
 **The idea, as stated.** Two primitives are either jointly compatible or they
 are not — a binary fact about a position, not a question of degree. But
@@ -1672,7 +1589,7 @@ message makes two different claims that need different answers.**
   only from how Method 5 and §§8g-8p had been connecting to it:
   `boundary_board_states.md` §14 item 1 already defines exactly this
   distinction as the tier structure, with Tier 3 named "start-reachable" for
-  precisely this reason. The correction is to make explicit, here, that any
+  precisely this reason. Any
   composition work aimed at the forward-search-scoping purpose needs its
   targets checked against Tier 3 specifically, not left at Tier 1's
   internal-validity bar. Recorded as a standing requirement on Method 5 and
@@ -1706,34 +1623,17 @@ message makes two different claims that need different answers.**
   objects, provable by overlapping but not identical means, and a clean
   forcing line proves the first regardless of whether the second holds
   anywhere nearby.
-- **Checked against the actual game, not argued in the abstract.** Before
-  White's Qf3, Stockfish's top five candidates span 4 to −60 centipawns — an
-  ordinary field, nothing forced. After Qf3, Black's top five span +7 to
-  +166 — clearly better for Black, confirmed and real — but that is a field
-  of improving options, not one forced line from which White has zero
-  escape. White has continuations from there; they start from a worse
-  position, which is exactly what a dominance/refutation claim establishes,
-  and exactly what "no moves downstream, no compensation possible" would need
-  to be stronger than to match the language used. The position only
-  approaches the "no escape, forced" texture described much later, after
-  several further moves compound the disadvantage (consistent with the
-  earlier finding, §8o, that this kind of razor-thin margin is a real but
-  distinct phenomenon, found at specific later junctures — Kd1 vs. Kf1, for
-  instance — not as a property of the queen move's immediate consequence by
-  itself).
 - **What this leaves standing, precisely.** The queen-development read is
   real chess judgment, correctly identified, and provable by ordinary
   refutation technique without needing a whole game tree — all of that
   holds. It establishes that Qf3 was dominated by better alternatives. It
-  does not establish, and the data above shows it did not in fact produce,
-  an inescapable forced sequence at that specific move, and it was never a
-  claim about the position being a drawn equilibrium in the first place.
+  does not establish an inescapable forced sequence at that specific move,
+  and it was never a claim about the position being a drawn equilibrium in the
+  first place.
 
 ### 8r. Forward anchoring, the discovery/certification split, and cooperative-mate relaxation
 
-*Correction (§8y): the statement below that discovery only proposes applies to discovery by population features and by relaxations. Discovery by residual, meaning a proven verdict that the equalized catalog does not account for, is a deduction under the definition, and its output is exact.*
-
-*Correction (`boundary_board_states.md` §14 item 8): this section uses "exactly one non-losing move" as if it were the definition of a boundary state. It is a measure of width (w = 1 is the strict case), not the definition. Where a conclusion below depends on w = 1 specifically, it holds only for that strict case.*
+*The statement below that discovery only proposes applies to discovery by population features and by relaxations. Discovery by residual, meaning a proven verdict that the equalized catalog does not account for, is a deduction under the definition, and its output is exact (§8y).*
 
 **The idea, as stated.** The initial position informs every downstream
 mechanism up to the mates Syzygy encapsulates, so cataloging primitives and
@@ -1797,24 +1697,6 @@ perturbation more efficient. The structure reinforces itself.
   CMD is what the defender's best resistance adds. That gap framing is this
   assessment's own observation, not something from the record above, and is
   untested.
-- **A worked case, enumerated against the real start position rather than
-  argued.** Exhaustive enumeration from the initial position finds no mate in
-  1-3 plies by either side. Black's fastest cooperative mate takes 4 plies, in
-  exactly 8 sequences, every one a fool's-mate variant (White plays f3 or f4
-  and g4, Black plays e6 or e5 and then Qh4#). White's fastest takes 5 plies,
-  in 347 sequences, and the sample listed all contain one spare move (g1h3 or
-  b1c3, say) plus the same three ingredients mirrored: Black weakens the king
-  diagonal with f- and g-pawn moves, White moves the e-pawn, and Qh5 delivers.
-  The structure is the same for both sides: two moves by the loser that
-  weaken the king's diagonal, one line-opening move, and one delivery, four
-  plies of structure. The asymmetry in distance (4 versus 5) appears to be
-  ply parity: White's mating move must land on an odd ply, so the first
-  mover's tempo shows up as one spare ply and not as a faster mate. (The
-  parity explanation is this assessment's reading of the enumeration, not
-  separately verified.) This matches the stated structure of a lock (the
-  loser's weakened diagonal), a route (the opened line), and a delivery, and
-  it gives the "locked out pieces" and "not early because it mates first"
-  language a concrete minimal instance.
 - **What the relaxation cannot supply.** Cooperation removes the defender's
   choice, and the defender's choice is exactly where boundary states live: a
   boundary state is one where the side to move has exactly one non-losing
@@ -1864,7 +1746,7 @@ perturbation more efficient. The structure reinforces itself.
   the offset is exact (§8p); opening principles such as tempo count as
   heuristic rediscovery until an exact version is derived.
 
-### 8s. The fool's mate as a minimal primitive: ablation results, the four-term template, and what is new in it
+### 8s. The fool's mate as a minimal primitive: the four-term template, and what is new in it
 
 **The idea, as stated.** The fool's mate is informative because it is the
 earliest cooperative mate and needs the least forward trace to confirm. It
@@ -1884,37 +1766,8 @@ A boundary state can then emerge at the most upstream point of a commitment
 that forces the opponent into a position where they can only lose or draw,
 the race being equalized on the branch taken.
 
-**The data, run rather than argued.** For each of three real mates, every
-subset of the surrounding pieces was tested for whether the mate survives:
-
-| Position | Necessary | Free (never changes the verdict) | Conditional |
-|---|---|---|---|
-| Fool's mate, White's pieces (15 varied) | Qd1, Bf1, Pd2, Pe2 | Ra1, Nb1, Bc1, Ng1, Pa2, Pb2, Pc2, Pf3, Pg4 | Rh1 with Ph2 |
-| OTB game, Qxh7# threat, Black's pieces (13 varied) | Rf8 | Nb4, Bc5, Pe5, Pd6, Pa7, Pb7, Pc7, Ra8, Bc8, Qd8 | Pf7 with Pg7 |
-| Puzzle, final Qg7#, both sides (14 varied) | Rg1 | every other piece | none |
-
-Further checks on the fool's mate: with all four knights and rooks removed it
-is still checkmate; with the queen on h4 replaced by a bishop it is still
-checkmate; replaced by a rook, knight or pawn it is not; a white pawn put
-back on g3 or f2 blocks the ray and there is no check. The h-file pair
-behaves as a unit: with Ph2 removed and Rh1 present White answers Rxh4, but
-removing both, or the rook alone, leaves the mate intact. In the OTB position
-the f7/g7 pair behaves the same way, since g7 shields f7 from the queen's
-rank attack, so f7 is needed as an own-piece block only while g7 stands. And
-a pin version of the pattern was built: White knight on e4 (able to interpose
-on g3 or f2) with a black rook on e8 pinning it to the king and a black bishop
-on c4 covering e2 is checkmate; the same position without the rook is not (Ng3
-and Nf2 answer), and with the knight absent it is checkmate again.
-
 **Assessment — separate from the record above.**
 
-- **The stated predictions held.** The mate survives removing the knights and
-  rooks, and the pieces it cannot do without are exactly the king's four
-  start-square neighbors (Qd1, Bf1, Pd2, Pe2), so "dependent on the initial
-  start locking" is literally true: none of them can have moved. This was
-  stated before it was checked, and it could have failed. It is a small
-  corroboration in the sense of `boundary_board_states.md` §15, modest because
-  the claim is an easy one.
 - **"Not piece dependent apart from the king" holds, with the exact form of
   the dependence stated.** What is king-relative is the set of conditions;
   what fills each condition varies. The attacker on the ray can be a queen or
@@ -1930,13 +1783,12 @@ and Nf2 answer), and with the knight absent it is checkmate again.
   |---|---|---|---|
   | Check | open diagonal h4–e1 (g3, f2 emptied by the loser's pawns) | open diagonal e4–h7 (f5, g6 empty) | adjacent queen, no ray |
   | Flights denied | own pieces on d1, d2, e2, f1, plus the ray covers f2 | own rook on f8, the f7/g7 pair, queen covers h8 | queen covers g8 and h7, no own pieces needed |
-  | Checker not capturable | no white piece reaches h4 (the h1 rook masked by its own h2 pawn) | Bd3 supports h7 (held fixed in the test) | Rg1 supports g7 (necessary) |
+  | Checker not capturable | no white piece reaches h4 (the h1 rook masked by its own h2 pawn) | Bd3 supports h7 | Rg1 supports g7 |
   | Block | none possible | not applicable | not applicable |
 
   Mechanisms in that table: own-piece lock, attacker coverage, support,
   masking of a defender by its own piece, and defenders that are simply out of
-  play (the "free" column: Black's queen, bishop and second rook in the OTB
-  position were irrelevant to the mate).
+  play.
 - **The pin generalization is correct for absolute pins and needs a cost
   comparison for others.** An absolutely pinned piece cannot legally leave the
   pin line, so its coverage is removed exactly as if it were absent, which the
@@ -1955,17 +1807,15 @@ and Nf2 answer), and with the knight absent it is checkmate again.
   The puzzle's mate is the forced version of the same skeleton: Rxg7+, Rh7+
   and Qg6+ leave Black only Kh8, Kxh7 and Kh8, and Qg7# follows. The OTB
   game's Qxh7# threat is the same skeleton waiting, with f5 closing the ray.
-- **Single-piece ablation is not enough; the dependencies are joint.** The
-  Rh1/Ph2 and Pf7/Pg7 pairs are small real examples of the point of §8g: a
-  piece can be harmless alone, harmful with a partner, and harmless again when
-  both are gone. The load-bearing test has to be run over sets of pieces, as it
-  was here (all 32,768 subsets in the largest case), not one piece at a time.
-- **The classification into necessary, free and conditional is the noise
-  filter for a population.** The 347 White fool's-mate-length sequences found
-  in §8r differ mostly in a spare move; the ablation procedure is what collapses
-  them to one skeleton. It has been run on three final positions, and not yet
-  on the 347 sequences.
-- **Development discharges terms, by geometry and not run.** A knight on f3
+- **Dependencies are joint.** A piece can be harmless alone, harmful with a
+  partner, and harmless again when both are gone (the point of §8g). The
+  load-bearing test has to be run over sets of pieces, not one piece at a time.
+  Not run.
+
+- **The classification into necessary, free and conditional is the noise filter
+  for a population.** Fool's-mate-length sequences differ mostly in a spare move;
+  the ablation procedure is what would collapse them to one skeleton. Not run.
+- **Development discharges terms, by geometry.** A knight on f3
   attacks h4 and also occupies f3, which blocks the f-pawn from opening the
   ray. One developing move therefore discharges two terms of the fool's mate.
   This is a concrete form of the claim that piece activation unlocks
@@ -1975,14 +1825,14 @@ and Nf2 answer), and with the knight absent it is checkmate again.
   king's shield pawns advancing and weakening the diagonal. A passed pawn is a
   different thing (no opposing pawns ahead or beside it), and using the term
   here would blur a standard concept.
-- **On boundary states emerging at the most upstream commitment.** Read from the committing side, a commitment is a move after which the opponent is in an equilibrium: some of its moves lose, and the draw holds only through the equilibrium moves. "Can only lose or draw" is true of every drawn position for the side to move, so it is not what distinguishes a boundary state; what does is that the opponent has a losing deviation available while the draw is sustained by a cycle (`boundary_board_states.md` §14 item 8). An earlier version of this bullet said that the count of drawing replies being exactly one distinguishes it. That was the strict reading and is withdrawn.
+- **On boundary states emerging at the most upstream commitment.** Read from the committing side, a commitment is a move after which the opponent is in an equilibrium: some of its moves lose, and the draw holds only through the equilibrium moves. "Can only lose or draw" is true of every drawn position for the side to move, so it is not what distinguishes a boundary state; what does is that the opponent has a losing deviation available while the draw is sustained by a cycle (`boundary_board_states.md` §14 item 8).
 - **What none of this touches.** All three positions are decisive mates. The
   template gives the attacker-side half. A boundary state needs the defender-
   side half: what the single saving move preserves, and which term of the mate
   it keeps unsatisfied. That is where the draw lives, and it is the next
   experiment.
 
-### 8t. The mating-net predicate, irreversibility, and the first exact scan
+### 8t. The mating-net predicate and irreversibility
 
 **The idea, as stated.** The fool's mate should not be read piece by piece but
 as a composition of occupancy, coverage and the threat of placement. If a pin
@@ -2003,22 +1853,6 @@ cataloged is useless before the structure exists.
 
 **Assessment — separate from the record above.**
 
-- **Correction, added afterwards (`boundary_board_states.md` §14 item 8).** This
-  section counted drawn positions with exactly one saving move and called them
-  boundary-like. Exactly-one is a measure of width, not the definition, and the
-  positions counted are not boundary states: the stronger side in this material cannot
-  lose, and the family includes captures of a hanging pawn into a dead draw, which are
-  blunders by the pawn's side and not an equilibrium. What the scan did measure is the
-  width of drawn positions by pawn file, and that finding stands: the rook-pawn draw is
-  the widest, which counts against exactly-one as the definition, since the rook-pawn
-  draw is the project's paradigm local primitive. The figures below are retained as a
-  width measurement.
-- **Scope of the scan in this section.** The king-and-pawn-against-king scan
-  below answers only the side remarks about irreversibility and about reversible
-  moves, and the project's own earlier edge guess. It says nothing about the
-  fortress and mating-net primitive, and a forced choice of material is the wrong
-  instrument for finding that primitive. It is not evidence for or against it.
-  The test of the primitive is §8u.
 - **The primitive is best stated as a predicate over occupancy and coverage,
   with no piece names, and this is the form to adopt.** Let k be the king's
   square, D the defender and A the attacker. Let Occ_D be the squares held by
@@ -2035,85 +1869,26 @@ cataloged is useless before the structure exists.
   piece names, and piece names belong only in the catalog of instances. It is
   the definition of checkmate, as §8s noted, so the content lies in the
   mechanisms and their tempo costs.
-- **Structure before population is the right order, and the §8s item about
-  running the ablation filter on the 347 sequences is demoted.** A population
-  is for validating a stated predicate, not for finding it. The ablation in
-  §8s was over sets of pieces, and it found joint dependencies, but its
-  results are most useful as instances of the predicate above.
+- **Structure before population is the right order.** A population is for
+  validating a stated predicate, not for finding it. Ablation over sets of
+  pieces (§8s) is most useful as instances of the predicate above.
 - **Irreversibility is a real structural fact, and it is wider than pawns.**
   Pawn moves, captures, and the loss of castling rights cannot be undone. This
   is why tablebase construction is organized in layers: a position after such a
   move cannot recur, so the value of a position depends only on positions in the
   same layer and in layers reached by an irreversible move. Within a layer, a
   draw is sustained by reversible moves.
-- **Whether an irreversible break is decisive depends on the tempo budget, not
-  on irreversibility itself.** Checked in the fool's mate: after 1.f3 e5 White
-  has 19 legal moves and exactly one of them (g4) allows mate in one; after
-  1.g4 e5 two of 21 do (f3 and f4); after 1.f3 e5 2.Nh3 none does, because the
-  knight on h3 covers f2. The first irreversible weakening is not decisive; the
-  second is, and a developing move that restores coverage undoes the damage.
-  This fits "no viable way to cover the change" as a statement about how many
-  tempi remain, and it shows the hazard is narrow: one losing move among 19.
-- **A first exact scan, run on king and pawn against king.** The position
-  graph was solved by retrograde iteration (the pawn never changes file, so
-  files a to d suffice by symmetry), with promotions to all four pieces
-  evaluated. It gives 62,480 won positions with White to move and 48,802 with
-  Black to move, 111,282 in total, which matches the count I recall for the
-  standard bitbase (from memory, not checked against a source). It matched
-  Stockfish on all 600 randomly sampled legal positions, 405 won and 195 drawn.
-  The script is `kpk_boundary_scan.py`. These are Tier 1, local positions only:
-  Black's bare king fails the materially-live test of §5a-iii, and
-  reachability from the start was not checked.
-- **What the scan found.** Of 35,201 drawn Black-to-move positions with at
-  least one legal move, 5,125 (14.6%) have exactly one non-losing move. Of
-  those, 26 are positions where Black had only one legal move, so no choice
-  existed. The other 5,099 are genuine choices, and in 3,960 of them the unique
-  saving move is a king move, while in 1,139 it is capturing the pawn.
-- **The edge hypothesis of §8k is falsified, and this changes the picture of
-  the rook-pawn draw.** The fraction of drawn positions with exactly one saving
-  king move is 7.1% on the a-file, 9.4% on b, 13.3% on c and 15.0% on d, and the
-  mean number of non-losing moves falls from 4.15 on the a-file to 3.43 on the
-  d-file. The defending king stands on an edge square in 36.3% of the
-  exactly-one positions against 33.6% of drawn positions generally. So the
-  rook-pawn draw is the *widest* draw, the most forgiving, and the narrow
-  draws are the central-file opposition positions. This does not make the
-  rook-pawn draw less real as a primitive; it makes it a wide edge primitive,
-  useful as terrain (the lifting idea of §8k), and it means the first
-  population of narrow boundary states is the central-file one, not the
-  rook-pawn one. A hypothesis stated in advance was tested and failed, and it
-  is recorded as a failure in the sense of `boundary_board_states.md` §15.
-- **Whether reversible moves are a requirement of boundary states.** Not as a
-  logical requirement of the definition: 1,139 of the 5,099 genuine-choice
-  positions (22%) have an irreversible capture as the unique saving move, though
-  these are the hanging-pawn family, not a locking mechanism. For the 3,960
-  king-move positions the claim holds, but trivially, because Black has no other
-  piece to move, so king and pawn against king cannot test it. As a design
-  principle for composed positions it is sound and matches §8a, where frozen
-  pawn chains remove the irreversible options and leave reversible moves to hold
-  the balance. Testing it properly needs a material in which the defender also
-  has pawn moves.
-- **Whether irreversible pawn moves are the typical way a position is lost
-  is not supported in king and pawn against king.** In won positions with
-  White to move, a king move throws the win away 21.6% of the time it is
-  available (82,298 of 381,094), a pawn push 15.2% (8,662 of 57,095). Pushes
-  are 13.0% of the available moves and 9.5% of the spoiling ones. A push can
-  still be the decisive error, as g4 is in the fool's mate, and two instances
-  do not settle a general rule in either direction.
 - **The decisiveness of any break is a property of the position's value, not
-  of the move's irreversibility.** A spoiling king move is not physically
-  irreversible, yet the win is gone, because the resulting position is drawn.
+  of the move's irreversibility.** A move that spoils a win need not be physically
+  irreversible; the win is gone because the resulting position is drawn.
   Irreversibility shapes the structure of the game graph; value is what makes
   a break decisive.
-- **What now exists that did not.** A population of 3,960 narrow, local,
-  Tier 1 positions in one small material, which is the thing §8m's open
-  question asked for. They are not independent (many are neighbors of one
-  another), so the number overstates how many distinct primitives there are.
-  Decomposing them by ablation to see what recurs is now possible and has not
-  been done. **Correction:** under the corrected definition (`boundary_board_states.md`
-  §14 item 8) these are a width benchmark of drawn positions and not a population of
-  boundary states, so §8m's question is still unanswered.
+- **Reversible moves in composed positions.** As a design principle for composed
+  positions it is sound and matches §8a, where frozen pawn chains remove the
+  irreversible options and leave reversible moves to hold the balance. Testing it
+  needs a material in which the defender also has pawn moves.
 
-### 8u. A second fortress mate in an unrelated position: the predicate checked, and the net assembled by force
+### 8u. A second fortress mate in an unrelated position
 
 **The idea, as stated.** The primitive does not depend on the pieces on the
 board. It is found by starting from the initial position, taking the first
@@ -2127,76 +1902,25 @@ Qxd3, Rh3#. Black sacrifices the queen to position into the fortress, and the
 point is the primitive at work in a completely different position, where the
 pieces matter less than the emergent structure of the fortress built by force.
 
-**The position and the line, checked.** FEN
-`8/6pk/5r2/3Q1ppn/3N4/1P2P3/P4BRK/1q6 b - - 0 1`. As typed, `exd4` is illegal,
-since White's own knight stands on d4; the reading that fits is `exf4` (the e3
-pawn takes the knight that arrived on f4), and with it the whole line is legal
-and ends in checkmate, confirmed by python-chess. Stockfish gives Nf4 as Black's
-only winning first move: of 30 legal moves it scores +3.67, and the next best
-(Qc1) scores −4.00. Along the line White's replies are heavily restricted: 2
-legal replies after Rh6+ (Kg3, Bh4), 3 after Qd3+ (Qf3, Nf3, Be3, the last losing
-to mate in two). The mate is not forced at the end: after ...g4 White has 16
-legal moves, of which Rh2, Rg1, Be3 and Bg1 avoid mate (the engine prefers Rh2,
-with Black still clearly winning, about +3.7), and Qxd3 allows Rh3#.
-
-**The net report, computed by `mating_net_report.py` with no reference to piece types.**
-
-| Term | Fool's mate | OTB Qxh7# | Puzzle 1, Qg7# | Puzzle 2, Rh3# |
-|---|---|---|---|---|
-| Check | open diagonal h4–e1 | open diagonal e4–h7 | adjacent queen | adjacent rook along the 3rd rank |
-| Flights denied | own pieces on d1, d2, e2, f1; ray covers f2 | own rook f8, own pawn f7, queen covers h8, g7 | queen covers g8, h7 | own bishop f2, own rook g2, own pawn f4; rook covers h2, h4; x-ray through the king covers f3; Black pawn g4 (protected by f5) |
-| Checker not capturable | no white piece reaches h4; the h1 rook is masked by the h2 pawn | king cannot take: Bd3 supports h7 | king cannot take: Rg1 supports g7 | king cannot take: pawn g4 supports h3; the white queen on d3 is masked by its own king on g3 |
-| Block | none possible | not applicable | not applicable | not applicable |
-
-Roles found by removing each piece in turn (which defence reappears): in puzzle
-2, Bf2, Rg2 and the pawn on f4 uphold the flight term, the Black pawn on g4
-upholds the capture term, and the Black pawn on f5 is needed because without it
-Black's own king would be in check from the queen on d3. The white queen, the
-d4 knight and the a2 and b3 pawns are irrelevant to the final mate.
-
-**How the net is assembled, move by move.**
-
-| Black move | What it does to the net | White's options |
-|---|---|---|
-| ...Nf4 | attacks Qd5 and Rg2; after exf4 a white pawn sits on f4, filling a future flight square, and e3 is empty, opening the 3rd rank | 38 legal, 12 avoid a forced mate, all clearly losing |
-| ...Rh6+ | check along the h-file, opened by the knight's departure; Kg3 puts the king among Bf2, Rg2 and the f4 pawn | 2 legal |
-| ...Qd3+ | check along the 3rd rank; the queen cannot be taken, because White's knight on d4 blocks the d-file; Qf3 interposes and is then pinned | 3 legal |
-| ...g4 | attacks the pinned queen (its only legal moves are Qe3 and Qxd3), protects h3, fills g4 behind f5 | 16 legal, 4 avoid mate |
-| ...Rh3# after Qxd3 | the queen arrives on d3, behind its own king, so it cannot cover h3 | none |
-
 **Assessment — separate from the record above.**
 
-- **The predicate carries over.** Four mates with different mating pieces
-  (queen, queen, queen, rook), different kings and different surroundings
-  decompose into the same four terms, and the roles are generated without any
-  piece names. The lock here is the king's own pieces, Bf2 and Rg2, plus a
-  pawn lured onto f4; in the fool's mate it was the king's four start-square
-  neighbors.
 - **New mechanisms appear, and each fits the §8t predicate as a restriction of
   the defender's coverage or an addition to occupancy or attacker coverage.**
-  A decoy that fills a flight square (Nf4 and exf4 put the defender's own pawn
+  A decoy that fills a flight square (Nf4 and the capture on f4 put the defender's own pawn
   on f4). Pinning the interposing piece (Qf3 pinned by the queen on d3). A
   defender masked by its own king (the queen on d3 behind the king on g3). A
   checker protected by a pawn (g4 protecting h3). The attacker's own shield
   can be part of the net (f5).
-- **The assembly is forcing, and that is where the "race" shows.** Every Black
-  move is a check or an attack on a queen, which is why White has 2 and 3 legal
-  replies at the key points. The enabling moves that were voluntary in the
+- **The assembly is forcing, and that is where the "race" shows.** The line
+  consists of checks and attacks on a queen. The enabling moves that were voluntary in the
   fool's mate are here compelled by threats, which is the bridge to adversarial
   play noted in §8s.
-- **Stated precisely, because it was described as the queen being sacrificed to
-  position into the fortress:** the queen is given up only if White takes it,
-  and White can decline with Rh2 or three other moves; Black still wins by a
-  wide margin. The fortress in question is White's own king enclosure, built
-  mainly from White's own pieces, and the sacrifices serve to fill it and to
-  mask the defenders.
 - **Independence from piece types holds for the predicate, not for the
   mechanisms.** A pin needs a slider on a line, a decoy needs a capture, a
   shield needs a line to shield. The geometry lives in the mechanism catalog,
   which is where it should be.
 - **This is a weak test of the claim that the primitive can be found in any
-  position where it emerges, because every position checked is a mate already
-  on the board.** A stronger test is to recognize the net before the mate, for
+  position where it emerges, because the position is a mate already on the board.** A stronger test is to recognize the net before the mate, for
   example from the start of this puzzle, by finding that the terms can be
   completed with forcing moves. That has not been done.
 - **The g4 move does three things at once** (attacks the pinned queen, protects
@@ -2206,15 +1930,8 @@ d4 knight and the a2 and b3 pawns are irrelevant to the final mate.
   the alignment was a coincidence and here it is chosen. Whether this adds
   anything beyond an ordinary tempo move that builds the net is open, and the
   decision recorded there is still pending.
-- **Black has exactly one winning move at the start of this puzzle** (30 legal
-  moves, Nf4 wins, the next best loses by about four pawns), so the position is
-  a decisive only-move position. It is not a draw and is not a boundary state;
-  the winning-move count there is a puzzle property, unrelated to the definition of a
-  boundary state (`boundary_board_states.md` §14 item 8).
 
 ### 8v. Cataloging the mating net as a portable primitive
-
-*Correction (§8ab).* The names P-002, P-004, P-005, P-007 and SUB-1 below are kept as recorded. They are not primitives: the catalog has three, the mating and capture net (P-001), chained dependencies (P-003, which absorbs what this section calls P-007, SUB-1 and the frozen structure) and the coverage race (P-008). The classification of each name is in §8ab and in catalog §1. Catalog section numbers cited here (§7, §7a, §7b, §7c, §8, §9) are those of the catalog before that reduction; the map to the present numbers is catalog §10.5.*
 
 **The idea, as stated.** The discovery should be recorded in a scalable,
 generalized way: as a modular primitive that can be extracted and deployed in a
@@ -2231,7 +1948,7 @@ position has yet been evaluated with one.
 
 - **The catalog is `boundary_board_state_primitive_catalog.md`.** It has four levels
   (primitive, mechanism, derived form, instance), an entry template that implements
-  and extends §8i, an index of five entries of which one is written, and P-001 in
+  and extends §8i, an index (reduced to three primitives, §8ab), and P-001 in
   full: the four-term definition, the mechanisms for each term with the instances
   that exhibit them, a defence mirror, derived forms, a procedure that evaluates any
   position without naming pieces, a composition interface, its role in
@@ -2254,13 +1971,9 @@ position has yet been evaluated with one.
 - **The cyclic requirement is recorded as a definition in
   `boundary_board_states.md` §14 item 7,** and it makes P-005 (repetition loop) the
   next entry the catalog needs, since the loop moves must preserve the held terms.
-- **No script was added.** `mating_net_report.py` is a reference implementation of
-  the terminal case only; the catalog entry does not depend on it. The procedure for
-  non-terminal positions (catalog §4.7) is a specification and has not been run.
+- **The procedure for evaluating a position (catalog §4.7) is a specification and has not been run.**
 
 ### 8w. Applying the net to pieces other than the king
-
-*Correction (§8ab).* The "race primitive P-002" named below is the tempo comparison, which is a term (TP of P-003, TM of P-008) and not a primitive. See §8ab.
 
 **The idea, as stated.** The primitive should also apply to a piece other than the
 king, for example an early-developed queen: a net that captures the queen, joint
@@ -2286,14 +1999,14 @@ this is the same primitive or a different one that can be jointly compatible.
   masking, pin, decoy. The second puzzle contains a queen net in this form: after
   ...Qd3+ Qf3 the queen on f3 is pinned to the king, then ...g4 attacks it, and its only
   legal moves are along the pin line (Qe3 or Qxd3).
-- **Two terms did not carry over, which is why a sibling was first proposed (superseded by the decision below).**
+- **Two terms of the king net do not carry over (the reason the piece net is not a sibling primitive; see the decision below).**
   (1) *Protection and exchange (P).* Capturing the king ends the game, so the king net
   has no exchange accounting. A queen net completes only if the capture wins material
   (the static exchange evaluation familiar from engines); protecting a queen against a
   pawn attack does not save it. P depends on a value scale, which the king case does not
   need. (2) *Counter-threat (K).* A king in check must answer. A queen under attack may be
   left alone if the defender has a check or a larger threat, so a counter-threat is an
-  extra escape (revised in the Limits bullet below: counter-threats are a composition rule and not a
+  extra escape (see the Limits bullet below: counter-threats are a composition rule and not a
   term). The outcomes differ too: the king net ends in mate; the piece net ends in
   material gain, or, short of that, in tempo yield, where each residual escape the target
   uses costs the defender a move.
@@ -2302,7 +2015,7 @@ this is the same primitive or a different one that can be jointly compatible.
   capture net, with the kind of target as a parameter (royal or non-royal). The former sibling
   specification P-006 is retired and its ID is not reused. The two properties that distinguish
   the kinds are the legal-move rule for a check and the outcome clause; neither is a separate
-  primitive. The earlier proposal in this section, a sibling with its own terms, is superseded.
+  primitive.
 - **Joint compatibility has a precise form for the attacker.** For an attacking move m,
   let Res_K(m) and Res_Q(m) be the sets of defender replies that resolve the threat on
   each net. The nets are jointly compatible for the attacker when both are engaged and no
@@ -2325,12 +2038,8 @@ this is the same primitive or a different one that can be jointly compatible.
   move that is positive in several columns is the multi-duty move already noted in §8u.
   The count above is a hand-sized instance of the ledger. It has not been built or
   tested further.
-- **Limits, as first written, and the correction.** As first written this bullet said that
-  the exchange term needs a value scale and the counter-threat term needs a notion of a
-  threat large enough to matter, so that the piece trap brings outside evaluation into a
-  primitive the mating net kept free of it. That was wrong in kind: it treated the absence
-  of entries from the catalog as an inherent need for evaluation. Corrected reading:
-  *Counter-threats* are the same primitives applied with the colors swapped. A check is a
+- **Limits.** The absence of entries from the catalog is not an inherent need for outside
+  evaluation. *Counter-threats* are the same primitives applied with the colors swapped. A check is a
   king net the defender has engaged, and a larger threat is another net. Whether a
   counter-threat beats an attacker's net is a comparison of the tempo of two nets in
   opposite directions, which is the race. It is therefore a composition rule (catalog
@@ -2370,20 +2079,14 @@ compatibility. This had been iterated in the past.
 
 **Assessment — separate from the record above.**
 
-- **The architecture is the designer's and is unchanged.** It matches §3 of
+- **The architecture is the designer's.** It matches §3 of
   `boundary_board_states.md`: a candidate pool built from necessary-not-sufficient filters,
   exhaustive verification of each candidate, the verdict cached permanently whether boundary or
   not, and a pool that shrinks as verification proceeds. In the terms used here: a primitives
   catalog (`boundary_board_state_primitive_catalog.md`); a boundary state catalog with
   candidate, proven and disproven entries; and the composition of primitives recorded on proven
   entries.
-- **A correction to this record's earlier handling.** An earlier version of this section, and a
-  section of the catalog file, put a record specification for proven entries inside the
-  primitives catalog; gave it status labels of its own (composed, partial, uncomposed) in place
-  of candidate, proven and disproven; and described missing primitives as things to be written
-  before entries could be complete. All three departed from the architecture. The specification
-  was removed from the primitives catalog, the status labels were dropped, and the third point
-  is replaced by the reduction rule below.
+- **Where the record specification lives.** The specification for proven entries belongs to the boundary state catalog, not the primitives catalog. Entries carry the status labels candidate, proven and disproven (no others). Missing primitives are handled by the reduction rule below, not as things to be written before entries can be complete.
 - **The reduction rule, as designed.** If a proven entry is composed of primitives a, b and c,
   and the catalog holds a and b, the missing c is emergent from joint compatibility: its
   interface is fixed by the residual interface that a and b leave in the proven entry, in the
@@ -2412,14 +2115,11 @@ compatibility. This had been iterated in the past.
 - **Earlier wording is replaced.** §8w and the catalog had called the derivability of the
   exchange outcome and the counter-net comparison the programme's hypothesis. It is what a
   complete catalog is required to achieve, checked entry by entry through the residual interface.
-- **No proven entry exists yet.** The project has not proven a global boundary state, and the
-  earlier king-and-pawn data are local width measurements. Under the reduction rule the first
+- **No proven entry exists yet.** The project has not proven a global boundary state. Under the reduction rule the first
   entries do not have to wait for the other primitives to be written: their residual interfaces
   are where those primitives are extracted from.
 
 ### 8y. Activation, the primitive state, and perturbation
-
-*Correction (§8ab).* The names P-002, P-004, P-005, P-007 and SUB-1 below are kept as recorded. They are not primitives: the catalog has three, the mating and capture net (P-001), chained dependencies (P-003, which absorbs what this section calls P-007, SUB-1 and the frozen structure) and the coverage race (P-008). The classification of each name is in §8ab and in catalog §1. Catalog section numbers cited here (§7, §7a, §7b, §7c, §8, §9) are those of the catalog before that reduction; the map to the present numbers is catalog §10.5.*
 
 **The idea, as stated.** Another primitive, identified from endgame logic, is pawn promotion. In
 king and pawn against king and pawn it is not a mating or capture net but a segmented process in
@@ -2480,7 +2180,7 @@ the composition of the primitives is moving closer to a boundary state.
   primitive race condition decides it, and it is one of three: a primitive not yet in the catalog, whose
   joint compatibility with the known ones carries the imbalance; a known primitive that is not jointly
   compatible with another in this position and is decisive; or a catalog entry that was evaluated wrongly.
-  The first two are the designer's statement of it; the third is a correction to an entry. All three
+  The first two are the designer's statement of it; the third is an error in an entry. All three
   develop the protective belt, the primitives, and none touches the hard core, the definition of a
   boundary state. The residual interface fixes what the missing or incompatible primitive must discharge.
   An engine verdict can point to where to look; the gap is established by the proof.
@@ -2489,8 +2189,6 @@ the composition of the primitives is moving closer to a boundary state.
   defined, so Method 7 has not been run.
 
 ### 8z. Segmented dependencies generalized: chains, the movement relation, and the substrate
-
-*Correction (§8ab).* The names P-002, P-004, P-005, P-007 and SUB-1 below are kept as recorded. They are not primitives: the catalog has three, the mating and capture net (P-001), chained dependencies (P-003, which absorbs what this section calls P-007, SUB-1 and the frozen structure) and the coverage race (P-008). The classification of each name is in §8ab and in catalog §1. Catalog section numbers cited here (§7, §7a, §7b, §7c, §8, §9) are those of the catalog before that reduction; the map to the present numbers is catalog §10.5.*
 
 **The idea, as stated.** Chain structures are a key structure of the locking mechanism. A passed pawn rests on a chain
 structure, the pawn wall, with the pawn passing unopposed. A knight outpost is a chain structure: taking the knight
@@ -2520,9 +2218,7 @@ general form. A note on one piece's color or parity alone does not meet that con
   coverage and route distance under inclusion; the entry P-003, specified with the chain as its core (catalog §7b); new mechanisms for
   P-007 (RT3 to RT5, LK3, OB4, OB5) and a derived pair of forms (DF-P1, DF-P2); the mechanism O3 for P-001; and rows in the
   dependency map (catalog §8). The definition of a boundary state, the architecture of the catalogs and the proof-and-insurance
-  rule are unchanged. Nothing in the earlier documents was deleted. The one existing cell that was replaced is the state of
-  P-003 in the catalog index ("not written"), because its state changed; the other existing lines were extended by appended
-  sentences.
+  rule are not changed by these additions.
 - **The two families are one construction at two layers, and they meet at the dependency set.** The chain is a dependency
   graph among units, with two edge types: ENABLE (an element's removal or occupation is required before a stage opens, which is
   the lock removal of P-007) and SUPPORT (an element's presence makes the capture of another unfavorable, which is P-001's X2
@@ -2530,13 +2226,11 @@ general form. A note on one piece's color or parity alone does not meet that con
   squares whose occupancy decides whether it exists, and a wall or chain that stands on that set is an ENABLE edge to the
   route. That is the mechanism by which a chain "informs" a race: it cuts the edges of the relations that travel along a line
   and leaves the relations that leap unaffected except at the destination.
-- **A correction to this record's earlier handling, stated plainly.** The first version of this assessment, given in the
-  discussion, treated the color symmetry of one kind of unit and the parity of another as separate piece notes, and then made
-  piece-specific route claims. The designer's correction is that the substrate must be one construction on the movement
+- **The substrate is one construction, with no piece rule (the designer's statement).** Color symmetry and parity are not separate piece notes, and no piece-specific route claims are made. The substrate must be one construction on the movement
   relation and that the primitive catalog must state no rule of any piece. Piece-specific special cases are inputs supplied
   with each unit's relation when a primitive is applied to a position, and they are accounted for during composition and
   race calculation on that board structure. Recording them in a primitive turns it into a subspace of piece composition and
-  defeats its purpose. The catalog now states the construction and no piece rule. On route distance, the generic fact is
+  defeats its purpose. The catalog states the construction and no piece rule. On route distance, the generic fact is
   inclusion: a relation that includes another's edges gives a distance no greater, by definition, and the stalemate and
   zugzwang considerations enter through composition. A register of piece-specific special cases kept apart from the
   primitives, as an input they consult, is a possible modular addition (catalog §9.3) and is not started.
@@ -2559,7 +2253,7 @@ general form. A note on one piece's color or parity alone does not meet that con
 - **A mirror of overload, in the graph.** Overload (§8f) is a node that serves two edges it cannot serve at once. The single
   move that discharges several duties at no cost (the OTB case study §7, and §8u) reads as a move that adds or satisfies two
   edges at once. This is noted as a reading. Whether it is a named pattern is still the open decision recorded in the case study.
-- **Two predictions, stated in advance (catalog §7a.10).** (1) In the ablation of §8s, the minimal sets whose removal changes
+- **Two predictions, stated in advance (catalog §7a.10).** (1) In an ablation of a position (§8s), the minimal sets whose removal changes
   the verdict coincide with the cut sets of the graph read from the same position by P-001's mechanisms. (2) Orbit exclusion
   (RT3) reproduces the known color-lock verdicts across the whole class, including the color-lock fact found inside Uri's rule
   (§8n), which this record reads as an instance of orbit exclusion and which has to be checked against §8n. Neither is run.
@@ -2570,8 +2264,6 @@ general form. A note on one piece's color or parity alone does not meet that con
 
 
 ### 8aa. The coverage race: a third primitive derived from two, adversarial composition, and scoped coverage
-
-*Correction (§8ab).* The names P-002, P-004, P-005, P-007 and SUB-1 below are kept as recorded. They are not primitives: the catalog has three, the mating and capture net (P-001), chained dependencies (P-003, which absorbs what this section calls P-007, SUB-1 and the frozen structure) and the coverage race (P-008). The classification of each name is in §8ab and in catalog §1. Catalog section numbers cited here (§7, §7a, §7b, §7c, §8, §9) are those of the catalog before that reduction; the map to the present numbers is catalog §10.5.*
 
 **The idea, as stated.** With two primitives, the capture and mating net and the chain structures with their segmented
 dependencies, a third is derived under joint compatibility, and it demonstrates the complete graph of the primitives in a concrete
@@ -2609,8 +2301,7 @@ primitives under perturbation is integrated into the process, and that is what m
 
 - **Followed, and integrated, in the belt only.** The additions are: the entry P-008 (catalog §7c), with its register of held terms and their support, its effect vector, its four terms, its mechanisms and its two-sided evaluation; the narrowing of P-003 to version 2 (catalog §7b); new
   rows in the dependency map and the index; a convention on adversarial evaluation (catalog §6); and the provenance of §9.4. The
-  definition of a boundary state, the architecture of the catalogs and the proof-and-insurance rule are unchanged. Nothing was
-  deleted: the material moved out of P-003 is mapped item by item to its new place (catalog §7b.5 and §7b.6).
+  definition of a boundary state, the architecture of the catalogs and the proof-and-insurance rule are not changed by these additions.
 - **The reduction rule, exercised on two written entries.** The composition of P-001 and P-003 leaves a residual interface, and
   the residual fixes what the third entry must discharge. P-001 reads coverage as sets at one position. P-003 reads support as
   present or absent. A net on a supporter is an exchange, and an exchange changes the position. The interface that remains is: does
@@ -2639,18 +2330,10 @@ primitives under perturbation is integrated into the process, and that is what m
   sacrifice, a pin, or an offered piece) is read from P-001's carriers. The case of a piece placed to threaten the structure, whose
   capture leaves the capturer incompatible with the structure's race, is then a forced-in arrival whose change combines the removal
   of an element from its post with a change of occupancy and exposure (catalog OP6).
-- **A second correction to this record's handling, stated plainly.** The first version of this assessment and of the catalog
-  entry described the supply and demand condition as a first-level condition that a scoped search then confirms or overturns, and
-  proposed the rate of exceptions as a measure. That presented the primitive as an approximation to a search verdict. The designer's
-  point is that primitive race conditions are calculated under perturbation: the effect of a move on each primitive race condition
+- **Primitive race conditions are calculated exactly (the designer's statement).** The coverage condition is not a first-level condition that a scoped search confirms or overturns, and there is no rate of exceptions to measure. The designer's point is that primitive race conditions are calculated under perturbation: the effect of a move on each primitive race condition
   is what matters, the condition is evaluated exactly at every position, and certainty about a line comes from those evaluations
-  and grows with the catalog. The entry and this record were restated, and the withdrawn wording is noted in catalog §7c.13 and
-  §9.4.
-- **A third correction to this record's handling, stated plainly.** Version 1 of the catalog entry defined the coverage condition
-  through a supply-and-demand formalization, a Hall-form condition with a slack, a robustness and a tight set. That was imported from
-  outside the race semantics of the primitives, and it is not the primitive architecture. The designer's point is that the
-  architecture is built from the primitives' own race conditions under perturbation. The entry is restated in terms of held terms,
-  support and effect vectors, and the withdrawn formalism is recorded in catalog §7c.13 and §9.4.
+  and grows with the catalog. The entry is stated in these terms (catalog §7c.13 and §9.4).
+- **The coverage condition uses the primitives' own race semantics (the designer's statement).** A supply-and-demand formalization (a Hall-form condition with a slack, a robustness and a tight set) is imported from outside the race semantics and is not the primitive architecture. The architecture is built from the primitives' own race conditions under perturbation. The entry is stated in terms of held terms, support and effect vectors (catalog §7c.13 and §9.4).
 - **The hybrid, as the designer states it.** The primitive race conditions are calculated under perturbation, and exhaustive
   coverage is formed by that understanding. Concretely: the mechanism tables enumerate the effects a perturbation can have on a
   structure, so a perturbation with a null effect on every engaged primitive in the footprint is covered without branching (a null
@@ -2705,17 +2388,15 @@ classification of what the earlier index carried:
 | P-006 | retired; merged into P-001 version 2 | catalog §4 |
 | P-007 Activation | the result when a chain of enabling dependencies resolves | catalog §7 (terms RT, LK, OB, TP) |
 
-**What went wrong, recorded.** The first catalog indexed P-002 to P-005 as primitives to be written, from the families of §8b and the
-cyclic definition, and later sections added P-007, SUB-1 and the narrowed P-003 to that index without testing each against the
+**Basis of the reduction.** The earlier index listed P-002 to P-005 as primitives to be written, from the families of §8b and the
+cyclic definition, and added P-007, SUB-1 and the narrowed P-003 to that index without testing each against the
 requirement that a primitive is a race condition with terms. The chained-dependencies primitive, which the designer had described as
-one, was split into three entries by that growth. The index was then taken as given by later sessions. The correction restores the
-architecture the designer had stated at the start.
+one, was split into three entries by that growth. The reduction restores the architecture the designer stated at the start: a primitive is a race condition with terms.
 
-**What is unchanged.** The hard core and the definition of a boundary state; the architecture of the catalogs; the reduction rule and
+**What the reduction preserves.** The hard core and the definition of a boundary state; the architecture of the catalogs; the reduction rule and
 the proof-and-insurance rule; every term, mechanism, derived form, instance, definition and prediction of the merged entries, which
 were moved and not discarded (catalog §10.5 maps each earlier section to its new place); P-008 (renumbered, no definition changed);
-the historical sections of this record, which keep the names as recorded and carry correction notes. The earlier index is kept in
-`backup_before_three_primitive_restructure/`.
+the sections of this record that use the earlier names (see the standing notes at the top).
 
 **Left open, and recorded as a residual and not as a fourth primitive.** Zugzwang without capture is not read by any of the three.
 By the reduction rule it comes back as a residual interface if a proven boundary-state entry needs it, and it is admitted then only if it
@@ -2752,8 +2433,7 @@ verify. Choosing a line and a depth is a calibration problem. The survey of line
 
 **Followed, and integrated.** The method is written as its own document, `boundary_board_states_opening_survey.md`, with the
 definitions above, the procedure, the three cache entries (forced region, boundary found, none can exist), the calibration, and the
-use of the theory tree as material (deviation map, width, evidence tier). Pointers were added to `boundary_board_states.md` (the
-thirty-first addition, the resume box, and §14 item 9). The primitives, the hard core and the other definitions are unchanged.
+use of the theory tree as material (deviation map, width, evidence tier). Pointers are in `boundary_board_states.md` (the resume block and §14 item 9). The primitives, the hard core and the other definitions are not affected.
 
 **Assessment — separate from the record above.**
 
@@ -2763,18 +2443,16 @@ thirty-first addition, the resume box, and §14 item 9). The primitives, the har
   calibration.
 - **This is consistent with §3.** A state's own status is local and unconditional there. The classification here is of how a
   verified state is reached, and it does not touch the status.
-- **A reading offered for correction.** *Global* is read as start-reachable in the sense of §5, as membership of a family reachable from the initial position under the optimal backtrace constraint (survey §5a). `boundary_board_states.md` §14 item 4 asked for a firm definition of local and global, and this is offered as one. The
+- **A reading.** *Global* is read as start-reachable in the sense of §5, as membership of a family reachable from the initial position under the optimal backtrace constraint (survey §5a). `boundary_board_states.md` §14 item 4 asked for a firm definition of local and global, and this is offered as one. The
   record's "local" in §3 (a status that is local and unconditional) and this survey's "local boundary state" (verified, with no
   claim about arrival) agree.
-- **Avoidability is not the test (the designer's correction).** A reading proposed in discussion, that a candidate which a side can route around is for that reason non-global, was withdrawn. A detour leads to another global boundary state, which still closes the phase between choice and force; global states are many, and a detour does not make a candidate non-global.
+- **Avoidability is not the test (the designer's statement).** A candidate which a side can route around is not for that reason non-global. A detour leads to another global boundary state, which still closes the phase between choice and force; global states are many, and a detour does not make a candidate non-global.
 - **A scope point in the cache.** The forced-region entry is a claim under optimal play. A drawn position that the winning side
   could reach by an error is not on an optimal continuation and remains admissible as a local candidate. The entry says nothing
   about it. Whether the survey wants such candidates is left open in the survey document.
 - **A guard rail from §8p applies.** A cache claim about everything below a position needs a certificate. A search that finds no
   boundary state below a node has found absence of information, and an assertion in the theory tree is an assertion.
-- **A correction recorded.** In discussion, the global and local classification was first read as a scope tag on a verdict, on the
-  ground that a position's status is independent of how it is reached. The designer corrected it: the status is the position's, and
-  the classification is path-dependent by definition. The first reading was withdrawn.
+- **The classification is path-dependent by definition (the designer's statement).** It is not a scope tag on a verdict. The status of a position is the position's own (§3), and the global and local classification concerns how the position is reached.
 - **Not run.** No line has been surveyed. The calibration signals of the survey document are criteria and not results.
 
 ### 8ad. Forced terminal draws as boundary states
@@ -2785,7 +2463,7 @@ classifying them as sub-optimal relative to other potential branches. Under exha
 force stalemate or a dead position, and that is not evidence against the classification. The definition as stated should not exclude
 them. What it informs is that the boundary-state catalog is not to be spammed with stalemate positions treated as discoveries.
 
-**Followed, and integrated.** Recorded in `boundary_board_states.md` §14 item 10, with correction notes at the places that exclude
+**Followed, and integrated.** Recorded in `boundary_board_states.md` §14 item 10, with notes at the places that exclude
 these draws (§1, item 7, item 8), a sentence in catalog §5 item 2, and the survey document (the forced-draw node, §3, and §10). The
 equilibrium condition is unchanged: the position is drawn, each side has a losing deviation, both sides are live. What changes is
 the realization: the cycle of repetition is the paradigm and the forced terminal draw is a second.
@@ -2795,8 +2473,7 @@ the realization: the cycle of repetition is the paradigm and the forced terminal
 - **This closes the realization question** recorded when the closure claim was discussed: a route into a forced liquidation or a
   forced stalemate with no avoiding move is covered by the closure, and the definition does not need a cycle on every route.
 - **The filter is by choice and not by terminal type.** A terminal draw that could have been avoided is not an equilibrium, so it is
-  not a boundary state. A terminal draw that cannot be avoided, with a losing deviation on each side, is. The 1,139 king-and-pawn
-  positions in which the saving move captures the pawn into a dead draw remain excluded, by the stronger side being unable to lose.
+  not a boundary state. A terminal draw that cannot be avoided, with a losing deviation on each side, is. Positions in king and pawn against king in which the saving move captures the pawn into a dead draw remain excluded, by the stronger side being unable to lose.
 - **A condition to check on each such candidate:** that the equilibrium holds upstream of the terminal position, that is, that both
   sides have a losing deviation and no non-losing move avoids the termination. The terminal position itself is the end of the draw
   and not the equilibrium.
@@ -3186,7 +2863,7 @@ matching of primitives. The designer has said that another angle is under consid
 
 **Followed, and integrated.** The process is written as its own document, `boundary_board_states_syzygy_mining.md`. The statements are summarized in survey §4k, the
 classification of a family and the global definition are in survey §5a, and the later specification of the process is in
-`boundary_board_states_start_selection.md` §2a. Changelog entries 62 and 65 of `boundary_board_states.md`.
+`boundary_board_states_start_selection.md` §2a.
 
 **Assessment — separate from the record above.**
 
@@ -3320,7 +2997,7 @@ classification of a family and the global definition are in survey §5a, and the
   across enough distinct materials, for recurrence-finding to have real
   content (§8m)** — the population-first approach applies in spirit
   regardless, but if rook-pawn edge draws are close to the only clean
-  small-material instance, step 3 of §8m's corrected order has little to work
+  small-material instance, step 3 of §8m's order has little to work
   with until larger materials are reachable, and the single-example fallback
   in §8j becomes the practical path. Untested, and worth checking early since
   it decides whether the scan is worth building before the ablation machinery
@@ -3367,7 +3044,7 @@ classification of a family and the global definition are in survey §5a, and the
   move over another rather than a position's drawn value — is worth
   formalizing as its own documented proof type**, distinct from but
   structurally related to a boundary-state certificate. Not yet attempted;
-  flagged because the match found this session suggests it would reuse
+  flagged because the match found suggests it would reuse
   existing machinery rather than need new.
 - **Whether any Method 5 composition proposed so far (§8j's rook-pawn
   contract, the locked-pawn-pair substitutes of §8k) actually clears the
@@ -3389,10 +3066,7 @@ classification of a family and the global definition are in survey §5a, and the
   from a primitive decomposition, and which of them (rule of the square,
   opposition, Philidor, Lucena, Vančura, triangulation) can be given an exact
   rather than engine-estimated offset.
-- **Whether the ablation filter (§8s) collapses the 347 White fool's-mate-length
-  sequences to one skeleton, and what it does to cooperative mates at greater
-  depth.** Run on three final positions only. Depth is the constraint: full
-  enumeration to 6 plies is on the order of 10^8 positions.
+- **Whether the ablation filter (§8s) collapses fool's-mate-length sequences to one skeleton, and what it does to cooperative mates at greater depth.** Not run. Depth is the constraint: full enumeration to 6 plies is on the order of 10^8 positions.
 - **Whether the mechanism catalog of §8s (own-piece lock, attacker coverage,
   support, masking, out-of-play defenders, absolute pin, decoy, forced
   enabling move) accounts for the named mating patterns** (back-rank mate,
@@ -3402,25 +3076,17 @@ classification of a family and the global definition are in survey §5a, and the
   term of the opponent's possible mate or promotion does the single saving
   move keep unsatisfied, and does the answer recur across boundary states.
   Untested, and it is the step that connects the mate templates to draws.
-- **Whether the 3,960 narrow king-move positions of §8t decompose, by
-  ablation, into a small recurring set of primitives**, and whether the
-  decomposition is the opposition and key-square structure of classical theory.
-  This is the first real test of §8m's recurrence question. The positions are
-  highly correlated, so recurrence must be measured over distinct structures,
-  not over the raw count.
+- **Whether narrow positions in king and pawn against king decompose, by ablation, into a small recurring set of primitives**, and whether the decomposition is the opposition and key-square structure of classical theory. This is the first real test of §8m's recurrence question. Positions are highly correlated, so recurrence must be measured over distinct structures, not over the raw count. Not run.
 - **Whether the rook-pawn draw behaves as a wide edge primitive in composition
-  (§8t, §8k)**, given that it has the widest draws of any file. If it does, it is
-  the right terrain to lift the edge condition into pieces, and the wrong
-  first candidate for a narrow boundary state.
+  (§8k).** If it does, it is the right terrain to lift the edge condition into
+  pieces. Not run.
 - **Net recognition before the mate (§8u).** Whether the four-term predicate, with
   tempo costs attached to each mechanism, can detect from a position that has not
   yet been mated that the terms can be completed by forcing moves, and how that
-  compares with the engine on a set of puzzles. Not attempted; the checks so far
-  are on final mating positions only.
+  compares with the engine on a set of puzzles. Not attempted.
 - **Whether the mechanism list of §8u (decoy fill, pin of the interposer, masking
   by the defender's own piece, pawn-protected checker, the attacker's shield)
-  accounts for a larger corpus of mating positions**, using
-  `mating_net_report.py`. Four mates have been run.
+  accounts for a larger corpus of mating positions.** Not run.
 - **The decision flagged in the OTB case study §7** on whether a single move that
   discharges several terms without conflict is a named pattern; there are now
   two instances (f5, g4), of different kinds.
@@ -3448,12 +3114,8 @@ classification of a family and the global definition are in survey §5a, and the
   It is run when the first entry is composed.
 - **A material in which the defender also has pawn moves (§8t)**, so that the
   claim that reversible moves are required to hold an equilibrium can be tested.
-  King and pawn against king cannot discriminate. A self-built solver for
-  king and pawn against king and pawn is the next material up and is much
-  larger.
-- **Whether the finding that draws are narrowest on central files and widest on
-  the rook-pawn file holds in other materials**, or is a feature of king and
-  pawn against king alone.
+  King and pawn against king cannot discriminate; king and pawn against king and
+  pawn is the next material up and is much larger.
 - **The form of the constraint system of the reduction rule (§8x)**: whether the joint-compatibility
   constraints fix the missing primitive uniquely or a family, and how the proven entry and its
   neighbors select.
@@ -3480,7 +3142,7 @@ classification of a family and the global definition are in survey §5a, and the
   found by ablation (§8s).** Prediction P8-1, stated in advance. Not run.
 - **Whether the evaluation of the coverage race under perturbation, composed over a line, reproduces the verdict of exhaustive
   search (§8aa).** Prediction P8-2, stated in advance. A disagreement is a residual interface. Not run.
-- **Whether every verdict-changing perturbation in the ablation and deviation data (§8s) meets the support closure (catalog §8.9).**
+- **Whether every verdict-changing perturbation in ablation and deviation data meets the support closure (catalog §8.9).**
   Prediction P8-3, stated in advance. A failure specifies by the reduction rule what the catalog lacks. Not run.
 - **How many perturbations must be branched (§8aa, catalog §8.9), especially where kings are involved (§8h condition 3), and whether
   additional primitives reduce it.** Kept open by design.

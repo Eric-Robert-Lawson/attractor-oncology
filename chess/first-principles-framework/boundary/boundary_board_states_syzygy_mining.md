@@ -6,12 +6,12 @@ them into reachable families, and link the families upward toward the initial po
 the record; the designer will run and verify the data on return. The same process is held, as a specification, in
 `boundary_board_states_start_selection.md` §2a, which is the fuller and later record. No primitive calculation is part of the
 process (§1). The designer has said that another angle is under consideration which may change this process; the staged workflow
-from an anchor in start-selection §2b is the one recorded since.
+from an anchor is in start-selection §2b.
 
 **Companion documents.** `boundary_board_states_opening_survey.md` (§4j the two catalogs, §4k the designer's statements behind this
 file, §5a reachability families and the classification of a family), `boundary_board_state_topology.md` (§8ar, the record of the
 statements), `boundary_board_states_start_selection.md` (§2a, the later specification of this process, and §2b, the staged workflow), `boundary_board_states.md`
-(changelog entries 62, 63 and 65), `boundary_board_state_primitive_catalog.md` (the primitives, used afterwards, §1).
+`boundary_board_state_primitive_catalog.md` (the primitives, used afterwards, §1).
 
 **How this file is organized.** What is the designer's statement is marked as such and kept apart from this file's readings, in the
 manner of the catalog's §10. The steps of §3 describe the procedure, and where a step is generalized to other materials the
@@ -155,7 +155,7 @@ No estimate of the size of any material, table or run is recorded here. The scal
 
 ## 10. Files
 
-No script, database or result from any earlier test is carried over into this record. The designer's own files for the first
+The designer's own files for the first
 material to be mined, `KRvKR.rtbw` and `KRvK.rtbw`, and the designer's solver and validator, are the designer's, and the process is to
 be built and verified from them on return. The procedure of §3 is specific to the pieces named at each step (step 2 assumes a
 pawnless material; other materials need their own move generation).

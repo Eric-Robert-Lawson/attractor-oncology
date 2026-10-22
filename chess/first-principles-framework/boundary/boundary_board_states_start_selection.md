@@ -6,7 +6,7 @@ decides nothing. Nothing in it has been run on a pruned structure.
 
 **Companion documents.** `boundary_board_states_opening_survey.md` (the method; §4e is the statement this file expands, §7 is the
 calibration of a line and a depth), `boundary_board_state_topology.md` (§8aj, §8al, §8an, §8ap, §8aq), `boundary_board_states.md` (changelog entries 38, 39,
-42, and 62 to 79), `boundary_board_state_primitive_catalog.md` (the three primitives). The designer's statements are marked as such and kept
+42, and 62 to 81), `boundary_board_state_primitive_catalog.md` (the three primitives). The designer's statements are marked as such and kept
 apart from this file's readings, as in the catalog's §10.
 
 ---
@@ -409,6 +409,28 @@ composition of many primitives that can compose together from a population comes
 of pieces can be understood through the compositional understanding of ablation, together with the composition of other primitives
 already composed.
 
+**Triangulation from known regions, and the discovery zone (a statement).** If local choice regions are reachable, it is possible to consider
+the triangulation of multiple phases, and the primitive relativistic calculations, and to view the change into the discovery zone, a region
+without exhaustive coverage, through directionality with respect to regions already understood. The direction of the relativistic primitive
+calculation ablation (or inverse ablation, or whatever it is formally called) can be seen relativistically to them as not in the direction of
+the known regions. It may be possible that, through primitive calculations relative to other nodes, a pattern emerges whereby other primitives
+are seen to go towards equilibrium, and the missing link can be solved for.
+
+**The unresolved case is a compositional search (a statement).** It may not be a matter of an incorrect composition or a missing primitive. It
+may be a misunderstanding of the composition of the primitives, and of what is being equalized and prioritized through the race. By identifying
+the compositional changes towards an equilibrium, the primitives in equilibrium can be identified, and the equilibrium state verified. If,
+relative to other calculations that are resolved, one is not resolved, another primitive may be at play that resolves the equilibrium. It is
+therefore a compositional search problem.
+
+**Reachable has two senses, set by the mode of the work (a statement).** Whether a position is reachable depends on whether local boundary
+board state positions are being discovered through optimality or the landscape is being enumerated. Boundary board state certification is under
+optimality. The pruning process may need to enumerate the full landscape without concerns of optimality, but where Syzygy is used, reachable
+means reachable under optimality. Some choice regions are disjoint and not reachable under optimal play. They are discovered by pairing the full
+landscape understanding with the pruning structure drawn from it, which maps out the local choice regions. The catalog of boundary board states
+is then populated with the primitive catalog, the primitive calculations are made, and the process continues to populate the catalog and
+potentially to find the patterns the programme needs to break the Syzygy limitations. The ambiguity about reachability is a duality built into
+the programme, and making it explicit is important.
+
 ## 3. Progress
 
 | Item | State |
@@ -431,6 +453,8 @@ already composed.
 | Relativistic comparison between local choice regions within a segmented boundary (§2b) | Stated by the designer; not run |
 | Primitive calculations at two choice regions and along the path between, and piece addition by locking mechanisms (§2b) | Stated by the designer; not run |
 | The staged workflow from a segment anchor (§2b) | Stated by the designer; the self-referential prune and the repeated-position rules are not fully resolved; not run |
+| Triangulation from known regions into the discovery zone, and the unresolved case as a compositional search (§2b) | Stated by the designer; not run |
+| The two senses of reachable (optimal, for certification; the full landscape, for enumeration and pruning) (§2b) | Stated by the designer; recorded as a duality of the programme |
 
 ## 4. This file's reading, offered for correction
 
@@ -519,9 +543,12 @@ already composed.
   adjacency between two regions (a losing move out of one, and a winner's drawing move into the other) can be read from the same
   data as the mining, and whether it is wanted is not specified. Offered for correction.
 - **Segments and the two senses of reachable.** A segmented boundary is defined by reversible and irreversible moves, as the designer
-  states, and an irreversible move is an edge that cannot be navigated back. Reachable can be read as reachable by some sequence of legal
-  moves with both sides cooperating, or as reachable by force, where one side can compel the path. Which sense the comparison between
-  choice regions uses is not stated. Offered for correction.
+  states, and an irreversible move is an edge that cannot be navigated back. The earlier version of this bullet read the two senses of
+  reachable as cooperative or by force and said the designer had not stated which was meant. That was a misreading, and it is replaced.
+  The designer states the duality: reachable under optimality, for certification and wherever Syzygy is used; and reachable in the full
+  landscape without concern for optimality, for the enumeration that the pruning process may need. Disjoint choice regions are not reachable
+  in the first sense and are found through the second. The segmented boundary is read as applying to the full landscape, where an
+  irreversible move bounds navigation. Offered for correction.
 - **The potential is testable inside the tables.** The distance is the primitive calculation, as the designer states it: zero at an
   equilibrium and nonzero away from one. For a position of a material in the tables, that calculation can be compared with the win, draw
   or loss value and the distance to zeroing that Syzygy gives. If it tracks them, there is a ground for extending it beyond the tables.
@@ -543,6 +570,20 @@ already composed.
 - **Closure is a test, applied family by family.** It follows from the fixpoint reading above that a family is tested for closure by
   classifying every move of its members, and an unclosed family is identified by finding one move into decisive territory. Offered for
   correction.
+- **Triangulation is guidance and the closure is the certificate.** The designer's statement is read as a way of directing the search in the
+  discovery zone: which compositions to try, and in what direction the primitive calculations move relative to the known regions. A position
+  is in a region only when every move is a member or a certified loss (the fixpoint reading above), and the designer's own statement that
+  mapping is not certification applies. The regions that serve as reference points are read as regions within one segmented boundary, since
+  across an irreversible move navigation is one-directional; the sense of reachable that joins them is the full-landscape sense, since disjoint
+  regions are not reachable under optimal play (the statement on the two senses of reachable above). Offered for correction.
+- **Relation to the residual interface.** The opening survey (§4a) and topology §8p read a failure to compose with the catalog first as a
+  residual interface, which may be a missing primitive. The statement above places an earlier question before that reading: whether what is
+  being equalized and prioritized in the race has been understood, and so which composition of the existing primitives resolves. A missing
+  primitive is then the case where no composition of the existing ones does. Those documents are not changed. Offered for correction.
+- **Testable inside the tables.** For positions of a material in the tables, a composition proposed from the known regions can be checked
+  against the table: whether the primitives it names as in equilibrium coincide with the drawn positions that have a losing deviation for
+  each side, and whether the primitive left unresolved is where a position departs from a known region. The primitive calculation is done
+  post hoc by the designer (§2a). Offered for correction.
 
 ## 5. Not yet specified
 

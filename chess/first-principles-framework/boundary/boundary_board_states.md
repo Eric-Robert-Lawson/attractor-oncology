@@ -7,6 +7,16 @@ reasoned assessment of this idea's actual scope and limits is kept in §13,
 clearly labeled as a distinct, independently-argued position rather than folded
 into or diluting the objective stated here.
 
+**Provenance of the programme (the designer's statement).** The programme was constructed from the designer's own informal understanding of
+chess, which the designer holds was complete in structure before the programme was started. The formal names used in these documents (mating
+net, decoy, opposition and so on) are labels applied afterwards to map that structure onto formal chess understanding. The programme was not
+built from formal chess theory, and its agreement with formal theory is read as convergence: formal theory and the programme describe the same
+structure in different ways. The exactness of that agreement is derivable from the primitive calculations and from how the primitives compose,
+by joint compatibility, into a calculable equilibrium; testing it is the purpose of the rediscovery suite (`boundary_board_state_topology.md` §8r).
+The designer has no formal training in game theory, combinatorics, chess, systems design, search optimization or computer science, and built the
+architecture as an autodidact from this informal understanding. The designer states this as a fact about the origin of the programme and not as
+a supplement to any proof, and regards the framing as important to the programme.
+
 This file is the construction pipeline and the record of the idea: what a boundary state is (§1, §14), how candidates are generated and validated (§2, §3), and how the programme is framed (§15). The other documents of the programme are:
 
 - `boundary_board_state_topology.md`: the abstract layer, covering the status of a confirmed boundary state, start-reachability, the scaffolding strategy and composition from race-condition primitives.

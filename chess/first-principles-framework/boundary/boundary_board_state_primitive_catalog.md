@@ -1005,6 +1005,13 @@ capture net on any target, chained dependencies (the segmented process through a
 development, unlocking, castling and promotion, with locks and the movement rules of units), and the coverage race
 derived from the two (topology §8ab).
 
+**The origin of the names (the designer's statement).** The structure of the primitives was built by the designer first, and the formal chess
+names ("mating net", "decoy", "opposition" and the like) were applied afterwards as labels that map the structure onto formal chess
+understanding. The catalog was not constructed from a list of formal chess theory. That the structure and the formal theory agree is
+read by the designer as convergence: two different descriptions of the same structure. The names in this file were mostly supplied by the
+assistant when the designer described the structure, and so the vocabulary can look borrowed from formal theory when the structure was not.
+The designer states this as fact about the origin, and not as a supplement to any proof.
+
 This file's organizational choices, offered for the designer to change: the ID scheme (P-001 and on); the
 four levels of primitive, mechanism, derived form and instance; the fields of the entry template; the term
 codes (C, F, X, B, O for P-001; RT, LK, OB, TP for P-003; OP, CR, FS, TM for P-008); the status words COMPLETED,

@@ -3196,7 +3196,7 @@ classification of a family and the global definition are in survey §5a, and the
 - **The term *interior*** (drawn positions with no losing move) is this file's, used in the process document to name the remainder of the
   choice space. The designer did not name it.
 - **Not run.** The process is a specification. Nothing in it is carried over from any earlier test, and the designer will run and verify the data on return. Primitives are placed after the fact, as the designer states.
-- **Scale.** The sizes of larger materials are estimates in the process document (§8), not measurements.
+- **Scale.** No estimate of size is recorded; the scale is to be measured by the designer's first runs.
 
 ---
 

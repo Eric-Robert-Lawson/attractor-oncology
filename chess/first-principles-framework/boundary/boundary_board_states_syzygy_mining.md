@@ -140,13 +140,9 @@ As the designer states it (§1): mine all the Syzygy data the machine can handle
 reachable families from that mining; then automate the process off that basis with the pruning mechanism, matching the primitives
 afterwards. This agrees with survey §4h (the order of work) and §4f (what is cheap).
 
-## 8. Scale (this file's readings, offered for correction)
+## 8. Scale
 
-These are estimates and have not been checked against a run. Each added piece multiplies the count of legal positions by a factor of
-tens, so a five-piece material is likely to be in the tens of millions after folding, more where pawns reduce the symmetry, and a
-table of edges would be larger by about the average number of drawing moves. The sizes of the Syzygy sets (a gigabyte or so for
-three to five pieces, tens of gigabytes for six, terabytes for seven) are from memory and not checked. Probing in a scripting
-language is likely to be the slow step and may need a faster tool for larger materials.
+No estimate of the size of any material, table or run is recorded here. The scale is to be measured by the designer's first runs.
 
 ## 9. Not decided
 

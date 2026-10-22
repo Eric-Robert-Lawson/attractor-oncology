@@ -6,7 +6,7 @@ decides nothing. Nothing in it has been run on a pruned structure.
 
 **Companion documents.** `boundary_board_states_opening_survey.md` (the method; §4e is the statement this file expands, §7 is the
 calibration of a line and a depth), `boundary_board_state_topology.md` (§8aj, §8al, §8an, §8ap, §8aq), `boundary_board_states.md` (changelog entries 38, 39,
-42, and 62 to 72), `boundary_board_state_primitive_catalog.md` (the three primitives). The designer's statements are marked as such and kept
+42, and 62 to 79), `boundary_board_state_primitive_catalog.md` (the three primitives). The designer's statements are marked as such and kept
 apart from this file's readings, as in the catalog's §10.
 
 ---
@@ -360,6 +360,55 @@ between them, two relativistic points of certainty with a measurable deviation b
 choice region. The designer regards this as informative for deriving the composition of the primitives and the measurements between choice
 regions, and as possibly helping with optimality calculations once exhaustive coverage from Syzygy has reached its limit.
 
+**The relativistic comparison between local choice regions (a statement).** When the exhaustive coverage of Syzygy is exhausted, the focus of the
+programme is the relativistic comparison between local choice regions, to work out whether the structure of the programme can be used
+beyond that limit. Otherwise it meets the same limitation. The designer is not sure whether this reaches a wall. Irreversible moves have
+been an overlooked attribute: the inability to navigate backwards from an irreversible move is what makes a position not reachable.
+A relativistic comparison between choice regions in a local sense is between reachable choice regions, which are structured by the
+segmented boundaries of reversible and irreversible moves. Reachable local choice regions lie within the same segmented boundary
+definition, otherwise the navigation is one-directional, from a to b and not from b to a. The relation between reachable, chronological,
+and the measurements between them is important to record and include in the programme. Take two disjoint choice regions, a and b,
+within the same segmented boundary. Between them is forced region, or perhaps a discoverable choice region. Take a direct path from the
+position of a closest to b (posa, with the turn) to the position of b closest to a (posb, with the turn). The primitive calculation
+between White and Black at posa is in equilibrium, and equates to zero. The same holds at posb. A position posc on the path that is not in
+equilibrium has a primitive calculation that is a distance to its surrounding most reachable sum of choice regions, similar to general
+gravity in physics. The nearest distance to a choice region gives the temporal difference, and with it precisely how much someone is ahead
+or behind. Within a segmented boundary this may reduce. When the navigation goes through an irreversible boundary from the retrograde
+side, the emergent rule sets that govern it may be understood if a pattern emerges.
+
+**Deriving the primitive calculations between two choice regions, and adding pieces (a statement).** The primitive calculations can be derived
+from the catalog and two given choice regions. Take posa and posb. A path between the two is understood, and the perturbation analysis
+mechanism per move shows what changes. Each point between posa and posb can be evaluated in the fully known landscape of the Syzygy
+structure, to see what emerges. The three primitives are applied to the positions, and the two relativistic positions are considered, with
+how those primitives relate. Both have equilibrium primitive values, and the work is to derive what that equilibrium is at posa and at
+posb, and then the change under perturbation along the path between them. Enumerating these primitive compositions across the known
+landscape gives a population of how the reachable structure relates in explicit primitive calculations, and from it the relationship
+between those calculations and piece movements, as a composition of interdependent relation. Moving up the segmented boundaries adds
+an element to the interdependent graph network. With additional pieces it may not matter, when those pieces are under locking mechanisms
+that put them under compositional conditions strict enough to make them effectively dead. Understanding the true composition and joint
+compatibility of the primitives, so that these dead locking mechanisms emerge calculably from a population, may show how to add pieces
+deliberately and calculably with minimal increase in complexity. Such pieces are added from derivative boundary board state positions in
+which the primitives in equilibrium remain in the same equilibrium, because the added piece cannot interact with the primitive enough to
+change it, or is added purposefully to complete a race condition where it fits perfectly. Reachable families imply a region of move
+spaces which reside and are reachable.
+
+**Piece addition by room on the board, and composition of boundary states (a statement).** A boundary board state position within the Syzygy
+limitations can have enough room on the board for pieces to be added that increase the complexity but can never reach the primitive
+calculations that enforce the equilibrium. This is where the joint compatibility of the primitives under equilibrium comes into play. If
+there exists a boundary board state position to which dead pieces can be added, it is because there exists another boundary board state
+position in which those pieces are in a jointly compatible primitive structure, and the composition of the missing parts forms a new
+primitive boundary board state position, which is the composition of the other positions. As an example, there exists an equilibrium of a
+pawn race and king endgame. From it the pawn race primitive calculation can be derived. Pieces can be added in locked positions that can
+never reach the pawn race in time. Exhaustive coverage is not needed to show that the primitive calculations still hold, and if that race
+is the decisive factor in victory, or the only viable way to it, it can be concluded that adding these dead pieces does not impact it while
+increasing the complexity, at the same certainty.
+
+**Piece addition can shift the equilibrium (a statement).** The addition of pieces can shift the equilibrium, where a new emergent path
+appears in which the race that was present and unaffected is beaten by a new one, through the addition of the pieces. This is where a
+composition of many primitives that can compose together from a population comes in to inform the addition of new pieces. The addition
+of pieces can be understood through the compositional understanding of ablation, together with the composition of other primitives
+already composed.
+
 ## 3. Progress
 
 | Item | State |
@@ -379,6 +428,8 @@ regions, and as possibly helping with optimality calculations once exhaustive co
 | The link from a mined family to the initial position | Stated (survey §5a); the backtrace procedure is not specified beyond the statements |
 | Closed local regions and sparse disjoint regions (§2b) | Stated by the designer; none found; whether enough regions exist to inform the global composition is uncertain |
 | Disjoint choice regions as a catalog, and the primitive measurement between them (§2b) | Stated by the designer; not run |
+| Relativistic comparison between local choice regions within a segmented boundary (§2b) | Stated by the designer; not run |
+| Primitive calculations at two choice regions and along the path between, and piece addition by locking mechanisms (§2b) | Stated by the designer; not run |
 | The staged workflow from a segment anchor (§2b) | Stated by the designer; the self-referential prune and the repeated-position rules are not fully resolved; not run |
 
 ## 4. This file's reading, offered for correction
@@ -467,13 +518,28 @@ regions, and as possibly helping with optimality calculations once exhaustive co
   addition is to treat the forced stretch between regions as an object to measure and the regions as a catalog. Within the tables, an
   adjacency between two regions (a losing move out of one, and a winner's drawing move into the other) can be read from the same
   data as the mining, and whether it is wanted is not specified. Offered for correction.
-- **Scope measured on engine games (this assistant's measurement, not verified by the designer).** In 1,000 games of TCEC superfinals,
-  seasons 20 to 29, taken from the public archive `github.com/TCEC-Chess/tcecgames`, the median full move at which 7 or fewer pieces
-  (kings included) first occurs is 79, and only 35% of games reach it; 10 or fewer is reached in 59% (median move 62); 5 or fewer in 4%.
-  Of 570 drawn games, 91% ended with more than 7 pieces, but 497 of the 570 were ended by the tournament's draw adjudication, so the
-  true share of draws reaching the table range is higher by an amount not known. These are engine games from biased opening books, not
-  optimal play. The per-game data is in `tcec_superfinal_piece_counts.csv`, delivered with this change. The measurement places the
-  structure the tables do not reach at roughly 8 to 16 pieces, between about move 40 and move 80. Offered for correction.
+- **Segments and the two senses of reachable.** A segmented boundary is defined by reversible and irreversible moves, as the designer
+  states, and an irreversible move is an edge that cannot be navigated back. Reachable can be read as reachable by some sequence of legal
+  moves with both sides cooperating, or as reachable by force, where one side can compel the path. Which sense the comparison between
+  choice regions uses is not stated. Offered for correction.
+- **The potential is testable inside the tables.** The distance is the primitive calculation, as the designer states it: zero at an
+  equilibrium and nonzero away from one. For a position of a material in the tables, that calculation can be compared with the win, draw
+  or loss value and the distance to zeroing that Syzygy gives. If it tracks them, there is a ground for extending it beyond the tables.
+  If it does not, that is learned inside the tables. The primitive calculation is done post hoc on the mined positions, by the designer,
+  as stated in §2a. Offered for correction.
+- **Relation to tempo.** Survey §4c (temporal analytical relativistic measuring) and §4e (tempo as a calculable metric) measure a difference
+  in tempo. The statement above reads as that measure taken as a distance from equilibrium, which would give how far ahead or behind a
+  side is as a first-principles margin. Whether it replaces an evaluation score is not stated. Offered for correction.
+- **Piece addition and the record of dead pieces.** The statement above is read as the dead pieces, the footprint and the ablation already in
+  the record (topology §8an and §8s; catalog §4.9 and §4.12), used constructively: instead of removing a piece to isolate the primitive
+  composition, a piece is added to a derived boundary state. Offered for correction.
+- **Piece addition as the inverse of ablation.** Ablation shows what a piece contributes to a composition. Adding a piece asks what the
+  added pieces would contribute together with the primitives already composed, and so whether they form a new race that beats the one
+  that was present. The answer is read as coming from the population of compositions and not from geometry. Offered for correction.
+- **A test inside the tables.** A boundary state found in the tables can have a piece added, within the material the tables hold, and the
+  result compared with the table: whether it stays drawn and keeps its losing deviations, as the primitive composition says it should. A
+  piece judged not to interact with the primitives that nevertheless changed the result would show another way it enters, and would be
+  information for the composition. Offered for correction.
 - **Closure is a test, applied family by family.** It follows from the fixpoint reading above that a family is tested for closure by
   classifying every move of its members, and an unclosed family is identified by finding one move into decisive territory. Offered for
   correction.
@@ -496,6 +562,8 @@ route; and the criterion for stopping the search for sparse regions.
 
 Whether an adjacency or a distance between disjoint choice regions is defined and recorded, or the catalog is only a set of regions; and how the
 primitive measurement on a forced stretch is recorded.
+
+The rule sets that govern navigating an irreversible boundary from the retrograde side, which the designer expects may be found if a pattern emerges.
 
 ## 6. Provenance
 

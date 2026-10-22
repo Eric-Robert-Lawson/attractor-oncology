@@ -188,8 +188,8 @@ are created under optimal constraints: the moves chosen are the optimal ones.
 material, that is a provable equilibrium of reduction to insufficient material and not a choice of stalemate, since optimality is
 what matters here.
 
-**The 50-move rule (a statement).** It is ignored for now. It matters only for a reachable family once the anchor is reached, where
-it gives a cutoff from the number of moves.
+**The 50-move rule (a statement).** It is not followed. The designer has removed it from the program, which makes the program simpler.
+It is not a cutoff at the anchor or at any other stage.
 
 **The primitives afterwards (a statement).** The primitive compositional analysis is not part of the enumeration. It is done post hoc,
 from the population of certified local boundary board state positions obtained by exhaustive coverage of Syzygy, and by the designer
@@ -218,7 +218,7 @@ Then the process is automated and the primitives are matched.
    recovered. With no pawns the symmetries are the eight board symmetries and the swap of colours with the side to move swapped. With
    pawns the direction of play limits them to the left-right mirror.
 4. **Take the tablebase value** of each representative by its sign: win, draw or loss for the side to move. Cursed and blessed values
-   count as wins and losses, because the 50-move rule is ignored. Check coverage: every legal position has a value.
+   count as wins and losses, because the 50-move rule is not followed. Check coverage: every legal position has a value.
 5. **Check the table against an independent move generator.** Derive each position's value from the values of its children and compare
    (checkmate and stalemate where there are no legal moves). An inconsistency means an error in the move
    generator, the symmetry fold or the reading of the table. A sample is also compared with a second tablebase reader.
@@ -539,13 +539,12 @@ inverse ablation, a way may be found to equalize the primitives by searching unk
   that need not lead to the initial position. The global closure claim (the programme's closure and its failure condition, a certified
   route out) is about the region anchored at the initial position. A closed local region is a finding of its own, with no failure
   condition attached, and an unclosed one is a family with a certified decisive route out. The two are kept apart in the record.
-- **What the 50-move rule can change, and what it cannot.** It can only turn a win into a draw, so a branch cached as decisive with the rule
-  ignored may be a draw on a route with a high move counter. The draw claim of a certified region is not affected, since everything in it
-  is a draw under the stricter reading. What can be affected is the extent of the region: a move labelled losing may be a drawing move on
-  such a route, so the region found may be smaller than the real one, and those routes remain to be enumerated once the anchor is
-  reached. The counter resets on a capture or a pawn move, which are read as the segment boundaries, so a verdict at a segment entry does
-  not depend on the route, and inside a segment a cached decisive verdict is exposed only where the distance to zeroing plus the counter
-  on arrival comes close to 100 plies. The certification of a region is valid up to where it is valid.
+- **The 50-move rule is not followed.** Syzygy's win, draw and loss values include the rule as cursed wins and blessed losses. The program's
+  game has no such rule, so reading a cursed win as a win and a blessed loss as a loss is the program's own value and not an approximation.
+  The 75-move rule is the automatic form of the same rule and is read here as removed with it; repetition draws are not affected. A
+  draw in the program's game is also a draw in standard chess, because the rule only adds draws: a line that loses in standard chess ends
+  in mate and loses in the program's game too. A win in the program's game need not be a win in standard chess. This is a reading,
+  offered for correction.
 - **The list of global states and the localized regions.** With the statement of the whole, the survey's list of global states is read as
   the rim of the global choice region, and the localized choice regions are the disjoint pockets in the forced space. A reachable family
   that links to the initial position under optimal backtracing is therefore a family on the rim of the global region, and a family that

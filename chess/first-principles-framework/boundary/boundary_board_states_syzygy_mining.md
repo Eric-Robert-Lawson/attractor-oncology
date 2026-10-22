@@ -31,7 +31,8 @@ generalization is marked as this file's reading and is offered for correction.
 - **Primitive calculation is not part of the script.** The primitive calculations are done when a drawn position is verified later,
   by the designer. Primitive compositional analysis is done after the fact, from the population of certified local boundary board
   state positions obtained by exhaustive coverage from Syzygy.
-- **The 50-move rule is ignored for now.** It matters only inside a reachable family, when the anchor is reached, as a cutoff.
+- **The 50-move rule is not followed.** The designer has removed it from the program, which makes the program simpler. No stage of
+  the process uses it, and it is not a cutoff at the anchor or anywhere else.
 - **How a draw is realized.** The draws are categorized by whether the paths draw by stalemate, by insufficient material, or
   cyclically. Where the verified best move from the tablebase is to reduce to insufficient material, that is a provable equilibrium
   of reduction to insufficient material, rather than a stalemate choice, since optimality is the concern.
@@ -68,7 +69,7 @@ small enough to be held completely, the tablebase is the complete solution of th
    colours (which also swaps the side to move) give sixteen images, and a position is represented by the image with the smallest
    index. For a material with pawns the group is smaller; that is this file's reading, and has not been run.
 3. **Probe the value of every representative.** Win, draw or loss for the side to move, taken by sign. A cursed win or a blessed loss
-   counts as a win or a loss, since the 50-move rule is ignored (§1).
+   counts as a win or a loss, since the 50-move rule is not followed (§1).
 4. **Classify every legal move of every drawn position, under optimal play.** A move that loses is a deviation, certified by the
    table, and is counted and not followed. A move that keeps the draw is an optimal move, and is either a move that stays in the
    material, which is an edge of the graph of §5, or a capture that leaves the material, whose value is read from the lower
@@ -132,7 +133,7 @@ boundary under optimal play share its equilibrium.
 - **A test of the automation.** On every material where the tablebase has the answer, the pruning mechanism's verdicts can be
   compared with the tables position by position, so the automation can be checked before it is trusted on materials the tables do
   not reach.
-- **The 50-move rule** enters at this stage and not before, as the designer states (§1).
+- **The 50-move rule** does not enter at any stage (§1).
 
 ## 7. The order of work
 

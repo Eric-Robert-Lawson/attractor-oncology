@@ -526,7 +526,7 @@ The full statements and the process are in `boundary_board_states_syzygy_mining.
 - Primitive calculations are not part of the script. They are done when a drawn position is verified later, and primitive
   compositional analysis is done after the fact, from the population of certified local boundary board states obtained by
   exhaustive coverage from Syzygy.
-- The 50-move rule is ignored for now. It matters only in a reachable family, as a cutoff, when the anchor is reached.
+- The 50-move rule is not followed; the designer has removed it from the program. It is not a cutoff at any stage.
 - Draws are categorized by stalemate, insufficient material, or cyclical. Where the best move verified from the tablebase is to
   reduce to insufficient material, that is a provable equilibrium of reduction rather than a stalemate choice, since optimality is
   the concern.

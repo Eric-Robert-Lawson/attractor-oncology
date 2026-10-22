@@ -2844,8 +2844,8 @@ with its legal move pool.
 
 *Optimal play, and what is left to later.* Branches are created under optimal constraints. The primitive calculations are not part of the script; they are done when a
 drawn position is verified later, and primitive compositional analysis is done after the fact, from the population of certified local
-boundary board state positions obtained by exhaustive coverage from Syzygy. The 50-move rule is ignored for now: it matters only in a
-reachable family, when the anchor is reached, as a cutoff.
+boundary board state positions obtained by exhaustive coverage from Syzygy. The 50-move rule is not followed: the designer has removed it from the program,
+which makes the program simpler, and it is not a cutoff at any stage.
 
 *How a draw is realized.* The draws are categorized by stalemate, insufficient material, or cyclical. Where the verified best move is to reduce to insufficient
 material, that is a provable equilibrium of reduction to insufficient material rather than a stalemate choice, since optimality is the concern.

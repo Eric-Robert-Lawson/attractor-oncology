@@ -776,38 +776,21 @@ where that changes.
 
 ---
 
-## 7. The 50-move rule — the full reasoning, then what was verified
+## 7. The 50-move rule — not followed
 
-**The reasoning**: the 50-move rule implies a board position might,
-geometrically, appear to avoid a forced draw — but the specific sequence of moves
-required to *reach* that position might itself force a draw first, under the
-50-move rule, before the position is ever actually reached. If so, such a
-position is impossible to reach without violating the rule, and a
-board-geometry-only analysis wouldn't be the true exhaustive list. An alternative
-possibility was also raised: Syzygy might not track the 50-move rule at all, in
-which case the whole consideration is irrelevant. Stated resolution at the time:
-it doesn't matter which is true, since this project's own engine tracks no move
-history at all, and the rule "can be applied post-hoc regardless."
+**The designer's statement.** The program does not follow the 50-move rule. The designer has removed it from the program's chess, which
+makes the program simpler. Repetition draws are not affected: the hard core is a drawn equilibrium sustained by a repetition cycle.
 
-**What direct verification against Syzygy's own documentation found — more
-precise than either possibility above**: `probe_wdl` returns five values, not
-three — `-2` (unconditional loss), `-1` (**blessed loss**, mate forceable but the
-50-move rule saves the mover), `0` (draw), `1` (**cursed win**, mate forceable but
-the 50-move rule would turn it into a draw), `2` (unconditional win). Syzygy
-*does* structurally track the 50-move rule. But only relative to a hypothetically
-fresh clock at the probed position — the documentation states unconditional
-win/loss values hold "assuming 50-move counter is zero"; `probe_wdl` never reads
-a real game's actual current halfmove clock.
+**This file's reading, offered for correction.** The 75-move rule is the automatic form of the same rule and is read as removed with it.
+The earlier concern, that the rule could make a position unreachable because the moves that reach it force a draw first, no longer
+arises.
 
-**The reconciling fact**: this project's own engine tracks no move history or
-halfmove clock at all — pure distance-to-mate, exactly matching Syzygy's
-"assume a fresh clock" semantics. So the correct practice when bootstrapping from
-Syzygy is to **collapse cursed-win into unconditional win, and blessed-loss into
-unconditional loss** — not a workaround, but the direct, correct alignment
-between two systems that already agree on the underlying question. §6's code
-already implements this collapse via its `<= -1` / implicit `>= 1` thresholds.
-Neither original possibility was quite right; the truth was more specific than
-either.
+**What it means for Syzygy values.** `probe_wdl` returns five values: `-2` (unconditional loss), `-1` (**blessed loss**, mate forceable
+but the 50-move rule saves the mover), `0` (draw), `1` (**cursed win**, mate forceable but the 50-move rule would turn it into a draw)
+and `2` (unconditional win). The unconditional values hold assuming a fresh 50-move counter. Since the program does not follow the rule,
+a cursed win is a win and a blessed loss is a loss, so the values are collapsed: `-2` and `-1` are losses, `1` and `2` are wins, and
+`0` is the draw. This is the program's own value and not an approximation. §6's code implements the collapse through its `<= -1` and
+`>= 1` thresholds, and the engine of this project tracks no move history or halfmove clock.
 
 ---
 
@@ -815,10 +798,8 @@ either.
 
 Exactly four position-level drawing mechanisms exist under standard chess rules:
 **stalemate**, **insufficient material**, **repetition** (threefold, claimable,
-or fivefold, automatic), and the **50/75-move rule**. Repetition and the 50-move
-rule are treated as interchangeable for this project's purposes, by deliberate
-choice (§1) — both mean "the position is drawn," and which specific rule a real
-game would invoke to claim it doesn't change whether the position qualifies.
+or fivefold, automatic), and the **50/75-move rule**. The program follows the
+first three and does not follow the 50/75-move rule (§7).
 Insufficient material is already the real, narrow ceiling exclusion (§4d).
 Stalemate is the one mechanism needing real care: stalemate as the *realization*
 of a boundary state's drawing branch (the non-losing move leaves the *opponent*

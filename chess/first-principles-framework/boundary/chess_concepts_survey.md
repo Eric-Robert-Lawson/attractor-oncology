@@ -46,7 +46,7 @@
 - **Dead position.** A position from which no sequence of legal moves can lead to checkmate by any series of legal moves, however unskilful (FIDE Art. 5.2.2). Includes some blocked-pawn positions. The game is drawn immediately.
 - **Threefold repetition.** The same position, same side to move, same castling and en-passant rights, occurring three times. A claimable draw (FIDE 9.2).
 - **Fivefold repetition.** Five occurrences. Automatic draw (FIDE 9.6).
-- **Fifty-move rule.** 50 moves by each side with no pawn move and no capture. Claimable draw. **Seventy-five-move rule** is the automatic version.
+- **Fifty-move rule.** 50 moves by each side with no pawn move and no capture. Claimable draw. **Seventy-five-move rule** is the automatic version. (Standard rule; the programme does not follow it.)
 - **Draw by agreement.** Players agree.
 - **Castling.** King moves two squares toward a rook, rook jumps over. Conditions: neither piece has moved, squares between empty, king not in check, does not cross or land on an attacked square. *Castling rights* are part of position identity.
 - **En passant.** A pawn that has just advanced two squares may be captured as if it had advanced one, on the immediately following move only.
@@ -417,7 +417,7 @@ Named final positions. Descriptions are minimal.
 - **Blockade.** A position where nothing can move.
 - **Dead position.** See §1.
 - **Insufficient material.** See §1.
-- **Fifty-move draw.** See §1.
+- **Fifty-move draw.** See §1. Not followed by the programme.
 - **Opposite-coloured bishops.** See §13.
 - **Wrong-rook-pawn draws.**
 - **Perpetual attack on a piece.** Repeating threats.
@@ -534,6 +534,6 @@ These are *names that sit near* the existing catalog terms, listed so the user c
 - Time-race vocabulary that names a *race*: tempo, tempo count, pawn race, rule of the square, lead in development, initiative, triangulation, reserve tempi.
 - Recorded residual in the catalog: **zugzwang without capture** (zugzwang, mutual zugzwang, trébuchet, corresponding squares, §14). It remains a residual, not a primitive.
 - Equilibrium vocabulary: dynamic equality, fortress, perpetual check, repetition, stalemate, dead position, insufficient material, blockade, opposite-coloured bishops (§15). These name draw *results*; the programme's boundary-state definition requires a cycle realization or a forced terminal draw.
-- Solving vocabulary: WDL, DTZ/DTM, tablebase, weak solution, transposition table, GHI (§16–17). Path-dependence through repetition (GHI) is relevant to how a proof search caches a verdict that rests on a cycle. For a closed region the draw value does not depend on it, because the repetition and 50-move rules can only end a game as a draw. It bears on the certification of exits, which must not rest on a cycle argument, and on the cache key for a cycle, which the designer expects to discover (survey §10).
+- Solving vocabulary: WDL, DTZ/DTM, tablebase, weak solution, transposition table, GHI (§16–17). Path-dependence through repetition (GHI) is relevant to how a proof search caches a verdict that rests on a cycle. For a closed region the draw value does not depend on it, because the repetition rule can only end a game as a draw (the programme does not follow the 50-move rule). It bears on the certification of exits, which must not rest on a cycle argument, and on the cache key for a cycle, which the designer expects to discover (survey §10).
 
 **Caution on use.** If a term here is felt to be a candidate primitive, the check is the admission rule in the catalog §1, not its presence in this list.

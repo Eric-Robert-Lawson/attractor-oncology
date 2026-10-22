@@ -87,7 +87,7 @@ topological framework is tracking something outside itself rather than
 constructing an internally-consistent story after the fact. It is not proof
 that the framework can be formalized into the exhaustive, composable catalog
 described in `boundary_board_state_topology.md` §8 — that is a different,
-much harder claim, addressed in §6 below. It is proof that the intuitive
+much harder claim, addressed in §6 below. It is evidence that the intuitive
 version of the framework, applied under real OTB conditions with a ten-second
 or so decision window, correctly favored a move that satisfied a real
 tactical necessity the player was not consciously tracking, for reasons that
@@ -152,7 +152,7 @@ performance rating from one game is a very noisy statistic. A single strong
 positional-plus-tactical theme, well executed against a weaker opponent's
 compounding errors, can easily produce an inflated single-game number that
 would not hold up as an average across many games. This does not diminish
-what was real in this game stands regardless —
+what was real in this game,
 but the 2150 figure itself should be read as a single-game estimate, not a
 claim about standing playing strength.
 

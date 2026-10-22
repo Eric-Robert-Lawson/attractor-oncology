@@ -10,7 +10,7 @@ from an anchor is in start-selection §2b.
 
 **Companion documents.** `boundary_board_states_opening_survey.md` (§4j the two catalogs, §4k the designer's statements behind this
 file, §5a reachability families and the classification of a family), `boundary_board_state_topology.md` (§8ar, the record of the
-statements), `boundary_board_states_start_selection.md` (§2a, the later specification of this process, and §2b, the staged workflow), `boundary_board_states.md`
+statements), `boundary_board_states_start_selection.md` (§2a, the later specification of this process, and §2b, the staged workflow), `boundary_board_states.md` (the construction pipeline) and
 `boundary_board_state_primitive_catalog.md` (the primitives, used afterwards, §1).
 
 **How this file is organized.** What is the designer's statement is marked as such and kept apart from this file's readings, in the

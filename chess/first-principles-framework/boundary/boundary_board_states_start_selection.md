@@ -6,7 +6,7 @@ decides nothing. Nothing in it has been run on a pruned structure.
 
 **Companion documents.** `boundary_board_states_opening_survey.md` (the method; §4e is the statement this file expands, §7 is the
 calibration of a line and a depth), `boundary_board_state_topology.md` (§8aj, §8al, §8an, §8ap, §8aq), `boundary_board_states.md` (changelog entries 38, 39,
-42, 62, 63, 64 and 67), `boundary_board_state_primitive_catalog.md` (the three primitives). The designer's statements are marked as such and kept
+42, and 62 to 70), `boundary_board_state_primitive_catalog.md` (the three primitives). The designer's statements are marked as such and kept
 apart from this file's readings, as in the catalog's §10.
 
 ---
@@ -341,6 +341,11 @@ deviates from the forced region and plays sub-optimally, or through ignorance of
 localized choice region can therefore lie past the global choice region. There cannot be disjoint global regions that share the initial
 start position, by the geometric definition of global.
 
+**The structure of the whole (a statement).** The global choice region leads into the global forced region. Localized choice regions lie
+within the forced region, disjoint from the global choice region, and are therefore unreachable from the initial position under optimal
+play. They are reached only by sub-optimal play or through ignorance of optimality. This resolves how the survey's list of global
+boundary states relates to the two spaces.
+
 ## 3. Progress
 
 | Item | State |
@@ -434,6 +439,10 @@ start position, by the geometric definition of global.
   reached. The counter resets on a capture or a pawn move, which are read as the segment boundaries, so a verdict at a segment entry does
   not depend on the route, and inside a segment a cached decisive verdict is exposed only where the distance to zeroing plus the counter
   on arrival comes close to 100 plies. The certification of a region is valid up to where it is valid. Offered for correction.
+- **The list of global states and the localized regions.** With the statement of the whole, the survey's list of global states is read as
+  the rim of the global choice region, and the localized choice regions are the disjoint pockets in the forced space. A reachable family
+  that links to the initial position under optimal backtracing is therefore a family on the rim of the global region, and a family that
+  cannot link lies in a pocket. Offered for correction.
 - **Closure is a test, applied family by family.** It follows from the fixpoint reading above that a family is tested for closure by
   classifying every move of its members, and an unclosed family is identified by finding one move into decisive territory. Offered for
   correction.

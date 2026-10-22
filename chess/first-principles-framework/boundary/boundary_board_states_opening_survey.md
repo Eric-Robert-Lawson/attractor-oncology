@@ -62,6 +62,10 @@ has already been passed. Those are consequences that may fall out of it (§5, §
   position and that list is the enclosed phasing of choice and force. That a position can be avoided is therefore not a ground
   for classifying it as non-global. A verified state not shown to be in a family reachable from the initial position under the optimal
   backtrace constraint (§5a) is local.
+- **The whole, as the designer states it later.** The global choice region leads into the global forced region. Localized choice regions
+  lie within the forced region, disjoint from the global choice region, and so are unreachable from the initial position under optimal
+  play (`boundary_board_states_start_selection.md` §2b). The list of global states above is read as the rim of the global choice region.
+  This is the designer's resolution of how the list relates to the two spaces.
 - **The target of this survey.** A local boundary state candidate, anchored at the initial position through a chosen line with a
   viable path of arrival. The path may be optimal or sub-optimal.
 
@@ -614,7 +618,7 @@ the theory tree is tagged as such, and it does not count as certified.
 **Scope of C1.** The claim is made *under optimal play*, as the designer stated. A forced win has no drawn position on any optimal
 continuation, so no boundary state can lie on one. A drawn position that the winning side could reach by an error is not on an
 optimal continuation, and under the target of §2 it is an admissible local candidate anchored through this line. C1 therefore says
-nothing about such positions. Whether the survey wants candidates reached by deviations from a forced win is open (§10).
+nothing about such positions. Whether the survey wants candidates reached by deviations from a forced win was open (§10); the designer's later statement is that such regions exist.
 
 **Scope of C3 and the pruning of sub-optimal paths (the designer's statement).** Sub-optimal paths are excluded by the distinction
 between choice and force: a choice that leads to a forced loss is pruned. In a drawn region a move either preserves the value or
@@ -699,7 +703,10 @@ cache entries; and the primitives that the line shows to be missing, found by th
 ## 10. Open questions
 
 - The meaning of "first" over all paths: retired. The designer's later statement (§5a) defines *global* by membership of a family reachable from the initial position under the optimal backtrace constraint, so the question no longer arises.
-- Whether C1 should also claim anything about positions reached by deviations from a forced win (§6).
+- Whether C1 should also claim anything about positions reached by deviations from a forced win (§6). Answered in part by the designer's later
+  statement (`boundary_board_states_start_selection.md` §2b): a decisive position can have a choice region below it, reached when the side that
+  is winning plays sub-optimally or through ignorance of optimality, and a localized choice region can lie past the global one. Such regions
+  exist and are what the mining looks for. Whether C1 records them is not specified.
 - How a cycle of interdependent candidates is verified when it is small enough to verify at all: whether the web is verified as
   one unit.
 - How the cache treats the repetition cycle that realizes a candidate, since the draw is a property of a cycle of positions and not

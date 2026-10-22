@@ -10,6 +10,20 @@ primitive (§1, the admission rule). This file is the primitives catalog only. B
 (topology §8x). Evidence tags used throughout: **SPEC** (defined, not tested), **INSTANCES** (checked on specific positions),
 **CERTIFIED** (backed by an exhaustive or complete case-list certificate; none yet).
 
+**The catalog as the designer states it.** The catalog has three primitives, each complete in itself, and the designer fully
+understands each of them. The catalog is not stated to be complete as a whole: it can be added to if required, through the reduction
+rule and the admission rule (§1). The architecture requires every primitive to be modular, generalizable and piece-agnostic, and the three
+meet that requirement. The mating or capture net (P-001) is the foundational primitive. It can be chained, under multiple compositions,
+into a coverage capture net of dependencies: the capture net, the segmented dependencies (P-003) and the coverage race (P-008) compose.
+This is not a ranking of one primitive above two secondary ones. A pawn promotion race is covered by integrating its conditional race
+into that composition. It is not a primitive of its own because it is not piece-agnostic, and piece-agnosticism is what the architecture
+requires of a primitive. (The designer's statement, in the designer's words as given.)
+
+**This file's reading, offered for correction.** The tags **written** and **SPEC**, and the words "not run", record how far an entry has
+been written out in this file and whether it has been tested on positions. They do not record how well the designer understands the
+primitive, and they are not to be read as saying that P-003 and P-008 are provisional. The word
+"provisional" in the title of §9 describes the dependency map, not the primitives.
+
 Companion documents: `boundary_board_states.md` (the concept and methods; the definition of a global boundary state is in its
 §14 items 7 and 8), `boundary_board_state_topology.md` (the record; P-001 was derived in its §8s, §8t and §8u; the reduction to
 three primitives is recorded in its §8ab), `boundary_board_states_case_study_otb.md` (the game).
@@ -63,6 +77,7 @@ table below, and it is never added to the index.
 | ID and name | What it is | Where its content lives |
 |---|---|---|
 | P-002 Race to a square | the tempo comparison. Race is what every primitive is, so it is a term and not a primitive. A pawn race is the promotion route of P-003 against obstruction | term TP of P-003 (§7.5), term TM of P-008 (§8.5), mechanism RT2 |
+| Pawn promotion race | a race that names a piece, so it fails the piece-agnostic requirement (the designer's statement). It is covered by integrating the conditional race into the composition of the three primitives | P-003 (the promotion route RT2, term TP), P-001 (the outcome of a promotion is a target), P-008 (term TM); composition, §9 |
 | P-004 Edge restriction | the board edge as missing edges in the movement relation. It has no race condition: it is an input | the navigation graph of P-003 (§7.3) |
 | P-005 Repetition loop | the definition of a boundary state: the cycle sustained by both sides when the primitives are in equilibrium (a forced terminal draw with no choice to deviate is a second realization, `boundary_board_states.md` §14 item 10). It emerges from the primitives, so it is the hard core and not a primitive | §5 item 2; `boundary_board_states.md` §14 item 7 |
 | P-006 Piece trap | merged into P-001: the capture net on any target, of which the mating net is the royal case | §4 |
@@ -101,7 +116,8 @@ Every entry has these fields ("none" is allowed, blank is not). This implements 
 | P-003 | Chained dependencies | the segmented process through a chain of dependencies and the race to resolve it: a pawn chain, an outpost, a lock held by duty, and the bringing of a unit or pawn into play (development, unlocking, castling, promotion). The movement relation of each unit supplies the routes and the dependency sets | **specified, SPEC** (§7, version 3; was P-007, SUB-1 and P-003 version 2) | topology §8a, §8d, §8f, §8y, §8z, §8ab |
 | P-008 | Coverage race under disturbance | the effect of a perturbation on the held terms of every engaged primitive at once, the support those terms share, and the race to open one before it is restored, computed for both sides | **specified, SPEC** (§8, version 2; was §7c) | topology §8aa |
 
-Three primitives are specified. P-001 is written, and P-003 and P-008 are SPEC and have not been run. What the three do not
+The catalog is three primitives, each complete and piece-agnostic as the designer states, and it can be added to if required (Status, above). In the State column, P-001 is
+written out in full and P-003 and P-008 are specified (SPEC); none has been run on positions. What the three do not
 account for is recorded as residual and is not pre-registered as a primitive: zugzwang without capture is not read by any of them.
 By the reduction rule it is returned as a residual interface if a proven boundary-state entry needs it (topology §8x), and it is
 admitted only as the deduction of that residual under the admission rule of §1.

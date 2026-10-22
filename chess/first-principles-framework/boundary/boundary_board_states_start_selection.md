@@ -6,7 +6,7 @@ decides nothing. Nothing in it has been run on a pruned structure.
 
 **Companion documents.** `boundary_board_states_opening_survey.md` (the method; §4e is the statement this file expands, §7 is the
 calibration of a line and a depth), `boundary_board_state_topology.md` (§8aj, §8al, §8an, §8ap, §8aq), `boundary_board_states.md` (changelog entries 38, 39,
-42, and 62 to 70), `boundary_board_state_primitive_catalog.md` (the three primitives). The designer's statements are marked as such and kept
+42, and 62 to 72), `boundary_board_state_primitive_catalog.md` (the three primitives). The designer's statements are marked as such and kept
 apart from this file's readings, as in the catalog's §10.
 
 ---
@@ -346,6 +346,20 @@ within the forced region, disjoint from the global choice region, and are theref
 play. They are reached only by sub-optimal play or through ignorance of optimality. This resolves how the survey's list of global
 boundary states relates to the two spaces.
 
+**Disjoint choice regions, the catalog, and what lies between them (a statement).** The designer's reading of the engine-game piece counts
+is that the dependency on the cataloging of discoveries is heavy, and on the reliability of the localized boundary board state and choice
+regions sharing properties in a compositional way, which makes structural sense but may not be enough to mitigate the limitations. There
+are entirely disjoint localized choice regions in a sea of forced sequential landscape, beyond the global choice region anchored at the
+initial start position. The 7-piece Syzygy foundation is available, and the distance from the initial position to where there is
+certainty makes initial anchoring too distant, so the construction is from the retrograde side. The pruned structure leaves only the
+equilibrium structures. The choice regions found from Syzygy may emerge as a region, may be isolated and sparse, and may have region
+closure. The distance between them is an anchoring-point question, and the anchoring point is the formation of the region and its structure
+to begin with. They are a catalog and not a network of connected structures, and they are certified by the same procedure within Syzygy.
+Between two disjoint choice regions lies forced region. The primitive catalog gives measurable primitive calculations on the forced stretch
+between them, two relativistic points of certainty with a measurable deviation between them that arrives back at equilibrium at the other
+choice region. The designer regards this as informative for deriving the composition of the primitives and the measurements between choice
+regions, and as possibly helping with optimality calculations once exhaustive coverage from Syzygy has reached its limit.
+
 ## 3. Progress
 
 | Item | State |
@@ -364,6 +378,7 @@ boundary states relates to the two spaces.
 | The boundary board state understanding confirmed as covering a majority of the whole space | Pending, per the designer, before any results are integrated |
 | The link from a mined family to the initial position | Stated (survey §5a); the backtrace procedure is not specified beyond the statements |
 | Closed local regions and sparse disjoint regions (§2b) | Stated by the designer; none found; whether enough regions exist to inform the global composition is uncertain |
+| Disjoint choice regions as a catalog, and the primitive measurement between them (§2b) | Stated by the designer; not run |
 | The staged workflow from a segment anchor (§2b) | Stated by the designer; the self-referential prune and the repeated-position rules are not fully resolved; not run |
 
 ## 4. This file's reading, offered for correction
@@ -443,6 +458,22 @@ boundary states relates to the two spaces.
   the rim of the global choice region, and the localized choice regions are the disjoint pockets in the forced space. A reachable family
   that links to the initial position under optimal backtracing is therefore a family on the rim of the global region, and a family that
   cannot link lies in a pocket. Offered for correction.
+- **The stretch between two choice regions.** A value does not rise for the side that chooses. Leaving a drawn region for forced territory
+  takes a losing move by one side, and entering another drawn region from forced territory takes a sub-optimal move by the winning side.
+  A path from one choice region to a disjoint one is therefore a loser's error, a forced sequence, and a winner's error, and lies entirely
+  off optimal play. The primitive measurements along it describe how a race is won and then given up. They bear on the composition of
+  the primitives and on the relations of the regions, and cannot change what is optimal. Offered for correction.
+- **Relation to the deviation map.** Each exit of a certified region already carries the refuting primitive (survey §4a). The designer's
+  addition is to treat the forced stretch between regions as an object to measure and the regions as a catalog. Within the tables, an
+  adjacency between two regions (a losing move out of one, and a winner's drawing move into the other) can be read from the same
+  data as the mining, and whether it is wanted is not specified. Offered for correction.
+- **Scope measured on engine games (this assistant's measurement, not verified by the designer).** In 1,000 games of TCEC superfinals,
+  seasons 20 to 29, taken from the public archive `github.com/TCEC-Chess/tcecgames`, the median full move at which 7 or fewer pieces
+  (kings included) first occurs is 79, and only 35% of games reach it; 10 or fewer is reached in 59% (median move 62); 5 or fewer in 4%.
+  Of 570 drawn games, 91% ended with more than 7 pieces, but 497 of the 570 were ended by the tournament's draw adjudication, so the
+  true share of draws reaching the table range is higher by an amount not known. These are engine games from biased opening books, not
+  optimal play. The per-game data is in `tcec_superfinal_piece_counts.csv`, delivered with this change. The measurement places the
+  structure the tables do not reach at roughly 8 to 16 pieces, between about move 40 and move 80. Offered for correction.
 - **Closure is a test, applied family by family.** It follows from the fixpoint reading above that a family is tested for closure by
   classifying every move of its members, and an unclosed family is identified by finding one move into decisive territory. Offered for
   correction.
@@ -462,6 +493,9 @@ initial position to the first segment anchor; and how certified segments are com
 
 How the closed local regions found are to be recorded and flagged in the catalog, and how an unclosed family is recorded with its decisive
 route; and the criterion for stopping the search for sparse regions.
+
+Whether an adjacency or a distance between disjoint choice regions is defined and recorded, or the catalog is only a set of regions; and how the
+primitive measurement on a forced stretch is recorded.
 
 ## 6. Provenance
 

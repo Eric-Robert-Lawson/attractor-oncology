@@ -5,7 +5,7 @@ conjunction of terms with an explicit interface, written so that it can be appli
 that it does not depend on any implementation. The three are **P-001**, the capture net, whose royal-target case is
 the mating net (§4, written); **P-003**, chained dependencies, the segmented process of a chain of dependencies and the race to
 resolve it (§7, SPEC); and **P-008**, the coverage race under disturbance (§8, SPEC). Nothing else is a
-primitive (§1, the admission rule). This file is the primitives catalog only. Boundary states belong to a separate catalog
+primitive (§1, the admission rule). The rules of chess and how the three primitives cover them are in §11. This file is the primitives catalog only. Boundary states belong to a separate catalog
 (candidate, proven and disproven; `boundary_board_states.md` §3), with the composition of primitives recorded on proven entries
 (topology §8x). Evidence tags used throughout: **SPEC** (defined, not tested), **INSTANCES** (checked on specific positions),
 **CERTIFIED** (backed by an exhaustive or complete case-list certificate; none yet).
@@ -118,7 +118,7 @@ Every entry has these fields ("none" is allowed, blank is not). This implements 
 
 The catalog is three primitives, each complete and piece-agnostic as the designer states, and it can be added to if required (Status, above). In the State column, P-001 is
 written out in full and P-003 and P-008 are specified (SPEC); none has been run on positions. What the three do not
-account for is recorded as residual and is not pre-registered as a primitive: zugzwang without capture is not read by any of them.
+account for is recorded as residual and is not pre-registered as a primitive: zugzwang without capture is not read by any of them. (The designer states that zugzwang is a composition of all three primitives, §11.2.)
 By the reduction rule it is returned as a residual interface if a proven boundary-state entry needs it (topology §8x), and it is
 admitted only as the deduction of that residual under the admission rule of §1.
 
@@ -1138,3 +1138,255 @@ citations.
 
 **This file's reading, offered for the designer to change:** the choice of P-003 as the ID of the chained-dependencies entry; the reading that the tempo comparison is a term of P-003 and of P-008 and not an entry; the reading that zugzwang
 without capture is a residual and not a fourth primitive.
+
+
+---
+
+## 11. Rule-set integration: how the three primitives cover the rules of chess
+
+**Status: SPEC. Not run.** The designer's aim is to show that the three primitives, with the inputs and the metrics below and with no
+further primitive, express every rule of chess that bears on a primitive calculation, for any board state and not only for positions
+in the tablebases. If they do, the calculation on any position can be written as one workflow over the same layers, and this section is
+the start of that workflow guide. The result this section can record is "no residual found against the rules enumerated here". It does
+not record that the rule set is exhausted: the enumeration is §11.5, taken from the Laws of Chess (Articles 2 to 5 and 9), and the open
+rows are in §11.6. That the rules can be expressed through the primitives is a different claim from the calculations being correct.
+The second is checked against the tablebases where they reach.
+
+### 11.1 The layers (the designer's statements)
+
+- **Inputs.** The movement relation of each unit (the squares it moves to and, where they differ, the squares it captures on, §7.3) and
+  the board geometry. Piece rules, such as a pawn pushing and capturing differently, are a piece move rule set disjoint from the
+  primitives and are not part of the primitive integration. The coverage net includes occupancy as well as coverage.
+- **Metrics.** Flags tracked through the game and carried forward with the position: the castling viability flags of each king and
+  rook (kingside and queenside), the en passant flag, the side to move, and the position history that repetition uses. They are not at
+  the layer of the primitives. Carrying them is a requirement of the architecture, because each is a genuine segmented dependency of
+  irreversibility and is disjoint from the board and the side to move. A node of the pruned structure is therefore keyed by the board,
+  the side to move and the flags. The 50-move rule is not followed (`boundary_board_states.md` §7), so there is no move counter.
+- **The three primitives.** The capture and mating net (P-001), the coverage race (P-008) and the segmented and chained dependencies
+  (P-003) are joint compatible and compositionally dependent. Any two need the third to compose a calculation that is not trivial. A king
+  chasing a pawn to promotion is a simple calculation. Promotion composed with a race for coverage, while another primitive is held in
+  equilibrium by a locking mechanism so that other pieces cannot shift it, requires all three.
+- **Segmented boundaries.** Not a primitive. A classification by reversible and irreversible moves, coupled to the metric flags and to
+  the reachability within the region a segment encloses. After an irreversible move, the option of a viable move that would have
+  compensated is gone, so the segment boundary directly bears on the primitive calculation.
+
+**What the designer says of the flags.** A flag can be reversible or irreversible, linked to segmented dependency. A temporary loss of
+the right to castle depends on coverage. An irreversible loss comes from the king moving or from a specific rook moving.
+
+**This file's reading, offered for correction.**
+
+- **The pairing of flags and segment boundaries.** The flags are the bookkeeping of the segmented boundaries (the designer confirms this
+  reading). Loss of a castling right, the expiry of the en passant flag, a pawn move and a capture are
+  the irreversible changes (as read in `boundary_board_states_start_selection.md` §4, "Keys and segments").
+- **The lifecycle of the castling flag.** One flag for each king and rook pair. Set at the start; cleared when the king moves, when that
+  rook moves, or when that rook is captured on its home square; never set again. Under Article 3.8.2.1 the right is lost when the king or that
+  rook has moved, and a rook that arrives on the home square has moved, so the Laws need no separate clause. A flag keyed to the square
+  would, so the capture is explicit here. The temporary unavailability that depends on
+  coverage (a covered square, a king in check, an occupied square) is read as a property of the position, computed by the primitives, and
+  not as a state of the flag. The flag then only ever clears, and the reversible part of the designer's statement is that computed
+  property. This splits the designer's single word "flag" in two, as the designer recommended.
+- **The en passant flag** is set for one ply by a pawn advancing two squares and then expires.
+- **The key and the en passant entry.** Article 9.2.3 counts two positions as the same only if the same player has the move, the pieces
+  stand alike and the possible moves are alike, so a different castling right or the possibility of an en passant capture makes the
+  positions different. For the key this file reads the en passant entry as availability (a legal en passant capture exists) and not as the
+  bare flag that every two-square push sets, so that positions identical in what can happen share one entry. The wording of 9.2.3 ("the
+possible moves of all the pieces of both players are the same") and 9.2.3.1 ("a pawn could have been captured en passant") supports
+availability. The designer confirms that positions identical except in en passant availability are different positions, because their
+move pools differ and their outcomes may differ, and the repetition count treats them as different.
+
+### 11.2 The rules and the primitives
+
+"Designer" marks what the designer stated. "Laws" marks what the text of the Laws states (effective 1 January 2023). "Reading" marks this file's reading, offered for correction.
+
+| Rule | How it enters | Source |
+|---|---|---|
+| Movement of each piece, captures, the board edge | Input: the movement relation and the geometry (§7.3, §7.4) | Designer |
+| The board and the initial position (Article 2) | Input: the geometry. The initial position is the anchor of the opening survey | Designer for the anchor; the input is a reading |
+| Alternation of moves, White first (1.2, 1.3) | Metric: the side to move. The tempo of the initial position is in `boundary_board_states_opening_survey.md` §4e | Designer |
+| Pawn conditions (3.7.1, 3.7.2, 3.7.3.3 to 3.7.3.5): the one- and two-square advance need the squares unoccupied, and promotion is mandatory to a queen, rook, bishop or knight, of the player's choice, with the effect immediate | Input: the movement relation, and the relation change at promotion | Laws |
+| Attack versus legal move (3.1.2, 3.1.3, 3.9): a piece attacks a square even if moving there would expose its own king, and a pinned piece still gives check | Coverage is defined on attack with occupancy, before legality (3.1.2, 3.1.3, 3.9.1 state that a piece attacks a square and gives check even when it is constrained from moving there). A king may not enter a square that a pinned piece attacks (3.9.2). Legality, with the pins and the check restriction, is applied to the move pool afterwards | Laws; the designer confirmed the ordering of coverage before legality |
+| Legal and illegal positions (3.10.3: a position is illegal when it cannot have been reached by any series of legal moves) | Enters the construction route, where perturbation has no legal-move restriction, so a constructed position may be illegal. The tables' notion of a legal position (distinct squares, kings not adjacent, the side not to move not in check) is weaker than reachability. Reachability from the initial position is the program's own (`boundary_board_states_opening_survey.md` §5a). The catalog keeps a constructed position that is unreachable or illegal, because it informs joint compatibility and the reachable positions. Reachability is a property of the global boundary states, which are reachable from the initial position by definition, so a local entry need not be reachable. Keeping the unreachable ones is informative and not required if storage forbids | Laws for the definition; Designer for the use |
+| The obligation to move (no passing) | Enters the move pool of the side to move. It is the basis of zugzwang | Designer confirmed |
+| Check, double check, pins | A restriction of the move pool by the capture net and the coverage. Losing the race against the mating net is an illegal move, so the rule forces the side in check to choose within the viable moves. This is the highest priority a primitive has, and it is a segmented dependency in which the state of the capture, mate and coverage conditions determines the viable moves | Designer |
+| Checkmate | P-001 on the king: the net completes | Designer |
+| Castling | The viability flag (a metric). The occupancy between king and rook, which is a chain of clearing moves (P-003). The coverage of the squares by the opponent (P-008). The king not being in check (P-001). It can be available at once or wait on dependencies to resolve | Designer |
+| En passant | A flag set by the previous move that adds an edge to the move pool. A capture that exposes the king to a net is not viable, which is the check restriction above and follows from perturbation and the coverage net with no separate rule | Designer |
+| Promotion | A segmented dependency: a route race, whether a piece can reach the pawn in time. The capture net and the coverage net enter only when they are composed to obstruct the route. They also show when the opposing king's move pool is fully covered with no piece able to interpose, which is a stalemate potential and in some cases the desired outcome. The promoted piece's relation is an input | Designer; the input is a reading |
+| Stalemate | The state of the move pool: the side to move has no legal move and is not in check | Designer confirmed the derivation |
+| Zugzwang | Not a rule. A classification of the move pool in which the only viable options are losing moves. It shares its structure with a boundary state, in which the draw is the only non-losing option and each deviation from it loses, and it is a composition of all three primitives. It does not make the catalog's recorded residual "zugzwang without capture" (§3) a fourth primitive | Designer; the residual is a reading |
+| Repetition (9.2, 9.6.1) | The hard core, not a primitive. A cycle of positions. The position history is a metric. "The same position" is Article 9.2.3: the same player to move, the same pieces, the same possible moves, with castling rights and en passant possibility counted. Threefold repetition is a claim and fivefold is automatic. A cycle sustained without limit passes either count, so the program does not need to choose one | Designer; Laws 9.2, 9.2.3, 9.2.3.1, 9.2.3.2 and 9.6.1 for the definition and the counts; the last sentence is a reading |
+| Insufficient material | A composition of all three: occupancy and coverage, not the moves, decide whether the material can arrive in a coverage net that converts to a mating net anywhere on the board. If it cannot, the calculation is one that can never be reached. **Composed in §11.4.** The designer withdrew the assumption that sufficient material always allows a forced net, after the wrong-coloured bishop with a rook pawn was given as a drawn counter-example, and the shortcut is removed from the record. How the primitives compose in such cases is in §11.4 | Designer. The reading follows |
+| Dead position (1.5, 5.2.2) | Not a boundary board state position: no move can lose. A status DEAD: no sequence of legal moves reaches a net, certified by the closure over the reachable positions. It is the terminal draw that can realize a boundary board state upstream. See below | Designer |
+| The 50-move and 75-move rules | Not followed (`boundary_board_states.md` §7) | Designer |
+| Draw by agreement, resignation, the clock, touch-move | Outside the position-level rule set. A boundary state does not consider them, and none of them is engaged under optimal play | Designer |
+
+**Insufficient material, a reading.** The rule tests whether any sequence of legal moves can compose a mating net at all. What the
+boundary program needs is whether a net is forced, or is reached only through a move that loses. Two knights against
+a king can compose a net and cannot force one, so the position is drawn under optimal play and the defender has a losing deviation. The
+wrong-coloured bishop with a rook pawn has more than the minimum material, and the coverage cannot reach the promotion corner; the
+catalog already assigns that case to P-003, the route and tempo comparison with orbit exclusion (the table of §10, "Edge and corner
+draws").
+
+**Dead position (the designer's resolution).** The rule: no sequence of legal moves can lead to checkmate. The designer's resolution is
+that a dead position is not a boundary board state position. It does not have the structure of one: the draw is not chosen over a loss.
+A draw is reached because the mating condition is lost, so what remains is only a choice phase, to draw now or eventually. This agrees
+with the criterion of a boundary, a drawn position with a move that can lose, and with the hard core's losing deviation for each side
+(`boundary_board_states_opening_survey.md` §2, §4a): in a dead position no move can lose. It is the terminal draw that can realize a
+boundary state upstream (`boundary_board_states.md` §14 item 10, as bare material is treated in the mining). The designer states that the
+earlier view, that a dead position reached by optimal play should be one, was a nuance not considered and is withdrawn.
+
+The statements that hold together:
+
+- **Dead** means that no sequence of legal moves reaches a net. It is a status, and it is the irreversible case of unreachability. A
+  dead position is an interior position and is pruned as one.
+- **A boundary board state is upstream of it.** A drawn position in which each side has a losing deviation and both sides are live can
+  have a dead position as its forced terminal draw. The dead position is treated as a draw the moment it arrives, as K v K is, and it is
+  an equilibrium balance.
+- **A position in which only one side has a losing deviation is not a boundary board state.** The criterion requires a losing
+  deviation for each side.
+- **Every route to a net is forced or a choice.** If it is forced, the position is a win and not a draw. If the opponent has a move
+  that avoids it, the route is entered only through a move that loses, and that move is the losing deviation. The moves that keep the
+  draw cost nothing, so a route needs no cooperation beyond them. Whether the mover knows the move loses does not enter the
+  classification. Under optimal play the two kinds of drawn position are both plain draws. They differ in the test for a boundary,
+  which is whether a move that can lose exists, so pruning removes the dead ones and keeps the others.
+- **In the dead test, repetition does not cut a path.** The reachable set is taken over positions without history, and it is finite.
+
+### 11.3 Worked examples
+
+Both are by inspection of a position. Nothing in them was run.
+
+**Castling (the designer's example).** The calculation for White's kingside castling, in order:
+
+1. **The flag.** Is the kingside flag still set? If not, castling is not in the move pool and the calculation stops. The flag is a
+   metric and no primitive reads it.
+2. **Occupancy.** Are the squares between king and rook empty? If a piece stands on them, clearing it is a chain (P-003): the pieces
+   that stand there must move, and each clearing move costs a tempo, which enters the tempo comparison of the race.
+3. **Coverage.** Does the opponent's coverage reach the squares the castling involves? The designer's statement names the squares where
+   the king, the rook and the squares between them stand. The Laws (Article 3.8.2.2) put the
+   condition on the king's squares: the square the king stands on, the square it crosses and the square it lands on. The rook's square,
+   and on the queenside the square beside the rook, may be attacked. The Laws govern, so the condition is on the king's squares. It is
+   a coverage calculation (P-008). The squares between king and rook matter for occupancy (step 2), not for coverage.
+4. **Check.** Is the king in check? Then the net on the king (P-001) is engaged and castling is out of the pool.
+5. **The result.** Castling is in the pool at this ply, or it is waiting on the dependencies of steps 2 and 3, with their cost. If it is
+   played the king flag clears, which is an irreversible change and a segment boundary.
+
+*An instance, by inspection of the initial position.* White's flags are set. The squares f1 and g1 are occupied, so the chain is two
+clearing moves (the bishop and the knight) before castling. No Black piece covers e1, f1 or g1. After the two clearing moves, castling
+would be in the pool at the third White tempo.
+
+**Check as a restriction of the move pool.** Take a king attacked by a rook along an open file. The net on the king is completed by the
+rook unless the move pool answers it. The viable moves are capturing the rook, interposing on the file, or moving the king to a square
+the coverage net does not cover. Every other legal-looking move leaves the net completed and is not a move at all. The side in check
+therefore chooses within the viable moves, and a viable-move count of zero is the checkmate.
+
+### 11.4 Insufficient material and dead position
+
+This is this file's reading of how the rule composes from the primitives, offered for correction.
+
+**What can be derived.** A net on a king needs the attack on its square and every flight square covered or occupied, with occupancy
+counted as part of the coverage net. "No net can be composed on any continuation" therefore means that no arrangement of the material
+satisfies the attack and the flight condition at once. For a pawnless material that is a finite question about the arrangements of the
+material, which is the retrograde seed of the construction route: the checkmate positions of the material, with either king mated.
+
+- **King and one minor piece against a king, on any square.** A net on the lone king at square s needs s attacked and every neighbour of s
+  covered. The attacking king cannot give the check, since the kings may not stand adjacent, so the minor piece gives it. A bishop that
+  attacks s stands on the colour of s and covers only that colour. A knight that attacks s stands on the opposite colour and covers
+  only squares of the colour of s. Either way the minor piece covers only the diagonal neighbours of s, which have the colour of s, and
+  never the orthogonal neighbours, which have the other colour. Nor can it stand on an orthogonal neighbour and still attack s. So the
+  attacking king must cover every orthogonal neighbour of s. There are at least two, and any two of them have as their common
+  neighbours only s and squares adjacent to s. A king that covers both would stand on s or next to it, which the kings may not do. So
+  no net exists on any square, in the corner, on an edge or in the centre. This is the same fact as the corner case, with the colour
+  argument in place of the count of three flights.
+- **Any number of bishops, all on one colour of square, on both sides.** The same argument holds. A bishop that attacks s covers only
+  the colour of s, so no bishop covers an orthogonal neighbour of s. The defender's bishops stand on the same colour, so none of them
+  can occupy an orthogonal neighbour either. The attacking king cannot cover them all. So no net exists, and the material is dead.
+- **Materials where the defender can occupy an orthogonal neighbour**, such as bishops on both colours, or a knight, are not covered by
+  the argument. Such a material is not dead if one reachable position of that material is a mate, and exhibiting one is enough.
+  This is the check for the designer (below).
+- **The flag.** For pawnless material, whether the material is dead depends only on the material: the count of each piece type for each
+  side and the square colour of each bishop. It is therefore recorded once per material as a flag on the material and looked up. For
+  material with pawns the flag does not apply. A pawn can promote, so deadness depends on the position and comes from the status
+  DEAD and the closure.
+- **As a check.** Whether a material has any mating placement is a finite enumeration, for the designer to run in the manner of the
+  mining. Two knights against a king is expected to have mating placements and not to be forceable, and king and a single minor piece
+  against king is expected to have none.
+
+**Where it is not solved.**
+
+1. **Forced or a choice.** The primitives are written as races between two sides. "Dead" is a statement about every continuation: none
+   completes a net. A status DEAD, beside COMPLETED, ENGAGED and DORMANT, says that no continuation completes the net, certified by a
+   closure over the continuations. That adds a status, not a primitive. The designer accepts the status DEAD as a requirement. It changes a
+   status and no primitive, so it does not change the coverage of the rule set by the three primitives. Where a route to a net exists
+   it is forced or it is a choice (§11.2, the dead position). Two knights against a king has a route that is a choice, so it is drawn
+   under optimal play and it is not dead.
+2. **Deadness that depends on the position.** For a material that has mating placements, such as a locked pawn structure with the kings
+   unable to reach anything, the material argument does not apply. The question is a segmented dependency of P-003: is there a route to
+   unlock the structure, such as the squares from which a blocking pawn can be captured? If no route exists for either side, the
+   position is dead. If one exists, the position is live, and it is forced or a choice as above. Permanence (§7.4) is the case in which
+   no route can exist because nothing in the structure can change. The certificate is the closure over the positions reachable from
+   the position. It is the definition of dead executed as an enumeration, and it is finite over positions that carry the board, the
+   side to move and the metric flags (§11.1). What remains is its cost, which can be large. The designer accepts permanence (§7.4) as a
+   way to lower that cost: a structure that cannot change is held as fixed occupancy and coverage. The unlocking of such a structure
+   can come through piece captures or through deviation opportunities in the locking structure, and the primitives navigate those as
+   well. A position with the side not to move already in check is unreachable and never enters a global closure (the designer).
+3. **The wrong-coloured bishop with a rook pawn** is not dead. The net is composable, and the coverage cannot reach the promotion
+   corner, so it is not forceable (the table of §10, "Edge and corner draws").
+
+So insufficient material is covered by the primitives: the colour argument gives the dead materials, the material flag records them,
+and the status DEAD with the closure covers the position-dependent case by definition. What is not derived is the list of every
+other pawnless material having a mating placement; that is a check by exhibiting one position each.
+
+### 11.5 The Laws walked clause by clause
+
+The rules of play of the FIDE Laws of Chess (effective 1 January 2023). The clause numbers and wording of the rows below were checked
+against the published text, except Article 4, Article 2 beyond 2.1 and 2.2, and 9.1, 9.4 and 9.5, which are out of scope or
+procedural. Articles 6 to 8 and 10 onward concern the clock, recording, irregularities, scoring and conduct, and are outside the
+position-level rule set.
+
+| Clauses | Rule | Disposition |
+|---|---|---|
+| 1.1 to 1.3 | Players alternate, White first | Metric: the side to move |
+| 1.4, 1.4.1 | The objective: to place the opponent's king under attack so that the opponent has no legal move | P-001; the move pool |
+| 1.5, 5.2.2 | Neither side can mate: draw | §11.4 |
+| 2.1 to 2.4 | The board, the pieces, the initial position | Inputs; the anchor |
+| 3.1, 3.2 to 3.6, 3.7 (moves), 3.8 (king) | Occupancy, capture, and the moves of each piece | Inputs: the movement relation |
+| 3.1.2, 3.1.3 | Attack is independent of legality | Coverage is defined on attack |
+| 3.7.3.1, 3.7.3.2 | En passant | Metric flag and the move pool |
+| 3.7.3.3 to 3.7.3.5 | Promotion | P-003 route; relation change as an input |
+| 3.8.2.1 | Permanent loss of the right to castle | Metric flag |
+| 3.8.2.2 | Temporary prevention of castling | Computed from coverage and occupancy |
+| 3.9.1, 3.9.2 | Check; no piece may be moved that exposes or leaves its king in check | Restriction of the move pool |
+| 3.10 | Legal moves; illegal positions | The move pool; position legality (§11.2) |
+| Article 4 | The act of moving, touch-move | Out of scope |
+| 5.1.1 | Checkmate | P-001 |
+| 5.1.2 | Resignation | Out of scope |
+| 5.2.1 | Stalemate | State of the move pool |
+| 5.2.3 | Draw by agreement | Out of scope |
+| 9.1, 9.4, 9.5 | Draw offers and the procedure of claims | Out of scope |
+| 9.2, 9.2.3, 9.6.1 | Threefold and fivefold repetition; what "the same position" is | The hard core; metrics and the key |
+| 9.3, 9.6.2 | The 50-move and 75-move rules | Not followed |
+
+### 11.6 What is open
+
+- **Insufficient material and dead position** (§11.4): the status DEAD is accepted and the certificate is the closure, a definition
+  executed as an enumeration, with permanence accepted as the way to lower its cost. The coverage by the primitives is settled: the
+  colour argument and the material flag. Not run: that every pawnless material outside the dead materials has a mating placement.
+- **Settled, no longer open:** the split of the castling flag into a permanent flag and a computed unavailability (the designer
+  recommended it); the en passant flag lasting one ply (Law 3.7.3.2); the key's entry for en passant as availability (9.2.3, 9.2.3.1);
+  the obligation to move, with no passing; position legality in the construction route (§11.2); attack versus legal move, the pawn
+  conditions, the repetition definition and counts, and the king-only coverage condition for castling (stated by the Laws).
+- **Viability and coverage.** The purpose of the rule-set coverage is to show that the primitive catalog covers the whole rule set and
+  to set the program up to judge whether it is viable, castling included. The coverage is wanted whether or not the program turns out
+  viable for a rule, because limitations of viability do not change what the catalog covers (the designer). The rules are written for
+  any position.
+- **Correctness.** Expressing a rule through the primitives is not the same as computing the right verdict. The check against the
+  tablebases is the designer's, post hoc, as in `boundary_board_states_syzygy_mining.md` §1.
+
+### 11.7 Provenance
+
+**The designer's:** the layering of §11.1; the flags as segmented dependencies of irreversibility that the position key must carry; the
+treatment of check, castling, en passant, promotion, stalemate, zugzwang, repetition and insufficient material in §11.2; the withdrawal
+of the sufficient-material assumption; the acceptance of the status DEAD; the resolution that a dead position is not a boundary board state position, that it can be the terminal draw of one upstream, and that a position in which only one side has a losing deviation is not one; the classification of a route to a net as forced or a choice; the closure as the certificate; the exclusion of draw by agreement, resignation, the clock and
+touch-move; and the removal of the 50-move rule. **This file's:** the Laws walk of §11.5, the composition of §11.4, the two worked examples as
+written, and the derivation of §11.4. The designer confirmed the lifecycle of the flags and the obligation to move. **The Laws':** the castling coverage condition on the king's squares only
+(3.8.2.2; the designer's statement named more squares), attack independent of legality, the pawn conditions, the repetition definition and counts, and the definition of an illegal position. The designer confirmed that repetition does not cut a path in the dead test.

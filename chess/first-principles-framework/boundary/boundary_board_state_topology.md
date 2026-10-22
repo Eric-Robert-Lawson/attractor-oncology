@@ -2423,7 +2423,7 @@ force a win, a draw or a loss. A forced loss is uninformative. A forced win mark
 takes it, which prunes the lines that allow it. A forced draw is a possible boundary state, and a draw forced at each step to
 prevent a forced loss is boundary-state behavior. The theory tree and perturbation up it locate where choice becomes force.
 
-A cache keyed on the position records work done. If force is already deployable from a position, or a boundary state has been
+A cache keyed on the position (with the side to move and the metric flags, catalog §11.1) records work done. If force is already deployable from a position, or a boundary state has been
 passed, so that every branch below is a forced sequential win and the only decisive moves are forced out of zugzwang-type
 situations, then any path that reaches the position inherits that, and the work below it need not be repeated. A found local
 candidate is cached, and it may or may not be global. If it is concluded exhaustively that no local candidate can exist below a
@@ -2462,6 +2462,8 @@ boundary state when it arises where there is no choice to deviate. The assumptio
 classifying them as sub-optimal relative to other potential branches. Under exhaustive confirmation of all branches, some branches may
 force stalemate or a dead position, and that is not evidence against the classification. The definition as stated should not exclude
 them. What it informs is that the boundary-state catalog is not to be spammed with stalemate positions treated as discoveries.
+A dead position itself is not a boundary state, because no move in it can lose. The boundary state is the position upstream whose
+forced draw lands in it.
 
 **Followed, and integrated.** Recorded in `boundary_board_states.md` §14 item 10, with notes at the places that exclude
 these draws (§1, item 7, item 8), a sentence in catalog §5 item 2, and the survey document (the forced-draw node, §3, and §10). The

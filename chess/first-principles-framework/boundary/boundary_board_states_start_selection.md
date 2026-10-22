@@ -509,7 +509,7 @@ inverse ablation, a way may be found to equalize the primitives by searching unk
 - **The two spaces and the weak solution.** The statement is read as the weak solution of survey §2a and §4g: the region of optimal play
   with every deviation out of it certified as a loss. The boundary is read as the rim of the choice space, which includes the initial
   position.
-- **Keys and segments.** Nodes are read as keyed by the position and the side to move, so the structure is a finite graph and a repeat is a
+- **Keys and segments.** Nodes are read as keyed by the position, the side to move and the metric flags (castling flags and the en passant flag, catalog §11.1), so the structure is a finite graph and a repeat is a
   cache hit. A cycle can only lie within a fixed material, pawn structure and castling rights, so the irreversible moves (captures,
   pawn moves, loss of castling rights) are read as the boundaries between segments.
 - **The region is a fixpoint.** A node is in the region only if no move wins for the side to move, and every move is either a certified
@@ -541,7 +541,7 @@ inverse ablation, a way may be found to equalize the primitives by searching unk
   condition attached, and an unclosed one is a family with a certified decisive route out. The two are kept apart in the record.
 - **The 50-move rule is not followed.** Syzygy's win, draw and loss values include the rule as cursed wins and blessed losses. The program's
   game has no such rule, so reading a cursed win as a win and a blessed loss as a loss is the program's own value and not an approximation.
-  The 75-move rule is the automatic form of the same rule and is read here as removed with it; repetition draws are not affected. A
+  The 75-move rule is removed with it (the designer); repetition draws are not affected. A
   draw in the program's game is also a draw in standard chess, because the rule only adds draws: a line that loses in standard chess ends
   in mate and loses in the program's game too. A win in the program's game need not be a win in standard chess. This is a reading,
   offered for correction.

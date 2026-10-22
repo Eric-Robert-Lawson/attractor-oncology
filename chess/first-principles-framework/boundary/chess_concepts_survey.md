@@ -43,7 +43,7 @@
 - **Checkmate.** Check with no legal reply. Ends the game.
 - **Stalemate.** Side to move has no legal move and is not in check. Draw.
 - **Insufficient material.** No sequence of legal moves can produce checkmate (e.g. K v K, K+B v K, K+N v K). FIDE also has a *dead position* rule below.
-- **Dead position.** A position from which no sequence of legal moves can lead to checkmate by any series of legal moves, however unskilful (FIDE Art. 5.2.2). Includes some blocked-pawn positions. The game is drawn immediately.
+- **Dead position.** A position from which no sequence of legal moves can lead to checkmate by any series of legal moves (FIDE Art. 5.2.2). Includes some blocked-pawn positions. The game is drawn immediately.
 - **Threefold repetition.** The same position, same side to move, same castling and en-passant rights, occurring three times. A claimable draw (FIDE 9.2).
 - **Fivefold repetition.** Five occurrences. Automatic draw (FIDE 9.6).
 - **Fifty-move rule.** 50 moves by each side with no pawn move and no capture. Claimable draw. **Seventy-five-move rule** is the automatic version. (Standard rule; the programme does not follow it.)

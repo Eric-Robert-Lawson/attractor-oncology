@@ -68,7 +68,8 @@ where a losing side's last real choice exists.
 >   by stalemate or insufficient material are not boundary states. What remains is
 >   construction: the primitives, the composition rules, and the cost model.
 >   A draw by forced stalemate or forced capture into a dead position is a boundary state when it arises with no
->   choice to deviate (item 10), so the exclusion applies to draws that could have been avoided.
+>   choice to deviate (item 10), so the exclusion applies to draws that could have been avoided. The dead position itself is not a
+>   boundary state, because no move in it can lose. The boundary state is the position upstream whose forced draw lands in it.
 > - **The primitive catalog now exists** (`boundary_board_state_primitive_catalog.md`):
 >   a specification with an entry template, an index of three primitives (the earlier index of eight is reduced; topology §8ab) of which
 >   P-001 (the capture net, whose royal case is the mating net) is written, and the generalization rule by which it
@@ -143,7 +144,7 @@ The final board state reached after repetition sets in, for both sides, is itsel
 the boundary position — the furthest downstream point, since everything before it
 was the approach toward it.
 
-*Note (§14 item 10): a draw realized by a forced stalemate or a forced capture into a dead position is the same as a boundary state when it arises with no choice to deviate, that is, when the equilibrium holds. The exclusion in this text is a filter against positions where the draw could have been avoided, and against cataloging such positions as discoveries. It is not an exclusion of the equilibrium case. Read "cycle" in the definition as the paradigm realization.*
+*Note (§14 item 10): a draw realized by a forced stalemate or a forced capture into a dead position is the same as a boundary state when it arises with no choice to deviate, that is, when the equilibrium holds. The exclusion in this text is a filter against positions where the draw could have been avoided, and against cataloging such positions as discoveries. It is not an exclusion of the equilibrium case. Read "cycle" in the definition as the paradigm realization. A dead position is itself excluded from the boundary board states (no move in it can lose); the boundary state is the position upstream whose forced draw lands in it.*
 
 *The cyclic requirement is restated as a definition, and its fit with §8's treatment of
 forced stalemate is examined, in §14 item 7. That "exactly one non-losing move" is a
@@ -405,7 +406,7 @@ placement, king distance, coverage, material count — are computable directly
 from the board, with no search required. Whether that position is a boundary
 state is a *topological* property in the sense already established throughout
 this document: it depends on the full recursive value of every legal child,
-not on anything locally readable from the position alone (§4b, and the same
+not on anything locally readable from the position alone (the same
 argument that has ruled out every proposed geometric shortcut in this
 document's own record). The open, empirical question Method 4 targets: do
 geometrically different positions that are topologically the same kind of
@@ -577,8 +578,7 @@ five-point workflow:
    resolved.** This is the crux, and it is a *different* claim from "avoid
    caching the full landscape at all." The distinction, precisely: the proposal
    is not "don't build the full landscape's
-   memoized state, recompute subtrees on demand whenever revisited" — that
-   version genuinely fails (§4b). This version is the opposite shape: do the
+   memoized state, recompute subtrees on demand whenever revisited". This version is the opposite shape: do the
    full, normal, single memoized computation exactly as the existing pipeline
    already does, and simply choose *not to persist* the non-boundary majority of
    that computation to the long-term output file — write out only the small,
@@ -636,19 +636,11 @@ positions. The sound version — "no check is *ever* possible under any
 continuation from here" — is a true global fact, but establishing it costs the
 same as the computation the filter was meant to avoid.
 
-### 4b. What genuinely doesn't work: recomputing unproven subtrees on demand
+### 4b. Recomputing unproven subtrees on demand
 
-This is the one part of the original proposal that does fail, and it's narrower
-than "the whole caching idea" — specifically, treating full-landscape memoization
+This is narrower than "the whole caching idea": it concerns treating full-landscape memoization
 as avoidable *during* the search itself, re-deriving a subtree each time it's
-revisited rather than keeping it resident. This project already ran the closest
-real experiment to this exact tradeoff, in the opposite direction: caching *more*
-(`reachable_shapes` by canonical form, a shared cross-pass move-tuple cache, both
-in `general_analyzer.py`) to avoid recomputation was tested and came back **~6.5%
-slower, twice**, because `explore()` still walks the full subtree regardless of
-cache hits — traversal, not value storage, is the dominant cost. Discarding the
-in-memory computation early and re-deriving it later hits the identical wall from
-the other side: more re-traversal makes the already-dominant cost worse. This is
+revisited rather than keeping it resident. This is
 exactly what §3's point 3 does *not* propose — it keeps the full in-memory
 computation intact for the single pass, and only economizes on what gets written
 out afterward, which is a different, and sound, question.
@@ -778,10 +770,9 @@ where that changes.
 
 ## 7. The 50-move rule — not followed
 
-**The designer's statement.** The program does not follow the 50-move rule. The designer has removed it from the program's chess, which
+**The designer's statement.** The program does not follow the 50-move rule or the 75-move rule. The designer has removed them from the program's chess, which
 makes the program simpler. Repetition draws are not affected: the hard core is a drawn equilibrium sustained by a repetition cycle.
 
-**This file's reading, offered for correction.** The 75-move rule is the automatic form of the same rule and is read as removed with it.
 The earlier concern, that the rule could make a position unreachable because the moves that reach it force a draw first, no longer
 arises.
 
@@ -1033,7 +1024,7 @@ incompleteness rather than a genuine absence of a drawing structure.
    the approach actually reaches further than full classification does, before
    trusting it on a material too large to check the answer against.
 8. **For a material neither Syzygy nor this project can fully classify**: §10's
-   mechanism, not full classification (§4b), is the candidate path forward — with
+   mechanism, not full classification, is the candidate path forward — with
    step 7's own result as the evidence for whether it's real.
 9. **Once steps 1-8 are working at a small, verified scale, the candidate-list
    resolution problem itself is the natural target for the distributed model in
@@ -1117,7 +1108,7 @@ Everything in §§1-11 specifies *what* a boundary state is, *how* to generate a
 validate candidates, and *why* the resulting catalog has real leverage (§10).
 This section is about a separate, further question: given a candidate list that
 may be large and a per-candidate verification cost that stays real regardless of
-which generation method produced it (§4b), what actually gets it resolved at
+which generation method produced it, what actually gets it resolved at
 scale — and why that's a genuinely different shape of problem than the one
 Syzygy itself is bounded by.
 
@@ -1181,7 +1172,7 @@ approach specified in §2 is the method documented here, not asserted as the
 final or most efficient one possible. Whether other techniques — leveraging the
 topology of an already-partially-built catalog, or patterns emerging once enough
 candidates have been resolved — could further reduce the per-candidate cost
-established in §4b is a genuine, acknowledged, unresolved question, one that
+is a genuine, acknowledged, unresolved question, one that
 sustained distributed effort over time is arguably better positioned to surface
 than any single, fixed method decided in advance.
 
@@ -1386,7 +1377,8 @@ and was believed to be recorded already.
   the local kind (Tier 1, topology §5a-iii), not global.
   *Note (item 10): for the equilibrium case, a draw realized by a forced stalemate or a forced capture
   into a dead position is a boundary state when no side has a choice that avoids it and each side has a losing deviation. It is a terminal
-  draw of the local kind only where the draw could have been avoided.*
+  draw of the local kind only where the draw could have been avoided. A dead position itself is not a boundary state; the boundary
+  state is the position upstream whose forced draw lands in it.*
 - **A consequence worth stating.** Both sides must be able to lose, since otherwise
   the stronger side's non-losing moves are all of its moves and there is no narrow
   constraint. Both being able to lose implies both being live, so this definition
@@ -1479,7 +1471,8 @@ by stalemate, or by a forced capture into a dead position, is the same as a boun
 choice to deviate: the position is drawn, each side has a losing deviation, and no side has a non-losing move that avoids the terminal
 draw. The classification of such draws as not boundary states rested on their being sub-optimal relative to other branches, so that
 the draw could have been avoided. Where exhaustive coverage of all branches shows that some branches force stalemate or a dead
-position, that is not evidence against the classification. The text of §1, item 7 and item 8 that excludes these draws is a filter
+position, that is not evidence against the classification. The classification applies to the position upstream of the terminal draw: a
+dead position itself has no move that can lose and is not a boundary state. The text of §1, item 7 and item 8 that excludes these draws is a filter
 with a purpose: the boundary-state catalog is not to be filled with stalemate positions that arise from sub-optimal play, and such
 positions are not to be treated as discoveries. The definition of a global boundary state in item 7 is read with the cycle of
 repetition as its paradigm realization, and with the forced terminal draw as a second realization of the same equilibrium. The case

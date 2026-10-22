@@ -594,7 +594,7 @@ optimality backtrace constraint, which is the requirement for any family created
 
 ## 6. The cache
 
-The cache is keyed on the position. Its claims concern every path from the anchor that arrives at that position, so a position
+The cache is keyed on the position, which carries the side to move and the metric flags (catalog §11.1). Its claims concern every path from the anchor that arrives at that position, so a position
 reached by another route, or reached again, inherits the entry. It follows the architecture of `boundary_board_states.md` §3
 (a verdict, once resolved, is permanent; only finished verdicts are persisted).
 
@@ -604,7 +604,7 @@ reached by another route, or reached again, inherits the entry. It follows the a
 | **C2 Boundary found** | A local candidate, or a verified local state, exists here. It may or may not be global, and the entry records which has been shown. | A found boundary is not rediscovered, and later classification reuses it |
 | **C3 None can exist** | It was concluded exhaustively that no local candidate exists below this position, on the closure of the non-losing moves and to the depth reached (scope below). | No future work is spent proving it again |
 
-**What an entry must carry.** The position key and side to move; the claim (C1, C2 or C3); the certificate that supports it (a
+**What an entry must carry.** The position key (the board, the side to move and the metric flags); the claim (C1, C2 or C3); the certificate that supports it (a
 complete case list, exhaustive search, or an assertion taken from theory, with its evidence tag); the scope of the claim (below);
 and the depth and line through which it was reached.
 

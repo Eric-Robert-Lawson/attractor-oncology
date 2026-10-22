@@ -6,7 +6,7 @@ decides nothing. Nothing in it has been run on a pruned structure.
 
 **Companion documents.** `boundary_board_states_opening_survey.md` (the method; §4e is the statement this file expands, §7 is the
 calibration of a line and a depth), `boundary_board_state_topology.md` (§8aj, §8al, §8an, §8ap, §8aq), `boundary_board_states.md` (changelog entries 38, 39,
-42, 62, 63 and 64), `boundary_board_state_primitive_catalog.md` (the three primitives). The designer's statements are marked as such and kept
+42, 62, 63, 64 and 67), `boundary_board_state_primitive_catalog.md` (the three primitives). The designer's statements are marked as such and kept
 apart from this file's readings, as in the catalog's §10.
 
 ---
@@ -332,6 +332,15 @@ family is to be remarked upon as significant, because it implies a lack of forci
 optimality. It is a significant finding if ever found. A localized or global closed region will share the properties of the global
 choice phase or region if the programme's presupposition holds.
 
+**Mining without an anchor, and the choice of anchor (a statement).** The Syzygy landscape can be enumerated into reachable families, with
+the family constructed backwards and met forwards. The boundary board states can be mined locally and the pruned structure basis built with
+no anchoring at the initial position, linking back to the initial position afterwards by surveying the Syzygy database. The work
+reaches the limits of Syzygy when it reaches them, and what can be enumerated with Syzygy is enumerated. The forward anchor can be the
+initial position or wherever is chosen. A decisive position can have a choice region below it, reached if the player who is winning
+deviates from the forced region and plays sub-optimally, or through ignorance of optimality, which is what the programme maps out. A
+localized choice region can therefore lie past the global choice region. There cannot be disjoint global regions that share the initial
+start position, by the geometric definition of global.
+
 ## 3. Progress
 
 | Item | State |
@@ -395,8 +404,16 @@ choice phase or region if the programme's presupposition holds.
   forced win" put as a rule. The survey's certification condition (§4a) says each move "stays inside the region as a non-losing move";
   it is read here as "leads to a node in the region", since a move into a position that wins for the mover is non-losing and is not in
   the region. The survey is not changed. Offered for correction.
-- **The anchor is checked first.** The first test at a segment anchor is whether the anchor is itself in the region. An anchor that is
-  decisive lies past the boundary and has no region below it. Offered for correction.
+- **What the status of an anchor decides.** The earlier reading here, that a decisive anchor "has no region below it", was wrong and is
+  withdrawn (the designer's correction). A decisive position can have a choice region below it, reached when the side that is winning
+  plays sub-optimally or through ignorance of optimality, and mapping such regions is what the process is for. The status of an anchor
+  therefore does not decide whether a region exists below it. It decides what claim the result carries: a region at the initial
+  position carries the global closure claim, and a region below any other anchor, decisive or not, is a local finding. Offered for
+  correction.
+- **Where the traces meet.** The families inside the tables are exact. The forward structure meets them only where it descends, by
+  captures and promotions, to a material the tables hold, so the meeting is at the table boundary. A predecessor of a family member from
+  a larger material is outside the tables, and that step is the pruning mechanism of the larger material. The forward side, between the
+  full material and the tables, is the large part. Offered for correction.
 - **The tablebase end of the overlap.** The part of the forward structure that the tables reach is the part that descends, by captures
   or promotions, to the material the tables hold. A boundary state that keeps more pieces than the tables hold closes by a cycle at a
   fixed material and is not reached by the tables. The first population is therefore of low material, and whether its pattern carries

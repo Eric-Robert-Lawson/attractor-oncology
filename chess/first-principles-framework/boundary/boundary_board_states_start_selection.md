@@ -6,7 +6,7 @@ decides nothing. Nothing in it has been run on a pruned structure.
 
 **Companion documents.** `boundary_board_states_opening_survey.md` (the method; §4e is the statement this file expands, §7 is the
 calibration of a line and a depth), `boundary_board_state_topology.md` (§8aj, §8al, §8an, §8ap, §8aq), `boundary_board_states.md` (changelog entries 38, 39,
-42, and 62 to 81), `boundary_board_state_primitive_catalog.md` (the three primitives). The designer's statements are marked as such and kept
+42, and 62 to 82), `boundary_board_state_primitive_catalog.md` (the three primitives). The designer's statements are marked as such and kept
 apart from this file's readings, as in the catalog's §10.
 
 ---
@@ -431,6 +431,32 @@ is then populated with the primitive catalog, the primitive calculations are mad
 potentially to find the patterns the programme needs to break the Syzygy limitations. The ambiguity about reachability is a duality built into
 the programme, and making it explicit is important.
 
+**Joint compatibility shown on the king and pawn race, and the carry-over to added pieces (a statement and the designer's example).** A
+pawn race against a piece chase, such as the king chasing a pawn, is a joint compatible primitive, trivial in itself, and it is emergent in
+position-agnostic board states. The race to prevent promotion is always happening. The primitive calculation matters more in the endgame,
+because the race can be obstructed by other pieces that manage it more effectively than repositioning the most important piece. There are more
+compositional interdependencies on the pieces that can obstruct the race. At the starting position the way the king stops the h pawn from
+promoting is not being calculated, because other pieces can be used to obstruct. The designer holds that the joint compatibility of primitives
+is demonstrable from formalized chess understanding, once the primitive is generalized properly and it is seen how piece additions add
+complexity to the obstruction of the primitive race, with the pawn promotion races as the demonstration.
+
+The example. In king and pawn against king the primitive is understood: when the pawn is capturable and when it is not. It is a race
+condition segmented to queen promotion, to sufficient material to force a win. If the pawn is captured, it is a boundary board state position.
+Now take five pawns on the board, three white and two black, where the race applies in one corner. Two black and two white pawns block each
+other and cannot be interacted with without losing the promotion race of the remaining pawn. Those pawns are then as if they were not in the game,
+and the exact same primitive calculation applies. Suppose also that those two pairs obstruct the movement of other pieces on the board, and
+that to unlock those pieces the kings would have to reach the locked pawns, which they cannot do without losing the primitive race to promotion,
+a decisive loss. The same primitive is at play in a different position, with the joint compatibility at play again. Three different positions,
+with the same primitive joint compatibility at play, provably.
+
+**Exclusion by the compositions already in equilibrium, and a finite structure (a statement).** The sum of the other reachable choice regions
+also excludes the same composition from being a discoverable boundary board state. The compositions that already exist in equilibrium are
+known, and when the equilibrium is balanced out, what is already cataloged and calculated cannot be composed again. There is a finite number of
+reachable positions within the segmented boundary and the structure being set up. Understanding how the primitives compose and are prioritized
+through the navigation of points of equilibrium, using the relativistic sum of the other reachable choice regions in the segmented boundary,
+and perhaps other ways of measuring across the segmented boundaries, is informative about the directionality of the primitive composition. By
+inverse ablation, a way may be found to equalize the primitives by searching unknown regions for primitive balancing.
+
 ## 3. Progress
 
 | Item | State |
@@ -455,6 +481,7 @@ the programme, and making it explicit is important.
 | The staged workflow from a segment anchor (§2b) | Stated by the designer; the self-referential prune and the repeated-position rules are not fully resolved; not run |
 | Triangulation from known regions into the discovery zone, and the unresolved case as a compositional search (§2b) | Stated by the designer; not run |
 | The two senses of reachable (optimal, for certification; the full landscape, for enumeration and pruning) (§2b) | Stated by the designer; recorded as a duality of the programme |
+| The king and pawn race as an illustration of joint compatibility and carry-over to added pieces; exclusion by the compositions already in equilibrium (§2b) | Stated by the designer; not run |
 
 ## 4. This file's reading, offered for correction
 
@@ -584,6 +611,19 @@ the programme, and making it explicit is important.
   against the table: whether the primitives it names as in equilibrium coincide with the drawn positions that have a losing deviation for
   each side, and whether the primitive left unresolved is where a position departs from a known region. The primitive calculation is done
   post hoc by the designer (§2a). Offered for correction.
+- **What the king and pawn example is, and is not.** The example is read as the mechanism of carry-over for added material and not as a demonstration
+  confined to king and pawn against king. The three positions share one primitive calculation because the added pieces are inert: reaching
+  them costs the kings more than the race allows, so the outcome is set by the race. This is the piece-addition statement above, shown on a
+  concrete case. A reading offered earlier in discussion, that one primitive shown where the tables hold the answer says little about
+  positions with more pieces, took the example as a demonstration at three pieces and missed the carry-over. It is withdrawn. What the example
+  fixes is the mechanism. How much of the larger landscape reduces to a known core with inert material, and where an added piece forms a new
+  emergent race (the statement on equilibrium shifts), is left to the mined population. Offered for correction.
+- **The example can be checked in the tables.** Two kings and five pawns are seven pieces, within Syzygy. For the positions where two pairs are
+  locked and the kings cannot reach them without losing the race, the table's value can be compared with the value of king and pawn against
+  king for the active pawn. Agreement on all such positions would show the inertness exact under the stated conditions, and a disagreement
+  would show where it leaks (for example through occupied squares that change how the kings can maneuver, or through mutual zugzwang). Either
+  result is information for the composition. The designer has not stated which catalog primitive the pawn race corresponds to, and no mapping
+  is made here. Offered for correction.
 
 ## 5. Not yet specified
 

@@ -2877,7 +2877,6 @@ classification of a family and the global definition are in survey §5a, and the
 - **Not run.** The process is a specification. Nothing in it is carried over from any earlier test, and the designer will run and verify the data on return. Primitives are placed after the fact, as the designer states.
 - **Scale.** No estimate of size is recorded; the scale is to be measured by the designer's first runs.
 
-
 ### 8as. Irreversible choices as the anchor between the primitive catalog and move choice
 
 **The idea, as stated.** *The program's difficulty falls with irreversibility.* From the initial position to the end of any game, the game
@@ -2937,6 +2936,8 @@ The catalog is unchanged.
   losing deviation with a named refutation. Per-crossing testing gives P3-1 (catalog §7.13) and P8-1 (§8.13) a natural scope.
 - **The two uses of the machinery.** Certification (boundary states, the closure) and explanation or choice of moves in play do not depend on
   each other. Neither requires nor tests the other (start-selection §4).
+- **The named concepts are convergence, not a novel-fact test.** Those without an exact offset count as heuristic rediscovery until an exact
+  version is derived (§8r).
 - **Not run.**
 
 ---
@@ -3214,3 +3215,6 @@ The catalog is unchanged.
 - **Resolved (§8ab):** P-003 remains a primitive, as the single chained-dependencies primitive (catalog §7, §10.5).
 - **How the repetition cycle that defines a boundary state keeps every entry of both registers held across the cycle (catalog §8.14, §5 item 2).**
 - **The anchored survey (§8ac, `boundary_board_states_opening_survey.md` §10).** Whether the forced-region cache claims anything about deviations from a forced win; how a web of interdependent candidates is verified; and how the cache treats the repetition cycle of a candidate. Not run.
+- **The edge record of a segment crossing (§8as).** What a crossing carries, how the equilibrium pool is recorded per segment, and whether
+  composition rules can be read from edge records across a population. The prediction that the pool does not grow along optimal crossings
+  is stated and not run.

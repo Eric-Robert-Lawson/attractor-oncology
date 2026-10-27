@@ -1597,6 +1597,12 @@ does. A programme's heuristic producing real practical value well before its
 hardest formal claims are settled is not a weakness in Lakatos's account. It
 is close to the normal case.
 
+**The human method, and the segmented boundary.** The designer's statement (topology §8as) is that choosing a move by a set of primitive
+races is the informal human calculation made explicit, applicable in proportion to the size of the choice pool, and that the named concepts
+of chess (pins, forks, open files, the fianchetto, the promotion race) are frequently recurring jointly compatible compositions, evidence of
+a shared structure. By the standard above this is convergence and not a novel-fact test: the named concepts without an exact offset count as
+heuristic rediscovery until an exact version is derived (topology §8r). Not run.
+
 **The substrate and the chain (topology §8z).** The movement-relation substrate and the chain primitive are
 developments of the protective belt, and they leave the definition of a boundary state, the hard core, untouched. By the
 stricter standard above they are not yet progressive. Nothing in them has been run. They make two predictions that can

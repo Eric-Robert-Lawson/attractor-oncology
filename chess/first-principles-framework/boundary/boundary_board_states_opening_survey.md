@@ -668,14 +668,20 @@ that makes it, done in parity for the opponent. This is more practical than enum
 branch structure. The branching structure is worked in segments. A segment added to the pruned structure either wins its race against
 another segment, or is pruned entirely because what already exists in the structure shows that the branch would never be taken.
 
+**What a segment is for (the designer's statement; topology §8as).** The choice of an irreversible move selects a determinate pool of
+primitives that can be followed under optimal play toward boundary board states, and each further irreversible move narrows the pool. The
+traversal of segmented boundaries, with respect to the initial position anchor, is the anchoring point that connects the primitive catalog
+to actual move choices, and the composition of primitives is understood through that traversal with the primitive calculations coupled
+across it. The difficulty of applying the program falls as irreversibility accumulates, because the scoped region has fewer choices.
+
 **This file's reading, offered for correction.** The comparison of segments is a comparison of values, and a branch is excluded when
 the side to move has an alternative of value at least as good. Each such exclusion carries a certificate like any other prune (§4a).
 
 The whole process as the designer has stated it is in §4c.
 
-**Not yet specified.** The fields of the progression file; the order in which segments are taken; how the depth of a segment is
-chosen beyond the calibration signals of §7; how the boundary conditions of a segment at its depth limit are recorded; and how
-segments compose into the closure of §2a. These are not decided and are not filled in here.
+**Not yet specified.** The fields of the progression file; the record carried by a crossing (topology §8as); the order in which segments
+are taken; how the depth of a segment is chosen beyond the calibration signals of §7; how the boundary conditions of a segment at its
+depth limit are recorded; and how segments compose into the closure of §2a. These are not decided and are not filled in here.
 
 ## 8. The theory tree as material
 

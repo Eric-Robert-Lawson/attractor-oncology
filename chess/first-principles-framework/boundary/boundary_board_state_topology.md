@@ -2877,6 +2877,68 @@ classification of a family and the global definition are in survey §5a, and the
 - **Not run.** The process is a specification. Nothing in it is carried over from any earlier test, and the designer will run and verify the data on return. Primitives are placed after the fact, as the designer states.
 - **Scale.** No estimate of size is recorded; the scale is to be measured by the designer's first runs.
 
+
+### 8as. Irreversible choices as the anchor between the primitive catalog and move choice
+
+**The idea, as stated.** *The program's difficulty falls with irreversibility.* From the initial position to the end of any game, the game
+progresses through irreversible moves, and each one removes choice from the branching network. Past a segmented boundary there is a scoped
+region, defined by reachability, in which the primitives apply and each primitive's enumeration is far more tractable, because a smaller
+choice pool means fewer alternative races to eliminate exhaustively. This applies in particular to the search for a boundary board state.
+Localized boundary board states are therefore found more easily where irreversibility has already formed a board structure, and the
+program's constructive understanding of joint compatibility (piece structures with board edges, composition and decomposition of
+primitives) can be used there and to expand the catalog.
+
+*The choice of an irreversible move selects a pool.* At the moment an irreversible move is chosen, only a certain pool of primitives
+remains that can be followed under optimal conditions toward boundary board states. This structure is to be discovered and is emergent from
+the program, but it exists. With each further irreversible move the pool of branches that are optimal for both players narrows. The
+optimal primitive calculations that arrive at equilibrium are deterministic through the traversal of segmented boundaries. Each choice made
+for a boundary traversal, under a fully understood program, navigates a specific primitive composition toward a specific equilibrium pool,
+from among equally compatible branches, within a reachable family. The traversal of irreversible segmented boundaries, with respect to the
+initial position anchor, is the anchoring point that connects the primitive catalog to actual move choices.
+
+*Consequence for the belt.* Additions to the protective belt regarding the composition of primitives can be understood through the
+traversal of segmented boundaries, with the primitive calculations coupled across each. The compositional resolution through segmented
+boundary traversal is the missing piece.
+
+*The human method, formalized.* Choosing a move by a specific set of primitive races is the informal calculation a human does mentally, and
+it is explainable by the program. As the pool narrows and the piece structure looks familiar in joint composition, the race conditions are
+calculated to the threshold of the player's capability before a move is played. This is the human approach to chess, and the program
+formalizes it. It is applicable and pragmatic in proportion to the size of the choice pool that must be enumerated against the race
+calculations.
+
+*Named concepts as evidence of a shared structure.* People who have developed an informal understanding of this structure but cannot
+articulate it without shared terms use concepts such as pins, a rook on an open file, forks by a knight, pawn or bishop, central control,
+the bishop stack as strong and the pawn stack as weak, the fianchetto, the Sicilian defence, and the king and pawn promotion race. Each is
+a primitive calculation, jointly compatible enough to compose so broadly that it has earned an identity. None dictates the outcome alone:
+the entire composition within the structure does, until a threshold of certainty is reached. That formal chess understanding can articulate
+these concepts is evidence of a shared structure persisting with common primitive structures that arise frequently.
+
+*Puzzles.* A puzzle with a forced solution is a matter of primitive race calculations determining the race that wins, applied agnostically
+to any board position. Positions without a forced solution are a matter of pruning the structure to find the state of balance, whether
+losing, winning or drawn.
+
+**Followed, and integrated.** Survey §7a (the segmented progression); `boundary_board_states.md` §15 (the operational claim). No new file.
+The catalog is unchanged.
+
+**Assessment — separate from the record above.**
+
+- **This fills the stated gap in survey §7a.** §7a recorded that the progression is segmented and that its process was not specified. This
+  says what a segment is for: an irreversible choice commits to a determinate pool, and the crossing is where a primitive composition is
+  tied to a move.
+- **Reading, offered for correction: the structure is a graph of segments.** Segments are keyed as in start-selection §4 (material, pawn
+  structure, castling rights), the irreversible moves are its edges, and a boundary state's cycle lies inside one segment. In Syzygy the
+  zeroing moves are these edges (`boundary_board_states_syzygy_validation_and_scoping.md` §2 item 3), so the pool per segment is readable
+  from the mining.
+- **Reading, offered for correction: an edge can carry a record.** For each optimal crossing: the change in primitive state, and the
+  equilibrium pool kept. For each losing crossing: the refuting primitive and mechanism, as for any deviation (survey §4a). A crossing whose
+  effect on the pool no primitive change explains is a residual interface for the reduction rule (§8x). Composition rules can then be read
+  from edge records across a population, rather than only derived in the abstract.
+- **Prediction, stated in advance, not run.** Along optimal crossings the pool does not grow, and every crossing that empties it is a
+  losing deviation with a named refutation. Per-crossing testing gives P3-1 (catalog §7.13) and P8-1 (§8.13) a natural scope.
+- **The two uses of the machinery.** Certification (boundary states, the closure) and explanation or choice of moves in play do not depend on
+  each other. Neither requires nor tests the other (survey §4f of start-selection §4).
+- **Not run.**
+
 ---
 
 ## 9. What remains open

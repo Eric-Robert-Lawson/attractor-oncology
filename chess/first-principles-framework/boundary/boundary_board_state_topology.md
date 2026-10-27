@@ -2936,7 +2936,7 @@ The catalog is unchanged.
 - **Prediction, stated in advance, not run.** Along optimal crossings the pool does not grow, and every crossing that empties it is a
   losing deviation with a named refutation. Per-crossing testing gives P3-1 (catalog §7.13) and P8-1 (§8.13) a natural scope.
 - **The two uses of the machinery.** Certification (boundary states, the closure) and explanation or choice of moves in play do not depend on
-  each other. Neither requires nor tests the other (survey §4f of start-selection §4).
+  each other. Neither requires nor tests the other (start-selection §4).
 - **Not run.**
 
 ---

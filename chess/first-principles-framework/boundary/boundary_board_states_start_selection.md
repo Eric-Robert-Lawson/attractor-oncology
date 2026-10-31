@@ -714,8 +714,8 @@ the tablebase, and the draw set and the profile follow. Step 4 needs the tables 
   same requirement as storing the anchor, a link that has to live in the catalog for later resolution to find what it touches. The record
   fields are not specified.
 - **The composition is one-directional.** It can produce a candidate equilibrium. Excluding the other races is a separate step. Each
-  position then ends as holds, breaks or unscoped, and the measures of the method are the size and shape of the unscoped region and the
-  cost of reaching each status, not agreement with a table alone.
+  position then ends as holds, breaks or unscoped, and the measures of the method are the size and shape of the unscoped region and
+  whether each status is reachable within the ceiling, not agreement with a table alone.
 - **A testable form of "cannot interact in time".** If no added unit can, within the race length of the base, occupy, attack, protect or
   block a square the race depends on, the base outcome holds. That is a lemma the extended table can try to break. Holding the base race
   is not a necessary condition in the other direction: an added unit can rescue a lost base race or spoil a drawn one, so inside that
@@ -724,11 +724,12 @@ the tablebase, and the draw set and the profile follow. Step 4 needs the tables 
   and adding material can add or remove them. This bears on the expectation that an added imbalance breaks the equilibrium: it is a
   prediction to test, because an exit can be a drawing resource for the weaker side.
 - **Lookahead to certified leaves is, as search, a depth-limited search ended by cached results.** What the programme adds is the share of
-  leaves certified by the rules and the catalog rather than by searching, and what that costs. A leaf value that is only estimated from
+  leaves certified by the rules and the catalog rather than by searching, and whether the rest is reachable at all. A leaf value that is only estimated from
   the primitives is kept apart from a certified one. Whether a base's rule set can be told from a short search depends on the base's race
   depth: a base whose not-drawn region is entirely shallow cannot show it, and a base with long races can.
 - **The cost of an extension is the delta.** Read this way, the cost model (catalog §4.8) for an extended material is the cost of the
-  scoped additions and their composition with the base, not of enumerating the extended material.
+  scoped additions and their composition with the base, not of enumerating the extended material. The designer's standard is that a
+  result is obtainable, not that it is cheap, since a certification is permanent; cost matters as reachability within the ceiling.
 
 ## 5. Not yet specified
 

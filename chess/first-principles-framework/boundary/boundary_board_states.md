@@ -1653,3 +1653,14 @@ disagreement being a residual interface that develops the catalog; and that ever
 and deviation data meets the support closure. The primitive is evaluated exactly at each position, so the saving is the
 perturbations that need no branching, and how large that is depends on the size of the closure, which has not been measured. The
 designer keeps open that further primitives may reduce the residual coverage.
+
+**The failure conditions (the designer's statement).** The designer works from the causal basis of optimality and sees two ways the
+programme fails: that a forced mate from the initial position exists under optimality, or the technological ceiling, where the limits of
+Syzygy and of the computational paradigm are reached and the catalog does not yield enough progressively to mitigate the gap. A deviation
+from the Lakatosian architecture through an error in the design is a failure of the design, not of the programme. That the composition
+scales with segmented irreversibility is, in the designer's statement, true by definition; whether it is computable within the ceiling is
+the open question. A primitive found to be missing is added under the admission rule, and certification is permanent, so the standard is
+that a result is obtainable, not that it is cheap. This file's reading, offered for correction: a third way the programme could be
+weakened is degeneration without either of those two, where the catalog fills but the composition predictions keep missing, the unscoped
+region does not shrink as the catalog grows, and each addition is made after the fact. A running count of primitives admitted against
+materials covered would show it, since a count that grows with every material would mean the catalog is acting as a table.

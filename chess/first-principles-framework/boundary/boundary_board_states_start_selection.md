@@ -200,6 +200,18 @@ the initial game start position is one. Upstream positions that under optimal co
 A distinction drawn by how many drawing moves a position has is a meaningless classification criterion. A family reachable from the
 initial start position under the optimal backtrace constraint has every member global (survey §5a).
 
+**The local catalog entry: an anchor, and moving again (a statement).** A local boundary board state is reached by optimal routing from an
+anchoring point, and the anchoring point cannot itself be the endpoint that receives the status. The anchor is either already a local
+boundary board state, with its draws proven downstream, or the point where a forced phase becomes a choice through a sub-optimal move.
+Optimality binds both sides: where a win can be chosen it is chosen, so a route that offers a winning choice beside the option of keeping
+the local boundary board state is not a route of one from that anchor. Beyond the anchor, both players must be able to move again, at
+least one ply each, under optimal routing that ends in a draw. There is no requirement that a move can lose. The move-again requirement is
+a deliberate filter: it removes trivial dead positions and stalemates, which say nothing about optimality. It also eliminates some
+outright drawn positions that would otherwise populate a majority of the catalog and would likely be uninformative about optimal play.
+What it excludes also bears on optimality in the programme and on the closure of choice and force through the segmented boundaries of
+irreversibility. An entry records the board, the side to move, and the moves that are optimal and keep these conditions. Wins and losses
+are not recorded.
+
 **The two spaces (a statement).** There is a choice space and a forced space that together encapsulate the entire space of chess, with
 the areas of sub-optimal play pruned. The boundary between them is literal. The pruned structure that emerges from the process is the
 full solution of chess.
@@ -234,6 +246,14 @@ Then the process is automated and the primitives are matched.
    order of the symmetry.
 9. **Apply the criterion by query.** Drawn with a move that loses is a boundary board state position. Drawn with no losing move is
    interior. Not drawn is forced space.
+   Under the statement of the local catalog entry (this file's reading, offered for correction), the query is instead: drawn; entered
+   from an anchor; and the side to move has a drawing move to a position where the opponent has a drawing move. In the tablebase an
+   anchor is a predecessor valued as a win for its mover whose move to this position gave the win away, or a predecessor already in
+   the catalog. A crossing from a larger material may be a third kind, which the statement does not name. Positions whose drawing moves
+   all end the game, by stalemate or a capture to insufficient material, leave the opponent without a move and fall to the filter.
+   That differs from item 10 of `boundary_board_states.md` §14, and the absence of a requirement that a move can lose differs from
+   the criterion above and from items 7 and 8 of that file. Neither difference is reconciled here. The anchor kind may be stored as a
+   flag on each entry; this is not decided.
 10. **Verify the components** with a second implementation.
 11. **Store the result in a database.** For the post hoc composition analysis, also keep the edges of the graph, the losing moves with the
     positions they lead to, and the refutation distance of each loss (the distance to zeroing from the distance tables, and true mate
@@ -617,8 +637,8 @@ Black plans to compare; how the comparison is recorded; and how the schematic's 
 line.
 
 The backtrace that links a mined family to the initial position, beyond the designer's statements; the order of materials; a tablebase
-reader suited to the size of the material; which of the edges, losing moves and refutation distances to build first; and whether interior
-positions are entered in the catalog.
+reader suited to the size of the material; which of the edges, losing moves and refutation distances to build first; whether interior
+positions are entered in the catalog; and whether the anchor kind is stored on each entry (§2a, step 9).
 
 The self-referential prune and the rules for repeated positions in §2b; how a segment anchor is chosen and checked; the preset path from the
 initial position to the first segment anchor; and how certified segments are composed.

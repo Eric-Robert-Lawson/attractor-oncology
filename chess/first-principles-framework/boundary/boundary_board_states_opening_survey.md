@@ -674,6 +674,13 @@ traversal of segmented boundaries, with respect to the initial position anchor, 
 to actual move choices, and the composition of primitives is understood through that traversal with the primitive calculations coupled
 across it. The difficulty of applying the program falls as irreversibility accumulates, because the scoped region has fewer choices.
 
+**Segmented irreversibility is shared by global and local (the designer's statement).** The segmented boundaries of irreversibility are a
+structural metric shared by global and local boundary board states. They are understood from the progression from the initial position,
+and they gauge how far into a game a position is. They link the primitive race condition calculations to the board state structure as a
+measurement, and are linked to piece count and structure and to the metric flags (castling, en passant and others). The irreversible
+choices that are eliminated affect the choices that inform the primitive calculations of previous segments. Using this structure is a
+deliberate choice, to build the program and to add to the protective belt as the catalog grows.
+
 **This file's reading, offered for correction.** The comparison of segments is a comparison of values, and a branch is excluded when
 the side to move has an alternative of value at least as good. Each such exclusion carries a certificate like any other prune (§4a).
 

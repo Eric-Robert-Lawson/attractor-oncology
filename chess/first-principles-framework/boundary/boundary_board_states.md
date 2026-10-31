@@ -39,6 +39,32 @@ where a losing side's last real choice exists.
 >   draw is sustained by a cycle of moves of both sides (§14 items 7 and 8). The
 >   number of non-losing moves at the node is a recorded width, with exactly one the
 >   strict case (§1, condition 2).
+> - **The two phases of the programme (the designer's statement).** The hard core and the initial basis of the protective belt are
+>   specified before the programme is executed: the definition of a boundary board state, the three primitives, and the admission and
+>   reduction rules. The measure the designer holds is not a full specification of everything. It is continuous integration specification,
+>   the additions to and modifications of the protective belt that come from discoveries, which are enumerated after the basis is
+>   executed and depend on it. Execution begins with the Syzygy mining of a catalog of boundary board state positions
+>   (`boundary_board_states_start_selection.md` §2a). Integration specification starts from that catalog. Its progress depends on
+>   expanding the catalog, and it is capped by what the mining can discover within the limits of Syzygy and of the computational
+>   paradigm. The segmented progression, the explicit primitive calculations on the catalog, the composition of those contributions, the
+>   upward link, and pruning and automation at scale are integration specifications of this kind. Whether the programme can be used to
+>   progress past the limits is undetermined; if a ceiling is reached, the open questions of integration specification are open to a
+>   community effort. The designer states that the cost model (catalog §4.8) is integration specification as well, because the primitives
+>   cannot be calculated before the mining has populated the catalog. This file's reading, offered for correction: the lists of what is not yet specified in the survey (§7a), the
+>   start-selection file (§5) and the mining file (§9) are read as integration specifications under this statement, and not as gaps in
+>   the basis.
+> - **The ceiling and what follows from it (the designer's statement).** The seven-piece limit of Syzygy, set by storage, is a hard cap on
+>   the mining. There is therefore a fixed set of boundary board state positions within the scope of the tablebase solution. That catalog
+>   allows the calculation of the primitives, the application of the anchoring understanding, reachability, and segmented progression
+>   within the Syzygy limits, and the study of the composition of primitives relative to what has been enumerated as possible. The main
+>   goal is to discover what makes a boundary board state a boundary board state, decoupled from the requirement of exhaustive coverage.
+>   The further aims are conditional. If the enumeration process of the discovery belt informs optimality across the choice and force
+>   regions, it may sidestep exhaustive coverage to scope moves for optimal play. If information about boundary board states beyond the
+>   Syzygy limits can be gained, if the programme tells more about what makes a boundary board state, and if the status of a boundary
+>   board state can be determined without the global exhaustive coverage requirement, then the programme may be integrated into the
+>   tablebase process to raise the ceiling Syzygy has, provided it has merit to improve the determination of optimality. This file's
+>   reading, offered for correction: the machine's own storage may set a lower cap than seven pieces (`boundary_board_states_start_selection.md`
+>   §2a puts it at perhaps five), and the worst case, too little enumerable to build a population, is in start-selection §2b.
 > - **Four external anchors, each with its own honest status.** Checkers' weak
 >   solution — a tight structural match to the scaffolding strategy (§9 here,
 >   §7 there). Možina, Sadikov and Bratko's KBNK work — a looser family

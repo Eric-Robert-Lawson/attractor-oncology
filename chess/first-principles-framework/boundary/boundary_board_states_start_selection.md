@@ -495,6 +495,57 @@ through the navigation of points of equilibrium, using the relativistic sum of t
 and perhaps other ways of measuring across the segmented boundaries, is informative about the directionality of the primitive composition. By
 inverse ablation, a way may be found to equalize the primitives by searching unknown regions for primitive balancing.
 
+## 2c. Composition from a mined base (the designer's statements, and how they were found)
+
+**Status.** This is integration specification (`boundary_board_states.md`, read-first block): it follows from the Syzygy mining of §2a and
+depends on a populated catalog. It is stated in general terms, and no piece, material or position is part of it. Nothing in it has been
+run. The designer's statements are marked, and this file's readings are in §4.
+
+**The base and its rule set (a statement).** The mining of a material gives a class of resolved positions. Where the draw set of the class
+is vast, which is the expected outcome and not a failure to prune, the information is in the complement: the conditions that make a
+position not drawn under optimality, found as primitive race conditions. A rule set for drawn against not drawn, derived from the full
+landscape, is certain within the class. Once it exists the class no longer needs the table for classification, which is the decoupling
+from exhaustive coverage. The moves of the pool are then used to restore an equilibrium that a race has defeated.
+
+**Inverse ablation as composition (a statement).** Material is added to a base equilibrium. The scope of the ablation is chosen: narrow,
+with the kings as they are and only the primitives native to the position (overlapping pieces counted or not), or wider. Symmetry keeps
+either small. Constructing from an equilibrium is easier than joining two forced regions into one. The scoped primitive race to the mating
+net is taken before the ablation, where it is certain, and after, where the additions change it, and the question is whether the
+equilibrium holds in the scoped primitive solution. Segmented progression and irreversibility give the potential of the calculation.
+The addition contributes a scoped pool: the primitives native to the position, and the composition of how the new material integrates
+with the primitives already calculated, including how soon each added unit reaches the race, so that arrival between added units is
+compared. The designer's expectation is that an added imbalance breaks the base equilibrium unless the race is already decided in the
+position or the added unit cannot interact with it in time.
+
+**Partial coverage (a statement).** This covers many of the primitives and not all. The branches it does not cover, if any, remain
+uncovered until exhaustive coverage covers them. A race shortened elsewhere by the additions may still force against a candidate, so
+excluding other races is a second step. The more populated the catalog, the more results can be cached from elsewhere.
+
+**Lookahead to certainty (a statement).** From a position in the uncertain region, look ahead a chosen depth (7 plies, for example) to
+positions where the primitive calculations already show race conditions informed by another position. The scoped distance from certainty
+is where those positions lie. Where practical the enumeration goes deeper.
+
+**Segments, estimates and return (a statement).** The work is segmented, with certification checkpoints. Progress can use rough
+estimates, left unsettled, and the work returns to earlier checkpoints to see whether the later resolution of what was estimated changes
+their certification.
+
+**The larger material, as test and source (a statement).** Where exhaustive coverage of the extended material exists, it shows how the
+primitive calculations deviate under the ablation, and what emerges is added to the protective belt as integration specification. Whether
+the tablebase is used inside the composition is a choice, and the precise gap, if one exists, where the composition cannot sidestep
+exhaustive coverage, is what the test looks for.
+
+**How it was found, and how to derive it again (compact; to be extended by later discoveries).**
+
+1. Mine a base material under §2a. The entry criteria prune little, because the draw set is vast, as the designer expected.
+2. Take the complement. Probe the distance to the next zeroing move of every non-drawn position, giving the race profile of the
+   not-drawn region. This was done on the base. The results are not kept in this record.
+3. Read the profile as the input of a rule set for not drawn (above), and the base as the certain side of a composition.
+4. Take the next material as the ablation of the base (a base plus one added unit per side in the worked instance, a two-rook base
+   extended by a minor piece each side) and compare the composed prediction with that material's own table. This step has not been run.
+
+To derive step 1 and 2 again: enumerate the legal positions of the base, read the win, draw or loss value and the distance of each from
+the tablebase, and the draw set and the profile follow. Step 4 needs the tables of the extended material.
+
 ## 3. Progress
 
 | Item | State |
@@ -520,6 +571,9 @@ inverse ablation, a way may be found to equalize the primitives by searching unk
 | Triangulation from known regions into the discovery zone, and the unresolved case as a compositional search (§2b) | Stated by the designer; not run |
 | The two senses of reachable (optimal, for certification; the full landscape, for enumeration and pruning) (§2b) | Stated by the designer; recorded as a duality of the programme |
 | The king and pawn race as an illustration of joint compatibility and carry-over to added pieces; exclusion by the compositions already in equilibrium (§2b) | Stated by the designer; not run |
+| Rule set for drawn against not drawn, derived from a mined base class (§2c) | Stated by the designer; the race profile of the not-drawn region was measured on one base and not kept here; the rule set is not written |
+| Composition by inverse ablation from a base equilibrium, with the lookahead to certified leaves (§2c) | Stated by the designer; not run |
+| Certification checkpoints, estimates left unsettled, and return to earlier checkpoints (§2c) | Stated by the designer; the record of status and dependency is not specified (§4, §5) |
 
 ## 4. This file's reading, offered for correction
 
@@ -654,7 +708,34 @@ inverse ablation, a way may be found to equalize the primitives by searching unk
   result is information for the composition. The designer has not stated which catalog primitive the pawn race corresponds to, and no mapping
   is made here.
 
+- **Composition from a mined base (§2c): the status of a result.** Work that runs ahead of certainty needs a status on every result:
+  certified, conditional (certified if stated estimates hold) or unresolved. A conditional result records the estimates it depends on, so
+  that when one is resolved the dependents are re-evaluated, upward if it is confirmed and downward or invalid if it is refuted. This is the
+  same requirement as storing the anchor, a link that has to live in the catalog for later resolution to find what it touches. The record
+  fields are not specified.
+- **The composition is one-directional.** It can produce a candidate equilibrium. Excluding the other races is a separate step. Each
+  position then ends as holds, breaks or unscoped, and the measures of the method are the size and shape of the unscoped region and the
+  cost of reaching each status, not agreement with a table alone.
+- **A testable form of "cannot interact in time".** If no added unit can, within the race length of the base, occupy, attack, protect or
+  block a square the race depends on, the base outcome holds. That is a lemma the extended table can try to break. Holding the base race
+  is not a necessary condition in the other direction: an added unit can rescue a lost base race or spoil a drawn one, so inside that
+  reach the composition rules decide.
+- **The exits of a base change under ablation.** A base's terminal exits, the draws reached by reducing material, are particular to it,
+  and adding material can add or remove them. This bears on the expectation that an added imbalance breaks the equilibrium: it is a
+  prediction to test, because an exit can be a drawing resource for the weaker side.
+- **Lookahead to certified leaves is, as search, a depth-limited search ended by cached results.** What the programme adds is the share of
+  leaves certified by the rules and the catalog rather than by searching, and what that costs. A leaf value that is only estimated from
+  the primitives is kept apart from a certified one. Whether a base's rule set can be told from a short search depends on the base's race
+  depth: a base whose not-drawn region is entirely shallow cannot show it, and a base with long races can.
+- **The cost of an extension is the delta.** Read this way, the cost model (catalog §4.8) for an extended material is the cost of the
+  scoped additions and their composition with the base, not of enumerating the extended material.
+
 ## 5. Not yet specified
+
+The scope function of an ablation (narrow or wide) and how the arrival of each kind of added unit is measured; the depth of the lookahead
+and how it is chosen; how a rule set for drawn against not drawn is written down and tested against the base table; the fields of the
+status and dependency record (§4), how dependents are re-evaluated, and where checkpoints are placed; and how the unscoped region is
+recorded.
 
 White's candidate constructions against the schematic; the order in which Black's three moves are taken in the survey; the other
 Black plans to compare; how the comparison is recorded; and how the schematic's variant with b6 and Bb7 is treated beside the g6

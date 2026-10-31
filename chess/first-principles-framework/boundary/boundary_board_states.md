@@ -22,7 +22,7 @@ This file is the construction pipeline and the record of the idea: what a bounda
 - `boundary_board_state_topology.md`: the abstract layer, covering the status of a confirmed boundary state, start-reachability, the scaffolding strategy and composition from race-condition primitives.
 - `boundary_board_state_primitive_catalog.md`: the three primitives (the mating and capture net, chained dependencies, the coverage race) and the composition rules.
 - `boundary_board_states_opening_survey.md`: the anchored survey from the initial position, the closure and its certificate.
-- `boundary_board_states_start_selection.md`: the choice of where to begin, with the designer's statements on choice regions, relativistic comparison, triangulation and the two senses of reachable.
+- `boundary_board_states_start_selection.md`: the choice of where to begin, with the designer's statements on choice regions, relativistic comparison, triangulation and the two senses of reachable, and the composition workflow from a mined base (§2c).
 - `boundary_board_states_syzygy_mining.md`: the Syzygy mining process.
 - `boundary_board_states_case_study_otb.md`: a case study from over-the-board play.
 - `chess_concepts_survey.md`: a survey of chess concepts read against the programme.
@@ -65,6 +65,14 @@ where a losing side's last real choice exists.
 >   tablebase process to raise the ceiling Syzygy has, provided it has merit to improve the determination of optimality. This file's
 >   reading, offered for correction: the machine's own storage may set a lower cap than seven pieces (`boundary_board_states_start_selection.md`
 >   §2a puts it at perhaps five), and the worst case, too little enumerable to build a population, is in start-selection §2b.
+> - **Composition from a mined base, the first integration specification (the designer's statement; start-selection §2c).** The mining of a
+>   base class gives a rule set for drawn against not drawn, found in the complement of a vast draw set, so that classification of the class
+>   no longer needs the table. New material is added to a base equilibrium (inverse ablation) and the scoped primitive race before and after
+>   is compared, with a lookahead to certified leaves. It covers many primitives and not all, so what it does not cover stays uncovered until
+>   exhaustive coverage covers it. Work proceeds on estimates, with checkpoints revisited as estimates are resolved, so every result carries a
+>   status (certified, conditional, unresolved) and its dependencies. Exhaustive coverage of the extended material shows where the primitive
+>   calculations deviate, and the deviation is added to the protective belt. This file's reading, offered for correction: the status and
+>   dependency record is an architectural requirement of the same kind as the stored anchor; its fields are not specified.
 > - **Four external anchors, each with its own honest status.** Checkers' weak
 >   solution — a tight structural match to the scaffolding strategy (§9 here,
 >   §7 there). Možina, Sadikov and Bratko's KBNK work — a looser family

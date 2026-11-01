@@ -76,8 +76,8 @@ where a losing side's last real choice exists.
 > - **The forward anchor is a requirement (the designer's statement; start-selection §2d).** The Syzygy mining is a back trace and does not by
 >   itself say whether a mined state is reachable from the initial position. The full landscape is still to be enumerated, because a
 >   population of local states, reachable or not, is how the nature of a boundary board state is learned. The forward construction from the
->   initial position has to be built whatever the outcome of the Syzygy approach, from paths of played master games (the designer's
->   lean) or of set-depth play, with internal coherence by self-reference and certainty by exhaustive coverage of the gaps. This file's
+>   initial position has to be built whatever the outcome of the Syzygy approach, from paths of played grand master games (the designer's
+>   lean), engine games integrated afterwards by reference to the pruned structure, or of set-depth play, with internal coherence by self-reference and certainty by exhaustive coverage of the gaps. This file's
 >   reading, offered for correction: the link of a mined state to the initial position has a status like any result, and "unreachable" is
 >   a theorem that exists only after the closure.
 > - **Four external anchors, each with its own honest status.** Checkers' weak
@@ -140,7 +140,7 @@ where a losing side's last real choice exists.
 >   unless it passes the admission rule of catalog §1** (a conjunction of terms with mechanisms that decides a race under
 >   perturbation; irreducible by the reduction rule; not a description of a result or of an emergent state; piece- and
 >   board-agnostic; modular, with no overlap). What fails the rule is classified as a definition, input, term, mechanism, derived
->   form or instance, and recorded in the table of catalog §1. Zugzwang without capture is an open residual, not a fourth primitive.
+>   form or instance, and recorded in the table of catalog §1. Zugzwang is not a residual and not a fourth primitive: the designer states that it is a composition of the three, by the completeness argument of topology §8ab.
 > - **The anchored opening survey (topology §8ac, `boundary_board_states_opening_survey.md`).** The method that uses the catalog along a
 >   chosen opening line from the initial position to find a local boundary-state candidate. Local means a verified equilibrium with no
 >   claim about the path; global means membership of a family reachable from the initial position under the optimal backtrace constraint (item 9
@@ -1666,7 +1666,10 @@ programme fails: that a forced mate from the initial position exists under optim
 Syzygy and of the computational paradigm are reached and the catalog does not yield enough progressively to mitigate the gap. A deviation
 from the Lakatosian architecture through an error in the design is a failure of the design, not of the programme. That the composition
 scales with segmented irreversibility is, in the designer's statement, true by definition; whether it is computable within the ceiling is
-the open question. A primitive found to be missing is added under the admission rule, and certification is permanent, so the standard is
+the open question. The designer's completeness argument (topology §8ab) is that the primitives were derived by exhaustive coverage of the rule
+set of the game, so no position lies outside them without a causal disconnection. This file's reading, offered for correction: it
+establishes that an account exists in primitive terms, and the open question is how compact that account is. A primitive found to be
+missing is added under the admission rule, and certification is permanent, so the standard is
 that a result is obtainable, not that it is cheap. This file's reading, offered for correction: a third way the programme could be
 weakened is degeneration without either of those two, where the catalog fills but the composition predictions keep missing, the unscoped
 region does not shrink as the catalog grows, and each addition is made after the fact. A running count of primitives admitted against

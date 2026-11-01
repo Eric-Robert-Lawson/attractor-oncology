@@ -704,7 +704,7 @@ uses, none of which is a certificate:
   tag INSTANCES. It becomes CERTIFIED only through the complete case list or exhaustive verification (topology §8r).
 
 Played games are a further source of forward paths. The designer's statement is that the forward anchoring at the initial position is a
-requirement of the programme and that master games are the chosen source of the paths (`boundary_board_states_start_selection.md` §2d).
+requirement of the programme and that grand master games, with engine games integrated afterwards, are the chosen sources of the paths (`boundary_board_states_start_selection.md` §2d).
 A path from a game is a line in the sense of §3 and is not a certificate.
 
 ## 9. What the survey produces

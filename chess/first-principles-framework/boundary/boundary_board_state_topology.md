@@ -2398,9 +2398,16 @@ the proof-and-insurance rule; every term, mechanism, derived form, instance, def
 were moved and not discarded (catalog §10.5 maps each earlier section to its new place); P-008 (renumbered, no definition changed);
 the sections of this record that use the earlier names (see the standing notes at the top).
 
-**Left open, and recorded as a residual and not as a fourth primitive.** Zugzwang without capture is not read by any of the three.
-By the reduction rule it comes back as a residual interface if a proven boundary-state entry needs it, and it is admitted then only if it
-passes the admission rule.
+**Zugzwang is not a residual (the designer's statement; the earlier reading of an open residual is withdrawn).** Zugzwang is a move pool in
+which every move loses, and each move is refuted by what follows it. A refutation that is itself a zugzwang is decided by tempo and route
+parity, which the chained dependencies derive, and every chain of refutations ends at a terminal: a capture, a mate or a stalemate. The
+designer states that the primitives were derived by exhaustive coverage of the rule set of the game, so that every position has an account
+in primitive terms. A position outside them would mean a causal disconnection between the start and the terminal, or an element outside
+the rules, and the designer holds both impossible. This is a completeness argument, and it is recorded as the reason the catalog needs no
+fourth primitive for zugzwang. This file's reading, offered for correction: it establishes that an account exists, and not that the
+account is short or computable within the ceiling, which is the question of composition and of the rule-set test. By the reduction rule a
+residual still comes back as a residual interface if a proven boundary-state entry needs one, and it is admitted then only if it passes the
+admission rule.
 
 ### 8ac. The anchored opening survey: local and global by path, and the position-keyed cache
 
@@ -3159,7 +3166,7 @@ The catalog is unchanged.
   mechanism, which is the unfinished part of the entry.
 - **Whether the evaluation procedure of catalog §4.7, applied to non-terminal
   positions, gives a usable DORMANT or ENGAGED signal.** A specification only; not run.
-- **The writing order of the primitives (§8v, §8ab).** P-001 is written; P-003 and P-008 are SPEC and not run. P-002, P-004, P-005 and P-007 are not primitives (§8ab), so they are not to be written. What the three leave unaccounted for, such as zugzwang without capture, is returned by the reduction rule as a residual if a proven entry needs it.
+- **The writing order of the primitives (§8v, §8ab).** P-001 is written; P-003 and P-008 are SPEC and not run. P-002, P-004, P-005 and P-007 are not primitives (§8ab), so they are not to be written. What the three leave unaccounted for, if anything, is returned by the reduction rule as a residual if a proven entry needs it; zugzwang is not one (§8ab).
 - **Resolved:** exactly-one is not required at any node of the equilibrium loop
   (`boundary_board_states.md` §14 item 8).
 - **Which measure of an equilibrium is informative:** the width (non-losing moves at a

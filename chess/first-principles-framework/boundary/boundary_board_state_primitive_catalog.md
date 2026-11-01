@@ -117,10 +117,9 @@ Every entry has these fields ("none" is allowed, blank is not). This implements 
 | P-008 | Coverage race under disturbance | the effect of a perturbation on the held terms of every engaged primitive at once, the support those terms share, and the race to open one before it is restored, computed for both sides | **specified, SPEC** (§8, version 2; was §7c) | topology §8aa |
 
 The catalog is three primitives, each complete and piece-agnostic as the designer states, and it can be added to if required (Status, above). In the State column, P-001 is
-written out in full and P-003 and P-008 are specified (SPEC); none has been run on positions. What the three do not
-account for is recorded as residual and is not pre-registered as a primitive: zugzwang without capture is not read by any of them. (The designer states that zugzwang is a composition of all three primitives, §11.2.)
-By the reduction rule it is returned as a residual interface if a proven boundary-state entry needs it (topology §8x), and it is
-admitted only as the deduction of that residual under the admission rule of §1.
+written out in full and P-003 and P-008 are specified (SPEC); none has been run on positions. Zugzwang without capture is not a residual: the designer states that zugzwang is a composition of all three primitives (§11.2), by the
+completeness argument of topology §8ab. A residual is still returned by the reduction rule as a residual interface if a proven
+boundary-state entry needs one (topology §8x), and it is admitted only as the deduction of that residual under the admission rule of §1.
 
 ---
 
@@ -134,7 +133,7 @@ target is a parameter; the royal case is the mating net. The ID P-006 is not reu
 **Covers:** the capture of a target piece by an attacker, by any combination of pieces:
 checkmate when the target is the king, and the win of material, or tempo yield short of it, when
 the target is any other piece. **Says nothing about:** decisive results by promotion, or by
-zugzwang without capture. It names no piece types.
+zugzwang without capture, which is a composition of the three primitives (§3). It names no piece types.
 
 **Target kinds.** The primitive has one parameter, the kind of target: *royal* (the king) or
 *non-royal* (any other piece). The kinds differ in two properties and in nothing else. (1) For
@@ -1137,7 +1136,7 @@ citations.
 | §9 provenance | §10 |
 
 **This file's reading, offered for the designer to change:** the choice of P-003 as the ID of the chained-dependencies entry; the reading that the tempo comparison is a term of P-003 and of P-008 and not an entry; the reading that zugzwang
-without capture is a residual and not a fourth primitive.
+without capture is a residual (withdrawn: the designer states that zugzwang is a composition of the three primitives and not a residual, topology §8ab).
 
 
 ---
@@ -1213,7 +1212,7 @@ move pools differ and their outcomes may differ, and the repetition count treats
 | En passant | A flag set by the previous move that adds an edge to the move pool. A capture that exposes the king to a net is not viable, which is the check restriction above and follows from perturbation and the coverage net with no separate rule | Designer |
 | Promotion | A segmented dependency: a route race, whether a piece can reach the pawn in time. The capture net and the coverage net enter only when they are composed to obstruct the route. They also show when the opposing king's move pool is fully covered with no piece able to interpose, which is a stalemate potential and in some cases the desired outcome. The promoted piece's relation is an input | Designer; the input is a reading |
 | Stalemate | The state of the move pool: the side to move has no legal move and is not in check | Designer confirmed the derivation |
-| Zugzwang | Not a rule. A classification of the move pool in which the only viable options are losing moves. It shares its structure with a boundary state, in which the draw is the only non-losing option and each deviation from it loses, and it is a composition of all three primitives. It does not make the catalog's recorded residual "zugzwang without capture" (§3) a fourth primitive | Designer; the residual is a reading |
+| Zugzwang | Not a rule. A classification of the move pool in which the only viable options are losing moves. It shares its structure with a boundary state, in which the draw is the only non-losing option and each deviation from it loses, and it is a composition of all three primitives. It leaves no residual to make a fourth primitive (§3; topology §8ab) | Designer; the earlier reading of a residual is withdrawn |
 | Repetition (9.2, 9.6.1) | The hard core, not a primitive. A cycle of positions. The position history is a metric. "The same position" is Article 9.2.3: the same player to move, the same pieces, the same possible moves, with castling rights and en passant possibility counted. Threefold repetition is a claim and fivefold is automatic. A cycle sustained without limit passes either count, so the program does not need to choose one | Designer; Laws 9.2, 9.2.3, 9.2.3.1, 9.2.3.2 and 9.6.1 for the definition and the counts; the last sentence is a reading |
 | Insufficient material | A composition of all three: occupancy and coverage, not the moves, decide whether the material can arrive in a coverage net that converts to a mating net anywhere on the board. If it cannot, the calculation is one that can never be reached. **Composed in §11.4.** The designer withdrew the assumption that sufficient material always allows a forced net, after the wrong-coloured bishop with a rook pawn was given as a drawn counter-example, and the shortcut is removed from the record. How the primitives compose in such cases is in §11.4 | Designer. The reading follows |
 | Dead position (1.5, 5.2.2) | Not a boundary board state position: no move can lose. A status DEAD: no sequence of legal moves reaches a net, certified by the closure over the reachable positions. It is the terminal draw that can realize a boundary board state upstream. See below | Designer |

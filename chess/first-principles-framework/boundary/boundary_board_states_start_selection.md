@@ -573,11 +573,40 @@ itself (§2b). A branch is not pruned because it wins by force. It is pruned bec
 under optimal play, which makes it forced region and safe to prune, and that needs full coverage of reachability before the pruning.
 
 **The source of forward paths (a statement).** Forward construction needs paths from the initial position to positions the tables
-resolve. Two sources are named. One is games already played by masters, fetchable throughout the history of chess. The other is a
+resolve. Three sources are named. One is games already played by grand masters, fetchable throughout the history of chess. Another is
+engine games (below). The other is a
 program playing out games with exhaustive coverage to a set depth, or with engine heuristics, decoupled from optimality. The designer
-leans to master games, because what computational optimality has been missing is what the human players hold, an integrated cache of earlier
+leans to grand master games, because what computational optimality has been missing is what the human players hold, an integrated cache of earlier
 play, and the designer cannot name a better source. A path from a game establishes reachability by play and not optimality, which is
 established afterwards by exhaustive coverage of the gaps.
+
+**Grand master games and engine games, in stages (a statement).** Grand master games are meant, and not master games in general. They are
+shorter, with fewer sub-optimal moves, and reach the endgame sooner. Engine games are longer (the designer recalls 90 or more moves, not
+checked here), carry the primitive calculations to a depth beyond a human's and more completely, and need more storage. Where a grand
+master's move differs from an engine's, the engine's move can lie ten or more moves of depth ahead, beyond what a human reaches, and the
+gap to certainty there is a self-referential exhaustive scope of that depth. Grand master games are therefore integrated first: shorter
+lines, smaller gaps, and more pruned with certainty. Engine games are integrated afterwards, by reference to the structure already
+pruned. One that follows a grand master line adds little. One that deviates and arrives at positions reachable under sub-optimal play is
+identified by reference to the pruned structure and integrated with a small change in storage. The games are ordered by opening and
+reachability, so that disjoint structures are not stored together. The difficulty of the construction is scoped by reachability, grand
+master logic against the search depth of an engine, which sets the length of a game, the depth of a gap and the chronological order of the
+construction.
+
+**Progressive enhancement from the two sources (a statement).** The two sources are a deliberate architectural choice, made on the
+opportunity cost of the combinatorial game theoretic composition relative to the progressive construction of the programme: to complete
+with possible inefficiency, and to prevent the vastness of the gap from stalling the work or raising reachability problems. The sequence
+is as follows. The Syzygy enumeration of the full landscape proceeds throughout, and is certain to be done. Primitives can be calculated
+on it, or the anchor points can be integrated into the analysis, in either order, and the order affects only how soon the programme
+finishes. Grand master games lean towards the force region and towards missed primitive calculations, and they are marked and routed to
+a point in the tables where a local boundary board state is reached. Self-referential pruning builds on them from the anchor at the
+initial position, pruning sub-optimal routing relative to arrival at local states. It shows where draws recur, which openings reach which
+areas, and which states are reachable through more than one opening. The result is a basis of table-certain local states and high-level
+play, sub-optimal against an engine and far closer to optimal than the full landscape enumerated by exhaustive coverage. Positions that
+the grand master structure finds are then sought in engine games, which are fed in to parse out those positions and target the scope.
+Engine games bring more focus on draws and more resolute boundary board states, and can be selected to fill parts of the structure, so
+that additions are scoped to certainty and to reachability with the openings that reach the gap. The designer also states that depth
+causally affects game length at the level of a population: a search too shallow to resolve a forcing sequence misjudges irreversible
+choices that cannot be reversed, which limits the move pool and the emergence of primitives, and counter examples are matters of luck.
 
 **The observation behind it (the designer's report of a published video; not checked by this assistant).** In "Magnus Carlsen CHECKMATES
 Super GMs in SECONDS!", Carlsen, as Black in an Indian game, says a few moves in that he had the position in his 2023 World Cup game
@@ -616,7 +645,7 @@ that Carlsen knows the programme in these terms.
 | Composition by inverse ablation from a base equilibrium, with the lookahead to certified leaves (§2c) | Stated by the designer; not run |
 | Certification checkpoints, estimates left unsettled, and return to earlier checkpoints (§2c) | Stated by the designer; the record of status and dependency is not specified (§4, §5) |
 | The forward anchor as a requirement, the two tracks, and the sources of forward paths (§2d) | Stated by the designer; not run |
-| Paths from played master games, or from set-depth play, into the table range (§2d) | Stated by the designer; none selected or recorded |
+| Paths from grand master games, then engine games by reference to the pruned structure, or from set-depth play, into the table range (§2d) | Stated by the designer; none selected or recorded |
 
 ## 4. This file's reading, offered for correction
 
@@ -787,6 +816,20 @@ that Carlsen knows the programme in these terms.
   moves off the line are what the rule sets of §2c are for.
 - **The cache key.** The recognition in the observation is of a structure and not of an exact position. A key made from the segment key and
   what the structure makes live would let one result serve many positions. Its fields are not specified.
+- **The cost of certifying is set by depth per node, and not by the length of a game.** Pruning an alternative at a node needs a
+  certified refutation of it, and the depth of that refutation is the same whoever played the game. A shorter line has fewer nodes and
+  not shallower refutations, so staging grand master games first defers the deep nodes and does not remove them. The measure for scoping
+  is the distance from certainty per node (§2c), and a node where an engine's move differs from a human's is read as a flag for a deep one,
+  to be scheduled later.
+- **Storage is by position, and not by game.** Games are paths, and positions reached by different move orders are one position, so the
+  structure is a graph with shared nodes partitioned by the segment key and the opening, and storage grows with distinct positions.
+- **The two sources are complementary, by the designer's choice (§2d).** As this file understands it, and to be checked, most top engine games are drawn, which
+  would make them long paths that hold the equilibrium to the table range and so close to the choice region. A decisive game leaves the
+  choice region at an error, and that node is a losing deviation with its refutation, which the definition requires for each side
+  (`boundary_board_states.md` §14 item 8). Agreed draws that end before the table range give no path into it. A sample of played games shows where equilibria are and not where
+  they are not, so it directs the search, and the closure still needs coverage.
+- **Engine moves are assertions.** An engine's choice is placed in the catalog at the evidence tier of survey §8 and is certified only by
+  coverage of the gap.
 - **The observation is convergence.** By the standard of `boundary_board_states.md` §15 it is heuristic rediscovery and not a novel-fact
   test: ordinary expert memory and engine-assisted preparation, which are standard among top players, account for the recall without the
   programme. It is recorded as the designer's reading of what structure to build, and not as evidence that the structure is sufficient.

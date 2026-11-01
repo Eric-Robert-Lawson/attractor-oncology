@@ -469,7 +469,7 @@ Named final positions. Descriptions are minimal.
 - **Depth, seldepth, nodes, nps.** Search measures.
 - **WDL model.** Evaluation expressed as win/draw/loss probabilities.
 - **Mate score vs eval score.** Mate in N distinct from centipawn values.
-- **Engine assertion vs proof.** An engine evaluation is a heuristic claim, not a proof, except in tablebase and forced-mate cases. (The programme classifies certificates as MATE-VERIFIED, TB-EXACT, ENGINE-ASSERTION.)
+- **Engine assertion vs proof.** An engine evaluation is a heuristic claim, not a proof, except in tablebase and forced-mate cases. (The programme counts a certificate as a verified forced mate, a tablebase result or a complete case list, and an engine's assertion is not one; survey §4a and §8.)
 - **Forced mate.** Mate that the opponent cannot avoid.
 - **Blunder check.** Detecting a tactical oversight.
 - **Move quality classes:** best, excellent, good, inaccuracy, mistake, blunder (by centipawn loss thresholds).
@@ -532,7 +532,7 @@ These are *names that sit near* the existing catalog terms, listed so the user c
 - Near **P-003 (chained dependencies):** overloading, removal of the guard, deflection, decoy, interference, relative pin, discovered attack, clearance, overprotection, pawn chain base/head, capture sequence counting.
 - Near **P-008 (coverage race under disturbance):** control of a square, key squares, outpost/hole, domination, mined squares, flight squares, colour complex, fortress, opposition and corresponding squares, restraint/blockade.
 - Time-race vocabulary that names a *race*: tempo, tempo count, pawn race, rule of the square, lead in development, initiative, triangulation, reserve tempi.
-- Recorded residual in the catalog: **zugzwang without capture** (zugzwang, mutual zugzwang, trébuchet, corresponding squares, §14). It remains a residual, not a primitive.
+- **Zugzwang** (zugzwang, mutual zugzwang, trébuchet, corresponding squares, §14): the designer states that it is a composition of the three primitives and not a residual (topology §8ab; catalog §3 and §11.2). In the programme's terms it is a move pool in which every move loses, each move refuted by a primitive race.
 - Equilibrium vocabulary: dynamic equality, fortress, perpetual check, repetition, stalemate, dead position, insufficient material, blockade, opposite-coloured bishops (§15). These name draw *results*; the programme's boundary-state definition requires a cycle realization or a forced terminal draw.
 - Solving vocabulary: WDL, DTZ/DTM, tablebase, weak solution, transposition table, GHI (§16–17). Path-dependence through repetition (GHI) is relevant to how a proof search caches a verdict that rests on a cycle. For a closed region the draw value does not depend on it, because the repetition rule can only end a game as a draw (the programme does not follow the 50-move rule). It bears on the certification of exits, which must not rest on a cycle argument, and on the cache key for a cycle, which the designer expects to discover (survey §10).
 

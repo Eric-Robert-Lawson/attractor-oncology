@@ -97,8 +97,7 @@ where a losing side's last real choice exists.
 >   boundary state is a set of mutually dependent locks whose joint
 >   compatibility is a constraint system checked as a whole; and verification
 >   is scoped by an interference closure rather than run over the composed
->   position. The immediate next step is to write one primitive (the rook-pawn
->   edge race) as an assume-guarantee contract (topology §8i-§8j).
+>   position.
 > - **Definition (settled; §14 items 7 and 8).** Under perfect play the position is a draw,
 >   because deviation from the repeated draw line is suboptimal and loses decisively on a
 >   primitive race condition. Entailed by the definition: every boundary state has a
@@ -1023,6 +1022,11 @@ incompleteness rather than a genuine absence of a drawing structure.
 
 ## 11. Concrete next build
 
+*This file's reading, offered for correction.* This list was written before the Syzygy mining process
+(`boundary_board_states_start_selection.md` §2a) and the two phases of the programme (read-first block) were stated. Steps 1 and 13, the
+scan of Syzygy materials for boundary states, are read as carried out by that process, whose entries are the candidate stage and take the
+conditions of items 7 and 8 of §14 afterwards by query. The other steps are not reordered here.
+
 1. **Bootstrap from Syzygy** for any material already covered, using
    `is_boundary_state()` (§6, with the §7 collapse applied) — a pure scan, no new
    tablebase construction, real boundary states out immediately.
@@ -1089,13 +1093,10 @@ incompleteness rather than a genuine absence of a drawing structure.
     wide fortress versus exactly-one, then run the small obstacle-board solver
     as insurance (topology §8d).
 13. **Build a population of confirmed local boundary states before attempting
-    decomposition** (topology §8m; not rook-pawn KPvK alone). Scan every material
-    Syzygy or this project already covers for *local* boundary states — drawn,
-    a losing deviation for the side to move (width recorded; §14 item 8),
-    failing the materially-live test on one side (topology
-    §5a-iii) — across as many distinct materials and entry families (topology
-    §8b) as the scan reaches, not only the rook-pawn corner draw. Uses the definition in §14
-    items 7 and 8. A population of boundary states needs a material in which both sides can lose; king and pawn against king has a side that cannot lose, and its exactly-one positions include captures of a hanging pawn into dead draws, which are not boundary states.
+    decomposition** (topology §8m). Scan every material Syzygy or this project
+    already covers for local boundary states in the settled sense (§14 items 7 to 9):
+    drawn, a losing deviation for each side (width recorded; §14 item 8), across as
+    many distinct materials as the scan reaches. A population of boundary states needs a material in which both sides can lose; king and pawn against king has a side that cannot lose, and its exactly-one positions include captures of a hanging pawn into dead draws, which are not boundary states.
 14. **Discover primitives from that population and generate candidates by
     subtraction** (topology §8l, §8m). Decompose each population member by
     minimization-by-ablation into fragments with explicit interfaces; catalog
@@ -1103,9 +1104,7 @@ incompleteness rather than a genuine absence of a drawing structure.
     from an entry and solve for a structure that discharges the residual
     assumptions. This requires the obstacle-board solver (walls as blocked
     squares) as required infrastructure, not insurance — Syzygy cannot
-    evaluate positions with walls. If step 13's scan turns up too small a
-    population for recurrence to be meaningful, fall back to the single-example
-    path on rook-pawn KPvK alone (topology §8j, steps 5 onward).
+    evaluate positions with walls.
 15. **Add a forward-driven selection layer on top of steps 13-14** (topology
     §8r). Steps 13-14 are retrograde-first because exact anchors are cheapest
     there. Which materials and primitives to catalog first should be chosen by
@@ -1351,11 +1350,11 @@ step 4 comparison with Haworth. What follows from it:
   A bare king, and a king with a single minor piece against a bare king, are
   never live. It is computable once per material split. It is not yet in the
   §6 sketch.
-- The example positions are still drawn, exactly-one positions in a material
-  where one side cannot win. Under the vocabulary of topology §5a-iii they are
-  candidates for *local* boundary states, alongside the rook-pawn KPvK draw.
-  Whether they count, given that they involve a reduction to insufficient
-  material and no locking mechanism, is a question recorded there.
+- The example positions are drawn positions in a material where one side
+  cannot win. Under the settled definition (item 8) they are not boundary
+  states, because only one side has a losing deviation and so there is no
+  equilibrium between two sides. The earlier vocabulary of topology §5a-iii,
+  which called such draws local, is withdrawn (item 9).
 
 **3. The §6 sketch lacked a drawn-position guard.** See the §6 addendum. This
 one is small and mechanical.
@@ -1414,11 +1413,11 @@ and was believed to be recorded already.
   (each side has a losing deviation against perfect play), whose drawing branch is
   realized by a cycle of repetition sustained by moves of both sides, with both
   sides live. Positions whose draw is realized by a
-  forced stalemate or by a forced capture into a dead position are terminal draws of
-  the local kind (Tier 1, topology §5a-iii), not global.
+  forced stalemate or by a forced capture into a dead position are terminal draws, not
+  boundary states (see the note of item 10).
   *Note (item 10): for the equilibrium case, a draw realized by a forced stalemate or a forced capture
   into a dead position is a boundary state when no side has a choice that avoids it and each side has a losing deviation. It is a terminal
-  draw of the local kind only where the draw could have been avoided. A dead position itself is not a boundary state; the boundary
+  draw, and not a boundary state, only where the draw could have been avoided. A dead position itself is not a boundary state; the boundary
   state is the position upstream whose forced draw lands in it.*
 - **A consequence worth stating.** Both sides must be able to lose, since otherwise
   the stronger side's non-losing moves are all of its moves and there is no narrow
@@ -1463,9 +1462,6 @@ avoided, and is not an exclusion of a forced terminal draw that arises with no c
   every invariant, not that there be exactly one of them. The earlier phrasing in this
   record that the exactly-one move is the only move that leaves every lock in place
   (topology §8g) tied the two together and is not a definition.
-- **The rook-pawn draw is the paradigm.** The project treats the rook-pawn draw as
-  the paradigm local primitive. A test that selects against the paradigm example is
-  not the definition.
 - **Definition.** A boundary state is a drawn position that is an
   equilibrium: each side has at least one deviation that loses against perfect play, so
   neither can improve and both can worsen; the draw is realized by a cycle of repetition
@@ -1473,7 +1469,7 @@ avoided, and is not an exclusion of a forced terminal draw that arises with no c
   more tied race-condition primitives whose invariants the cycle's moves maintain
   (catalog §5, recorded on the proven entry as in topology §8x). Both sides being able to lose implies both are
   live. Positions in which
-  only one side has a losing deviation are the local kind (topology §5a-iii).
+  only one side has a losing deviation are not boundary states, because there is no equilibrium between two sides.
 - **Width.** The number of non-losing moves at a node is recorded as a descriptive
   parameter w ≥ 1. The case w = 1 is the strict case the original text called a
   boundary state; w > 1 is a wider equilibrium. Neither is excluded. Width is cheap to
@@ -1493,8 +1489,8 @@ avoided, and is not an exclusion of a forced terminal draw that arises with no c
   draw is sustained by a cycle.
 - **Consequences for earlier items.** The tiers of item 1 take exactly-one as Tier 1's
   test and should be read with w as a parameter. The question in item 7 of whether
-  exactly-one holds at every node of the loop no longer arises. King and pawn against king, under this definition, holds only local
-  candidates, and not a population of boundary states.
+  exactly-one holds at every node of the loop no longer arises. King and pawn against king, under this definition, holds no boundary states,
+  since the stronger side cannot lose there (item 10).
 
 **9. "Local" and "global" by the path of arrival (the designer's statement; topology §8ac).** A boundary state's own status is local and
 unconditional (topology §3) and is the position's. Its *classification* depends on how it is reached. A **local** boundary state is a
@@ -1504,8 +1500,8 @@ position under the optimal backtrace constraint (survey §5a).
 A global state is sound against all deviation replies, and there are many of them: a deviation may lead to a different global state,
 which still closes the phase between choice and force, so avoidability is not a ground for calling a state non-global. A state not shown to be in such a family is local. This is offered as the firm definition that item 4 asked for. The record's start-reachability
 (topology §5, Tier 3 of item 1) is read as the reachability part of *global*, which is an open reading recorded in
-`boundary_board_states_opening_survey.md` §2. Earlier uses of "local candidate" in this file, for positions that satisfy only the
-local conditions of a material, are not changed. Nothing in this item changes the definition of a boundary state (items 7 and 8).
+`boundary_board_states_opening_survey.md` §2. Earlier uses of "local" in this file and in topology §5a-iii, for draws in which one side is not materially live, are withdrawn and
+reworded (items 2, 7 and 8, and §11 step 13). Nothing in this item changes the definition of a boundary state (items 7 and 8).
 
 **10. Forced terminal draws are boundary states when there is no choice to deviate (the designer's ruling; topology §8ad).** A forced draw
 by stalemate, or by a forced capture into a dead position, is the same as a boundary state by the definition when it arises with no

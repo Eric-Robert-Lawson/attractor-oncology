@@ -28,18 +28,18 @@ certified local boundary states), `boundary_board_states.md` (the concept and th
    that navigate this. If the structure of that process can be understood with certainty and the direction proves useful, it is a
    potential addition to the protective belt.
 
-## 2. The anchor and compatibility (the designer's)
+## 2. The king position and compatibility (the designer's)
 
-1. The terminal anchoring point of the mating net is the king. The anchor informs the segmented dependency calculation and the coverage
-   net.
-2. Piece structures can share the king in the same place, and then overlap at the anchor.
-3. Piece structures with a different king placement are not jointly compatible by definition, because the anchoring point of the mating
-   net primitive differs.
+1. The terminal point of the mating net is the king, and the primitive calculations depend on the king position. The king position
+   informs the segmented dependency calculation and the coverage net.
+2. Piece structures can share the king in the same place, and then overlap at the king.
+3. Piece structures with a different king placement are not jointly compatible by definition, because the king position on which the mating
+   net primitive depends differs. A composition that integrated further kings would add more kings than the rules allow.
 4. Joint compatibility has two parts: the joint compatibility of the primitives, and the joint compatibility with the composition of the
    rule set from the initial position. The second concerns the piece set under the rules of chess. A board state with three knights
    is not compatible with the initial piece setup, and is reachable only through a pawn promotion to a knight. It does not mean the
    anchoring of a global boundary board state to the initial position.
-5. Sharing the king's square as the anchoring point is the minimum requirement for royal structures to be compatible. It is not
+5. Sharing the king's square is the minimum requirement for royal structures to be compatible. It is not
    sufficient: the other checks still apply.
 
 ## 3. Perturbation and ablation of a structure (the designer's)
@@ -81,14 +81,14 @@ certified local boundary states), `boundary_board_states.md` (the concept and th
    depend on tempo and those that do not, and that the composition check needs to know which. It is not shown.
 5. **Reachable material.** An extra piece of a kind arises by promotion, which consumes a pawn and needs captures for the pawn to change
    file. This bears on whether a composition with an extra knight is reachable from the initial position. It is not worked out here.
-6. **Fields of a composition record.** The anchor; the region and the placement; the support closure; the primitive calculations; the
+6. **Fields of a composition record.** The king position; the region and the placement; the support closure; the primitive calculations; the
    material required and whether it is reachable; whether the equilibrium depends on tempo.
 7. **The status of non-royal structures.** Structures with no king in them, such as a capture net on a non-royal target or a chain, would
    be compatible with a royal structure so long as the other checks pass.
 
 ## 6. What is open
 
-- **The anchor in a repetition cycle.** The king may alternate between squares in a cycle. Whether the same anchor means the same king
+- **The king position in a repetition cycle.** The king may alternate between squares in a cycle. Whether the same king position means the same king
   square at the same point of the cycle, or the king's orbit through the cycle, is not stated.
 - **Viability.** Whether the direction is useful is to be decided on a catalog of proven local boundary board states and the primitive
   calculations run on them. The primitive calculations of P-003 and P-008 are specified and not run (primitive catalog §5), and the cost
@@ -99,4 +99,6 @@ certified local boundary states), `boundary_board_states.md` (the concept and th
 ## 7. Provenance
 
 **The designer's:** §1 to §4, the anchor and its compatibility, the perturbation of a structure, the protocol, and the decision to keep
-the direction as a separate file that can be removed. **This file's:** §5 and the open questions of §6.
+the direction as a separate file that can be removed. **This file's:** §5 and the open questions of §6. An earlier version called the king position an anchor. That wording is withdrawn on the
+designer's statement, because the king position is a compatibility requirement of inverse ablation and the word anchor belongs to the
+survey (`boundary_board_states_start_selection.md` §2b).

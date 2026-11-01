@@ -2,8 +2,12 @@
 
 **Status.** A process record, not a result and not a tool. It holds the process the designer is using to build the boundary board
 state certification catalog (survey §4j) from the Syzygy tablebases: enumerate the proven draws of a material, classify them, group
-them into reachable families, and link the families upward toward the initial position. Nothing in it has been run or verified as part of
-the record; the designer will run and verify the data on return. The same process is held, as a specification, in
+them into reachable families, and link the families upward toward the initial position. Nothing in it has been verified as part of the
+record. The process of §3 has since been implemented and run once, on the designer's KRvKR and KRvK tables, with the results not kept
+here (§3 is how to derive them again), and the designer verifies the data. Where this file and start-selection §2a differ, §2a governs.
+In particular an entry there is a drawn position that can move again and is anchored, and the conditions of `boundary_board_states.md`
+§14 items 7 and 8 (a losing deviation for each side, a draw sustained by a cycle) are applied afterwards by query, so the criterion in §1
+and §4 below, and the question in §9, are read under that. The same process is held, as a specification, in
 `boundary_board_states_start_selection.md` §2a, which is the fuller and later record. No primitive calculation is part of the
 process (§1). The designer has said that another angle is under consideration which may change this process; the staged workflow
 from an anchor is in start-selection §2b.
@@ -157,8 +161,8 @@ No estimate of the size of any material, table or run is recorded here. The scal
 ## 10. Files
 
 The designer's own files for the first
-material to be mined, `KRvKR.rtbw` and `KRvK.rtbw`, and the designer's solver and validator, are the designer's, and the process is to
-be built and verified from them on return. The procedure of §3 is specific to the pieces named at each step (step 2 assumes a
+material to be mined, `KRvKR.rtbw` and `KRvK.rtbw`, and the designer's solver and validator, are the designer's, and the process has
+been built and run once from them, with the results not kept here, and the designer verifies the data. The procedure of §3 is specific to the pieces named at each step (step 2 assumes a
 pawnless material; other materials need their own move generation).
 
 ## 11. Provenance

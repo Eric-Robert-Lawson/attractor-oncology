@@ -366,9 +366,12 @@ This is the local closure definition that can emerge. This file's reading, offer
 stated by anchor instead of by family, and with the initial position as the anchor it is the closure claim of survey §2a.
 
 **What an anchor is (a statement).** The initial position as the anchor is the definitional property of a global boundary board state.
-A segment or pruned-structure anchor is an application of the definitional understanding of a local boundary board state. The designer
-assumes that the king as the anchor in `boundary_board_states_piece_structure_composition.md` is also a local application of the same
-methodology; not checked here.
+A segment or pruned-structure anchor is an application of the definitional understanding of a local boundary board state. The king position in
+`boundary_board_states_piece_structure_composition.md` was earlier called an anchor there, and that wording is withdrawn (the designer's
+statement). The king position is a foundational compatibility requirement of inverse ablation, because the primitive calculations depend on
+it and a composition cannot add kings, so an ablation that integrated further kings is not jointly compatible by definition. The designer
+holds that this and the anchor of the survey rest on one understanding. This file's reading, offered for correction: how the two are
+linked is not specified, and the word anchor is kept for the survey.
 
 **Mining without an anchor, and the choice of anchor (a statement).** The Syzygy landscape can be enumerated into reachable families, with
 the family constructed backwards and met forwards. The boundary board states can be mined locally and the pruned structure basis built with
@@ -508,7 +511,8 @@ landscape, is certain within the class. Once it exists the class no longer needs
 from exhaustive coverage. The moves of the pool are then used to restore an equilibrium that a race has defeated.
 
 **Inverse ablation as composition (a statement).** Material is added to a base equilibrium. The scope of the ablation is chosen: narrow,
-with the kings as they are and only the primitives native to the position (overlapping pieces counted or not), or wider. Symmetry keeps
+with the kings as they are and only the primitives native to the position (overlapping pieces counted or not), or wider. Keeping the kings as they are is a compatibility requirement of
+inverse ablation and not a convenience (§2b, what an anchor is). Symmetry keeps
 either small. Constructing from an equilibrium is easier than joining two forced regions into one. The scoped primitive race to the mating
 net is taken before the ablation, where it is certain, and after, where the additions change it, and the question is whether the
 equilibrium holds in the scoped primitive solution. Segmented progression and irreversibility give the potential of the calculation.
@@ -630,7 +634,7 @@ that Carlsen knows the programme in these terms.
 | A second route: construction of endgame local boundary board states, decoupled from the forward trace | Stated by the designer (§2); not run |
 | A third path: opening theory branches that force draws | Stated by the designer (§2); not run |
 | The procedure on any seed (decisive position or certified state) | Stated by the designer; recorded in topology §8an; illustrated in §2; not run |
-| Syzygy mining of a material into a database of proven draws (§2a) | Process stated by the designer and recorded as a specification; to be run and verified by the designer |
+| Syzygy mining of a material into a database of proven draws (§2a) | Specified by the designer; implemented and run once on one base material at the designer's request, with the results not kept in the record; to be verified by the designer |
 | The boundary board state understanding confirmed as covering a majority of the whole space | Pending, per the designer, before any results are integrated |
 | The link from a mined family to the initial position | Stated (survey §5a); the backtrace procedure is not specified beyond the statements |
 | Closed local regions and sparse disjoint regions (§2b) | Stated by the designer; none found; whether enough regions exist to inform the global composition is uncertain |
@@ -784,7 +788,9 @@ that Carlsen knows the programme in these terms.
   certified, conditional (certified if stated estimates hold) or unresolved. A conditional result records the estimates it depends on, so
   that when one is resolved the dependents are re-evaluated, upward if it is confirmed and downward or invalid if it is refuted. This is the
   same requirement as storing the anchor, a link that has to live in the catalog for later resolution to find what it touches. The record
-  fields are not specified.
+  fields are not specified. The evidence tags of the catalog (SPEC, INSTANCES, CERTIFIED) grade the evidence behind a claim, and the status
+  records dependence on estimates, so a result tagged CERTIFIED stays conditional if it rests on an estimated leaf. Whether the two are
+  merged is not stated.
 - **The composition is one-directional.** It can produce a candidate equilibrium. Excluding the other races is a separate step. Each
   position then ends as holds, breaks or unscoped, and the measures of the method are the size and shape of the unscoped region and
   whether each status is reachable within the ceiling, not agreement with a table alone.

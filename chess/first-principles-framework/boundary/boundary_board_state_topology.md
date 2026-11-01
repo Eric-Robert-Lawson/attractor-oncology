@@ -264,6 +264,13 @@ Recorded as stated, then assessed separately, in the same way as §8. Written
 after §§3-5 and in some tension with their use of the word "global"; the
 tension is part of what the assessment addresses.
 
+**Settled definitions, which supersede §5a-i to §5a-iii where they differ (the designer's).** *Local* is a verified equilibrium with no
+requirement on the path. *Global* is membership of a family reachable from the initial position under the optimal backtrace constraint
+(`boundary_board_states.md` §14 item 9; survey §2). The use of "local" in §5a-iii for a draw in which one side is not materially live is
+withdrawn: such a position has a losing deviation for one side only, so there is no equilibrium between two sides, and it is not a boundary
+state. The rook-pawn corner draw is a source of structure for a primitive and not a boundary state. The liveness test remains as condition 1
+of the definition. The sections below are kept as the record of the earlier attempts.
+
 ### 5a-i. The idea, as stated
 
 Local boundary states are those that do not contribute to the closure of the
@@ -984,49 +991,33 @@ Composition rules to be validated on small instances before use:
 5. Load-bearing test: ablating any primitive changes the value or the
    non-losing count.
 
-### 8j. Path to implementation (provisional)
+### 8j. Path to implementation (provisional; reworded to the settled definitions)
 
-The idea is not yet fully crystallized, so this is an ordering of likely
-steps, not a commitment. Per §8m, the order starts with a population scan,
-not a single hand-analyzed primitive.
+The idea is not yet fully crystallized, so this is an ordering of likely steps, not a commitment. Per §8m the order starts with a
+population, and the population is now mined as in `boundary_board_states_start_selection.md` §2a.
 
-1. Decide the open definitional questions (`boundary_board_states.md` §14,
-   and §5a here): which tier of boundary state is the target, and what
-   "local versus global" is to distinguish.
-2. **(Population-first, per §8m.)** Scan every material already covered by
-   Syzygy or this project for *local* boundary states (§5a-iii) — drawn,
-   exactly-one, one side failing the materially-live test — across as many
-   distinct materials and entry families (§8b) as the scan reaches, not only
-   rook-pawn KPvK.
-3. Run minimization-by-ablation (§8l) across the resulting population and
-   record each result's interface (§8i); look for what recurs.
-4. Propose catalog primitives from what recurred in step 3. Where nothing
-   recurs beyond rook-pawn KPvK, treat that as the answer to §8m's own open
-   question about population size, and fall back to the single-example path
-   (original steps 2-3 below) as the only available one.
-5. *(Original single-example path, kept for the case step 4 falls back to it.)*
-   Write one primitive as a contract in the §8i schema — the rook-pawn corner
-   race is the natural candidate, and is a *live* component (the pawn has
-   pushes), so composing it needs every other piece to be frozen terrain that
-   leaves the race untouched, or a variant with the pawn itself blocked and
-   the race played over something else. Derive its deciding inequality from
-   the exact tablebase boundary of the small material.
-6. Compose a proposed primitive (from step 4, or step 5's fallback) with one
-   frozen structure (the locked pawn chains of §8a) on paper: write the
-   resource accounting, the footprint, and the case list.
-7. Run the small obstacle-board solver, and Syzygy where the piece count
-   allows, as insurance; then run the load-bearing ablation on the result.
-8. Only after several small compositions behave as the rules predict, attempt
-   a duty-based (non-frozen) lock, which needs the full §8h conditions.
-9. Feed each verified composition, and each failure, back into the catalog with
-   the rule it confirmed or broke.
+1. Decide the open definitional questions (`boundary_board_states.md` §14): settled in items 7 to 10.
+2. **(Population-first, per §8m.)** Mine every material covered by Syzygy or this project for boundary states in the settled sense:
+   drawn, a losing deviation for each side (start-selection §2a).
+3. Run minimization-by-ablation (§8l) across the resulting population and record each result's interface (§8i); look for what recurs.
+4. Propose catalog primitives from what recurred in step 3.
+5. Compose a proposed primitive with one frozen structure (the locked pawn chains of §8a) on paper: write the resource accounting, the
+   footprint, and the case list.
+6. Run the small obstacle-board solver, and Syzygy where the piece count allows, as insurance; then run the load-bearing ablation on the
+   result.
+7. Only after several small compositions behave as the rules predict, attempt a duty-based (non-frozen) lock, which needs the full §8h
+   conditions.
+8. Feed each verified composition, and each failure, back into the catalog with the rule it confirmed or broke.
 
-Step 1 and the scan in step 2 need no new code beyond the guarded scan in
-`boundary_board_states.md` §6, restricted to the liveness test of §5a-iii;
-step 3 and steps 6-7 need the obstacle-board solver already called for in
-§8d, which §8m notes is required infrastructure here, not insurance only.
+Steps 3 and 5 to 6 need the obstacle-board solver already called for in §8d, which §8m notes is required infrastructure here, not
+insurance only.
 
 ### 8k. The board edge as a structural requirement: role substitution
+
+*Reading note (the settled definition, `boundary_board_states.md` §14 items 8 and 10).* The rook-pawn corner draw below is called a
+boundary state in the designer's original wording. Under the settled definition it is a draw in which the stronger side cannot lose, so
+there is no equilibrium between two sides, and it is a source of structure for a primitive and not a boundary state. The idea of the
+edge's role does not depend on the label.
 
 **The idea, as stated.** The rook-pawn KPvK draw is a boundary state because
 of the edge-of-board condition: the pawn is topologically confined to the edge
@@ -1253,31 +1244,21 @@ forward search reconnecting to it.
     work, or the checkers precedent itself — each found afterward, on
     checking what already existed. Recorded as the order in which the
     connections were found, not as something verified here.
-- **The build order.** §8j's step 2 and
-  `boundary_board_states.md` step 13, as drafted, start from a single
-  hand-analyzed example (rook-pawn KPvK). Under this idea that is premature:
-  a single example cannot reveal what recurs. The order is —
-  1. Scan every material Syzygy already covers (and any this project has
-     solved) for *local* boundary states specifically — drawn, exactly-one,
-     and failing the materially-live test on one side (§5a-iii) — not just
-     rook-pawn KPvK, but the other entry families in §8b that exist as real
-     tablebase positions: wrong-colored bishop with a rook pawn, knight with a
-     rook pawn on the seventh rank, and any others the scan turns up.
-  2. Run the minimization-by-ablation operator (§8l) across that whole
-     population, not on one case, and record each result's interface (§8i).
-  3. Look for what recurs across interfaces — shared exclusion mechanisms,
-     shared race-margin shapes, shared mobility-exclusivity requirements — and
-     only then propose these as catalog primitives.
-  4. Attempt composition (§8j steps 4-7) using primitives that recurred in
-     step 3, not primitives defined from a single worked example.
-  This reordering is reflected in the updated build steps below and in
-  `boundary_board_states.md` step 13.
+- **The build order.** A single hand-analyzed example cannot reveal what recurs. The order is —
+  1. Mine every material Syzygy already covers (and any this project has solved) for boundary states in the settled sense
+     (start-selection §2a).
+  2. Run the minimization-by-ablation operator (§8l) across that whole population, not on one case, and record each result's
+     interface (§8i).
+  3. Look for what recurs across interfaces — shared exclusion mechanisms, shared race-margin shapes, shared mobility-exclusivity
+     requirements — and only then propose these as catalog primitives.
+  4. Attempt composition (§8j steps 5 to 8) using primitives that recurred in step 3, not primitives defined from a single worked
+     example.
+  This order is reflected in §8j and in `boundary_board_states.md` step 13.
 - **What decides whether this changes anything, concretely.** Whether the
   scan in step 1 above turns up enough local boundary states, across enough
   distinct materials, for step 3's recurrence-finding to have anything to
   work with. If the true population of tablebase-confirmed local boundary
-  states is small (rook-pawn edge draws being close to the only clean
-  instance at very small material), the population-first approach still
+  states is small, the population-first approach still
   applies in spirit but has little to extract from until larger materials are
   reachable. Untested, and worth checking early, since it bears directly on
   whether step 1 is worth running before step 2's machinery is built.
@@ -3005,15 +2986,8 @@ The catalog is unchanged.
 - Whether dominator-style analysis (§4) has a more efficient algorithmic form
   specific to this problem's structure, beyond directly adapting standard
   directed-graph dominator algorithms — unexplored.
-- **What "local versus global" is meant to distinguish (§5a)** — extensibility,
-  upward connectivity, or both; and, if closure contribution is the intended
-  criterion, what narrower object "the closure of the choice/force boundary"
-  denotes, since every genuine choice-point boundary state is already a
-  transition point in the §3 sense.
-- **Whether extensibility can be defined operationally (§5a)** — for example as
-  the set of single-piece additions under which the value and the exactly-one
-  property survive — and whether it correlates with the load-bearing relation
-  of §4.
+- **What "local versus global" is meant to distinguish (§5a)** — settled: the path of arrival (`boundary_board_states.md` §14 item 9;
+  survey §2). Extensibility and closure contribution were earlier attempts.
 - **Whether duty-based (non-frozen) locks can be certified by construction
   (§8f, §8h)** — that is, whether the four footprint conditions can be met for
   any real fortress-style structure without the footprint growing to the whole
@@ -3028,14 +3002,10 @@ The catalog is unchanged.
 - **Whether complete interdependence (§8g) characterizes tight boundary states
   in practice**, or whether redundant-structure boundary states are common
   enough that it is only one family among several.
-- **Which primitive to write first as a contract (§8j)** — the rook-pawn corner
-  race is the proposed candidate; not yet attempted.
-- **Whether "materially live" (§5a-iii) is the right operational form of
-  "sufficient material,"** and whether the local/global distinction by
-  liveness supersedes the closure-contribution wording of §5a-i.
-- **Whether hanging-piece positions in total-win materials count as local
-  boundary states (§5a-iii)** or fall outside because they involve no locking
-  mechanism.
+- **Whether "materially live" (§5a-iii) is the right operational form of "sufficient material."** The local/global distinction is not
+  by liveness (the settled definitions at §5a); liveness is condition 1 of the definition.
+- **Hanging-piece positions in total-win materials** are not boundary states (`boundary_board_states.md` §14 items 2 and 10): one side
+  cannot lose.
 - **Whether the board edge's role decomposes into restriction plus funneling
   (§8k)**, whether a substitute must supply both, and whether exactly-one
   positions in tablebase KPvK correlate with edge adjacency.
@@ -3062,16 +3032,11 @@ The catalog is unchanged.
 - **Whether boundary states in real tablebases decompose into a modest,
   recurring set of primitives (§8l),** which decides whether the catalog
   compresses.
-- **Whether lifting (§8l) works for the rook-pawn primitive:** whether locked
-  structure can reproduce the edge's exclusion and its mobility exclusivity
-  without introducing capture, check or stalemate interference.
 - **Whether a population scan turns up enough confirmed local boundary states,
   across enough distinct materials, for recurrence-finding to have real
   content (§8m)** — the population-first approach applies in spirit
-  regardless, but if rook-pawn edge draws are close to the only clean
-  small-material instance, step 3 of §8m's order has little to work
-  with until larger materials are reachable, and the single-example fallback
-  in §8j becomes the practical path. Untested, and worth checking early since
+  regardless, but if the population is small, step 3 of §8m's order has
+  little to work with until larger materials are reachable. Untested, and worth checking early since
   it decides whether the scan is worth building before the ablation machinery
   is.
 - **Whether a composed floor of real, useful size can actually be built
@@ -3118,8 +3083,8 @@ The catalog is unchanged.
   structurally related to a boundary-state certificate. Not yet attempted;
   flagged because the match found suggests it would reuse
   existing machinery rather than need new.
-- **Whether any Method 5 composition proposed so far (§8j's rook-pawn
-  contract, the locked-pawn-pair substitutes of §8k) actually clears the
+- **Whether any Method 5 composition proposed so far (the locked-pawn-pair
+  substitutes of §8k) actually clears the
   Tier 3 start-reachability bar now required of it (§8q)**, or whether this
   requirement, once checked, rules out some of what's already been proposed
   as a composition target.
@@ -3149,9 +3114,6 @@ The catalog is unchanged.
   move keep unsatisfied, and does the answer recur across boundary states.
   Untested, and it is the step that connects the mate templates to draws.
 - **Whether narrow positions in king and pawn against king decompose, by ablation, into a small recurring set of primitives**, and whether the decomposition is the opposition and key-square structure of classical theory. This is the first real test of §8m's recurrence question. Positions are highly correlated, so recurrence must be measured over distinct structures, not over the raw count. Not run.
-- **Whether the rook-pawn draw behaves as a wide edge primitive in composition
-  (§8k).** If it does, it is the right terrain to lift the edge condition into
-  pieces. Not run.
 - **Net recognition before the mate (§8u).** Whether the four-term predicate, with
   tempo costs attached to each mechanism, can detect from a position that has not
   yet been mated that the terms can be completed by forcing moves, and how that

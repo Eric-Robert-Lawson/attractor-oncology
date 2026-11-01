@@ -73,6 +73,13 @@ where a losing side's last real choice exists.
 >   status (certified, conditional, unresolved) and its dependencies. Exhaustive coverage of the extended material shows where the primitive
 >   calculations deviate, and the deviation is added to the protective belt. This file's reading, offered for correction: the status and
 >   dependency record is an architectural requirement of the same kind as the stored anchor; its fields are not specified.
+> - **The forward anchor is a requirement (the designer's statement; start-selection §2d).** The Syzygy mining is a back trace and does not by
+>   itself say whether a mined state is reachable from the initial position. The full landscape is still to be enumerated, because a
+>   population of local states, reachable or not, is how the nature of a boundary board state is learned. The forward construction from the
+>   initial position has to be built whatever the outcome of the Syzygy approach, from paths of played master games (the designer's
+>   lean) or of set-depth play, with internal coherence by self-reference and certainty by exhaustive coverage of the gaps. This file's
+>   reading, offered for correction: the link of a mined state to the initial position has a status like any result, and "unreachable" is
+>   a theorem that exists only after the closure.
 > - **Four external anchors, each with its own honest status.** Checkers' weak
 >   solution — a tight structural match to the scaffolding strategy (§9 here,
 >   §7 there). Možina, Sadikov and Bratko's KBNK work — a looser family

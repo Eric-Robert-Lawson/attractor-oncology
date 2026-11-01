@@ -546,6 +546,47 @@ exhaustive coverage, is what the test looks for.
 To derive step 1 and 2 again: enumerate the legal positions of the base, read the win, draw or loss value and the distance of each from
 the tablebase, and the draw set and the profile follow. Step 4 needs the tables of the extended material.
 
+## 2d. The forward anchor, and the sources of forward paths (the designer's statements)
+
+**Status.** A requirement of the programme as the designer states it, and not a change to the hard core. The designer's statements are
+marked, and this file's readings are in §4. Nothing in it has been run.
+
+**The initial anchor is an inevitable requirement (a statement).** The aim of the programme is the closure between the choice and the
+force region anchored to the initial position. The Syzygy mining is a back trace from the tables, and by itself it does not say whether
+a mined local state can be reached from the initial position. The forward anchoring has to be built at some point, whatever the outcome
+of the Syzygy approach, including when that approach is exhausted or yields little that is emergent. This does not reorder the emphasis
+of §2, which is to populate the catalog first.
+
+**Two tracks (a statement).** The back trace from the tables, decoupled from the initial anchor, serves the nature of the phenomenon: the
+full landscape of the tablebase is still to be enumerated for every local boundary board state it holds, reachable or not, because a
+population of them is how to learn what makes a boundary board state one, and may eventually allow exhaustive coverage to be sidestepped.
+The forward construction from the initial position serves reachability and the global closure. The two are to meet (§2a, §2b). Progress
+on the forward track can be made on internal coherence by self-reference, without certainty, on the understanding that the structure
+built may or may not be optimal and that certainty in a gap needs exhaustive coverage of it. The distance between the forward structure
+and the certainty of the back trace is then a calculable, measurable point, and the difficulty of resolving certainty between two
+branches that can be pruned can be scoped.
+
+**Irreversible moves on the forward track (a statement).** The programme links the segmented boundaries of irreversible moves to changes
+in the primitives. From the initial position only a certain number of openings can allow the equilibrium to emerge at all, and the
+structure and cadence of the irreversible moves shape which moves of the pool remain viable. Self-reference lets the structure prune
+itself (§2b). A branch is not pruned because it wins by force. It is pruned because no local boundary board state can be reached from it
+under optimal play, which makes it forced region and safe to prune, and that needs full coverage of reachability before the pruning.
+
+**The source of forward paths (a statement).** Forward construction needs paths from the initial position to positions the tables
+resolve. Two sources are named. One is games already played by masters, fetchable throughout the history of chess. The other is a
+program playing out games with exhaustive coverage to a set depth, or with engine heuristics, decoupled from optimality. The designer
+leans to master games, because what computational optimality has been missing is what the human players hold, an integrated cache of earlier
+play, and the designer cannot name a better source. A path from a game establishes reachability by play and not optimality, which is
+established afterwards by exhaustive coverage of the gaps.
+
+**The observation behind it (the designer's report of a published video; not checked by this assistant).** In "Magnus Carlsen CHECKMATES
+Super GMs in SECONDS!", Carlsen, as Black in an Indian game, says a few moves in that he had the position in his 2023 World Cup game
+against Gukesh, and plays from that. The designer reads this as recognising a position as lying in a branch reached from the start by earlier
+play, fetching the understanding of its races, and spending calculation only on deviations, with a loss on a deviation becoming data
+added to the branch. The designer reads it as the architecture of the programme in the forward direction, aimed at winning where the
+programme is aimed at the equilibrium, and as what mastery of the programme requires and not a gift of memory. The designer does not claim
+that Carlsen knows the programme in these terms.
+
 ## 3. Progress
 
 | Item | State |
@@ -574,6 +615,8 @@ the tablebase, and the draw set and the profile follow. Step 4 needs the tables 
 | Rule set for drawn against not drawn, derived from a mined base class (§2c) | Stated by the designer; the race profile of the not-drawn region was measured on one base and not kept here; the rule set is not written |
 | Composition by inverse ablation from a base equilibrium, with the lookahead to certified leaves (§2c) | Stated by the designer; not run |
 | Certification checkpoints, estimates left unsettled, and return to earlier checkpoints (§2c) | Stated by the designer; the record of status and dependency is not specified (§4, §5) |
+| The forward anchor as a requirement, the two tracks, and the sources of forward paths (§2d) | Stated by the designer; not run |
+| Paths from played master games, or from set-depth play, into the table range (§2d) | Stated by the designer; none selected or recorded |
 
 ## 4. This file's reading, offered for correction
 
@@ -730,6 +773,23 @@ the tablebase, and the draw set and the profile follow. Step 4 needs the tables 
 - **The cost of an extension is the delta.** Read this way, the cost model (catalog §4.8) for an extended material is the cost of the
   scoped additions and their composition with the base, not of enumerating the extended material. The designer's standard is that a
   result is obtainable, not that it is cheap, since a certification is permanent; cost matters as reachability within the ceiling.
+- **The link to the initial position has a status (§2d).** The vocabulary of certified, conditional and unresolved is read as applying to
+  the link between a mined state and the initial position: certified when a forward path has every move certified optimal, conditional
+  when the path comes from play and is not yet certified, unlinked when there is none. "Unreachable" is read as a theorem that exists only
+  after the closure, because from the tables alone a state behind a thrown win looks the same as one in front of it. Before the closure a
+  mined state is linked or unlinked. So the back trace has no stopping point set by reachability, and it is not wasted, because the
+  population it builds does not depend on the link. Reachability sets priority and not value.
+- **A path from a game is a source and not a certificate.** It stays within the standing rule that heuristics may order and propose and
+  never supply certainty. What the source decides is where the forward work begins. Reachability by play and reachability under optimality
+  are the two senses of §2b.
+- **The forward certificate is heavier than a played cache.** A player's cache covers the line played and the replies met. The certificate
+  for a region needs every move of both sides classified, as inside the region or a certified loss (§2b). The cheap certificates for the
+  moves off the line are what the rule sets of §2c are for.
+- **The cache key.** The recognition in the observation is of a structure and not of an exact position. A key made from the segment key and
+  what the structure makes live would let one result serve many positions. Its fields are not specified.
+- **The observation is convergence.** By the standard of `boundary_board_states.md` §15 it is heuristic rediscovery and not a novel-fact
+  test: ordinary expert memory and engine-assisted preparation, which are standard among top players, account for the recall without the
+  programme. It is recorded as the designer's reading of what structure to build, and not as evidence that the structure is sufficient.
 
 ## 5. Not yet specified
 
@@ -737,6 +797,10 @@ The scope function of an ablation (narrow or wide) and how the arrival of each k
 and how it is chosen; how a rule set for drawn against not drawn is written down and tested against the base table; the fields of the
 status and dependency record (§4), how dependents are re-evaluated, and where checkpoints are placed; and how the unscoped region is
 recorded.
+
+How games are selected and run into the table range; how a path is recorded, with the status of its link (§4); how the set-depth
+alternative is parameterised; how the distance between the forward structure and the certainty of the back trace is measured; and the
+fields of the cache key.
 
 White's candidate constructions against the schematic; the order in which Black's three moves are taken in the survey; the other
 Black plans to compare; how the comparison is recorded; and how the schematic's variant with b6 and Bb7 is treated beside the g6

@@ -703,6 +703,10 @@ uses, none of which is a certificate:
 - **Evidence tier.** A book's assessment, or an engine's, is an assertion. It places a candidate in the candidate catalog with the
   tag INSTANCES. It becomes CERTIFIED only through the complete case list or exhaustive verification (topology §8r).
 
+Played games are a further source of forward paths. The designer's statement is that the forward anchoring at the initial position is a
+requirement of the programme and that master games are the chosen source of the paths (`boundary_board_states_start_selection.md` §2d).
+A path from a game is a line in the sense of §3 and is not a certificate.
+
 ## 9. What the survey produces
 
 For each line surveyed: the nodes classified (decisive, choice, forced-draw); the located boundary between choice and force with

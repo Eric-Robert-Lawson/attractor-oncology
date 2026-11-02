@@ -24,6 +24,8 @@ This file is the construction pipeline and the record of the idea: what a bounda
 - `boundary_board_states_opening_survey.md`: the anchored survey from the initial position, the closure and its certificate.
 - `boundary_board_states_start_selection.md`: the choice of where to begin, with the designer's statements on choice regions, relativistic comparison, triangulation and the two senses of reachable, and the composition workflow from a mined base (§2c).
 - `boundary_board_states_syzygy_mining.md`: the Syzygy mining process.
+- `boundary_board_states_piece_structure_composition.md`: the king position and compatibility, and the composition of piece structures (a removable direction).
+- `boundary_board_states_syzygy_validation_and_scoping.md`: Syzygy as validation and as the scope of certification (a removable placeholder).
 - `boundary_board_states_case_study_otb.md`: a case study from over-the-board play.
 - `chess_concepts_survey.md`: a survey of chess concepts read against the programme.
 
@@ -80,6 +82,11 @@ where a losing side's last real choice exists.
 >   status (certified, conditional, unresolved) and its dependencies. Exhaustive coverage of the extended material shows where the primitive
 >   calculations deviate, and the deviation is added to the protective belt. This file's reading, offered for correction: the status and
 >   dependency record is an architectural requirement of the same kind as the stored anchor; its fields are not specified.
+> - **Fronts and contribution (the designer's statement; start-selection §2e).** The work divides into four fronts that humans and machines
+>   can take in segments: the Syzygy mining of local states, the primitive calculations on the certified states, the construction and pruning
+>   front, and inverse ablation applied to the certified states. The architecture was positioned from the start to allow a decentralized,
+>   progressive Lakatosian effort toward a weak solution. §12 is the earlier statement of the distributed model for candidate resolution. The
+>   format of a contribution and its checking are not specified.
 > - **The primitive limit (the designer's statement).** Any primitive added must account for a class of outcomes, and the three present ones
 >   are not specific even to a piece, since the piece rules are inputs. The metrics and flags of the board state compose into full coverage
 >   and are not primitives. The primitives are the calculations of equilibrium balance, and the size of the programme comes from how they
@@ -125,14 +132,15 @@ where a losing side's last real choice exists.
 > - **The primitive catalog now exists** (`boundary_board_state_primitive_catalog.md`):
 >   a specification with an entry template, an index of three primitives (the earlier index of eight is reduced; topology §8ab) of which
 >   P-001 (the capture net, whose royal case is the mating net) is written, and the generalization rule by which it
->   covers the fool's mate and any other position. The definition of a global
->   boundary state is restated in §14 item 7 (a cyclic equilibrium, both sides
->   live), and the loop it describes is the hard core and not a primitive (topology §8ab).
+>   covers the fool's mate and any other position. The definition of a boundary
+>   state is restated in §14 item 7 (a cyclic equilibrium, both sides
+>   live), and the loop it describes is the hard core and not a primitive (topology §8ab). Global and local are classifications of a boundary state by
+>   the path of arrival (item 9), and not part of this definition.
 > - **Status of the work.** The only code in this document is the
 >   `is_boundary_state()` sketch in §6, checked for syntax but not yet run
 >   against real Syzygy or project data. No run results are kept in this
 >   record. The catalog (`boundary_board_state_primitive_catalog.md`) is a specification, and no
->   proven boundary-state entry exists yet.
+>   proven boundary-state entry is kept in this record (the Syzygy mining has been run once, with its results not kept; start-selection §2a).
 > - **Chained dependencies (topology §8z, §8ab, catalog §7).** Chains, which are locks read as the
 >   dependency of one element on another, and the movement rule of every unit are specified at the level of primitives. P-003
 >   is specified (SPEC, version 3). It derives orbits, route parity, edge dependence and the permanence of coverage from a
@@ -1156,6 +1164,8 @@ conditions of items 7 and 8 of §14 afterwards by query. The other steps are not
 
 ## 12. Open, distributed resolution — the practical path forward, complementary to Syzygy
 
+*Reading note.* This section is the earlier statement of the model, for candidate resolution. The division of the whole programme into fronts that can be taken in segments is in `boundary_board_states_start_selection.md` §2e.
+
 Everything in §§1-11 specifies *what* a boundary state is, *how* to generate and
 validate candidates, and *why* the resulting catalog has real leverage (§10).
 This section is about a separate, further question: given a candidate list that
@@ -1248,10 +1258,9 @@ the statement at the top of this file records as the project's own stated priori
   vague "scale" question)**: whether targeted forward search with boundary-
   catalog early termination is tractable for materials whose full exhaustive
   classification is not. Everything else in this list is secondary to this one.
-- **Whether Method 2's transition points (§2) are typically exactly-one
-  (true boundary states) or typically several (edge-of-region, not boundary
-  states under the strict definition)** — a real, empirical, currently untested
-  question about the actual shape of the drawn/decisive boundary, not assumed
+- **What width Method 2's transition points (§2) typically have** — one non-losing move, or several — and how many of them are
+  equilibria in the settled sense (§14 items 7 and 8), with a losing deviation for each side. Width is a recorded measure and not the
+  definition. A real, empirical, currently untested question about the actual shape of the drawn/decisive boundary, not assumed
   either way going in.
 - **Whether the conditional closure argument's "wall" (§2) ever falls within
   currently-computable material, or always requires crossing materials beyond
@@ -1276,8 +1285,8 @@ the statement at the top of this file records as the project's own stated priori
   pre-generation material-category skip, rather than only the per-position
   terminal check it already is.
 - **Whether Method 5 can produce any placement satisfying all of its conditions
-  at once, and whether that placement is an exactly-one boundary state or only
-  a proven wide fortress** — the discovery itself; the full list of conditions
+  at once, and what width that placement has, and whether it is an equilibrium of the
+  settled kind or only a proven wide fortress** — the discovery itself; the full list of conditions
   and the related open questions are in `boundary_board_state_topology.md` §9.
 - **The items in §14 below**, which are definitional and need a decision before
   construction targets can be chosen.
@@ -1294,6 +1303,9 @@ visible so that they are decided deliberately and not by drift. Every claim
 marked "untested" was reasoned, not run.
 
 **1. The definition of a boundary state exists in two versions that diverge.**
+*Superseded by items 7 to 10 (reading note).* The definition is settled: a drawn equilibrium with a losing deviation for each side, and
+exactly-one is a width measure. "Local" below means checkable from the position alone, with no requirement on the path (item 9). The tiers
+are kept as a record of how much history is assumed.
 The operational definition is purely local: the position is drawn and the side
 to move has exactly one non-losing move (§1 condition 2; the §6 sketch). The
 narrative definition adds upstream-flavored parts: condition 3, and the
@@ -1420,8 +1432,8 @@ and was believed to be recorded already.
   stalemate forced under a sequence is allowed in principle (§8); a cycle is the
   paradigm. No non-degenerate forced-stalemate case is
   claimed here; the point is the reconciliation of §1 and §8.
-- **Resulting definition, recorded as the project's definition of a global
-  boundary state (restated in item 8):** a drawn position that is an equilibrium
+- **Resulting definition, recorded as the project's definition of a
+  boundary state (restated in item 8; whether it is global or local is item 9):** a drawn position that is an equilibrium
   (each side has a losing deviation against perfect play), whose drawing branch is
   realized by a cycle of repetition sustained by moves of both sides, with both
   sides live. Positions whose draw is realized by a
@@ -1523,7 +1535,7 @@ the draw could have been avoided. Where exhaustive coverage of all branches show
 position, that is not evidence against the classification. The classification applies to the position upstream of the terminal draw: a
 dead position itself has no move that can lose and is not a boundary state. The text of §1, item 7 and item 8 that excludes these draws is a filter
 with a purpose: the boundary-state catalog is not to be filled with stalemate positions that arise from sub-optimal play, and such
-positions are not to be treated as discoveries. The definition of a global boundary state in item 7 is read with the cycle of
+positions are not to be treated as discoveries. The definition of a boundary state in item 7 is read with the cycle of
 repetition as its paradigm realization, and with the forced terminal draw as a second realization of the same equilibrium. The case
 in king and pawn against king (item 7, positions in which the saving move captures the pawn into a dead draw) is excluded
 for a different reason, which stands: the stronger side cannot lose there, so there is no equilibrium between two sides. This closes
@@ -1614,7 +1626,7 @@ project's own history so far:
 - **What would move the needle, concretely — the same list this document
   already converges on.** Run the population scan (topology §8m) and see
   whether primitives actually recur. Build one composed primitive and check
-  it against the tablebase (§11 step 14). Test whether a composition can be
+  it against the tablebase (§11 step 12). Test whether a composition can be
   certified at a piece count Syzygy cannot reach — the direct test of §7a's
   prediction. Each of these, run and checked rather than merely argued, is a
   novel fact in Lakatos's sense if it comes back positive. A negative result
@@ -1672,13 +1684,14 @@ designer keeps open that further primitives may reduce the residual coverage.
 **The failure conditions (the designer's statement).** The designer works from the causal basis of optimality and sees two ways the
 programme fails: that a forced mate from the initial position exists under optimality, or the technological ceiling, where the limits of
 Syzygy and of the computational paradigm are reached and the catalog does not yield enough progressively to mitigate the gap. A deviation
-from the Lakatosian architecture through an error in the design is a failure of the design, not of the programme. That the composition
+from the Lakatosian architecture through an error in the design is a failure of the design, not of the programme. The designer separates two outcomes. A structural failure, where the primitives or their composition break on a class of positions even when size is not the problem, is a failure of the architecture. A scale limit, where the structure holds and the part of it that can be certified stops at the window of the digital paradigm, is not a failure of the architecture, and what was reached stays certified and usable. This file's reading, offered for correction: the first is what the completeness argument excludes, and the second is the ceiling named above. That the composition
 scales with segmented irreversibility is, in the designer's statement, true by definition; whether it is computable within the ceiling is
 the open question. The designer's completeness argument (topology §8ab) is that the primitives were derived by exhaustive coverage of the rule
 set of the game, so no position lies outside them without a causal disconnection. The designer states that a counterexample cannot lie outside the primitives,
-because every reason to lose under the rules is a refutation chain, so a position the calculation cannot account for is either a
-composition not yet calculated properly or a failure of the hard core, and the second is a failure of the programme if it cannot be
-accounted for structurally. A disciplined Lakatosian programme states this in advance. This file's reading, offered for correction: it
+because every reason to lose under the rules is a refutation chain. A position the calculation cannot account for is then one of three
+things. A composition not yet calculated properly is repaired. A missing primitive is added under the admission rule, which is not a failure
+of the programme (survey §2a, table). A position that cannot be accounted for structurally by any primitive would be a causal disconnection
+from the rule set, and that is a failure of the programme, since the completeness argument would not hold. A disciplined Lakatosian programme states this in advance. This file's reading, offered for correction: it
 establishes that an account exists in primitive terms, and the open question is how compact that account is and whether it is computable
 within the ceiling, which is the execution. A primitive found to be
 missing is added under the admission rule, and certification is permanent, so the standard is

@@ -6,8 +6,8 @@ them into reachable families, and link the families upward toward the initial po
 record. The process of §3 has since been implemented and run once, on the designer's KRvKR and KRvK tables, with the results not kept
 here (§3 is how to derive them again), and the designer verifies the data. Where this file and start-selection §2a differ, §2a governs.
 In particular an entry there is a drawn position that can move again and is anchored, and the conditions of `boundary_board_states.md`
-§14 items 7 and 8 (a losing deviation for each side, a draw sustained by a cycle) are applied afterwards by query, so the criterion in §1
-and §4 below, and the question in §9, are read under that. The same process is held, as a specification, in
+§14 items 7 and 8 (a losing deviation for each side, a draw sustained by a cycle) are applied afterwards by query, so the criterion in §1,
+§2 and §4 below, and the question in §9, are read under that. The question in §9 on the opponent's deviation is settled by main §14 item 8 (a losing deviation for each side). The same process is held, as a specification, in
 `boundary_board_states_start_selection.md` §2a, which is the fuller and later record. No primitive calculation is part of the
 process (§1). The designer has said that another angle is under consideration which may change this process; the staged workflow
 from an anchor is in start-selection §2b.

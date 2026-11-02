@@ -354,7 +354,7 @@ That restriction acts like a board edge inside the locking mechanism (see §8k).
   (bare king) and is therefore local. It is best treated as a *primitive*: a
   source of structure to compose from, not a global state itself. This
   matches the way §8 already uses it.
-- **Open: do hanging-piece positions in total-win materials count as local
+- **Resolved by the settled definition (`boundary_board_states.md` §14 items 8 and 10): no, they are not boundary states, because one side cannot lose. The question as it was asked in the earlier vocabulary: do hanging-piece positions in total-win materials count as local
   boundary states?** They are drawn and exactly-one, and one side is not live,
   like KPvK. They differ in mechanism: the draw comes from reduction to
   insufficient material, and there is no locking race or edge condition. If a

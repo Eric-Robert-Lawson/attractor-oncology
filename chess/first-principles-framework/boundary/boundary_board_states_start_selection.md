@@ -343,7 +343,7 @@ and choice boundary, or display holes for decisive force sequences that make opt
 enumerated within the Syzygy limitation to construct a population from which to develop an understanding of these structures at all.
 
 **Modularity and community effort (a statement).** Linking to initial anchored pruning positions and the game start position is a good
-way to approach the work in segments, and makes it approachable as a community effort if it can be shown to have a viable path at all.
+way to approach the work in segments, and makes it approachable as a community effort if it can be shown to have a viable path at all. The division into fronts is §2e.
 
 **On novelty (a statement, not checked by this assistant).** The designer's belief is that this is concrete and provable, and that from
 the designer's understanding and an earlier literature check it does not exist in the literature.
@@ -619,6 +619,42 @@ play, fetching the understanding of its races, and spending calculation only on 
 added to the branch. The designer reads it as the architecture of the programme in the forward direction, aimed at winning where the
 programme is aimed at the equilibrium, and as what mastery of the programme requires and not a gift of memory. The designer does not claim
 that Carlsen knows the programme in these terms.
+
+## 2e. Fronts and contribution (the designer's statements, and this file's readings)
+
+**The designer's statement.** The architecture was positioned from the start so that the work divides into fronts that humans and machines
+can take on in segments, up to whatever limit exists. The designer holds that this makes the programme a decentralized, progressive,
+Lakatosian system for a weak solution of chess, whose product is, in the designer's phrase, what amounts to the training data of the weak
+solution, built equilibria-first. The fronts are:
+
+1. **The Syzygy mining of local boundary board states** (§2a). The storage and compute for the full tables are beyond one machine. The
+   mining is by material, so it divides by material.
+2. **Applying the primitive calculations to certified local boundary board states.** Not every mined state needs the composition shown:
+   the composition of primitives is applied to the proven states to show the equilibrium, given the board state, the material, the side
+   to move and what emerges from the structure. Accumulating these calculations teaches what makes a boundary board state one, and can
+   alter the protective belt. It also maps the deviations into the forced region reachable from an equilibrium, which gives the temporal
+   differential explicitly (§2b). The designer states that this front does not depend on the pruning front.
+3. **The construction and pruning front.** The Syzygy phase, then the grand master and engine phases (§2d), with the segment chosen to fit
+   the storage window and the gaps sought inside it. Games can be added by contributors and the work run on parallel machines.
+4. **Inverse ablation applied to the certified states** (§2c). The primitive calculations, with the races in equilibrium already
+   understood, are carried into added material. This makes progress on exhaustive coverage and informs the pruning front.
+
+The designer's statement of how they relate: front 2 informs fronts 3 and 4 and is not a precondition of them, and front 3 and front 4
+inform each other.
+
+**This file's readings, offered for correction.**
+- **Contributions are of kinds with different evidence tiers.** A mined state, a primitive calculation on it, an added game and a
+  pruning assertion are different kinds, and the statuses of §4 (certified, conditional, unresolved, with the dependency record) apply to
+  each. A contribution from a table is a certificate. A played game or an engine move is an assertion at the survey §8 tier until
+  certified. The architecture's strength for distribution is that a certificate can be checked by a contributor other than the one who
+  produced it, and checking is cheaper than finding.
+- **A belt change reaches back.** Front 2 can alter the protective belt, and results from the other fronts were produced under the
+  primitive set and rules of the time. The dependency record would need to carry the version of the belt that a result was certified
+  under, so that a change marks what it touches as conditional and leaves table-certified results alone. Not specified.
+- **What is not specified:** the unit of contribution and its format; how a segment is claimed and recorded; how a submitted certificate
+  is checked and by whom; how the dependency record is shared; and whether a community forms, which is outside the specification. The
+  specification makes it possible and does not secure it. The phrase "training data" is the designer's, and in this file's reading it names
+  the stored pruned structure and its certificates (a weak solution) and not machine-learning data.
 
 ## 3. Progress
 

@@ -742,6 +742,12 @@ that Carlsen knows the programme in these terms.
   or loss value and the distance to zeroing that Syzygy gives. If it tracks them, there is a ground for extending it beyond the tables.
   If it does not, that is learned inside the tables. The primitive calculation is done post hoc on the mined positions, by the designer,
   as stated in §2a.
+- **The designer's confidence on the temporal property.** The designer holds that a calculable temporal property relative to the equilibrium
+  of zero, taken as a distance from the neighboring choice regions, emerges from the primitive calculations, and that it would be internally
+  inconsistent if it did not, because it can be derived only from the certainty about equilibria that the primitive calculations give. The
+  form of the calculation is not specified: it is an integration specification, dependent on the foundational phase and on execution. The
+  number of neighbors is vast with the move pool, so a valid calculation needs the pruning to have progressed, in the manner of a closure
+  of choice around the force region. The designer does not know how an evaluation score is calculated and does not claim a relation to one.
 - **Relation to tempo.** Survey §4c (temporal analytical relativistic measuring) and §4e (tempo as a calculable metric) measure a difference
   in tempo. The statement above reads as that measure taken as a distance from equilibrium, which would give how far ahead or behind a
   side is as a first-principles margin. Whether it replaces an evaluation score is not stated.

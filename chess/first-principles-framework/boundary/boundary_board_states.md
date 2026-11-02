@@ -65,6 +65,13 @@ where a losing side's last real choice exists.
 >   tablebase process to raise the ceiling Syzygy has, provided it has merit to improve the determination of optimality. This file's
 >   reading, offered for correction: the machine's own storage may set a lower cap than seven pieces (`boundary_board_states_start_selection.md`
 >   §2a puts it at perhaps five), and the worst case, too little enumerable to build a population, is in start-selection §2b.
+> - **The bet (the designer's statement).** The solution has a fixed size that no computational paradigm changes. What the paradigm sets is
+>   the window the stored structure has to fit in. The wager is that restricting the work to the family reachable from the initial position,
+>   and pruning it with certification, keeps the structure inside that window, so that the work is also segmented and what is unreachable need
+>   not be fetched. Whether pieces of the solution can answer for the positions asked about without the whole is open, and the cut-off is held
+>   to be reachability, because of the exhaustive coverage requirement. Segments that fit are chess knowledge even if the whole does not, and
+>   scoping the closure and the gap is progress in itself. Sidestepping both exhaustive coverage and the storage limit is the aim. The
+>   designer states that the temporal property of start-selection §2b is conditional on the same pruning.
 > - **Composition from a mined base, the first integration specification (the designer's statement; start-selection §2c).** The mining of a
 >   base class gives a rule set for drawn against not drawn, found in the complement of a vast draw set, so that classification of the class
 >   no longer needs the table. New material is added to a base equilibrium (inverse ablation) and the scoped primitive race before and after
@@ -73,6 +80,11 @@ where a losing side's last real choice exists.
 >   status (certified, conditional, unresolved) and its dependencies. Exhaustive coverage of the extended material shows where the primitive
 >   calculations deviate, and the deviation is added to the protective belt. This file's reading, offered for correction: the status and
 >   dependency record is an architectural requirement of the same kind as the stored anchor; its fields are not specified.
+> - **The primitive limit (the designer's statement).** Any primitive added must account for a class of outcomes, and the three present ones
+>   are not specific even to a piece, since the piece rules are inputs. The metrics and flags of the board state compose into full coverage
+>   and are not primitives. The primitives are the calculations of equilibrium balance, and the size of the programme comes from how they
+>   are applied to pieces and composed on a given board state. The option to add a primitive is kept from epistemic humility. The designer
+>   expects the three to be exhaustive, and would be surprised by an addition.
 > - **The forward anchor is a requirement (the designer's statement; start-selection §2d).** The Syzygy mining is a back trace and does not by
 >   itself say whether a mined state is reachable from the initial position. The full landscape is still to be enumerated, because a
 >   population of local states, reachable or not, is how the nature of a boundary board state is learned. The forward construction from the
@@ -1663,8 +1675,12 @@ Syzygy and of the computational paradigm are reached and the catalog does not yi
 from the Lakatosian architecture through an error in the design is a failure of the design, not of the programme. That the composition
 scales with segmented irreversibility is, in the designer's statement, true by definition; whether it is computable within the ceiling is
 the open question. The designer's completeness argument (topology §8ab) is that the primitives were derived by exhaustive coverage of the rule
-set of the game, so no position lies outside them without a causal disconnection. This file's reading, offered for correction: it
-establishes that an account exists in primitive terms, and the open question is how compact that account is. A primitive found to be
+set of the game, so no position lies outside them without a causal disconnection. The designer states that a counterexample cannot lie outside the primitives,
+because every reason to lose under the rules is a refutation chain, so a position the calculation cannot account for is either a
+composition not yet calculated properly or a failure of the hard core, and the second is a failure of the programme if it cannot be
+accounted for structurally. A disciplined Lakatosian programme states this in advance. This file's reading, offered for correction: it
+establishes that an account exists in primitive terms, and the open question is how compact that account is and whether it is computable
+within the ceiling, which is the execution. A primitive found to be
 missing is added under the admission rule, and certification is permanent, so the standard is
 that a result is obtainable, not that it is cheap. This file's reading, offered for correction: a third way the programme could be
 weakened is degeneration without either of those two, where the catalog fills but the composition predictions keep missing, the unscoped

@@ -68,6 +68,10 @@ admitted as a primitive only if all five hold:
 5. **Modular.** It does not overlap the terms of another primitive. An overlap is a defect and is fixed by moving the content,
    not by packing several dependencies into one entry (topology §8aa).
 
+**The limit on additions (the designer's statement).** A primitive added must account for a class of outcomes. A single
+case, or a piece-specific or board-specific fact, is classified below and is not added. The designer expects the three primitives to be
+exhaustive of the rule set, and keeps the option open from epistemic humility.
+
 Content that fails the rule is not discarded. It is classified as one of: a **definition** (of the hard core), an **input** (to a
 primitive), a **term** or **mechanism** (of an existing primitive), a **derived form** or an **instance**. It is recorded in the
 table below, and it is never added to the index.

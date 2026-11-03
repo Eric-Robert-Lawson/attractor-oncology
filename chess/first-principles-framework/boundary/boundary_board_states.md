@@ -41,6 +41,23 @@ where a losing side's last real choice exists.
 >   draw is sustained by a cycle of moves of both sides (§14 items 7 and 8). The
 >   number of non-losing moves at the node is a recorded width, with exactly one the
 >   strict case (§1, condition 2).
+> - **The basis and scope of the solution (the designer's statement).** The programme is internally consistent within the bounds of the
+>   anchors it is built on, and its merit rests on those anchors and not on the consistency. The load-bearing anchors found so far are
+>   these, and others may be added to the protective belt: the primitive catalog is connected to the complete rule set of the game, so that
+>   every refutation is a composition of the primitives (topology §8ab); the forward trace is anchored at the initial position; and the
+>   back trace is anchored at the terminal conditions, the mating positions and the equilibria, which retrograde analysis and the tablebases
+>   give exactly within their reach. A weak solution is the forward and the back trace properly anchored to each other, as in the checkers
+>   solution (§9). Chess does not fit the window of the digital paradigm for that method as it stands, and the programme is an attempt to
+>   compact the structure by equilibria-first construction. Work is segmented by reachability and by irreversibility, and the primitive
+>   calculations depend on the irreversible segmented boundaries. Some classes of positions can be certified by primitive calculations that
+>   exclude the status, as in the base of a mined material, and others are a small list that can be stored as a list. Progress on the
+>   programme, the resolution of points of equilibrium and the additions to the protective belt are expected to bring out deterministic
+>   relationships between the parts of the architecture, so that the force region can be rederived from the equilibria-first construction
+>   and the storage requirement falls. The designer states that this sums up the basis and the scope of the solution the programme presents.
+>   This file's reading, offered for correction: where an anchor is wrong the consistency does not carry over to the game. The back anchor is
+>   checkable now, inside the tables. The completeness anchor is checkable through the predictions of the catalog (§7.13, §8.13) and the
+>   exit condition (start-selection §2c). The forward anchor depends on the premise that the initial position is a draw, which the closure
+>   would prove (survey §2a).
 > - **The two phases of the programme (the designer's statement).** The hard core and the initial basis of the protective belt are
 >   specified before the programme is executed: the definition of a boundary board state, the three primitives, and the admission and
 >   reduction rules. The measure the designer holds is not a full specification of everything. It is continuous integration specification,
@@ -80,13 +97,17 @@ where a losing side's last real choice exists.
 >   is compared, with a lookahead to certified leaves. It covers many primitives and not all, so what it does not cover stays uncovered until
 >   exhaustive coverage covers it. Work proceeds on estimates, with checkpoints revisited as estimates are resolved, so every result carries a
 >   status (certified, conditional, unresolved) and its dependencies. Exhaustive coverage of the extended material shows where the primitive
->   calculations deviate, and the deviation is added to the protective belt. This file's reading, offered for correction: the status and
+>   calculations deviate, and the deviation is added to the protective belt. The exit condition (start-selection §2c) is the first such
+>   addition: a position of the extension is not in the force region unless the winning race also excludes the exits to lower materials,
+>   including the certified base. Inverse ablation informs the moves that cross an irreversible boundary, and the moves within a segment are
+>   decided by the primitive races and reachability (start-selection §2c). This file's reading, offered for correction: the status and
 >   dependency record is an architectural requirement of the same kind as the stored anchor; its fields are not specified.
 > - **Fronts and contribution (the designer's statement; start-selection §2e).** The work divides into four fronts that humans and machines
 >   can take in segments: the Syzygy mining of local states, the primitive calculations on the certified states, the construction and pruning
 >   front, and inverse ablation applied to the certified states. The architecture was positioned from the start to allow a decentralized,
 >   progressive Lakatosian effort toward a weak solution. §12 is the earlier statement of the distributed model for candidate resolution. The
->   format of a contribution and its checking are not specified.
+>   format of a contribution and its checking are not specified. Seeded pruning as community work, with the object as a set of facts, is in
+>   start-selection §2f.
 > - **The primitive limit (the designer's statement).** Any primitive added must account for a class of outcomes, and the three present ones
 >   are not specific even to a piece, since the piece rules are inputs. The metrics and flags of the board state compose into full coverage
 >   and are not primitives. The primitives are the calculations of equilibrium balance, and the size of the programme comes from how they

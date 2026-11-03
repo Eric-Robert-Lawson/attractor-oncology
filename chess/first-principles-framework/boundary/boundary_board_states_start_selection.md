@@ -521,6 +521,37 @@ with the primitives already calculated, including how soon each added unit reach
 compared. The designer's expectation is that an added imbalance breaks the base equilibrium unless the race is already decided in the
 position or the added unit cannot interact with it in time.
 
+**The exit condition (a statement).** Material added to a base leaves the weaker side its exits to lower materials, including the reduction
+back to a certified base by exchange. An exit whose value is a draw is a drawing resource, and it does not matter whether other drawing
+options also exist: what matters is that the draw can be reached. So a position of the extension is not in the force region of the stronger
+side unless the race that wins also excludes every such exit, either by making the capture or exchange unavailable or by making the position
+it reaches lost. Where the base is certified as a boundary board state, that certification is what establishes that the exit is a draw, and
+the condition follows from the certified ancestor. It is a necessary condition on the composed race, and it can exclude a position from
+the force region on its own where the other moves of the position give no advantage in other primitive races. Exits come from every lower
+material the extension can reach, each with the certification of its own ancestor, and which exits are present depends on the ablation.
+The designer states that the primitives cover this. The designer does not require the calculations to be novel. What matters is that they are
+derived from the programme, composed from the primitives, and not specific to the pieces of the instance. A material with an exhaustive table
+serves as the sandbox: the condition is tested against the table, and the table is then removed.
+
+**The scope of the derivation, and the within-segment remainder (a statement).** A reduction is a move across an irreversible boundary, and the
+conditions derived by inverse ablation from certified ancestors apply to such moves. For moves within a segment inverse ablation does not
+inform. The unknown resides there: in the navigation of the mating net inside the segment, and in where a position arrives after a reduction if
+that choice is made. Within a segment a position is resolved in one of two ways. Either a forcing sequence exists from it to a certified force
+region in favour of the side that forces it, one sequence being enough, and the position is then a certified force region for that side. Or no
+such sequence exists, and the position is drawn. The draw needs exhaustive coverage, because deviations from the forced draw can exist and a
+single one found excludes the impact of the choices not taken. The complete set of positions within a segment is enumerable, because the
+segment is bounded by irreversibility, and its exhaustion is an explicit target (the closed structure of survey §4a).
+
+**The deviation in the tables (a statement).** The tables have the choice and the force regions mapped. In the force region the table gives
+the winning branch, which can be walked out. A branch not taken can be reached as well: take the position that a sub-optimal move leads to and
+continue with the optimal moves from there. The difference between the two lines, measured in the primitive calculation to the end of the race,
+is the deviation of that move. A sub-optimal move that stays within the same segment as a resolved local boundary board state has a primitive
+calculation referenced to an equilibrium. The designer's expectation is that where the exhaustive primitive compositional calculations of a
+position share the same minimum, the same procedure also certifies a local boundary board state from the mining, by going through the
+sub-optimal moves as the table does. It may be possible to navigate those calculations with less storage, recalculating the force region from
+the equilibria first, and where the force region is vast enough this compacts the storage and extends the reach of certainty within the
+paradigm window.
+
 **Partial coverage (a statement).** This covers many of the primitives and not all. The branches it does not cover, if any, remain
 uncovered until exhaustive coverage covers them. A race shortened elsewhere by the additions may still force against a candidate, so
 excluding other races is a second step. The more populated the catalog, the more results can be cached from elsewhere.
@@ -532,6 +563,23 @@ is where those positions lie. Where practical the enumeration goes deeper.
 **Segments, estimates and return (a statement).** The work is segmented, with certification checkpoints. Progress can use rough
 estimates, left unsettled, and the work returns to earlier checkpoints to see whether the later resolution of what was estimated changes
 their certification.
+
+**The estimate and refine loop (a statement, with this file's step list).** Primitives can be scoped, so the primitive calculations of a
+position can be understood without exhaustive coverage of it. A human calculating a position does this: captures, coverage, the move pool
+and the opportunities in it are all primitive calculations. The rule set of an anchor can therefore be estimated and then tested for
+counterexamples, where another primitive impacts optimality, and built upon progressively and iteratively. The steps, as this file reads
+them, offered for correction:
+1. **Estimate.** State the scoped primitive calculations for the anchor class as a rule set. Its status is conditional or unresolved (§4).
+2. **Stress-test.** Look for counterexamples inside the scope: by exhaustive coverage where a table exists, by search or by seeds (§2f)
+   where it does not.
+3. **Account for the counterexample.** A counterexample is a composition of primitives whose terms lay outside the scope of the estimate.
+   Bring that composition into the rule set and extend the scope to the support closure it needs (catalog §8.9). If no primitive account
+   can be given, record it as a residual interface for the reduction rule (topology §8x).
+4. **Repeat** from step 2 with the refined rule set.
+5. **Certify.** The rule set is certified within its scope when the check is exhaustive over that scope: complete inside a table, and a
+   closed pruned structure outside one (survey §4a). Until then it keeps its status and its dependencies.
+Each pass is a belt modification and is recorded. Whether the loop converges quickly, that is, whether the scope stays small as
+counterexamples are accounted for, is not known and is found by running it on the first classes.
 
 **The larger material, as test and source (a statement).** Where exhaustive coverage of the extended material exists, it shows how the
 primitive calculations deviate under the ablation, and what emerges is added to the protective belt as integration specification. Whether
@@ -655,6 +703,63 @@ inform each other.
   is checked and by whom; how the dependency record is shared; and whether a community forms, which is outside the specification. The
   specification makes it possible and does not secure it. The phrase "training data" is the designer's, and in this file's reading it names
   the stored pruned structure and its certificates (a weak solution) and not machine-learning data.
+
+## 2f. Seeded pruning as community work (the designer's statements, and this file's readings)
+
+**Status.** Integration specification. It depends on the forward anchor (§2d), the fronts (§2e) and the dependency record (§4). Nothing in it
+has been run. The structure is the designer's, and the vocabulary of closure, basis and interface is this file's, offered for correction.
+
+**The designer's statement: seeds and objects.** The forward trace is built from seeds, the played games of grand masters and engines (§2d).
+A batch of seeds, pruned by the programme's method, gives an object. A second batch gives a second object. Pruning the seeds of both from the
+initial full seed gives a third object, and feeding the first two objects into the same method gives that same third object. Any pruning can
+eliminate a seed directly. A seed from any batch can carry a trace certification from a batch that invalidates it, showing that it lies in a
+force region and which dependencies resolve it. Batches can be stored in segments. A game can be read as following primitive compositional
+rules, and its outcome then emerges from what the programme has already established (primitive calculations from other local boundary
+board states, inverse ablation, the segmented progression). The seeds that matter are those that compose structure within the same
+segmented boundary, organized by reachability and irreversibility in the way the Syzygy piece-combination schema is. This allows modular
+storage that can be fetched and deleted by dependency within the storage window, and the window can differ between contributors.
+
+**The designer's statement: the role of the seeds.** The structure is like mining in one respect only. A community resolves a block whose
+objective is the self-referential progression of the programme, and there is no token and no financial scheme. The seeds are a heuristic,
+and the heuristic is architected into the programme as an iterative progression by population effort to refine the seeds, which does not
+depend on certification. The community pruned structure does not itself denote the certificate. A counterexample to a pruned structure is
+informative, and the seed combination that produced it is extracted and added to the list of seeds that optimize the structure. The
+designer notes that this by itself cannot say that exhaustion has been reached.
+
+**The designer's statement: the object is a set of facts.** The object is a set of facts and not the trace of the procedure, with the seeds
+that inform the reachability family under consideration kept. The rule set of a class is among the facts. For a base class, the rules that
+exclude boundary board states depend on the anchor board state relative to primitives that are already lost and immediately identifiable.
+The rule set is built from primitive calculations identified within the reachable class formed under the irreversible segmented boundary it
+lies in, and it is scoped to it. ("Fact" in this section names whatever the object contains; what that is, in the programme's terms, is in the readings below.) Part of the community work is the programming of the rule set and the addition of seeds that stress-test
+it, since the progression of a rule set for a reachable family, as an addition to the protective belt, is progress of the programme.
+
+**This file's readings, offered for correction.**
+- **Closure.** If the object is the set of facts that follow from a set of seeds under the rules, the pruning is a closure operator, so
+  pruning the objects of two batches equals pruning the batches together. The merge is order-independent and idempotent, so contributors need
+  no coordination and duplicated work is harmless.
+- **What the object contains (corrected on the designer's statement).** Nothing beyond what the record already has, and no typology of
+  facts. An earlier version of this section named three kinds of fact, positional, rule and link. That was this file's invention and is
+  withdrawn. The object holds certified entries (the catalog and the cache entries of survey §4j and §6, with the link statuses of §4) and
+  conditions stated as primitive calculations relative to the anchor of a class and scoped to its irreversible segmented boundary. For a mined
+  base, such a condition excludes a position from boundary status because a primitive race is already decided in it, and it is derived from
+  full coverage. An exception to a condition is another composition of the primitives that beats it, and it is recorded as that composition,
+  which classifies many branches at once, and not as a list of individual counterexample branches. Individual branches are kept only where no
+  primitive account exists yet, and those are residual interfaces for the reduction rule (topology §8x). The seed paths are provenance. A path
+  from a game is a witness for a conditional link and not a certificate of one (§2d), so provenance is kept apart from the rest and the
+  closure does not depend on it.
+- **Basis and interface.** A seed that the other seeds derive is redundant, so a minimal set of seeds regenerates the object, and storing it
+  trades storage for recomputation. A segment depends on lower segments only through the values at its crossing exits, so those interface
+  values are kept and the lower interiors can be deleted. Neither has been shown to be small.
+- **Certified and conditional.** Only certified facts form a closure. Conditional prunes are non-monotone, since later facts can retract them,
+  and need the dependency record. A draw is closed only when every move is accounted for (survey §4a), and a check decides that,
+  whatever seed produced the structure.
+- **A condition is a hypothesis within its anchor and scope.** A counterexample inside the scope is an anomaly. The response is to account for
+  it by a primitive composition, which refines the condition, or to record it as a residual interface. Listing counterexamples branch by
+  branch with no primitive account, or narrowing the scope with no primitive reason, is the degenerate move, so such changes are recorded and
+  the running count of main §15 includes them.
+- **Not specified:** the formats of a certified entry, a condition and a seed record; the efficiency measure of a seed (nodes to closure, for example);
+  how segments are assigned and duplication avoided; how a conflict between batches is resolved; the fields of the dependency record; and
+  who checks a certificate.
 
 ## 3. Progress
 
@@ -843,6 +948,25 @@ inform each other.
 - **The exits of a base change under ablation.** A base's terminal exits, the draws reached by reducing material, are particular to it,
   and adding material can add or remove them. This bears on the expectation that an added imbalance breaks the equilibrium: it is a
   prediction to test, because an exit can be a drawing resource for the weaker side.
+- **The exit condition, read against the record (this file's reading, offered for correction).** (1) It is what retrograde analysis does
+  mechanically: a position is not a win if the defender has a capture into a drawn lower material, and the tables are built that way. What
+  the programme adds is stating it in primitive terms, so that it can be predicted and composed without the table. (2) Denying an exit is a
+  capture-net or coverage term (P-001, P-008) on the exchanging unit and its squares, so the record needs no new primitive for it. (3) It is a
+  necessary condition and not the composition rule, since the rest of the race still has to be decided. (4) A prediction, stated in advance
+  and not run: in the extended table, for every position valued a win for the stronger side, each exit open to the defender is either
+  unavailable at that position or lost, and the primitive calculation reproduces that set of positions without the table. A disagreement is
+  a residual interface for the reduction rule (topology §8x). (5) It extends the exits bullet above, which recorded the exits as a thing to
+  test, to a condition on the interface between base and extension.
+- **The scope and the deviation statements, read against the record (this file's reading, offered for correction).** (1) The table already
+  certifies each deviation by its win, draw or loss value, so the route through the primitive calculations is the independent route, and
+  agreement of the two on every position of a material is the validation (the validation placeholder, §2 item 5). (2) The delta is the
+  designer's: the change in the primitive calculations along a line, and not the table's convention. What the table provides is structure to
+  derive it from or to compare it with: the value of each position, the values of its children, and a distance to the next zeroing move, which
+  is not the distance to mate (mining §5; validation placeholder §2 item 2). How the delta is derived from that structure is not specified. (3) What it is that "shares the same minimum", and over which set of calculations, is not
+  specified here. (4) The compaction holds only if the rule set together with the recalculation is smaller than the table it replaces. The
+  size of the force region does not by itself give compression, and the trade is storage against the cost of recalculating. Nothing here has
+  been run. (5) The two-way resolution within a segment is the asymmetry of certification: a win needs one forcing strategy that covers every
+  reply, and a draw needs the closed structure or a path to a certified state. It corresponds to the cache entries of survey §6.
 - **Lookahead to certified leaves is, as search, a depth-limited search ended by cached results.** What the programme adds is the share of
   leaves certified by the rules and the catalog rather than by searching, and whether the rest is reachable at all. A leaf value that is only estimated from
   the primitives is kept apart from a certified one. Whether a base's rule set can be told from a short search depends on the base's race

@@ -507,6 +507,16 @@ of a chain of enabling dependencies. The movement rule of each unit supplies the
 read on. **Says nothing about:** what a resolved chain then captures (P-001), or whether the coverage that a chain provides survives
 a perturbation (P-008). It names no piece type and states no piece rule (§6).
 
+**The nesting (the designer's statement).** This entry is also where the dependencies of the other two primitives nest in composition.
+The capture net and the coverage race depend on the chain that has to resolve before they can be read, and the chain depends on them
+(§9). An irreversible step in the chain is a segment boundary, and across it the goals of the primitives are reshaped: the target, the
+attackers and the coverage that the nets are read on are not the same before and after. A promotion is the instance (§7.9): before the
+boundary there is a net on the advancing unit, with the other side's refutation of that goal, and after it the net is on the royal
+target, by the resolved unit together with the king. **This file's reading, offered for correction (confirmed by the designer).**
+"Says nothing about what a resolved chain then captures" is read as saying that the capture is evaluated by P-001 and not here. The
+nesting is the dependency between the two, and it is carried by this entry. Segmented boundaries remain not a primitive (§11.1): they
+are a classification of the moves, and the dependency across them is what this entry holds.
+
 ### 7.2 Inputs
 
 A position P; a chain, which is a sub-graph of the dependency graph G (§7.3); for each unit its movement relation M; the side S
@@ -1171,7 +1181,8 @@ The second is checked against the tablebases where they reach.
   equilibrium by a locking mechanism so that other pieces cannot shift it, requires all three.
 - **Segmented boundaries.** Not a primitive. A classification by reversible and irreversible moves, coupled to the metric flags and to
   the reachability within the region a segment encloses. After an irreversible move, the option of a viable move that would have
-  compensated is gone, so the segment boundary directly bears on the primitive calculation.
+  compensated is gone, so the segment boundary directly bears on the primitive calculation. The dependency of the primitives across a
+  boundary, and the reshaping of their goals, is carried by P-003 (§7.1, the nesting).
 
 **What the designer says of the flags.** A flag can be reversible or irreversible, linked to segmented dependency. A temporary loss of
 the right to castle depends on coverage. An irreversible loss comes from the king moving or from a specific rook moving.
@@ -1387,7 +1398,7 @@ position-level rule set.
 
 ### 11.7 Provenance
 
-**The designer's:** the layering of §11.1; the flags as segmented dependencies of irreversibility that the position key must carry; the
+**The designer's:** the nesting of §7.1; the layering of §11.1; the flags as segmented dependencies of irreversibility that the position key must carry; the
 treatment of check, castling, en passant, promotion, stalemate, zugzwang, repetition and insufficient material in §11.2; the withdrawal
 of the sufficient-material assumption; the acceptance of the status DEAD; the resolution that a dead position is not a boundary board state position, that it can be the terminal draw of one upstream, and that a position in which only one side has a losing deviation is not one; the classification of a route to a net as forced or a choice; the closure as the certificate; the exclusion of draw by agreement, resignation, the clock and
 touch-move; and the removal of the 50-move rule. **This file's:** the Laws walk of §11.5, the composition of §11.4, the two worked examples as

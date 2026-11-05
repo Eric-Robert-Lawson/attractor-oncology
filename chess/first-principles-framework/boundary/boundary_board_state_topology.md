@@ -128,6 +128,16 @@ a true boundary state or the weaker, several-options edge case remains the
 same open, empirical question already on record — this argument locates where
 to look, not what will be found there.
 
+**A note on the direction of this section (the designer's statement; start-selection §2c).** This section concerns the local status: once a
+state is certified as local, nothing that its ancestors have available excludes it from the local definition. The main definition's deviation
+condition is evaluated along an anchoring trajectory under optimality, and the deviation it requires can lie at a prior move in a different
+irreversible segment upstream. In an enumeration with no anchoring point outside the segment, a position lacking the condition within the scope
+is therefore not excluded, and the condition waits for exhaustive coverage between an anchoring point and the position. A state is excluded
+from local status only where no anchoring point can hold the constraints. The exclusion that ancestors do bring is the exclusion from global
+status: where the anchoring trajectory cannot be arrived at under optimality from the initial position, the state is certified local and
+certified non-global, which is an expected outcome of the programme. Where the deviations exist within the scope the status is certified
+locally and unconditionally, as here.
+
 ---
 
 ## 4. What's actually being pointed at: necessity versus redundancy, a real and different property

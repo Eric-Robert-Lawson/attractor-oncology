@@ -510,6 +510,43 @@ position not drawn under optimality, found as primitive race conditions. A rule 
 landscape, is certain within the class. Once it exists the class no longer needs the table for classification, which is the decoupling
 from exhaustive coverage. The moves of the pool are then used to restore an equilibrium that a race has defeated.
 
+**The exclusion form of the rule set, and its depth bound (a statement).** Within an irreversible segment, every position is a boundary board
+state unless a rule excludes it. The rules are exclusion rules, stated as primitive calculations: a position is excluded, as a position of the
+force region, when a primitive imbalance exists within d plies. Only the minimum of a primitive count matters under optimality, so the count of
+a forced position is the length of its shortest race (the winning side wins in x, and the other side would need x+1 to equalize, or the extra
+move changes the outcome within the force region). The depth d is not given by the primitives, and it is not a choice: it is an emergent
+property of the region with a deterministic value. Where exhaustive coverage exists it is counted: d is such that no position of the segment,
+unforced at d, enters the force region after more than d plies of optimal play. When that is verified the rules are closed, and every position
+without an imbalance within d is drawn, certified within the segment and decoupled from the table. Otherwise d is an estimate, a scope limit on
+the depth of search that calibrates the window in which certainty can be reached, and it can be disproved by counterexamples, which inform the
+constraints of the rule set. The same statement can be put forward before the exhaustive coverage, as a hypothesis conditional on
+counterexamples: a counterexample is a position unforced at d that enters the force region later, and it can be constructed from the
+community's contribution (§2f) from uncertainty. Another approach may exist that emerges from the architecture and structure of the
+programme, and it is left to be discovered as integration specification. Whether the turn changes the status of a position, or the position
+is forced whichever side moves, is recorded with the position, which is stored once with a flag for the side to move, and it informs the
+choice of moves under optimality in the segment. The depth is extended deliberately, where the structure calls for it, and the exhaustive
+check is what certifies each extension. The approach depends on a property of the segment: that its boundary board states dominate its
+positions. Where they do not, a different approach is needed. This is one approach that the architecture of the programme allows to the
+enumeration of the status of boundary board states in an irreversible segment. It is neither unique nor complete: the structure of the
+programme leaves open the discovery of other approaches and their addition to the protective belt.
+
+**The main definition as the root dependency of the rule set (a statement).** The rule set accounts for the main definition
+(`boundary_board_states.md` §14 items 7 and 8: a losing deviation for each side, and a draw realized by a cycle or a forced terminal draw), and
+that definition is its root dependency. Boundary board status is a trajectory consideration with respect to it: it is determined along a
+trajectory from an anchoring point to the position, under optimality. The irreversible segment that holds the position may not provide the
+required losing deviations, and a deviation that satisfies the condition can lie at a prior move of the trajectory, in a different irreversible
+segment upstream, which has not been encountered. A segment enumerated from the tables holds no information on that trajectory, so no position
+can be excluded within it for lacking the deviation, and the condition is left until exhaustive coverage between an anchoring point and the
+position verifies it. A position is certified as a local boundary board state when an anchoring point exists whose trajectory to it holds the
+optimality constraint and the losing deviation constraint of the main definition. The anchoring point need not be the initial position, and the
+position need not be reachable from it. A trajectory that passes a choice of a won force region in place of the draw is not an optimal
+trajectory and cannot serve as that anchoring trajectory. A certified local state is not excluded from the local definition by anything further
+upstream. It is excluded from local status only where no anchoring point can hold the constraints. If the anchoring trajectory cannot be arrived
+at under optimality from the initial position, the state is certified local and certified non-global. That exclusion from global status, by
+ancestor-dependent logic through the upstream irreversible segments, is an expected outcome of the programme. Where the required potential
+losing deviations exist within the scope, the position is certified locally and unconditionally. Where they do not, the position is not
+excluded: it stays a boundary board state by default, uncertified, and the dependency waits.
+
 **Inverse ablation as composition (a statement).** Material is added to a base equilibrium. The scope of the ablation is chosen: narrow,
 with the kings as they are and only the primitives native to the position (overlapping pieces counted or not), or wider. Keeping the kings as they are is a compatibility requirement of
 inverse ablation and not a convenience (§2b, what an anchor is). Symmetry keeps
@@ -787,6 +824,8 @@ it, since the progression of a rule set for a reachable family, as an addition t
 | The two senses of reachable (optimal, for certification; the full landscape, for enumeration and pruning) (§2b) | Stated by the designer; recorded as a duality of the programme |
 | The king and pawn race as an illustration of joint compatibility and carry-over to added pieces; exclusion by the compositions already in equilibrium (§2b) | Stated by the designer; not run |
 | Rule set for drawn against not drawn, derived from a mined base class (§2c) | Stated by the designer; the race profile of the not-drawn region was measured on one base and not kept here; the rule set is not written |
+| The exclusion form of the rule set, with its depth bound found by exhaustive coverage, and its conditional statement before coverage (§2c) | Stated by the designer; no exclusion rule is written; no bound is recorded; not run in the programme's terms |
+| The main definition as the root dependency of the rule set: boundary status as a trajectory consideration, certified locally where the deviations exist within the scope, otherwise not excluded and waiting for coverage from an anchoring point (§2c) | Stated by the designer; not run |
 | Composition by inverse ablation from a base equilibrium, with the lookahead to certified leaves (§2c) | Stated by the designer; not run |
 | Certification checkpoints, estimates left unsettled, and return to earlier checkpoints (§2c) | Stated by the designer; the record of status and dependency is not specified (§4, §5) |
 | The forward anchor as a requirement, the two tracks, and the sources of forward paths (§2d) | Stated by the designer; not run |
@@ -967,6 +1006,26 @@ it, since the progression of a rule set for a reachable family, as an addition t
   size of the force region does not by itself give compression, and the trade is storage against the cost of recalculating. Nothing here has
   been run. (5) The two-way resolution within a segment is the asymmetry of certification: a win needs one forcing strategy that covers every
   reply, and a draw needs the closed structure or a path to a certified state. It corresponds to the cache entries of survey §6.
+- **The exclusion form, read against the record (this file's reading, offered for correction).** (1) It is the estimate and refine loop of §2c
+  with a definite shape: the estimate is an exclusion rule with a depth bound d, and the counterexample is one position, unforced at d, that
+  enters the force region later. The certificate is the exhaustive coverage of the segment, and d is read off it and not derived from the
+  primitives. (2) The statement of a hypothesis before coverage is conditional in the sense of this section. A hypothesis that survives the
+  counterexamples offered is not thereby certified, and keeps its status until the exhaustive check closes it. (3) It carries its scope: the
+  segment, the side to move (d may differ by side, and the position forced whichever side moves is a different class from one that depends on
+  the turn), and the lower-segment values it reads through the interface (§2f, basis and interface). Without the scope a counterexample can be
+  argued away as concerning another scope. (4) What exclusion certifies is that a position is not forced. That the position is a boundary board
+  state is the main definition, which the statement above makes the root dependency and defers for the deviation condition. Three classes of a
+  non-excluded position follow from it, as read here: certified locally, where the deviations exist within the scope; the default, where they
+  do not and an upstream prior may yet supply them; and certified through a trajectory, after coverage between an anchoring point and the
+  position. The dominance on which the approach depends is the share of the positions that the rules do not exclude, and the share certified
+  locally is a separate figure. Both are properties to be measured for each segment before the approach is used on it. Local and global are read here as follows, offered for correction: local certification needs one
+  anchoring trajectory that holds both constraints, and it is not withdrawn afterwards; the exclusion that ancestors bring is the exclusion from
+  global status, where no anchoring trajectory from the initial position holds optimality. This agrees with topology §3, which concerns the local
+  status, and with survey §2 and `boundary_board_states.md` §14 item 9, where *local* carries no requirement on the path. (5) d is read as a property of
+  the region and not as a parameter to be chosen. Where it is counted from a table, the table's distance is to the next irreversible move and
+  not to the mate (mining §5; validation placeholder §2 item 2), so the count needs the care recorded there. Where it is estimated, its status
+  is conditional until the exhaustive check, and the counterexamples that disprove it are kept with it. (6) The turn flag stores one position for both sides to move, and the comparison of the same position
+  across the side to move is the temporal analytical relativistic measuring of survey §4c. How the comparison is recorded is not specified.
 - **Lookahead to certified leaves is, as search, a depth-limited search ended by cached results.** What the programme adds is the share of
   leaves certified by the rules and the catalog rather than by searching, and whether the rest is reachable at all. A leaf value that is only estimated from
   the primitives is kept apart from a certified one. Whether a base's rule set can be told from a short search depends on the base's race
@@ -1009,7 +1068,9 @@ it, since the progression of a rule set for a reachable family, as an addition t
 ## 5. Not yet specified
 
 The scope function of an ablation (narrow or wide) and how the arrival of each kind of added unit is measured; the depth of the lookahead
-and how it is chosen; how a rule set for drawn against not drawn is written down and tested against the base table; the fields of the
+and how it is chosen; how an estimated depth bound d of an exclusion rule is recorded with its status and its counterexamples, how the three classes of a non-excluded position are recorded (§4), how it is recorded
+by side to move, how the dominance of the boundary board states in a segment is measured and what share the approach needs, and what is done where
+it fails (§2c, §4); how a rule set for drawn against not drawn is written down and tested against the base table; the fields of the
 status and dependency record (§4), how dependents are re-evaluated, and where checkpoints are placed; and how the unscoped region is
 recorded.
 
@@ -1040,4 +1101,4 @@ The rule sets that govern navigating an irreversible boundary from the retrograd
 
 **The designer's:** the observation of the Black schematic in high-level play; the three moves and their uniqueness to the
 primitives; that the Black moves are scoped and White's side has not been examined; that the discovery is still in progress; and the
-claim made of the deduction; the second route, the third path, the procedure on any seed and the illustration (§2); the statements of §2a and §2b. **This file's:** the table, the section order, the organization of the procedure in §2a, and the readings in §4.
+claim made of the deduction; the second route, the third path, the procedure on any seed and the illustration (§2); the statements of §2a and §2b, and the exclusion form of the rule set, its depth bound and the main definition as its root dependency (§2c). **This file's:** the table, the section order, the organization of the procedure in §2a, and the readings in §4.

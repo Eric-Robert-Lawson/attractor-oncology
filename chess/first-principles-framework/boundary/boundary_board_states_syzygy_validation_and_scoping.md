@@ -54,6 +54,8 @@ and their tempo terms), `boundary_board_states_piece_structure_composition.md` (
    - that the equilibrium value is zero exactly on the drawn positions that have a losing deviation for each side;
    - the verdicts of the pruning automation against the tables, position by position (mining §6);
    - the piece-addition test and the king-and-pawn example (start-selection §4).
+   - the scoped temporal calculation, derived within a search depth, against the tempo read from the exhaustive landscape of a material, where
+     the tempo is a measurement and not a calculation (start-selection §2c, the tempo paragraph).
 6. **The step from agreement inside the tables to certainty outside them is a separate step.** Agreement on every material the tables
    hold shows that the primitive calculation is coherent. It does not by itself show it stays exact where the tables stop, which
    start-selection §2b names as the programme's worst case. Outside the tables the certificate is still the exhaustive coverage of the

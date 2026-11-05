@@ -522,9 +522,7 @@ the depth of search that calibrates the window in which certainty can be reached
 constraints of the rule set. The same statement can be put forward before the exhaustive coverage, as a hypothesis conditional on
 counterexamples: a counterexample is a position unforced at d that enters the force region later, and it can be constructed from the
 community's contribution (§2f) from uncertainty. Another approach may exist that emerges from the architecture and structure of the
-programme, and it is left to be discovered as integration specification. Whether the turn changes the status of a position, or the position
-is forced whichever side moves, is recorded with the position, which is stored once with a flag for the side to move, and it informs the
-choice of moves under optimality in the segment. The depth is extended deliberately, where the structure calls for it, and the exhaustive
+programme, and it is left to be discovered as integration specification. The depth is extended deliberately, where the structure calls for it, and the exhaustive
 check is what certifies each extension. The approach depends on a property of the segment: that its boundary board states dominate its
 positions. Where they do not, a different approach is needed. This is one approach that the architecture of the programme allows to the
 enumeration of the status of boundary board states in an irreversible segment. It is neither unique nor complete: the structure of the
@@ -546,6 +544,26 @@ at under optimality from the initial position, the state is certified local and 
 ancestor-dependent logic through the upstream irreversible segments, is an expected outcome of the programme. Where the required potential
 losing deviations exist within the scope, the position is certified locally and unconditionally. Where they do not, the position is not
 excluded: it stays a boundary board state by default, uncertified, and the dependency waits.
+
+**Tempo, certification and the scoped region of uncertainty (a statement).** *Status:* potential integration specification, not run. The designer
+is unsure whether the tempo record is useful to the programme without exhaustive coverage. Under exhaustive coverage the tempo of a position is a
+measurement derivable from the landscape: whether the turn changes the status of a position, or the position is forced whichever side moves. It
+can be recorded with the position, stored once with a flag for the side to move, and it informs the choice of moves under optimality in the
+segment. Exhaustive coverage meets the storage limit of the paradigm window, so it cannot be the only route. Without it, a temporal calculation
+is derived within the scope of a search depth and is certain within the scope that the search enumerates. It informs the primitive
+calculations, with anchoring points given by the difference between the plies searched at a depth, and each added depth adds to the combinatorial
+growth. It can also be determined from the board state, from the irreversible segmented boundaries, which inform the pool of primitive
+calculations to the mate that can emerge from the position, and from the requirement that optimality is relative to the choice opportunities
+of a move. After a trajectory on which the primitive calculations must resolve for the equilibrium after what looks like a poor choice, the
+scope for returning to equilibrium is limited, and a point that compensates for the choices made can exist. That it can exist is the statement. If
+it does, finding it needs more depth, and the segmented community effort can help resolve that conditional. A primitive race that resolves
+within the window acts as a heuristic up to the window of the paradigm. There the rule set hypothesis applies: the depth is determined up to x,
+with the potential for a counterexample to prove otherwise, added to the rule set as a specified example. The region scoped to a depth with a
+degree of certainty leaves a scoped region of uncertainty, in which a community can search for counterexamples at population level. It is a
+segmented region and a focus of community effort. Each addition to the rule set makes the region smaller, and it can be composed with the same
+depth analysis under the same window limitation, enumerating what the window allows and accumulating certainty. The outcome, including whether
+compensation is possible, becomes accumulated certainty from exhaustive coverage within the segmented region being enumerated. This is a viable
+approach given the architecture and structure of the programme, and its viability depends on the window size and not on whether the programme works.
 
 **Inverse ablation as composition (a statement).** Material is added to a base equilibrium. The scope of the ablation is chosen: narrow,
 with the kings as they are and only the primitives native to the position (overlapping pieces counted or not), or wider. Keeping the kings as they are is a compatibility requirement of
@@ -826,6 +844,7 @@ it, since the progression of a rule set for a reachable family, as an addition t
 | Rule set for drawn against not drawn, derived from a mined base class (§2c) | Stated by the designer; the race profile of the not-drawn region was measured on one base and not kept here; the rule set is not written |
 | The exclusion form of the rule set, with its depth bound found by exhaustive coverage, and its conditional statement before coverage (§2c) | Stated by the designer; no exclusion rule is written; no bound is recorded; not run in the programme's terms |
 | The main definition as the root dependency of the rule set: boundary status as a trajectory consideration, certified locally where the deviations exist within the scope, otherwise not excluded and waiting for coverage from an anchoring point (§2c) | Stated by the designer; not run |
+| Tempo as a certification vector: derivable under exhaustive coverage, a scoped temporal calculation within a search depth without it, and the scoped region of uncertainty as the focus of community effort (§2c) | Stated by the designer; potential integration specification; not run |
 | Composition by inverse ablation from a base equilibrium, with the lookahead to certified leaves (§2c) | Stated by the designer; not run |
 | Certification checkpoints, estimates left unsettled, and return to earlier checkpoints (§2c) | Stated by the designer; the record of status and dependency is not specified (§4, §5) |
 | The forward anchor as a requirement, the two tracks, and the sources of forward paths (§2d) | Stated by the designer; not run |
@@ -1024,8 +1043,12 @@ it, since the progression of a rule set for a reachable family, as an addition t
   status, and with survey §2 and `boundary_board_states.md` §14 item 9, where *local* carries no requirement on the path. (5) d is read as a property of
   the region and not as a parameter to be chosen. Where it is counted from a table, the table's distance is to the next irreversible move and
   not to the mate (mining §5; validation placeholder §2 item 2), so the count needs the care recorded there. Where it is estimated, its status
-  is conditional until the exhaustive check, and the counterexamples that disprove it are kept with it. (6) The turn flag stores one position for both sides to move, and the comparison of the same position
-  across the side to move is the temporal analytical relativistic measuring of survey §4c. How the comparison is recorded is not specified.
+  is conditional until the exhaustive check, and the counterexamples that disprove it are kept with it. (6) The turn flag (§2c, the tempo paragraph) stores one position for both sides to move, and the comparison of the same position
+  across the side to move is the temporal analytical relativistic measuring of survey §4c. How the comparison is recorded is not specified. (7) Where tables
+  exist, the scoped temporal calculation can be tested against the tempo read from the exhaustive landscape, and the table then removed (the sandbox
+  of §2c), with an estimated value kept apart from a certified one. Compensation is read as a conditional that more depth can resolve, and its
+  resolution either way is a certified result within the scope enumerated. The recomposition of the region of uncertainty is read as a viable
+  approach whose reach is set by the window.
 - **Lookahead to certified leaves is, as search, a depth-limited search ended by cached results.** What the programme adds is the share of
   leaves certified by the rules and the catalog rather than by searching, and whether the rest is reachable at all. A leaf value that is only estimated from
   the primitives is kept apart from a certified one. Whether a base's rule set can be told from a short search depends on the base's race
@@ -1068,7 +1091,7 @@ it, since the progression of a rule set for a reachable family, as an addition t
 ## 5. Not yet specified
 
 The scope function of an ablation (narrow or wide) and how the arrival of each kind of added unit is measured; the depth of the lookahead
-and how it is chosen; how an estimated depth bound d of an exclusion rule is recorded with its status and its counterexamples, how the three classes of a non-excluded position are recorded (§4), how it is recorded
+and how it is chosen; how an estimated depth bound d of an exclusion rule is recorded with its status and its counterexamples, how the three classes of a non-excluded position are recorded (§4), how a scoped temporal calculation and its depth are recorded and compared with the tempo of an exhaustive landscape, how the region of uncertainty is delimited and handed to a community, how it is recorded
 by side to move, how the dominance of the boundary board states in a segment is measured and what share the approach needs, and what is done where
 it fails (§2c, §4); how a rule set for drawn against not drawn is written down and tested against the base table; the fields of the
 status and dependency record (§4), how dependents are re-evaluated, and where checkpoints are placed; and how the unscoped region is
@@ -1101,4 +1124,4 @@ The rule sets that govern navigating an irreversible boundary from the retrograd
 
 **The designer's:** the observation of the Black schematic in high-level play; the three moves and their uniqueness to the
 primitives; that the Black moves are scoped and White's side has not been examined; that the discovery is still in progress; and the
-claim made of the deduction; the second route, the third path, the procedure on any seed and the illustration (§2); the statements of §2a and §2b, and the exclusion form of the rule set, its depth bound and the main definition as its root dependency (§2c). **This file's:** the table, the section order, the organization of the procedure in §2a, and the readings in §4.
+claim made of the deduction; the second route, the third path, the procedure on any seed and the illustration (§2); the statements of §2a and §2b, and the exclusion form of the rule set, its depth bound, the main definition as its root dependency, and tempo and the scoped region of uncertainty (§2c). **This file's:** the table, the section order, the organization of the procedure in §2a, and the readings in §4.

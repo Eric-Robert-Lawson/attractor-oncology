@@ -2,7 +2,7 @@
 
 **Goal.** Enumerate and progress the programme in any certifiable way, so that there is more structure for the Lakatosian programme to build on. Every step has to be considered against the programme's architecture and against scaling on all fronts: more materials, more segments, more of the space.
 
-**Working frame.** For an irreversible segment (KRvKR is the first example), every position is a boundary board state *unless* a rule excludes it. The rules are written in primitive terms (coverage net, capture/mating net, segmented dependencies) and bound the forced region through ply-bounded temporal calculations, with closure. Depth extends only when the structure calls for it.
+**Working frame.** For an irreversible segment (KRvKR first), every position is a boundary board state unless a rule excludes it. A rule excludes a position when a primitive imbalance exists within d plies (counts matter only at their minimum under optimality). The depth d is found by exhaustive coverage of the segment’s Syzygy files: d is the smallest depth such that no position becomes forced after more than d plies of optimal play while unforced at d. Once that is verified, everything without an imbalance at depth d is drawn, certified within the segment. The check is per side to move, and the lower segments are read through the interface. Depth is extended only when the structure calls for it, and the exhaustive check is what certifies each extension.
 
 **Syzygy's role.** A measuring instrument for the branch to the win and for the landscape. It is not a target to reproduce, and reproducing win/draw/loss classes is not progress.
 

@@ -542,8 +542,9 @@ The full statements and the process are in `boundary_board_states_syzygy_mining.
 
 - **The tablebase as the certificate of §4a.** For a drawn position of a material held in the tablebase, every legal move either
   keeps the draw or loses, and the table gives the value of each, so the closure condition of §4a (every legal move accounted for)
-  is met by the table. Whether each side has a losing deviation at the position, and what "both sides live" tests, is not settled by
-  the statements (mining document §9).
+  is met by the table. That each side has a losing deviation, and with it both sides live, is settled by
+  `boundary_board_states.md` §14 item 8. Where the deviation is evaluated is along the anchoring trajectory, certified locally where it exists
+  within the scope (`boundary_board_states_start_selection.md` §2c).
 - **The mined population as the entry stage of the catalog.** The proven draws of a mined material are read as entries of the
   certification catalog at its entry stage (§4j), for the materials mined. No fields of an entry are proposed.
 - **The order of work.** This is §4h run on tablebase data: the furthest downstream certified entries first, and the families and the

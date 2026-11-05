@@ -161,7 +161,7 @@ where a losing side's last real choice exists.
 >   `is_boundary_state()` sketch in §6, checked for syntax but not yet run
 >   against real Syzygy or project data. No run results are kept in this
 >   record. The catalog (`boundary_board_state_primitive_catalog.md`) is a specification, and no
->   proven boundary-state entry is kept in this record (the Syzygy mining has been run once, with its results not kept; start-selection §2a).
+>   proven boundary-state entry is kept in this record (start-selection §2a).
 > - **Chained dependencies (topology §8z, §8ab, catalog §7).** Chains, which are locks read as the
 >   dependency of one element on another, and the movement rule of every unit are specified at the level of primitives. P-003
 >   is specified (SPEC, version 3). It derives orbits, route parity, edge dependence and the permanence of coverage from a

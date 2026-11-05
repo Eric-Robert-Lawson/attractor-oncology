@@ -1020,11 +1020,28 @@ P-001 is the terminal primitive: every plan ends in a capture net. Race to a squ
 of this map: the first is a term (TP, TM), the second is an input (missing edges of the movement relation), and the third is the
 result of a chain resolving (§1).
 
+**Order of approaches (the designer's statement; unrun specification).** This assumes the classes below cover every move of a general board
+state. If they do not, this statement changes. Every legal move is a capture, a non-capture irreversible move, or a reversible move. In terms
+of role, a move is one of: completing the mating net directly; a capture net, which navigates one or more irreversible boundaries (not
+necessarily a single step from one segment to the next); a move that restricts the opponent's optimal replies, which is a segmented
+dependency; navigation within the segment; or a non-capture irreversible move, which is structurally the same as restricting replies and also
+changes the pool of viable compositions. The coverage race is not one of these classes: it is a dependency of the optimality calculation of
+the nets (the P-008 to P-001 row above), since a net cannot be evaluated for both sides without the occupancy and coverage of the other
+pieces. The irreversible boundaries a position has already crossed bound the pool of compositions that can emerge from it, whatever the
+pieces are. The order in which approaches are tried is not a rule of this catalog. It emerges from the analysis of the board state, from the
+boundaries already crossed, from the progress of the programme, and from the difficulty of each approach and how the order changes the work
+of the others. Cheaper approaches can prune the work and storage of harder ones, but this is not definitive: certification requires
+exhaustive coverage of the segment, and a harder approach may decide what cheaper ones cannot. A suboptimal move excludes itself by landing
+in a losing force region shown by primitive calculation. A reversible move that maintains the draw is navigation within the segment, and
+whether it is drawn is certified by d and coverage. The ordering does not decide either; the workflow does (start-selection §2c).
+
 ---
 
 ## 10. Provenance, and the mapping from the original catalog families
 
 ### 10.1 What is the designer's and what is this file's organization
+
+The order-of-approaches statement in §9 is the designer's.
 
 The designer's: the architecture (a primitives catalog; candidate, proven and disproven
 boundary-state catalogs with verdicts cached permanently; composition of primitives recorded on proven

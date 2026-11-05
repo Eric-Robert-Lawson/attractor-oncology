@@ -514,12 +514,12 @@ from exhaustive coverage. The moves of the pool are then used to restore an equi
 state unless a rule excludes it. The rules are exclusion rules, stated as primitive calculations: a position is excluded, as a position of the
 force region, when a primitive imbalance exists within d plies. Only the minimum of a primitive count matters under optimality, so the count of
 a forced position is the length of its shortest race (the winning side wins in x, and the other side would need x+1 to equalize, or the extra
-move changes the outcome within the force region). The depth d is not given by the primitives, and it is not a choice: it is an emergent
+move changes the outcome within the force region). The depth d (the depth of search that solves the primitive calculations, set to the deepest depth that can present a counterexample to boundary
+board state certification) is not given by the primitives, and it is not a choice: it is an emergent
 property of the region with a deterministic value. Where exhaustive coverage exists it is counted: d is such that no position of the segment,
 unforced at d, enters the force region after more than d plies of optimal play. When that is verified the rules are closed, and every position
-without an imbalance within d is drawn, certified within the segment and decoupled from the table. Otherwise d is an estimate, a scope limit on
-the depth of search that calibrates the window in which certainty can be reached, and it can be disproved by counterexamples, which inform the
-constraints of the rule set. The same statement can be put forward before the exhaustive coverage, as a hypothesis conditional on
+without an imbalance within d is drawn, certified within the segment and decoupled from the table. Otherwise what is recorded is a coverage depth, which calibrates the window in which certainty can be reached (the paragraph on coverage below), and
+it can be disproved by counterexamples, which inform the constraints of the rule set. The same statement can be put forward before the exhaustive coverage, as a hypothesis conditional on
 counterexamples: a counterexample is a position unforced at d that enters the force region later, and it can be constructed from the
 community's contribution (§2f) from uncertainty. Another approach may exist that emerges from the architecture and structure of the
 programme, and it is left to be discovered as integration specification. The depth is extended deliberately, where the structure calls for it, and the exhaustive
@@ -564,6 +564,48 @@ segmented region and a focus of community effort. Each addition to the rule set 
 depth analysis under the same window limitation, enumerating what the window allows and accumulating certainty. The outcome, including whether
 compensation is possible, becomes accumulated certainty from exhaustive coverage within the segmented region being enumerated. This is a viable
 approach given the architecture and structure of the programme, and its viability depends on the window size and not on whether the programme works.
+
+**Coverage, the depth bound, and their recording (a statement).** *Status:* integration specification, not run. Coverage and the depth bound d are two
+things. The depth bound is the depth of search used to solve the primitive calculations, set to the deepest depth that can present a counterexample to
+boundary board state certification, where the exclusion approach is viable for the segment. Coverage is the region and the depth over which that
+search has been carried out and certified. It is search coverage, and not the coverage net, which is a primitive. Under exhaustive coverage the structure itself gives d as a set count, derived from the full coverage
+and not estimated. Without exhaustive coverage the recorded depth is the coverage depth in the segment, a depth coverage metric that carries
+forward to the next compositional step. Composed with further coverage it can resolve an actual d, which is then derived from, and dependent on, the
+segmented coverage of those regions: the initial coverage and the new coverage together form the depth requirement that the region of coverage has
+certified. This continues until enough is certified to discover the true d. The true d is then known permanently, and what remains is managing the
+segmented portions of the regions to reach full coverage certification within the closure of d, by composing the coverage regions. Until then the
+recorded depth is entered in the rule set and marked as not certified: a scoped parameter, based on previous segmented certification, stating a
+condition that holds up to a certain scope of certification. It exists as a calibration marker because of the limits of the paradigm window. It is
+not linked to whose turn it is. The primitive calculations of a board state can deviate with the turn, but the recorded depth is limited by storage,
+and would be maximized to the limit of the window if that were possible. Whether the scope is a region or a depth bound depends on which approach is
+viable given the window size and the other limiting factors, and is a dependency of the programme's structure and not a choice. The same holds for
+the fields of the record, which follow from enumerating the dependency net. The one choice left is an optimization: making the rule set as small as
+possible, whichever schematic achieves it. It waits on the architecture and structure of the programme being understood well enough to say how optimal
+an optimization is. How the rule sets compose along a trajectory from an anchoring point through many irreversible segmented boundaries is a
+specification to be worked out when it is reached. It depends on the pool of viable approaches, which has not been enumerated, and each approach has
+to be generalizable in composition.
+
+**Order of approaches (a pointer to the designer's statement).** The order in which the approaches of the rule set are tried is not a rule.
+It emerges from the analysis of the board state, the boundaries crossed, the progress of the programme, and the difficulty of each
+approach and its effect on the others' work. It is stated, with the classes of moves it assumes cover a general board state, in
+`boundary_board_state_primitive_catalog.md` §9. A suboptimal move, and a reversible move that maintains the draw, are handled by the
+workflow of this section (force region, d and coverage), and not by the ordering.
+
+**Equilibria-first construction and the storage of the solution (a statement).** *Status:* integration specification, not run. The programme is
+equilibria-first. What is stored is the certified boundary board states and the primitives. A win or loss value per position is not stored, and
+certification is not recorded in the stored solution where that can be avoided. Force regions are regenerated from the equilibria when they are
+needed, in the way a generated basis is not stored natively. Which move is best from a position is not the concern, since the weak solution needs
+values and not best moves. This trades storage for repeated work: the same certification is done again, so that the accumulated data stays inside
+the paradigm window, where an architecture that stores a value per position, with the tables below it as dependencies, reaches its storage limit.
+The risk, stated for epistemic honesty: until the rule set and d are found, nothing mitigates that storage limit. If the rule set and its
+exceptions are not smaller than the table, the programme meets the same limit, and this may be the point at which it is not reachable. It is not
+known, and execution shows it. A regeneration that is not cheap does not by itself make the approach non-viable. If something discovered changes this
+understanding, the protective belt is updated.
+
+**Viability of the storage trade (this file's reading, offered for correction; unrun).** The measure read from the statement above is the growth of
+the rule set and its exception record for each added unit of material, set against the growth of the tables, compared on total resources (storage,
+compute and distribution) and not on storage alone. The quantities that bear on it are the size of the rule set and the exception record, d, and
+the cost of regenerating the interface values a segment needs. The cost of regeneration is a measured quantity and not a condition of viability.
 
 **Inverse ablation as composition (a statement).** Material is added to a base equilibrium. The scope of the ablation is chosen: narrow,
 with the kings as they are and only the primitives native to the position (overlapping pieces counted or not), or wider. Keeping the kings as they are is a compatibility requirement of
@@ -645,7 +687,7 @@ exhaustive coverage, is what the test looks for.
 
 1. Mine a base material under §2a. The entry criteria prune little, because the draw set is vast, as the designer expected.
 2. Take the complement. Probe the distance to the next zeroing move of every non-drawn position, giving the race profile of the
-   not-drawn region. This was done on the base. The results are not kept in this record.
+   not-drawn region.
 3. Read the profile as the input of a rule set for not drawn (above), and the base as the certain side of a composition.
 4. Take the next material as the ablation of the base (a base plus one added unit per side in the worked instance, a two-rook base
    extended by a minor piece each side) and compare the composed prediction with that material's own table. This step has not been run.
@@ -830,7 +872,7 @@ it, since the progression of a rule set for a reachable family, as an addition t
 | A second route: construction of endgame local boundary board states, decoupled from the forward trace | Stated by the designer (§2); not run |
 | A third path: opening theory branches that force draws | Stated by the designer (§2); not run |
 | The procedure on any seed (decisive position or certified state) | Stated by the designer; recorded in topology §8an; illustrated in §2; not run |
-| Syzygy mining of a material into a database of proven draws (§2a) | Specified by the designer; implemented and run once on one base material at the designer's request, with the results not kept in the record; to be verified by the designer |
+| Syzygy mining of a material into a database of proven draws (§2a) | Specified by the designer; not run |
 | The boundary board state understanding confirmed as covering a majority of the whole space | Pending, per the designer, before any results are integrated |
 | The link from a mined family to the initial position | Stated (survey §5a); the backtrace procedure is not specified beyond the statements |
 | Closed local regions and sparse disjoint regions (§2b) | Stated by the designer; none found; whether enough regions exist to inform the global composition is uncertain |
@@ -841,10 +883,13 @@ it, since the progression of a rule set for a reachable family, as an addition t
 | Triangulation from known regions into the discovery zone, and the unresolved case as a compositional search (§2b) | Stated by the designer; not run |
 | The two senses of reachable (optimal, for certification; the full landscape, for enumeration and pruning) (§2b) | Stated by the designer; recorded as a duality of the programme |
 | The king and pawn race as an illustration of joint compatibility and carry-over to added pieces; exclusion by the compositions already in equilibrium (§2b) | Stated by the designer; not run |
-| Rule set for drawn against not drawn, derived from a mined base class (§2c) | Stated by the designer; the race profile of the not-drawn region was measured on one base and not kept here; the rule set is not written |
+| Rule set for drawn against not drawn, derived from a mined base class (§2c) | Stated by the designer; not run; the rule set is not written |
 | The exclusion form of the rule set, with its depth bound found by exhaustive coverage, and its conditional statement before coverage (§2c) | Stated by the designer; no exclusion rule is written; no bound is recorded; not run in the programme's terms |
 | The main definition as the root dependency of the rule set: boundary status as a trajectory consideration, certified locally where the deviations exist within the scope, otherwise not excluded and waiting for coverage from an anchoring point (§2c) | Stated by the designer; not run |
 | Tempo as a certification vector: derivable under exhaustive coverage, a scoped temporal calculation within a search depth without it, and the scoped region of uncertainty as the focus of community effort (§2c) | Stated by the designer; potential integration specification; not run |
+| Coverage and the depth bound as two things, the recording of a coverage depth as a scoped, not certified parameter, and its composition into the true d; composition of rule sets along a trajectory through many irreversible segmented boundaries (§2c) | Stated by the designer; the composition is to be specified when reached; not run |
+| The order of approaches as emergent from the analysis, and the classes of moves it assumes cover a general board state (catalog §9) | Stated by the designer; assumes full coverage of the classes, not established; not run |
+| Equilibria-first construction and the storage trade, with its stated risk and the viability measure read from it (§2c) | Stated by the designer; the measure is this file's reading; not run |
 | Composition by inverse ablation from a base equilibrium, with the lookahead to certified leaves (§2c) | Stated by the designer; not run |
 | Certification checkpoints, estimates left unsettled, and return to earlier checkpoints (§2c) | Stated by the designer; the record of status and dependency is not specified (§4, §5) |
 | The forward anchor as a requirement, the two tracks, and the sources of forward paths (§2d) | Stated by the designer; not run |
@@ -1030,8 +1075,8 @@ it, since the progression of a rule set for a reachable family, as an addition t
   enters the force region later. The certificate is the exhaustive coverage of the segment, and d is read off it and not derived from the
   primitives. (2) The statement of a hypothesis before coverage is conditional in the sense of this section. A hypothesis that survives the
   counterexamples offered is not thereby certified, and keeps its status until the exhaustive check closes it. (3) It carries its scope: the
-  segment, the side to move (d may differ by side, and the position forced whichever side moves is a different class from one that depends on
-  the turn), and the lower-segment values it reads through the interface (§2f, basis and interface). Without the scope a counterexample can be
+  segment and the lower-segment values it reads through the interface (§2f, basis and interface). The recorded d is not linked to the side to move, and the
+  turn-dependence of a position is the separate matter of the tempo paragraph (§2c). Without the scope a counterexample can be
   argued away as concerning another scope. (4) What exclusion certifies is that a position is not forced. That the position is a boundary board
   state is the main definition, which the statement above makes the root dependency and defers for the deviation condition. Three classes of a
   non-excluded position follow from it, as read here: certified locally, where the deviations exist within the scope; the default, where they
@@ -1042,8 +1087,9 @@ it, since the progression of a rule set for a reachable family, as an addition t
   global status, where no anchoring trajectory from the initial position holds optimality. This agrees with topology §3, which concerns the local
   status, and with survey §2 and `boundary_board_states.md` §14 item 9, where *local* carries no requirement on the path. (5) d is read as a property of
   the region and not as a parameter to be chosen. Where it is counted from a table, the table's distance is to the next irreversible move and
-  not to the mate (mining §5; validation placeholder §2 item 2), so the count needs the care recorded there. Where it is estimated, its status
-  is conditional until the exhaustive check, and the counterexamples that disprove it are kept with it. (6) The turn flag (§2c, the tempo paragraph) stores one position for both sides to move, and the comparison of the same position
+  not to the mate (mining §5; validation placeholder §2 item 2), so the count needs the care recorded there. Where only a coverage depth is recorded, its status
+  is conditional until the coverage composes to the true d, and the counterexamples that disprove it are kept with it. Coverage and d are two
+  quantities (§2c, the coverage paragraph). (6) The turn flag (§2c, the tempo paragraph) stores one position for both sides to move, and the comparison of the same position
   across the side to move is the temporal analytical relativistic measuring of survey §4c. How the comparison is recorded is not specified. (7) Where tables
   exist, the scoped temporal calculation can be tested against the tempo read from the exhaustive landscape, and the table then removed (the sandbox
   of §2c), with an estimated value kept apart from a certified one. Compensation is read as a conditional that more depth can resolve, and its
@@ -1091,10 +1137,9 @@ it, since the progression of a rule set for a reachable family, as an addition t
 ## 5. Not yet specified
 
 The scope function of an ablation (narrow or wide) and how the arrival of each kind of added unit is measured; the depth of the lookahead
-and how it is chosen; how an estimated depth bound d of an exclusion rule is recorded with its status and its counterexamples, how the three classes of a non-excluded position are recorded (§4), how a scoped temporal calculation and its depth are recorded and compared with the tempo of an exhaustive landscape, how the region of uncertainty is delimited and handed to a community, how it is recorded
-by side to move, how the dominance of the boundary board states in a segment is measured and what share the approach needs, and what is done where
+and how it is chosen; how a coverage depth, and the depth bound d it leads to, is recorded with its status and its counterexamples, how the three classes of a non-excluded position are recorded (§4), how a scoped temporal calculation and its depth are recorded and compared with the tempo of an exhaustive landscape, how the region of uncertainty is delimited and handed to a community, how the dominance of the boundary board states in a segment is measured and what share the approach needs, and what is done where
 it fails (§2c, §4); how a rule set for drawn against not drawn is written down and tested against the base table; the fields of the
-status and dependency record (§4), how dependents are re-evaluated, and where checkpoints are placed; and how the unscoped region is
+status and dependency record (§4), the fields of the record of a coverage depth and how a conditional entry is retracted, how the rule sets compose along a trajectory from an anchoring point through many irreversible segmented boundaries, how dependents are re-evaluated, and where checkpoints are placed; and how the unscoped region is
 recorded.
 
 How games are selected and run into the table range; how a path is recorded, with the status of its link (§4); how the set-depth
@@ -1120,8 +1165,12 @@ primitive measurement on a forced stretch is recorded.
 
 The rule sets that govern navigating an irreversible boundary from the retrograde side, which the designer expects may be found if a pattern emerges.
 
+Whether the classes of moves in catalog §9 cover every move of a general board state, which the order of approaches assumes; if they do not, that statement changes.
+
+The size of the rule set and its exception record, the value of d, and the cost of regenerating interface values, which settle whether the storage trade of §2c stays inside the window; none is known before the rule set and d are found.
+
 ## 6. Provenance
 
 **The designer's:** the observation of the Black schematic in high-level play; the three moves and their uniqueness to the
 primitives; that the Black moves are scoped and White's side has not been examined; that the discovery is still in progress; and the
-claim made of the deduction; the second route, the third path, the procedure on any seed and the illustration (§2); the statements of §2a and §2b, and the exclusion form of the rule set, its depth bound, the main definition as its root dependency, and tempo and the scoped region of uncertainty (§2c). **This file's:** the table, the section order, the organization of the procedure in §2a, and the readings in §4.
+claim made of the deduction; the second route, the third path, the procedure on any seed and the illustration (§2); the statements of §2a and §2b, and the exclusion form of the rule set, its depth bound, the main definition as its root dependency, tempo and the scoped region of uncertainty, and coverage, the depth bound and their recording (§2c), the order of approaches (catalog §9), and equilibria-first construction with its storage risk (§2c). **This file's:** the table, the section order, the organization of the procedure in §2a, and the readings in §4.

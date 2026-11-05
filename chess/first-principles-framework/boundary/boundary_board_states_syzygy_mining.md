@@ -3,8 +3,7 @@
 **Status.** A process record, not a result and not a tool. It holds the process the designer is using to build the boundary board
 state certification catalog (survey §4j) from the Syzygy tablebases: enumerate the proven draws of a material, classify them, group
 them into reachable families, and link the families upward toward the initial position. Nothing in it has been verified as part of the
-record. The process of §3 has since been implemented and run once, on the designer's KRvKR and KRvK tables, with the results not kept
-here (§3 is how to derive them again), and the designer verifies the data. Where this file and start-selection §2a differ, §2a governs.
+record. Nothing in it has been run as part of the record (§3 is how to derive the data), and the designer verifies the data. Where this file and start-selection §2a differ, §2a governs.
 In particular an entry there is a drawn position that can move again and is anchored, and the conditions of `boundary_board_states.md`
 §14 items 7 and 8 (a losing deviation for each side, a draw sustained by a cycle) are applied afterwards by query, so the criterion in §1,
 §2 and §4 below, and the question in §9, are read under that. The question in §9 on the opponent's deviation is settled by main §14 item 8 (a losing deviation for each side). The same process is held, as a specification, in
@@ -97,8 +96,8 @@ small enough to be held completely, the tablebase is the complete solution of th
 ## 4. The classification the process applies
 
 The designer's criterion is that a drawn position with a move that can lose is a boundary board state position (§1). The process
-applies it to the side to move, from the stored counts. The designer's criterion has two sides, and whether the opponent's losing
-deviation is also tested at the same position is not settled by the statement (§9). The interior of §2 is not a boundary board
+applies it to the side to move, from the stored counts. The designer's criterion has two sides: a losing deviation for each side (`boundary_board_states.md` §14 item 8), evaluated along the
+anchoring trajectory and certified locally where it exists within the scope (`boundary_board_states_start_selection.md` §2c). The interior of §2 is not a boundary board
 state position under the criterion.
 
 The realization of a draw (§3, step 6) is recorded separately from the criterion, as the designer asks (§1). Reduction to a bare
@@ -151,18 +150,19 @@ No estimate of the size of any material, table or run is recorded here. The scal
 
 ## 9. Not decided
 
-- Whether the boundary criterion tests the opponent's losing deviation at the same position, or only the side to move's.
 - Whether to store the edges, the losing moves and the refutation distances (§5).
 - Which components are the reachable families (§6).
 - The fields of an entry of the boundary board state certification catalog; none is proposed.
 - How the upward link is carried out beyond the tables (§6).
 - The other angle the designer has said is under consideration.
 
+Settled, and removed from this list: whether the boundary criterion tests the opponent's losing deviation. It does, by `boundary_board_states.md`
+§14 item 8 (a losing deviation for each side), evaluated along the anchoring trajectory and certified locally where it exists within the scope
+(`boundary_board_states_start_selection.md` §2c).
+
 ## 10. Files
 
-The designer's own files for the first
-material to be mined, `KRvKR.rtbw` and `KRvK.rtbw`, and the designer's solver and validator, are the designer's, and the process has
-been built and run once from them, with the results not kept here, and the designer verifies the data. The procedure of §3 is specific to the pieces named at each step (step 2 assumes a
+The designer's own files for the first material to be mined, `KRvKR.rtbw` and `KRvK.rtbw`, and the designer's solver and validator, are the designer's. No run of the process is recorded here. The procedure of §3 is specific to the pieces named at each step (step 2 assumes a
 pawnless material; other materials need their own move generation).
 
 ## 11. Provenance

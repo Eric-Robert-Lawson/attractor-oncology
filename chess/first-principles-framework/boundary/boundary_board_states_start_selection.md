@@ -192,8 +192,9 @@ what matters here.
 It is not a cutoff at the anchor or at any other stage.
 
 **The primitives afterwards (a statement).** The primitive compositional analysis is not part of the enumeration. It is done post hoc,
-from the population of certified local boundary board state positions obtained by exhaustive coverage of Syzygy, and by the designer
-when a draw position is verified.
+from the population of certified local boundary board state positions obtained by exhaustive coverage of Syzygy. The primitive calculations
+are run as procedures, not by hand. Where a table gives exhaustive coverage, the calculations are understood and tested against it. Where
+coverage is not exhaustive, they are applied and refined progressively by the programme.
 
 **The criterion (a statement).** A position in the choice region that has a move that can lose is a boundary board state position, and
 the initial game start position is one. Upstream positions that under optimal conditions lead to the boundary share its equilibrium.
@@ -984,8 +985,8 @@ it, since the progression of a rule set for a reachable family, as an addition t
 - **The potential is testable inside the tables.** The distance is the primitive calculation, as the designer states it: zero at an
   equilibrium and nonzero away from one. For a position of a material in the tables, that calculation can be compared with the win, draw
   or loss value and the distance to zeroing that Syzygy gives. If it tracks them, there is a ground for extending it beyond the tables.
-  If it does not, that is learned inside the tables. The primitive calculation is done post hoc on the mined positions, by the designer,
-  as stated in §2a.
+  If it does not, that is learned inside the tables. The primitive calculation is done post hoc on the mined positions, run as a procedure and
+  tested against the table (§2a, "The primitives afterwards").
 - **The designer's confidence on the temporal property.** The designer holds that a calculable temporal property relative to the equilibrium
   of zero, taken as a distance from the neighboring choice regions, emerges from the primitive calculations, and that it would be internally
   inconsistent if it did not, because it can be derived only from the certainty about equilibria that the primitive calculations give. The
@@ -1020,7 +1021,7 @@ it, since the progression of a rule set for a reachable family, as an addition t
 - **Testable inside the tables.** For positions of a material in the tables, a composition proposed from the known regions can be checked
   against the table: whether the primitives it names as in equilibrium coincide with the drawn positions that have a losing deviation for
   each side, and whether the primitive left unresolved is where a position departs from a known region. The primitive calculation is done
-  post hoc by the designer (§2a).
+  post hoc, run as a procedure and tested against the table (§2a, "The primitives afterwards").
 - **What the king and pawn example is.** The example is read as the mechanism of carry-over for added material and not as a demonstration
   confined to king and pawn against king. The three positions share one primitive calculation because the added pieces are inert: reaching
   them costs the kings more than the race allows, so the outcome is set by the race. This is the piece-addition statement above, shown on a

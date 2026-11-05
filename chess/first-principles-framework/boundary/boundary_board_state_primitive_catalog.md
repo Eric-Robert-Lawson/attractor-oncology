@@ -1411,7 +1411,8 @@ position-level rule set.
   viable for a rule, because limitations of viability do not change what the catalog covers (the designer). The rules are written for
   any position.
 - **Correctness.** Expressing a rule through the primitives is not the same as computing the right verdict. The check against the
-  tablebases is the designer's, post hoc, as in `boundary_board_states_syzygy_mining.md` §1.
+  tablebases is done post hoc where a table gives exhaustive coverage, and the primitive calculations are run as procedures, not by hand
+  (start-selection §2a, "The primitives afterwards").
 
 ### 11.7 Provenance
 

@@ -31,8 +31,9 @@ generalization is marked as this file's reading and is offered for correction.
   value (and distance) and mapping it onto the actual branch with its legal move pool, to determine which branches align with the
   count.
 - **Optimal play is the emphasis.** The moves chosen for branch creation are chosen under optimal constraints.
-- **Primitive calculation is not part of the script.** The primitive calculations are done when a drawn position is verified later,
-  by the designer. Primitive compositional analysis is done after the fact, from the population of certified local boundary board
+- **Primitive calculation is not part of the script.** The primitive calculations are run as procedures, not by hand, after the enumeration:
+  tested against the table where it gives exhaustive coverage, and applied and refined progressively by the programme where it does not
+  (start-selection §2a, "The primitives afterwards"). Primitive compositional analysis is done after the fact, from the population of certified local boundary board
   state positions obtained by exhaustive coverage from Syzygy.
 - **The 50-move rule is not followed.** The designer has removed it from the program, which makes the program simpler. No stage of
   the process uses it, and it is not a cutoff at the anchor or anywhere else.

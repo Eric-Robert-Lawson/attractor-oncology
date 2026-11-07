@@ -92,8 +92,8 @@ forcing opening that decides chess from the moment it is taken, with no blunder 
 chess theory, so the closure is predicated on the fact that one does not exist, and the enumeration of the closure would be the proof.
 
 The closure is expected to be achieved through the cyclical structure, or through zugzwang that forces eventual losing moves, which
-classifies the branch upstream once it is discovered. With the ruling of `boundary_board_states.md` §14 item 10, a forced terminal
-draw with no choice to deviate is also a realization.
+classifies the branch upstream once it is discovered. With the ruling of `boundary_board_states.md` §14 item 10 (as revised), a terminal
+draw reached under optimality is also a realization.
 
 **The existence of the boundary (the designer's statement).** A decisive position is pruned. If the pruning goes all the way up to the
 initial position, chess is solved by force from the initial position. If it does not, there is an explicit boundary, either the
@@ -135,7 +135,7 @@ The hard core therefore has one failure condition, which is also a result: a cer
 | Primitive status | for each side and each engaged primitive, COMPLETED, ENGAGED (with held terms) or DORMANT (catalog §4.4, §7.6, §8.6) |
 | Decisive node | a node where a side has a forced win: a net completed or completable against every reply |
 | Choice node | a node where both sides have non-losing alternatives, recorded with its width |
-| Forced-draw node | a node where the draw is held by forced replies against a forced loss, with the equilibrium realized by a repetition cycle sustained by both sides or by a forced terminal draw with no choice to deviate, both sides live (`boundary_board_states.md` §14 items 7 and 10) |
+| Forced-draw node | a node where the draw is held by forced replies against a forced loss, with the equilibrium realized by a repetition cycle sustained by both sides or by a terminal draw reached under optimality, both sides live (`boundary_board_states.md` §14 items 7 and 10) |
 | Candidate | a forced-draw node whose primitive accounting is an equilibrium (catalog §5), entered in the candidate catalog |
 | Web | the set of candidates whose verification depends on one another (§7) |
 | Reachability family | boundary board states that can reach one another: if a boundary board state can reach another one, it is in the same reachable family (§5a). The classification of a family when it is anchored to the initial position is in §5a. Recorded in the boundary board state certification catalog (§4j) |
@@ -200,8 +200,8 @@ with each non-losing alternative that stays drawn, every legal move of both side
 position in the region, or it is a certified forced loss for the side that plays it. Then no side can improve by leaving the
 region, and the value of the region is the draw. The complete deviation map is the proof, and the primitives supply the reasons for
 the refutations. It needs: each forced loss certified (a verified forced mate, a tablebase result, or a complete case list, and not
-an engine assertion); closure under the non-losing moves; a losing deviation for each side, with the realization shown (the cycle,
-or a forced terminal draw with no choice to deviate); and, for a global classification, the separate proof of §5.
+an engine assertion); closure under the non-losing moves; the realization shown (the cycle,
+or a terminal draw reached under optimality), with the losing deviation of each side recorded as a property and not as a condition (`boundary_board_states.md` §14 item 8, revision of 6 November 2026); and, for a global classification, the separate proof of §5.
 
 ### 4b. Equilibrium maintained until the move pool narrows (the designer's statement)
 
@@ -542,8 +542,8 @@ The full statements and the process are in `boundary_board_states_syzygy_mining.
 
 - **The tablebase as the certificate of §4a.** For a drawn position of a material held in the tablebase, every legal move either
   keeps the draw or loses, and the table gives the value of each, so the closure condition of §4a (every legal move accounted for)
-  is met by the table. That each side has a losing deviation, and with it both sides live, is settled by
-  `boundary_board_states.md` §14 item 8. Where the deviation is evaluated is along the anchoring trajectory, certified locally where it exists
+  is met by the table. Whether each side has a losing deviation, and with it whether both sides are live, is a recorded property of the state, by
+  `boundary_board_states.md` §14 item 8 (revision of 6 November 2026). Where the deviation is evaluated is along the anchoring trajectory, certified locally where it exists
   within the scope (`boundary_board_states_start_selection.md` §2c).
 - **The mined population as the entry stage of the catalog.** The proven draws of a mined material are read as entries of the
   certification catalog at its entry stage (§4j), for the materials mined. No fields of an entry are proposed.

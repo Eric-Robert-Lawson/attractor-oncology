@@ -37,9 +37,9 @@ where a losing side's last real choice exists.
 > **Where this stands, and how to resume (read this first).**
 >
 > - **The concept in one line (§14 item 8).** A boundary state is a drawn position that is an
->   equilibrium: each side has a deviation that loses against perfect play, and the
->   draw is sustained by a cycle of moves of both sides (§14 items 7 and 8). The
->   number of non-losing moves at the node is a recorded width, with exactly one the
+>   equilibrium, sustained by a cycle of moves of both sides or by a terminal draw reached under optimality (§14 items 7, 8 and 10). Since the revision of 6 November 2026,
+>   the losing deviation of each side is a recorded property and not a condition of the status (item 8, revision); the strict boundary is the query status
+>   with a losing deviation for each side. The number of non-losing moves at the node is a recorded width, with exactly one the
 >   strict case (§1, condition 2).
 > - **The basis and scope of the solution (the designer's statement).** The programme is internally consistent within the bounds of the
 >   anchors it is built on, and its merit rests on those anchors and not on the consistency. The load-bearing anchors found so far are
@@ -147,8 +147,10 @@ where a losing side's last real choice exists.
 >   catalog is reducible from the joint compatibility of the others (topology §8x); and draws
 >   by stalemate or insufficient material are not boundary states. What remains is
 >   construction: the primitives, the composition rules, and the cost model.
->   A draw by forced stalemate or forced capture into a dead position is a boundary state when it arises with no
->   choice to deviate (item 10), so the exclusion applies to draws that could have been avoided. The dead position itself is not a
+>   Revised 6 November 2026 (item 8, revision paragraph): the losing deviation of each side is a recorded property and not a condition of the status; the
+>   wording above that makes it a condition is the record and is superseded on this point.
+>   A draw by stalemate or capture into a dead position is a boundary state when the position is reached under optimality (item 10, as revised; the losing deviation of each
+>   side is a recorded property, item 8 revision), whether or not other drawing moves exist; the exclusion applies only to draws that arise from sub-optimal play. The dead position itself is not a
 >   boundary state, because no move in it can lose. The boundary state is the position upstream whose forced draw lands in it.
 > - **The primitive catalog now exists** (`boundary_board_state_primitive_catalog.md`):
 >   a specification with an entry template, an index of three primitives (the earlier index of eight is reduced; topology §8ab) of which
@@ -186,7 +188,7 @@ where a losing side's last real choice exists.
 >   claim about the path; global means membership of a family reachable from the initial position under the optimal backtrace constraint (item 9
 >   of §14). It has its own cache (forced region, boundary found, none can exist) keyed on the position. Specified, not run.
 >   Also recorded there and in §14 items 10 and 11: global boundary states are many, and avoidability is not a ground for non-global;
->   a forced terminal draw with no choice to deviate is a boundary state; a pruned structure that is closed (every move inside the
+>   a terminal draw reached under optimality is a boundary state (the losing deviation of each side is a recorded property, item 8 revision) whether or not other drawing moves exist; a pruned structure that is closed (every move inside the
 >   region or a certified loss) is itself the certificate for a local state; and the closure of the global boundary states is the
 >   hard core's one failure condition, with the premise that the initial position is a draw.
 
@@ -225,7 +227,7 @@ The final board state reached after repetition sets in, for both sides, is itsel
 the boundary position — the furthest downstream point, since everything before it
 was the approach toward it.
 
-*Note (§14 item 10): a draw realized by a forced stalemate or a forced capture into a dead position is the same as a boundary state when it arises with no choice to deviate, that is, when the equilibrium holds. The exclusion in this text is a filter against positions where the draw could have been avoided, and against cataloging such positions as discoveries. It is not an exclusion of the equilibrium case. Read "cycle" in the definition as the paradigm realization. A dead position is itself excluded from the boundary board states (no move in it can lose); the boundary state is the position upstream whose forced draw lands in it.*
+*Note (§14 item 10): a draw realized by a forced stalemate or a forced capture into a dead position is the same as a boundary state when the equilibrium holds and the position is reached under optimality (item 10, as revised). The exclusion in this text is a filter against draws that arise only from sub-optimal play, and against cataloging such positions as discoveries; the existence of other drawing moves is recorded as width and does not exclude. It is not an exclusion of the equilibrium case. Read "cycle" in the definition as the paradigm realization. A dead position is itself excluded from the boundary board states (no move in it can lose); the boundary state is the position upstream whose forced draw lands in it.*
 
 *The cyclic requirement is restated as a definition, and its fit with §8's treatment of
 forced stalemate is examined, in §14 item 7. That "exactly one non-losing move" is a
@@ -1136,8 +1138,8 @@ conditions of items 7 and 8 of §14 afterwards by query. The other steps are not
 13. **Build a population of confirmed local boundary states before attempting
     decomposition** (topology §8m). Scan every material Syzygy or this project
     already covers for local boundary states in the settled sense (§14 items 7 to 9):
-    drawn, a losing deviation for each side (width recorded; §14 item 8), across as
-    many distinct materials as the scan reaches. A population of boundary states needs a material in which both sides can lose; king and pawn against king has a side that cannot lose, and its exactly-one positions include captures of a hanging pawn into dead draws, which are not boundary states.
+    drawn, reached under optimality, with the losing deviation of each side recorded as a property (width recorded; §14 item 8, revision of 6 November 2026), across as
+    many distinct materials as the scan reaches. A population of strict-boundary states (status with a losing deviation for each side) needs a material in which both sides can lose; king and pawn against king has a side that cannot lose, so its positions carry the status with one deviation flag unset and none is in the strict boundary (item 8, revision).
 14. **Discover primitives from that population and generate candidates by
     subtraction** (topology §8l, §8m). Decompose each population member by
     minimization-by-ablation into fragments with explicit interfaces; catalog
@@ -1280,7 +1282,7 @@ the statement at the top of this file records as the project's own stated priori
   catalog early termination is tractable for materials whose full exhaustive
   classification is not. Everything else in this list is secondary to this one.
 - **What width Method 2's transition points (§2) typically have** — one non-losing move, or several — and how many of them are
-  equilibria in the settled sense (§14 items 7 and 8), with a losing deviation for each side. Width is a recorded measure and not the
+  equilibria in the settled sense (§14 items 7 and 8), with a losing deviation for each side (a recorded property since the revision of 6 November 2026, item 8). Width is a recorded measure and not the
   definition. A real, empirical, currently untested question about the actual shape of the drawn/decisive boundary, not assumed
   either way going in.
 - **Whether the conditional closure argument's "wall" (§2) ever falls within
@@ -1324,7 +1326,7 @@ visible so that they are decided deliberately and not by drift. Every claim
 marked "untested" was reasoned, not run.
 
 **1. The definition of a boundary state exists in two versions that diverge.**
-*Superseded by items 7 to 10 (reading note).* The definition is settled: a drawn equilibrium with a losing deviation for each side, and
+*Superseded by items 7 to 10 (reading note).* The definition is settled: a drawn equilibrium realized by a cycle or a terminal draw reached under optimality, with the losing deviation of each side recorded as a property (item 8, revision of 6 November 2026), and
 exactly-one is a width measure. "Local" below means checkable from the position alone, with no requirement on the path (item 9). The tiers
 are kept as a record of how much history is assumed.
 The operational definition is purely local: the position is drawn and the side
@@ -1396,8 +1398,7 @@ step 4 comparison with Haworth. What follows from it:
   never live. It is computable once per material split. It is not yet in the
   §6 sketch.
 - The example positions are drawn positions in a material where one side
-  cannot win. Under the settled definition (item 8) they are not boundary
-  states, because only one side has a losing deviation and so there is no
+  cannot win. Under the definition as revised on 6 November 2026 (item 8) they hold the status with one deviation flag unset, and they are not in the strict boundary, because only one side has a losing deviation and so there is no
   equilibrium between two sides. The earlier vocabulary of topology §5a-iii,
   which called such draws local, is withdrawn (item 9).
 
@@ -1455,14 +1456,14 @@ and was believed to be recorded already.
   claimed here; the point is the reconciliation of §1 and §8.
 - **Resulting definition, recorded as the project's definition of a
   boundary state (restated in item 8; whether it is global or local is item 9):** a drawn position that is an equilibrium
-  (each side has a losing deviation against perfect play), whose drawing branch is
+  (the deviation of each side, losing against perfect play, is a recorded property and not a condition; item 8, revision), whose drawing branch is
   realized by a cycle of repetition sustained by moves of both sides, with both
   sides live. Positions whose draw is realized by a
   forced stalemate or by a forced capture into a dead position are terminal draws, not
   boundary states (see the note of item 10).
   *Note (item 10): for the equilibrium case, a draw realized by a forced stalemate or a forced capture
-  into a dead position is a boundary state when no side has a choice that avoids it and each side has a losing deviation. It is a terminal
-  draw, and not a boundary state, only where the draw could have been avoided. A dead position itself is not a boundary state; the boundary
+  into a dead position is a boundary state when the position is reached under optimality, whether or not other drawing moves exist (item 10, as revised; the losing deviation of each side is a recorded property). It is a terminal
+  draw, and not a boundary state, only where the position arises from sub-optimal play. A dead position itself is not a boundary state; the boundary
   state is the position upstream whose forced draw lands in it.*
 - **A consequence worth stating.** Both sides must be able to lose, since otherwise
   the stronger side's non-losing moves are all of its moves and there is no narrow
@@ -1486,8 +1487,8 @@ show a position forcing a draw from a place where it could have been avoided.
 Capturing a pawn the opponent leaves en prise is a blunder by the pawn's side, unless
 the race was already lost.
 
-*Note (item 10): the exclusion of insufficient-material and stalemate draws in this text applies where the draw could have been
-avoided, and is not an exclusion of a forced terminal draw that arises with no choice to deviate.*
+*Note (item 10): the exclusion of insufficient-material and stalemate draws in this text applies to draws that arise from sub-optimal play,
+and is not an exclusion of a terminal draw reached under optimality, whether or not other drawing moves exist (item 10, as revised).*
 
 *Assessment — separate from the record above.*
 
@@ -1507,14 +1508,14 @@ avoided, and is not an exclusion of a forced terminal draw that arises with no c
   every invariant, not that there be exactly one of them. The earlier phrasing in this
   record that the exactly-one move is the only move that leaves every lock in place
   (topology §8g) tied the two together and is not a definition.
-- **Definition.** A boundary state is a drawn position that is an
+- **Definition (as originally recorded; revised 6 November 2026, see the revision paragraph at the end of this item).** A boundary state is a drawn position that is an
   equilibrium: each side has at least one deviation that loses against perfect play, so
   neither can improve and both can worsen; the draw is realized by a cycle of repetition
   sustained by the moves of both sides; and the equilibrium is accounted for by one or
   more tied race-condition primitives whose invariants the cycle's moves maintain
   (catalog §5, recorded on the proven entry as in topology §8x). Both sides being able to lose implies both are
   live. Positions in which
-  only one side has a losing deviation are not boundary states, because there is no equilibrium between two sides.
+  only one side has a losing deviation are not in the strict boundary, because there is no equilibrium between two sides; since the revision of 6 November 2026 (end of this item) they are not excluded from the status.
 - **Width.** The number of non-losing moves at a node is recorded as a descriptive
   parameter w ≥ 1. The case w = 1 is the strict case the original text called a
   boundary state; w > 1 is a wider equilibrium. Neither is excluded. Width is cheap to
@@ -1524,8 +1525,8 @@ avoided, and is not an exclusion of a forced terminal draw that arises with no c
   including the capture of an unprotected pawn, are terminal draws. They are excluded
   for the reasons in §1 and §8, and item 7 records the reconciliation. The exactly-one test alone does not exclude them, which is part
   of why that test is not the definition.
-  *Note (item 10): the exclusion applies to terminal draws that could have been avoided. A forced terminal draw with no choice to
-  deviate is a boundary state when the equilibrium holds.*
+  *Note (item 10): the exclusion applies to terminal draws that arise from sub-optimal play. A terminal draw reached under optimality is a
+  boundary state when the equilibrium holds, whether or not other drawing moves exist (item 10, as revised).*
 - **Consequence for the starting position.** The argument that the
   starting position is not a boundary state because it has many non-losing first moves,
   rests on the exactly-one test, which is a width measure and not the definition. The starting position is not ruled out
@@ -1534,8 +1535,10 @@ avoided, and is not an exclusion of a forced terminal draw that arises with no c
   draw is sustained by a cycle.
 - **Consequences for earlier items.** The tiers of item 1 take exactly-one as Tier 1's
   test and should be read with w as a parameter. The question in item 7 of whether
-  exactly-one holds at every node of the loop no longer arises. King and pawn against king, under this definition, holds no boundary states,
-  since the stronger side cannot lose there (item 10).
+  exactly-one holds at every node of the loop no longer arises. King and pawn against king, under this definition as recorded, holds no boundary states,
+  since the stronger side cannot lose there (item 10); under the revision of 6 November 2026 its positions carry the status with one deviation flag unset and none is in the strict boundary.
+
+*Revision (the designer's statement, 6 November 2026; this changes the definition in items 7 and 8, and is recorded as a change).* The losing deviation of each side is no longer a condition of the status. The status of a boundary board state is: the position is drawn, it is reached under optimality from an anchoring point (`boundary_board_states_start_selection.md` §2c), and the draw is realized by a cycle or by a terminal draw reached under optimality. The following are recorded properties of a state, and none is a condition: a losing deviation for White and a losing deviation for Black (each recorded as yes, no, or not yet determined), whether both sides are live, the width w, and the realization class. The strict boundary between choice and force is the query *status, with a losing deviation recorded for each side*. It is derived afterwards and does not gate the catalog. As the designer states the reason: the condition existed so that structure would not collapse into reductions to a forced outcome, and the precision of the exclusion it brings is not needed to understand or to build from the status under an equilibria-first construction, where it costs the construction. Consequences recorded here. (1) Positions with no losing move for either side (the interior) and positions with a losing deviation for one side only (king and pawn against king, the rook-pawn corner draw) hold the status and are outside the strict boundary. (2) The closure claim (item 11) is read on the status set, where it holds trivially because the set is larger. Its substantive form is the claim about the strict boundary, whose certification is the harder task, and that cost is accepted. (3) A dead position or a stalemate is not itself the holder of the status: the holder is the position upstream whose draw is realized by it (item 10). Whether a dead position should itself be evaluated is open. The wording that makes the deviation a condition (the Definition above, the notes of this item, items 7 and 10, §1 and the readme block) is superseded on this point and is kept as the record, with a pointer at each place. Items 7 and 8 state no other change.
 
 **9. "Local" and "global" by the path of arrival (the designer's statement; topology §8ac).** A boundary state's own status is local and
 unconditional (topology §3) and is the position's. Its *classification* depends on how it is reached. A **local** boundary state is a
@@ -1548,19 +1551,25 @@ which still closes the phase between choice and force, so avoidability is not a 
 `boundary_board_states_opening_survey.md` §2. Earlier uses of "local" in this file and in topology §5a-iii, for draws in which one side is not materially live, are withdrawn and
 reworded (items 2, 7 and 8, and §11 step 13). Nothing in this item changes the definition of a boundary state (items 7 and 8).
 
-**10. Forced terminal draws are boundary states when there is no choice to deviate (the designer's ruling; topology §8ad).** A forced draw
-by stalemate, or by a forced capture into a dead position, is the same as a boundary state by the definition when it arises with no
-choice to deviate: the position is drawn, each side has a losing deviation, and no side has a non-losing move that avoids the terminal
-draw. The classification of such draws as not boundary states rested on their being sub-optimal relative to other branches, so that
-the draw could have been avoided. Where exhaustive coverage of all branches shows that some branches force stalemate or a dead
+**10. Terminal draws reached under optimality are boundary states (the designer's ruling; topology §8ad; revised 5 November 2026, see the revision paragraph at the end of this item).** A draw
+by stalemate, or by a capture into a dead position, is the same as a boundary state by the definition when the position is reached under
+optimality, that is, an anchoring trajectory holds the optimality constraint (`boundary_board_states_start_selection.md` §2c; the anchor need not be the initial position): the position is drawn, and the draw is realized by a terminal
+draw that optimal play can reach. The losing deviation of each side is a recorded property and not a condition (item 8, revision of 6 November 2026). Whether the position has other drawing moves, including moves that avoid the terminal draw, is recorded as
+the width w (item 8) and is not a condition. In the definition (items 7, 8 and 10), "forced" in "forced terminal draw" means forced by the equilibrium
+under optimal play, and does not mean that no other drawing move exists. The realization classes that the mining records (`boundary_board_states_syzygy_mining.md` §3 step 6)
+are descriptive fields and are not a condition. The classification of such draws as not boundary states rested on
+reading them as avoidable, that is, as sub-optimal relative to other branches. A draw that another drawing move could replace is not
+sub-optimal in value (item 8), so avoidability is not a ground for exclusion. Where exhaustive coverage of all branches shows that some branches force stalemate or a dead
 position, that is not evidence against the classification. The classification applies to the position upstream of the terminal draw: a
 dead position itself has no move that can lose and is not a boundary state. The text of §1, item 7 and item 8 that excludes these draws is a filter
 with a purpose: the boundary-state catalog is not to be filled with stalemate positions that arise from sub-optimal play, and such
 positions are not to be treated as discoveries. The definition of a boundary state in item 7 is read with the cycle of
 repetition as its paradigm realization, and with the forced terminal draw as a second realization of the same equilibrium. The case
-in king and pawn against king (item 7, positions in which the saving move captures the pawn into a dead draw) is excluded
-for a different reason, which stands: the stronger side cannot lose there, so there is no equilibrium between two sides. This closes
+in king and pawn against king (item 7, positions in which the saving move captures the pawn into a dead draw) is outside the strict boundary
+for a different reason: the stronger side cannot lose there, so there is no equilibrium between two sides (under the revision of 6 November 2026, item 8, it holds the status with one deviation flag unset). This closes
 the open realization question recorded in `boundary_board_states_opening_survey.md` §10.
+
+*Revision (the designer's statement, 5 November 2026; a repair of an inconsistency, not a change to the definition in items 7 and 8).* The earlier wording of this item required that "no side has a non-losing move that avoids the terminal draw", and the notes at §1, item 7, item 8 and topology §8ad excluded a terminal draw "where the draw could have been avoided". That condition is a width condition (one way to the draw), and it contradicts item 8, which records width as a measure and not as the definition. A position in which the draw is forced under optimal play, in which a mistake by the opponent leads into a force region, and in which the side can choose between equally drawing moves (stop at the terminal draw or continue) satisfies the equilibrium clause of item 8 as it stands. Whether to stop or to continue is a practical choice among moves of equal value. What stays excluded is a position that arises only from sub-optimal play, which is the reachability condition of `boundary_board_states_start_selection.md` §2c (an anchoring trajectory under optimality) and not an avoidance condition. The realization (cycle or terminal draw) and the width are recorded for each boundary state, so that the catalog can be listed or filtered by either. That keeps the purpose of the earlier filter (the catalog is not to be filled with stalemate positions as discoveries) without excluding any position from the definition. A dead position has no move that can lose and is not a boundary state; the boundary state is the position upstream. A consequence is that the candidate set can be larger than under the earlier wording. Its size is to be measured, and it is not a ground for either reading. The earlier wording survives only as quoted in this paragraph and is superseded.
 
 **11. The closure claim (the designer's statement; topology §8ae).** The closure of the global boundary board states must be ensured,
 otherwise the programme fails. A viable deviation in the choice phase reaches a boundary state, and a route does not pass from choice
@@ -1570,6 +1579,8 @@ nonexistence, and enumerating it would be the proof. A route out of the closure,
 A closure that holds makes the forward and backward trace complete and a weak solution viable. A missing primitive or a failed belt
 prediction is not a failure of the programme. The full statement, with its outcomes and the premise that the initial position is a
 draw, is in `boundary_board_states_opening_survey.md` §2a. The segmented progression is recorded there in §7a with only what is stated.
+
+*Revision (6 November 2026; item 8 revision).* With the losing deviation a recorded property and not a condition, the closure claim holds on the status set trivially, because the set is larger. Its substantive form concerns the strict boundary (status with a losing deviation for each side), and its certification is the harder task. The designer accepts that cost.
 
 ---
 
@@ -1665,13 +1676,12 @@ corresponding squares are both instances of this. Both are reasons for more
 confidence in the programme's direction, even though neither is itself the
 strict novel-fact test Lakatos's stronger label requires.
 
-**On the operational claim.** The OTB game and the chess.com puzzle,
-independently verified and recorded in
-`boundary_board_states_case_study_otb.md`, are real evidence that the
-intuitions motivating this programme's hard core are tracking something
-genuine in actual play — confirmed multiple times, including a mate-in-one
-coincidence that is as clean a piece of independent corroboration as this
-project has produced anywhere. That is a different claim from the hard
+**On the operational claim.** The OTB game and the chess.com puzzle are recorded in
+`boundary_board_states_case_study_otb.md`: the game record and the narrative are the
+author's, the mate-in-one reading is by inspection of the board, and no engine or
+enumeration check is kept there. They are evidence, to that extent, that the
+intuitions motivating this programme's hard core are tracking something in actual
+play. That is a different claim from the hard
 core's strongest formal commitment — that boundary states compose by
 provable, exhaustively verifiable rules into a usable catalog — and the two
 should keep being held separately, the way that document's own §6 already

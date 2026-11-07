@@ -83,7 +83,7 @@ table below, and it is never added to the index.
 | P-002 Race to a square | the tempo comparison. Race is what every primitive is, so it is a term and not a primitive. A pawn race is the promotion route of P-003 against obstruction | term TP of P-003 (§7.5), term TM of P-008 (§8.5), mechanism RT2 |
 | Pawn promotion race | a race that names a piece, so it fails the piece-agnostic requirement (the designer's statement). It is covered by integrating the conditional race into the composition of the three primitives | P-003 (the promotion route RT2, term TP), P-001 (the outcome of a promotion is a target), P-008 (term TM); composition, §9 |
 | P-004 Edge restriction | the board edge as missing edges in the movement relation. It has no race condition: it is an input | the navigation graph of P-003 (§7.3) |
-| P-005 Repetition loop | the definition of a boundary state: the cycle sustained by both sides when the primitives are in equilibrium (a forced terminal draw with no choice to deviate is a second realization, `boundary_board_states.md` §14 item 10). It emerges from the primitives, so it is the hard core and not a primitive | §5 item 2; `boundary_board_states.md` §14 item 7 |
+| P-005 Repetition loop | the definition of a boundary state: the cycle sustained by both sides when the primitives are in equilibrium (a terminal draw reached under optimality is a second realization, `boundary_board_states.md` §14 item 10, as revised). It emerges from the primitives, so it is the hard core and not a primitive | §5 item 2; `boundary_board_states.md` §14 item 7 |
 | P-006 Piece trap | merged into P-001: the capture net on any target, of which the mating net is the royal case | §4 |
 | P-007 Activation | the result when a chain of enabling dependencies resolves (development, unlocking, castling, promotion). The race condition in it is the chain | P-003 (§7): terms RT, LK, OB, TP |
 | SUB-1 Substrate | the movement relation and the dependency graph, the structure on which the chain is read. A part of the chained-dependencies primitive, not a separate entry | P-003 (§7.3, §7.4, §7.7) |
@@ -173,7 +173,7 @@ resolves it, which is when all five terms hold:
 | **F** Escape | every square in N(t) is in Occ_D, or in Cov_A, or holds an A piece that is protected, so that T cannot capture it |
 | **X** Capture | every attacker lies outside Cov_D: no D piece, T included, can legally capture it |
 | **B** Block | every square between a sliding attacker and t lies outside Cov_D (vacuously true for an adjacent or knight attack) |
-| **O** Outcome | royal: vacuous, since capture ends the game. Non-royal: the capture is favorable, meaning every D answer that leaves T on the board but makes the capture unfavorable (protection, or an exchange that equalizes) is closed. A recapture is a net on the capturing piece, so O is a chain of nested nets whose outcome is read from the composed race map. Static exchange evaluation is the stand-in until the catalog supplies that |
+| **O** Outcome | royal: vacuous, since capture ends the game. Non-royal: the capture is favorable, meaning every D answer that leaves T on the board but makes the capture unfavorable (protection, or an exchange that equalizes) is closed. A recapture is a net on the capturing piece, so O is a chain of nested nets whose outcome is read from the composed race map. Static exchange evaluation is the stand-in until the catalog supplies that. The outcome is read by the value of the position the capture reaches: a capture crosses an irreversible boundary into the next segment, and it completes the net when that position is a win for A. A capture that reaches a drawn position (a trade to insufficient material, a stalemate) does not complete the net, and carries no further status |
 
 **Side condition S.** The sequence that builds the net must not leave A's own king in check. A
 piece that shields A's king, or protects a net square, can therefore be part of the net.
@@ -431,14 +431,14 @@ recursion between a net and its counter-nets. The tempo ledger over a whole game
 ## 5. Evaluating a boundary-state candidate with the catalog
 
 1. **Drawn, and an equilibrium:** each side has a deviation that loses against perfect
-   play. The number of non-losing moves at the node is recorded as a width and is not
+   play (revised 6 November 2026: the deviation of each side is a recorded property and not a condition of the status; `boundary_board_states.md` §14 item 8, revision). The number of non-losing moves at the node is recorded as a width and is not
    required to be one. Established by the composition (a complete case list, topology §8d),
    with exhaustive search as insurance on the first entries.
 2. **Cyclic realization.** The drawing branch closes into a loop whose moves are
    available to both sides, and both sides are live (the definition is in
    `boundary_board_states.md` §14 item 7). This is the definition of a boundary state, the
-   emergent effect of the primitives being in equilibrium. It is not a primitive (§1). A forced terminal draw with no choice to
-   deviate is a second realization of the same equilibrium (`boundary_board_states.md` §14 item 10).
+   emergent effect of the primitives being in equilibrium. It is not a primitive (§1). A terminal draw reached under optimality is a second
+   realization of the same equilibrium, whether or not other drawing moves exist (`boundary_board_states.md` §14 item 10, as revised).
    Established by search.
 3. **Primitive accounting.** For each catalog primitive that engages, the status is
    DORMANT or an explicit set of held terms (P-001, §4.11). The accounting is recorded on the
@@ -1262,7 +1262,7 @@ draws").
 that a dead position is not a boundary board state position. It does not have the structure of one: the draw is not chosen over a loss.
 A draw is reached because the mating condition is lost, so what remains is only a choice phase, to draw now or eventually. This agrees
 with the criterion of a boundary, a drawn position with a move that can lose, and with the hard core's losing deviation for each side
-(`boundary_board_states_opening_survey.md` §2, §4a): in a dead position no move can lose. It is the terminal draw that can realize a
+(`boundary_board_states_opening_survey.md` §2, §4a): in a dead position no move can lose. Since the revision of 6 November 2026 the deviation of each side is a recorded property and not a condition of the status, so that is not what keeps the dead position out: it is the terminal realization of the draw, and the status is held by the position upstream. Whether a dead position should itself be evaluated is open. It is the terminal draw that can realize a
 boundary state upstream (`boundary_board_states.md` §14 item 10, as bare material is treated in the mining). The designer states that the
 earlier view, that a dead position reached by optimal play should be one, was a nuance not considered and is withdrawn.
 
@@ -1270,11 +1270,11 @@ The statements that hold together:
 
 - **Dead** means that no sequence of legal moves reaches a net. It is a status, and it is the irreversible case of unreachability. A
   dead position is an interior position and is pruned as one.
-- **A boundary board state is upstream of it.** A drawn position in which each side has a losing deviation and both sides are live can
+- **A boundary board state is upstream of it.** A drawn position reached under optimality, whether or not each side has a losing deviation (a recorded property since 6 November 2026), can
   have a dead position as its forced terminal draw. The dead position is treated as a draw the moment it arrives, as K v K is, and it is
   an equilibrium balance.
-- **A position in which only one side has a losing deviation is not a boundary board state.** The criterion requires a losing
-  deviation for each side.
+- **A position in which only one side has a losing deviation is not in the strict boundary.** The strict boundary requires a losing
+  deviation for each side. The status does not (revision of 6 November 2026).
 - **Every route to a net is forced or a choice.** If it is forced, the position is a win and not a draw. If the opponent has a move
   that avoids it, the route is entered only through a move that loses, and that move is the losing deviation. The moves that keep the
   draw cost nothing, so a route needs no cooperation beyond them. Whether the mover knows the move loses does not enter the
@@ -1418,7 +1418,7 @@ position-level rule set.
 
 **The designer's:** the nesting of §7.1; the layering of §11.1; the flags as segmented dependencies of irreversibility that the position key must carry; the
 treatment of check, castling, en passant, promotion, stalemate, zugzwang, repetition and insufficient material in §11.2; the withdrawal
-of the sufficient-material assumption; the acceptance of the status DEAD; the resolution that a dead position is not a boundary board state position, that it can be the terminal draw of one upstream, and that a position in which only one side has a losing deviation is not one; the classification of a route to a net as forced or a choice; the closure as the certificate; the exclusion of draw by agreement, resignation, the clock and
+of the sufficient-material assumption; the acceptance of the status DEAD; the resolution that a dead position is not a boundary board state position, that it can be the terminal draw of one upstream, and that a position in which only one side has a losing deviation is not one (revised 6 November 2026: it is not in the strict boundary, and it holds the status with one deviation flag unset); the classification of a route to a net as forced or a choice; the closure as the certificate; the exclusion of draw by agreement, resignation, the clock and
 touch-move; and the removal of the 50-move rule. **This file's:** the Laws walk of §11.5, the composition of §11.4, the two worked examples as
 written, and the derivation of §11.4. The designer confirmed the lifecycle of the flags and the obligation to move. **The Laws':** the castling coverage condition on the king's squares only
 (3.8.2.2; the designer's statement named more squares), attack independent of legality, the pawn conditions, the repetition definition and counts, and the definition of an illegal position. The designer confirmed that repetition does not cut a path in the dead test.

@@ -235,8 +235,11 @@ Then the process is automated and the primitives are matched.
 2. **Enumerate every legal position**, with either side to move: distinct squares, kings not adjacent, and the side not to move not in
    check.
 3. **Fold by symmetry.** Keep one canonical representative per class and its orbit size, so that counts over all positions can be
-   recovered. With no pawns the symmetries are the eight board symmetries and the swap of colours with the side to move swapped. With
-   pawns the direction of play limits them to the left-right mirror.
+   recovered. The fold is the symmetry group of the segment, derived from its irreversible-move structure and the piece types present. With no pawns and no
+   castling rights, the symmetries are the eight board symmetries, and the swap of colours with the side to move swapped where the material is its own
+   colour exchange (otherwise the swap identifies the material with its counterpart). With pawns the direction of play limits the group to the left-right
+   reflection (files a and h exchanged, b and g, c and f, d and e, with the ranks unchanged). The up-down reflection and the rotations change the race to
+   promotion and do not apply. A castling right removes the left-right reflection. The pawn and castling cases are this file's reading and have not been run.
 4. **Take the tablebase value** of each representative by its sign: win, draw or loss for the side to move. Cursed and blessed values
    count as wins and losses, because the 50-move rule is not followed. Check coverage: every legal position has a value.
 5. **Check the table against an independent move generator.** Derive each position's value from the values of its children and compare
@@ -252,23 +255,19 @@ Then the process is automated and the primitives are matched.
    stalemate or insufficient material is reachable by drawing moves. Label the realization as stalemate now, terminal only, cycle only
    or mixed. A cycle in the symmetry quotient is a real cycle: a path from a position to its own symmetric image repeats after the
    order of the symmetry.
-9. **Apply the criterion by query.** Drawn with a move that loses is a boundary board state position. Drawn with no losing move is
-   interior. Not drawn is forced space.
+9. **Apply the criterion by query.** Drawn, and reached under optimality (§2c), is the status of a boundary board state. A move that loses, for each side, is a recorded property. Drawn with a losing move for each side is the strict boundary. Drawn with no losing move is
+   interior, which holds the status with its flags unset (`boundary_board_states.md` §14 item 8, revision of 6 November 2026). Not drawn is forced space.
    Under the statement of the local catalog entry (this file's reading, offered for correction), the query is instead: drawn; entered
    from an anchor; and the side to move has a drawing move to a position where the opponent has a drawing move. In the tablebase an
    anchor is a predecessor valued as a win for its mover whose move to this position gave the win away, or a predecessor already in
-   the catalog. A crossing from a larger material may be a third kind, which the statement does not name. Positions whose drawing moves
+   the catalog. A crossing from a larger material may be a third kind, which the statement does not name and which a run on one segment does not seek (§2c, revision of 6 November 2026). Positions whose drawing moves
    all end the game, by stalemate or a capture to insufficient material, leave the opponent without a move and fall to the filter.
    The filter is a condition of the survey and does not change the definition of a boundary board state (`boundary_board_states.md` §14
    items 7, 8 and 10). Read against them, it leaves out the positions upstream of a forced terminal draw, and the statement says no move
-   need be able to lose, where items 7 and 8 ask for a losing deviation for each side. The reading, confirmed by the designer, is that
+   need be able to lose, which agrees with the revision of 6 November 2026 (`boundary_board_states.md` §14 item 8: the losing deviation of each side is a recorded property and not a condition). The reading, confirmed by the designer, is that
    the surveying procedure is not a statement on definitions: entries are the candidate stage of the certification catalog (survey
-   §4j), and the conditions of items 7 and 8 are applied afterwards as a query on the stored counts, so only entries that pass are
-   boundary board states by definition. The anchor is stored on each entry (statement above). This file's
-   reading, offered for correction: a position can be entered from several anchors, so anchors are kept as a link between entries and
-   anchor positions, each anchor with its kind (a thrown win, a member of the catalog, or a crossing from a larger material) and its
-   segment key (material, pawn structure and the flags of survey §6). A family is then the entries that share an anchor. Anchors from a
-   larger material are recorded where that material is mined.
+   §4j), and the losing deviations of items 7 and 8 are recorded afterwards as a query on the stored counts (the strict boundary is the entries with both flags set; revised 6 November 2026). The anchor is stored on each entry (statement above). One anchor is stored, and it is not a choice: it is the furthest possible anchoring point under optimality (§2c, revision of 6 November 2026), with its kind (a thrown win or a member of the catalog) and its
+   segment key (material, pawn structure and the flags of survey §6). A family is then the entries that share an anchor. An anchor in a larger material is not sought in a run on this segment, and is recorded where that material is mined.
 10. **Verify the components** with a second implementation.
 11. **Store the result in a database.** For the post hoc composition analysis, also keep the edges of the graph, the losing moves with the
     positions they lead to, and the refutation distance of each loss (the distance to zeroing from the distance tables, and true mate
@@ -530,7 +529,7 @@ enumeration of the status of boundary board states in an irreversible segment. I
 programme leaves open the discovery of other approaches and their addition to the protective belt.
 
 **The main definition as the root dependency of the rule set (a statement).** The rule set accounts for the main definition
-(`boundary_board_states.md` §14 items 7 and 8: a losing deviation for each side, and a draw realized by a cycle or a forced terminal draw), and
+(`boundary_board_states.md` §14 items 7 and 8 as recorded: a losing deviation for each side, and a draw realized by a cycle or a forced terminal draw; since the revision of 6 November 2026 the deviation is a recorded property and not a condition, see the revision paragraph below), and
 that definition is its root dependency. Boundary board status is a trajectory consideration with respect to it: it is determined along a
 trajectory from an anchoring point to the position, under optimality. The irreversible segment that holds the position may not provide the
 required losing deviations, and a deviation that satisfies the condition can lie at a prior move of the trajectory, in a different irreversible
@@ -545,6 +544,8 @@ at under optimality from the initial position, the state is certified local and 
 ancestor-dependent logic through the upstream irreversible segments, is an expected outcome of the programme. Where the required potential
 losing deviations exist within the scope, the position is certified locally and unconditionally. Where they do not, the position is not
 excluded: it stays a boundary board state by default, uncertified, and the dependency waits.
+
+**Revision (the designer's statement, 6 November 2026): the status, the recorded properties, the anchor, and the cycle.** (1) The status of a boundary board state is: the position is drawn, it is reached under optimality from an anchoring point, and its draw is realized by a cycle or by a terminal draw reached under optimality. The losing deviation of each side, whether both sides are live, the width w and the realization class are recorded properties and are not conditions of the status (`boundary_board_states.md` §14 item 8, revision). In the paragraph above, the "losing deviation constraint of the main definition" in the certification sentence is superseded, and so is the wording that a position "stays a boundary board state by default, uncertified" where the deviations are not found: wherever this file speaks of a default, or of an uncertified boundary state for lack of a deviation, read that the state holds the status and the flag is recorded as not yet determined. The deviation flags are determined along the anchoring trajectory where it exists. The strict boundary between choice and force is the query status with a losing deviation recorded for each side. (2) The anchor is a measurement of optimality. It cannot be the state itself, except that the initial position is assumed to be a boundary board state. It is not a choice. It is the furthest possible anchoring point: the furthest upstream by reachability under optimality, across irreversible segmented boundaries where the mining scope reaches them. When a segment is mined from the tables, the anchor lies within the segment (for KRvKR, within KRvKR). A state whose anchor lies beyond the segment is made when the larger material is mined, and is not sought in a run on this segment. An entry stores one anchor. The several anchors per entry of step 9, and the third kind (a crossing from a larger material), are superseded for a run on one segment. This file's reading, offered for correction: the furthest anchor is found by backtrace along optimal moves inside the segment, and the thrown-win predecessor and an earlier catalog member are the two kinds named in step 9 where that backtrace can end; whether a catalog member can end it is not settled here. (3) For a cycle, the cycle itself is the object and the endpoint of the boundary board state, and the anchor can be any point within the cycle structure. Certifying the cycle object certifies that, and the placements of an anchor and an endpoint within it are not listed. This file's reading, offered for correction: the certificate of the cycle object is the strongly connected component of the drawing-move graph (every drawing move accounted for, and every exit certified), every member inherits the status, and the deviation flags of its members are recorded from the component.
 
 **Tempo, certification and the scoped region of uncertainty (a statement).** *Status:* potential integration specification, not run. The designer
 is unsure whether the tempo record is useful to the programme without exhaustive coverage. Under exhaustive coverage the tempo of a position is a
@@ -1084,7 +1085,7 @@ it, since the progression of a rule set for a reachable family, as an addition t
   do not and an upstream prior may yet supply them; and certified through a trajectory, after coverage between an anchoring point and the
   position. The dominance on which the approach depends is the share of the positions that the rules do not exclude, and the share certified
   locally is a separate figure. Both are properties to be measured for each segment before the approach is used on it. Local and global are read here as follows, offered for correction: local certification needs one
-  anchoring trajectory that holds both constraints, and it is not withdrawn afterwards; the exclusion that ancestors bring is the exclusion from
+  anchoring trajectory that holds the optimality constraint (the losing deviations are recorded along it as properties since 6 November 2026, §2c), and it is not withdrawn afterwards; the exclusion that ancestors bring is the exclusion from
   global status, where no anchoring trajectory from the initial position holds optimality. This agrees with topology §3, which concerns the local
   status, and with survey §2 and `boundary_board_states.md` §14 item 9, where *local* carries no requirement on the path. (5) d is read as a property of
   the region and not as a parameter to be chosen. Where it is counted from a table, the table's distance is to the next irreversible move and

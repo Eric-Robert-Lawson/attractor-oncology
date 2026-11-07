@@ -5,7 +5,7 @@ state certification catalog (survey §4j) from the Syzygy tablebases: enumerate 
 them into reachable families, and link the families upward toward the initial position. Nothing in it has been verified as part of the
 record. Nothing in it has been run as part of the record (§3 is how to derive the data), and the designer verifies the data. Where this file and start-selection §2a differ, §2a governs.
 In particular an entry there is a drawn position that can move again and is anchored, and the conditions of `boundary_board_states.md`
-§14 items 7 and 8 (a losing deviation for each side, a draw sustained by a cycle) are applied afterwards by query, so the criterion in §1,
+§14 items 7 and 8 (a losing deviation for each side, a draw sustained by a cycle; since the revision of 6 November 2026 the deviation is a recorded property and the strict boundary is the query on it) are applied afterwards by query, so the criterion in §1,
 §2 and §4 below, and the question in §9, are read under that. The question in §9 on the opponent's deviation is settled by main §14 item 8 (a losing deviation for each side). The same process is held, as a specification, in
 `boundary_board_states_start_selection.md` §2a, which is the fuller and later record. No primitive calculation is part of the
 process (§1). The designer has said that another angle is under consideration which may change this process; the staged workflow
@@ -60,7 +60,7 @@ This section is this file's reading of the statements above, offered for correct
 legal position is in one of two spaces. The forced space is the positions whose value is a win or a loss for the side to move. The
 choice space is the drawn positions. The boundary is the set of drawn positions that have at least one move that loses, the
 positions from which a deviation leaves the choice space for the forced space. The rest of the choice space, the drawn positions
-with no losing move, is called the interior here. The designer did not name it, and the term is this file's. For a material
+with no losing move, is called the interior here. The designer did not name it, and the term is this file's. Since the revision of 6 November 2026 (`boundary_board_states.md` §14 item 8) the interior is not excluded from the status of a boundary board state: the set described above as the boundary is the strict boundary, a query on recorded properties, and the interior holds the status with its deviation flags unset. For a material
 small enough to be held completely, the tablebase is the complete solution of the material and the two spaces are exact.
 
 ## 3. The process, step by step
@@ -69,9 +69,17 @@ small enough to be held completely, the tablebase is the complete solution of th
    are those of the material and of every material reachable from it by a capture; a bare king against a bare king needs no
    file, and is a draw by insufficient material.
 2. **Enumerate the legal positions, both sides to move.** The squares are distinct, the kings are not adjacent, and the side not to
-   move is not in check. Fold by symmetry. For a material with no pawns, the eight symmetries of the board together with the swap of
-   colours (which also swaps the side to move) give sixteen images, and a position is represented by the image with the smallest
-   index. For a material with pawns the group is smaller; that is this file's reading, and has not been run.
+   move is not in check. Fold by symmetry. The fold is the symmetry group of the segment. It is derived from the segment's irreversible-move structure and the
+   piece types present, and it is not fixed in advance. It is the set of board symmetries, with or without the exchange of colours, that map the
+   segment's legal positions and legal moves onto themselves. Where no pawn is present and castling rights are absent (as in the tablebases), the
+   eight symmetries of the board apply (the four rotations, and the reflections). A pawn fixes the direction of play and the promotion rank, and
+   a pawn move is irreversible in that direction. Only the left-right reflection applies (files a and h exchanged, b and g, c and f, d and e, with the
+   ranks unchanged). The up-down reflection (ranks 1 and 8 exchanged, 2 and 7, 3 and 6, 4 and 5) and the rotations change the race to promotion,
+   and do not apply. The exchange of colours, with the side to move exchanged, folds a position onto another position of the same material only where the material is its own
+   colour exchange (KRvKR is; KRvK is not, and the exchange identifies it with KvKR). A castling right ties the king and a rook to their squares and removes the
+   left-right reflection. A position is represented by the image with the smallest index, and the group and the orbit sizes it gives are recorded
+   with the segment. For KRvKR (no pawns, its own colour exchange) the group has sixteen images. The pawn and castling cases are this file's reading,
+   and have not been run.
 3. **Probe the value of every representative.** Win, draw or loss for the side to move, taken by sign. A cursed win or a blessed loss
    counts as a win or a loss, since the 50-move rule is not followed (§1).
 4. **Classify every legal move of every drawn position, under optimal play.** A move that loses is a deviation, certified by the
@@ -98,8 +106,7 @@ small enough to be held completely, the tablebase is the complete solution of th
 
 The designer's criterion is that a drawn position with a move that can lose is a boundary board state position (§1). The process
 applies it to the side to move, from the stored counts. The designer's criterion has two sides: a losing deviation for each side (`boundary_board_states.md` §14 item 8), evaluated along the
-anchoring trajectory and certified locally where it exists within the scope (`boundary_board_states_start_selection.md` §2c). The interior of §2 is not a boundary board
-state position under the criterion.
+anchoring trajectory and certified locally where it exists within the scope (`boundary_board_states_start_selection.md` §2c). The interior of §2 is not in the strict boundary under the criterion. Since the revision of 6 November 2026 the criterion is a query on recorded properties (a losing deviation for each side, per position), and the status itself is a drawn position reached under optimality (`boundary_board_states.md` §14 item 8, revision).
 
 The realization of a draw (§3, step 6) is recorded separately from the criterion, as the designer asks (§1). Reduction to a bare
 kings draw is a forced class when every drawing move of the position is a capture to a bare kings draw.
@@ -115,7 +122,8 @@ certification catalog, and no template is proposed here.
 
 **Left out**, so far (this file's reading): the edges themselves, the identity of the losing moves with the child each leads to, and how fast each loss is
 refuted (the `.rtbz` files give the distance to zeroing, which is not the distance to mate where captures are possible). Whether
-to store them is the designer's decision.
+to store them is the designer's decision. For a mined tablebase material they are kept (`boundary_board_states_start_selection.md` §2a step 11, which governs);
+where storage limits what can be kept, as in the forward trace beyond the tables, which of them to keep is decided there. This is a reading, offered for correction.
 
 ## 6. From the mined catalog to families and to the anchor
 
@@ -151,14 +159,14 @@ No estimate of the size of any material, table or run is recorded here. The scal
 
 ## 9. Not decided
 
-- Whether to store the edges, the losing moves and the refutation distances (§5).
+- Whether to store the edges, the losing moves and the refutation distances (§5; for a mined tablebase material, `boundary_board_states_start_selection.md` §2a step 11 keeps them and governs).
 - Which components are the reachable families (§6).
 - The fields of an entry of the boundary board state certification catalog; none is proposed.
 - How the upward link is carried out beyond the tables (§6).
 - The other angle the designer has said is under consideration.
 
 Settled, and removed from this list: whether the boundary criterion tests the opponent's losing deviation. It does, by `boundary_board_states.md`
-§14 item 8 (a losing deviation for each side), evaluated along the anchoring trajectory and certified locally where it exists within the scope
+§14 item 8 (a losing deviation for each side, a recorded property since the revision of 6 November 2026), evaluated along the anchoring trajectory and certified locally where it exists within the scope
 (`boundary_board_states_start_selection.md` §2c).
 
 ## 10. Files

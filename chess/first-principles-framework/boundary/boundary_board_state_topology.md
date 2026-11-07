@@ -277,8 +277,7 @@ tension is part of what the assessment addresses.
 **Settled definitions, which supersede §5a-i to §5a-iii where they differ (the designer's).** *Local* is a verified equilibrium with no
 requirement on the path. *Global* is membership of a family reachable from the initial position under the optimal backtrace constraint
 (`boundary_board_states.md` §14 item 9; survey §2). The use of "local" in §5a-iii for a draw in which one side is not materially live is
-withdrawn: such a position has a losing deviation for one side only, so there is no equilibrium between two sides, and it is not a boundary
-state. The rook-pawn corner draw is a source of structure for a primitive and not a boundary state. The liveness test remains as condition 1
+withdrawn: such a position has a losing deviation for one side only, so there is no equilibrium between two sides, and it is not in the strict boundary (revised 6 November 2026: it holds the status with one deviation flag unset). The rook-pawn corner draw is a source of structure for a primitive and is not in the strict boundary. The liveness test remains as condition 1
 of the definition. The sections below are kept as the record of the earlier attempts.
 
 ### 5a-i. The idea, as stated
@@ -1008,7 +1007,7 @@ population, and the population is now mined as in `boundary_board_states_start_s
 
 1. Decide the open definitional questions (`boundary_board_states.md` §14): settled in items 7 to 10.
 2. **(Population-first, per §8m.)** Mine every material covered by Syzygy or this project for boundary states in the settled sense:
-   drawn, a losing deviation for each side (start-selection §2a).
+   drawn, reached under optimality, with the losing deviation of each side recorded (start-selection §2a; main §14 item 8, revision of 6 November 2026).
 3. Run minimization-by-ablation (§8l) across the resulting population and record each result's interface (§8i); look for what recurs.
 4. Propose catalog primitives from what recurred in step 3.
 5. Compose a proposed primitive with one frozen structure (the locked pawn chains of §8a) on paper: write the resource accounting, the
@@ -2468,14 +2467,17 @@ these draws (§1, item 7, item 8), a sentence in catalog §5 item 2, and the sur
 equilibrium condition is unchanged: the position is drawn, each side has a losing deviation, both sides are live. What changes is
 the realization: the cycle of repetition is the paradigm and the forced terminal draw is a second.
 
+**Revision (the designer's statement, 5 November 2026).** The condition in the statement above that the draw arises "where there is no choice to deviate", and its integration as "no non-losing move avoids the termination", is a width condition and is withdrawn as a condition. It contradicted main §14 item 8, which records width as a measure and not as the definition. A terminal draw counts when it is reached under optimality (an anchoring trajectory that holds the optimality constraint, start-selection §2c), each side has a losing deviation, and both sides are live; whether other drawing moves exist is recorded as width. The full statement is in main §14 item 10, as revised. The earlier statement above is kept as the record and is superseded on this point.
+
+**Revision (the designer's statement, 6 November 2026).** The losing deviation of each side is a recorded property of a boundary board state and not a condition of its status (main §14 item 8, revision paragraph). The status is a drawn position reached under optimality, realized by a cycle or a terminal draw reached under optimality. Where this section, the statement above or the assessment below says that each side has a losing deviation, read it as the strict boundary, the query status with a losing deviation recorded for each side. A terminal position itself is still not the holder of the status.
+
 **Assessment — separate from the record above.**
 
 - **This closes the realization question** recorded when the closure claim was discussed: a route into a forced liquidation or a
-  forced stalemate with no avoiding move is covered by the closure, and the definition does not need a cycle on every route.
-- **The filter is by choice and not by terminal type.** A terminal draw that could have been avoided is not an equilibrium, so it is
-  not a boundary state. A terminal draw that cannot be avoided, with a losing deviation on each side, is. Positions in king and pawn against king in which the saving move captures the pawn into a dead draw remain excluded, by the stronger side being unable to lose.
-- **A condition to check on each such candidate:** that the equilibrium holds upstream of the terminal position, that is, that both
-  sides have a losing deviation and no non-losing move avoids the termination. The terminal position itself is the end of the draw
+  forced stalemate reached under optimality is covered by the closure (an avoiding move is not a condition; main §14 item 10, as revised), and the definition does not need a cycle on every route.
+- **The filter is by reachability, and not by terminal type or by the existence of other drawing moves (revised 5 November 2026).** A terminal draw reached only by sub-optimal play
+  is not on an optimal trajectory, so it is not a boundary state. A terminal draw reached under optimality is a boundary state (the losing deviation of each side is a recorded property; revised 6 November 2026), whether or not other drawing moves exist (main §14 item 10, as revised). Positions in king and pawn against king in which the saving move captures the pawn into a dead draw are outside the strict boundary, by the stronger side being unable to lose (revised 6 November 2026: they hold the status with one deviation flag unset).
+- **A condition to check on each such candidate:** that the equilibrium holds upstream of the terminal position, that is, that the position is reached under optimality, and that the losing deviation of each side is recorded (a property and not a condition; revised 6 November 2026); other drawing moves, including ones that avoid the termination, are recorded as width and are not a condition (revised 5 November 2026). The terminal position itself is the end of the draw
   and not the equilibrium.
 - **Not run.**
 

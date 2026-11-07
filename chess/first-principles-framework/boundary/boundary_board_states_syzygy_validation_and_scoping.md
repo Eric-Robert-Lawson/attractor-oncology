@@ -51,7 +51,7 @@ and their tempo terms), `boundary_board_states_piece_structure_composition.md` (
 5. **A validation list inside the tables**, collecting readings already in the record:
    - the sign of the primitive calculation against the table's win, draw or loss, on every position of a material;
    - the length of the winning race against the table's distance, with the care of item 2;
-   - that the equilibrium value is zero exactly on the drawn positions that have a losing deviation for each side;
+   - that the equilibrium value is zero exactly on the drawn positions that have a losing deviation for each side (the strict boundary; revised 6 November 2026);
    - the verdicts of the pruning automation against the tables, position by position (mining §6);
    - the piece-addition test and the king-and-pawn example (start-selection §4).
    - the scoped temporal calculation, derived within a search depth, against the tempo read from the exhaustive landscape of a material, where

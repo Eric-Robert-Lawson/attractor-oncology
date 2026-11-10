@@ -17,8 +17,9 @@ Run of 9 November 2026. Counts only. Nothing here is a verdict on a rule. This r
 3. Run the class-level recursion to a fixed point, recording the minimum depth per class. Stop after two consecutive iterations with no new assignment.
 4. Compare class by class with the table (win, draw, loss) and with |dtz|, after the recursion.
 5. Composition ladder: rerun step 2 with the winning side's candidate moves restricted to S0 capture or mate only, S1 plus checks, S2 plus rook attacks, S3 plus checks and rook attacks, S4 every move. The defender keeps every legal reply. Restricted sets are subsets of the exact set by construction.
-6. Drawn classes: build the drawing-move graph, take strongly connected components independently of any stored file, then a predecessor pass by reverse move generation. Anchor kinds: 1 on the cycle object, 2 off the cycle and reached from it by drawing moves, 3 reached only from a thrown win, 4 no predecessor inside the segment.
-7. Status set = kinds 1 and 2. Record the losing deviation per class as a property.
+6. Quiet layers (9 November 2026): rerun the ladder recursion with a quota q of quiet moves for the winning side along the line, q = 0 to 4. A quiet move is one that neither gives check nor leaves the opponent's rook attacked. Captures, mates, checks and rook attacks are unrestricted; the defender has every legal reply and no quota. q = 0 is S3 and a large q is the exact recursion. Then, for the quiet-first classes, list every quiet move that passes (the position after it, with the defender to move, is lost for the defender by forcing primitives alone), the defender's replies with how each is won, and the same board with the winner to move (the pass test).
+7. Drawn classes: build the drawing-move graph, take strongly connected components independently of any stored file, then a predecessor pass by reverse move generation. Anchor kinds: 1 on the cycle object, 2 off the cycle and reached from it by drawing moves, 3 reached only from a thrown win, 4 no predecessor inside the segment.
+8. Status set = kinds 1 and 2. Record the losing deviation per class as a property.
 
 ## 3. Results of record
 
@@ -32,7 +33,15 @@ Run of 9 November 2026. Counts only. Nothing here is a verdict on a rule. This r
 - S0 376,262 / 8,485. S1 391,656 / 9,045. S2 378,332 / 8,831. S3 391,937 / 9,050. S4 392,459 / 9,058, equal to the exact recursion class by class. All restricted levels have 0 false wins and 0 false losses.
 - Smallest restriction that wins a won class: capture or mate only 376,262; needs checks 15,394; needs rook attacks 83; needs checks and attacks together 198; needs a quiet move 522 (466 at d=5, 56 at d=7). Composition by checks and attacks covers 391,937 of 392,459 (99.867%).
 - Lost classes: capture or mate only 8,485; needs checks 560; attacks 0; both 5; quiet 8.
-- The 522 won and 8 lost classes are derived by the same recursion with every move allowed. No named primitive in the ladder selects their quiet move. The 466 d=5 classes have quiet-only first winning moves: king moves 358, rook moves 108.
+- The 522 won and 8 lost classes that no forcing line wins: see Quiet layer below. The 466 d=5 classes have quiet-only first winning moves: king moves 358, rook moves 108.
+
+**Quiet layer (quota of quiet moves along the line)**
+- q = 0 equals S3 (0 differences); q = 1 reproduces the exact recursion class by class (392,459 won, 9,058 lost, 0 false, same minimal depth for every class); q = 2 to 4 add nothing. Every class that needs a quiet move needs exactly one: won d=5 466, d=7 56; lost 8.
+- The 56 d=7 classes have a forcing first move and the quiet move later in the line; none has a quiet first move.
+- For the 466 quiet-first classes the passing quiet move is a move into a position, defender to move, that is lost for the defender by forcing primitives alone (466 of 466; first move 598 passing moves in all, 394 classes with one, 30 with two, 24 with three, 18 with four, out of 5,534 quiet moves).
+- In that position, in all 466, the defender has exactly one legal king move and 7 to 14 rook moves. Of 4,326 replies, 3,800 are won at once (940 by the king taking the rook, 352 by the rook taking the rook, 2,508 by a mate in one) and 526 by a forcing win at d=3 (the single king move in all 466, and 60 rook moves).
+- Pass test: the same board with the winner to move is won at once in 458 of the 466 and within three plies in the other 8. Every passing move creates a threat (0 passing moves without one). A threat does not suffice: 714 quiet moves create one, 598 pass, 116 do not. The two move sets are identical in 350 of the 466 classes.
+- Reading in primitive terms: the quiet move is one capture or mating net threat created by a move, composed with a coverage net over the defender's reply set, every reply of which is covered by a capture or mate at d=1 or a forcing win at d=3. The term "threat" is a label of this run.
 
 **Status set**
 - Drawn classes 946,389. Strongly connected components 12,724, one with more than one class (933,666 classes), no self-loops.
@@ -53,6 +62,7 @@ Run of 9 November 2026. Counts only. Nothing here is a verdict on a rule. This r
 | Components | Rebuilt without the stored file | match the stored file exactly |
 | Anchors | Reverse move generation: all 295 kind-4 classes have no legal predecessor; 400 random drawn classes agree on thrown-win and drawn-predecessor existence | 0 disagreements |
 | Ladder | python-chess, own restricted recursion, 1,044 membership tests over S0 to S3 on samples from every category | 0 disagreements |
+| Quiet layer, all 466 quiet-first classes | python-chess, own restricted recursion: a forcing-only line never wins; a quiet move into a forcing-only-lost position exists; defender king moves; pass test; threat versus passing move sets | 0 disagreements with the counts of section 3 |
 
 A first run of the python-chess checker disagreed on 94 samples at depth 5 and beyond. The cause was in the checker (its Lost ignored a mated position once d>0, and its Win skipped mate in one at d>=3). It was fixed and rerun. The C++ program was not changed.
 
@@ -60,7 +70,7 @@ A first run of the python-chess checker disagreed on 94 samples at depth 5 and b
 
 - The independent checks are samples except the table comparison, the move-generator comparison and the unanchored-class check, which are exhaustive. Both programs are mine and share my reading of the programme. An independent recount is outside this session.
 - "Forcing" and "quiet" are labels of this run, not terms of the other documents.
-- No tempo or cost term (§4.8, TP, TM) was used. A primitive that derives the 522 won and 8 lost quiet-move classes, for example by a race on the edge, is not derived here.
+- No tempo or cost term (§4.8, TP, TM) was used. The quiet layer is covered by a one-move composition of the primitives already derived (section 3), with the candidate quiet moves enumerated. A generator that proposes the passing move without trying the quiet moves is not derived: the threat condition narrows 5,534 quiet moves to 714 and keeps all 598 passing, and the coverage test decides the rest. The quiet layer was checked in python-chess for the 466 quiet-first classes and not for the 56 quiet-later or the 8 lost classes, which rest on the C++ run alone. The ply of the quiet move in the 56 and the 8 is not located.
 - Pawn and castling folds were not run. Entry by crossing from a larger material was not run.
 - The thrown-win limit (a drawn position reached only through a won side's sub-optimal move is outside the status set unless it is an anchor entered by an irreversible crossing) is the designer's provisional statement of 9 November 2026. The designer is not certain of it. It affects 11,819 of 946,389 drawn classes, next to the force region, and none of the force-region results.
 

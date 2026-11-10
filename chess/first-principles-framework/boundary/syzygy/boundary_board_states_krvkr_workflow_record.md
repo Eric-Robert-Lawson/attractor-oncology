@@ -25,8 +25,8 @@ Run of 9 and 10 November 2026. Counts only. Nothing here is a verdict on a rule.
 | Double threat, check forcing the answer (§4.10) | run as the rule of mode 3, read as a double threat by this record |
 | Mechanism tags (§4.5) | not run |
 | Cost model (§4.8): cooperative distance CMD and the gap to the adversarial depth | CMD run at class level (section 3.3); the cost model itself is not calibrated |
-| P-003 route distance, route-length set, tempo TP (§7) | not run |
-| P-008 coverage race, TM (§8) | not run |
+| P-003 route distance, route-length set, tempo TP (§7) | not run; a residual reply set at horizon 1 (section 3.5) stands in for the reach |
+| P-008 coverage race, TM (§8) | not run; the residual reply set of section 3.5 is a one-step form of the held replies |
 | Hard core status and anchor (items 7 to 10) | run on the segment (section 3.4) |
 | Closure claim (item 11) | not tested; one segment |
 
@@ -59,7 +59,7 @@ Cost of one query on a fresh evaluator (new memo per query, seed 20261110, 600 q
 
 Readings. (1) Move order is the large effect, and it applies to proving a draw as well: a drawn position needs every move of the mover refuted (a "for all"), but each refutation is a "there exists" reply of the opponent, and forcing-first puts the rook capture and checks first, so the refuting reply is found early. Mode 0 alone falls from 9,232 to 4,029 nodes by order. (An earlier statement that order saves nothing for draws applied only to the top "for all" level and is withdrawn.) (2) Mode 3 restricts the mover to primitives but pays a threat test per quiet move, so in generator order it costs more nodes than mode 0; with forcing first it is about half of mode 0 (2,107 against 4,029 on drawn) and 318 against 909 on lost. Mode 2, which has the 82 stored classes in place of the threat test, is cheaper still. (3) Reach pruning by the cooperative distance is sound (0 wrong) but costs 18 times more than it saves: that distance is flat on this segment and it is computed by a cooperative search at every node. Per-net reach needs a cheap local distance from the segmented dependencies (P-003); that is not built.
 
-Storage. Syzygy KRvKR: 12,944 bytes of win/draw/loss table and 3,408 bytes of dtz table, 16,352 in all. Modes 0 and 3 store nothing; mode 2 stores 328 bytes. The table is already small, so no storage gain can be measured on this segment: the comparison is storage against compute, and a drawn position costs about 2,100 nodes in mode 3 with forcing-first order (11,500 in generator order) against one table probe.
+What the stored lists are. Modes 0 and 3 store nothing and mode 2 stores 82 class indices (the 74 seeds and 8 lost classes, appendix). These are the places where the composition of the primitives did not yet derive the move, so they mark the interface the catalog still has to close. They are not compared with any table: a table lists outcomes, and the composition computes them from the position with the catalog's elements, so the two are different measurements and this record does not set one against the other. The cost figures above measure how much calculation a composition takes, in order to compare compositions and orderings with each other.
 
 ### 3.2 The landscape (calibration ground)
 
@@ -97,6 +97,40 @@ The ranks are read from the class graph, that is, computed backward from the ter
 - k = 7 (lost within 6): won 392,459, lost 9,058. The quiet move appears later in the line for 56 of the 58 classes first won at d=7, and the 8 lost classes at d=6 need it.
 A certificate at depth k is the set won (or lost) within k together with "no forced win within k" for the remainder. Here nothing lies beyond depth 7, so the remainder at k=7 is the draws. The cooperative bound (cooperative reach cannot exceed the adversarial depth, §4.8) certifies "no win within 3" without search for 847 classes only; on this material the reachability bound is weak.
 
+### 3.5 Local reach at each compositional moment (run on 10 November)
+
+This runs the reading that the minimum reach is computed during the composition, at each step, to choose which route to continue, and that a fixed ranking is only one approach. Catalog elements run: the capture net on the rook and the mating net on the king as completion at horizon 1 (§4.3, §4.4), and a residual reply set at horizon 1, which is a one-step form of R_F, R_X, R_B, R_O. Left out: route distance by the segmented dependencies (§7), the coverage race and TM (§8), mechanism tags (§4.5), horizons above 1. No table and no class graph is read by it.
+
+At a node, for each candidate move of the mover, R1 is the number of opponent replies after which the mover has no capture or mate at once; R1 = 0 means the net completes by force within 3 plies. The mover's candidates are ordered by R1 (capture or mate first). In the "for all" positions the replies are ordered by whether the mover would then have a completion at once (C1). Every probe is counted as a generated position, the same unit as the search; the first table below counts each call of the move generator, mate tests only on checking moves.
+
+Selection of the first move. Positions with the true depth at least 3 (the exact depth is used only to mark which moves are winning, afterwards):
+
+| Order | first move is a winning move, random won positions (74 classes) | same, quiet-first special classes (466) | mean position of the first winning move (74 / 466) |
+|---|---|---|---|
+| generator order | 0.0% | 55.6% | 14.15 / 3.18 |
+| forcing moves first (fixed list) | 44.6% | 10.5% | 1.84 / 4.94 |
+| local R1 over every candidate | 95.9% | 76.4% | 1.04 / 1.26 |
+| local R1 over forcing candidates, quiet moves after | 94.6% | 10.5% | 1.34 / 4.94 |
+
+Calculation, in generated positions per query (0 wrong values everywhere):
+
+| Composition | won | lost | drawn | special (466 + 8) |
+|---|---|---|---|---|
+| mode 0, forcing first | 1 | 934 | 6,439 | 276 |
+| mode 0, local R1 over every candidate | 581 | 4,957 | 159,168 | 7,418 |
+| mode 0, local R1 over forcing candidates | 330 | 2,712 | 65,733 | 3,865 |
+| mode 3, forcing first | 3 | 583 | 3,597 | 370 |
+| mode 3, local R1 over every candidate | 562 | 2,498 | 8,551 | 4,041 |
+| mode 3, local R1 over forcing candidates | 328 | 1,812 | 3,293 | 1,759 |
+
+Findings.
+1. The residual set at horizon 1, computed from the position with the two nets and nothing else, identifies the move that continues a minimal winning route as the first choice in 96% of random won positions, and in 76% of the quiet-first special classes, where a fixed list of move kinds puts a winning move first in 10%. So the quiet moves the earlier record had to derive backwards are mostly visible to a local reach measure. This is the first result in which the choice of the quiet move comes from the position's own nets.
+2. With that order the search itself is small: in mode 3 the search nodes per query fall from 428 to 76 on drawn positions and from 104 to 16 on lost positions. The calculation moves from the search into the reach measure, which is computed for every candidate at every node.
+3. At horizon 1 the measure is accurate but not economical to compute for every candidate; restricted to forcing candidates it is cheaper, and then it is no more accurate than the fixed list on the special classes (10.5%), because those moves are quiet. The 76% needs the quiet moves in the measure. Cost and accuracy trade off at this horizon, and the way out the programme names is the route distance of §7 and the coverage race of §8, which should hold the reach between nodes instead of recounting the replies at each one. That is not built.
+4. About 24% of the quiet-first special classes still do not have the winning move first. Those are candidates for the residual sets R_F, R_X, R_B, R_O at a longer horizon, and are the next material for the catalog (the interface of the quiet layer in section 3.3).
+5. Cooperative reach used as a cut (earlier row, "reach pruning") is not this: it asks whether any reply allows completion, and the cooperative distance is flat on this segment, so it removes few routes. The residual set asks about all replies, and it discriminates.
+6. Samples: the random won positions with depth at least 3 are 74 of 1,500 drawn, a small sample; the 466 are all of them.
+
 ### 3.4 Status set
 
 - Drawn classes 946,389. Strongly connected components 12,724, one with more than one class (933,666 classes), no self-loops.
@@ -124,6 +158,7 @@ A certificate at depth k is the set won (or lost) within k together with "no for
 | Quiet layer built backwards | python-chess unmove generation and own legality, S3 sets from the ladder table: 74 seeds to the 466, 3,216 candidates to the 8, the 8 to the 56 | exact equality with the C++ sets at every step |
 | Tempo reserve | C++, every class meeting the conditions of section 3.3 | counts as stated; not independently re-derived |
 | Cooperative distance, slack and the priority orders | C++, relaxation over the class graph, per net and combined | counts as stated; not independently re-derived |
+| Local reach by the residual reply set at horizon 1 (section 3.5) | C++, fresh evaluator per query, probes counted as generated positions, first winning move marked afterwards with the exact recursion | 0 wrong values in every cost sample; selection counts as stated; not independently re-derived |
 
 A first run of the python-chess checker disagreed on 94 samples at depth 5 and beyond. The cause was in the checker (its Lost ignored a mated position once d>0, and its Win skipped mate in one at d>=3). It was fixed and rerun. The C++ program was not changed.
 
@@ -132,7 +167,7 @@ A first run of the python-chess checker disagreed on 94 samples at depth 5 and b
 In the order the specification asks for them:
 1. Compute the terms F, X, B and O for the nets on the king and on the rook, and the residual reply sets R_F, R_X, R_B, R_O of §4.4, and test whether the double-threat rule of §4.10 over them reproduces the rule of mode 3 and the ladder levels. The check and attack flags and the 3-ply completion are the stand-ins to replace.
 2. Tag the residual replies with the mechanisms of §4.5 whose establishment would remove them, and test whether the tags select the passing quiet moves without enumerating the quiet moves. The threat condition alone leaves 116 of 714 quiet moves that do not pass.
-3. Compute the per-net route distance (§7) from the movement relation, so that the rank is computed from the position and not read from the class graph, and test that it reproduces the ranks of section 3.3. Run the coverage race (§8) on the defender's replies: the replies covered by a completed net and those held open, and whether the attacker's move shrinks the held set, as a move generator in place of enumeration. The cooperative distance is flat on this material, so this is where the content lies. Compute the route distance and the parity of the route-length set (§7) for the attacker's unit, for the 109 reserve-1 classes and for the 437 slack-2 classes, and test whether it separates the 70 lost from the 39 drawn.
+3. Compute the per-net route distance (§7) from the movement relation, held between nodes, so that the reach is computed from the position and not recounted at each node (section 3.5 does it by a residual reply set at horizon 1, accurate, not economical), and test that it reproduces the ranks of section 3.3. Run the coverage race (§8) on the defender's replies: the replies covered by a completed net and those held open, and whether the attacker's move shrinks the held set, as a move generator in place of enumeration. The cooperative distance is flat on this material, so this is where the content lies. Compute the route distance and the parity of the route-length set (§7) for the attacker's unit, for the 109 reserve-1 classes and for the 437 slack-2 classes, and test whether it separates the 70 lost from the 39 drawn.
 4. Calibrate the cost model (§4.8) against the exact depths of section 3.2.
 5. Close the status and closure questions on more than one segment (item 11), including the pawn fold (left-right reflection only) and the castling fold (not run), and entry by crossing from a larger material.
 
@@ -140,7 +175,7 @@ Other limits of this record:
 - The independent checks are samples except the table comparison, the move-generator comparison, the unanchored-class check and the mode comparisons, which are exhaustive. Both programs are the author's and share one reading of the programme; an independent recount is outside this session.
 - "Forcing", "quiet", "threat", "seed" and the ladder levels are labels of this run, not terms of the other documents.
 - The thrown-win limit (a drawn position reached only through a won side's non-optimal move is outside the status set unless it is an anchor entered by an irreversible crossing) is the designer's provisional statement of 9 November 2026, with the designer not certain of it. It affects 11,819 of 946,389 drawn classes, next to the force region, and none of the force-region results.
-- The storage comparison covers one small segment. Whether the rules and any stored lists grow more slowly than a table for larger segments is not tested. Cost figures are samples. The code of the rules is not counted.
+- The composition was run on one segment. Whether the stored interface stays as small on larger segments is not tested. Cost figures are samples of 600 per outcome and 474 for the special cases. The code of the rules is not counted.
 
 ## 6. Reproduction
 

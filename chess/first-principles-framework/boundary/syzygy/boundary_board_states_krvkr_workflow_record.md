@@ -1,109 +1,152 @@
-# KRvKR workflow record: force region rule set and status set
+# KRvKR workflow record: applying the programme to a segment
 
-Run of 9 November 2026. Counts only. Nothing here is a verdict on a rule. This record replaces the scripts and tables of the run as the carried-forward certification: the numbers in section 3 are what any reproduction must match. No code is carried.
+Run of 9 and 10 November 2026. Counts only. Nothing here is a verdict on a rule. This record carries the procedure of the programme as applied to KRvKR, in the order the programme specifies, with what was run, what stood in for a specified element, and what was not run. The exhaustive landscape is the calibration ground. No code is carried: the numbers in sections 3 and 4 are what any reproduction must match.
 
-## 1. Scope and inputs
+## 1. The procedure, applied
 
-- Segment: KRvKR, white king, rook and black king, rook, no castling, no pawns. Fold by the 16-image symmetry (8 board symmetries times colour exchange, KRvKR being its own colour exchange). 1,347,906 classes, 21,561,456 positions.
-- Index convention: index = ((((wK*64+wR)*64+bK)*64+bR)*2+stm), square = 8*rank+file, stm 0 = White; class = minimum index over the 16 images.
-- Syzygy tables (counted: cursed and blessed as win and loss, 50-move rule not followed) are comparison only. No table value enters any recursion.
-- Definitions used, as revised 6 November 2026: boundary status = drawn, reached under optimality from an anchor inside the segment, the draw realized by a cycle or a terminal draw reached under optimality. The losing deviation is a recorded property and not a condition. Anchor rule: start-selection §2c. A drawn class reached only through a won side's non-optimal move (a thrown win), or with no predecessor inside the segment, is outside the status set. The exception, entry by an irreversible crossing from a larger material, is outside this run's scope.
-- The move-again entry filter is withdrawn (start-selection §2c, revision of 9 November 2026). It plays no role in the force region and excluded equilibrium positions. No run step uses it.
+**A. Hard core: segment, fold, anchor, status.** Segment KRvKR (king and rook against king and rook, no castling, no pawns). Fold by the 16-image symmetry (8 board symmetries times colour exchange, KRvKR being its own colour exchange): 1,347,906 classes, 21,561,456 positions. Index convention: index = ((((wK*64+wR)*64+bK)*64+bR)*2+stm), square = 8*rank+file, stm 0 = White, class = minimum index over the 16 images. Status, as revised 6 November 2026 (`boundary_board_states.md` §14 item 8): drawn, reached under optimality from an anchor inside the segment, the draw realized by a cycle or a terminal draw reached under optimality; the losing deviation is a recorded property and not a condition. Anchor rule: start-selection §2c. A drawn class reached only through a won side's non-optimal move (a thrown win), or with no predecessor inside the segment, is outside the status set. Entry by an irreversible crossing from a larger material is outside this run. The move-again entry filter is withdrawn (§2c, 9 November 2026) and no step uses it.
 
-## 2. Procedure
+**B. Compose the primitives for the material** (`boundary_board_state_primitive_catalog.md`). Targets: the defender's king (royal) and the defender's rook (non-royal). Each is a capture net, the royal one being the mating net (P-001, §4.3 to §4.7). The nets are composed by the double-threat rule of §4.10: nets on different targets are jointly compatible when no reply resolves both, and a check must be answered by the legal-move rule. Nets are read within a horizon h in plies (§4.2). The outcome of the capture net on the rook is read from the value of the position the capture reaches (§4.3, outcome clause): the KRvK leaf is a win by value unless the weak side is stalemated or can recapture the rook (checked against the KRvK table, 223,944 positions, 0 disagreements).
 
-1. Enumerate classes and generate moves with an own generator. A capture of the opponent's rook leads to a KRvK leaf: a win by value if the weak side is mated or has a legal move and cannot capture the rook; a draw if it is stalemated or can recapture.
-2. Win(P,d), d odd: the mover has a capture into a won leaf, or a quiet move after which the opponent has at least one reply and every reply is Win(.,d-2); a mate in one counts at d=1. Lost(P,d), d even: the mover is mated (d=0), or has a legal move and every move is quiet and leads to Win(.,d-1). A capture into a drawn leaf is neither.
-3. Run the class-level recursion to a fixed point, recording the minimum depth per class. Stop after two consecutive iterations with no new assignment.
-4. Compare class by class with the table (win, draw, loss) and with |dtz|, after the recursion.
-5. Composition ladder: rerun step 2 with the winning side's candidate moves restricted to S0 capture or mate only, S1 plus checks, S2 plus rook attacks, S3 plus checks and rook attacks, S4 every move. The defender keeps every legal reply. Restricted sets are subsets of the exact set by construction.
-6. Quiet layers (9 November 2026): rerun the ladder recursion with a quota q of quiet moves for the winning side along the line, q = 0 to 4. A quiet move is one that neither gives check nor leaves the opponent's rook attacked. Captures, mates, checks and rook attacks are unrestricted; the defender has every legal reply and no quota. q = 0 is S3 and a large q is the exact recursion. Then, for the quiet-first classes, list every quiet move that passes (the position after it, with the defender to move, is lost for the defender by forcing primitives alone), the defender's replies with how each is won, and the same board with the winner to move (the pass test).
-7. Drawn classes: build the drawing-move graph, take strongly connected components independently of any stored file, then a predecessor pass by reverse move generation. Anchor kinds: 1 on the cycle object, 2 off the cycle and reached from it by drawing moves, 3 reached only from a thrown win, 4 no predecessor inside the segment.
-8. Table-free evaluator (10 November 2026): evaluate a position by search to 7 plies with the rules of section 3 and no table, in three modes: 0 every move; 1 forcing primitives plus one quiet move; 2 forcing primitives plus the stored lists of section 3. Run on every class and compare with the table (value and depth); then on a fresh evaluator per position on random samples (seed 20261110) to count the nodes expanded.
-9. Status set = kinds 1 and 2. Record the losing deviation per class as a property.
+**C. The landscape as calibration.** The exact recursion over the segment, with no table in it, and the Syzygy tables (cursed and blessed counted as win and loss, 50-move rule not followed), compared class by class. Win(P,d), d odd: the mover captures the rook into a won leaf, or mates, or makes a move after which the opponent has at least one reply and every reply is Win(.,d-2). Lost(P,d), d even: the mover is mated (d=0), or has a legal move and every move is a non-capture leading to Win(.,d-1). A capture into a drawn leaf is neither. Run to a fixed point (two consecutive iterations with no new assignment). The landscape gives the value, and the exact depth, of every class.
 
-## 3. Results of record
+**D. Compare the composition with the landscape, and locate the residual.** The composition is restricted to the primitive moves and the landscape shows where it falls short. The ladder levels are S0 capture or mate only, S1 plus checks, S2 plus rook attacks, S3 plus checks and rook attacks, S4 every move. Checks and rook attacks stand in for the net being engaged (the term C of §4.3); this is this record's reading.
 
-**Force region (exact recursion, 7 plies for wins, 6 for losses)**
-- Won classes 392,459, drawn 946,389 (15,138,064 positions), lost 9,058. Recursion equals the table: 0 mismatches.
-- New won classes at d = 1, 3, 5, 7: 376,262 / 14,503 / 1,636 / 58. New lost classes at d = 0, 2, 4, 6: 603 / 7,882 / 465 / 108.
-- Won d equals |dtz| for every won class; lost d equals |dtz|+1 for every lost class that is not mated; the 603 mated classes have d=0.
-- Every position without an imbalance within that depth is drawn.
+**E. Read the residual, articulate it, run again.** The classes S3 does not win are the special cases. They were read in the landscape (section 3.3), articulated as a threat-creating move composed with a net on the other target, and the composition was run again as mode 3 (section 3.1).
 
-**Composition ladder (won / lost classes found)**
-- S0 376,262 / 8,485. S1 391,656 / 9,045. S2 378,332 / 8,831. S3 391,937 / 9,050. S4 392,459 / 9,058, equal to the exact recursion class by class. All restricted levels have 0 false wins and 0 false losses.
-- Smallest restriction that wins a won class: capture or mate only 376,262; needs checks 15,394; needs rook attacks 83; needs checks and attacks together 198; needs a quiet move 522 (466 at d=5, 56 at d=7). Composition by checks and attacks covers 391,937 of 392,459 (99.867%).
-- Lost classes: capture or mate only 8,485; needs checks 560; attacks 0; both 5; quiet 8.
-- The 522 won and 8 lost classes that no forcing line wins: see Quiet layer below. The 466 d=5 classes have quiet-only first winning moves: king moves 358, rook moves 108.
+**F. Certify and record.** Section 4. What is left is section 5.
 
-**Quiet layer (quota of quiet moves along the line)**
-- q = 0 equals S3 (0 differences); q = 1 reproduces the exact recursion class by class (392,459 won, 9,058 lost, 0 false, same minimal depth for every class); q = 2 to 4 add nothing. Every class that needs a quiet move needs exactly one: won d=5 466, d=7 56; lost 8.
-- The 56 d=7 classes have a forcing first move and the quiet move later in the line; none has a quiet first move.
-- For the 466 quiet-first classes the passing quiet move is a move into a position, defender to move, that is lost for the defender by forcing primitives alone (466 of 466; first move 598 passing moves in all, 394 classes with one, 30 with two, 24 with three, 18 with four, out of 5,534 quiet moves).
-- In that position, in all 466, the defender has exactly one legal king move and 7 to 14 rook moves. Of 4,326 replies, 3,800 are won at once (940 by the king taking the rook, 352 by the rook taking the rook, 2,508 by a mate in one) and 526 by a forcing win at d=3 (the single king move in all 466, and 60 rook moves).
-- Pass test: the same board with the winner to move is won at once in 458 of the 466 and within three plies in the other 8. Every passing move creates a threat (0 passing moves without one). A threat does not suffice: 714 quiet moves create one, 598 pass, 116 do not. The two move sets are identical in 350 of the 466 classes.
-- Reading in primitive terms: the quiet move is one capture or mating net threat created by a move, composed with a coverage net over the defender's reply set, every reply of which is covered by a capture or mate at d=1 or a forcing win at d=3. The term "threat" is a label of this run.
+## 2. Status of each element of the catalog in this run
 
-**Rule set at counted depth 7, table-free (labels of this run)**
-- R0 capture net: the mover captures the opponent's rook; won by value unless the weak side is stalemated or can recapture the rook (the leaf rule, checked against the KRvK table, 223,944 positions, 0 disagreements).
+| Element | Status in this run |
+|---|---|
+| P-001 nets on the king and the rook, terms C, F, X, B, O (§4.3) | C held by the check and attack flags; O by the capture leaf; F, X, B were not computed as terms |
+| Outputs: residual reply sets R_F, R_X, R_B, R_O and status COMPLETED, ENGAGED, DORMANT (§4.4, §4.7) | not computed; completion within 3 plies by captures, mates, checks and attacks stands in for them |
+| Double threat, check forcing the answer (§4.10) | run as the rule of mode 3, read as a double threat by this record |
+| Mechanism tags (§4.5) | not run |
+| Cost model (§4.8): cooperative distance CMD and the gap to the adversarial depth | CMD run at class level (section 3.3); the cost model itself is not calibrated |
+| P-003 route distance, route-length set, tempo TP (§7) | not run |
+| P-008 coverage race, TM (§8) | not run |
+| Hard core status and anchor (items 7 to 10) | run on the segment (section 3.4) |
+| Closure claim (item 11) | not tested; one segment |
+
+## 3. Results
+
+### 3.1 The composition rule and its certification (mode 3)
+
+Rule set at counted depth 7 (labels of this run):
+- R0 capture net: the mover captures the opponent's rook; won by value unless the weak side is stalemated or can recapture the rook.
 - R1 mating net: a move that mates.
-- R2 forcing composition: a move that gives check or attacks the opponent's rook, after which every defender reply is lost, the losses being those of R0 to R4.
-- R3 quiet composition: a quiet move into one of the 74 seeds (won in 5 plies), or a forcing move into one of the 8 stored lost classes (won in 7 plies). Lost: the mover is mated, or is one of the 8, or every move is a non-capture that leads to a won position by R0 to R3. Drawn: none of these within the window. The fold is the 16-image symmetry.
-- Stored data, 82 class indices in the convention of section 1, listed in the appendix: seeds 74, lost classes 8. They are the backward construction below and can be re-derived by it.
-- Certification: all three modes reproduce the table on every one of the 1,347,906 classes, value and depth (won 392,459, lost 9,058, drawn 946,389; depth equal to |dtz| for wins and |dtz|+1 for lost classes that are not mated): 0 disagreements. Mode 0 needs no stored data.
-- Cost of one query on a fresh evaluator, nodes expanded (mean, max) and time per query:
-  - mode 0, 120 per outcome: won 3 (135), 0.01 ms; lost 4,790 (27,012), 17.8 ms; drawn 9,042 (19,734), 34.1 ms.
-  - mode 1, 1,500 per outcome: won 5 (977), 0.02 ms; lost 4,068 (34,779), 15.2 ms; drawn 9,019 (30,070), 34.9 ms.
-  - mode 2, 1,500 per outcome: won 2 (654), 0.01 ms; lost 2,780 (24,474), 10.3 ms; drawn 4,627 (23,729), 17.3 ms.
-  - 0 wrong values in every sample.
-- Storage. Syzygy KRvKR: 12,944 bytes of win/draw/loss table and 3,408 bytes of dtz table, 16,352 in all. Stored data of mode 2: 82 class indices, 328 bytes, plus the rules as code. Mode 0 stores nothing. The table is already small, so there is no storage gain to measure on this segment; the comparison is storage against compute. A drawn position costs about 4,600 nodes in mode 2 (9,000 in mode 0), against one table probe.
+- R2 forcing composition: a move that gives check or attacks the opponent's rook, after which every defender reply is lost, losses being those of R0 to R3.
+- R3 quiet composition: a quiet move (neither a check nor a rook attack) that creates a threat, meaning that with the same board and the mover to move again, a capture net on the rook, a mating net on the king, or a forcing line of checks and rook attacks completes within 3 plies; after it every defender reply is lost by R0 to R3. This is the horizon h of §4.2 and §4.7 applied to the nets on the two targets, and the double-threat reading of §4.10.
+- Lost: the mover is mated, or every move is a non-capture that leads to a won position by R0 to R3. Drawn: none of these within the window. The fold is the 16-image symmetry.
+- Stored data: none.
 
-**Quiet layer built backwards (no trial of candidate moves)**
-- Seeds. The forcing-only-lost classes (defender to move, lost by S3 alone) are 9,050: 603 mated, 7,882 at d=2, 465 at d=4, 100 at d=6. A position can be the end of a quiet move only if the defender is not in check and the defender's rook is not attacked. The 603 mated classes are in check. Of the other 8,447, 8,373 are not quiet (7,882 at d=2, 391 at d=4, 100 at d=6) and are entered by forcing moves, so their predecessors are already won by forcing lines. Only 74 classes, all at d=4, are quiet. In all 74 the defender has exactly one legal king move.
-- Step 1. The quiet un-moves of the 74 seeds give exactly the 466 quiet-first won classes, all at d=5: none missing, none extra, each class's exact depth equal to its seed depth plus 1.
-- Step 2. The defender's un-moves from the 466 give 3,216 candidate positions. Those in which every defender move is covered (won by forcing, or one of the 466) are exactly the 8 lost classes at d=6. Each has a single legal move, and it leads to one of the 466.
-- Step 3. The forcing un-moves of the 8 give exactly the 56 won classes at d=7. No class lies beyond them, which matches q = 1 sufficing.
-- Reachable: the special classes are the quiet un-move predecessors of the 74 seeds, the defender predecessors of those, and the forcing predecessors of the 8. Not reachable by a quiet layer: any forcing-lost class that is in check or has its rook attacked, which is every forcing-lost class at d=0, 2 and 6 and 391 of 465 at d=4.
+Certification: mode 3 reproduces the table on all 1,347,906 classes, value and depth (won 392,459, lost 9,058, drawn 946,389; depth equal to |dtz| for wins and |dtz|+1 for lost classes that are not mated): 0 disagreements. Three other modes were run on the same classes with 0 disagreements: mode 0 every move, mode 1 forcing primitives plus one quiet move anywhere in the line, mode 2 forcing primitives plus 82 stored class indices (the 74 seeds and 8 lost classes of section 3.3, in the appendix).
 
-**Status set**
+Cost of one query on a fresh evaluator (new memo per query, seed 20261110, 600 queries per outcome, 474 for the special cases). Nodes expanded per query, mean; for mode 3 the threat tests are counted as nodes too (an earlier version of this record left them out and kept the memo between queries, which understated mode 3):
+
+| Mode and move order | won | lost | drawn | special (466 + 8) |
+|---|---|---|---|---|
+| 0 every move, generator order | 3 | (earlier run: 4,790) | 9,232 | 435 |
+| 0 every move, forcing first | 2 | 909 | 4,029 | 176 |
+| 2 stored lists, forcing first | 2 | 102 | 417 | 40 |
+| 3 threat rule, generator order | 10 | 5,713 | 11,500 | 1,048 |
+| 3 threat rule, forcing first | 1 | 318 | 2,107 | 216 |
+| 3 + forcing first + reach pruning by cooperative distance | 8 | 6,046 | 37,914 | 4,724 |
+
+0 wrong values in every cell.
+
+Readings. (1) Move order is the large effect, and it applies to proving a draw as well: a drawn position needs every move of the mover refuted (a "for all"), but each refutation is a "there exists" reply of the opponent, and forcing-first puts the rook capture and checks first, so the refuting reply is found early. Mode 0 alone falls from 9,232 to 4,029 nodes by order. (An earlier statement that order saves nothing for draws applied only to the top "for all" level and is withdrawn.) (2) Mode 3 restricts the mover to primitives but pays a threat test per quiet move, so in generator order it costs more nodes than mode 0; with forcing first it is about half of mode 0 (2,107 against 4,029 on drawn) and 318 against 909 on lost. Mode 2, which has the 82 stored classes in place of the threat test, is cheaper still. (3) Reach pruning by the cooperative distance is sound (0 wrong) but costs 18 times more than it saves: that distance is flat on this segment and it is computed by a cooperative search at every node. Per-net reach needs a cheap local distance from the segmented dependencies (P-003); that is not built.
+
+Storage. Syzygy KRvKR: 12,944 bytes of win/draw/loss table and 3,408 bytes of dtz table, 16,352 in all. Modes 0 and 3 store nothing; mode 2 stores 328 bytes. The table is already small, so no storage gain can be measured on this segment: the comparison is storage against compute, and a drawn position costs about 2,100 nodes in mode 3 with forcing-first order (11,500 in generator order) against one table probe.
+
+### 3.2 The landscape (calibration ground)
+
+- Won classes 392,459, drawn 946,389 (15,138,064 positions), lost 9,058. The recursion equals the table: 0 mismatches.
+- New won classes at d = 1, 3, 5, 7: 376,262 / 14,503 / 1,636 / 58. New lost classes at d = 0, 2, 4, 6: 603 / 7,882 / 465 / 108.
+- Won d equals |dtz| for every won class; lost d equals |dtz|+1 for every lost class that is not mated; the 603 mated classes have d=0. Every position without an imbalance within that depth is drawn.
+- The exact depth of every class is the cost in plies against best resistance, available for the calibration of §4.8.
+
+### 3.3 What the landscape shows about the special cases (calibration findings, not rules)
+
+**Ladder (won / lost classes found).** S0 376,262 / 8,485. S1 391,656 / 9,045. S2 378,332 / 8,831. S3 391,937 / 9,050. S4 392,459 / 9,058, equal to the exact recursion class by class. All restricted levels have 0 false wins and 0 false losses. Smallest restriction that wins a won class: capture or mate only 376,262; needs checks 15,394; needs rook attacks 83; needs checks and attacks together 198; needs a quiet move 522 (466 at d=5, 56 at d=7). Lost classes: capture or mate only 8,485; needs checks 560; attacks 0; both 5; quiet 8. Checks alone carry nearly the whole force region (S1 against S3).
+
+**Quiet layer.** With a quota q of quiet moves for the winning side along the line, q = 0 equals S3 and q = 1 reproduces the exact recursion class by class, with the same minimal depth for every class; q = 2 to 4 add nothing. Every class that needs a quiet move needs exactly one: won d=5 466, d=7 56; lost 8. The 56 d=7 classes have a forcing first move and the quiet move later. The 466 d=5 classes have quiet-only first winning moves: king moves 358, rook moves 108.
+
+**The position after the quiet move.** For the 466 quiet-first classes the passing quiet move leads to a position, defender to move, that is lost for the defender by forcing primitives alone (466 of 466; 598 passing moves out of 5,534 quiet moves: 394 classes with one, 30 with two, 24 with three, 18 with four). In all 466 the defender has exactly one legal king move and 7 to 14 rook moves. Of 4,326 replies, 3,800 are won at once (940 by the king taking the rook, 352 by the rook taking the rook, 2,508 by a mate in one) and 526 by a forcing win at d=3 (the single king move in all 466, and 60 rook moves). The same board with the winner to move is won at once in 458 of the 466 and within three plies in the other 8. Every passing move creates a threat (0 passing moves without one); a threat does not suffice (714 quiet moves create one, 598 pass, 116 do not; the two sets are identical in 350 of the 466 classes).
+
+**Built backwards from the primitive-lost positions.** The forcing-only-lost classes (defender to move, lost by S3 alone) are 9,050: 603 mated, 7,882 at d=2, 465 at d=4, 100 at d=6. A quiet move can end only in a position where the defender is not in check and its rook is not attacked. The 603 mated are in check; of the other 8,447, 8,373 are not quiet (7,882 at d=2, 391 at d=4, 100 at d=6) and are entered by forcing moves, so their predecessors are already won by forcing lines. Only 74 classes, all at d=4, are quiet (the seeds), and in all 74 the defender has exactly one legal king move. The quiet un-moves of the 74 give exactly the 466. The defender's un-moves from the 466 give 3,216 candidates; those with every move covered (won by forcing, or one of the 466) are exactly the 8 lost classes at d=6, each with a single legal move that leads to one of the 466. The forcing un-moves of the 8 give exactly the 56 won classes at d=7. Nothing lies beyond them. Not reachable by a quiet layer: every forcing-lost class that is in check or has its rook attacked.
+
+**Tempo reserve.** Reserve is the number of the mover's moves that are not lost at once. Take the classes where the mover is not in check, its rook is not attacked, it has no winning capture, and the opponent to move on the same board would win at once: with reserve 1 there are 109 classes, 70 lost in 4 plies and 39 drawn; with reserve 2 to 15 none is lost. The other 4 seeds have only a 3-ply threat and reserve 7 to 10 (one each at 7, 8, 9 and 10), every move covered at d=3. Together 74, all the seeds. Reserve 1 therefore holds for 70 of the 74 seeds and is not sufficient (39 drawn). The term that separates the 70 from the 39 is not computed.
+
+**Cooperative distance and the slack of the winning moves.** Net completed means A has a winning capture or a mate (this record's reading of COMPLETED, §4.4). CMD is the number of plies for A to complete a net with both sides cooperating, the completing move included, computed over the class graph. It is 1 for 376,262 classes, 3 for 970,797 and 5 for 214 of the 1,347,273 classes where A, the mover, can complete one; 30 drawn classes have none. Of the 946,389 drawn classes, 946,293 have CMD 3 and 66 have CMD 5. The minimum-move pool is therefore flat on this material: cooperation reaches a net within 3 plies almost everywhere, drawn or won. What separates the outcomes is the defender's resistance, the gap between the adversarial depth d and CMD: for won classes the gap is 0 at d=1 (376,262 classes) and d=3 (14,503), 2 at d=5 (1,636) and 4 at d=7 (58). Slack of a move is CMD of the position it reaches (defender to move) minus CMD of the position it leaves plus 1; slack 0 means the move is on a cooperative shortest route. Of 4,876,998 non-capturing moves from won classes, 268,869 (5.5%) have slack 0. Of the 20,798 minimal-depth winning moves, 20,361 have slack 0 and 437 have slack 2; none has another slack. A minimal winning move with slack 0 exists in 392,022 of the 392,459 won classes. The 437 others are the classes whose every minimal winning move is a detour of 2 plies: 381 at d=5 and 56 at d=7, all with a forcing first move. All 598 passing quiet moves of the 466 quiet-first classes have slack 0. The reading of the 2-ply detour as the tempo adjustment of the route-length parity of §7 is this record's and is not tested. The cooperative minimum is a rank for the order of enumeration and not an answer: every move stays in the search, and a winning move may lie at any rank.
+
+**Priority order (the cooperative minimum used to order the enumeration).** One rank per net, because the pool of nets is separate for each: cooperative distance to a capture net, A the mover (plies:classes): 1:372,719, 3:974,340, 5:214, none 633; to a mating net: 1:4,215, 3:64,424, 5:262,211, 6:1,015,500, none 1,556. Slack is read per net. Measured on the 16,197 won classes with d>=3, which have 17.86 legal moves on average: the expected number of moves examined until the first minimal-depth winning move, ties in random order (all d>=3 / the 466 quiet-first / the 437 slack-2 classes):
+- generator order, no priority: 9.38 / 6.97 / 9.63.
+- forcing first (mate, check, attack, quiet): 1.65 / 8.21 / 1.34.
+- slack, either net: 8.87 / 6.23 / 17.82.
+- slack per net (the lower), then the sum: 10.52 / 1.68 / 17.59.
+- forcing first, then quiet moves by per-net slack (lower, then sum): 1.53 / 3.89 / 1.34.
+The ranks are read from the class graph, that is, computed backward from the terminal conditions over every position. That is a table of distances to terminal points, which the programme does not use: the programme's rank is the local reach from the position by the progression of moves towards a mating condition, through the dependencies and the coverage, and it serves two purposes, the order of enumeration and the question whether a win is reachable within the remaining plies at all. The table here is an oracle that shows the ordering power an ideal local computation has, and the local computation is to be checked against it. An order saves nothing in proving a draw, where every move must be examined; a saving there needs a sound bound, and CMD is a lower bound on the adversarial depth (§4.8) that is flat here.
+
+**Depth-indexed certification (partial certificates).** The composition rule of section 3.1 has the exact depth of every one of the 1,347,906 classes, so it is exact at every depth k. Won within k, lost within k, and the composition needed at that depth:
+- k = 1 (lost within 0 and 2): won 376,262, lost 603 and 8,485. Capture net and mating net only.
+- k = 3: won 390,765, lost 8,485. Plus the forcing composition (checks and rook attacks); every class first won at d=3 has a forcing winning move.
+- k = 5 (lost within 4): won 392,401, lost 8,950. Plus the quiet threat move, needed by 466 of the 1,636 classes first won at d=5. The 465 classes first lost at d=4 need only the forcing composition.
+- k = 7 (lost within 6): won 392,459, lost 9,058. The quiet move appears later in the line for 56 of the 58 classes first won at d=7, and the 8 lost classes at d=6 need it.
+A certificate at depth k is the set won (or lost) within k together with "no forced win within k" for the remainder. Here nothing lies beyond depth 7, so the remainder at k=7 is the draws. The cooperative bound (cooperative reach cannot exceed the adversarial depth, §4.8) certifies "no win within 3" without search for 847 classes only; on this material the reachability bound is weak.
+
+### 3.4 Status set
+
 - Drawn classes 946,389. Strongly connected components 12,724, one with more than one class (933,666 classes), no self-loops.
 - Anchor kinds (classes / positions): 1 on the cycle object 933,666 / 14,934,624; 2 off cycle, reached from it 609 / 9,744; 3 thrown-win only 11,819 / 188,976; 4 no predecessor in the segment 295 / 4,720 (294 have the mover in check).
 - Status set (kinds 1 and 2): 934,275 classes, 14,944,368 positions. Outside it, drawn: 12,114 classes (kinds 3 and 4).
-- Recorded properties on the cycle object: White-to-move members with a losing move 412,342, Black-to-move members 397,749. Status-set classes whose mover has a losing move: 810,680.
+- Recorded properties: White-to-move cycle members with a losing move 412,342, Black-to-move 397,749; status-set classes whose mover has a losing move 810,680.
+- Form of the certificate for an equilibrium region. A depth-bounded search cannot certify it. It is certified by closure: a finite set S of positions reached under optimality in which every position has a value-preserving move that stays in S, in which every move leaving S reaches a position certified won for the opponent by a depth-bounded certificate (the thrown wins, section 3.3), and which holds a cycle and no mating terminal. Then "no forced win within k" holds without limit on k. In KRvKR: drawn positions with a winning move 0; edges from a lost class into a drawn class 0; one cycle object of 933,666 of the 946,389 drawn classes; the 12,723 others are 609 reached from it by drawing moves, 11,819 reached only by a thrown win and 295 with no predecessor. The closure here was built by enumerating the region. That the primitives supply it as an invariant, the defence form of §4.7 (invariant-preserving moves: after which, for every reply of the attacker within h plies, no net is COMPLETED), is the clause of item 8 that no run has tested.
+- 2,792 drawn classes have every drawing move a capture (44,672 positions), none on the cycle object; they stay drawn equilibrium states.
 
 ## 4. Certification
 
 | Result | Checked by | Outcome |
 |---|---|---|
-| Recursion, wins, draws, losses | Class-by-class against the table | 0 mismatches over 1,347,906 classes |
-| Depth | Against |dtz| | Equal as stated in section 3 |
+| Recursion, wins, draws, losses | Class by class against the table | 0 mismatches over 1,347,906 classes |
+| Depth | Against \|dtz\| | Equal as stated in section 3.2 |
 | Capture-leaf rule | python-chess against the KRvK table, every legal position, weak side to move (223,944) | 0 disagreements |
-| Minimal depth and winning-move structure | python-chess, own recursion, no table, random samples (seed 20261109) across d = 1, 3, 5, 7 and lost d = 2, 4, 6 | 0 disagreements |
+| Minimal depth and winning-move structure | python-chess, own recursion, no table, random samples (seed 20261109): d = 1, 3, 5, 7 and lost d = 2, 4, 6 | 0 disagreements |
 | Drawn classes | python-chess, 150 sampled | none won within 7 or lost within 8 |
-| Move generator | Counts of legal, losing and staying moves for every drawn class and total edges (20,137,706) against the stored files | 0 mismatches |
-| Components | Rebuilt without the stored file | match the stored file exactly |
+| Move generator | Counts of legal, losing and staying moves for every drawn class, and total edges (20,137,706), against the stored files | 0 mismatches |
+| Components | Rebuilt without the stored file | match exactly |
 | Anchors | Reverse move generation: all 295 kind-4 classes have no legal predecessor; 400 random drawn classes agree on thrown-win and drawn-predecessor existence | 0 disagreements |
-| Ladder | python-chess, own restricted recursion, 1,044 membership tests over S0 to S3 on samples from every category | 0 disagreements |
-| Table-free evaluator, three modes | Every class against the table: value and depth. Cost on fresh-evaluator samples | 0 disagreements over 1,347,906 classes in each mode; 0 wrong in every cost sample |
-| Quiet layer built backwards: 74 seeds to the 466, 3,216 candidates to the 8, the 8 to the 56 | python-chess unmove generation and own legality, S3 sets from the ladder table | exact equality with the C++ sets at every step |
-| Quiet layer, all 466 quiet-first classes | python-chess, own restricted recursion: a forcing-only line never wins; a quiet move into a forcing-only-lost position exists; defender king moves; pass test; threat versus passing move sets | 0 disagreements with the counts of section 3 |
+| Ladder | python-chess, own restricted recursion, 1,044 membership tests over S0 to S3, samples from every category | 0 disagreements |
+| Composition rule (mode 3) and the three other modes | Every class against the table, value and depth; cost on fresh-evaluator samples (seed 20261110) | 0 disagreements over 1,347,906 classes in each of the four modes; 0 wrong in every cost sample |
+| Quiet layer, all 466 quiet-first classes | python-chess, own restricted recursion: a forcing-only line never wins; a quiet move into a forcing-only-lost position exists; defender king moves; pass test; threat versus passing move sets | 0 disagreements with section 3.3 |
+| Quiet layer built backwards | python-chess unmove generation and own legality, S3 sets from the ladder table: 74 seeds to the 466, 3,216 candidates to the 8, the 8 to the 56 | exact equality with the C++ sets at every step |
+| Tempo reserve | C++, every class meeting the conditions of section 3.3 | counts as stated; not independently re-derived |
+| Cooperative distance, slack and the priority orders | C++, relaxation over the class graph, per net and combined | counts as stated; not independently re-derived |
 
 A first run of the python-chess checker disagreed on 94 samples at depth 5 and beyond. The cause was in the checker (its Lost ignored a mated position once d>0, and its Win skipped mate in one at d>=3). It was fixed and rerun. The C++ program was not changed.
 
-## 5. What is not covered
+## 5. Residual progress (where this run stopped)
 
-- The independent checks are samples except the table comparison, the move-generator comparison and the unanchored-class check, which are exhaustive. Both programs are mine and share my reading of the programme. An independent recount is outside this session.
-- "Forcing" and "quiet" are labels of this run, not terms of the other documents.
-- No tempo or cost term (§4.8, TP, TM) was used. The quiet layer is covered by a one-move composition of the primitives already derived (section 3), with the candidate quiet moves enumerated. The quiet layer is also built backwards from the seeds (section 3), so the candidate quiet moves are not tried forward. What is not derived is a static description of the 74 seeds: all have one defender king move, which is a shared property and is not shown to define them. The seeds are read from the forcing-only-lost set, which comes from the C++ run. The backward construction was run in python-chess (unmove generation, own legality) with the S3 win and loss sets taken from the C++ ladder table. The ply of the quiet move inside the 56 follows from the construction (the second ply after the forcing first move leads to the 8, whose single reply is one of the 466).
-- The storage comparison covers one small segment. Whether the rule set and its stored lists grow more slowly than a table for larger segments is not tested. The cost figures are samples; the table comparison is exhaustive. The code of the rules is not counted in the 328 bytes.
-- Pawn and castling folds were not run. Entry by crossing from a larger material was not run.
-- The thrown-win limit (a drawn position reached only through a won side's sub-optimal move is outside the status set unless it is an anchor entered by an irreversible crossing) is the designer's provisional statement of 9 November 2026. The designer is not certain of it. It affects 11,819 of 946,389 drawn classes, next to the force region, and none of the force-region results.
+In the order the specification asks for them:
+1. Compute the terms F, X, B and O for the nets on the king and on the rook, and the residual reply sets R_F, R_X, R_B, R_O of §4.4, and test whether the double-threat rule of §4.10 over them reproduces the rule of mode 3 and the ladder levels. The check and attack flags and the 3-ply completion are the stand-ins to replace.
+2. Tag the residual replies with the mechanisms of §4.5 whose establishment would remove them, and test whether the tags select the passing quiet moves without enumerating the quiet moves. The threat condition alone leaves 116 of 714 quiet moves that do not pass.
+3. Compute the per-net route distance (§7) from the movement relation, so that the rank is computed from the position and not read from the class graph, and test that it reproduces the ranks of section 3.3. Run the coverage race (§8) on the defender's replies: the replies covered by a completed net and those held open, and whether the attacker's move shrinks the held set, as a move generator in place of enumeration. The cooperative distance is flat on this material, so this is where the content lies. Compute the route distance and the parity of the route-length set (§7) for the attacker's unit, for the 109 reserve-1 classes and for the 437 slack-2 classes, and test whether it separates the 70 lost from the 39 drawn.
+4. Calibrate the cost model (§4.8) against the exact depths of section 3.2.
+5. Close the status and closure questions on more than one segment (item 11), including the pawn fold (left-right reflection only) and the castling fold (not run), and entry by crossing from a larger material.
+
+Other limits of this record:
+- The independent checks are samples except the table comparison, the move-generator comparison, the unanchored-class check and the mode comparisons, which are exhaustive. Both programs are the author's and share one reading of the programme; an independent recount is outside this session.
+- "Forcing", "quiet", "threat", "seed" and the ladder levels are labels of this run, not terms of the other documents.
+- The thrown-win limit (a drawn position reached only through a won side's non-optimal move is outside the status set unless it is an anchor entered by an irreversible crossing) is the designer's provisional statement of 9 November 2026, with the designer not certain of it. It affects 11,819 of 946,389 drawn classes, next to the force region, and none of the force-region results.
+- The storage comparison covers one small segment. Whether the rules and any stored lists grow more slowly than a table for larger segments is not tested. Cost figures are samples. The code of the rules is not counted.
 
 ## 6. Reproduction
 
-Reproduce with the conventions of section 1, the steps of section 2 in order, and the stopping rule of step 3. A reproduction is accepted when it matches the counts of section 3, each against its check in section 4. Random samples use seed 20261109 (checkers) and 20261110 (cost samples).
+Reproduce with the conventions of section 1.A, the procedure of section 1 in order, and the stopping rule of 1.C. A reproduction is accepted when it matches the counts of section 3, each against its check in section 4. Random samples use seed 20261109 (checkers) and 20261110 (cost samples).
 
-## Appendix: stored class indices (convention of section 1)
+## Appendix: stored class indices of mode 2 (convention of section 1.A)
 
 Seeds (74, defender to move, quiet, lost in 4): 222532 222548 222564 222580 526488 526490 526492 526494 526504 526506 526508 526510 526520 526522 526524 526526 526536 526538 526540 526542 526552 526554 526556 526558 526568 526570 526572 526574 526584 526586 526588 526590 1059098 1059100 1059102 1059114 1059116 1059118 1059130 1059132 1059134 1059146 1059148 1059150 1059162 1059164 1059166 1059178 1059180 1059182 1059194 1059196 1059198 1591708 1591710 1591724 1591726 1591740 1591742 1591756 1591758 1591772 1591774 1591788 1591790 1591804 1591806 1608080 1608096 1608112 1608128 1608144 1608160 1608176.
 

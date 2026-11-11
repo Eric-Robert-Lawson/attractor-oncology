@@ -11,7 +11,7 @@ Run of 9 and 10 November 2026. Counts only. Nothing here is a verdict on a rule.
 | Step | State at the end of 10 November |
 |---|---|
 | 1 | Done. Status set 934,275 classes, 14,944,368 positions (section 3.4). |
-| 2 | Not done. The P-001 terms agree with the generator on 100% of classes where a net is complete (section 3B). The defence form as an invariant over the status set has not been run. P-008 has not been run beyond the register at the lost classes. |
+| 2 | In progress. The P-001 terms agree with the generator on 100% of classes where a net is complete (section 3B). The defence-form closure over all classes is run in sections 3C and 3D: 0 disagreements in value and depth over 1,347,906 classes, with no economy. |
 | 3 | Not done. The composition rule of section 3.1 matches the table on 100% of classes, but it enumerates replies and recurses with the move generator. It is the calibration, not the rule set of step 3. |
 
 ## 1. The procedure, applied
@@ -187,6 +187,37 @@ Every figure below is a count over the 1,347,906 classes (or over the ladder row
 - Not computed: effect vectors of defender moves (UNCHANGED, HELD, OPENED), the equilibrium moves of §8.11, and the opening mechanisms OP1 to OP6. They depend on the register at the positions the defender moves from, and the register is empty at the seeds .
 
 **Not run.** PD (ordering by reach; withdrawn from this record as outside the scope of section 0) and PF (the support closure).
+
+## 3C. Defence-form closure from the P-001 completion: predictions registered before the run (10 November, 20:50)
+
+Sections 3C and 3D of an earlier version of this record (an attacker-candidate rule built on a support definition that the documents do not give) are withdrawn.
+
+**What is run, from the documents only.** The defence form of §4.7: for the side to move, a move is invariant-preserving when, after it, the opponent has no move that completes a net at once (a move m with R(P, m) empty: for the king, the terms C, F, X, B of §4.3 hold, which is checkmate; for the rook, a capture the leaf of §4.3 O values as a win), and every other reply of the opponent leads to a position in which the side again has an invariant-preserving move. A capture of the opponent's rook by the mover is a move after which the opponent has no net. The set of positions in which the side to move has such a move at every turn, forever, is the greatest fixed point of that condition: the closure certificate of section 3.4 ("every position has a value-preserving move that stays in S"), computed with the primitive's completion test and no table. Both sides are treated alike: a class is lost for the mover when it leaves the fixed point, and the mover wins when some move leads to a position that left it (or completes at once). Positions with no legal move: in check, the mover is checkmated and is outside the set; not in check, a stalemate, inside.
+
+**What it leaves out.** P-003 route distance, P-008 support and any pruning: every legal move and every reply is taken, so this is the exact defence form with no economy. It uses P-001 §4.3 and §4.7 and the closure certificate of section 3.4 only.
+
+Predictions, stated before the run, all exact:
+1. **G1.** The fixed point is reached after the removal rounds 0 to 3 and a round 4 that removes nothing. The classes removed in round j are exactly the classes with exact loss depth 2j (round 0: the 603 checkmated classes; round 1: the lost d=2 classes; round 2: lost d=4; round 3: lost d=6).
+2. **G2.** The classes inside the fixed point from which the mover has no move to a position outside it (and no completing move) are exactly the drawn classes of the status set and the other drawn classes; the mover wins exactly in the 392,459 won classes. 0 disagreements with Syzygy over 1,347,906 classes in value.
+3. **G3.** The depth of every win, read as one plus the round of the best move's child (a mate or a capture the leaf values as a win: depth 1), equals the exact depth in every won class.
+
+## 3D. Defence-form closure: results (10 November, run after section 3C)
+
+Computed over the 1,347,906 classes with the P-001 completion (terms C, F, X, B of §4.3 for the king, the capture leaf for the rook) and the defence form of §4.7, taking every legal move and every reply. No table value is read during the computation. The table is read afterwards, for the comparison only.
+
+| Round | Classes removed from the closure |
+|---|---|
+| 0 (checkmated) | 603 |
+| 1 | 7,882 |
+| 2 | 465 |
+| 3 | 108 |
+| 4 | 0 |
+
+- **G1** confirmed. The rounds remove 603, 7,882, 465 and 108 classes, which are the classes of exact loss depth 0, 2, 4 and 6 (the 465 are the 391 non-seeds and the 74 seeds; the 108 are the 100 forcing-solved and the 8 quiet-move classes). Round 4 removes nothing: the fixed point is reached.
+- **G2** confirmed. Value agrees with Syzygy on 1,347,906 of 1,347,906 classes, 0 disagreements: won 392,459, lost 9,058, drawn 946,389. The drawn classes are the classes inside the fixed point from which the mover has no move to a position outside it.
+- **G3** confirmed. Win depth equals the exact depth on all 392,459 won classes (0 differ), and the loss depth, twice the round, equals the exact depth on all 9,058 lost classes (0 differ).
+
+What this establishes: the closure certificate of section 3.4 is supplied by the defence form with the P-001 completion test, over the whole segment, with no table and 100% agreement in value and depth. What it does not establish: any economy. Every move and reply was taken, so it is exact enumeration with the primitive's completion test, and P-003 and P-008 were not used. The classes the 74 seeds and the 8 are in are found only because the recursion looks two and three rounds past the immediate completion.
 
 ## 4. Certification
 

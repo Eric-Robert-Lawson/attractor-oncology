@@ -2,6 +2,18 @@
 
 Run of 9 and 10 November 2026. Counts only. Nothing here is a verdict on a rule. This record carries the procedure of the programme as applied to KRvKR, in the order the programme specifies, with what was run, what stood in for a specified element, and what was not run. The exhaustive landscape is the calibration ground. No code is carried: the numbers in sections 3 and 4 are what any reproduction must match.
 
+## 0. Scope of the application to KRvKR (the designer's statement, 10 November 2026)
+
+1. Use Syzygy to enumerate the boundary board states of KRvKR. The status is the one of `boundary_board_states.md` §14 items 7, 8 and 10 as revised on 6 November 2026: the position is drawn, it is reached under optimality from an anchoring point, and the draw is realized by a cycle or by a terminal draw reached under optimality. The losing deviation of each side, the width and the realization class are recorded properties and not conditions, so nothing is excluded for them.
+2. Apply the primitives of the catalog to show that these states are equilibrium states: the registers and equilibrium moves of P-008 §8.11, and the defence form of P-001 §4.7.
+3. From the compositions found against the Syzygy ground truth, build a rule set that certifies the boundary board states by primitive calculation, without using Syzygy, and agrees with Syzygy on 100% of the classes.
+
+| Step | State at the end of 10 November |
+|---|---|
+| 1 | Done. Status set 934,275 classes, 14,944,368 positions (section 3.4). |
+| 2 | Not done. The P-001 terms agree with the generator on 100% of classes where a net is complete (section 3B). The defence form as an invariant over the status set has not been run. P-008 has not been run beyond the register at the lost classes. |
+| 3 | Not done. The composition rule of section 3.1 matches the table on 100% of classes, but it enumerates replies and recurses with the move generator. It is the calibration, not the rule set of step 3. |
+
 ## 1. The procedure, applied
 
 **A. Hard core: segment, fold, anchor, status.** Segment KRvKR (king and rook against king and rook, no castling, no pawns). Fold by the 16-image symmetry (8 board symmetries times colour exchange, KRvKR being its own colour exchange): 1,347,906 classes, 21,561,456 positions. Index convention: index = ((((wK*64+wR)*64+bK)*64+bR)*2+stm), square = 8*rank+file, stm 0 = White, class = minimum index over the 16 images. Status, as revised 6 November 2026 (`boundary_board_states.md` §14 item 8): drawn, reached under optimality from an anchor inside the segment, the draw realized by a cycle or a terminal draw reached under optimality; the losing deviation is a recorded property and not a condition. Anchor rule: start-selection §2c. A drawn class reached only through a won side's non-optimal move (a thrown win), or with no predecessor inside the segment, is outside the status set. Entry by an irreversible crossing from a larger material is outside this run. The move-again entry filter is withdrawn (§2c, 9 November 2026) and no step uses it.
@@ -16,19 +28,45 @@ Run of 9 and 10 November 2026. Counts only. Nothing here is a verdict on a rule.
 
 **F. Certify and record.** Section 4. What is left is section 5.
 
+## 1b. The programme as the designer articulated it, checked against the documents (10 November)
+
+The statements are the designer's, from this session, in the order given. Each is checked against the text of the catalog (`boundary_board_state_primitive_catalog.md`), the main document and `boundary_board_states_start_selection.md`; the sections cited in the table were read for this check, and the rest of those documents was not re-read.
+
+| # | The designer's statement | Where the documents say it | Result |
+|---|---|---|---|
+| 1 | The hard core is the boundary board state; the belt is the three primitives, joint compatible and compositionally dependent: any two need the third for a calculation that is not trivial | main §14 items 7 to 11; catalog §11.1 (the three primitives), §9 | matches |
+| 2 | The mating net is an outcome of reachability from the position, not a precomputed array of terminal points | catalog §4.7 (the deliveries are the attacker's legal moves that attack the target, at the position, to the horizon h); §7.3 and §7.5 (a route to a configuration with a gain); §9 (the roles of a move: completing the net, a capture net across boundaries, a move that restricts the opponent's optimal replies, which is a segmented dependency, navigation) | matches |
+| 3 | The coverage net informs the mating net | catalog §9 (P-008 to P-001: an opened held term lets a net complete; the coverage race is a dependency of the optimality calculation of the nets, since a net cannot be evaluated for both sides without the occupancy and coverage of the other pieces); §8.3 | matches |
+| 4 | The minimum number of moves to reach a net, even with cooperation, informs the priority of enumeration; it is a priority order and never the answer | catalog §4.8 (the cooperative cost is the helpmate distance, CMD <= DTM); §6 ("a heuristic may order candidates and may propose mechanisms. It certifies nothing"); §9 (cheaper approaches can prune, not definitive; the ordering is not a rule of the catalog, the workflow decides) | matches |
+| 5 | The minimum reachability is computed at each compositional moment, to choose which route is more practical to continue | catalog §7.3: the route distance d_M(s, t, P) is the cheapest path in the navigation graph, an edge costing one tempo plus its exposure, with the route-length set; §7.5 terms RT and TP; §8.9 items 2 to 4: a perturbation whose change misses the support closure needs no branching | matches. The documents define the local calculation as a route distance on the navigation graph and the support closure. It is not a cooperative search and not a count of the opponent's replies. Section 3B runs the route distance with the defender held in place |
+| 6 | Navigation towards the net is dependency based, chronological from the anchoring position; a forced sequence is a cadence that segmented dependency race conditions calculate | catalog §7 (ENABLE and SUPPORT edges, the segmented process); §11.2 (check as a segmented dependency that restricts the viable moves); start-selection §2c (anchor and trajectory) | matches |
+| 7 | The search runs inside the primitive calculations and does not enumerate every branch | catalog §8.9 items 3 and 4 (exact pruning, exhaustive coverage over what remains, as case lists decided by primitive calculation); §9 last lines; start-selection §2c ("within a segment ... a forcing sequence exists ... or the position is drawn, and the draw needs exhaustive coverage") | matches. Exhaustive coverage stays the certification and the insurance on the first entries |
+| 8 | Depth-indexed partial certification, with the uncertain region as the focus of community effort | start-selection §2c: the exclusion form with its depth bound d; the coverage depth recorded as a scoped parameter and not as certified; the scoped region of uncertainty | matches |
+| 9 | An equilibrium region cycles under optimality and never reaches a mating terminal | main §14 items 7, 8 and 10 (the cycle, the terminal draw); catalog §4.7 defence form, §8.11 (the equilibrium moves are those whose effect vector has no OPENED entry on the mover's own register) | matches. The certificate by invariant is specified there and was not run; the run's certificate is an enumeration |
+| 10 | The special cases arise where placement removes the moves that keep the equilibrium, for king and for rook, measurable from placement | catalog §4.7 defence form (the invariant-preserving moves); §4.5 mechanisms F1, F2 and the mirror D-F; §8.3 held terms, residual replies, support, opening sets, key elements, joint support; §8.7 OP2 (joint spend) and OP4 (denial); the board edge as an input (§1, the P-004 row; §7.3 missing edges) | matches the framework. The quantities the documents ask for are held terms and their supports. The run computed stand-ins: the moves not removed by the generator and by a capture or mate at once (sections 3.7 to 3.9) |
+| 11 | The primitives are piece-agnostic and board-agnostic; the edge and the movement are inputs; a special case recorded inside a primitive would make it a subspace of piece composition | catalog §1 (admission rule 4), §6, §10 (the P-004 row) | an arrangement such as a rook beside its king on an edge names a piece and an edge. It is an instance, and at most a candidate derived form (the mechanisms F1, the board edge as missing edges, and F2, as in DF-A), with no definitional weight. It is not a rule and is not to be written into a primitive |
+| 12 | One workflow record, no scripts, each computation says which catalog element it runs and what it leaves out | the designer's instruction | followed; the code is not delivered |
+
+What the run did that follows the programme. Both targets, the king as the royal target and the rook as the non-royal target, with the outcome clause read from the value of the position the capture reaches, tested against the KRvK table as the sandbox (start-selection §2c, the exit condition); the double-threat composition of §4.10 at horizon 3; the defence form of §4.7 at levels 1 and 2; the hard-core status on the segment (section 3.4); depth-indexed certification; the landscape used as calibration and not as a rule.
+
+What it did not run, in the documents' terms. P-003 on KRvKR: the navigation graphs of the king and the rook, the route distance with exposure, the route-length set, the term TP. P-008 on KRvKR: the register of each side (held terms with residual replies), the supports, opening sets, key elements and joint support, the effect vector of a move, the terms OP, CR, FS, TM. P-001 as written: the terms C, F, X, B and O as terms, the residual partition R_F, R_X, R_B, R_O, the mechanism tags. The predictions P3-1, P3-2, P8-1, P8-2 and P8-3, none of which was stated before a run. The invariant-based equilibrium certificate. A second segment.
+
+What the programme asks to run next, in its own terms. (1) P-003: build the navigation graphs on the board for the king and the rook with their dependency sets, compute route distance with exposure from the position, and compare the reach it gives with the ranks of section 3.3; this is the local calculation of statement 5. (2) P-008: the defender's register at the node and at the seeds, with supports, opening sets and key elements, and the effect vector of the attacker's moves, naming the mechanism (OP1 to OP6) of each; read the quiet move as a perturbation by that vector. (3) P-001 as §4.7 writes it. Predictions will be stated in the record before each is run. The designer's open items are kept apart: the thrown-win anchor limit (provisional), and whether the operating-rule block goes into the main document.
+
 ## 2. Status of each element of the catalog in this run
 
 | Element | Status in this run |
 |---|---|
-| P-001 nets on the king and the rook, terms C, F, X, B, O (§4.3) | C held by the check and attack flags; O by the capture leaf; F, X, B were not computed as terms |
-| Outputs: residual reply sets R_F, R_X, R_B, R_O and status COMPLETED, ENGAGED, DORMANT (§4.4, §4.7) | not computed; completion within 3 plies by captures, mates, checks and attacks stands in for them |
+| P-001 nets on the king and the rook, terms C, F, X, B, O (§4.3) | computed from coverage sets and occupancy, royal target and non-royal target (section 3B): 0 disagreements with the generator, with F read with the outcome at the destination square for the rook |
+| Outputs: residual reply sets R_F, R_X, R_B, R_O and status COMPLETED, ENGAGED, DORMANT (§4.4, §4.7) | not computed at every position. The defence form of §4.7 as an invariant over the status set has not been run (section 0, step 2) |
 | Double threat, check forcing the answer (§4.10) | run as the rule of mode 3, read as a double threat by this record |
 | Mechanism tags (§4.5) | not run |
 | Cost model (§4.8): cooperative distance CMD and the gap to the adversarial depth | CMD run at class level (section 3.3); the cost model itself is not calibrated |
-| P-003 route distance, route-length set, tempo TP (§7) | not run; a residual reply set at horizon 1 (section 3.5) stands in for the reach |
-| P-008 coverage race, TM (§8) | not run; the residual reply set of section 3.5 is a one-step form of the held replies |
+| P-003 route distance, route-length set, tempo TP (§7) | route distance of the attacker's king and rook with the defender held in place, run (section 3B); TP not run |
+| P-008 coverage race, TM (§8) | register at the lost classes, run (section 3B); effect vectors, equilibrium moves and TM not run |
 | Hard core status and anchor (items 7 to 10) | run on the segment (section 3.4) |
 | Closure claim (item 11) | not tested; one segment |
+| Predictions P3-1, P3-2, P8-1, P8-2, P8-3 (§7.13, §8.13) | not tested. PA to PF of section 3A were stated before the run of section 3B |
 
 ## 3. Results
 
@@ -97,40 +135,6 @@ The ranks are read from the class graph, that is, computed backward from the ter
 - k = 7 (lost within 6): won 392,459, lost 9,058. The quiet move appears later in the line for 56 of the 58 classes first won at d=7, and the 8 lost classes at d=6 need it.
 A certificate at depth k is the set won (or lost) within k together with "no forced win within k" for the remainder. Here nothing lies beyond depth 7, so the remainder at k=7 is the draws. The cooperative bound (cooperative reach cannot exceed the adversarial depth, §4.8) certifies "no win within 3" without search for 847 classes only; on this material the reachability bound is weak.
 
-### 3.5 Local reach at each compositional moment (run on 10 November)
-
-This runs the reading that the minimum reach is computed during the composition, at each step, to choose which route to continue, and that a fixed ranking is only one approach. Catalog elements run: the capture net on the rook and the mating net on the king as completion at horizon 1 (§4.3, §4.4), and a residual reply set at horizon 1, which is a one-step form of R_F, R_X, R_B, R_O. Left out: route distance by the segmented dependencies (§7), the coverage race and TM (§8), mechanism tags (§4.5), horizons above 1. No table and no class graph is read by it.
-
-At a node, for each candidate move of the mover, R1 is the number of opponent replies after which the mover has no capture or mate at once; R1 = 0 means the net completes by force within 3 plies. The mover's candidates are ordered by R1 (capture or mate first). In the "for all" positions the replies are ordered by whether the mover would then have a completion at once (C1). Every probe is counted as a generated position, the same unit as the search; the first table below counts each call of the move generator, mate tests only on checking moves.
-
-Selection of the first move. Positions with the true depth at least 3 (the exact depth is used only to mark which moves are winning, afterwards):
-
-| Order | first move is a winning move, random won positions (74 classes) | same, quiet-first special classes (466) | mean position of the first winning move (74 / 466) |
-|---|---|---|---|
-| generator order | 0.0% | 55.6% | 14.15 / 3.18 |
-| forcing moves first (fixed list) | 44.6% | 10.5% | 1.84 / 4.94 |
-| local R1 over every candidate | 95.9% | 76.4% | 1.04 / 1.26 |
-| local R1 over forcing candidates, quiet moves after | 94.6% | 10.5% | 1.34 / 4.94 |
-
-Calculation, in generated positions per query (0 wrong values everywhere):
-
-| Composition | won | lost | drawn | special (466 + 8) |
-|---|---|---|---|---|
-| mode 0, forcing first | 1 | 934 | 6,439 | 276 |
-| mode 0, local R1 over every candidate | 581 | 4,957 | 159,168 | 7,418 |
-| mode 0, local R1 over forcing candidates | 330 | 2,712 | 65,733 | 3,865 |
-| mode 3, forcing first | 3 | 583 | 3,597 | 370 |
-| mode 3, local R1 over every candidate | 562 | 2,498 | 8,551 | 4,041 |
-| mode 3, local R1 over forcing candidates | 328 | 1,812 | 3,293 | 1,759 |
-
-Findings.
-1. The residual set at horizon 1, computed from the position with the two nets and nothing else, identifies the move that continues a minimal winning route as the first choice in 96% of random won positions, and in 76% of the quiet-first special classes, where a fixed list of move kinds puts a winning move first in 10%. So the quiet moves the earlier record had to derive backwards are mostly visible to a local reach measure. This is the first result in which the choice of the quiet move comes from the position's own nets.
-2. With that order the search itself is small: in mode 3 the search nodes per query fall from 428 to 76 on drawn positions and from 104 to 16 on lost positions. The calculation moves from the search into the reach measure, which is computed for every candidate at every node.
-3. At horizon 1 the measure is accurate but not economical to compute for every candidate; restricted to forcing candidates it is cheaper, and then it is no more accurate than the fixed list on the special classes (10.5%), because those moves are quiet. The 76% needs the quiet moves in the measure. Cost and accuracy trade off at this horizon, and the way out the programme names is the route distance of §7 and the coverage race of §8, which should hold the reach between nodes instead of recounting the replies at each one. That is not built.
-4. About 24% of the quiet-first special classes still do not have the winning move first. Those are candidates for the residual sets R_F, R_X, R_B, R_O at a longer horizon, and are the next material for the catalog (the interface of the quiet layer in section 3.3).
-5. Cooperative reach used as a cut (earlier row, "reach pruning") is not this: it asks whether any reply allows completion, and the cooperative distance is flat on this segment, so it removes few routes. The residual set asks about all replies, and it discriminates.
-6. Samples: the random won positions with depth at least 3 are 74 of 1,500 drawn, a small sample; the 466 are all of them.
-
 ### 3.4 Status set
 
 - Drawn classes 946,389. Strongly connected components 12,724, one with more than one class (933,666 classes), no self-loops.
@@ -139,6 +143,50 @@ Findings.
 - Recorded properties: White-to-move cycle members with a losing move 412,342, Black-to-move 397,749; status-set classes whose mover has a losing move 810,680.
 - Form of the certificate for an equilibrium region. A depth-bounded search cannot certify it. It is certified by closure: a finite set S of positions reached under optimality in which every position has a value-preserving move that stays in S, in which every move leaving S reaches a position certified won for the opponent by a depth-bounded certificate (the thrown wins, section 3.3), and which holds a cycle and no mating terminal. Then "no forced win within k" holds without limit on k. In KRvKR: drawn positions with a winning move 0; edges from a lost class into a drawn class 0; one cycle object of 933,666 of the 946,389 drawn classes; the 12,723 others are 609 reached from it by drawing moves, 11,819 reached only by a thrown win and 295 with no predecessor. The closure here was built by enumerating the region. That the primitives supply it as an invariant, the defence form of §4.7 (invariant-preserving moves: after which, for every reply of the attacker within h plies, no net is COMPLETED), is the clause of item 8 that no run has tested.
 - 2,792 drawn classes have every drawing move a capture (44,672 positions), none on the cycle object; they stay drawn equilibrium states.
+
+## 3A. Primitive run on KRvKR: predictions registered before the run (10 November, 13:40)
+
+Catalog elements run: P-001 §4.3 terms C, F, X, B, O for the royal target (the defender's king) and the non-royal target (the defender's rook), with the residual partition of §4.4; P-003 §7.3 navigation graphs of the king and the rook with dependency sets and edge exposure, route distance d_M, and the reach of the attacker's units to a configuration at which a net completes, with the defender's pieces held in place; the double-threat composition of §4.10. P-008 §8.3 is read at the lost classes (held terms, residual replies, supports, key elements; results in section 3B). Left out: the tempo budget TP and TM as a comparison against an opposing race (KRvKR has no pawn race), the cost model §4.8 beyond the route distance, mechanism tags beyond F1, F2, X3.
+
+Predictions, stated before any of the code below was run:
+1. **PA.** For the royal target, C, F, X and B as §4.3 defines them hold exactly when the defender is checkmated: 0 disagreements with the move generator over every class position with the defender to move.
+2. **PB.** For the non-royal target, the net holds by the five terms exactly when no reply of the defender resolves it by R_F, R_X, R_B or R_O, and the only disagreements with the move generator are replies that give check (a counter-net, §4.10): none other.
+3. **PC.** The reach of the attacker's units to a net completion, with the defender held in place, in attacker moves k, gives 2k - 1 <= the exact depth for every won class (it is a cooperative lower bound, §4.8).
+4. **PE.** The gap between the exact depth and 2k - 1 is larger for the 466 and the 56 than for the forcing-solved classes of the same depth.
+5. **PF.** The support closure of §8.9, computed for the defender's register, is the whole board in KRvKR, so §8.9 item 3 gives no pruning here.
+
+## 3B. Primitive run on KRvKR: results (10 November, after section 3A)
+
+Every figure below is a count over the 1,347,906 classes (or over the ladder rows named). Nothing here is a verdict on a rule.
+
+**P-001 terms, royal target (PA).** C, F, X and B as §4.3 defines them, computed from the coverage sets and occupancy (Cov_A with the target king lifted, Occ_D, legal attackers, between-squares), agree with the move generator on every class: 0 disagreements. The net holds on 603 classes, all of them the 603 mated classes.
+
+**P-001 terms, non-royal target (PB).** The target is the defender's rook, attacked by the attacker's rook or king in 367,815 classes where the defender has a legal reply (a further 42 attacked-rook classes have no legal reply and are outside the comparison). Terms C, F, X, B and O were computed, with O read as §4.3 states it (the capture is favourable and its outcome is read by the value of the position the capture reaches; each defender reply is checked for a favourable capture left to the attacker).
+- F read literally (a covered square closes the flight) disagrees with the generator on 888 classes.
+- F read with the outcome at the destination (a covered square where the capture is unfavourable counts as a flight) agrees on all 1,347,906 classes (net holds on 5,818), 0 disagreements. Recorded as a residual interface of §4.3 for a non-royal target: F needs the outcome at the square, which is the clause O already carries. The catalog text is unchanged.
+- An earlier version of the code that ignored the legality of the attacker's king capture after a defender king move disagreed on 250 classes. That was an error in the code, found and fixed here, not a finding about the catalog.
+- No disagreement was a counter-net check, so the exception named in PB was not needed.
+
+**P-003 reach with the defender held in place (PC, PE).** The movement relation of the attacker's king and rook (§7.3), the defender's pieces fixed, completing move = a mate or a capture the leaf values as a won position, k = least number of attacker moves. Two variants: movement relation only (R), and R with edges that leave the moved rook attacked and unprotected denied (exposure, E). Compared with the exact depth, bound 2k - 1 for a won class (attacker to move) and 2k for a lost class (defender to move).
+- PC is not confirmed. The bound is violated by 946 of the 392,459 won classes: 938 of the 14,503 depth-3 classes and 8 of the 58 depth-7 classes have an exact depth below 2k - 1. For the 8,455 lost classes with d > 0 it is violated by 1,941. The cause has not been diagnosed. The hypothesis, not yet tested, is that holding the defender in place is not a relaxation, because the defender has to move and the forced move changes the defender's pieces.
+- Gap (exact depth minus 2k - 1) by exact depth: depth 1, all 376,262 at gap 0; depth 3, 13,565 at 0 and 938 at -2; depth 5, 4 at 0 and 1,632 at 2; depth 7, 28 at 0, 20 at 2, 2 at 4, 8 at -2.
+- PE holds in aggregate and fails once depth is matched. The 522 quiet-first classes: 482 at gap 2, 32 at 0, 8 at -2. The other won classes: 1,170 at gap 2, 2 at gap 4, 938 at -2, the rest at 0. At depth 5 alone, all 1,170 forcing-solved classes have gap 2, as do 462 of the 466 quiet-first classes. The gap follows the depth, and it does not separate the quiet-first classes from the forcing-solved classes of the same depth.
+- Exposure variant: violated on 10,310 of 391,937 non-special won classes and on 8 of the 522, with no unreachable class. The denied edges are used by the shortest lines, so the denial is not a bound either.
+
+**P-008 register at the lost classes (§8.3).** The defender's register where the attacker's rook gives check, replies partitioned as R_F, R_X, R_B:
+
+| Group | Classes | Rook gives check | Flights per position | Captures | Interpositions | Held terms | Joint support (narrow and wide) |
+|---|---|---|---|---|---|---|---|
+| Seeds (lost d=4, quiet move needed) | 74 | 0 | none | none | none | none | none |
+| Lost d=4, not seeds | 391 | 307 | 4.04 | 0 | 0 | F only, 307 | 0 |
+| Lost d=6, forcing-solved | 100 | 99 | 5.09 | 0 | 0 | F only, 99 | 0 |
+| Lost d=6, quiet move needed | 8 | 8 | 1.00 | 0 | 0 | F only, 8 | 0 |
+
+- At the 74 seeds the defender is not in check, so C does not hold and the net on the king is not engaged. The register at a seed is empty by §8.3 as written. The attacker's win there needs a quiet move that establishes C, and the catalog route to that is the ENGAGED-NEW status of §8.4, whose engagement support is read through P-003 route distance (RT). How the engagement squares of a dormant net are defined is not written in §8.4.
+- Where the rook gives check, only F is held, in every group. Narrow support = the unit, the squares it uses and the line it moves along; wide = narrow plus the coverage reads (attacker king, attacker rook and its ray). Under both readings the three families of replies never share support, and the one element common to all residual replies of the register is the defender's king, a key element of F.
+- Not computed: effect vectors of defender moves (UNCHANGED, HELD, OPENED), the equilibrium moves of §8.11, and the opening mechanisms OP1 to OP6. They depend on the register at the positions the defender moves from, and the register is empty at the seeds .
+
+**Not run.** PD (ordering by reach; withdrawn from this record as outside the scope of section 0) and PF (the support closure).
 
 ## 4. Certification
 
@@ -158,18 +206,15 @@ Findings.
 | Quiet layer built backwards | python-chess unmove generation and own legality, S3 sets from the ladder table: 74 seeds to the 466, 3,216 candidates to the 8, the 8 to the 56 | exact equality with the C++ sets at every step |
 | Tempo reserve | C++, every class meeting the conditions of section 3.3 | counts as stated; not independently re-derived |
 | Cooperative distance, slack and the priority orders | C++, relaxation over the class graph, per net and combined | counts as stated; not independently re-derived |
-| Local reach by the residual reply set at horizon 1 (section 3.5) | C++, fresh evaluator per query, probes counted as generated positions, first winning move marked afterwards with the exact recursion | 0 wrong values in every cost sample; selection counts as stated; not independently re-derived |
 
 A first run of the python-chess checker disagreed on 94 samples at depth 5 and beyond. The cause was in the checker (its Lost ignored a mated position once d>0, and its Win skipped mate in one at d>=3). It was fixed and rerun. The C++ program was not changed.
 
 ## 5. Residual progress (where this run stopped)
 
-In the order the specification asks for them:
-1. Compute the terms F, X, B and O for the nets on the king and on the rook, and the residual reply sets R_F, R_X, R_B, R_O of §4.4, and test whether the double-threat rule of §4.10 over them reproduces the rule of mode 3 and the ladder levels. The check and attack flags and the 3-ply completion are the stand-ins to replace.
-2. Tag the residual replies with the mechanisms of §4.5 whose establishment would remove them, and test whether the tags select the passing quiet moves without enumerating the quiet moves. The threat condition alone leaves 116 of 714 quiet moves that do not pass.
-3. Compute the per-net route distance (§7) from the movement relation, held between nodes, so that the reach is computed from the position and not recounted at each node (section 3.5 does it by a residual reply set at horizon 1, accurate, not economical), and test that it reproduces the ranks of section 3.3. Run the coverage race (§8) on the defender's replies: the replies covered by a completed net and those held open, and whether the attacker's move shrinks the held set, as a move generator in place of enumeration. The cooperative distance is flat on this material, so this is where the content lies. Compute the route distance and the parity of the route-length set (§7) for the attacker's unit, for the 109 reserve-1 classes and for the 437 slack-2 classes, and test whether it separates the 70 lost from the 39 drawn.
-4. Calibrate the cost model (§4.8) against the exact depths of section 3.2.
-5. Close the status and closure questions on more than one segment (item 11), including the pawn fold (left-right reflection only) and the castling fold (not run), and entry by crossing from a larger material.
+Steps 2 and 3 of section 0, in order:
+1. The defence form of §4.7 as an invariant over the status set: the closure certificate of section 3.4 supplied by the primitives (invariant-preserving moves, after which no net is COMPLETED for any attacker reply within h plies), tested against the 934,275 classes. Predictions first.
+2. The residual reply sets R_F, R_X, R_B, R_O at every position, and the test whether the double-threat rule of §4.10 over them reproduces the rule of mode 3 and the ladder levels.
+3. P-008 registers and equilibrium moves (§8.11) at the positions the defender moves from. At the 74 seeds no net is engaged and the register is empty (section 3B).
 
 Other limits of this record:
 - The independent checks are samples except the table comparison, the move-generator comparison, the unanchored-class check and the mode comparisons, which are exhaustive. Both programs are the author's and share one reading of the programme; an independent recount is outside this session.

@@ -333,6 +333,18 @@ evaluate(P, T, D, h):
 ```
 Counter-nets are applied in composition (§4.10), not here.
 
+**The two readings with D to move, and the horizon (the designer's statement, 12 November 2026).** The deliveries of the procedure above, read with D to move
+("in P after each legal move of D"), have two readings, kept apart by their purpose. The *cooperative* reading takes the attacker's moves after any defender
+move that lets them. It measures reachability: the distance of the units to the configuration the net requires, as the coverage race and the segmented
+dependencies read it (P-008, P-003), and the cooperative bound of the cost model (§4.8, CMD <= DTM). The *adversarial* reading has the defender choose its
+reply, and a delivery counts only if it holds against every reply the defender has. It is the reading of the composed calculation and of the defence form
+below, and it is the one that does the work of progressing the programme and finding optimality. Under the composed calculation the evaluation of reachability
+through each ply is fed by the depth enumerated under the adversarial reading, and the cooperative distance informs where to look (§9). The horizon h counts
+plies from P, the defender's replies included and the completing move included, with no reply counted after it. h is a choice, and once it is made it shapes the
+decisions of the rest of the programme; the choice is plies, counted this way. A win in which the winning side makes four moves and the defender three replies
+is therefore a win within h = 7, which is the count of the depth of a win in the tables and in the KRvKR record (`boundary_board_states_krvkr_workflow_record.md` §3E).
+For that segment h = 7 reproduces every win and every loss (the deepest loss is at depth 6). The value of h is a parameter of the segment and of the approach, and 7 is its value there only.
+
 **Defence form.** For D to move, the *invariant-preserving* moves are those after
 which, for every reply of A within h plies, the status is not COMPLETED. When the capture of the target
 is the only route to a loss, these are the non-losing moves. At a boundary state
@@ -1020,6 +1032,28 @@ P-001 is the terminal primitive: every plan ends in a capture net. Race to a squ
 of this map: the first is a term (TP, TM), the second is an input (missing edges of the movement relation), and the third is the
 result of a chain resolving (§1).
 
+**How the three compose in a calculation (the designer's statement, 12 November 2026; unrun specification).** The capture net, which is the mating
+net where the target is the royal unit, is the root and the highest-priority primitive: it defines what completion is, and every plan ends in it. The
+coverage race matters because it informs the routing that can resolve the net, and whether the opponent can obstruct that routing: occupancy and coverage
+decide whether a unit can arrive at the square or the occupancy the net requires, and whether the opponent can prevent it. This is a compositional effect
+that needs an understanding of the depth of navigation. The segmented and chained dependencies are what calculate these dependent segments together,
+to resolve the routing and the obstruction race beyond one ply, and the irreversible segmented boundaries bound that calculation and let it build on
+progress made. No primitive is calculated alone (§11.1): taken together the three represent exhaustive coverage. The architecture treats them as
+composed but modular on purpose, because the modules allow optimizations by component that navigate the routing, where a reliance on exhaustive
+coverage alone does not.
+
+The calculation is search technically, guided by the compositional structure. A branch that looks promising is evaluated first, and at each ply the
+reachability is read relative to the opponent's reply. What is understood of one branch is kept while others are evaluated, so that it is known when
+another branch can resolve better than the one in hand and the work can return to it. Whether the routing converges is read, and the routing can be
+evaluated from a fixed point and from different anchoring points, which is the relativistic comparison of optimality. The reach is a priority and
+never an exclusion. If the net needs a unit and the pool of compositions has that unit arriving in five moves while others arrive sooner, that
+informs direction and prioritization and does not exclude that the five-move route is the optimal one. The comparison is made across the units and
+across the candidate compositions, each reading the reachability of the others, which is a joint and self-referential comparison. The result of
+the calculation is exact and agrees with exhaustive coverage. There is no error rate, and a heuristic that only orders (§6) never certifies. The
+depth to which a result is certified, and the dependency of an upstream result on the segments below it, are in
+`boundary_board_states_start_selection.md` §2g. Not specified: the order of evaluation inside one depth level beyond the statement that reach is a
+priority, and how the statuses of the nets at successive plies are composed into a verdict at a depth.
+
 **Order of approaches (the designer's statement; unrun specification).** This assumes the classes below cover every move of a general board
 state. If they do not, this statement changes. Every legal move is a capture, a non-capture irreversible move, or a reversible move. In terms
 of role, a move is one of: completing the mating net directly; a capture net, which navigates one or more irreversible boundaries (not
@@ -1041,7 +1075,7 @@ whether it is drawn is certified by d and coverage. The ordering does not decide
 
 ### 10.1 What is the designer's and what is this file's organization
 
-The order-of-approaches statement in §9 is the designer's.
+The order-of-approaches statement in §9 is the designer's, and so is the statement of how the three compose in a calculation (§9, 12 November 2026); the condensed wording of that paragraph is this file's.
 
 The designer's: the architecture (a primitives catalog; candidate, proven and disproven
 boundary-state catalogs with verdicts cached permanently; composition of primitives recorded on proven
@@ -1200,6 +1234,8 @@ The second is checked against the tablebases where they reach.
   the reachability within the region a segment encloses. After an irreversible move, the option of a viable move that would have
   compensated is gone, so the segment boundary directly bears on the primitive calculation. The dependency of the primitives across a
   boundary, and the reshaping of their goals, is carried by P-003 (§7.1, the nesting).
+
+How the three compose in a calculation, with the roles of the capture net, the coverage race and the dependencies, is in §9.
 
 **What the designer says of the flags.** A flag can be reversible or irreversible, linked to segmented dependency. A temporary loss of
 the right to castle depends on coverage. An irreversible loss comes from the king moving or from a specific rook moving.

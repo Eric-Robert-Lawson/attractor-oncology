@@ -1,6 +1,6 @@
 # KRvKR workflow record: applying the programme to a segment
 
-Run of 9 and 10 November 2026. Counts only. Nothing here is a verdict on a rule. This record carries the procedure of the programme as applied to KRvKR, in the order the programme specifies, with what was run, what stood in for a specified element, and what was not run. The exhaustive landscape is the calibration ground. No code is carried: the numbers in sections 3 and 4 are what any reproduction must match.
+Run of 9 and 10 November 2026. Counts only. Nothing here is a verdict on a rule. Section 3E was added on 12 November 2026 and records how the programme's depth-scoped certification (start-selection §2g) reads on this segment. It adds no run. This record carries the procedure of the programme as applied to KRvKR, in the order the programme specifies, with what was run, what stood in for a specified element, and what was not run. The exhaustive landscape is the calibration ground. No code is carried: the numbers in sections 3 and 4 are what any reproduction must match.
 
 ## 0. Scope of the application to KRvKR (the designer's statement, 10 November 2026)
 
@@ -12,7 +12,7 @@ Run of 9 and 10 November 2026. Counts only. Nothing here is a verdict on a rule.
 |---|---|
 | 1 | Done. Status set 934,275 classes, 14,944,368 positions (section 3.4). |
 | 2 | In progress. The P-001 terms agree with the generator on 100% of classes where a net is complete (section 3B). The defence-form closure over all classes is run in sections 3C and 3D: 0 disagreements in value and depth over 1,347,906 classes, with no economy. |
-| 3 | Not done. The composition rule of section 3.1 matches the table on 100% of classes, but it enumerates replies and recurses with the move generator. It is the calibration, not the rule set of step 3. |
+| 3 | Not done. The composition rule of section 3.1 matches the table on 100% of classes, but it enumerates replies and recurses with the move generator. It is the calibration, not the rule set of step 3. The approach for it is the guided search with the depth iteration of section 3E, not run. |
 
 ## 1. The procedure, applied
 
@@ -66,6 +66,7 @@ What the programme asks to run next, in its own terms. (1) P-003: build the navi
 | P-008 coverage race, TM (§8) | register at the lost classes, run (section 3B); effect vectors, equilibrium moves and TM not run |
 | Hard core status and anchor (items 7 to 10) | run on the segment (section 3.4) |
 | Closure claim (item 11) | not tested; one segment |
+| Depth-scoped certification of §2g: depth derived from coverage, the iteration, the anchor in the depth calculation, the end of the depth at the crossing, dependency across segments; and the composition of the three primitives of catalog §9 | read on this segment in section 3E; the guided search, the anchor inside the depth iteration and the dependency record are not run |
 | Predictions P3-1, P3-2, P8-1, P8-2, P8-3 (§7.13, §8.13) | not tested. PA to PF of section 3A were stated before the run of section 3B |
 
 ## 3. Results
@@ -219,6 +220,23 @@ Computed over the 1,347,906 classes with the P-001 completion (terms C, F, X, B 
 
 What this establishes: the closure certificate of section 3.4 is supplied by the defence form with the P-001 completion test, over the whole segment, with no table and 100% agreement in value and depth. What it does not establish: any economy. Every move and reply was taken, so it is exact enumeration with the primitive's completion test, and P-003 and P-008 were not used. The classes the 74 seeds and the 8 are in are found only because the recursion looks two and three rounds past the immediate completion.
 
+## 3E. The depth-scoped certification of the programme, read on KRvKR (12 November 2026)
+
+The programme's statement is in `boundary_board_states_start_selection.md` §2g and the composition of the primitives in `boundary_board_state_primitive_catalog.md` §9. This section records what each element reads on this segment, from the counts of sections 3.2 to 3.4 and 3D, and what has not been run. It adds no run. KRvKR is the sandbox, the segment with exhaustive coverage, and what is read here is one approach and not the programme.
+
+| Element of §2g | On KRvKR |
+|---|---|
+| Depth derived from exhaustive coverage | d is 7 plies for wins and 6 for losses. The classes first won at depth 1, 3, 5, 7 are 376,262 / 14,503 / 1,636 / 58, and the classes first lost at depth 0, 2, 4, 6 are 603 / 7,882 / 465 / 108 (section 3.2). No class resolves beyond. Every class with no imbalance within that depth is drawn: 946,389 classes. The exact recursion of section 1.C holds no table and equals the table on all 1,347,906 classes (0 mismatches). |
+| What d counts | Plies. The recursion of section 1.C steps d by 2 for one move of the winning side and one reply, so the depth of a win is odd and ends on the winning side's move with no reply after it. A won class of depth 7 is four moves of the winning side and three replies, 7 plies and not 14. Checked on 5 sampled depth-7 classes (seed 20261112): the table's dtz is 7, a win exists within 7 plies and not within 5 by the table-free recursion, and the line walked out has 7 plies, 4 moves of the winning side, ending with the capture of the rook into KRvK. It is the distance to that irreversible move and not the distance to mate, since KRvK still has to be won after it. The horizon h of catalog §4.7 counts plies with the completing move inside it, so h = 7 for this segment (the deepest loss, at depth 6, is inside it). |
+| The property the approach rests on | Material is equal (king and rook each). The status set is 934,275 of 1,347,906 classes (14,944,368 of 21,561,456 positions; 69.3% of both), and the cycle object is 933,666 classes (section 3.4). |
+| The iteration read at each depth | Won within k = 1, 3, 5, 7: 376,262 / 390,765 / 392,401 / 392,459. Lost within k: 8,485 / 8,485 / 8,950 / 9,058 (section 3.3, depth-indexed certification). The stopping rule of section 1.C, two consecutive iterations with no new assignment, is the plateau rule. The won classes first appear at odd depths only and the lost classes at even depths only, so an iteration that raises the depth by one ply and watches the won classes sees none new at depth 2, 4 and 6; a comparison of the won classes spans two plies. Here the plateau at 7 coincides with the table, and the check against the table is the only reason it is known to be the true depth. |
+| The anchor as part of the depth calculation | Not carried out in this run. The anchor kinds of section 3.4 were computed after the landscape, by reverse move generation and the drawing-move graph, and the depth was not iterated along the trajectory from the anchor. |
+| The depth ends at the irreversible boundary | The crossings of KRvKR are the captures, into KRvK or into a draw. The leaf value is read from the KRvK table, and the capture-leaf rule agrees with it on all 223,944 positions with the weak side to move (section 4). The table's depth for a won class is the distance to zeroing: won d equals \|dtz\|, lost d equals \|dtz\|+1 for the classes not mated (section 3.2). |
+| Dependency across segments | Not exercised. Every crossing read in this run is read from an exhaustive table, or from the capture-leaf rule checked against it, so the scope of every read is exhaustive and no discovery below can change a result here. The anchor of every status-set class lies inside the segment (section 3.4), and a crossing from a larger material is outside this run (section 1.A). As a lower segment for a larger material, KRvKR is certified exhaustively by the recursion of section 1.C and the table, so a read of it from above carries the scope exhaustive. |
+| The composition of the three primitives | The runs of section 3B are runs of single primitives: the terms of P-001 on both targets (0 disagreements with the generator, with F read with the outcome at the destination for the rook), the P-003 reach with the defender held in place (violated as a bound on 946 won and 1,941 lost classes), and the P-008 register at the lost classes. In the designer's statement no primitive is calculated alone (catalog §11.1, §9), and the reach with the defender held in place carries none of the opponent's obstruction. Those runs are not a test of the composition, and the defence-form closure of section 3D uses P-001 only and takes every move. |
+
+**Not run.** The guided search of catalog §9 on this segment: the three primitives composed, a promising branch evaluated first with the reach read at each ply relative to the reply, the evaluated branches kept and returned to when another resolves better, the reach used as a priority and not an exclusion, and the depth iterated by two-ply steps from a chosen start depth with no table in it. The test registered for it is the number of branches the guided search evaluates, set against the exhaustive closure of section 3D, with the value and the depth equal to the table on every class. Its predictions are to be written into this record before it is run, and only its result after. The iteration along the trajectory from the anchor, the dependency record of what an upstream result read, and the case where the lower segment has no table are not run on this segment.
+
 ## 4. Certification
 
 | Result | Checked by | Outcome |
@@ -246,6 +264,7 @@ Steps 2 and 3 of section 0, in order:
 1. The defence form of §4.7 as an invariant over the status set: the closure certificate of section 3.4 supplied by the primitives (invariant-preserving moves, after which no net is COMPLETED for any attacker reply within h plies), tested against the 934,275 classes. Predictions first.
 2. The residual reply sets R_F, R_X, R_B, R_O at every position, and the test whether the double-threat rule of §4.10 over them reproduces the rule of mode 3 and the ladder levels.
 3. P-008 registers and equilibrium moves (§8.11) at the positions the defender moves from. At the 74 seeds no net is engaged and the register is empty (section 3B).
+4. The guided search of section 3E, with its predictions registered first: the three primitives composed, the depth iterated without a table, the anchor inside the depth calculation, and the number of evaluated branches set against the closure of section 3D at 100% agreement with the table.
 
 Other limits of this record:
 - The independent checks are samples except the table comparison, the move-generator comparison, the unanchored-class check and the mode comparisons, which are exhaustive. Both programs are the author's and share one reading of the programme; an independent recount is outside this session.

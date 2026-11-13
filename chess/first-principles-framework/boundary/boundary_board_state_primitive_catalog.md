@@ -337,13 +337,13 @@ Counter-nets are applied in composition (§4.10), not here.
 ("in P after each legal move of D"), have two readings, kept apart by their purpose. The *cooperative* reading takes the attacker's moves after any defender
 move that lets them. It measures reachability: the distance of the units to the configuration the net requires, as the coverage race and the segmented
 dependencies read it (P-008, P-003), and the cooperative bound of the cost model (§4.8, CMD <= DTM). The *adversarial* reading has the defender choose its
-reply, and a delivery counts only if it holds against every reply the defender has. It is the reading of the composed calculation and of the defence form
-below, and it is the one that does the work of progressing the programme and finding optimality. Under the composed calculation the evaluation of reachability
+reply, and a delivery counts only if it holds against every reply the defender has. It is the reading of the composed calculation,
+and it is the one that does the work of progressing the programme and finding optimality. Under the composed calculation the evaluation of reachability
 through each ply is fed by the depth enumerated under the adversarial reading, and the cooperative distance informs where to look (§9). The horizon h counts
 plies from P, the defender's replies included and the completing move included, with no reply counted after it. h is a choice, and once it is made it shapes the
 decisions of the rest of the programme; the choice is plies, counted this way. A win in which the winning side makes four moves and the defender three replies
 is therefore a win within h = 7, which is the count of the depth of a win in the tables and in the KRvKR record (`boundary_board_states_krvkr_workflow_record.md` §3E).
-For that segment h = 7 reproduces every win and every loss (the deepest loss is at depth 6). The value of h is a parameter of the segment and of the approach, and 7 is its value there only.
+The value of h is a parameter of the segment and of the approach, and 7 is its value there only.
 
 **Defence form.** For D to move, the *invariant-preserving* moves are those after
 which, for every reply of A within h plies, the status is not COMPLETED. When the capture of the target
@@ -1049,10 +1049,9 @@ evaluated from a fixed point and from different anchoring points, which is the r
 never an exclusion. If the net needs a unit and the pool of compositions has that unit arriving in five moves while others arrive sooner, that
 informs direction and prioritization and does not exclude that the five-move route is the optimal one. The comparison is made across the units and
 across the candidate compositions, each reading the reachability of the others, which is a joint and self-referential comparison. The result of
-the calculation is exact and agrees with exhaustive coverage. There is no error rate, and a heuristic that only orders (§6) never certifies. The
+the calculation is exact and agrees with exhaustive coverage. There is no error rate. The
 depth to which a result is certified, and the dependency of an upstream result on the segments below it, are in
-`boundary_board_states_start_selection.md` §2g. Not specified: the order of evaluation inside one depth level beyond the statement that reach is a
-priority, and how the statuses of the nets at successive plies are composed into a verdict at a depth.
+`boundary_board_states_start_selection.md` §2g.
 
 **Order of approaches (the designer's statement; unrun specification).** This assumes the classes below cover every move of a general board
 state. If they do not, this statement changes. Every legal move is a capture, a non-capture irreversible move, or a reversible move. In terms

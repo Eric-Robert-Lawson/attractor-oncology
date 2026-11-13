@@ -76,9 +76,9 @@ small enough to be held completely, the tablebase is the complete solution of th
    a pawn move is irreversible in that direction. Only the left-right reflection applies (files a and h exchanged, b and g, c and f, d and e, with the
    ranks unchanged). The up-down reflection (ranks 1 and 8 exchanged, 2 and 7, 3 and 6, 4 and 5) and the rotations change the race to promotion,
    and do not apply. The exchange of colours, with the side to move exchanged, folds a position onto another position of the same material only where the material is its own
-   colour exchange (KRvKR is; KRvK is not, and the exchange identifies it with KvKR). A castling right ties the king and a rook to their squares and removes the
+   colour exchange. A castling right ties the king and a rook to their squares and removes the
    left-right reflection. A position is represented by the image with the smallest index, and the group and the orbit sizes it gives are recorded
-   with the segment. For KRvKR (no pawns, its own colour exchange) the group has sixteen images. The pawn and castling cases are this file's reading,
+   with the segment. The pawn and castling cases are this file's reading,
    and have not been run.
 3. **Probe the value of every representative.** Win, draw or loss for the side to move, taken by sign. A cursed win or a blessed loss
    counts as a win or a loss, since the 50-move rule is not followed (§1).
@@ -171,7 +171,7 @@ Settled, and removed from this list: whether the boundary criterion tests the op
 
 ## 10. Files
 
-The designer's own files for the first material to be mined, `KRvKR.rtbw` and `KRvK.rtbw`, and the designer's solver and validator, are the designer's. No run of the process is recorded here. The procedure of §3 is specific to the pieces named at each step (step 2 assumes a
+The designer's own tablebase files, solver and validator are the designer's. No run of the process is recorded here. The procedure of §3 is specific to the pieces named at each step (step 2 assumes a
 pawnless material; other materials need their own move generation).
 
 ## 11. Provenance

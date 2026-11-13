@@ -27,12 +27,6 @@ This file is the construction pipeline and the record of the idea: what a bounda
 - `boundary_board_states_piece_structure_composition.md`: the king position and compatibility, and the composition of piece structures (a removable direction).
 - `boundary_board_states_syzygy_validation_and_scoping.md`: Syzygy as validation and as the scope of certification (a removable placeholder).
 - `boundary_board_states_case_study_otb.md`: a case study from over-the-board play.
-- `chess_concepts_survey.md`: a survey of chess concepts read against the programme.
-
-Kept separate from `syzygy_improvement_proven_results.md` and the other Claim A/B/C documents because
-this is a genuinely different kind of object: those are about distance and escape
-count; this is about win/draw/loss pattern-matching at the single precise point
-where a losing side's last real choice exists.
 
 > **Where this stands, and how to resume (read this first).**
 >
@@ -464,8 +458,7 @@ worth mining deliberately — not a claim that the specific method matches.
 
 ### Method 4: stratified ablation over defender material, testing a geometric/topological distinction directly
 
-**A precondition this method depends on, stated first because it corrects
-something in this document's own earlier build plan (§11).** Whether a
+**A precondition this method depends on, stated first.** Whether a
 boundary state can exist in a material at all depends on that material having
 *genuine drawn territory* somewhere in it. A material that is a forced win
 *everywhere* against a bare king — KQvK, KRvK, KBNvK among them — has no
@@ -473,9 +466,7 @@ drawn positions to sit at the edge of, aside from stalemate reachable only
 through a prior blunder, already excluded by §1's own definition. So these
 materials are not merely unlikely candidates for Method 2's seeding — they are
 **structurally empty of boundary states**, by the same logic that makes
-insufficient material an unconditional draw in the other direction. §11's
-build plan listed KQvK and KBNvK as Method 2 targets; that needs correcting,
-not just noting as a caveat. **This has a satisfying, independent check
+insufficient material an unconditional draw in the other direction. **This has a satisfying, independent check
 already sitting in §9**: Haworth's exhaustive enumeration found zero mutual
 zugzwangs in KBNK specifically. That's not a coincidence next to this
 document's own claim of zero boundary states there — both are the same
@@ -689,8 +680,7 @@ The existing architecture already treats "what's needed to compute" and "what's
 worth persisting long-term" as two different questions with two different costs.
 Point 3 above is a direct extension of that same pattern.
 
-**What this grounding does and does not establish — stated precisely, since it
-matters for §11.** The existing engine confirms the *general architectural
+**What this grounding does and does not establish — stated precisely.** The existing engine confirms the *general architectural
 approach* is sound: enumerating downstream from a given starting position,
 memoizing fully in memory, persisting selectively. It does **not** mean the
 current `compositional_trajectory_solver_modular_shapes.cpp` or
@@ -846,7 +836,7 @@ scan over the completed database, structurally identical to how
 `analyze_longest_line.py` already finds forced plies. The only place real, heavy
 computation is still required is a material neither Syzygy nor this project has
 solved yet, and that's not a new cost this idea introduces — it's the same cost
-already being paid for KRPvK right now, for entirely separate reasons. §10 is
+of solving such a material for any other purpose. §10 is
 where that changes.
 
 ---
@@ -946,7 +936,7 @@ the same real infrastructure that already proved workable at this exact
 material's scale. The overlap between which positions get flagged by either lens
 is presumably large but unmeasured — a real, open, directly checkable question.
 
-**The concrete action this adds to §11's plan**: Haworth's KBNK-zero-mZZ result is
+**The concrete action this adds**: Haworth's KBNK-zero-mZZ result is
 a precise, already-published, external number to check this project's own
 boundary-state scan against, the moment it runs on real KBNvK data. Since a
 boundary board state doesn't require the mutual property mZZ does, boundary-state
@@ -971,7 +961,7 @@ general instinct, not a mapping of the specific method — worth being exact
 about that distinction rather than letting the precedent's real strength imply
 more than it does.
 
-**A third precedent, for the scaffolding strategy in §10 and §11 step 10 —
+**A third precedent, for the scaffolding strategy in §10 —
 recorded in full in `boundary_board_state_topology.md` §7 and pointed to here so
 this section stands complete on its own.** Checkers was weakly solved by
 combining an exhaustively built retrograde endgame database with forward
@@ -1063,124 +1053,9 @@ incompleteness rather than a genuine absence of a drawing structure.
 
 ---
 
-## 11. Concrete next build
+## 11. [Removed, 13 November 2026]
 
-*This file's reading, offered for correction.* This list was written before the Syzygy mining process
-(`boundary_board_states_start_selection.md` §2a) and the two phases of the programme (read-first block) were stated. Steps 1 and 13, the
-scan of Syzygy materials for boundary states, are read as carried out by that process, whose entries are the candidate stage and take the
-conditions of items 7 and 8 of §14 afterwards by query. The other steps are not reordered here.
-
-1. **Bootstrap from Syzygy** for any material already covered, using
-   `is_boundary_state()` (§6, with the §7 collapse applied) — a pure scan, no new
-   tablebase construction, real boundary states out immediately.
-2. **Seed Method 2's retrograde walk (§2) from Syzygy's own decisive positions**,
-   directly alongside step 1 — walk backward from known wins/losses, validating
-   each traced step against the ancestor's full set of children (via Syzygy or
-   this project's own data, discarding branches the ancestor's own optimal play
-   wouldn't take) until reaching the first ancestor with any non-losing option,
-   then verify that transition point the same way step 1's candidates are
-   verified. No new solving technique required, only a new way of directing the
-   existing retrograde machinery.
-3. **Extend both methods to this project's own solved materials with genuine
-   drawn territory** — KRPvK once complete, and the Method 4 ablation
-   sequence (KQvNK, KQvBK, KQvBNK) once built — the same way
-   `analyze_longest_line.py` already scans for forced plies. **Not** KQvK or
-   KBNvK directly: both are structurally empty of boundary states (§2, Method
-   4) — running this step against either is expected to return zero, and that
-   expected-empty result is itself the first real test of that claim, not a
-   wasted run.
-4. **Confirm the expected-zero result for KBNvK against Haworth's
-   already-published zero-mutual-zugzwang result** (§9) — not a comparison of
-   two independent numbers hoping to match, but two different arguments (this
-   document's structural one, Haworth's exhaustive enumeration) predicting
-   the same zero from two independent directions. A non-zero result here
-   would mean something in this document's own reasoning is wrong, not just
-   surprising.
-5. **Build the repurposed forward-search tool** (§10) — a new, dedicated
-   pipeline, not the current `compositional_trajectory_solver_modular_shapes.cpp`
-   or `run_full_sweep.py` run unmodified against a different output target.
-   Reuses their memoization pattern and delta-checkpoint approach (§3), extended
-   with boundary-catalog early termination during forward search from a
-   specified starting position.
-6. **Cache proven boundary-state verdicts to a small, dedicated file**, following
-   §3's point 3 — persisting only the proven-verdict subset, not the whole
-   landscape, using the same compute-fully/persist-selectively pattern the
-   engine's own `pending_export` mechanism already demonstrates is sound.
-7. **Test the scoping mechanism (§10) on a material this project can already
-   fully classify**, comparing forward-search-with-early-termination against
-   full classification directly — the first real, measured data point on whether
-   the approach actually reaches further than full classification does, before
-   trusting it on a material too large to check the answer against.
-8. **For a material neither Syzygy nor this project can fully classify**: §10's
-   mechanism, not full classification, is the candidate path forward — with
-   step 7's own result as the evidence for whether it's real.
-9. **Once steps 1-8 are working at a small, verified scale, the candidate-list
-   resolution problem itself is the natural target for the distributed model in
-   §12** — a coordinating registry of candidates, independent contributors each
-   resolving one, permanent caching of verified verdicts (§3), following the
-   GIMPS precedent rather than attempting a single, centrally-coordinated sweep.
-10. **Extend confirmed boundary states outward via the scaffolding strategy in
-    `boundary_board_state_topology.md` §7** — tracing further upstream than
-    strictly needed for each state's own confirmation, recording which
-    confirmed states turn out to connect to each other and which specific
-    larger materials mark the current frontier, using that frontier as the
-    prioritized target for steps 8-9 rather than an arbitrary choice of what
-    to solve next.
-11. **Build the primitives catalog** (`boundary_board_state_topology.md` §8b):
-    for each entry, record the deciding inequality and the locked-squares
-    signature, taking each small material's boundary states from its exact
-    tablebase, not from a heuristic formula.
-12. **Attempt one composition (Method 5) on paper**: choose a single concrete
-    placement — the 4-against-4 diagonal chain, or something simpler — write out
-    the tempo timings for every route that breaks the frozen structure, decide
-    wide fortress versus exactly-one, then run the small obstacle-board solver
-    as insurance (topology §8d).
-13. **Build a population of confirmed local boundary states before attempting
-    decomposition** (topology §8m). Scan every material Syzygy or this project
-    already covers for local boundary states in the settled sense (§14 items 7 to 9):
-    drawn, reached under optimality, with the losing deviation of each side recorded as a property (width recorded; §14 item 8, revision of 6 November 2026), across as
-    many distinct materials as the scan reaches. A population of strict-boundary states (status with a losing deviation for each side) needs a material in which both sides can lose; king and pawn against king has a side that cannot lose, so its positions carry the status with one deviation flag unset and none is in the strict boundary (item 8, revision).
-14. **Discover primitives from that population and generate candidates by
-    subtraction** (topology §8l, §8m). Decompose each population member by
-    minimization-by-ablation into fragments with explicit interfaces; catalog
-    them; look for what recurs across the population; remove one primitive
-    from an entry and solve for a structure that discharges the residual
-    assumptions. This requires the obstacle-board solver (walls as blocked
-    squares) as required infrastructure, not insurance — Syzygy cannot
-    evaluate positions with walls.
-15. **Add a forward-driven selection layer on top of steps 13-14** (topology
-    §8r). Steps 13-14 are retrograde-first because exact anchors are cheapest
-    there. Which materials and primitives to catalog first should be chosen by
-    start-position reachability (Tier 3, §14 item 1), with forward-trace and
-    cooperative-mate (helpmate-style) enumeration used to *propose* primitives
-    and the exact methods used to *certify* them. This changes the order of
-    work, not what counts as a certificate. Depends on a definition of forward
-    perturbation that does not yet exist beyond Method 6's single-parameter
-    probe.
-16. **Run the rediscovery validation suite** (topology §8r): give each known
-    result (rule of the square, opposition and key squares, corresponding
-    squares, Uri's rule, Philidor, Lucena, Vančura, triangulation) a primitive
-    decomposition and a pass criterion, and check the decomposition reproduces
-    the result exactly. Cheap and external, so it comes before any claim of new
-    structure.
-17. **Run the mating-net report across a corpus of mating positions and, as a
-    stronger test, try to recognize the net before the mate** (topology §8u).
-    The four terms and the role of each piece are computed with
-    no reference to piece types. Not run; recognition from a pre-mate position is
-    not attempted.
-18. **Define the primitive state S and the perturbation ΔS over the written
-    primitives, and apply Method 7** (topology §8y). The per-ply tempo ledger of
-    topology §8w is its first instance. It needs the cost model of P-001 and the
-    written entries of the catalog (P-003 and P-008 are specified and not run).
-19. **Run the two predictions of topology §8z** (catalog §7.13): that the load-bearing sets found by ablation (§8s) are
-    the cut sets of the dependency graph read from the same position, and that orbit exclusion reproduces the known
-    color-lock verdicts across the whole class. Nothing in this step has been run.
-20. **Run the three predictions of the coverage race** (topology §8aa, catalog §8.13): that the key elements (the singleton
-    opening sets of the held terms) coincide with the load-bearing elements found by ablation (§8s); that the evaluation of the
-    primitive under perturbation, composed over a line, reproduces the verdict of exhaustive search; and that every
-    verdict-changing perturbation in the ablation and deviation data meets the support closure. Count the perturbations that must
-    be branched against those legal in the footprint, since that decides how much the hybrid saves. Nothing in this step has
-    been run.
+A build plan that named specific materials and expected results. It is not part of the general architecture and is withdrawn. The section number is kept so that the numbering of the other sections is unchanged.
 
 
 ---
@@ -1346,7 +1221,7 @@ blunder-derived ones (item 2). Three tiers make the choice explicit:
 - **Tier 3 — start-reachable:** the definition in the topology document's §5.
   Currently uncheckable at scale.
 
-Each tier contains the next. The methods in §2 and the build in §11 should
+Each tier contains the next. The methods in §2 should
 name the tier they target. The tier structure is kept as a description of how much of a position's history is assumed; the definition of a boundary state itself is settled (item 8). Every
 tier also includes condition 1, that both sides are materially live (item 2).
 
@@ -1354,9 +1229,8 @@ Read "exactly one non-losing move" in the tier descriptions as "a recorded width
 
 **2. Two predictions about total-win materials conflict — RESOLVED: the flag
 was mistaken; the original reasoning is kept below, and the resolution follows
-it.** §2 Method 4 and §11
-steps 3-4 state that KQvK, KRvK and KBNvK are "structurally empty of boundary
-states," and treat Haworth's zero mutual zugzwangs in KBNK as independent
+it.** §2 Method 4 states that KQvK, KRvK and KBNvK are "structurally empty of boundary
+states," and treats Haworth's zero mutual zugzwangs in KBNK as independent
 confirmation of an expected zero. §9 states the opposite prediction: that the
 boundary-state count should come back *larger* than zero even where the mutual
 zugzwang count is zero. They cannot both hold. Reasoning suggests the §9
@@ -1384,8 +1258,7 @@ boundary state. The reading that let the example through took the operational
 test (drawn, exactly one non-losing move) as the whole definition, and read
 condition 1's "reduction from sacrificing will force a draw" as covering the
 case, without applying condition 1's first clause. §2 Method 4's claim that
-these materials are empty of boundary states therefore stands, as does the §11
-step 4 comparison with Haworth. What follows from it:
+these materials are empty of boundary states therefore stands. What follows from it:
 
 - The §9 prediction (a nonzero boundary count in KBNK where the mutual-zugzwang
   count is zero) is out of scope wherever a side is not materially live, and
@@ -1420,7 +1293,7 @@ without overloading §8's taxonomy. Proposed, not adopted.
 
 **6. Higher-order constraints are not captured by pairwise compatibility.**
 See topology §8g. This is a design constraint on any future composition
-tooling and is recorded here so it is not lost when the build in §11 step 12
+tooling and is recorded here so it is not lost when composition tooling
 is scoped.
 
 **7. The cyclic requirement, and where the record already says it.**
@@ -1549,7 +1422,7 @@ A global state is sound against all deviation replies, and there are many of the
 which still closes the phase between choice and force, so avoidability is not a ground for calling a state non-global. A state not shown to be in such a family is local. This is offered as the firm definition that item 4 asked for. The record's start-reachability
 (topology §5, Tier 3 of item 1) is read as the reachability part of *global*, which is an open reading recorded in
 `boundary_board_states_opening_survey.md` §2. Earlier uses of "local" in this file and in topology §5a-iii, for draws in which one side is not materially live, are withdrawn and
-reworded (items 2, 7 and 8, and §11 step 13). Nothing in this item changes the definition of a boundary state (items 7 and 8).
+reworded (items 2, 7 and 8). Nothing in this item changes the definition of a boundary state (items 7 and 8).
 
 **10. Terminal draws reached under optimality are boundary states (the designer's ruling; topology §8ad; revised 5 November 2026, see the revision paragraph at the end of this item).** A draw
 by stalemate, or by a capture into a dead position, is the same as a boundary state by the definition when the position is reached under
@@ -1658,7 +1531,7 @@ project's own history so far:
 - **What would move the needle, concretely — the same list this document
   already converges on.** Run the population scan (topology §8m) and see
   whether primitives actually recur. Build one composed primitive and check
-  it against the tablebase (§11 step 12). Test whether a composition can be
+  it against the tablebase. Test whether a composition can be
   certified at a piece count Syzygy cannot reach — the direct test of §7a's
   prediction. Each of these, run and checked rather than merely argued, is a
   novel fact in Lakatos's sense if it comes back positive. A negative result

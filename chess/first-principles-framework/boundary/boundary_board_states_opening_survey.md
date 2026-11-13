@@ -210,9 +210,7 @@ can emerge, with no forced sequence to a decisive outcome. The assumption that i
 been found, and no primitive race has yet committed moves to produce an opening, so that, with the symmetry of the starting
 position, any forced attempt can be mitigated by the moves available. The primitives available from the initial position have not
 committed enough to narrow the branches. Imbalance emerges from decisive moves that create the opportunity for a race to be won, so a
-primitive is reached only through the moves that enable it. The fool's-mate primitive in Bird's Opening is the example: it depends on
-White making the enabling moves, the g-pawn above all, and Black cannot make moves that force it open, so under optimal play it is
-not reached.
+primitive is reached only through the moves that enable it.
 
 Optimal play is then a matter of exhausting the moves that mitigate these primitives, until the move pool and the lack of other
 opportunities force an imbalance, in a mechanic similar to zugzwang. Finding the global boundary states is maintaining the primitive
@@ -324,44 +322,13 @@ conditions such as forcing a sequential mate. So, for discovery, branches that s
 state positions that maintain White's momentum from the beginning of the game are then found, and positions that give the tempo are
 entirely pruned out of the discovery mining.
 
-**The observation of Black's schematic.** The fianchetto is seen more often played by Black, unless White chooses a line in which the
-fianchetto was part of deep study. In speed chess, Black appears to choose a fianchetto schematic almost as an automatic move
-scheme: a fianchetto on the king side with a pawn push (typically the e pawn), or a pawn push reactive to White's development of
-that pawn. The general schematic of Black's opening is: White moves, b6; White moves, either Bb7 or the pawn push; White moves.
-The designer reads this as informative because of the dichotomy: Black is reactive to White and White is the constructor, at the
-highest level and under optimal settings.
-
-How the designer's certainty arises from this observation is in `boundary_board_states_start_selection.md` §2.
-
-**Why, from the primitives.** The combination g6, Bg7, d6 makes progress on the development race primitives in a particular way,
-anchored on the initial position. g6 is a bishop development, Bg7 is the bishop development move, and d6 is a development move that
-unlocks the mobility of several pieces at once: it opens the potential of the c pawn push, with the queen ray and Black's bishop
-ray, and gives the king mobility and a fortress without committing to the castling side. These moves also do not impact the other
-race condition primitives negatively, and do not commit to a branching path that would make any of them a blunder from the initial
-position anchor. This allows White to construct while Black makes moves that directionally resolve race condition primitive
-dependencies, in reaction to White's construction. Moves that deviate and threaten the position are in a small pool. The designer
-reads this as the structural result of the primitives on the causality of optimal play showing in actual play, with the program
-allowing us to understand why this reactive schema is optimal and observed often.
-
-**What it informs.** The place to start evaluating is not Bird's Opening, which is obscure, but the richest vein of the branch
-network. There the pruned structure is enumerated by making White's move choices to construct against the known Black schematic,
-with the pruning methodology, and possibly with the tempo constraint above. The designer regards this as a missing piece of the
-protective belt, something to use in the pruning process and to understand optimal chess when it is seen.
-
 **This file's reading, offered for correction.**
 
 - **A prune by tempo is a prune for discovery.** The closed pruned structure of §4a requires every legal move to be inside the region
   or a certified forced loss. A branch that surrenders the tempo and is pruned only by the criterion is therefore recorded as pruned
   by scope, uncertified, and not as closed. The boundary states found under the criterion are candidates anchored on White's
   momentum. Whether a boundary state exists that does not maintain it is left open by the criterion.
-- **The same holds for the fixed Black schematic.** Playing against a fixed Black schematic fixes Black's pool, so what it finds is
-  a candidate line, and the closure of §2a still requires the other Black replies.
-- **The names.** The setup g6, Bg7, d6 appears in opening theory in the Modern Defence, the Pirc Defence, the King's Indian Defence
-  and the Dragon variation of the Sicilian, among others; b6 with Bb7 appears in Owen's Defence and the Queen's Indian. This is
-  noted from memory and not checked here.
-- **The belt.** The designer's placing of this in the protective belt has not been assessed against the admission rule (catalog §1).
-  It is not a catalog entry. How the tempo of the initial position relates to the tempo terms of the catalog (§4, §8) is not
-  specified.
+- **The belt.** How the tempo of the initial position relates to the tempo terms of the catalog (§4, §8) is not specified.
 - **Tempo and the earlier statements.** The definition above is the same marker as in §4c, where the same position with a different
   side to move is compared. The tempo of the initial position (White to move) is the one tempo fact that is known before any
   calculation. For positions further down the line, the definition makes tempo a result of the primitive calculations, so the
@@ -645,7 +612,7 @@ This is a calibration problem. The depth and the line are chosen so that the web
 - The positions from which a global classification would have to link the candidate to the initial position (§5) are not enumerable.
 - The candidates at the depth chosen are interdependent, and no candidate's verification can be separated from the rest.
 
-The designer's statement on where to start (§4e) bears on the choice of line. The progress of that discovery is recorded in
+The designer's statements on where to start bear on the choice of line and are recorded in
 `boundary_board_states_start_selection.md`.
 
 When a signal fires, the line is changed or the depth is moved, and the result is recorded as a cache entry for the abandoned
@@ -729,8 +696,6 @@ cache entries; and the primitives that the line shows to be missing, found by th
 - Whether the width profile along a line tracks the choice-to-force boundary that the primitives locate. A prediction to be stated
   before it is run.
 - How a book's assertion enters the case list where the position is outside the book's lines.
-- Which line to start with, given §4e: the designer's statement is to start with the richest vein and not with Bird's Opening. The
-  plan for Bird's is in the documents, and the choice between them is the designer's.
 - The sense of tempo in §4e: answered by the designer (§4e, "Tempo, as defined"). It is the explicit, calculable metric stated there,
   and not a sense or a heuristic. How its use as a scoping criterion is recorded on the pruned edges is not specified.
 - How primitives are composed to create the calculation (§4f): answered by the designer (§4f, "Composition beyond the three

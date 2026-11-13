@@ -1262,7 +1262,7 @@ forward search reconnecting to it.
      requirements — and only then propose these as catalog primitives.
   4. Attempt composition (§8j steps 5 to 8) using primitives that recurred in step 3, not primitives defined from a single worked
      example.
-  This order is reflected in §8j and in `boundary_board_states.md` step 13.
+  This order is reflected in §8j.
 - **What decides whether this changes anything, concretely.** Whether the
   scan in step 1 above turns up enough local boundary states, across enough
   distinct materials, for step 3's recurrence-finding to have anything to
@@ -1669,10 +1669,7 @@ perturbation more efficient. The structure reinforces itself.
   checkers weak solution used both, a forward search reconnecting to a
   retrograde database. As a priority ordering for *selecting what to
   catalog*, forward-first is defensible and is adopted here; as an ordering
-  for *certifying*, nothing changes. This should be reflected in the build
-  order of `boundary_board_states.md` §11: its current steps are
-  retrograde-first because exact anchors are cheapest there, and a
-  forward-driven selection layer belongs on top of them. One honest limit: a
+  for *certifying*, nothing changes. One honest limit: a
   forward trace from the start position over the whole tree is the huge
   search, and perturbation exists to avoid it. The only perturbation
   procedure defined so far is Method 6's single-parameter probe, and nothing
@@ -2530,8 +2527,7 @@ yet specified and nothing has been filled in beyond that.
 which a forced draw can emerge and with no forced sequence to a decisive outcome. That it is a draw is assumed because no forced win
 has been found, and because no primitive race has committed moves to produce an opening: with the symmetry of the starting position,
 any forced attempt can be mitigated by the moves available. Imbalance emerges from decisive moves that create the opportunity for a
-race to be won, so a primitive is reached only through the moves that enable it. In Bird's Opening the fool's-mate primitive depends
-on White making the enabling moves, and Black cannot force it open, so under optimal play it is not reached. Optimal play exhausts
+race to be won, so a primitive is reached only through the moves that enable it. Optimal play exhausts
 the moves that mitigate the primitives until the move pool forces an imbalance, as in zugzwang. The move pool is enumerated in the
 pruned structure, and its values come from the pruning, from the losing conditions of the primitives, and not from heuristics. The
 global boundary states are found by maintaining the equilibrium until then: take the longest line along which the pruned structure
@@ -2596,11 +2592,7 @@ sequence in the losing favor.
 the first move, the two phases exist. Under optimal play White is the constructor and Black the reactor. White chooses the opening
 line and so the direction toward the boundary board state; Black chooses from the pool White's choices have set. White also chooses
 whether to maintain the tempo or give it to Black, a choice Black cannot make; optimal play to a boundary state may not depend on
-maintaining it. For discovery, branches that surrender the tempo can be pruned. Black's observed fianchetto schematic (g6, Bg7, d6,
-and the b6 and Bb7 variant) is read as the primitives showing in play: development race progress that does not impact the other
-primitives negatively and commits to no branching path, with deviating threats in a small pool. The start is therefore the richest
-vein of the branch network, not Bird's Opening, constructing against the known Black schematic with the pruning methodology. The
-designer regards this as a missing piece of the protective belt.
+maintaining it. For discovery, branches that surrender the tempo can be pruned.
 
 **Tempo, as defined.** Tempo is an explicit, first-principles calculable metric, not a sense or a heuristic, and an emergent property
 of the whole structure. White, first to move from the initial position, has a temporal advantage relative to Black. The balance of
@@ -2617,7 +2609,7 @@ sequence can be mitigated through a forced draw under optimal conditions.
 
 **Assessment — separate from the record above.**
 
-- **Scope.** A prune by the tempo criterion, and the fixed Black schematic, find candidates and do not close the structure (survey §4e).
+- **Scope.** A prune by the tempo criterion finds candidates and does not close the structure (survey §4e).
 - **Belt.** Not assessed against the admission rule (catalog §1). Not a catalog entry.
 - **Not run.**
 

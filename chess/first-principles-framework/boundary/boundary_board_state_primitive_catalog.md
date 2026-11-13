@@ -341,9 +341,7 @@ reply, and a delivery counts only if it holds against every reply the defender h
 and it is the one that does the work of progressing the programme and finding optimality. Under the composed calculation the evaluation of reachability
 through each ply is fed by the depth enumerated under the adversarial reading, and the cooperative distance informs where to look (§9). The horizon h counts
 plies from P, the defender's replies included and the completing move included, with no reply counted after it. h is a choice, and once it is made it shapes the
-decisions of the rest of the programme; the choice is plies, counted this way. A win in which the winning side makes four moves and the defender three replies
-is therefore a win within h = 7, which is the count of the depth of a win in the tables and in the KRvKR record (`boundary_board_states_krvkr_workflow_record.md` §3E).
-The value of h is a parameter of the segment and of the approach, and 7 is its value there only.
+decisions of the rest of the programme; the choice is plies, counted this way.
 
 **Defence form.** For D to move, the *invariant-preserving* moves are those after
 which, for every reply of A within h plies, the status is not COMPLETED. When the capture of the target
@@ -1004,8 +1002,7 @@ How the effect of nested nets under perturbation combines with the tempo compari
 outcome clause O (§4.3, §4.13); until then P-001 evaluates O as it defines it. Whether the carrier is a term of this entry or an
 input it reads. Whether additional primitives reduce the support closure; the designer keeps this open as part of the design.
 How the repetition cycle that defines a boundary state (§5 item 2) keeps every entry of both registers held across
-the cycle. How large the support closure is on real compositions, which is recorded with each verdict and measured by build step 20
-of `boundary_board_states.md` §11. Where a perturbation class acts on a P-003 term that P-003's mechanisms leave undetermined, the
+the cycle. How large the support closure is on real compositions, which is recorded with each verdict. Where a perturbation class acts on a P-003 term that P-003's mechanisms leave undetermined, the
 reduction rule returns the residual.
 
 **Recaptures and discovered coverage.** Recaptures and discovered coverage are perturbations of the classes of §7.7 and are recomputed at each position

@@ -11,6 +11,8 @@ In particular an entry there is a drawn position that is anchored (the move-agai
 process (§1). The designer has said that another angle is under consideration which may change this process; the staged workflow
 from an anchor is in start-selection §2b.
 
+**d-depth scoping (the designer's statement, 15 November 2026).** Work within an irreversible segmented boundary is scoped by a stated d-depth, calculated to a stated terminal reason. The designer states that this is integrated into the fetching mechanism of the programme, is as structurally required as the primitives themselves, is invariant to the programme and is not isolated to an approach variant, and is a generalizable requirement. The full statement is in `boundary_board_states.md` ("Where this stands").
+
 **Companion documents.** `boundary_board_states_opening_survey.md` (§4j the two catalogs, §4k the designer's statements behind this
 file, §5a reachability families and the classification of a family), `boundary_board_state_topology.md` (§8ar, the record of the
 statements), `boundary_board_states_start_selection.md` (§2a, the later specification of this process, and §2b, the staged workflow), `boundary_board_states.md` (the construction pipeline) and

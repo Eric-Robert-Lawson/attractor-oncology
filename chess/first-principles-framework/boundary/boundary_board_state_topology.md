@@ -12,6 +12,9 @@ their own ancestors start to matter.
 
 - *Width.* "Exactly one non-losing move" is a measure of width (w = 1 is the strict case), not the definition of a boundary state. Where a conclusion in a section depends on w = 1 specifically, it holds only for that strict case. With width allowed, two or more live primitives are compatible with an equilibrium; composing one live primitive with frozen terrain is one option, not a requirement. The definition is in `boundary_board_states.md` §14 item 8.
 - *Primitives.* The catalog has three primitives: the mating and capture net (P-001), chained dependencies (P-003, which absorbs the entries named P-007, SUB-1 and the frozen structure in the sections below) and the coverage race (P-008). The names P-002, P-004, P-005, P-007 and SUB-1 are used in the sections below as recorded; they are not primitives. The "race primitive P-002" is the tempo comparison, a term (TP of P-003, TM of P-008). The classification of each name is in §8ab and in catalog §1.
+- *d-depth scoping.* Work within an irreversible segmented boundary is scoped by a stated d-depth, calculated to a stated terminal reason. The designer states that this is integrated into the fetching mechanism of the programme, is as structurally required as the primitives themselves, is invariant to the programme and is not isolated to an approach variant, and is a generalizable requirement. The full statement is in `boundary_board_states.md` ("Where this stands").
+
+
 - *Catalog section numbers.* Catalog sections cited in §8 and later (§7, §7a, §7b, §7c, §8, §9) are those of the catalog before the reduction to three primitives; the map to the present numbers is catalog §10.5.
 
 ---
@@ -867,7 +870,7 @@ conditions become visible that piece-placement geometry alone would hide.
   anchored. Circular assume-guarantee reasoning is sound only with a
   well-founded ordering. Tempo supplies one, since each deviation costs moves
   and the argument can be by induction on the tempo remaining; the anchors are
-  the exact tablebase-derived primitives and the zero-legal-move terrain.
+  the exact tablebase-derived primitives and the zero-legal-move terrain. (Superseded for the counter-net recursion: the recursion is a bounded d-depth resolution within an irreversible segmented boundary, per the designer's statement in `boundary_board_states.md` and `boundary_board_state_primitive_catalog.md` §4.10.)
   Everything else must be discharged relative to those.
 - **"Anything outside the equilibrium would make it not a boundary state" is
   the definition, not the certificate.** It says what a boundary state is. It
@@ -2040,7 +2043,7 @@ this is the same primitive or a different one that can be jointly compatible.
   limitation of the primitive:** the cost model for tempo (unfinished, catalog §4.8);
   the race primitive P-002, to compare nets by tempo; the other primitives, so that the
   composed race map exists; and a well-founded ordering for the mutual recursion between a
-  net and its counter-nets, for which tempo is the natural candidate (§8g). That a
+  net and its counter-nets, for which tempo is the natural candidate (§8g). (Superseded for the counter-net recursion: the recursion is a bounded d-depth resolution within an irreversible segmented boundary, per the designer's statement in `boundary_board_states.md` and `boundary_board_state_primitive_catalog.md` §4.10.) That a
   complete catalog derives the exchange outcome and the counter-net comparison without
   outside evaluation is what the definition of a boundary state requires of it (§8x). It is
   recorded entry by entry through the residual interface (§8x); the catalog is being built to
@@ -3140,7 +3143,7 @@ The catalog is unchanged.
   each side. Width is cheap to compute; the others need the catalog. Not decided.
 - **What the catalog needs in order to derive the outcome clause and the counter-net comparison for
   non-royal targets (§8w, catalog §4.3 and §4.10):** the cost model, the tempo comparison (terms TP and TM), the other
-  primitives, and a well-founded ordering.
+  primitives, and a well-founded ordering. (Superseded for the counter-net recursion: the recursion is a bounded d-depth resolution within an irreversible segmented boundary, per the designer's statement in `boundary_board_states.md` and `boundary_board_state_primitive_catalog.md` §4.10.)
 - **Whether the tempo ledger of §8w can be built over a whole game** and whether its
   columns track the engine's evaluation changes, stated in advance as in §8r. Not run.
 - **Whether escape steering (§8w) recurs**: a residual escape of one net falling into a

@@ -1,6 +1,6 @@
 # Segmented Batch Composition within the Paradigm Window: A Proposed Direction
 
-**Status.** A record of a direction the designer articulated on 15 November 2026. The designer states that it is one approach among others, a modular component of the programme that applies to this part of it (certifying a segment within a storage window), and not the lower-level architecture of the Lakatosian programme. Other approaches can be added. It is not worked out, and no result of any run is recorded in it. It is
+**Status.** A record of a direction the designer articulated on 15 November 2026. The designer states that the batch composition is one approach among others, a modular component of the programme that applies to this part of it (certifying a segment within a storage window), and not the lower-level architecture of the Lakatosian programme. Other approaches can be added. d-depth scoping is not part of what is one approach: the designer states that it is a structural requirement of the programme, invariant to it and integrated into its fetching mechanism (`boundary_board_states.md`, the statement on d-depth scoping; §1.15 here records the modes). It is not worked out, and no result of any run is recorded in it. It is
 kept as its own file so that the other documents are not changed by it. If the direction fails, it is removed by deleting this file. One
 tension with an existing statement is recorded in §3 and is not resolved here. The direction is stated in general terms: no piece, material or
 position is part of it, and the fractions of the window in §1.7 are an illustration and not a measurement. It adds no primitive and does not
@@ -261,7 +261,7 @@ the accounting of §15).
 10. **Fetching and the frontier.** There is a difference between fetching data up to a d-depth certainty that fits within the storage limit of
     one's machine, and working at the frontier of the program's progression.
 
-### 1.15 The primitives, the two modes, the legend, and what is deferred (the designer's, 15 November 2026)
+### 1.15 The primitives, the two modes, d-depth scoping, the legend, and what is deferred (the designer's, 15 November 2026)
 
 1. **Fetching and the frontier should be formal modes.** The designer states that they should be formal modes of the program.
 2. **The frontier will exceed most machines.** The designer is sure that, at a certain point, if the program is taken seriously, the
@@ -279,7 +279,10 @@ the accounting of §15).
    fetch of an irreversible segmented boundary. The user then chooses which segments to fetch.
 7. **The legend.** If the legend can be specified in the documentation, it should be, now, while following the architectural constraints of
    the program. (This file's draft is §2, item 31.)
-8. **The clean-up and the interdependencies are deferred.** Understanding how the interdependencies resolve, and the clean-up, is too large
+8. **d-depth scoping is a structural requirement of the programme.** The designer states that it is integrated into the fetching mechanism, is as
+   structurally required as the primitives, is invariant to the programme and is not isolated to an approach variant. The statement is in
+   `boundary_board_states.md` and in the catalog (§4.10).
+9. **The clean-up and the interdependencies are deferred.** Understanding how the interdependencies resolve, and the clean-up, is too large
    a task to undertake at this time. The designer leaves it to be built later, as an integrated specification.
 
 ---
@@ -436,7 +439,7 @@ the accounting of §15).
     7. **Symbols are free.** The designer does not care which symbols are chosen. A general document names none, and a segment may leave its
        most frequent terminal unmarked (item 14), which the designer has not specified.
     8. **Not specified here.** How a legend's status entries are updated when a lower segment changes belongs to the clean-up, which the
-       designer defers (§1.15, item 8). The scaling of a legend to other segments with other terminals is the designer's "different story"
+       designer defers (§1.15, item 9). The scaling of a legend to other segments with other terminals is the designer's "different story"
        (§1.9, item 5).
 
 ## 3. Relation to the existing record, and one tension
@@ -474,9 +477,9 @@ the accounting of §15).
   addressed. A draft of the legend's general specification is §2, item 31, and awaits the designer's correction.
 - **Detecting and owning clean-up certification.** How a changed certificate is noticed, who re-checks the results that cite it, and the format
   of the record are not specified (start-selection §4 and §5 say the record is not specified). The designer defers this, with the resolution of
-  the interdependencies, to a later integrated specification (§1.15, item 8).
+  the interdependencies, to a later integrated specification (§1.15, item 9).
 - **The specification of the clean-up pass.** The trigger, the format of the record, the ordering and its ties, and how a demoted result is
-  marked. The designer says it requires integration and further work, and defers it (§1.15, item 8). Not specified.
+  marked. The designer says it requires integration and further work, and defers it (§1.15, item 9). Not specified.
 - **What "the list" is in the keep rule** (§1.9, item 10), which this file reads as an ordering by the d that certification needs (§2, item 16).
 - **The conditions that dictate the clean-up for each window case.** The designer states that the architecture dictates them. They are not
   enumerated, and none is written here beyond the keep rule.
@@ -495,7 +498,7 @@ the accounting of §15).
   status of its data, and whether a mode for study is separate (§1.15, item 3).
 - **How a comparison of exits with unresolved lower values is recorded**, and how its conditional status is carried up the chain until the lower
   values are resolved (§1.12; §2, item 25). Not specified. It belongs with the resolution of the interdependencies that the designer defers
-  (§1.15, item 8).
+  (§1.15, item 9).
 - **How the viable pool of terminal conditions is computed at each ply** (§1.11, items 4 and 5), and what counts as a proof of unreachability
   (§1.11, item 6). Not specified.
 - **Whether the loop reaches the final state.** It stalls if the remaining forced positions need a depth beyond reach, or if the verdicts they

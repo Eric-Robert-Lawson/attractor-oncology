@@ -29,6 +29,8 @@ The piece-agnostic requirement applies to the primitives of the catalog and not 
 
 **Segmented dependency units, and the segmented dependency within them (the designer's statement, 15 November 2026).** Each irreversible segmented boundary, from the initial game position to the end of the game, is in itself a segmented dependency unit. Within an irreversible segmented boundary region are composed further segmented dependency chains of moves, which navigate the segmented dependency units. The designer states that this is a structural compositional fact at the lowest level of the architecture of the problem, that it does not depend on any approach, and that it generalizes to the core of the primitive catalog and is true there. The designer states that the differentiation between a segmented dependency unit and the segmented dependency within an irreversible segmented boundary region is explicit and actionable in the optimizations that the d-depth calibration and partial certification schema provides.
 
+**d-depth scoping (the designer's statement, 15 November 2026).** Work within an irreversible segmented boundary is scoped by a stated d-depth, calculated to a stated terminal reason. The designer states that this is integrated into the fetching mechanism of the programme, is as structurally required as the primitives themselves, is invariant to the programme and is not isolated to an approach variant, and is a generalizable requirement. The full statement is in `boundary_board_states.md` ("Where this stands").
+
 **This file's reading, offered for correction.** The tags **written** and **SPEC**, and the words "not run", record how far an entry has
 been written out in this file and whether it has been tested on positions. They do not record how well the designer understands the
 primitive, and they are not to be read as saying that P-003 and P-008 are provisional. The word
@@ -391,8 +393,9 @@ untested).
   are the nets of this catalog applied with the colors swapped: a check is an engaged net on the
   attacker's king, a larger threat is another net. A net is completed in composition only if no
   counter-net resolves or outruns it, which is a comparison of tempo between nets in opposite
-  directions. The recursion (a net against its counter-nets, each with counter-nets of its own)
-  needs a well-founded ordering; tempo is the candidate. This rule depends on the cost model
+  directions. The recursion of a net against its counter-nets is not a nested compositional problem
+  (the designer's statement, 15 November 2026). It is a bounded d-depth resolution within an
+  irreversible segmented boundary, by the d-depth primitive compositional calculation. This rule depends on the cost model
   (§4.8) and on the tempo comparison, which is a term of P-003 (TP) and of P-008 (TM). For the royal target the
   legal-move rule already forces a check to be answered, so the rule is built in.
 - **Escape steering.** A residual escape of one net can fall into a mechanism of another. In the
@@ -443,8 +446,8 @@ of captures. Whether the DORMANT/ENGAGED distinction gives a useful scoping sign
 positions. How the derived forms relate to the named mating patterns (back-rank, smothered, the
 Greek-gift mate). How a complete catalog derives the outcome clause O and the counter-net
 comparison without outside evaluation: this needs the cost model (§4.8), the tempo comparison of P-003 and P-008,
-the other primitives, so that a composed race map exists, and a well-founded ordering for the
-recursion between a net and its counter-nets. The tempo ledger over a whole game (topology §8w). Whether the chain reading of O (§7) reproduces static exchange evaluation where that is exact and corrects it where a chain cuts across the exchange (topology §8z).
+and the other primitives, so that a composed race map exists. The recursion between a net and its counter-nets is
+a bounded d-depth resolution within an irreversible segmented boundary (§4.10). The tempo ledger over a whole game (topology §8w). Whether the chain reading of O (§7) reproduces static exchange evaluation where that is exact and corrects it where a chain cuts across the exchange (topology §8z).
 
 ---
 
@@ -921,9 +924,7 @@ The primitive is evaluated for both sides with the colors swapped. The effect ve
 registers of both sides at once, so the feasibility term FS is read off the same vector: the effect on Y's own entries. For X's
 register the perturber is Y, whose candidate moves inside the support closure of X's register (§8.9) generate the perturbations;
 for Y's register the roles reverse. So the removal of a defender is not a property of one side's structure alone. It depends on the
-other side's options, and those depend on the other side's own held terms. The recursion between a perturbation and its
-counter-perturbations uses the well-founded ordering that §4.10 names for nets against counter-nets (tempo, with each
-perturbation spending a unit or a tempo). This entry adds no ordering of its own. The counter-net composition of §4.10 is the
+other side's options, and those depend on the other side's own held terms. This entry adds no ordering of its own. The counter-net composition of §4.10 is the
 special case in which the compared outcomes are nets.
 
 ### 8.9 Cost model: primitive evaluation under perturbation, with complete coverage

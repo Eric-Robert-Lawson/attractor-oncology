@@ -96,6 +96,14 @@ This file is the construction pipeline and the record of the idea: what a bounda
 >   including the certified base. Inverse ablation informs the moves that cross an irreversible boundary, and the moves within a segment are
 >   decided by the primitive races and reachability (start-selection §2c). This file's reading, offered for correction: the status and
 >   dependency record is an architectural requirement of the same kind as the stored anchor; its fields are not specified.
+> - **d-depth scoping as a structural requirement (the designer's statement, 15 November 2026).** Work within an irreversible segmented
+>   boundary is scoped by a stated d-depth, calculated to a stated terminal reason: a terminal mating condition inside the segment, or an
+>   irreversible entry into a lower segment. The designer states that d-depth is integrated into the fetching mechanism of the programme, that
+>   it is as structurally required as the primitives themselves, that it is invariant to the programme and not isolated to an approach
+>   variant, and that it is a generalizable requirement. The designer states that the barrier that the ordering of nested compositions
+>   appeared to pose (the recursion of a net against its counter-nets) seems to be emergent from the lack of this scoping. The tempo
+>   calculations, the inverse ablation and the other fronts are integration specifications, to be completed further in the documentation, and
+>   are under construction.
 > - **Fronts and contribution (the designer's statement; start-selection §2e).** The work divides into four fronts that humans and machines
 >   can take in segments: the Syzygy mining of local states, the primitive calculations on the certified states, the construction and pruning
 >   front, and inverse ablation applied to the certified states. The architecture was positioned from the start to allow a decentralized,

@@ -741,7 +741,7 @@ nodes. **Resources:** the supporters' coverage, used once per unit (§4.10), the
   promotion as a target; from P-008, the duty locks (an element in the support of two held terms is locked to both, topology §8f)
   that lock removal reads, and the effects of a perturbation that open ENABLE chains (LK3).
 - **Obstruction is a net on the unit,** and the outcome of a promotion is itself a target. The mutual dependence between P-001 and
-  this primitive is well-founded by tempo.
+  this primitive is bounded by d-depth scoping within an irreversible segmented boundary (§4.10, the designer's statement).
 - **Irreversibility:** resolving or dissolving an irreversible node (an advance or a capture by a unit with an irreversible
   relation) is a one-way change to the F term of P-001 (§4.10), so such a node is a cut point in time as well as in the graph.
 - **Duty trade-off:** a unit that holds a duty in a defence mirror (a guard, an interposer) leaves it when it advances elsewhere.
@@ -989,8 +989,8 @@ case recorded in topology §8f, and it has not been checked.
 
 | Claim | Status | Where |
 |---|---|---|
-| The two-sided coupling is well-founded | argued, not proven; §8.8 adds no ordering of its own | §8.8 |
-| The primitive's evaluation under perturbation, composed over a line, reproduces the exhaustive verdict | not run | prediction P8-2 |
+| The two-sided coupling terminates | bounded by d-depth scoping within an irreversible segmented boundary (the designer's statement, 15 November 2026): each level spends at least one ply of the budget. §8.8 adds no ordering of its own | §8.8, §4.10 |
+| The primitive's evaluation under perturbation, composed over a line, reproduces the verdict within the stated d, checked against exhaustive coverage where that exists | not run | prediction P8-2 |
 | A perturbation whose change misses the support of a condition leaves that condition unchanged | by definition | §8.3, §8.9 |
 | A held term is opened only by a perturbation whose change meets the support of every residual reply | by definition | §8.3 |
 | Held terms, support, opening sets, key elements, joint support and the support closure, as defined | SPEC | not run |
@@ -998,8 +998,8 @@ case recorded in topology §8f, and it has not been checked.
 1. **P8-1.** In an ablation of a position (topology §8s), the elements whose removal changes the verdict are the key elements of the held
    terms, that is, the singleton opening sets. Where a held term has no singleton opening set, the smallest removal set that changes
    the verdict is a minimal opening set. A smaller verdict-changing set refutes the support definition.
-2. **P8-2.** The evaluation of P-008 on the position after each perturbation, composed over a line, reproduces the verdict of
-   exhaustive search for exchange-dependent structures. A disagreement is a residual interface, which is a missing mechanism, an
+2. **P8-2.** The evaluation of P-008 on the position after each perturbation, composed over a line, reproduces the verdict
+   within the stated d (d-depth scoping, §4.10), as checked against exhaustive search where that exists, for exchange-dependent structures. A disagreement is a residual interface, which is a missing mechanism, an
    incompatibility with another primitive, or a wrong entry (topology §8y), and it develops the catalog. The number of
    perturbations that must be branched, against the number that are legal in the footprint, measures the saving.
 3. **P8-3.** In ablation and deviation data on a composition, every perturbation that changes the verdict of a composition has a

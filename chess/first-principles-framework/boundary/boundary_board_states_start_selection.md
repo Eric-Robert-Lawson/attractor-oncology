@@ -486,7 +486,7 @@ segment. Exhaustive coverage meets the storage limit of the paradigm window, so 
 is derived within the scope of a search depth and is certain within the scope that the search enumerates. It informs the primitive
 calculations, with anchoring points given by the difference between the plies searched at a depth, and each added depth adds to the combinatorial
 growth. It can also be determined from the board state, from the irreversible segmented boundaries, which inform the pool of primitive
-calculations to the mate that can emerge from the position, and from the requirement that optimality is relative to the choice opportunities
+calculations to the mate that can emerge from the position (the layering of the catalog and the segment is stated in the primitive catalog, Status), and from the requirement that optimality is relative to the choice opportunities
 of a move. After a trajectory on which the primitive calculations must resolve for the equilibrium after what looks like a poor choice, the
 scope for returning to equilibrium is limited, and a point that compensates for the choices made can exist. That it can exist is the statement. If
 it does, finding it needs more depth, and the segmented community effort can help resolve that conditional. A primitive race that resolves
@@ -793,7 +793,7 @@ it, since the progression of a rule set for a reachable family, as an addition t
 
 ## 2g. Depth-scoped certification: the iteration, the segment boundary, and dependency across segments (the designer's statements, 12 November 2026)
 
-**Status.** Integration specification, stated in general terms: no piece, material or position is part of it. It adds to §2c and does not replace it: the exclusion form of the rule set, the depth bound d, the recording of a coverage depth and the estimate and refine loop stand as written there. The designer's statements are marked and condensed here. The composition of the three primitives that the calculation uses is in `boundary_board_state_primitive_catalog.md` §9. It has not been run.
+**Status.** Integration specification, stated in general terms: no piece, material or position is part of it. It adds to §2c and does not replace it: the exclusion form of the rule set, the depth bound d, the recording of a coverage depth and the estimate and refine loop stand as written there. The designer's statements are marked and condensed here. The composition of the three primitives that the calculation uses is in `boundary_board_state_primitive_catalog.md` §9. It has not been run. The designer's refinement of 15 November 2026, that d is calculated to a stated terminal reason, with a legend and clean-up certification, is recorded as one approach in `boundary_board_states_batch_composition.md` §1.9 and does not change this section.
 
 **What the calculation is (a statement).** It is not an exhaustive search. It certifies the same outcome that exhaustive coverage would, without being exhaustive. The primitives show which approaches are dead on arrival, and when a forcing sequence is found it beats, by definition, the branches it dominates, so the branches past that point need not be discovered or enumerated. The work that does not shrink is at a true boundary board state, where no forcing sequence mitigates the coverage, and at positions that resolve at deep depth.
 

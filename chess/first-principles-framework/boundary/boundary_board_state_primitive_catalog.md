@@ -19,6 +19,16 @@ This is not a ranking of one primitive above two secondary ones. A pawn promotio
 into that composition. It is not a primitive of its own because it is not piece-agnostic, and piece-agnosticism is what the architecture
 requires of a primitive. (The designer's statement, in the designer's words as given.)
 
+**The catalog and the segment (the designer's statement, 15 November 2026).** The primitives of the catalog (the mating or capture net, the coverage net, the
+segmented dependencies) are piece-agnostic, as the architecture requires of a primitive. An irreversible segmented boundary is defined by
+board-state specifics, such as the piece positions and board-state metrics like whether castling has occurred. Applying primitive
+compositions within a segment is where the architecture converts from the piece-agnostic catalog to a specified segment. The segment
+defines the pool of mating and capture nets that can exist, and so informs the coverage net and the segmented dependencies. Each segment
+defines the possible ways to mate, and even different segments of similar material have different pools; that is the purpose of segmenting.
+The piece-agnostic requirement applies to the primitives of the catalog and not to the composition within a segment, which is scoped to it.
+
+**Segmented dependency units, and the segmented dependency within them (the designer's statement, 15 November 2026).** Each irreversible segmented boundary, from the initial game position to the end of the game, is in itself a segmented dependency unit. Within an irreversible segmented boundary region are composed further segmented dependency chains of moves, which navigate the segmented dependency units. The designer states that this is a structural compositional fact at the lowest level of the architecture of the problem, that it does not depend on any approach, and that it generalizes to the core of the primitive catalog and is true there. The designer states that the differentiation between a segmented dependency unit and the segmented dependency within an irreversible segmented boundary region is explicit and actionable in the optimizations that the d-depth calibration and partial certification schema provides.
+
 **This file's reading, offered for correction.** The tags **written** and **SPEC**, and the words "not run", record how far an entry has
 been written out in this file and whether it has been tested on positions. They do not record how well the designer understands the
 primitive, and they are not to be read as saying that P-003 and P-008 are provisional. The word

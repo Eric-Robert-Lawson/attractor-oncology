@@ -518,11 +518,7 @@ an optimization is. How the rule sets compose along a trajectory from an anchori
 specification to be worked out when it is reached. It depends on the pool of viable approaches, which has not been enumerated, and each approach has
 to be generalizable in composition.
 
-**Order of approaches (a pointer to the designer's statement).** The order in which the approaches of the rule set are tried is not a rule.
-It emerges from the analysis of the board state, the boundaries crossed, the progress of the programme, and the difficulty of each
-approach and its effect on the others' work. It is stated, with the classes of moves it assumes cover a general board state, in
-`boundary_board_state_primitive_catalog.md` §9. A suboptimal move, and a reversible move that maintains the draw, are handled by the
-workflow of this section (force region, d and coverage), and not by the ordering.
+**Classes of moves (a pointer to the designer's statement).** The classes of moves, and the assumption that they cover every move of a general board state, are stated in `boundary_board_state_primitive_catalog.md` §9. A suboptimal move, and a reversible move that maintains the draw, are handled by the workflow of this section (force region, d and coverage).
 
 **Equilibria-first construction and the storage of the solution (a statement).** *Status:* integration specification, not run. The programme is
 equilibria-first. What is stored is the certified boundary board states and the primitives. A win or loss value per position is not stored, and
@@ -811,6 +807,8 @@ it, since the progression of a rule set for a reachable family, as an addition t
 
 **The scope of the approach, and what a parameter like d could be (a statement).** The approach rests on the structure of one kind of irreversible segment, and that is not the only structure. Other regions may be mostly forced with little boundary (the inversion of the principle), and others about half boundary and half forced. A resolution can need an extreme depth: in a cursed win from a position of 7 or 8 pieces, a queen capture that took 500+ moves of manoeuvring just to capture before the position resolved by force, a d of 500+, well outside human calculation and barely within the storage limits of the tables, even before the rest of the forced sequence. The approach allows progress, and certainty scoped by a parameter like d, from any region once it is understood how to approach it in a general way. For all the designer knows d is a way that generalizes to all regions, with a limited scope of resolution, and the limited resolution may have value.
 
+**Calibrating what is stored against the search that re-derives the rest (a pointer).** How d sets the stored band, what the absence of a row means, and how d can be set on the forced and the choice region, are in `boundary_board_states_calibration.md`. It adds nothing to the certification of this section.
+
 ## 3. Progress
 
 | Item | State |
@@ -837,7 +835,8 @@ it, since the progression of a rule set for a reachable family, as an addition t
 | The main definition as the root dependency of the rule set: boundary status as a trajectory consideration, certified locally where the deviations exist within the scope, otherwise not excluded and waiting for coverage from an anchoring point (§2c) | Stated by the designer; not run |
 | Tempo as a certification vector: derivable under exhaustive coverage, a scoped temporal calculation within a search depth without it, and the scoped region of uncertainty as the focus of community effort (§2c) | Stated by the designer; potential integration specification; not run |
 | Coverage and the depth bound as two things, the recording of a coverage depth as a scoped, not certified parameter, and its composition into the true d; composition of rule sets along a trajectory through many irreversible segmented boundaries (§2c) | Stated by the designer; the composition is to be specified when reached; not run |
-| The order of approaches as emergent from the analysis, and the classes of moves it assumes cover a general board state (catalog §9) | Stated by the designer; assumes full coverage of the classes, not established; not run |
+| The classes of moves, which are assumed to cover a general board state (catalog §9) | Stated by the designer; assumes full coverage of the classes, not established; not run |
+| Calibrating storage against search time with d (calibration file) | Stated by the designer; the cost of the trade is not known; not run |
 | Equilibria-first construction and the storage trade, with its stated risk and the viability measure read from it (§2c) | Stated by the designer; the measure is this file's reading; not run |
 | Composition by inverse ablation from a base equilibrium, with the lookahead to certified leaves (§2c) | Stated by the designer; not run |
 | Certification checkpoints, estimates left unsettled, and return to earlier checkpoints (§2c) | Stated by the designer; the record of status and dependency is not specified (§4, §5) |
@@ -1101,11 +1100,11 @@ primitive measurement on a forced stretch is recorded.
 
 The rule sets that govern navigating an irreversible boundary from the retrograde side, which the designer expects may be found if a pattern emerges.
 
-Whether the classes of moves in catalog §9 cover every move of a general board state, which the order of approaches assumes; if they do not, that statement changes.
+Whether the classes of moves in catalog §9 cover every move of a general board state; if they do not, that statement changes.
 
 The size of the rule set and its exception record, the value of d, and the cost of regenerating interface values, which settle whether the storage trade of §2c stays inside the window; none is known before the rule set and d are found.
 
 
 ## 6. Provenance
 
-**The designer's:** that the discovery is still in progress; the second route, the third path, the procedure on any seed and the illustration (§2); the statements of §2a and §2b, and the exclusion form of the rule set, its depth bound, the main definition as its root dependency, tempo and the scoped region of uncertainty, and coverage, the depth bound and their recording (§2c), the order of approaches (catalog §9), and equilibria-first construction with its storage risk (§2c), and the statements of §2g (the calculation as certifying the same outcome without exhaustive search, the depth calibration, the iteration, the anchor as part of the depth calculation, the end of the depth at the irreversible boundary, the dependency across segments, and the scope of the approach), condensed from the designer's messages of 12 November 2026. **This file's:** the table, the section order, the organization of the procedure in §2a, the condensed wording of §2g, and the readings in §4.
+**The designer's:** that the discovery is still in progress; the second route, the third path, the procedure on any seed and the illustration (§2); the statements of §2a and §2b, and the exclusion form of the rule set, its depth bound, the main definition as its root dependency, tempo and the scoped region of uncertainty, and coverage, the depth bound and their recording (§2c), the classes of moves (catalog §9), and equilibria-first construction with its storage risk (§2c), calibrating storage against search time (`boundary_board_states_calibration.md`), and the statements of §2g (the calculation as certifying the same outcome without exhaustive search, the depth calibration, the iteration, the anchor as part of the depth calculation, the end of the depth at the irreversible boundary, the dependency across segments, and the scope of the approach), condensed from the designer's messages of 12 November 2026. **This file's:** the table, the section order, the organization of the procedure in §2a, the condensed wording of §2g, and the readings in §4.

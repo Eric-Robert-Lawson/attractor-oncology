@@ -125,7 +125,7 @@ certification catalog, and no template is proposed here.
 **Left out**, so far (this file's reading): the edges themselves, the identity of the losing moves with the child each leads to, and how fast each loss is
 refuted (the `.rtbz` files give the distance to zeroing, which is not the distance to mate where captures are possible). Whether
 to store them is the designer's decision. For a mined tablebase material they are kept (`boundary_board_states_start_selection.md` §2a step 11, which governs);
-where storage limits what can be kept, as in the forward trace beyond the tables, which of them to keep is decided there. This is a reading, offered for correction.
+where storage limits what can be kept, as in the forward trace beyond the tables, which of them to keep is decided there. Where the tables end, storage can be removed from the edges of the Syzygy solution so that more complicated regions become reachable. What a stored row and its absence then mean is in `boundary_board_states_calibration.md` (the designer's statement of 16 November 2026). This is a reading, offered for correction.
 
 ## 6. From the mined catalog to families and to the anchor
 

@@ -867,10 +867,7 @@ conditions become visible that piece-placement geometry alone would hide.
   pairwise.
 - **Mutual dependence needs a base case.** If a is safe because b holds and b
   holds because a is safe, nothing has been established unless the circle is
-  anchored. Circular assume-guarantee reasoning is sound only with a
-  well-founded ordering. Tempo supplies one, since each deviation costs moves
-  and the argument can be by induction on the tempo remaining; the anchors are
-  the exact tablebase-derived primitives and the zero-legal-move terrain. (Superseded for the counter-net recursion: the recursion is a bounded d-depth resolution within an irreversible segmented boundary, per the designer's statement in `boundary_board_states.md` and `boundary_board_state_primitive_catalog.md` §4.10.)
+  anchored. Circular assume-guarantee reasoning is sound only when it is anchored. For the counter-net recursion the base is the d-depth bound: the recursion is a bounded d-depth resolution within an irreversible segmented boundary, and each level spends at least one ply of the budget (the designer's statement in `boundary_board_states.md`; catalog §4.10). The anchors are the exact tablebase-derived primitives and the zero-legal-move terrain.
   Everything else must be discharged relative to those.
 - **"Anything outside the equilibrium would make it not a boundary state" is
   the definition, not the certificate.** It says what a boundary state is. It
@@ -998,8 +995,7 @@ Composition rules to be validated on small instances before use:
 2. Non-interference: no forcing move in one footprint gains tempo inside
    another.
 3. Closure: every piece is inside a primitive or is proven frozen terrain.
-4. Well-founded ordering: any circular dependence is discharged by induction on
-   tempo from exact anchors.
+4. Bounded resolution: any circular dependence is discharged within the stated d, from exact anchors (catalog §4.10).
 5. Load-bearing test: ablating any primitive changes the value or the
    non-losing count.
 
@@ -1206,8 +1202,7 @@ forward search reconnecting to it.
   separate is what the "beyond tautological" claim needs to rest on.** What is
   deductive and already established, independent of any population: once
   primitives are proposed, joint compatibility requires resource accounting,
-  closure, and a well-founded ordering for any circular dependence (§8g,
-  §8h). This follows from the minimax framework already adopted and needs no
+  closure, and a bounded d-depth resolution for any circular dependence (§8g, §8h). This follows from the minimax framework already adopted and needs no
   data. What is inductive and still open: which primitives actually recur
   across real materials, and what their interfaces look like. Only a
   population supplies that, and it remains a discovery process — real,
@@ -2042,8 +2037,7 @@ this is the same primitive or a different one that can be jointly compatible.
 - **What has to exist for these to be derivable, stated as dependencies and not as a
   limitation of the primitive:** the cost model for tempo (unfinished, catalog §4.8);
   the race primitive P-002, to compare nets by tempo; the other primitives, so that the
-  composed race map exists; and a well-founded ordering for the mutual recursion between a
-  net and its counter-nets, for which tempo is the natural candidate (§8g). (Superseded for the counter-net recursion: the recursion is a bounded d-depth resolution within an irreversible segmented boundary, per the designer's statement in `boundary_board_states.md` and `boundary_board_state_primitive_catalog.md` §4.10.) That a
+  composed race map exists; and the bounded d-depth resolution of the mutual recursion between a net and its counter-nets (catalog §4.10). That a
   complete catalog derives the exchange outcome and the counter-net comparison without
   outside evaluation is what the definition of a boundary state requires of it (§8x). It is
   recorded entry by entry through the residual interface (§8x); the catalog is being built to
@@ -2093,7 +2087,7 @@ compatibility. This had been iterated in the past.
   refutation among the known primitives form the **residual interface**: the specification of
   the primitives not yet in the catalog, which the reduction rule solves for. The record also
   holds how the primitives relate: shared resources, double-net relations, escape steering, and
-  the ordering of the recursion.
+  the bounded resolution of the recursion.
 - **The proof and its insurance.** A completed composition is itself the case-list proof of §8d:
   every deviation of each side is mapped to a primitive race condition that refutes it, and the
   equilibrium moves keep the invariants of every primitive. Exhaustive search is insurance. It is
@@ -2101,7 +2095,7 @@ compatibility. This had been iterated in the past.
   afterward as needed. A rule that an exhaustive search contradicts is revised.
 - **Where the complexity sits is agreed:** in the composition rules, meaning resource accounting
   across primitives and its higher-order constraints (§8g), the double-net condition (§8w),
-  escape steering, and the ordering of the recursion, and not in the individual primitives.
+  escape steering, and the bounded resolution of the recursion, and not in the individual primitives.
 - **Earlier wording is replaced.** §8w and the catalog had called the derivability of the
   exchange outcome and the counter-net comparison the programme's hypothesis. It is what a
   complete catalog is required to achieve, checked entry by entry through the residual interface.
@@ -2144,8 +2138,7 @@ the composition of the primitives is moving closer to a boundary state.
   queen against a bare king, is completable whenever the new queen is not immediately lost and the position
   is not a stalemate (standard endgame knowledge), so the activation race alone decides the result. In
   richer positions the strength of the net depends on which pieces have been activated, and the
-  opponent's net on the activator is the obstruction. The dependency is mutual, and tempo makes it
-  well-founded.
+  opponent's net on the activator is the obstruction. The dependency is mutual, and it is bounded by the stated d.
 - **Activation changes both sides' nets.** A developing move supplies mechanisms to one's own nets and
   removes one's own locks, which are the own-occupancy and masking mechanisms the opponent's net would use
   (F1 and X3 in P-001). In the fool's mate the lock is the defender's own undeveloped pieces, and Nf3
@@ -2312,8 +2305,7 @@ primitives under perturbation is integrated into the process, and that is what m
   of each of its residual replies. Both follow from the definition of support.
 - **Adversarial composition, and its coupling.** The same primitive is computed for both sides with the colors swapped, and the
   disturbances available to one side depend on whether its own structure still holds after it spends the units the disturbance uses.
-  That feasibility term couples the two evaluations. Each disturbance spends a unit or a tempo, so the coupling is well-founded by
-  induction on units and tempo, as in §8y. That is argued here and not proven. It restates for all primitives the counter-threat
+  That feasibility term couples the two evaluations. Each disturbance spends a unit or a tempo, so the coupling is bounded by the stated d within an irreversible segmented boundary, as in catalog §4.10, and each level spends at least one ply of the budget. It restates for all primitives the counter-threat
   composition already recorded in §8w.
 - **Beyond capture.** The primitive is defined by the effect of a perturbation on the held terms: a removed or displaced element,
   a changed occupancy on a dependency set, a changed exposure, an opposing entry. The carrier that compels it (a check, an attack, a
@@ -3143,7 +3135,7 @@ The catalog is unchanged.
   each side. Width is cheap to compute; the others need the catalog. Not decided.
 - **What the catalog needs in order to derive the outcome clause and the counter-net comparison for
   non-royal targets (§8w, catalog §4.3 and §4.10):** the cost model, the tempo comparison (terms TP and TM), the other
-  primitives, and a well-founded ordering. (Superseded for the counter-net recursion: the recursion is a bounded d-depth resolution within an irreversible segmented boundary, per the designer's statement in `boundary_board_states.md` and `boundary_board_state_primitive_catalog.md` §4.10.)
+  primitives, and the bounded d-depth resolution of the counter-net recursion (catalog §4.10).
 - **Whether the tempo ledger of §8w can be built over a whole game** and whether its
   columns track the engine's evaluation changes, stated in advance as in §8r. Not run.
 - **Whether escape steering (§8w) recurs**: a residual escape of one net falling into a

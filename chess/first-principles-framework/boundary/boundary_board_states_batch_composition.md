@@ -11,8 +11,7 @@ Companion documents: `boundary_board_states_start_selection.md` (§2c the exclus
 sources of forward paths; §2e fronts and contribution; §2f seeded pruning as community work; §2g depth-scoped certification and dependency
 across segments), `boundary_board_states_opening_survey.md` (§4f what the tablebase certifies; §4j the two catalogs; §5a reachability
 families; §7 calibration), `boundary_board_state_primitive_catalog.md` (§8.9 the support closure; §9 the dependency map),
-`boundary_board_states_syzygy_validation_and_scoping.md` (§1 the scope of the enumeration), `boundary_board_states.md` (the definition, §14, and
-the accounting of §15).
+`boundary_board_states_syzygy_validation_and_scoping.md` (§1 the scope of the enumeration), `boundary_board_states.md` (the definition, §14, and the accounting of §15), `boundary_board_states_calibration.md` (the stored band, what absence means, the cost model).
 
 ---
 
@@ -144,6 +143,8 @@ the accounting of §15).
    legend can be removed from the file and placed in the README of the irreversible segmented boundary itself. That README is the specified
    point for the piece-agnostic considerations and for the determination of the terminal endpoints. The legend denotes the terminal mating
    positions that are reachable, and also those left uncertain but likely forced, as a dependency certification progress point.
+   The designer's statement of 16 November 2026 refines items 4 and 7: the header is [d][index][symmetry condition], and the legend is a
+   file of terminal states of its own (`boundary_board_states.md`, "The d-depth metric").
 8. **The earlier statement, from the same day.** The d-depth metric bounds the number of moves available to complete a terminal net. A d of 5
    leaves the winning side at most 3 moves, so the pool of nets that can complete must be reachable within that, and this guides the choices
    that keep that pool reachable. The designer's refinement of items 1 to 7 followed this statement. §1.10, items 4 to 6, speak to the bound
@@ -278,7 +279,7 @@ the accounting of §15).
 6. **The two modes.** Frontier mode is the full fetch of given irreversible segmented boundaries. Fetch mode is the calibrated d-depth
    fetch of an irreversible segmented boundary. The user then chooses which segments to fetch.
 7. **The legend.** If the legend can be specified in the documentation, it should be, now, while following the architectural constraints of
-   the program. (This file's draft is §2, item 31.)
+   the program. (The specification is the designer's statement of 16 November 2026 in `boundary_board_states.md`; this file's reading is §2, item 31.)
 8. **d-depth scoping is a structural requirement of the programme.** The designer states that it is integrated into the fetching mechanism, is as
    structurally required as the primitives, is invariant to the programme and is not isolated to an approach variant. The statement is in
    `boundary_board_states.md` and in the catalog (§4.10).
@@ -328,16 +329,16 @@ the accounting of §15).
     it through the dependency record (start-selection §2g). The scope of the clean-up of §1.9, item 6, would then be the results whose terminal
     flag marks an entry into the changed segment, and the draw certificates that rest on such an entry. A draw that rests on an entry loses its
     closure if the entry's status is overturned. A result whose terminal ends the game inside its own segment depends on nothing below.
-12. **What a legend declares.** For each symbol: whether the terminal ends the game inside the segment or is an entry into a lower segment;
+12. **What a legend declares (read with the designer's statement of 16 November 2026).** For each type of terminal: whether the terminal ends the game inside the segment or is an entry into a lower segment;
     the segment entered; and the status that the entry carries (certified, conditional, or likely forced and not yet certified). An entry that
     returns the position to a boundary board state classification is an edge of the choice region and is recorded there, not as a terminal of
-    the forced region. The legend belongs in the README of the segmented boundary (§1.9, item 7), and a general document states only that it
-    exists and what it declares.
+    the forced region. The table of terminal states is a file of its own, the README of the segmented boundary describes it and declares the
+    types (§2, item 31), and a general document states only that it exists and what it declares.
 13. **"Likely forced" is a progress point and never a certificate.** The symbol records where the dependency sits and does not stand in for the
     status. A heuristic orders work and does not certify (the standing rules at the head of `boundary_board_states.md`).
-14. **The flag may denote a set.** Under d-optimal play a position can reach more than one type of terminal, so the flag may need to name a set
-    of types. Which sets occur is a property of the segment, to be recorded in its legend. A segment's most frequent terminal could be left
-    unmarked, which is one way to meet the storage point of §1.9, item 7. The designer has not specified the symbols or this convention.
+14. **The flag as a set (superseded).** This reading expected that the terminal flag might need to name a set of types. The designer's statement
+    of 16 November 2026 records one predominant branch, with the alternates reachable as anchor points, and the index names a single terminal
+    state. No set is recorded.
 15. **A clean-up pass on contribution.** Read as a pass that each contribution triggers: find the results that cite the changed certificates,
     through the dependency record; re-certify them or demote them to conditional; then apply the keep rule of §1.9, item 10, to the window.
     Each step is a re-check against the record and not a judgment, which is what would make it automatable. A certified result changes only
@@ -417,29 +418,27 @@ the accounting of §15).
     §1.15, item 3, is read as the same data used for another purpose: d, the favoured side and the terminal flag say how many plies a
     certified result needs and what it ends in. The format of a mode for study is not specified, and the program records the learning use
     and the discovery use as equally required.
-31. **A draft of the legend's specification, offered for correction.** This is the draft that §1.15, item 7, asks for. It states what a
-    legend is and what it declares in general terms. The symbols, and the content of any one legend, are the segment's and belong in the
-    README of its irreversible segmented boundary (§1.9, item 7), which is the specified point for the piece-agnostic considerations of that
-    segment and for the determination of its terminal endpoints.
-    1. **Where it lives.** In the README of the segmented boundary, not in the data files and not in a general document. The data files carry
-       only the symbol, inside the same d-depth header, so that the legend adds no storage (§1.9, item 7).
-    2. **What a tag is.** The d, the favoured side and the terminal symbol, together as one header. The designer's example is a d of 5 with
-       the favoured side, and the symbol follows it.
-    3. **What each symbol declares.** (a) The terminal kind: it ends the game inside the segment, with the terminal condition stated in the
-       segment's own terms, or it is an irreversible entry into a lower segment. (b) For an entry, the segment entered, named by its boundary
-       definition. (c) The status of the entry: certified (to a stated scope and by a stated source), conditional, or likely forced and not yet
-       certified. (d) What d counts to at that terminal, including its value where the game ends inside the segment.
-    4. **A set of terminals.** If a position can reach more than one terminal under d-optimal play, the legend lists the sets that occur and
-       the symbol each takes (item 14).
-    5. **An entry that returns the position to a boundary board state classification.** It is an edge of the choice region and is recorded
-       as such, and it is not a terminal of the forced region (item 12).
-    6. **A legend declares and does not certify.** "Likely forced" is a progress point and never a certificate (item 13). Certification stays in
-       the dependency record, and a legend's statement of status is read against that record.
-    7. **Symbols are free.** The designer does not care which symbols are chosen. A general document names none, and a segment may leave its
-       most frequent terminal unmarked (item 14), which the designer has not specified.
-    8. **Not specified here.** How a legend's status entries are updated when a lower segment changes belongs to the clean-up, which the
-       designer defers (§1.15, item 9). The scaling of a legend to other segments with other terminals is the designer's "different story"
-       (§1.9, item 5).
+31. **The header, the legend file and what the README declares (this file's reading of the designer's statement of 16 November 2026).** The
+    statement is in `boundary_board_states.md` ("The d-depth metric"). This reading replaces the draft of 15 November, which put a terminal
+    symbol in the header and the legend in the README.
+    1. **The header** is [d][index][symmetry condition]. The index points into the legend file, and the entry it points to gives the condition
+       type (mate, capture, or pawn push). No separate symbol and no set of terminals is recorded.
+    2. **The legend file** holds the terminal board states, once per symmetry class, and only those. Colour is not stored. The group of
+       transformations in force is the one that keeps a position inside the segment.
+    3. **The README of the segmented boundary** describes the legend file and the transformation symbols, and declares for each type: whether the
+       terminal ends the game inside the segment or enters a lower segment; the segment entered; the status of the entry (certified to a stated
+       scope and by a stated source, conditional, or likely forced and not yet certified); and what d counts to. A README declares and does not
+       certify. "Likely forced" is a progress point and never a certificate (item 13).
+    4. **An entry that returns the position to a boundary board state classification** is an edge of the choice region and is recorded there,
+       and it is not a terminal of the forced region (item 12).
+    5. **Which terminal is recorded when several are reachable** is the designer's predominant-branch statement. The rule used to pick it, such
+       as the lowest index, belongs to the application of a segment and not to a general document.
+    6. **Not specified here.** How the status entries of a README are updated when a lower segment changes belongs to the clean-up, which the
+       designer defers (§1.15, item 9). The pawn condition is stated by the designer in `boundary_board_states.md` and is not exercised in a
+       segment without a pawn.
+
+32. **The stored band and what absence means (this file's reading of the designer's statement of 16 November 2026 on calibrating storage against
+    search time).** The reading is held in `boundary_board_states_calibration.md` (§2, items 1 to 3), together with the designer's statements it reads. The keep rule of §1.9, item 10 and §2, item 16, is the lower threshold in that file's terms: entries of the lowest d are dropped and re-derived by search.
 
 ## 3. Relation to the existing record, and one tension
 
@@ -473,7 +472,7 @@ the accounting of §15).
   choice. §1.7 uses the later. The illustration is not a measurement and does not depend on the split.
 - **Whether start-selection §2f and this file are two approaches or one** (§3).
 - **The scaling of the legend** to other irreversible segmented boundaries with other terminals. The designer called it a different story. Not
-  addressed. A draft of the legend's general specification is §2, item 31, and awaits the designer's correction.
+  addressed. The legend and the header are specified by the designer's statement of 16 November 2026; §2, item 31, is this file's reading of what the README declares.
 - **Detecting and owning clean-up certification.** How a changed certificate is noticed, who re-checks the results that cite it, and the format
   of the record are not specified (start-selection §4 and §5 say the record is not specified). The designer defers this, with the resolution of
   the interdependencies, to a later integrated specification (§1.15, item 9).
@@ -491,10 +490,10 @@ the accounting of §15).
   of §1.14, item 3), and with what status for a certificate that comes from the tables. Not specified.
 - **The unit of the rule's calibration** (§1.14, item 8; §2, item 28): moves by each player, as the Laws state it, or plies as d does. Which
   fronts exist, and how a certificate carries the rule it was certified under, are not specified.
+- **The cost model and its scaling beyond one segment**, and the other open items of calibration, are in `boundary_board_states_calibration.md` §3.
 - **The two modes** (§1.15, items 1 and 6; §2, items 29 and 30). The designer states that fetching and the frontier are formal modes: frontier
   mode is the full fetch of given segments, and fetch mode is the calibrated d-depth fetch. The definition of each is not written beyond
-  that. Open: what a full fetch includes (pending and unresolved lists), how the size of a request is estimated, what a fetch states of the
-  status of its data, and whether a mode for study is separate (§1.15, item 3).
+  that. Open: what a full fetch includes (pending and unresolved lists), how the size of a request is estimated, what a fetch states of the status of its data (see `boundary_board_states_calibration.md` §2, item 6, on the stored band), and whether a mode for study is separate (§1.15, item 3).
 - **How a comparison of exits with unresolved lower values is recorded**, and how its conditional status is carried up the chain until the lower
   values are resolved (§1.12; §2, item 25). Not specified. It belongs with the resolution of the interdependencies that the designer defers
   (§1.15, item 9).
@@ -522,7 +521,7 @@ the accounting of §15).
 | The three pools, d informing reachability, the segmented dependency unit, termination and the optimizations (§1.11) | Stated by the designer; the unit and the chains inside it are stated as a structural fact in the catalog; no run recorded here |
 | Automated clean-up on contribution and the keep rule (§1.9, items 9 and 10) | Stated by the designer; the specification and its integration are not done; no run recorded here |
 | The two modes, the primitives as specified, the legend to be specified now, the clean-up and interdependencies deferred (§1.15) | Stated by the designer; the modes are named and not defined beyond that; the clean-up is deferred by the designer |
-| Direction of re-certification, what a legend declares, the flag as a set, the clean-up pass, the keep rule as an ordering, pruned against unvisited, the modes, a draft legend specification (§2, items 11 to 31) | This file's readings; the legend draft (item 31) awaits the designer's correction; no run recorded here |
+| Direction of re-certification, what a legend declares, the flag as a set, the clean-up pass, the keep rule as an ordering, pruned against unvisited, the modes, the reading of the header, the legend file and the README (§2, items 11 to 32) | This file's readings; no run recorded here |
 
 ## 6. Provenance
 

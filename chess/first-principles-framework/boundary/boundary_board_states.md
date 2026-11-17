@@ -26,6 +26,8 @@ This file is the construction pipeline and the record of the idea: what a bounda
 - `boundary_board_states_syzygy_mining.md`: the Syzygy mining process.
 - `boundary_board_states_piece_structure_composition.md`: the king position and compatibility, and the composition of piece structures (a removable direction).
 - `boundary_board_states_syzygy_validation_and_scoping.md`: Syzygy as validation and as the scope of certification (a removable placeholder).
+- `boundary_board_states_batch_composition.md`: segmented batch composition within the paradigm window, the two modes, the legend and the header (one approach, a modular component; removable by deleting the file).
+- `boundary_board_states_calibration.md`: calibrating storage against search time, with the d-depth metric as the control.
 - `boundary_board_states_case_study_otb.md`: a case study from over-the-board play.
 
 > **Where this stands, and how to resume (read this first).**
@@ -120,6 +122,38 @@ This file is the construction pipeline and the record of the idea: what a bounda
 >   them is put under threat without a recapture. The material imbalance that results affects the equilibrium calculation, and moving the
 >   covering piece calculably allows one of the two to be captured. The question is then whether a route through captures and coverage
 >   exists that equalizes the equilibrium, for instance with a check or better placement.
+> - **The d-depth metric (the designer's statement, 16 November 2026).** The d-depth metric is stored in one header, of the form
+>   [d][index][symmetry condition]. d is the number of plies to the terminal condition. The index points into the legend file of the
+>   irreversible segmented boundary, which is a file of its own and not the README. That file enumerates the board states that satisfy the
+>   terminal conditions of the segment: for a mate, the terminal mating condition; for a capture, the board state after the capture; for a
+>   pawn push, the pawn condition. The entry the index points to gives the condition type. Each state is stored once per symmetry class.
+>   The symmetry condition is a symbol for the transformation applied to the stored state to give the terminal state reached. Only
+>   transformations that keep a position inside the same irreversible segmented boundary are ever referenced for the segment. A
+>   transformation that would carry a position into a different segment (for a piece bound to one square colour, for example) is never
+>   referenced. When several equally viable branches exist, one is recorded as the predominant branch, and the alternates are reachable as
+>   anchor points connected by the segmented dependency move chain.
+> - **The pawn condition (the designer's statement, 16 November 2026).** A pawn push is an admission of no capture or mate potential for
+>   advantage. It has to be checked, and the pre-positioning inside the segment has an impact. The upstream dependency from the pawn push's
+>   segment affects the resolution of the certification, and there may be cases where the position must be routed to a specific board state
+>   before the pawn push, which decides advantage or draw. This is needed to enumerate the rest of the pawn-conditional dependency. It does
+>   not apply in a segment without a pawn.
+> - **Calibrating storage against search time (the designer's statement, 16 November 2026).** For a small segment, exhaustive coverage is
+>   likely the better method, because it fits the paradigm window and delivers at speed. This is likely true for most small piece
+>   combinations, although each also occupies paradigm window space cumulatively. As segments are added to pass the limits of the Syzygy
+>   tables, it can be calculated that it is better to leave some plies unresolved and to convert them to a search problem. This extends
+>   what the paradigm window can hold, at the calculable cost of the time to solve a search problem whose difficulty increases with each
+>   ply removed. Storage can be removed from the edges of the Syzygy solution, so that more complicated regions become reachable. The
+>   d-depth metric calibrates this directly, and a different d can be set on each region. A chosen d is also an admission that optimal play
+>   is out of reach, with certainty, in the desired delivery time. That ceiling is reached whether or not the program provides the answer,
+>   and work on the program can continue while study continues. The program needs to enumerate only the positions that study reaches, not
+>   the whole drawn region, and it may delete from storage the branches that do not matter. Under partial d-depth certification, wins at a
+>   depth beyond the chosen d (the cursed wins that burden the Syzygy storage) are not stored. Branches that recur in a player's own play
+>   can be enumerated specifically, which informs the starting anchor and reachability. The designer states that the program also serves
+>   chess study: the d that is chosen is directly related to the amount of play the student is trying to master, and a d of 40 means a move
+>   chain of 40 plies within which the student must consider optimality. The designer states that the approach converges with the Syzygy
+>   work and builds on its compression, that the compression is to be optimized later, and that the designer is confident it will work. The
+>   cost of the trade is not known: how much search time each ply removed adds, how much storage the d-depth pruning saves, and how the
+>   segmented dependency units are best chained and calibrated are to be found by test. It can be applied to the forced region and to the choice region alike, as the user chooses; for chess study the user would likely want the drawn regions that fit within the d-depth they can calculate. The development is in `boundary_board_states_calibration.md`.
 > - **Fronts and contribution (the designer's statement; start-selection §2e).** The work divides into four fronts that humans and machines
 >   can take in segments: the Syzygy mining of local states, the primitive calculations on the certified states, the construction and pruning
 >   front, and inverse ablation applied to the certified states. The architecture was positioned from the start to allow a decentralized,

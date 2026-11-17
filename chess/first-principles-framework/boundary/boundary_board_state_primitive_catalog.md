@@ -1041,17 +1041,16 @@ of this map: the first is a term (TP, TM), the second is an input (missing edges
 result of a chain resolving (§1).
 
 **How the three compose in a calculation (the designer's statement, 12 November 2026; unrun specification).** The capture net, which is the mating
-net where the target is the royal unit, is the root and the highest-priority primitive: it defines what completion is, and every plan ends in it. The
+net where the target is the royal unit, is the root primitive: it defines what completion is, and every plan ends in it. The
 coverage race matters because it informs the routing that can resolve the net, and whether the opponent can obstruct that routing: occupancy and coverage
 decide whether a unit can arrive at the square or the occupancy the net requires, and whether the opponent can prevent it. This is a compositional effect
 that needs an understanding of the depth of navigation. The segmented and chained dependencies are what calculate these dependent segments together,
 to resolve the routing and the obstruction race beyond one ply, and the irreversible segmented boundaries bound that calculation and let it build on
-progress made. No primitive is calculated alone (§11.1): taken together the three represent exhaustive coverage. The architecture treats them as
+progress made. No primitive is calculated alone (§11.1): taken together the three cover the segment within the stated d. The architecture treats them as
 composed but modular on purpose, because the modules allow optimizations by component that navigate the routing, where a reliance on exhaustive
 coverage alone does not.
 
-The calculation is search technically, guided by the compositional structure. A branch that looks promising is evaluated first, and at each ply the
-reachability is read relative to the opponent's reply. What is understood of one branch is kept while others are evaluated, so that it is known when
+The calculation is search technically, guided by the compositional structure. At each ply the reachability is read relative to the opponent's reply. What is understood of one branch is kept while others are covered within the stated d, so that it is known when
 another branch can resolve better than the one in hand and the work can return to it. Whether the routing converges is read, and the routing can be
 evaluated from a fixed point and from different anchoring points, which is the relativistic comparison of optimality. A unit that arrives in five moves
 while others arrive sooner is not excluded for that reason, because the five-move route may be the optimal one. A move is excluded only on proof
@@ -1062,7 +1061,7 @@ the calculation is exact within the stated d. There is no error rate. The
 depth to which a result is certified, and the dependency of an upstream result on the segments below it, are in
 `boundary_board_states_start_selection.md` §2g.
 
-**Order of approaches (the designer's statement; unrun specification).** This assumes the classes below cover every move of a general board
+**Classes of moves (the designer's statement; unrun specification).** This assumes the classes below cover every move of a general board
 state. If they do not, this statement changes. Every legal move is a capture, a non-capture irreversible move, or a reversible move. In terms
 of role, a move is one of: completing the mating net directly; a capture net, which navigates one or more irreversible boundaries (not
 necessarily a single step from one segment to the next); a move that restricts the opponent's optimal replies, which is a segmented
@@ -1070,12 +1069,9 @@ dependency; navigation within the segment; or a non-capture irreversible move, w
 changes the pool of viable compositions. The coverage race is not one of these classes: it is a dependency of the optimality calculation of
 the nets (the P-008 to P-001 row above), since a net cannot be evaluated for both sides without the occupancy and coverage of the other
 pieces. The irreversible boundaries a position has already crossed bound the pool of compositions that can emerge from it, whatever the
-pieces are. The order in which approaches are tried is not a rule of this catalog. It emerges from the analysis of the board state, from the
-boundaries already crossed, from the progress of the programme, and from the difficulty of each approach and how the order changes the work
-of the others. Cheaper approaches can prune the work and storage of harder ones, but this is not definitive: certification requires
-exhaustive coverage of the segment, and a harder approach may decide what cheaper ones cannot. A suboptimal move excludes itself by landing
+pieces are. A suboptimal move excludes itself by landing
 in a losing force region shown by primitive calculation. A reversible move that maintains the draw is navigation within the segment, and
-whether it is drawn is certified by d and coverage. The ordering does not decide either; the workflow does (start-selection §2c).
+whether it is drawn is certified by d and coverage.
 
 ---
 

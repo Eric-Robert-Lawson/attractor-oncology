@@ -319,8 +319,8 @@ the accounting of §15).
    position with no forced result within d is a lower bound on its status and not the status. The boundary board state status also needs the
    position to be reached under optimality and the draw to be realized (main §14 items 7, 8 and 10).
 9. **Engines propose.** An engine move or a played game is an assertion until certified (start-selection §2e, readings). If each engine picks
-   the deviation that relieves the most work, the proposals can converge, which works against the diversity of §1.4, item 2. Reach is a
-   priority and never an exclusion (primitive catalog §9), and the choice among deviations is not specified.
+   the deviation that relieves the most work, the proposals can converge, which works against the diversity of §1.4, item 2. Which
+   deviation a contributor works on is the community's work selection, and the choice among deviations is not specified.
 10. **The frontier.** The boundary of the uncertain region, and the points at which scoped attempts reach the window, would let a contributor
     choose seeds without any seed being supplied. Whether the program publishes it is this file's suggestion and not the designer's.
 11. **Re-certification runs in one direction.** An irreversible boundary scopes each segment, so a result in a lower segment does not depend on
@@ -366,8 +366,7 @@ the accounting of §15).
     the segment's own record, not here.
 
 22. **Exclusion only on certainty.** In this reading, §1.11 items 6 and 13 give the grounds for removing a move from the work: a proof that the
-    terminal cannot be reached optimally in the plies that remain, or another option already proven to cost less. Short of a proof, a move is ordered and not excluded (primitive catalog §9, reach is a
-    priority and never an exclusion). A filter that removes moves by their kind, without a proof of unreachability, is a heuristic exclusion
+    terminal cannot be reached optimally in the plies that remain, or another option already proven to cost less. Short of a proof, a move is not excluded. It is covered within the stated d. A filter that removes moves by their kind, without a proof of unreachability, is a heuristic exclusion
     and is not part of the direction. A test of the direction would derive the compositions from the labels of the two batches, level by level.
     A move that the composition does not account for is an anomaly that revises the composition. It is not an error rate, because the composed
     calculation is exact (catalog §9).

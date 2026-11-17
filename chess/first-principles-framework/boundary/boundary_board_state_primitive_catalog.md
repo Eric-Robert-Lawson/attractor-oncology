@@ -1053,11 +1053,12 @@ coverage alone does not.
 The calculation is search technically, guided by the compositional structure. A branch that looks promising is evaluated first, and at each ply the
 reachability is read relative to the opponent's reply. What is understood of one branch is kept while others are evaluated, so that it is known when
 another branch can resolve better than the one in hand and the work can return to it. Whether the routing converges is read, and the routing can be
-evaluated from a fixed point and from different anchoring points, which is the relativistic comparison of optimality. The reach is a priority and
-never an exclusion. If the net needs a unit and the pool of compositions has that unit arriving in five moves while others arrive sooner, that
-informs direction and prioritization and does not exclude that the five-move route is the optimal one. The comparison is made across the units and
+evaluated from a fixed point and from different anchoring points, which is the relativistic comparison of optimality. A unit that arrives in five moves
+while others arrive sooner is not excluded for that reason, because the five-move route may be the optimal one. A move is excluded only on proof
+(the terminal cannot be reached in the plies that remain, or another option is already proven to cost less). Otherwise it is covered within the
+stated d. The comparison is made across the units and
 across the candidate compositions, each reading the reachability of the others, which is a joint and self-referential comparison. The result of
-the calculation is exact and agrees with exhaustive coverage. There is no error rate. The
+the calculation is exact within the stated d. There is no error rate. The
 depth to which a result is certified, and the dependency of an upstream result on the segments below it, are in
 `boundary_board_states_start_selection.md` §2g.
 

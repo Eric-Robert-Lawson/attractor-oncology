@@ -104,6 +104,22 @@ This file is the construction pipeline and the record of the idea: what a bounda
 >   appeared to pose (the recursion of a net against its counter-nets) seems to be emergent from the lack of this scoping. The tempo
 >   calculations, the inverse ablation and the other fronts are integration specifications, to be completed further in the documentation, and
 >   are under construction.
+> - **The coverage net (the designer's statement, 16 November 2026).** The coverage net is the coverage race of the primitive catalog
+>   (P-008): they are the same primitive. The mating or capture net is, at its base level, a coverage net focused on the piece being
+>   captured. The coverage net is the net of the whole board and how it changes with the moves played. Both the state of the net at a
+>   position and its change after each ply are informative, and more may yet be discovered. The change between before and after a move
+>   informs the routing of the segmented dependency and the reachability of the condition within the d-depth requirement, and it
+>   accumulates through the progression along the dependencies. A change in coverage can force an opportunity cost, and some reversible
+>   moves within an irreversible segmented boundary are commitment moves under optimality, because the best reply is to capitalize on the
+>   imbalance in coverage; this informs the primitive calculations that can be done by force. The coverage net is what connects the mating
+>   or capture net condition with the routing of the segmented dependencies. There is no table of squares with threat counters and no fixed
+>   classification of a piece as attacker or defender, because the role of a piece can change with any route that satisfies the condition.
+>   There is one correct answer, or a pool of equally correct answers. Any information discovered about the choices or the coverage
+>   requirements is used to avoid exhaustive coverage. Storage limitation is the structural constraint that scopes the application of the
+>   coverage net to a strict allowance. The designer's example, with no piece named: one piece covers two others, and the piece that covers
+>   them is put under threat without a recapture. The material imbalance that results affects the equilibrium calculation, and moving the
+>   covering piece calculably allows one of the two to be captured. The question is then whether a route through captures and coverage
+>   exists that equalizes the equilibrium, for instance with a check or better placement.
 > - **Fronts and contribution (the designer's statement; start-selection §2e).** The work divides into four fronts that humans and machines
 >   can take in segments: the Syzygy mining of local states, the primitive calculations on the certified states, the construction and pruning
 >   front, and inverse ablation applied to the certified states. The architecture was positioned from the start to allow a decentralized,

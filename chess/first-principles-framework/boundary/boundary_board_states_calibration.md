@@ -2,7 +2,7 @@
 
 **Status.** A record of a direction the designer articulated on 16 November 2026. It states how the d-depth metric calibrates what a store holds against the search that rederives the rest, and it is the file where that calibration is developed. It is stated in general terms: no piece, material or position is part of it. It adds no primitive and does not touch the hard core (`boundary_board_states.md` §14 items 7 to 11). Statements marked **the designer's** are the designer's. Statements marked **this file's reading** are readings of the designer's words, offered for correction. No measurement is recorded in this file, and the designer states that the cost of the trade is not known.
 
-Companion documents: `boundary_board_states.md` (the designer's statements at "Where this stands": d-depth scoping, the d-depth metric, calibrating storage against search time), `boundary_board_states_start_selection.md` (§2g depth-scoped certification and dependency across segments), `boundary_board_states_batch_composition.md` (the keep rule, §1.9 item 10; pruned against unvisited; the two modes, §1.15), `boundary_board_states_syzygy_mining.md` (the certified base that this builds on).
+Companion documents: `boundary_board_states.md` (the designer's statements at "Where this stands": d-depth scoping, the d-depth metric, calibrating storage against search time), `boundary_board_states_start_selection.md` (§2g depth-scoped certification and dependency across segments), `boundary_board_states_batch_composition.md` (the keep rule, §1.9 item 10; pruned against unvisited; the two modes, §1.15), `boundary_board_states_syzygy_mining.md` (the certified base that this builds on), `boundary_board_states_d_depth_applications.md` (the applications of partial d-depth certification).
 
 ---
 
@@ -20,7 +20,7 @@ Companion documents: `boundary_board_states.md` (the designer's statements at "W
 
 6. **The metric calibrates it directly.** The d-depth metric is the control. The designer states that d can be calibrated differently on each region, and that it goes both ways. It can be applied to both regions, the forced and the choice regions, and which it is applied to is a choice for the user. For chess study the user would likely want the drawn regions that fit within the d-depth that they can calculate.
 7. **A chosen d is an admission.** A chosen d is also an admission that optimal play is out of reach, with certainty, within the delivery time that is wanted. This ceiling is reached whether or not the program provides the answer, and performing work while the study continues is not a barrier.
-8. **Cursed wins.** The Syzygy solution space can be pruned to what d-depth reachability of certainty gives, so that perfect play under partial d-depth certification keeps the cursed wins, which blow up the Syzygy storage, from being stored. Instead of being exact within an infinite d, the program is calibrated to remove that blow-up and the positions that surpass the certainty that can be derived within the d-depth certification.
+8. **Cursed wins.** The Syzygy solution space can be pruned to what d-depth reachability of certainty gives, so that perfect play under partial d-depth certification keeps the cursed wins, which blow up the Syzygy storage, from being stored. Instead of being exact within an infinite d, the program is calibrated to remove that blow-up and the positions that surpass the certainty that can be derived within the d-depth certification. For study, the same exclusion keeps the student out of rabbit holes that only occupy storage and distract from the depths of analysis that matter (`boundary_board_states_d_depth_applications.md` §1, item 8).
 
 ### 1.3 What is stored, and what is rederived
 
@@ -97,6 +97,7 @@ Items 9 to 14 are confirmed by the designer as the content that was left implici
 - **How an engine is brought into the program in parallel** (§1, item 26; §2, item 13): what it proposes, how its candidates are checked, and how branches resolved in parallel are recorded. Not specified.
 - **The drawn states** (§1, item 28). Whether emergent relations between the drawn equilibrium and certainty can be constructed. Open, and widening the paradigm window is the exhaustive route if they cannot.
 - **How a recorded draw in the choice region is stored and marked** as scoped to d (§1, item 29). Not specified.
+- **A request for a d beyond the stored cap.** The student's depth limit (`boundary_board_states_d_depth_applications.md` §1, item 8) and the cap K of the store (§2, item 1) are two limits that both use d. What a fetch gives when the requested d is above the cap that the store was built to is not specified.
 
 ## 4. Status
 

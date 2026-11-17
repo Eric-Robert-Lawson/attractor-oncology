@@ -28,6 +28,7 @@ This file is the construction pipeline and the record of the idea: what a bounda
 - `boundary_board_states_syzygy_validation_and_scoping.md`: Syzygy as validation and as the scope of certification (a removable placeholder).
 - `boundary_board_states_batch_composition.md`: segmented batch composition within the paradigm window, the two modes, the legend and the header (one approach, a modular component; removable by deleting the file).
 - `boundary_board_states_calibration.md`: calibrating storage against search time, with the d-depth metric as the control.
+- `boundary_board_states_d_depth_applications.md`: the applications of partial d-depth certification: chess study, play analysis and the depth limit.
 - `boundary_board_states_case_study_otb.md`: a case study from over-the-board play.
 
 > **Where this stands, and how to resume (read this first).**
@@ -149,8 +150,7 @@ This file is the construction pipeline and the record of the idea: what a bounda
 >   the whole drawn region, and it may delete from storage the branches that do not matter. Under partial d-depth certification, wins at a
 >   depth beyond the chosen d (the cursed wins that burden the Syzygy storage) are not stored. Branches that recur in a player's own play
 >   can be enumerated specifically, which informs the starting anchor and reachability. The designer states that the program also serves
->   chess study: the d that is chosen is directly related to the amount of play the student is trying to master, and a d of 40 means a move
->   chain of 40 plies within which the student must consider optimality. The designer states that the approach converges with the Syzygy
+>   chess study: the d that is chosen is directly related to the amount of play the student is trying to master, and a d of 40 means a move chain of 40 plies within which the student must consider optimality. That d is the limit the student studies under, the same as the calibrated fetch mode (`boundary_board_states_d_depth_applications.md`). The designer states that the approach converges with the Syzygy
 >   work and builds on its compression, that the compression is to be optimized later, and that the designer is confident it will work. The
 >   cost of the trade is not known: how much search time each ply removed adds, how much storage the d-depth pruning saves, and how the
 >   segmented dependency units are best chained and calibrated are to be found by test. It can be applied to the forced region and to the choice region alike, as the user chooses; for chess study the user would likely want the drawn regions that fit within the d-depth they can calculate. The development is in `boundary_board_states_calibration.md`.

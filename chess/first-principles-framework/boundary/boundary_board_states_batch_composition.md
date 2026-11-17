@@ -285,6 +285,7 @@ families; §7 calibration), `boundary_board_state_primitive_catalog.md` (§8.9 t
    `boundary_board_states.md` and in the catalog (§4.10).
 9. **The clean-up and the interdependencies are deferred.** Understanding how the interdependencies resolve, and the clean-up, is too large
    a task to undertake at this time. The designer leaves it to be built later, as an integrated specification.
+10. **The study use is the calibrated fetch (the designer's statement, 16 November 2026).** Use for study is the same event as the calibrated d-depth fetch of item 6. The d is the metric threshold for the depth capacity under which the student wants to study (`boundary_board_states_d_depth_applications.md` §1, item 8).
 
 ---
 
@@ -416,8 +417,7 @@ families; §7 calibration), `boundary_board_state_primitive_catalog.md` (§8.9 t
     (§1.14), and the legend of the segment. What "everything the program holds" includes, such as the pending and unresolved lists, how
     large a fetch is estimated before it is made, and how a user's machine is matched to a request, are not specified. The study use of
     §1.15, item 3, is read as the same data used for another purpose: d, the favoured side and the terminal flag say how many plies a
-    certified result needs and what it ends in. The format of a mode for study is not specified, and the program records the learning use
-    and the discovery use as equally required.
+    certified result needs and what it ends in. The study use is the calibrated fetch (§1.15, item 10), and the program records the learning use and the discovery use as equally required.
 31. **The header, the legend file and what the README declares (this file's reading of the designer's statement of 16 November 2026).** The
     statement is in `boundary_board_states.md` ("The d-depth metric"). This reading replaces the draft of 15 November, which put a terminal
     symbol in the header and the legend in the README.
@@ -493,7 +493,7 @@ families; §7 calibration), `boundary_board_state_primitive_catalog.md` (§8.9 t
 - **The cost model and its scaling beyond one segment**, and the other open items of calibration, are in `boundary_board_states_calibration.md` §3.
 - **The two modes** (§1.15, items 1 and 6; §2, items 29 and 30). The designer states that fetching and the frontier are formal modes: frontier
   mode is the full fetch of given segments, and fetch mode is the calibrated d-depth fetch. The definition of each is not written beyond
-  that. Open: what a full fetch includes (pending and unresolved lists), how the size of a request is estimated, what a fetch states of the status of its data (see `boundary_board_states_calibration.md` §2, item 6, on the stored band), and whether a mode for study is separate (§1.15, item 3).
+  that. Open: what a full fetch includes (pending and unresolved lists), how the size of a request is estimated, what a fetch states of the status of its data (see `boundary_board_states_calibration.md` §2, item 6, on the stored band).
 - **How a comparison of exits with unresolved lower values is recorded**, and how its conditional status is carried up the chain until the lower
   values are resolved (§1.12; §2, item 25). Not specified. It belongs with the resolution of the interdependencies that the designer defers
   (§1.15, item 9).

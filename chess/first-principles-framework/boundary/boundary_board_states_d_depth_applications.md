@@ -38,6 +38,8 @@ Companion documents: `boundary_board_states_calibration.md` (the stored band, th
 2. **What an application can state.** d is certified within an irreversible segmented boundary. What an application can say about a position is therefore what the program has certified for the segment that position is in. A position in a segment that has not been certified carries no statement.
 3. **A player's own positions as anchors.** The reading of §1, item 6 uses the enumeration of a player's recurring branches, which the calibration file states (§1, item 13), as the starting anchors and reachability. The divergence is read against the certified result at the position.
 4. **The depth limit and the measure of item 9.** The limit of item 8 is the d of the calibrated fetch (`boundary_board_states_batch_composition.md` §1.15, item 6). The d recorded for a position is plies to the first irreversible event of its segment, and a position or a move whose d exceeds the limit lies outside the depth that the user set. How the limit is recorded for a student or for a platform is not specified.
+5. **The roles of d found so far.** d scopes a certificate (start-selection §2g), controls what is stored against what is searched (`boundary_board_states_calibration.md`), is the depth limit a student studies under (§1, item 8), and is the measure used to analyze play (§1, item 9). The designer confirms this reading, and states that it is not determined whether these roles are exhaustive.
+
 
 ---
 
@@ -48,6 +50,7 @@ Companion documents: `boundary_board_states_calibration.md` (the stored band, th
 - **How the depth limit is set and recorded** for a student and for a platform (§1, item 8; §2, item 4). Not specified.
 - **How the program is integrated into a platform that analyzes games**, and the measure that detecting cheating would use. Not specified.
 - **The individualization of the program for chess study** beyond §1, item 6. The designer says it is for another day.
+- **A request for a d beyond the stored cap** (`boundary_board_states_calibration.md` §3). Not specified.
 - **The test at the frontier of the Syzygy solution** (§1, items 3, 4 and 10). Waits for access.
 
 ## 4. Status
@@ -55,7 +58,7 @@ Companion documents: `boundary_board_states_calibration.md` (the stored band, th
 | Element | Status |
 |---|---|
 | The statements of §1 | Stated by the designer. Items 3 and 4 are to be tested, and item 10 states that the test waits for access |
-| Items 1 to 4 of §2 | This file's readings, offered for correction |
+| Items 1 to 5 of §2 | This file's readings, offered for correction |
 | The applications of §1.2 and §1.3 | Direction recorded. Not specified further, and not run |
 
 ## 5. Provenance

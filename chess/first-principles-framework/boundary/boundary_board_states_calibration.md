@@ -32,7 +32,7 @@ Companion documents: `boundary_board_states.md` (the designer's statements at "W
 
 ### 1.4 Chess study
 
-14. **Study benefits most.** A person studying chess does not need to know of the cursed wins that burden the Syzygy storage and limit what it can deliver beyond its piece limits. The d-depth metric is directly related to the amount of play the student is trying to master. At a d of 40 or more, a human has to consider optimality within a move chain of that size. The designer states that chess study benefits from the d-depth architecture the most, more than the scientific endeavour does.
+14. **Study benefits most.** A person studying chess does not need to know of the cursed wins that burden the Syzygy storage and limit what it can deliver beyond its piece limits. The d-depth metric is directly related to the amount of play the student is trying to master. At a d of 40 or more, a human has to consider optimality within a move chain of that size. The designer states that chess study benefits from the d-depth architecture the most, more than the scientific endeavour does. The designer refines the limit for study on 19 November 2026: the d-depth limit is not a hard-coded limit but a quantity derived from the proof-size limitation, which calculates it, and it depends on the proof size within d (`boundary_board_states_engine_integration.md` §1, item 5).
 15. **Learning and progression.** It is essential to allow for learning as well as for the progression of the program (`boundary_board_states_batch_composition.md` §1.15, item 3).
 
 ### 1.5 Syzygy, compression and confidence
@@ -97,7 +97,7 @@ Items 9 to 14 are confirmed by the designer as the content that was left implici
 - **How an engine is brought into the program in parallel** (§1, item 26; §2, item 13): what it proposes, how its candidates are checked, and how branches resolved in parallel are recorded. Not specified.
 - **The drawn states** (§1, item 28). Whether emergent relations between the drawn equilibrium and certainty can be constructed. Open, and widening the paradigm window is the exhaustive route if they cannot.
 - **How a recorded draw in the choice region is stored and marked** as scoped to d (§1, item 29). Not specified.
-- **A request for a d beyond the stored cap.** The student's depth limit (`boundary_board_states_d_depth_applications.md` §1, item 8) and the cap K of the store (§2, item 1) are two limits that both use d. What a fetch gives when the requested d is above the cap that the store was built to is not specified.
+- **A request beyond the stored cap.** The student's limit, which depends on the proof size within d (`boundary_board_states_d_depth_applications.md` §1, item 8, as refined), and the cap K of the store (§2, item 1) are two limits. What a fetch gives when the requested limit lies beyond what the store was built to, and how a limit on proof size maps onto the cap K, are not specified.
 
 ## 4. Status
 

@@ -218,7 +218,7 @@ families; §7 calibration), `boundary_board_state_primitive_catalog.md` (§8.9 t
 14. **The zero case.** When d-depth equals the number of moves made, so that the difference is zero, the line is one of the optimal routes (there
     can be many), if it is proven to have been chosen from optimal move decisions.
 15. **Coverage remains exhaustive.** This still requires covering exhaustively. The exclusion that follows from the dependence on d-depth helps to
-    alleviate depth concerns.
+    alleviate depth concerns. The designer clarifies on 19 November 2026 that exhaustive depends on what is covered: exhaustive certification within d over the scoped region, and not exhaustive in general (`boundary_board_states_engine_integration.md` §1, item 15).
 
 ### 1.12 What optimality within a segment does and does not cover (the designer's, 15 November 2026)
 
@@ -285,7 +285,7 @@ families; §7 calibration), `boundary_board_state_primitive_catalog.md` (§8.9 t
    `boundary_board_states.md` and in the catalog (§4.10).
 9. **The clean-up and the interdependencies are deferred.** Understanding how the interdependencies resolve, and the clean-up, is too large
    a task to undertake at this time. The designer leaves it to be built later, as an integrated specification.
-10. **The study use is the calibrated fetch (the designer's statement, 16 November 2026).** Use for study is the same event as the calibrated d-depth fetch of item 6. The d is the metric threshold for the depth capacity under which the student wants to study (`boundary_board_states_d_depth_applications.md` §1, item 8).
+10. **The study use is the calibrated fetch (the designer's statement, 16 November 2026).** Use for study is the same event as the calibrated d-depth fetch of item 6. The d is the metric threshold for the depth capacity under which the student wants to study (`boundary_board_states_d_depth_applications.md` §1, item 8). The designer refines this on 19 November 2026: the d-depth limit for study is not a hard-coded limit but a quantity derived from the proof-size limitation, which calculates it (`boundary_board_states_engine_integration.md` §1, item 5).
 
 ---
 
@@ -377,8 +377,7 @@ families; §7 calibration), `boundary_board_state_primitive_catalog.md` (§8.9 t
     second needs the cost of the better option to be certified, not estimated. The moves that remain are compared adversarially, each side taking
     the move that is best for it against the other's reply. This follows the two readings of catalog §4.7 (the cooperative one that measures
     reachability, the adversarial one that does the work) and the statement in start-selection §2g that a found forcing sequence beats the
-    branches it dominates, so that they need not be enumerated. Coverage stays exhaustive (§1.11, item 15), and the exclusions reduce the depth
-    that has to be explored and not the region that has to be covered.
+    branches it dominates, so that they need not be enumerated. Coverage stays exhaustive (§1.11, item 15), which is exhaustive within the stated d over the scoped region and not exhaustive in general (`boundary_board_states_engine_integration.md` §1, item 15), and the exclusions reduce the depth that has to be explored and not the region that has to be covered. Covering is not storing: what the store keeps is set by the pattern of kept rows (calibration §1.3 and §2, items 9 to 12).
 24. **The zero case, and routes.** Item 14 confirms this file's reading of the budget formula: at zero plies remaining, the line is on an optimal
     route if it is at the terminal, and it is not the correct branch if it is not. There can be several optimal routes, so the exclusion by cost
     leaves every route of least cost and removes only the dearer ones.

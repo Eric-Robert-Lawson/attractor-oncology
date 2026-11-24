@@ -145,33 +145,9 @@ The open items, copied unchanged:
 
 None have been made. This section is begun when attempts begin. An attempt is written in four parts: what is given, with its sources in the construction file; the interactions between statements that are not stated, put as questions to the designer and not decided; the goal logic, with a tag on each part naming what it depends on; and what could not be derived. The goal is stated as a specification and not as a procedure, with the open pieces as named parameters, since the construction file leaves the approach to the goal open on purpose (item 40) and the working memory as a parameter (reading 63). Failed attempts are recorded here and not in the construction file. If a result bears on a statement in the construction file, the designer decides whether the statement is revised.
 
-### 2.1 Material before a first attempt (23 November 2026)
-
-This is not an attempt. It collects what the designer has stated since the copied blocks were made, in the first two of the four parts of an attempt, and it begins neither the goal logic nor the list of what could not be derived. Item and reading numbers refer to the construction file.
-
-**What is given, with sources.**
-
-- The check from an anchor. A board state is the anchor, with a proof tree of a chosen depth in which every reply of the side that does not choose is enumerated, and the certified side follows the priors or, where they hold none, the engine's moves (items 29, 90 and 95; reading 12).
-- What the check is compared with. The result is compared with what the engine natively played without priors. Agreement across the proof tree means resolved and needs no prior. A deviation is a problem, and a prior can be added somewhere to resolve it, to be used in parity with the evaluator (item 95).
-- The step when nothing is determined. One ply down with another edge of the frontier enumerated, or an expansion of the d-depth limit, or a variable programmable front, depending on the approach (item 95).
-- Where the work sits. From the most terminally understood root, back to front, composing d-depth regions until the coverage requirement is met (items 31, 39 and 90).
-- Where the check ends. At certified anchors, including in downstream segments, with the scope of what it certifies bounded by the weakest downstream landing (items 22, 33, 91 and 98; readings 60 and 83).
-- What is left in the priors. A perimeter at d of 1 only for the measurement that the goal decides to leave, and the d of the limit that the chosen position enables. No record of what was attempted beyond the d field and the region it encloses (items 50, 52, 94 and 96).
-- Draws are not stored (items 80 and 95). Where the depth that settles the draws is not known, the result is stated relative to full coverage, as the d-depth limit that has been resolved (item 95).
-- The limit is emergent, or chosen as an acceptable d-depth limit for partial certification (items 2, 16, 20 and 97).
-- What is measured explicitly is coverage, speed and storage. The engine's deviation from the proof tree is informative and is not tracked (item 93).
-
-**Interactions not stated, put as questions to the designer and not decided.**
-
-1. Item 90 has the regions compose until the coverage requirement is met. What is the coverage requirement as a quantity for a goal, and is it given for an anchor, for a segment, or by the goal?
-2. Item 90 speaks of a certified boundary board state that is reachably resolvable. Which boundary does it name: the outer bound of the proof tree, an entry with d alone, or the resolved entries, with d and the index?
-3. Item 95 has a prior added somewhere to resolve a deviation. Where: at the state at which the engine's move deviates, at the anchor, or at another state of the proof tree?
-4. Items 91 and 98. May a check end at a downstream landing position that is certified only to a limited scope, and if so, where is the composed scope held, given that an entry holds d and the index only?
-5. Item 96. What in the goal fixes the moment at which a perimeter is held?
-
 ## 3. Status
 
 | Element | Status |
 |---|---|
-| §1 | Copies of the construction file of 22 November 2026, unchanged. Items 72 to 98 of the construction file are not carried forward here, and §2.1 cites them by number |
-| §2 | No attempt made. §2.1 holds material gathered on 23 November 2026 before a first attempt |
+| §1 | Copies of the construction file of 22 November 2026, unchanged |
+| §2 | No attempt made |

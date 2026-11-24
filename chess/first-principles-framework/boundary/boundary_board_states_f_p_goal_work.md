@@ -141,6 +141,37 @@ The open items, copied unchanged:
 
 ---
 
+### 1.6 Statements made after item 71 (construction file, items 72 to 99, titles only)
+
+- Item 72: The goal of P has a general preset, and it can be as variable as the goals of F.
+- Item 73: The preset is found by running, from goals programmed by hand.
+- Item 74: The empirical record is developmental, and the two functions are a signature with an open body.
+- Item 75: For now the goal front is the body of the function, and the engines may differ by side.
+- Item 76: The goal is a parameter that is the body, held as stored code.
+- Item 77: The stored goal code is disjoint from the priors and the storage window.
+- Item 78: The viable pool is enumerated in the check and not held in the priors, and d is the depth of verification to the forced solution.
+- Item 79: The entry holds d and no move is added, and the metric of what d holds is what matters.
+- Item 80: The parts of the d-depth metric an entry holds depend on its state of resolution.
+- Item 81: What cannot be certified is not added, the index and the symmetry stay opaque until the legend and the transformations are specified, and the priors are segmented.
+- Item 82: Three different boundaries, the legend as a prior, and what d denotes.
+- Item 83: Bishop colour is part of a segment, and what the symmetry is for.
+- Item 84: The d-depth architecture was chosen for storage, coverage and speed, and the header is compression.
+- Item 85: Symmetry is compression, one entry covers its folds, and its notation is redundant storage.
+- Item 86: A transformation into another segment is predictable and is exploited.
+- Item 87: The d field carries status by itself.
+- Item 88: Directed rederivation and the condition based search are used together.
+- Item 89: The condition chosen from a pool of equals is relative to the scope, and the check of it is left open.
+- Item 90: A segment has a finite set of conditions, and where the condition sits is not hard-coded.
+- Item 91: Certainty is resolved back to front, and the search is bounded between the priors.
+- Item 92: The engine evaluates and is not trusted first where priors exist.
+- Item 93: Engine variation has to be accounted for, and it is open.
+- Item 94: The priors judge the engine's picks afterwards, and putting them into the evaluator is not excluded.
+- Item 95: A segment and its counterparts are a class.
+- Item 96: The stop of the check is a variable of the goal front.
+- Item 97: What the goal can ask of the priors cannot be answered before the goal exists.
+- Item 98: The metric and the indices measure the certainty of optimal routing, and not win, draw or loss.
+- Item 99: The goal is not built until the specification is understood.
+
 ## 2. Attempts
 
 None have been made. This section is begun when attempts begin. An attempt is written in four parts: what is given, with its sources in the construction file; the interactions between statements that are not stated, put as questions to the designer and not decided; the goal logic, with a tag on each part naming what it depends on; and what could not be derived. The goal is stated as a specification and not as a procedure, with the open pieces as named parameters, since the construction file leaves the approach to the goal open on purpose (item 40) and the working memory as a parameter (reading 63). Failed attempts are recorded here and not in the construction file. If a result bears on a statement in the construction file, the designer decides whether the statement is revised.
@@ -149,5 +180,5 @@ None have been made. This section is begun when attempts begin. An attempt is wr
 
 | Element | Status |
 |---|---|
-| §1 | Copies of the construction file of 22 November 2026, unchanged |
+| §1 | Copies of the construction file of 22 November 2026, unchanged, and §1.6, added on 24 November 2026 with the titles of items 72 to 99 |
 | §2 | No attempt made |

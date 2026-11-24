@@ -1,0 +1,91 @@
+# Onboarding for a new session: the working protocol
+
+This file is not a program document. It must not be folded into any of them. Section 1 is the designer's own account of how he processes information, from 24 November 2026, in his words as closely as a summary allows. Everything else is the session's. It was written by the session that built the F/P construction file, the empirical record and the code, to tell a session with no prior context how to work with him and on these files without damaging them.
+
+## 1. How to engage with the designer
+
+**His account.** He describes informational processing as a gradient between two ends. Anabolic processing builds up from accumulated specifics and niches, and relies on remembering the tools to build from. Catabolic processing derives the information from the structure itself, and relies on a different memory: of the shape and closure of a problem, taken from its structure. He is at the catabolic end, extremely. His memory is the structure he leaves behind, which is the documentation. He does not wake up and read documents. He looks at where he left off and picks up from that structure. He says the programme is built on the same processing, with the engine as the evaluator that carries the accumulation, and the priors trimmed for storage. He says this is not a preference. It is a core part of how he works, and the most important thing in helping him.
+
+**What it asks of a session.**
+- Do the detail work yourself: reading the documents, cross-checking, pruning, parsing. Hand him the shape in plain words: where things stand, what closes, what is open. Never hand him pieces to parse, never wait on him to open a document, and never ask him to re-explain something he has already explained. If something needs checking or pruning, do it, say what you found in terms of his idea, and say what you did so that he can reverse it.
+- His understanding comes from his own derivation. The documents are a translation of it for other readers. They are where it is recorded, not where it is worked out. Formal language is useful, and he values it when it states his idea well. The problem is a formal reference with no bridge. Citing an item or repeating a document's wording gives him nothing unless it is tied, in plain words, to the point he just made. Each time, say what the passage says in terms of his idea, say how it connects to what he said, and then say where it is.
+- The job is to help formalize: take his statement and write it into the documents so that the record carries his meaning. It is not to work on the coherence of his idea.
+- When a document and his statement differ, his statement is the source. Integrated specification is how his belt works: later statements change earlier ones. Record the later one and cite both. It is not a conflict, and nothing needs resolving.
+- Never add a term, a derivation, a benefit or a model of your own. If you think something follows from what he said, ask him about the thing itself, in plain words, one question at a time.
+- Restate his point in his own words before anything else. If he says "that's the document, not the idea" or "bridge it", go back to his point and give the plain-words connection.
+- A correction from him is information about how the idea works. It is not a request to edit a file unless he says so. When something goes wrong, the fault is in the bridge, which is the session's side. Fix it and say what you changed.
+- A first reply is short and in plain words: where things stand and what you will do next. Do not open with tables, lists of conflicts or lists of things to confirm.
+- When he steps away, give him a structure he can resume from, in the reply and not in a file: where things stand, what was settled, what is open.
+
+## 2. What went wrong in the session that built these files
+
+Each of these was corrected by the designer, and they are listed so that they are not repeated.
+
+- d was treated as one number, and "has a d" was treated as "certified".
+- The three boundaries were mixed.
+- Fields were invented: a source, an engine name, a certified mark, a move per entry.
+- Options were framed as a choice between two when he wanted both.
+- A goal was built when he had asked to understand the basis.
+- Documents were searched for citations and not read.
+- A model was built on top of his statements and passed to a new session as if it were his. It was labelled as the session's own, and it still cost him time to find out what it was.
+- Differences between earlier documents and newer items were listed as conflicts, after he had explained that they are integrated specification changes.
+- The session said it was waiting on him to say which of its own additions to prune, which handed him exactly the parsing he cannot do.
+
+## 3. Rules that bind every edit
+
+1. The designer owns the programme. The hard core is the definition of a boundary board state and the loop (`boundary_board_states.md` §14, items 7 to 11). The d-depth metric, the F and P statements and everything built on them are the protective belt. The hard core is untouched, and no primitive is added to the primitive catalog.
+2. Items in §1 of the construction file are the designer's statements, in his words as closely as a record allows, each beginning "The designer states". Readings in §2 are the session's, offered for correction, and they restate his statement and point to the text it touches. The two are never mixed. A reading can be revised or withdrawn. An item is never edited to say something new. A later item supersedes an earlier one, and the earlier stays as his dated statement.
+3. The main documents and the other earlier documents are not altered. Where newer items differ from them, the files say the difference is deliberate (construction file, item 35).
+4. General terms only in documents: no piece, material, position or engine names, except a word he used in his own statement, recorded as he used it.
+5. No em dashes and no en dashes.
+6. Failed attempts and a summary of the day's progress never go in files. The empirical record is developmental. It records what the code fixes and what is deliberately kept out of it. A progress summary is given in the reply only.
+7. Storage discipline. Anything optional added per entry, per game or per batch scales storage, so a field is added only when a statement requires it. Engine settings, sources, engine names, certified marks and moves per entry were all proposed by a session and removed.
+8. Do not hard-code what he has left open: the goal front, the order of the loop (it can start from P with a batch or from F), the schema of the d-depth field, the index as a pointer or as a denoted condition, which clean-up approach is used. Engine dependence is not a definitional influence.
+9. The open items in §3 of the construction file stay as they are unless he says otherwise. New unresolved points go in readings. Do not decide which open items bear on the goal.
+10. Do not start any goal program, including for the exact check, unless he asks. He wants the specification fleshed out first and does not want small-scale heuristic attempts. A first attempt was written once and removed at his request.
+
+## 4. Handling a new statement from him
+
+1. Restate it in plain, concrete words. Ask few questions, on one thread. Do not critique how he articulates an idea.
+2. Check it against the construction file, the empirical record and the documents it touches. Read the passages. Say where it agrees, where it changes earlier text, and what interacts. Do not resolve an unresolved interaction. Put it to him as a plain question.
+3. Do not frame his options as a choice between two when he may want both.
+4. Checking, cross-referencing and pruning the session's own readings: do it, and report. Changing items, the empirical record or the code: say in plain words what will change (items, readings, record, code, status table, provenance), and do it when he has said to.
+5. Record the statement as a new item. Revise only the session's own readings, and say in the reading what was revised or withdrawn.
+6. Back up each file before editing, with numbered versions. Apply edits with a script that asserts each target string occurs once.
+7. After editing, check: no em dashes or en dashes, items and readings numbered contiguously, the open items count unchanged, the status table and provenance updated, the code run. Then send the changed files.
+8. Keep the code to what the documents fix. Opaque values stay opaque. The code is plumbing and implements no goal.
+
+## 5. What to bring and read
+
+The workspace does not carry over between sessions, so the designer attaches the files. Attach the whole set of documents, not only the three newest: the main document `boundary_board_states.md`, the documents named in the status line of the construction file (engine integration, calibration, d-depth applications, batch composition, start selection, the topology file, the primitive catalog, the cost model, Syzygy mining), the three working files (`boundary_board_states_f_p_construction.md`, `boundary_board_states_f_p_empirical_record.md`, `boundary_board_states_f_p_goal_work.md`), and the code as the zip of the `fp` package. Several documents are read-only on purpose.
+
+Start with the status line, the status table and the provenance of the construction file, then the empirical record whole. Do not load every document at once, because the first session ran out of context once. Read in full what a question touches. Reading means reading and not searching for citations. When asked whether it understands something, a session reads the relevant documents first and answers in terms of his idea. To run the code, install the chess package with `pip install chess --break-system-packages` and run `run_smoke.py`.
+
+## 6. Where things are
+
+- Construction file: items 1 to 89, readings 1 to 77, 30 open items, a status table and provenance.
+- Empirical record: the designer's statements 1 to 10, what the code fixes (§2), what is kept out of the code (§3, items 1 to 19), readings, and a status table.
+- Goal work file: unchanged since the first attempt was removed. It records no attempt.
+- Code: the two functions F and P, an engine slot with a wrapper for a UCI engine, priors held in segments keyed by the documented key, a merged structure of a batch, a shape check, a start from a batch, and stored goals loaded by path. An entry holds d and, where resolved, the index. There is no check, no search and no transformation.
+- The removed attempt at the exact check was kept outside the deliverables in the earlier workspace. Ask him before bringing any of it back.
+
+## 7. Where the newer items differ from earlier text
+
+These are integrated specification changes in a cumulative protective belt. They are not conflicts, and nothing needs resolving. Record the newer item, cite both, and leave the older document as it is. The list says where earlier text states something different. It was found by searching and is not complete. The clean-up he wants for the next session is his to direct, so ask him what it covers.
+
+1. The header [d][index][symmetry condition] in the main document ("The d-depth metric", about line 128), in batch composition (§1.9 item 7, §2 item 31) and in calibration (§1 item 10). Items 85 to 87 do not hold the symmetry condition with an entry.
+2. The main document and start selection §3 have folds inside one segment. Item 86 has a transformation carry a position into another segment, with the same priors for both. Reading 73 withdrew an earlier reading that agreed with the main document.
+3. The legend file in batch composition §2 item 31. He has put the legend aside for now, and nothing is recorded about it.
+4. Item 83 defers special notations for transformations that cross into another segment. Items 85 and 86 supersede that.
+5. Start selection §2g describes dependency over segments. Item 86 has the same priors serving a segment and its counterpart. How §2g reads with that has not been checked.
+6. Batch composition records one predominant branch among equal routes, and calibration §1 item 11 has equally optimal alternatives as an open front. Items 78 and 89 concern the chosen condition and the equals.
+7. The clean-up certification in batch composition (§1.9 items 6 and 9, §2 items 15 and 25), and the check in item 89. He has left open how they relate.
+8. d is plies to a terminal in the main document, and d is the plies to the first irreversible event of its segment in d-depth applications §2 reading 4. Item 82 gives what d denotes and says the schema of the d-depth field is not a hard core.
+9. Item 9 (the priors are never forced to zero) and item 81 (what cannot be certified is not added).
+10. Item 83 says "mirroring on the rank axis", and start selection §3 says the left-right reflection with files exchanged. He has not stated which is meant.
+11. Engine integration reading 20 has a baseline P that keeps every line. Item 81 governs, and the baseline is withdrawn in the construction file.
+12. The draw-rule stand-ins: `f.py` ends games with a draw claim, and `structure.py` ends them at the 75-move rule, while start selection says the 50-move and 75-move rules are removed and repetition draws are not affected. He decides whether to record it.
+
+## 8. A first message to paste into a new session
+
+"My understanding comes from my own derivation, not from the formal wording of the documents. I process from the structure of a problem and not from accumulated details, and the documents are my memory: the structure I leave behind and pick up from. So you do the detail work, meaning the reading, cross-checking and parsing, and you hand me the shape in plain words. Never hand me pieces to parse. When you cite a document, tie it in plain words to my point first, then say where it is. When a document and my statement differ, my statement is the source, and later statements change earlier ones by design. Record what I say, add no terms, derivations, benefits or models of your own, and ask me about the idea itself, in plain words, one question at a time. Before you do anything, read `onboarding_protocol.md` in full, then the status line, status table and provenance of the construction file, then the empirical record. Do not edit any file until you have told me, in plain words, what each says and what you would change."

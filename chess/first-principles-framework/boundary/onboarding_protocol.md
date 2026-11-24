@@ -42,10 +42,12 @@ Each of these was corrected by the designer, and they are listed so that they ar
 7. Storage discipline. Anything optional added per entry, per game or per batch scales storage, so a field is added only when a statement requires it. Engine settings, sources, engine names, certified marks and moves per entry were all proposed by a session and removed.
 8. Do not hard-code what he has left open: the goal front, the order of the loop (it can start from P with a batch or from F), the schema of the d-depth field, the index as a pointer or as a denoted condition, which clean-up approach is used. Engine dependence is not a definitional influence.
 9. The open items in §3 of the construction file stay as they are unless he says otherwise. New unresolved points go in readings. Do not decide which open items bear on the goal.
-10. Do not start any goal program, including for the exact check, unless he asks. He wants the specification fleshed out first and does not want small-scale heuristic attempts. A first attempt was written once and removed at his request.
+10. Integrated specifications chosen so that the goal can be executed, and anything else the designer says about the goal approach, are recorded in the goal work file alone and never in the construction file. He created the goal file for this purpose so that chosen specifications do not contaminate the record of the F/P architecture. The construction file holds the F/P architecture. If it is not clear which file a statement belongs in, say so before writing it, in one plain sentence.
+11. Do not start any goal program, including for the exact check, unless he asks. He wants the specification fleshed out first and does not want small-scale heuristic attempts. A first attempt was written once and removed at his request.
 
 ## 4. Handling a new statement from him
 
+0. Before writing anything to a file, decide which file it belongs in and say so in one line in the reply. The construction file holds the F/P architecture: what the priors, d, an entry, the segments and the loop are, and what F and P take and give. A change to the lower level plumbing of the code that does not depend on any goal is an attribute of that architecture, so it goes in the construction file even when it arose from the code or from the goal front. The goal work file holds the specifications chosen for the goal approach and the work on the goal. The empirical record holds what the code fixes and what is kept out of it. A statement that is both goes in both files. If you cannot tell, say so in one plain sentence before writing. A write to the wrong file contaminates the record, and a wrong write costs him more than a question. If he says what a document contains, read the document before describing it.
 1. Restate it in plain, concrete words. Ask few questions, on one thread. Do not critique how he articulates an idea.
 2. Check it against the construction file, the empirical record and the documents it touches. Read the passages. Say where it agrees, where it changes earlier text, and what interacts. Do not resolve an unresolved interaction. Put it to him as a plain question.
 3. Do not frame his options as a choice between two when he may want both.
@@ -63,9 +65,9 @@ Start with the status line, the status table and the provenance of the construct
 
 ## 6. Where things are
 
-- Construction file: items 1 to 89, readings 1 to 77, 30 open items, a status table and provenance.
-- Empirical record: the designer's statements 1 to 10, what the code fixes (§2), what is kept out of the code (§3, items 1 to 19), readings, and a status table.
-- Goal work file: unchanged since the first attempt was removed. It records no attempt.
+- Construction file: items 1 to 95, readings 1 to 77, 30 open items, a status table and provenance. Items 88, 92, 93 and 94 are marked as moved to the goal work file, and items 89 and 91 are in both files because the designer says each belongs in both.
+- Empirical record: the designer's statements 1 to 9, what the code fixes (§2), what is kept out of the code (§3, items 1 to 21), readings, and a status table.
+- Goal work file: §1 carried forward from the construction file, §2 the designer's statements for the goal (24 November 2026), §3 attempts (none made), §4 status. This is where chosen integrated specifications are recorded.
 - Code: the two functions F and P, an engine slot with a wrapper for a UCI engine, priors held in segments keyed by the documented key, a merged structure of a batch, a shape check, a start from a batch, and stored goals loaded by path. An entry holds d and, where resolved, the index. There is no check, no search and no transformation.
 - The removed attempt at the exact check was kept outside the deliverables in the earlier workspace. Ask him before bringing any of it back.
 

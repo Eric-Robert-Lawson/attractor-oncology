@@ -23,6 +23,7 @@ It does not accumulate attempts. It records what the development of the code mak
 15. **The first test is the designer's to specify.** The designer states that the first anchoring is in the endgames, as a construction from zero priors for a segment that a tablebase has solved, and that the designer does not want to execute a test that the agent specifies. The agent does not specify the test (exact check goal file, statement 3; 23 November 2026).
 16. **The engine's deviation from a proof tree is informative and is not tracked explicitly.** The measures that are explicit are coverage, speed and storage (exact check goal file, statement 4; 23 November 2026).
 17. **The index points to board states, and the legend is superseded.** The index points to the last board state that precedes the terminal condition that moves the irreversible segmented boundary, or to the terminal condition within the segment, as segmented dependency board state locations, with no legend to fetch (exact check goal file, statement 11; 23 November 2026).
+18. **P takes a batch of board states and merges nothing, and the current code requires change.** The designer states that the goal for P should take a batch of board states and not a batch of games, that P should not merge anything, and that the code for P integrates a specification and excludes architectural variance that is meant to be open to programming, which requires change immediately (exact check goal file, statement 13; 23 November 2026).
 
 ## 2. What the code fixes
 
@@ -92,5 +93,6 @@ The code is in `code/` beside this file, as a package of seven parts. Each line 
 | The shape of an entry | Changed on 23 November 2026: the symmetry field and the rule that tied it to the index were removed after items 85 to 87. An entry holds d and, where resolved, the index. Plumbing only |
 | The engine slot | Changed on 23 November 2026: optional capabilities (several lines, leaving moves out) added, declared by the engine and removable as a unit. Tested with the two test engines and with a UCI engine installed from the workspace's system package source. Plumbing only |
 | The anchor and the paths | Stated on 23 November 2026 (§1, item 12). The code carries a start for the whole batch only |
+| P's input and its merged structure | Stated on 23 November 2026 as requiring change (§1, item 18). Not changed yet. §2 item 7 describes the code as it is |
 | What the code fixes | Recorded in §2 |
 | What is kept out of the code | Recorded in §3 |

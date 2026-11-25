@@ -63,10 +63,10 @@ The code is in `code/` beside this file, as a package of seven parts. Each line 
 15. **The legend of a boundary.** Not in the code. The index is an opaque value with no meaning enforced, and a goal for P that resolves a position supplies it (construction file, items 81 and 87).
 16. **Entries with no d.** Refused by the shape check (construction file, item 81).
 17. **Transformations by symmetry.** Not in the code. An entry holds no symmetry condition (construction file, items 85 and 86). Nothing in the code applies a transformation or treats a segment and its counterpart as one.
-18. **A search to rederive a line.** Not in the code, which has no search of its own. Whether it goes by d, by the condition or by both is not fixed (goal work file, §2 item 7).
+18. **A search to rederive a line.** Not in the code, which has no search of its own. Whether it goes by d, by the condition or by both is not fixed (goal work file, §2 item 1).
 19. **A check of the priors for the pool of equals across a change of scope.** Not in the code and left open: to record the pool, to run a recurring check, or neither, and whether the check is the clean-up of batch composition, a function of P, or P with a goal. It is a mechanism that a goal may supply (construction file, item 89 and reading 77).
-20. **The priors inside an engine's evaluation.** Not in the code, and not excluded. The default move of F asks the engine and does not consult the priors (goal work file, §2 item 10).
-21. **Engine variation.** Not in the code. The code does not account for an engine that does not reproduce its moves (goal work file, §2 item 9).
+20. **The priors inside an engine's evaluation.** Not in the code, and not excluded. The default move of F asks the engine and does not consult the priors (goal work file, §2 item 4).
+21. **Engine variation.** Not in the code. The code does not account for an engine that does not reproduce its moves (goal work file, §2 item 3).
 22. **A unit for the batch.** Not fixed. F gives a batch that a goal produces in any way it chooses, or else the games that it plays, each as the goal turns it into a unit, with the game itself where the goal makes nothing. P accepts whatever batch is given, and a unit of a kind that the default structure does not read reaches the goal as it was given, with the structure left out or built by another builder (§1, item 10; construction file, item 96).
 
 ## 4. Readings
@@ -86,5 +86,6 @@ The code is in `code/` beside this file, as a package of seven parts. Each line 
 | What P builds and requires | Integrated on 22 November 2026: the merged structure of a batch, given to the goal, and a check of the shape of what a goal returns. Tested on lines that share a prefix and that transpose, and with outputs of the wrong shape. Plumbing only |
 | The shape of an entry | Changed on 23 November 2026: the symmetry field and the rule that tied it to the index were removed after items 85 to 87. An entry holds d and, where resolved, the index. Plumbing only |
 | The unit of a batch | Changed on 24 November 2026: neither F nor P fixes the unit as a game. A goal for F can produce the batch in any way, choose the starts, or supply what goes into the batch for each finished game, and played games are the default. P gives the goal the batch as given, and the default structure reads games, boards and board state text. Tested with a batch of mixed units, with a loop started on board states, with F and P on a batch that a goal for F made of board states, with chosen starts, and with a batch produced from the priors without self-play. Plumbing only |
+| A stored goal for P that enumerates the pruned proof tree | Written on 24 November 2026 in `code/goals/`. It is content of the goal front and not of the framework. What was found with it is in the exact check goal file, §3. Plumbing of F and P unchanged by it |
 | What the code fixes | Recorded in §2 |
 | What is kept out of the code | Recorded in §3 |

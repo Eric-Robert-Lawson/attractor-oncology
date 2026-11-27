@@ -105,6 +105,7 @@ Companion documents: `boundary_board_states_f_p_goal_work.md` (the goal work and
 95. **A segment and its counterparts are a class.** The designer states that a transformation that lands a board state in a different segment is different from the links between segments by progression, which are the segmented dependency units. The designer states that a segment and its counterparts under transformation are classes that represent the same ground truth, from the structure that causally links the solution, which is his informal understanding. The designer states that if class is the formal specification for this, it is the more accurate way to articulate his idea formally.
 96. **The batch is not fixed to games, and F and P accept the same variance.** (24 November 2026) The designer states that the code should enable the input to be a batch of units that integrate into what is available for the goal front to program, that what changes in the code, if the batch was hard-coded as games, is that the prior function modularly accepts whatever batch can be used to inform the priors, and that the output of F is in the same format.
 97. **The output of F is any batch compatible with the input of P, and how it is made is left open.** (24 November 2026) The designer states that the goal allows the output of F to be any batch of information compatible with the input of P. The designer states that chosen starts, or board states produced from some operations on the priors, can be programmed into the goal front of F in any variable way that is left deliberately open, and that these are not mutually exclusive. The designer states that a change to the lower level architecture of the code, which is agnostic to the goal, is an attribute of the F/P construction and not of a goal alone.
+98. **The architecture fixes no data format for the priors.** (27 November 2026) The designer states that F and P carry priors without fixing their format or content. Not every prior must include the d-depth metric or the child field. Earlier statements about what a prior holds are read within the integrated specification they discuss.
 
 ---
 
@@ -276,11 +277,11 @@ Companion documents: `boundary_board_states_f_p_goal_work.md` (the goal work and
 
 | Element | Status |
 |---|---|
-| The statements of §1, items 1 to 97 | Stated by the designer on 21, 22, 23 and 24 November 2026. Item 7 is the designer's own statement that the effects are estimates until they are tested |
+| The statements of §1, items 1 to 98 | Stated by the designer on 21, 22, 23, 24 and 27 November 2026. Item 7 is the designer's own statement that the effects are estimates until they are tested |
 | Items 1 to 78 of §2 | This file's readings, offered for correction |
 | The record for a first attempt | Brought up to date on 22 November 2026 for a first empirical attempt (item 73). This is not a claim that anything is resolved |
 | The open items of §3 | Open. Nothing specified or run |
 
 ## 5. Provenance
 
-The statements of §1 are the designer's, from the session of 21 November 2026. Items 48 to 83 were stated on 22 November 2026, items 84 to 89 on 23 November 2026, and items 90 to 97 on 24 November 2026. §2 is this file's reading. The file rests on the engine integration file of 16 to 20 November 2026. It adds no result of any run.
+The statements of §1 are the designer's, from the session of 21 November 2026. Items 48 to 83 were stated on 22 November 2026, items 84 to 89 on 23 November 2026, items 90 to 97 on 24 November 2026, and item 98 on 27 November 2026. §2 is this file's reading. The file rests on the engine integration file of 16 to 20 November 2026. It adds no result of any run.

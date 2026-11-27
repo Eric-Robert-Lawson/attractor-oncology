@@ -30,7 +30,7 @@ Companion documents: `boundary_board_states_calibration.md` (the stored band, th
 4. **Which terms are derivable and which are emergent.** Reading §1, items 1 and 2: c and L follow from the schematic and the encoding, and are derivable. T is the size of the reference. R follows from the distribution of d in a segment and from the set of kept values of d (calibration §2, item 9), and it is emergent for each segment. The search cost of a gap (calibration §2, item 10) is a separate term and is not part of the storage terms.
 5. **The three fronts and the terms.** Reading §1, item 6: the d-depth exclusion reduces the work of reaching a result, the pruning reduces R, and the gap method trades c·R against the search that re-derives the dropped rows. Whether each front acts on one term or on several is not stated here.
 6. **What a fair comparison needs.** Reading §1, item 5: the reference must be counted on the same basis as the schematic. That means stating what T includes (both sides to move, the results that the schematic also holds, and the lower segments that exits depend on), and using on the program's side the best encoding of the key and the header that is available at the time of the comparison.
-7. **The two stores deliver different statements.** The reference gives an exact value for every position within its limits. The schematic gives a result certified within the stated d, a draw that is conditional within that scope, and no statement beyond the cap (calibration §2, items 2 and 11). The allowance of item 3 is therefore not a saving of the same thing. It is storage released by a deliberate change in what is certified: the exact value beyond the cap is not stated (§1, item 8), and the rows at the bottom of the band are re-derived by search. For the use of study (`boundary_board_states_d_depth_applications.md` §1, item 8) the values beyond the cap are not wanted. A use that requires the exact value of every position is a use of the reference.
+7. **The two stores deliver different statements.** This reading holds within the integrated specification that this file discusses, a schematic with a stated d and a cap, set against the reference. The reference gives an exact value for every position within its limits. The schematic gives a result certified within the stated d, a draw that is conditional within that scope, and no statement beyond the cap (calibration §2, items 2 and 11). The allowance of item 3 is therefore not a saving of the same thing. It is storage released by a deliberate change in what is certified: the exact value beyond the cap is not stated (§1, item 8), and the rows at the bottom of the band are re-derived by search. For the use of study (`boundary_board_states_d_depth_applications.md` §1, item 8) the values beyond the cap are not wanted. Within this specification, a use that requires the exact value of every position is a use of the reference. This is not a limit of the program, which can emerge the results of Syzygy by choosing integrated specifications to match (`boundary_board_states_f_p_construction.md`, item 98; `boundary_board_states_f_p_goals_general.md`, statement 15). Revised on 27 November 2026.
 
 ---
 
@@ -48,9 +48,9 @@ Companion documents: `boundary_board_states_calibration.md` (the stored band, th
 | Element | Status |
 |---|---|
 | The statements of §1 | Stated by the designer |
-| Items 1 to 7 of §2 | This file's readings, offered for correction |
+| Items 1 to 7 of §2 | This file's readings, offered for correction. Item 7 revised on 27 November 2026 |
 | The base calculation as a number for any segment | Not in this file. Open |
 
 ## 5. Provenance
 
-The statements of §1 are the designer's, from the session of 17 November 2026. §2 is this file's reading. This file adds no result of any run, and records no figure from one.
+The statements of §1 are the designer's, from the session of 17 November 2026. §2 is this file's reading, and its item 7 was revised on 27 November 2026, at the designer's direction, to state the specification it holds within. This file adds no result of any run, and records no figure from one.
